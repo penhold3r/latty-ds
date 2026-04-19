@@ -1,0 +1,74 @@
+---
+layout: ../../layouts/BaseLayout.astro
+title: Introduction
+description: Learn about the Latty Design System and its core principles
+---
+
+# Introduction
+
+Latty is a **framework-agnostic design system** built on design tokens and Web Components. It follows a "tokens first, components second" philosophy where design tokens generate CSS variables, and components consume them.
+
+## Core Principles
+
+### 1. Design Tokens as Foundation
+
+Design tokens are the single source of truth for design decisions. They generate:
+- CSS custom properties (`--lt-*`)
+- JSON exports for tooling
+- JavaScript/TypeScript modules
+
+### 2. Framework Agnostic
+
+Built with **Web Components** (using Lit), Latty works with any framework:
+- ✅ Vanilla JavaScript
+- ✅ React (via `@latty/react`)
+- ✅ Angular (via `@latty/angular`)
+- ✅ Vue, Svelte, and others
+
+### 3. Accessibility First
+
+All components follow **WAI-ARIA** guidelines and include:
+- Semantic HTML
+- Keyboard navigation
+- Screen reader support
+- Focus management
+
+### 4. Customizable & Themable
+
+Extensive theming through CSS custom properties:
+- Override tokens globally or per-component
+- Support for light/dark modes
+- Custom color palettes
+
+## Architecture Overview
+
+```
+@latty/tokens (Design Tokens)
+    ↓
+    ├─→ CSS Variables (--lt-color-primary-500)
+    ├─→ JSON exports
+    └─→ TypeScript types
+    
+@latty/web (Web Components)
+    ↓
+    └─→ <lt-button>, <lt-dialog>, <lt-table>, etc.
+    
+@latty/icons (Icon System)
+    ↓
+    └─→ <lt-icon name="check">
+
+@latty/react, @latty/angular (Framework Wrappers)
+    ↓
+    └─→ <Button />, <Dialog />, etc.
+```
+
+## Naming Conventions
+
+- **npm scope**: `@latty/*`
+- **Custom element prefix**: `lt-`
+- **CSS variable prefix**: `--lt-*`
+
+## What's Next?
+
+- [Installation](/getting-started/installation) - Install and set up Latty
+- [Usage](/getting-started/usage) - Learn how to use components

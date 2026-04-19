@@ -1,0 +1,35 @@
+---
+interface Props {
+  name: string;
+  baseColor: string;
+}
+
+const { name, baseColor } = Astro.props;
+const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+---
+
+<div style="margin-bottom: var(--lt-spacing-6);">
+  <h3 style="text-transform: capitalize; margin-bottom: var(--lt-spacing-3);">{name}</h3>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: var(--lt-spacing-2);">
+    {shades.map(shade => (
+      <div
+        style={`
+          background: var(--lt-color-${baseColor}-${shade});
+          padding: var(--lt-spacing-4);
+          border-radius: var(--lt-border-radius);
+          text-align: center;
+          color: ${shade >= 600 ? 'white' : 'var(--lt-color-neutral-900)'};
+          font-size: 0.875rem;
+          font-weight: 600;
+        `}
+      >
+        {shade}
+      </div>
+    ))}
+  </div>
+</div>
+---
+
+<script>
+  import '@latty/web';
+</script>

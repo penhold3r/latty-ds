@@ -1,0 +1,135 @@
+---
+layout: ../../layouts/BaseLayout.astro
+title: Usage
+description: How to use Latty components in your application
+---
+
+# Usage
+
+## Basic Usage
+
+### 1. Import Design Tokens
+
+First, import the design tokens CSS file. This makes all CSS custom properties available:
+
+```js
+import '@latty/tokens/dist/tokens.css';
+```
+
+### 2. Import Components
+
+Import the components you need:
+
+```js
+// Import all components
+import '@latty/web';
+
+// Or import individual components
+import '@latty/web/button';
+import '@latty/web/dialog';
+import '@latty/web/table';
+```
+
+### 3. Use in HTML
+
+Use the components with the `lt-` prefix:
+
+```html
+<lt-button variant="primary" icon="save">
+  Save Changes
+</lt-button>
+
+<lt-textfield
+  label="Email"
+  type="email"
+  required
+  helper-text="Enter your email address"
+></lt-textfield>
+
+<lt-dialog title="Confirm Action" size="md">
+  <p>Are you sure you want to proceed?</p>
+  <div slot="footer">
+    <lt-button variant="secondary">Cancel</lt-button>
+    <lt-button variant="primary">Confirm</lt-button>
+  </div>
+</lt-dialog>
+```
+
+## Framework-Specific Usage
+
+### React
+
+Use the React wrapper package:
+
+```tsx
+import '@latty/tokens/dist/tokens.css';
+import { Button, Dialog, Textfield } from '@latty/react';
+
+function App() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="primary" onClick={() => setOpen(true)}>
+        Open Dialog
+      </Button>
+
+      <Dialog 
+        title="My Dialog" 
+        open={open} 
+        onClose={() => setOpen(false)}
+      >
+        <p>Dialog content here</p>
+      </Dialog>
+    </>
+  );
+}
+```
+
+### Angular
+
+Use the Angular wrapper package:
+
+```typescript
+// app.module.ts
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
+@NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+export class AppModule {}
+```
+
+```html
+<!-- app.component.html -->
+<lt-button variant="primary" (click)="handleClick()">
+  Click me
+</lt-button>
+```
+
+## Working with Events
+
+Components emit custom events with the `lt-` prefix:
+
+```js
+const button = document.querySelector('lt-button');
+button.addEventListener('lt-click', (e) => {
+  console.log('Button clicked', e.detail);
+});
+
+const dialog = document.querySelector('lt-dialog');
+dialog.addEventListener('lt-close', () => {
+  console.log('Dialog closed');
+});
+```
+
+## Customizing Styles
+
+Override CSS custom properties to customize appearance:
+
+```css
+:root {
+  --lt-color-primary-500: #8b5cf6;
+  --lt-spacing-4: 2rem;
+}
+```

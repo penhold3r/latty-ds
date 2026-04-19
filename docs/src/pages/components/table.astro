@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Table" description="Responsive table component with sorting capabilities">
+  <h1>Table</h1>
+
+  <p>The Table component provides a responsive data table with sortable columns, multiple display modes, and extensive customization options.</p>
+
+  <h2>Features</h2>
+
+  <ul>
+    <li>✅ Sortable columns</li>
+    <li>✅ Custom sort functions</li>
+    <li>✅ Custom cell renderers</li>
+    <li>✅ Sticky columns</li>
+    <li>✅ Responsive modes (scroll/stack)</li>
+    <li>✅ Three density levels</li>
+    <li>✅ Zebra striping</li>
+    <li>✅ Row hover effects</li>
+    <li>✅ Loading and empty states</li>
+    <li>✅ Keyboard navigation</li>
+  </ul>
+
+  <h2>Basic Example</h2>
+
+  <pre><code class="language-html">&lt;lt-table&gt;&lt;/lt-table&gt;
+
+&lt;script&gt;
+  const table = document.querySelector('lt-table');
+  table.columns = [
+    &#123; key: 'name', label: 'Name', sortable: true &#125;,
+    &#123; key: 'email', label: 'Email', sortable: true &#125;,
+    &#123; key: 'role', label: 'Role', sortable: true &#125;,
+  ];
+  table.data = [
+    &#123; name: 'John Doe', email: 'john@example.com', role: 'Developer' &#125;,
+    &#123; name: 'Jane Smith', email: 'jane@example.com', role: 'Designer' &#125;,
+  ];
+&lt;/script&gt;</code></pre>
+
+  <h2>Properties</h2>
+
+  <table style="width: 100%; border-collapse: collapse; margin: var(--lt-spacing-4) 0;">
+    <thead>
+      <tr style="border-bottom: 2px solid var(--lt-color-neutral-300);">
+        <th style="text-align: left; padding: var(--lt-spacing-2);">Property</th>
+        <th style="text-align: left; padding: var(--lt-spacing-2);">Type</th>
+        <th style="text-align: left; padding: var(--lt-spacing-2);">Default</th>
+        <th style="text-align: left; padding: var(--lt-spacing-2);">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: var(--lt-spacing-2);"><code>columns</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>TableColumn[]</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>[]</code></td>
+        <td style="padding: var(--lt-spacing-2);">Column definitions</td>
+      </tr>
+      <tr>
+        <td style="padding: var(--lt-spacing-2);"><code>data</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>T[]</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>[]</code></td>
+        <td style="padding: var(--lt-spacing-2);">Data rows</td>
+      </tr>
+      <tr>
+        <td style="padding: var(--lt-spacing-2);"><code>density</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>'compact' | 'normal' | 'comfortable'</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>'normal'</code></td>
+        <td style="padding: var(--lt-spacing-2);">Table spacing</td>
+      </tr>
+      <tr>
+        <td style="padding: var(--lt-spacing-2);"><code>responsive-mode</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>'scroll' | 'stack'</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>'scroll'</code></td>
+        <td style="padding: var(--lt-spacing-2);">Responsive behavior</td>
+      </tr>
+      <tr>
+        <td style="padding: var(--lt-spacing-2);"><code>hoverable</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>boolean</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>false</code></td>
+        <td style="padding: var(--lt-spacing-2);">Row hover effect</td>
+      </tr>
+      <tr>
+        <td style="padding: var(--lt-spacing-2);"><code>striped</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>boolean</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>false</code></td>
+        <td style="padding: var(--lt-spacing-2);">Zebra stripes</td>
+      </tr>
+      <tr>
+        <td style="padding: var(--lt-spacing-2);"><code>bordered</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>boolean</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>false</code></td>
+        <td style="padding: var(--lt-spacing-2);">Cell borders</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Events</h2>
+
+  <table style="width: 100%; border-collapse: collapse; margin: var(--lt-spacing-4) 0;">
+    <thead>
+      <tr style="border-bottom: 2px solid var(--lt-color-neutral-300);">
+        <th style="text-align: left; padding: var(--lt-spacing-2);">Event</th>
+        <th style="text-align: left; padding: var(--lt-spacing-2);">Detail</th>
+        <th style="text-align: left; padding: var(--lt-spacing-2);">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: var(--lt-spacing-2);"><code>lt-sort-change</code></td>
+        <td style="padding: var(--lt-spacing-2);"><code>&#123; key: string, direction: 'asc' | 'desc' &#125;</code></td>
+        <td style="padding: var(--lt-spacing-2);">Fired when sort changes</td>
+      </tr>
+    </tbody>
+  </table>
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

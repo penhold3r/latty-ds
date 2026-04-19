@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'A framework-agnostic design system built on design tokens and Web Components' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | Latty Design System</title>
+  </head>
+  <body>
+    <header style="background: var(--lt-color-neutral-100); border-bottom: 1px solid var(--lt-color-neutral-200); padding: var(--lt-spacing-4) 0;">
+      <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <a href="/" style="font-size: 1.5rem; font-weight: 700; color: var(--lt-color-neutral-900); text-decoration: none;">
+          <span style="color: var(--lt-color-primary-500);">Latty</span> Design System
+        </a>
+        <nav>
+          <a href="/getting-started/introduction" style="margin: 0 var(--lt-spacing-3);">Getting Started</a>
+          <a href="/tokens/overview" style="margin: 0 var(--lt-spacing-3);">Tokens</a>
+          <a href="/components/button" style="margin: 0 var(--lt-spacing-3);">Components</a>
+          <a href="https://github.com/yourusername/latty-ds" target="_blank" style="margin: 0 var(--lt-spacing-3);">GitHub</a>
+        </nav>
+      </div>
+    </header>
+    <main class="container" style="padding-top: var(--lt-spacing-8); padding-bottom: var(--lt-spacing-8);">
+      <article class="prose">
+        <slot />
+      </article>
+    </main>
+    <footer style="background: var(--lt-color-neutral-100); border-top: 1px solid var(--lt-color-neutral-200); padding: var(--lt-spacing-6) 0; margin-top: var(--lt-spacing-12);">
+      <div class="container" style="text-align: center; color: var(--lt-color-neutral-600);">
+        <p>&copy; {new Date().getFullYear()} Latty Design System. Built with Astro.</p>
+      </div>
+    </footer>
+  </body>
+</html>

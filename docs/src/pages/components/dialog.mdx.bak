@@ -1,0 +1,207 @@
+---
+layout: ../../layouts/BaseLayout.astro
+title: Dialog
+description: Modal dialog component with customizable size and behavior
+---
+
+# Dialog
+
+The Dialog component provides a modal dialog with backdrop, customizable sizes, and full accessibility support including focus trapping and keyboard navigation.
+
+## Examples
+
+### Basic Dialog
+
+<div style="margin: var(--lt-spacing-4) 0;">
+  <lt-button id="open-basic-dialog" variant="primary">Open Dialog</lt-button>
+</div>
+
+<lt-dialog id="basic-dialog" title="Welcome">
+  <p>This is a basic dialog with default settings.</p>
+  <div slot="footer">
+    <lt-button id="close-basic-dialog" variant="primary">OK</lt-button>
+  </div>
+</lt-dialog>
+
+```html
+<lt-button id="open-dialog">Open Dialog</lt-button>
+
+<lt-dialog id="my-dialog" title="Welcome">
+  <p>Dialog content here</p>
+  <div slot="footer">
+    <lt-button id="close-dialog">OK</lt-button>
+  </div>
+</lt-dialog>
+
+<script>
+  document.getElementById('open-dialog').addEventListener('click', () => {
+    document.getElementById('my-dialog').show();
+  });
+  document.getElementById('close-dialog').addEventListener('click', () => {
+    document.getElementById('my-dialog').hide();
+  });
+</script>
+```
+
+### Dialog Sizes
+
+<div style="display: flex; gap: var(--lt-spacing-3); margin: var(--lt-spacing-4) 0; flex-wrap: wrap;">
+  <lt-button id="open-sm-dialog" variant="secondary">Small</lt-button>
+  <lt-button id="open-md-dialog" variant="secondary">Medium</lt-button>
+  <lt-button id="open-lg-dialog" variant="secondary">Large</lt-button>
+  <lt-button id="open-xl-dialog" variant="secondary">Extra Large</lt-button>
+  <lt-button id="open-fullscreen-dialog" variant="secondary">Fullscreen</lt-button>
+</div>
+
+<lt-dialog id="sm-dialog" title="Small Dialog" size="sm">
+  <p>This is a small dialog.</p>
+  <div slot="footer">
+    <lt-button id="close-sm-dialog">Close</lt-button>
+  </div>
+</lt-dialog>
+
+<lt-dialog id="md-dialog" title="Medium Dialog" size="md">
+  <p>This is a medium dialog (default size).</p>
+  <div slot="footer">
+    <lt-button id="close-md-dialog">Close</lt-button>
+  </div>
+</lt-dialog>
+
+<lt-dialog id="lg-dialog" title="Large Dialog" size="lg">
+  <p>This is a large dialog with more content space.</p>
+  <div slot="footer">
+    <lt-button id="close-lg-dialog">Close</lt-button>
+  </div>
+</lt-dialog>
+
+<lt-dialog id="xl-dialog" title="Extra Large Dialog" size="xl">
+  <p>This is an extra large dialog.</p>
+  <div slot="footer">
+    <lt-button id="close-xl-dialog">Close</lt-button>
+  </div>
+</lt-dialog>
+
+<lt-dialog id="fullscreen-dialog" title="Fullscreen Dialog" size="fullscreen">
+  <p>This dialog takes up the entire viewport.</p>
+  <div slot="footer">
+    <lt-button id="close-fullscreen-dialog">Close</lt-button>
+  </div>
+</lt-dialog>
+
+```html
+<lt-dialog size="sm">Small</lt-dialog>
+<lt-dialog size="md">Medium (default)</lt-dialog>
+<lt-dialog size="lg">Large</lt-dialog>
+<lt-dialog size="xl">Extra Large</lt-dialog>
+<lt-dialog size="fullscreen">Fullscreen</lt-dialog>
+```
+
+### Form Dialog
+
+<div style="margin: var(--lt-spacing-4) 0;">
+  <lt-button id="open-form-dialog" variant="primary">Open Form</lt-button>
+</div>
+
+<lt-dialog id="form-dialog" title="User Information">
+  <div style="display: flex; flex-direction: column; gap: var(--lt-spacing-4);">
+    <lt-textfield label="Name" required></lt-textfield>
+    <lt-textfield label="Email" type="email" required></lt-textfield>
+    <lt-textfield label="Message" multiline rows="4"></lt-textfield>
+  </div>
+  <div slot="footer" style="display: flex; gap: var(--lt-spacing-3); justify-content: flex-end;">
+    <lt-button id="cancel-form" variant="secondary">Cancel</lt-button>
+    <lt-button id="submit-form" variant="primary">Submit</lt-button>
+  </div>
+</lt-dialog>
+
+## Properties
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `open` | `boolean` | `false` | Controls dialog visibility |
+| `title` | `string` | `''` | Dialog title |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'fullscreen'` | `'md'` | Dialog size |
+| `hide-close-button` | `boolean` | `false` | Hides the close button |
+| `close-on-backdrop-click` | `boolean` | `true` | Close when clicking backdrop |
+| `close-on-escape` | `boolean` | `true` | Close when pressing Escape |
+
+## Methods
+
+| Method | Description |
+|--------|-------------|
+| `show()` | Opens the dialog |
+| `hide()` | Closes the dialog |
+| `toggle()` | Toggles dialog visibility |
+
+## Events
+
+| Event | Description |
+|-------|-------------|
+| `lt-open` | Fired when dialog opens |
+| `lt-close` | Fired when dialog closes |
+
+## Slots
+
+| Slot | Description |
+|------|-------------|
+| (default) | Dialog content |
+| `footer` | Dialog footer (typically for action buttons) |
+
+## Accessibility
+
+- Focus trap keeps focus within dialog
+- Escape key closes dialog (configurable)
+- Backdrop click closes dialog (configurable)
+- Body scroll is prevented when open
+- Proper ARIA attributes (`role="dialog"`, `aria-modal="true"`)
+- Focus is returned to trigger element on close
+
+<script is:inline type="module">
+  import '@latty/web';
+
+  // Basic dialog
+  const openBasic = document.getElementById('open-basic-dialog');
+  const closeBasic = document.getElementById('close-basic-dialog');
+  const basicDialog = document.getElementById('basic-dialog');
+  
+  if (openBasic && basicDialog) {
+    openBasic.addEventListener('click', () => basicDialog.show());
+  }
+  if (closeBasic && basicDialog) {
+    closeBasic.addEventListener('click', () => basicDialog.hide());
+  }
+
+  // Size dialogs
+  const sizes = ['sm', 'md', 'lg', 'xl', 'fullscreen'];
+  sizes.forEach(size => {
+    const openBtn = document.getElementById(`open-${size}-dialog`);
+    const closeBtn = document.getElementById(`close-${size}-dialog`);
+    const dialog = document.getElementById(`${size}-dialog`);
+    
+    if (openBtn && dialog) {
+      openBtn.addEventListener('click', () => dialog.show());
+    }
+    if (closeBtn && dialog) {
+      closeBtn.addEventListener('click', () => dialog.hide());
+    }
+  });
+
+  // Form dialog
+  const openForm = document.getElementById('open-form-dialog');
+  const cancelForm = document.getElementById('cancel-form');
+  const submitForm = document.getElementById('submit-form');
+  const formDialog = document.getElementById('form-dialog');
+  
+  if (openForm && formDialog) {
+    openForm.addEventListener('click', () => formDialog.show());
+  }
+  if (cancelForm && formDialog) {
+    cancelForm.addEventListener('click', () => formDialog.hide());
+  }
+  if (submitForm && formDialog) {
+    submitForm.addEventListener('click', () => {
+      alert('Form submitted!');
+      formDialog.hide();
+    });
+  }
+</script>

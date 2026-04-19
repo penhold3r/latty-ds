@@ -1,0 +1,102 @@
+import { Canvas, Meta } from '@storybook/blocks';
+import * as ButtonStories from './button.stories';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+Interactive button component with multiple variants, appearances, and states.
+
+The `lt-button` component provides a consistent, accessible button interface with support for icons, loading states, and various visual styles. Built with Lit and consuming design tokens from `@latty/tokens`.
+
+## Usage
+
+```html
+<lt-button variant="primary">Click me</lt-button>
+```
+
+### With Icons
+
+```html
+<lt-button icon="check">Save</lt-button>
+<lt-button icon-end="arrow-right">Next</lt-button>
+<lt-button icon="arrow-left" icon-end="arrow-right">Both sides</lt-button>
+```
+
+### Loading State
+
+```html
+<lt-button loading>Processing...</lt-button>
+```
+
+### Disabled State
+
+```html
+<lt-button disabled>Disabled</lt-button>
+```
+
+## Examples
+
+### Variants
+
+The button component supports multiple semantic variants for different use cases.
+
+<Canvas of={ButtonStories.Variants} />
+
+### Outlined
+
+All variants are available in outlined appearance.
+
+<Canvas of={ButtonStories.Outlined} />
+
+### Appearances
+
+Buttons can be rendered with filled (default) or outlined appearance.
+
+<Canvas of={ButtonStories.Appearances} />
+
+### Sizes
+
+Three size options are available: small, medium (default), and large.
+
+<Canvas of={ButtonStories.Sizes} />
+
+### With Icons
+
+Icons can be positioned before or after the button text, or both.
+
+<Canvas of={ButtonStories.WithIcons} />
+
+### Loading State
+
+The loading state displays a spinner and disables interaction.
+
+<Canvas of={ButtonStories.Loading} />
+
+### Disabled State
+
+Disabled buttons cannot be interacted with and have reduced opacity.
+
+<Canvas of={ButtonStories.Disabled} />
+
+## Accessibility
+
+- Uses semantic `<button>` element
+- Supports keyboard navigation (Enter, Space)
+- Provides appropriate ARIA attributes
+- Disabled state prevents interaction and conveys state to screen readers
+- Loading state announces changes to assistive technologies
+
+## Best Practices
+
+- Use **Primary** for the main call-to-action on a page
+- Use **Secondary** for supporting actions
+- Use **Neutral** for tertiary actions or dismissive actions
+- Use **Success** for positive confirmations (e.g., "Save", "Confirm")
+- Use **Error** for destructive actions (e.g., "Delete", "Remove")
+- Use **Warning** for actions that require caution
+- Use **Info** for informational actions
+- Prefer `filled` appearance for emphasis, `outlined` for less emphasis
+- Always provide clear, action-oriented text labels
+- Use icons to reinforce meaning, not replace labels
+- Show loading state during asynchronous operations

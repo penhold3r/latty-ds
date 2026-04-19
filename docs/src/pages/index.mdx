@@ -1,0 +1,76 @@
+---
+layout: ../layouts/BaseLayout.astro
+title: Home
+description: A framework-agnostic design system built on design tokens and Web Components
+---
+
+# Latty Design System
+
+Build consistent, accessible interfaces with design tokens and Web Components.
+
+## Why Latty?
+
+**Tokens First** - Design tokens generate CSS variables that power all components. Change once, update everywhere.
+
+**Framework Agnostic** - Built with Web Components, works with React, Angular, Vue, or vanilla JavaScript.
+
+**Accessible** - Built with accessibility in mind from the ground up, following WAI-ARIA guidelines.
+
+**Customizable** - Extensive theming capabilities through design tokens and CSS custom properties.
+
+## Quick Start
+
+Install the packages you need:
+
+```bash
+# Install all packages
+pnpm add @latty/tokens @latty/web @latty/icons
+
+# Or install individually
+pnpm add @latty/tokens  # Design tokens
+pnpm add @latty/web     # Web Components
+pnpm add @latty/icons   # Icon components
+```
+
+Import and use:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="node_modules/@latty/tokens/dist/tokens.css">
+</head>
+<body>
+  <script type="module">
+    import '@latty/web';
+  </script>
+
+  <lt-button variant="primary" icon="save">
+    Save Changes
+  </lt-button>
+</body>
+</html>
+```
+
+## Architecture
+
+Latty follows a "tokens first, components second" philosophy:
+
+1. **Design Tokens** (`@latty/tokens`) - Base color values generate complete palettes with tints and shades
+2. **Icons** (`@latty/icons`) - Icon components using Iconoir library with pluggable provider system
+3. **Web Components** (`@latty/web`) - Components consume design tokens via CSS custom properties
+4. **Framework Wrappers** - React and Angular wrappers for seamless integration
+
+## What's Included
+
+- **23+ Web Components** - Button, Dialog, Table, Form controls, and more
+- **Design Tokens** - Colors, spacing, typography, and elevation
+- **800+ Icons** - Powered by Iconoir
+- **TypeScript Support** - Full type definitions for all packages
+- **Accessibility** - WAI-ARIA compliant components with keyboard navigation
+
+## Get Started
+
+- [Introduction](/getting-started/introduction) - Learn about Latty
+- [Installation](/getting-started/installation) - Install and set up
+- [Usage](/getting-started/usage) - Start using components

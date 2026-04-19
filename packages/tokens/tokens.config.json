@@ -1,0 +1,11 @@
+{
+  "color": {
+    "primary": "#05b8e1",
+    "secondary": "#e26d05",
+
+    "success": "#22c55e",
+    "warning": "#eeb308",
+    "error": "#ef4444",
+    "info": "#0ea5e9"
+  }
+}

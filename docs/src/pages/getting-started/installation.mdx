@@ -1,0 +1,121 @@
+---
+layout: ../../layouts/BaseLayout.astro
+title: Installation
+description: How to install and set up the Latty Design System
+---
+
+# Installation
+
+## Package Manager
+
+Latty is distributed as npm packages. You can install them using your preferred package manager:
+
+```bash
+# Using pnpm (recommended)
+pnpm add @latty/tokens @latty/web @latty/icons
+
+# Using npm
+npm install @latty/tokens @latty/web @latty/icons
+
+# Using yarn
+yarn add @latty/tokens @latty/web @latty/icons
+```
+
+## Individual Packages
+
+You can also install packages individually based on your needs:
+
+### Design Tokens
+
+```bash
+pnpm add @latty/tokens
+```
+
+The tokens package contains:
+- CSS custom properties
+- JSON exports
+- TypeScript types
+
+### Web Components
+
+```bash
+pnpm add @latty/web
+```
+
+Includes all Web Components (requires `@latty/tokens`).
+
+### Icons
+
+```bash
+pnpm add @latty/icons
+```
+
+Icon system powered by Iconoir (800+ icons).
+
+### Framework Wrappers
+
+```bash
+# For React
+pnpm add @latty/react
+
+# For Angular
+pnpm add @latty/angular
+```
+
+## Build Tools
+
+Latty works with all modern build tools:
+
+### Vite
+
+No additional configuration needed. Just import:
+
+```js
+import '@latty/tokens/dist/tokens.css';
+import '@latty/web';
+```
+
+### Webpack
+
+Add CSS loader support:
+
+```js
+// webpack.config.js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+};
+```
+
+### Next.js
+
+Import in `_app.tsx`:
+
+```tsx
+// pages/_app.tsx
+import '@latty/tokens/dist/tokens.css';
+import type { AppProps } from 'next/app';
+
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+}
+```
+
+## TypeScript
+
+All packages include TypeScript definitions. No additional setup required!
+
+```typescript
+import type { Button } from '@latty/web';
+import type { TableColumn } from '@latty/web/table';
+```
+
+## What's Next?
+
+- [Usage](/getting-started/usage) - Learn how to use components

@@ -1,0 +1,42 @@
+---
+// Version switcher component for documentation
+const currentVersion = 'v1.0';
+const versions = [
+  { label: 'v1.0 (latest)', value: 'v1.0', path: '/' },
+  // { label: 'v0.9', value: 'v0.9', path: '/v0.9/' },
+  // Add more versions as needed
+];
+---
+
+<div class="version-switcher" style="position: relative;">
+  <select
+    id="version-select"
+    style="
+      padding: var(--lt-spacing-2) var(--lt-spacing-3);
+      border: 1px solid var(--lt-color-neutral-300);
+      border-radius: var(--lt-border-radius);
+      background: white;
+      cursor: pointer;
+      font-size: 0.875rem;
+    "
+  >
+    {versions.map(version => (
+      <option value={version.path} selected={version.value === currentVersion}>
+        {version.label}
+      </option>
+    ))}
+  </select>
+</div>
+
+<script>
+  const select = document.getElementById('version-select') as HTMLSelectElement;
+  if (select) {
+    select.addEventListener('change', (e) => {
+      const target = e.target as HTMLSelectElement;
+      const path = target.value;
+      if (path && path !== window.location.pathname) {
+        window.location.href = path;
+      }
+    });
+  }
+</script>

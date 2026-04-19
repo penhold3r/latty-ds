@@ -1,0 +1,54 @@
+---
+layout: ../../layouts/BaseLayout.astro
+title: Colors
+description: Explore the color system in Latty Design System
+---
+
+import ColorPalette from '../../components/ColorPalette.astro';
+
+# Colors
+
+The Latty color system provides complete color palettes with tints and shades automatically generated from base colors using the culori library.
+
+## Color Palettes
+
+Each color palette includes 11 shades from 50 (lightest) to 950 (darkest), with 500 being the base color.
+
+<ColorPalette name="Primary" baseColor="primary" />
+<ColorPalette name="Secondary" baseColor="secondary" />
+<ColorPalette name="Success" baseColor="success" />
+<ColorPalette name="Warning" baseColor="warning" />
+<ColorPalette name="Error" baseColor="error" />
+<ColorPalette name="Neutral" baseColor="neutral" />
+
+## Usage
+
+Use color tokens in your CSS:
+
+```css
+.button {
+  background: var(--lt-color-primary-500);
+  color: white;
+}
+
+.button:hover {
+  background: var(--lt-color-primary-600);
+}
+
+.text-muted {
+  color: var(--lt-color-neutral-600);
+}
+```
+
+## Customization
+
+Override base colors in your CSS to create custom themes:
+
+```css
+:root {
+  --lt-color-primary-500: #8b5cf6;  /* Violet */
+  --lt-color-success-500: #10b981;  /* Green */
+}
+```
+
+The system will automatically generate the full palette based on your custom colors during the build process.

@@ -1,0 +1,29 @@
+{
+  "name": "@latty/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./css/latty.css": "./dist/css/latty.css",
+    "./css/font-face.css": "./dist/css/font-face.css"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build:ts": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "build:assets": "mkdir -p dist/css dist/fonts && cp -R src/css/* dist/css/ && cp -R src/font/* dist/fonts/",
+    "build": "pnpm run clean && pnpm run build:ts && pnpm run build:assets"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@latty/icons": "workspace:*",
+    "lit": "^3.2.0"
+  }
+}
