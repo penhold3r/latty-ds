@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Chip" description="Chip component">
+  <h1>Chip</h1>
+  <p>TODO: describe the Chip component.</p>
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`<lt-chip>Content</lt-chip>`} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-chip" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>
