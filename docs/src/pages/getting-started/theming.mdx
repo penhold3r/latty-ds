@@ -1,0 +1,113 @@
+---
+layout: ../../layouts/BaseLayout.astro
+title: Theming
+description: Customize Latty's look and feel with design tokens
+---
+
+# Theming
+
+## How the color system works
+
+Colors are defined as a single base hex value per semantic in `tokens.config.json`. The build script takes each base and generates a full 10-step palette (50–900) using the OKLCH color space for perceptually uniform tints and shades:
+
+```json
+{
+  "color": {
+    "primary": "#05b8e1",
+    "secondary": "#e26d05",
+    "success": "#22c55e",
+    "warning": "#eeb308",
+    "error": "#ef4444",
+    "info": "#0ea5e9"
+  }
+}
+```
+
+The output is a full palette of CSS custom properties:
+
+```css
+--lt-color-primary-50:  #e1eaed;
+--lt-color-primary-100: #b8e3f2;
+--lt-color-primary-200: #83cde7;
+/* ... */
+--lt-color-primary-500: #0097be;
+/* ... */
+--lt-color-primary-900: #002f3e;
+```
+
+Components reference specific shades — `500` for interactive elements, `100` for backgrounds, `700` for hover states, etc.
+
+## Changing the brand color
+
+Edit `tokens.config.json` and rebuild the tokens package:
+
+```bash
+pnpm --filter @latty/tokens build
+```
+
+The build regenerates the entire palette from the new base value. This is the right approach for brand-level changes because all 10 shades stay perceptually balanced relative to each other.
+
+## Runtime overrides
+
+You can override individual CSS vars at runtime without a rebuild. This is useful for one-off adjustments or experimenting, but keep in mind that only the shades you explicitly set will change — the rest of the auto-generated palette remains:
+
+```css
+:root {
+  --lt-border-radius: 2px;   /* sharper corners */
+  --lt-font-family: 'Inter', system-ui, sans-serif;
+}
+```
+
+Scoped to a section of the page:
+
+```css
+.sidebar {
+  --lt-color-neutral-50: #f8f8ff;
+  --lt-color-neutral-100: #f0f0f8;
+}
+```
+
+## Spacing scale
+
+The spacing scale is based on a 4px grid. Step 1 = 4px, step 4 = 16px, step 8 = 32px. Override individual steps if needed:
+
+```css
+:root {
+  --lt-spacing-4: 1.25rem;  /* default: 1rem */
+}
+```
+
+## Dark mode
+
+Redefine the token values under a dark selector. Since components only reference CSS vars, every component updates automatically:
+
+```css
+@media (prefers-color-scheme: dark) {
+  :root {
+    --lt-color-neutral-50:  #0a0a0a;
+    --lt-color-neutral-100: #171717;
+    --lt-color-neutral-200: #262626;
+    --lt-color-neutral-300: #3a3a3a;
+    --lt-color-neutral-400: #525252;
+    --lt-color-neutral-500: #737373;
+    --lt-color-neutral-600: #a3a3a3;
+    --lt-color-neutral-700: #d4d4d4;
+    --lt-color-neutral-800: #e5e5e5;
+    --lt-color-neutral-900: #f5f5f5;
+  }
+}
+```
+
+Or toggle with a class:
+
+```css
+[data-theme="dark"] {
+  --lt-color-neutral-50: #0a0a0a;
+  /* ... */
+}
+```
+
+## What's next?
+
+- [Tokens overview](/tokens/overview) — browse all available tokens
+- [Colors](/tokens/colors) — see the full generated palettes

@@ -11,19 +11,23 @@
       "default": "./dist/index.js"
     },
     "./css/latty.css": "./dist/css/latty.css",
-    "./css/font-face.css": "./dist/css/font-face.css"
+    "./css/font-face.css": "./dist/css/font-face.css",
+    "./manifest.json": "./dist/manifest.json"
   },
   "scripts": {
     "clean": "rm -rf dist",
     "build:ts": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "build:assets": "mkdir -p dist/css dist/fonts && cp -R src/css/* dist/css/ && cp -R src/font/* dist/fonts/",
-    "build": "pnpm run clean && pnpm run build:ts && pnpm run build:assets"
+    "build:manifest": "cem analyze --config cem.config.mjs && node scripts/build-manifest.mjs",
+    "build": "pnpm run clean && pnpm run build:ts && pnpm run build:assets && pnpm run build:manifest"
   },
   "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.11.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
     "@latty/icons": "workspace:*",
     "lit": "^3.2.0"
-  }
+  },
+  "customElements": "dist/custom-elements.json"
 }

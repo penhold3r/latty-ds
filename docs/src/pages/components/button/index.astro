@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Button" description="Interactive button component with multiple variants and states">
+  <h1>Button</h1>
+  <p>An interactive button with multiple color variants, appearances, sizes, optional icons, and a loading state.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-button" content="Click me" />
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-button variant="primary">Save changes</lt-button>
+<lt-button variant="primary" appearance="outlined" icon="download">Download</lt-button>
+<lt-button variant="error" icon="trash" loading>Deleting…</lt-button>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-button" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>

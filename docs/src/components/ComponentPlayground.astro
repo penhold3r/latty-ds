@@ -1,0 +1,356 @@
+---
+import manifest from '@latty/web/manifest.json';
+
+interface Props {
+  tag: string;
+  content?: string;
+  previewHeight?: string;
+}
+
+const { tag, content: slotContent = '', previewHeight = '140px' } = Astro.props;
+
+const component = (manifest as any)[tag];
+const members = (component?.members ?? []) as any[];
+
+const id = `playground-${Math.random().toString(36).slice(2, 8)}`;
+
+function defaultValue(member: any): any {
+  if (member.default !== undefined && member.default !== '') return member.default;
+  if (member.type === 'boolean') return false;
+  if (member.type === 'select' && member.options?.length) return member.options[0];
+  return '';
+}
+
+const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]));
+---
+
+<div class="playground" id={id} data-tag={tag} data-content={slotContent} data-members={JSON.stringify(members)} data-defaults={JSON.stringify(defaults)}>
+
+  <!-- Preview -->
+  <div class="preview" style={`min-height: ${previewHeight}`}>
+    <div class="preview-stage" id={`${id}-stage`}></div>
+  </div>
+
+  <!-- Controls + Code -->
+  <div class="bottom">
+
+    <div class="controls">
+      <div class="section-label">Controls</div>
+      {members.map((member) => {
+        const val = defaultValue(member);
+        const label = member.name
+          .split('-')
+          .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(' ');
+
+        return (
+          <div class="control-row">
+            <label class="control-label" for={`${id}-${member.name}`}>{label}</label>
+            {member.type === 'boolean' ? (
+              <input
+                class="control-toggle"
+                type="checkbox"
+                id={`${id}-${member.name}`}
+                data-prop={member.name}
+                data-type="boolean"
+                checked={val === true}
+              />
+            ) : member.type === 'select' ? (
+              <select
+                class="control-select"
+                id={`${id}-${member.name}`}
+                data-prop={member.name}
+                data-type="select"
+              >
+                {member.options?.map((opt: string) => (
+                  <option value={opt} selected={opt === val}>{opt}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                class="control-text"
+                type={member.type === 'number' ? 'number' : 'text'}
+                id={`${id}-${member.name}`}
+                data-prop={member.name}
+                data-type={member.type}
+                value={String(val)}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+
+    <div class="code-panel">
+      <div class="code-header">
+        <span class="section-label" style="color: var(--lt-color-neutral-500)">HTML</span>
+        <button class="copy-btn" id={`${id}-copy`} aria-label="Copy code">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          Copy
+        </button>
+      </div>
+      <pre class="code-pre"><code class="code-output" id={`${id}-code`}></code></pre>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  import '@latty/web';
+
+  async function initPlayground(playground: Element) {
+    const id = playground.id;
+    const tag = (playground as HTMLElement).dataset.tag!;
+    const slotContent = (playground as HTMLElement).dataset.content ?? '';
+    const members: any[] = JSON.parse((playground as HTMLElement).dataset.members ?? '[]');
+    const defaults: Record<string, any> = JSON.parse((playground as HTMLElement).dataset.defaults ?? '{}');
+
+    // Wait for the custom element to be registered before creating it
+    await customElements.whenDefined(tag);
+
+    const stage = document.getElementById(`${id}-stage`)!;
+    const codeEl = document.getElementById(`${id}-code`)!;
+    const copyBtn = document.getElementById(`${id}-copy`)!;
+
+    const state: Record<string, any> = { ...defaults };
+
+    // Build component element
+    const el = document.createElement(tag);
+    if (slotContent) el.innerHTML = slotContent;
+    stage.appendChild(el);
+
+    applyState();
+    updateCode();
+
+    // Wire controls
+    playground.querySelectorAll('[data-prop]').forEach((control) => {
+      const input = control as HTMLInputElement | HTMLSelectElement;
+      const propName = input.dataset.prop!;
+      const type = input.dataset.type!;
+
+      input.addEventListener(type === 'boolean' ? 'change' : 'input', () => {
+        state[propName] = type === 'boolean'
+          ? (input as HTMLInputElement).checked
+          : input.value;
+        applyState();
+        updateCode();
+      });
+    });
+
+    // Copy button
+    copyBtn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(codeEl.textContent ?? '');
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        copyBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`;
+      }, 1500);
+    });
+
+    function applyState() {
+      members.forEach((member) => {
+        const value = state[member.name];
+        if (member.type === 'boolean') {
+          value ? el.setAttribute(member.name, '') : el.removeAttribute(member.name);
+        } else if (value !== '' && value !== undefined) {
+          el.setAttribute(member.name, String(value));
+        } else {
+          el.removeAttribute(member.name);
+        }
+      });
+    }
+
+    function generateCode(): string {
+      const attrParts: string[] = [];
+      members.forEach((member) => {
+        const value = state[member.name];
+        const def = defaults[member.name];
+        if (member.type === 'boolean') {
+          if (value === true) attrParts.push(member.name);
+        } else if (value !== '' && value !== undefined && value !== def) {
+          attrParts.push(`${member.name}="${value}"`);
+        }
+      });
+
+      if (!attrParts.length) {
+        return slotContent
+          ? `<${tag}>\n  ${slotContent}\n</${tag}>`
+          : `<${tag}></${tag}>`;
+      }
+
+      const attrs = '\n  ' + attrParts.join('\n  ') + '\n';
+      return slotContent
+        ? `<${tag}${attrs}>\n  ${slotContent}\n</${tag}>`
+        : `<${tag}${attrs}></${tag}>`;
+    }
+
+    function updateCode() {
+      codeEl.textContent = generateCode();
+    }
+  }
+
+  document.querySelectorAll('.playground').forEach((playground) => {
+    initPlayground(playground);
+  });
+</script>
+
+<style>
+  .playground {
+    border: 1px solid var(--lt-color-neutral-200);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: var(--lt-spacing-6) 0;
+    font-size: 0.875rem;
+  }
+
+  .preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--lt-spacing-10) var(--lt-spacing-8);
+    background: var(--lt-color-neutral-50);
+    border-bottom: 1px solid var(--lt-color-neutral-200);
+  }
+
+  .preview-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--lt-spacing-4);
+    flex-wrap: wrap;
+  }
+
+  .bottom {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+  }
+
+  .controls {
+    border-right: 1px solid var(--lt-color-neutral-200);
+    background: var(--lt-color-neutral-50);
+  }
+
+  .section-label {
+    display: block;
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lt-color-neutral-500);
+    border-bottom: 1px solid var(--lt-color-neutral-200);
+    background: var(--lt-color-neutral-100);
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    gap: var(--lt-spacing-3);
+    border-bottom: 1px solid var(--lt-color-neutral-100);
+  }
+
+  .control-row:last-child {
+    border-bottom: none;
+  }
+
+  .control-label {
+    color: var(--lt-color-neutral-700);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .control-select,
+  .control-text {
+    font-size: 0.8125rem;
+    padding: 3px 6px;
+    border: 1px solid var(--lt-color-neutral-300);
+    border-radius: 4px;
+    background: white;
+    color: var(--lt-color-neutral-900);
+    max-width: 120px;
+    width: 100%;
+  }
+
+  .control-select:focus,
+  .control-text:focus {
+    outline: 2px solid var(--lt-color-primary-400);
+    outline-offset: 1px;
+    border-color: var(--lt-color-primary-400);
+  }
+
+  .control-toggle {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--lt-color-primary-500);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .code-panel {
+    display: flex;
+    flex-direction: column;
+    background: var(--lt-color-neutral-900);
+    min-width: 0;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--lt-spacing-4);
+    border-bottom: 1px solid var(--lt-color-neutral-700);
+  }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: 1px solid var(--lt-color-neutral-600);
+    color: var(--lt-color-neutral-400);
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 150ms, border-color 150ms;
+    margin: var(--lt-spacing-2) 0;
+  }
+
+  .copy-btn:hover {
+    color: var(--lt-color-neutral-200);
+    border-color: var(--lt-color-neutral-400);
+  }
+
+  .code-pre {
+    margin: 0;
+    padding: var(--lt-spacing-4);
+    background: transparent;
+    overflow-x: auto;
+    flex: 1;
+  }
+
+  .code-output {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8125rem;
+    color: var(--lt-color-neutral-200);
+    background: none;
+    padding: 0;
+    white-space: pre;
+  }
+
+  @media (max-width: 640px) {
+    .bottom {
+      grid-template-columns: 1fr;
+    }
+    .controls {
+      border-right: none;
+      border-bottom: 1px solid var(--lt-color-neutral-200);
+    }
+  }
+</style>

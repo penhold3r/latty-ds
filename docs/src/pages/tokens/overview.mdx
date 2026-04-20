@@ -1,93 +1,60 @@
 ---
 layout: ../../layouts/BaseLayout.astro
-title: Design Tokens Overview
-description: Learn about the design token system in Latty
+title: Tokens Overview
+description: Design tokens in the Latty Design System
 ---
 
 # Design Tokens
 
-Design tokens are the foundation of the Latty Design System. They are the single source of truth for design decisions, generating CSS custom properties, JSON exports, and TypeScript types.
+Design tokens are the single source of truth for every visual decision in Latty. They are generated at build time from `tokens.config.json` and shipped as three artifacts:
 
-## Token Categories
+| Output | Path | Use case |
+|---|---|---|
+| CSS custom properties | `@latty/tokens/dist/tokens.css` | Any browser context |
+| JSON | `@latty/tokens/dist/tokens.json` | Tooling, documentation |
+| JavaScript module | `@latty/tokens/dist/tokens.js` | JS/TS consumers |
 
-Latty provides tokens in the following categories:
+## Token categories
 
-### Colors
+| Category | CSS prefix | Example |
+|---|---|---|
+| Colors | `--lt-color-*` | `--lt-color-primary-500` |
+| Spacing | `--lt-spacing-*` | `--lt-spacing-4` |
+| Border radius | `--lt-border-radius` | `0.5rem` |
+| Elevation | `--lt-elevation-*` | `--lt-elevation-2` |
+| Typography | `--lt-font-family` | `"Asap", sans-serif` |
 
-Complete color palettes with tints and shades automatically generated from base colors:
-
-- **Primary** - `--lt-color-primary-{50-950}`
-- **Secondary** - `--lt-color-secondary-{50-950}`
-- **Success** - `--lt-color-success-{50-950}`
-- **Warning** - `--lt-color-warning-{50-950}`
-- **Error** - `--lt-color-error-{50-950}`
-- **Neutral** - `--lt-color-neutral-{50-950}`
-
-### Spacing
-
-Two scales for spacing tokens:
-
-- **rem-based** - `--lt-spacing-{1-12}` (default)
-- **px-based** - `--lt-spacing-px-{1-12}`
-
-### Typography
-
-Typography tokens for consistent text styling:
-
-- **Font families** - `--lt-font-family-*`
-- **Font sizes** - `--lt-font-size-*`
-- **Line heights** - `--lt-line-height-*`
-- **Font weights** - `--lt-font-weight-*`
-
-### Other Tokens
-
-- **Border radius** - `--lt-border-radius`
-- **Shadows** - `--lt-shadow-*`
-- **Z-index** - `--lt-z-index-*`
-
-## Using Tokens
-
-Tokens are available as CSS custom properties after importing the CSS file:
+## Import
 
 ```css
-@import '@latty/tokens/tokens.css';
+@import '@latty/tokens/dist/tokens.css';
+```
 
-.my-component {
-  color: var(--lt-color-primary-500);
-  padding: var(--lt-spacing-4);
-  border-radius: var(--lt-border-radius);
-}
+```js
+import '@latty/tokens/dist/tokens.css';       // CSS vars in browser
+import tokens from '@latty/tokens/dist/tokens.js'; // JS object
 ```
 
 ## Customization
 
-Override tokens to create custom themes:
+Override any token on `:root` after the import to theme the system:
 
 ```css
+@import '@latty/tokens/dist/tokens.css';
+
 :root {
-  /* Custom primary color */
-  --lt-color-primary-500: #8b5cf6;
-  
-  /* Custom spacing scale */
-  --lt-spacing-4: 2rem;
-  
-  /* Custom border radius */
-  --lt-border-radius: 8px;
+  --lt-border-radius: 2px;
+  --lt-font-family: 'Inter', sans-serif;
 }
 ```
 
-## JavaScript/TypeScript Usage
+For brand-level color changes, edit `tokens.config.json` and rebuild:
 
-Import tokens as JavaScript/TypeScript objects:
-
-```typescript
-import tokens from '@latty/tokens';
-
-const primaryColor = tokens.color.primary[500];
-const spacing = tokens.spacing.rem[4];
+```bash
+pnpm --filter @latty/tokens build
 ```
 
-## Learn More
+## Explore
 
-- [Colors](/tokens/colors) - Explore the color system
-- [Spacing](/tokens/spacing) - Learn about spacing scales
+- [Colors](/tokens/colors) — full palette browser for all semantic colors
+- [Spacing](/tokens/spacing) — visual spacing scale

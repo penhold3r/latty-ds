@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Latty Design System" description="A framework-agnostic design system built on design tokens and Web Components">
+  <div class="hero">
+    <div class="hero-badge">Design System</div>
+    <h1 class="hero-title">Build consistent UI,<br/>at any scale</h1>
+    <p class="hero-subtitle">
+      Latty is a framework-agnostic design system built on design tokens and Web Components.
+      One token change updates every component, in every framework.
+    </p>
+    <div class="hero-actions">
+      <a href="/getting-started/introduction" class="btn-primary">Get started</a>
+      <a href="/components/button" class="btn-secondary">Browse components</a>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">◆</div>
+      <h3>Tokens first</h3>
+      <p>Design tokens are the single source of truth. They generate CSS custom properties, JSON exports, and TypeScript types — change once, update everywhere.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">⬡</div>
+      <h3>Framework agnostic</h3>
+      <p>Built on Web Components, Latty works natively in vanilla HTML, React, Angular, Vue, Svelte, or any other framework without wrappers.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">◎</div>
+      <h3>Fully themeable</h3>
+      <p>Every visual decision is a CSS custom property. Override tokens globally or per-component to create a completely custom brand.</p>
+    </div>
+  </div>
+
+  <div class="quick-start">
+    <h2>Quick start</h2>
+    <pre><code>pnpm add @latty/tokens @latty/web</code></pre>
+    <pre><code class="language-js">import '@latty/tokens/dist/tokens.css';
+import '@latty/web';</code></pre>
+    <pre><code class="language-html">&lt;lt-button variant="primary" icon="save"&gt;Save changes&lt;/lt-button&gt;
+
+&lt;lt-textfield label="Email" type="email" required&gt;&lt;/lt-textfield&gt;</code></pre>
+    <a href="/getting-started/installation" class="link-more">Full installation guide →</a>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: var(--lt-spacing-10) 0 var(--lt-spacing-12);
+    border-bottom: 1px solid var(--lt-color-neutral-200);
+    margin-bottom: var(--lt-spacing-10);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lt-color-primary-600);
+    background: var(--lt-color-primary-50);
+    border: 1px solid var(--lt-color-primary-200);
+    padding: 3px 10px;
+    border-radius: 99px;
+    margin-bottom: var(--lt-spacing-4);
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--lt-color-neutral-900);
+    margin-bottom: var(--lt-spacing-4);
+  }
+
+  .hero-subtitle {
+    font-size: 1.125rem;
+    color: var(--lt-color-neutral-600);
+    line-height: 1.7;
+    max-width: 52ch;
+    margin-bottom: var(--lt-spacing-6);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--lt-spacing-3);
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--lt-spacing-3) var(--lt-spacing-5);
+    background: var(--lt-color-primary-500);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 150ms;
+  }
+
+  .btn-primary:hover {
+    background: var(--lt-color-primary-600);
+    text-decoration: none;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--lt-spacing-3) var(--lt-spacing-5);
+    background: var(--lt-color-neutral-100);
+    color: var(--lt-color-neutral-800);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1px solid var(--lt-color-neutral-200);
+    transition: background 150ms;
+  }
+
+  .btn-secondary:hover {
+    background: var(--lt-color-neutral-200);
+    text-decoration: none;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--lt-spacing-6);
+    margin-bottom: var(--lt-spacing-12);
+  }
+
+  .feature {
+    padding: var(--lt-spacing-5);
+    border: 1px solid var(--lt-color-neutral-200);
+    border-radius: 10px;
+    background: var(--lt-color-neutral-50);
+  }
+
+  .feature-icon {
+    font-size: 1.25rem;
+    color: var(--lt-color-primary-500);
+    margin-bottom: var(--lt-spacing-3);
+  }
+
+  .feature h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--lt-color-neutral-900);
+    margin-bottom: var(--lt-spacing-2);
+  }
+
+  .feature p {
+    font-size: 0.875rem;
+    color: var(--lt-color-neutral-600);
+    line-height: 1.6;
+  }
+
+  .quick-start {
+    margin-bottom: var(--lt-spacing-12);
+  }
+
+  .quick-start h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--lt-color-neutral-900);
+    margin-bottom: var(--lt-spacing-4);
+  }
+
+  .quick-start pre {
+    margin-bottom: var(--lt-spacing-3);
+  }
+
+  .link-more {
+    display: inline-block;
+    margin-top: var(--lt-spacing-4);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--lt-color-primary-600);
+  }
+</style>

@@ -1,0 +1,185 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import tokens from '@latty/tokens/tokens.json';
+
+const spacing = (tokens as any).spacing;
+const steps = Object.keys(spacing.rem).sort((a, b) => Number(a) - Number(b));
+
+// Base = 16px, step * 4px
+function toPx(step: string) {
+  return Number(step) * 4;
+}
+---
+
+<BaseLayout title="Spacing" description="Spacing tokens in the Latty Design System">
+  <h1>Spacing</h1>
+  <p>
+    A 4px grid system with 25 steps (0–24), providing 0px to 96px in 4px increments.
+    Each step is available in both <code>rem</code> (canonical) and <code>px</code> units.
+  </p>
+
+  <div class="scale">
+    <div class="scale-header">
+      <span>Step</span>
+      <span>CSS variable</span>
+      <span>Value</span>
+      <span>px</span>
+      <span class="bar-col">Visual</span>
+    </div>
+
+    {steps.map((step) => {
+      const remVal = spacing.rem[step];
+      const pxVal = spacing.px[step];
+      const px = toPx(step);
+      const varName = step === '0' ? '--lt-spacing-0' : `--lt-spacing-${step}`;
+
+      return (
+        <div class="scale-row">
+          <span class="step-num">{step}</span>
+          <code class="var-name">{varName}</code>
+          <span class="val-rem">{remVal}</span>
+          <span class="val-px">{pxVal}</span>
+          <div class="bar-col">
+            <div
+              class="bar"
+              style={`width: ${Math.min(px, 320)}px`}
+              title={pxVal}
+            ></div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <h2>Usage</h2>
+  <div class="usage-grid">
+    <div class="usage-card">
+      <h3>CSS</h3>
+      <pre><code>{`.element {
+  padding: var(--lt-spacing-4);    /* 1rem / 16px */
+  margin-bottom: var(--lt-spacing-6); /* 1.5rem / 24px */
+  gap: var(--lt-spacing-3);        /* 0.75rem / 12px */
+}`}</code></pre>
+    </div>
+    <div class="usage-card">
+      <h3>Pixel variant</h3>
+      <pre><code>{`.element {
+  /* use -px- variant for pixel-precise values */
+  border-width: var(--lt-spacing-px-1); /* 4px */
+  min-height: var(--lt-spacing-px-10);  /* 40px */
+}`}</code></pre>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .scale {
+    border: 1px solid var(--lt-color-neutral-200);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: var(--lt-spacing-6) 0;
+    font-size: 0.8125rem;
+  }
+
+  .scale-header,
+  .scale-row {
+    display: grid;
+    grid-template-columns: 48px 180px 72px 60px 1fr;
+    align-items: center;
+    gap: var(--lt-spacing-4);
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+  }
+
+  .scale-header {
+    background: var(--lt-color-neutral-100);
+    border-bottom: 1px solid var(--lt-color-neutral-200);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--lt-color-neutral-500);
+  }
+
+  .scale-row {
+    border-bottom: 1px solid var(--lt-color-neutral-100);
+  }
+
+  .scale-row:last-child {
+    border-bottom: none;
+  }
+
+  .scale-row:hover {
+    background: var(--lt-color-neutral-50);
+  }
+
+  .step-num {
+    font-weight: 600;
+    color: var(--lt-color-neutral-500);
+    text-align: right;
+  }
+
+  .var-name {
+    color: var(--lt-color-primary-700);
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .val-rem {
+    color: var(--lt-color-neutral-700);
+    font-family: monospace;
+  }
+
+  .val-px {
+    color: var(--lt-color-neutral-500);
+    font-family: monospace;
+  }
+
+  .bar-col {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .bar {
+    height: 8px;
+    background: var(--lt-color-primary-400);
+    border-radius: 2px;
+    min-width: 2px;
+    transition: width 150ms;
+  }
+
+  .usage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--lt-spacing-4);
+    margin-top: var(--lt-spacing-6);
+  }
+
+  .usage-card h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--lt-color-neutral-700);
+    margin-bottom: var(--lt-spacing-2);
+  }
+
+  .usage-card pre {
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 640px) {
+    .scale-header,
+    .scale-row {
+      grid-template-columns: 40px 1fr 60px;
+    }
+    .scale-header span:nth-child(3),
+    .scale-header span:nth-child(4),
+    .scale-row .val-rem,
+    .scale-row .val-px {
+      display: none;
+    }
+    .usage-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

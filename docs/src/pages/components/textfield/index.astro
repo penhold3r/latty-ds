@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Textfield" description="Text input with validation states">
+  <h1>Textfield</h1>
+  <p>A text input supporting multiple types (text, email, password, multiline), validation variants, icons, and helper text. Password type includes an automatic visibility toggle.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-textfield" previewHeight="100px" />
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-textfield label="Email" type="email" placeholder="you@example.com" required></lt-textfield>
+
+<lt-textfield
+  label="Password"
+  type="password"
+  helper-text="Minimum 8 characters"
+></lt-textfield>
+
+<lt-textfield
+  label="Bio"
+  type="multiline"
+  placeholder="Tell us about yourself..."
+></lt-textfield>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-textfield" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>

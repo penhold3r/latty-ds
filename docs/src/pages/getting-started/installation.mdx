@@ -1,121 +1,84 @@
 ---
 layout: ../../layouts/BaseLayout.astro
 title: Installation
-description: How to install and set up the Latty Design System
+description: Add Latty to your project
 ---
 
 # Installation
 
-## Package Manager
-
-Latty is distributed as npm packages. You can install them using your preferred package manager:
+## Install packages
 
 ```bash
-# Using pnpm (recommended)
-pnpm add @latty/tokens @latty/web @latty/icons
+# pnpm
+pnpm add @latty/tokens @latty/web
 
-# Using npm
-npm install @latty/tokens @latty/web @latty/icons
+# npm
+npm install @latty/tokens @latty/web
 
-# Using yarn
-yarn add @latty/tokens @latty/web @latty/icons
+# yarn
+yarn add @latty/tokens @latty/web
 ```
 
-## Individual Packages
+`@latty/icons` is bundled inside `@latty/web` — you don't need to install it separately unless you want to use the icon registry API directly.
 
-You can also install packages individually based on your needs:
+## Import tokens
 
-### Design Tokens
-
-```bash
-pnpm add @latty/tokens
-```
-
-The tokens package contains:
-- CSS custom properties
-- JSON exports
-- TypeScript types
-
-### Web Components
-
-```bash
-pnpm add @latty/web
-```
-
-Includes all Web Components (requires `@latty/tokens`).
-
-### Icons
-
-```bash
-pnpm add @latty/icons
-```
-
-Icon system powered by Iconoir (800+ icons).
-
-### Framework Wrappers
-
-```bash
-# For React
-pnpm add @latty/react
-
-# For Angular
-pnpm add @latty/angular
-```
-
-## Build Tools
-
-Latty works with all modern build tools:
-
-### Vite
-
-No additional configuration needed. Just import:
+The tokens CSS file must be loaded before any components render. Import it once at your app's entry point:
 
 ```js
 import '@latty/tokens/dist/tokens.css';
+```
+
+With a CSS `@import` (e.g. in a global stylesheet):
+
+```css
+@import '@latty/tokens/dist/tokens.css';
+```
+
+In a plain HTML file:
+
+```html
+<link rel="stylesheet" href="node_modules/@latty/tokens/dist/tokens.css">
+```
+
+## Import components
+
+```js
+// All components at once
 import '@latty/web';
+
+// Or cherry-pick to keep bundles small
+import '@latty/web/button';
+import '@latty/web/textfield';
+import '@latty/web/dialog';
 ```
 
-### Webpack
+That's it — components are self-registering custom elements. Once imported, use them anywhere in your HTML.
 
-Add CSS loader support:
+## Framework wrappers (optional)
 
-```js
-// webpack.config.js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
-};
-```
+If you prefer typed React or Angular components:
 
-### Next.js
-
-Import in `_app.tsx`:
-
-```tsx
-// pages/_app.tsx
-import '@latty/tokens/dist/tokens.css';
-import type { AppProps } from 'next/app';
-
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
-}
+```bash
+pnpm add @latty/react    # React
+pnpm add @latty/angular  # Angular
 ```
 
 ## TypeScript
 
-All packages include TypeScript definitions. No additional setup required!
+All packages ship with `.d.ts` files. No extra setup needed.
 
-```typescript
-import type { Button } from '@latty/web';
-import type { TableColumn } from '@latty/web/table';
+To get HTML template type-checking for custom elements in TypeScript projects, add this to your `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM", "DOM.Iterable"]
+  }
+}
 ```
 
-## What's Next?
+## What's next?
 
-- [Usage](/getting-started/usage) - Learn how to use components
+- [Usage](/getting-started/usage) — start using components
+- [Theming](/getting-started/theming) — customize the look and feel

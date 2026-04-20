@@ -1,0 +1,202 @@
+---
+const currentPath = Astro.url.pathname;
+
+const nav = [
+  {
+    label: 'Introduction',
+    items: [
+      { label: 'What is Latty?', href: '/getting-started/introduction' },
+      { label: 'Installation', href: '/getting-started/installation' },
+      { label: 'Usage', href: '/getting-started/usage' },
+      { label: 'Theming', href: '/getting-started/theming' },
+    ],
+  },
+  {
+    label: 'Components',
+    items: [
+      { label: 'Accordion', href: '/components/accordion' },
+      { label: 'Button', href: '/components/button' },
+      { label: 'Checkbox', href: '/components/checkbox' },
+      { label: 'Chip', href: '/components/chip' },
+      { label: 'Dialog', href: '/components/dialog' },
+      { label: 'List', href: '/components/list' },
+      { label: 'Radio', href: '/components/radio' },
+      { label: 'Select', href: '/components/select' },
+      { label: 'Spinner', href: '/components/spinner' },
+      { label: 'Surface', href: '/components/surface' },
+      { label: 'Switch', href: '/components/switch' },
+      { label: 'Tab', href: '/components/tab' },
+      { label: 'Table', href: '/components/table' },
+      { label: 'Textfield', href: '/components/textfield' },
+      { label: 'Dialog', href: '/components/dialog' },
+    ],
+  },
+  {
+    label: 'Tokens',
+    items: [
+      { label: 'Overview', href: '/tokens/overview' },
+      { label: 'Colors', href: '/tokens/colors' },
+      { label: 'Spacing', href: '/tokens/spacing' },
+    ],
+  },
+];
+
+function isActive(href: string) {
+  return currentPath === href || currentPath === href + '/';
+}
+
+function isSectionActive(items: { href: string }[]) {
+  return items.some((item) => isActive(item.href));
+}
+---
+
+<nav class="sidebar" id="sidebar" aria-label="Documentation navigation">
+  <div class="sidebar-inner">
+    {nav.map((section) => (
+      <div class="nav-section" class:list={[{ 'is-open': isSectionActive(section.items) }]}>
+        <button
+          class="nav-section-toggle"
+          aria-expanded={isSectionActive(section.items) ? 'true' : 'false'}
+          data-section-toggle
+        >
+          <span>{section.label}</span>
+          <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <ul class="nav-items" role="list">
+          {section.items.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class:list={['nav-link', { 'is-active': isActive(item.href) }]}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .sidebar {
+    width: var(--sidebar-width, 240px);
+    flex-shrink: 0;
+    position: sticky;
+    top: var(--topbar-height, 56px);
+    height: calc(100vh - var(--topbar-height, 56px));
+    overflow-y: auto;
+    border-right: 1px solid var(--lt-color-neutral-200);
+    background: var(--lt-color-neutral-50);
+    padding: var(--lt-spacing-4) 0;
+  }
+
+  .sidebar-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lt-spacing-2);
+  }
+
+  .nav-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-section-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lt-color-neutral-500);
+    text-align: left;
+  }
+
+  .nav-section-toggle:hover {
+    color: var(--lt-color-neutral-700);
+  }
+
+  .chevron {
+    transition: transform 200ms ease;
+    flex-shrink: 0;
+  }
+
+  .nav-section.is-open .chevron {
+    transform: rotate(180deg);
+  }
+
+  .nav-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    flex-direction: column;
+  }
+
+  .nav-section.is-open .nav-items {
+    display: flex;
+  }
+
+  .nav-link {
+    display: block;
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    padding-left: calc(var(--lt-spacing-4) + var(--lt-spacing-2));
+    color: var(--lt-color-neutral-700);
+    text-decoration: none;
+    font-size: 0.875rem;
+    border-left: 2px solid transparent;
+    transition: color 150ms, border-color 150ms, background 150ms;
+  }
+
+  .nav-link:hover {
+    color: var(--lt-color-neutral-900);
+    background: var(--lt-color-neutral-100);
+    text-decoration: none;
+  }
+
+  .nav-link.is-active {
+    color: var(--lt-color-primary-600);
+    border-left-color: var(--lt-color-primary-500);
+    background: var(--lt-color-primary-50);
+    font-weight: 500;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      top: var(--topbar-height, 56px);
+      left: 0;
+      z-index: 100;
+      height: calc(100vh - var(--topbar-height, 56px));
+      transform: translateX(-100%);
+      transition: transform 250ms ease;
+      box-shadow: 4px 0 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar.is-open {
+      transform: translateX(0);
+    }
+  }
+</style>
+
+<script>
+  // Section toggles
+  document.querySelectorAll('[data-section-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const section = btn.closest('.nav-section');
+      const isOpen = section?.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+</script>

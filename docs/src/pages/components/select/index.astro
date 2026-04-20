@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Select" description="Dropdown select component">
+  <h1>Select</h1>
+  <p>A custom dropdown with labels, placeholder, helper text, and validation states. The <code>options</code> property is set via JavaScript as an array of <code>&#123; value, label &#125;</code> objects.</p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="select-playground">
+    <div slot="preview">
+      <lt-select id="playground-select" label="Country" placeholder="Select a country" style="width:260px;"></lt-select>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">variant</label>
+        <select class="control-select" id="ctrl-variant">
+          <option value="default" selected>default</option>
+          <option value="success">success</option>
+          <option value="warning">warning</option>
+          <option value="error">error</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">size</label>
+        <select class="control-select" id="ctrl-size">
+          <option value="sm">sm</option>
+          <option value="md" selected>md</option>
+          <option value="lg">lg</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">disabled</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-disabled" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">required</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-required" />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-select id="my-select" label="Country" placeholder="Select a country"></lt-select>
+
+<script type="module">
+  const select = document.getElementById('my-select');
+  select.options = [
+    { value: 'us', label: 'United States' },
+    { value: 'gb', label: 'United Kingdom' },
+    { value: 'ca', label: 'Canada' },
+  ];
+  select.addEventListener('change', (e) => console.log(e.detail.value));
+</script>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-select" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const select = document.getElementById('playground-select') as any;
+  const codeEl = document.getElementById('select-playground-code')!;
+
+  select.options = [
+    { value: 'us', label: 'United States' },
+    { value: 'gb', label: 'United Kingdom' },
+    { value: 'ca', label: 'Canada' },
+    { value: 'de', label: 'Germany' },
+    { value: 'fr', label: 'France' },
+  ];
+
+  const state: Record<string, any> = { variant: 'default', size: 'md', disabled: false, required: false };
+
+  function updateCode() {
+    const attrs = Object.entries(state)
+      .filter(([k, v]) => v !== false && !(k === 'variant' && v === 'default') && !(k === 'size' && v === 'md'))
+      .map(([k, v]) => v === true ? k : `${k}="${v}"`)
+      .join('\n  ');
+    codeEl.textContent = attrs
+      ? `<lt-select\n  ${attrs}\n  label="Country"\n  placeholder="Select a country"\n></lt-select>`
+      : `<lt-select label="Country" placeholder="Select a country"></lt-select>`;
+  }
+
+  document.getElementById('ctrl-variant')?.addEventListener('change', (e) => {
+    state.variant = (e.target as HTMLSelectElement).value;
+    select.setAttribute('variant', state.variant);
+    updateCode();
+  });
+  document.getElementById('ctrl-size')?.addEventListener('change', (e) => {
+    state.size = (e.target as HTMLSelectElement).value;
+    select.setAttribute('size', state.size);
+    updateCode();
+  });
+  ['disabled', 'required'].forEach((attr) => {
+    document.getElementById(`ctrl-${attr}`)?.addEventListener('change', (e) => {
+      const checked = (e.target as HTMLInputElement).checked;
+      state[attr] = checked;
+      checked ? select.setAttribute(attr, '') : select.removeAttribute(attr);
+      updateCode();
+    });
+  });
+
+  updateCode();
+</script>

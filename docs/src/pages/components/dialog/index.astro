@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Dialog" description="Modal dialog component">
+  <h1>Dialog</h1>
+  <p>A modal dialog with backdrop, keyboard trap, and focus management. Supports a <code>footer</code> slot for actions. Emits <code>lt-open</code> and <code>lt-close</code> events.</p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="dialog-playground">
+    <div slot="preview">
+      <lt-button variant="primary" id="open-dialog">Open dialog</lt-button>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">size</label>
+        <select class="control-select" id="ctrl-size">
+          <option value="sm">sm</option>
+          <option value="md" selected>md</option>
+          <option value="lg">lg</option>
+          <option value="xl">xl</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">hide-close-button</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-hide-close" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">close-on-backdrop-click</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-backdrop" checked />
+      </div>
+      <div class="control-row">
+        <label class="control-label">close-on-escape</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-escape" checked />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <lt-dialog id="playground-dialog" title="Example dialog" size="md">
+    <p>This is the dialog content. Try changing the controls to see how the dialog behaves.</p>
+    <div slot="footer">
+      <lt-button variant="neutral" appearance="outlined" id="cancel-dialog">Cancel</lt-button>
+      <lt-button variant="primary">Confirm</lt-button>
+    </div>
+  </lt-dialog>
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-button variant="primary" id="open-btn">Open dialog</lt-button>
+
+<lt-dialog id="my-dialog" title="Confirm action" size="sm">
+  <p>Are you sure you want to proceed?</p>
+  <div slot="footer">
+    <lt-button variant="neutral" appearance="outlined" id="cancel-btn">Cancel</lt-button>
+    <lt-button variant="primary">Confirm</lt-button>
+  </div>
+</lt-dialog>
+
+<script type="module">
+  const dialog = document.getElementById('my-dialog');
+  document.getElementById('open-btn').addEventListener('click', () => dialog.open = true);
+  document.getElementById('cancel-btn').addEventListener('click', () => dialog.open = false);
+</script>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-dialog" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const dialog = document.getElementById('playground-dialog') as any;
+  const codeEl = document.getElementById('dialog-playground-code')!;
+
+  const state = { size: 'md', 'hide-close-button': false, 'close-on-backdrop-click': true, 'close-on-escape': true };
+
+  function updateCode() {
+    const attrs = Object.entries(state)
+      .filter(([, v]) => v !== false && v !== 'md')
+      .map(([k, v]) => v === true ? k : `${k}="${v}"`)
+      .join('\n  ');
+    codeEl.textContent = attrs
+      ? `<lt-dialog\n  ${attrs}\n  title="Example dialog"\n></lt-dialog>`
+      : `<lt-dialog title="Example dialog"></lt-dialog>`;
+  }
+
+  document.getElementById('open-dialog')?.addEventListener('click', () => dialog.open = true);
+  document.getElementById('cancel-dialog')?.addEventListener('click', () => dialog.open = false);
+
+  document.getElementById('ctrl-size')?.addEventListener('change', (e) => {
+    state.size = (e.target as HTMLSelectElement).value;
+    dialog.setAttribute('size', state.size);
+    updateCode();
+  });
+
+  [['ctrl-hide-close', 'hide-close-button'], ['ctrl-backdrop', 'close-on-backdrop-click'], ['ctrl-escape', 'close-on-escape']].forEach(([ctrlId, attr]) => {
+    document.getElementById(ctrlId)?.addEventListener('change', (e) => {
+      const checked = (e.target as HTMLInputElement).checked;
+      (state as any)[attr] = checked;
+      checked ? dialog.setAttribute(attr, '') : dialog.removeAttribute(attr);
+      updateCode();
+    });
+  });
+
+  updateCode();
+</script>

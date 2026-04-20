@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Table" description="Data table with sorting and responsive design">
+  <h1>Table</h1>
+  <p>A data table with sortable columns, density options, and striped rows. Columns and data are set via JavaScript properties.</p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="table-playground" previewHeight="auto">
+    <div slot="preview" style="width:100%;overflow-x:auto;">
+      <lt-table id="playground-table" hoverable></lt-table>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">density</label>
+        <select class="control-select" id="ctrl-density">
+          <option value="compact">compact</option>
+          <option value="normal" selected>normal</option>
+          <option value="comfortable">comfortable</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">hoverable</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-hoverable" checked />
+      </div>
+      <div class="control-row">
+        <label class="control-label">striped</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-striped" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">bordered</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-bordered" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">loading</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-loading" />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-table id="my-table" hoverable striped></lt-table>
+
+<script type="module">
+  const table = document.getElementById('my-table');
+  table.columns = [
+    { key: 'name',   label: 'Name',   sortable: true },
+    { key: 'role',   label: 'Role' },
+    { key: 'status', label: 'Status' },
+  ];
+  table.data = [
+    { name: 'Alice',   role: 'Engineer', status: 'Active' },
+    { name: 'Bob',     role: 'Designer', status: 'Active' },
+    { name: 'Charlie', role: 'Manager',  status: 'Away' },
+  ];
+</script>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-table" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const table = document.getElementById('playground-table') as any;
+  const codeEl = document.getElementById('table-playground-code')!;
+
+  table.columns = [
+    { key: 'name',   label: 'Name',   sortable: true },
+    { key: 'email',  label: 'Email' },
+    { key: 'role',   label: 'Role',   sortable: true },
+    { key: 'status', label: 'Status' },
+  ];
+  table.data = [
+    { name: 'Alice Martin',   email: 'alice@example.com', role: 'Engineer', status: 'Active' },
+    { name: 'Bob Chen',       email: 'bob@example.com',   role: 'Designer', status: 'Active' },
+    { name: 'Carol Williams', email: 'carol@example.com', role: 'Manager',  status: 'Away' },
+    { name: 'David Kim',      email: 'david@example.com', role: 'Engineer', status: 'Active' },
+  ];
+
+  const state: Record<string, any> = { density: 'normal', hoverable: true, striped: false, bordered: false, loading: false };
+
+  function updateCode() {
+    const attrs = Object.entries(state)
+      .filter(([k, v]) => v !== false && !(k === 'density' && v === 'normal'))
+      .map(([k, v]) => v === true ? k : `${k}="${v}"`)
+      .join(' ');
+    codeEl.textContent = `<lt-table${attrs ? ' ' + attrs : ''}></lt-table>`;
+  }
+
+  // init
+  table.setAttribute('hoverable', '');
+  updateCode();
+
+  document.getElementById('ctrl-density')?.addEventListener('change', (e) => {
+    state.density = (e.target as HTMLSelectElement).value;
+    table.setAttribute('density', state.density);
+    updateCode();
+  });
+
+  ['hoverable', 'striped', 'bordered', 'loading'].forEach((attr) => {
+    const ctrl = document.getElementById(`ctrl-${attr}`) as HTMLInputElement;
+    ctrl?.addEventListener('change', () => {
+      state[attr] = ctrl.checked;
+      ctrl.checked ? table.setAttribute(attr, '') : table.removeAttribute(attr);
+      updateCode();
+    });
+  });
+</script>

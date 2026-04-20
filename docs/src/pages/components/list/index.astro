@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="List" description="Ordered and unordered list components">
+  <h1>List</h1>
+  <p>Styled list component supporting ordered and unordered types. Nest <code>lt-list-item</code> elements inside.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-list" content="<lt-list-item>First item</lt-list-item><lt-list-item>Second item</lt-list-item><lt-list-item>Third item</lt-list-item>" previewHeight="120px" />
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-list>
+  <lt-list-item>Design tokens</lt-list-item>
+  <lt-list-item>Web Components</lt-list-item>
+  <lt-list-item>Framework wrappers</lt-list-item>
+</lt-list>
+
+<lt-list type="ordered">
+  <lt-list-item>Install packages</lt-list-item>
+  <lt-list-item>Import tokens CSS</lt-list-item>
+  <lt-list-item>Use components</lt-list-item>
+</lt-list>
+  `} />
+
+  <h2>API — lt-list</h2>
+  <ApiTable tag="lt-list" />
+
+  <h2>API — lt-list-item</h2>
+  <ApiTable tag="lt-list-item" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>

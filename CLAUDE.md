@@ -46,6 +46,13 @@ pnpm lint                   # Run ESLint
 pnpm clean                  # Remove all dist directories
 ```
 
+### Scaffolding
+```bash
+./scripts/new-component.sh <ComponentName>   # Scaffold a new component
+```
+
+Creates all boilerplate in one shot: web component files, Vitest test, docs page, and sidebar entry. Use PascalCase (e.g. `Badge`, `DatePicker`). After running, fill in the logic, styles, types, and docs — everything else is wired up.
+
 ## Architecture
 
 ### Monorepo Structure
@@ -91,6 +98,8 @@ components/
 
 All custom elements use the `lt-` prefix (e.g., `lt-button`, `lt-spinner`). Components consume design tokens via CSS custom properties with the `--lt-` prefix.
 
+**Adding a new component**: always use `./scripts/new-component.sh <Name>` — it creates the 5 web package files, registers the export in `packages/web/src/index.js`, creates the docs page, and adds the sidebar entry alphabetically. Never create these manually.
+
 ### Documentation Site
 
 The `@latty/docs` package uses Astro with MDX for documentation:
@@ -107,7 +116,11 @@ docs/
     layouts/            # Astro layouts
       BaseLayout.astro  # Main page layout
     components/         # Astro components
-      ColorPalette.astro # Reusable doc components
+      Sidebar.astro       # Collapsible nav — add new component entries here (script does it automatically)
+      ApiTable.astro      # Reads component metadata and renders prop/attr table
+      ComponentPlayground.astro  # Attribute playground for simple components
+      PlaygroundShell.astro      # Shell for custom JS-driven playgrounds
+      CodeSnippet.astro   # Syntax-highlighted code block
     styles/             # Global styles
       global.css        # Base styles + token imports
 ```
@@ -129,28 +142,24 @@ These are resolved in Vite/Vitest via `vite-tsconfig-paths` plugin and in build 
 
 ### Creating Documentation
 
-To document a new component:
+**Always use the scaffold script** — it generates the docs page automatically. For manual edits, component pages live at `docs/src/pages/components/<name>/index.astro` and use `.astro` (not `.mdx`) so they can include `<script>` blocks for live demos.
 
-1. Create a `.mdx` file in `docs/src/pages/components/`
-2. Use the BaseLayout and add frontmatter:
-```mdx
----
-layout: ../../layouts/BaseLayout.astro
-title: Component Name
-description: Brief description
----
-```
-3. Import and use components in `<script>` tags:
-```html
-<script>
-  import '@latty/web';
-  const button = document.createElement('lt-button');
-  // ...
-</script>
-```
-4. Write examples using HTML + the imported components
+Two playground patterns exist:
 
-The documentation site automatically rebuilds when files change during development.
+1. **`ComponentPlayground`** — declarative, zero JS, reads attributes automatically:
+```astro
+<ComponentPlayground tag="lt-button" content="Click me" />
+```
+
+2. **`PlaygroundShell`** — for components that need JS to set properties (e.g. `lt-table` which takes `.columns`/`.data`):
+```astro
+<PlaygroundShell id="my-playground" previewHeight="auto">
+  <div slot="preview">...</div>
+  <div slot="controls">...</div>
+</PlaygroundShell>
+```
+
+The docs page must `import '@latty/web'` inside a `<script>` tag to register the custom elements in the browser.
 
 ## Naming Conventions
 

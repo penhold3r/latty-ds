@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Switch" description="Toggle switch component">
+  <h1>Switch</h1>
+  <p>A toggle switch for binary on/off settings. Emits a <code>change</code> event with <code>detail.checked</code> when toggled.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-switch" />
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-switch label="Enable notifications"></lt-switch>
+<lt-switch label="Dark mode" variant="success" checked></lt-switch>
+<lt-switch label="Unavailable" disabled></lt-switch>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-switch" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>

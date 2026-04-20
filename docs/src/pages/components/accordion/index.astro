@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Accordion" description="Collapsible content sections">
+  <h1>Accordion</h1>
+  <p>A collapsible section built on the native <code>&lt;details&gt;/&lt;summary&gt;</code> elements. Content placed in the default slot is shown when open.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-accordion" content="This is the collapsible content inside the accordion." previewHeight="80px" />
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-accordion label="What is Latty?">
+  Latty is a framework-agnostic design system built on design tokens and Web Components.
+</lt-accordion>
+
+<lt-accordion label="Installation" icon="download" open>
+  Install with: pnpm add @latty/tokens @latty/web
+</lt-accordion>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-accordion" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>

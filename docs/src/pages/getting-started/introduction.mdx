@@ -1,74 +1,63 @@
 ---
 layout: ../../layouts/BaseLayout.astro
 title: Introduction
-description: Learn about the Latty Design System and its core principles
+description: What Latty is, how it works, and why it's built this way
 ---
 
 # Introduction
 
-Latty is a **framework-agnostic design system** built on design tokens and Web Components. It follows a "tokens first, components second" philosophy where design tokens generate CSS variables, and components consume them.
+Latty is a **framework-agnostic design system** built on two primitives: design tokens and Web Components.
 
-## Core Principles
+## How it works
 
-### 1. Design Tokens as Foundation
-
-Design tokens are the single source of truth for design decisions. They generate:
-- CSS custom properties (`--lt-*`)
-- JSON exports for tooling
-- JavaScript/TypeScript modules
-
-### 2. Framework Agnostic
-
-Built with **Web Components** (using Lit), Latty works with any framework:
-- ✅ Vanilla JavaScript
-- ✅ React (via `@latty/react`)
-- ✅ Angular (via `@latty/angular`)
-- ✅ Vue, Svelte, and others
-
-### 3. Accessibility First
-
-All components follow **WAI-ARIA** guidelines and include:
-- Semantic HTML
-- Keyboard navigation
-- Screen reader support
-- Focus management
-
-### 4. Customizable & Themable
-
-Extensive theming through CSS custom properties:
-- Override tokens globally or per-component
-- Support for light/dark modes
-- Custom color palettes
-
-## Architecture Overview
+Everything flows top-down from a single config file:
 
 ```
-@latty/tokens (Design Tokens)
-    ↓
-    ├─→ CSS Variables (--lt-color-primary-500)
-    ├─→ JSON exports
-    └─→ TypeScript types
-    
-@latty/web (Web Components)
-    ↓
-    └─→ <lt-button>, <lt-dialog>, <lt-table>, etc.
-    
-@latty/icons (Icon System)
-    ↓
-    └─→ <lt-icon name="check">
-
-@latty/react, @latty/angular (Framework Wrappers)
-    ↓
-    └─→ <Button />, <Dialog />, etc.
+tokens.config.json          ← base brand colors
+       ↓
+@latty/tokens               ← generates palettes, spacing, typography
+       ↓
+  tokens.css                ← CSS custom properties (--lt-color-primary-500, etc.)
+  tokens.json               ← for tooling and documentation
+  tokens.js                 ← for JS/TS consumers
+       ↓
+@latty/web                  ← Lit Web Components that consume CSS vars
+       ↓
+@latty/react / @latty/angular  ← thin framework wrappers (optional)
 ```
 
-## Naming Conventions
+Components never hardcode colors, sizes, or spacing — they only reference `--lt-*` custom properties. This means a single token change ripples through every component automatically.
 
-- **npm scope**: `@latty/*`
-- **Custom element prefix**: `lt-`
-- **CSS variable prefix**: `--lt-*`
+## Package structure
 
-## What's Next?
+| Package | What it does |
+|---|---|
+| `@latty/tokens` | Generates CSS vars, JSON, and JS from brand config |
+| `@latty/web` | 16 Lit Web Components with `lt-` prefix |
+| `@latty/icons` | Icon system backed by Iconoir (800+ icons), pluggable |
+| `@latty/react` | React wrappers around `@latty/web` |
+| `@latty/angular` | Angular wrappers around `@latty/web` |
 
-- [Installation](/getting-started/installation) - Install and set up Latty
-- [Usage](/getting-started/usage) - Learn how to use components
+## Naming conventions
+
+All public APIs follow a consistent prefix scheme:
+
+- **npm scope** — `@latty/*`
+- **Custom element names** — `lt-button`, `lt-textfield`, `lt-dialog`, …
+- **CSS custom properties** — `--lt-color-*`, `--lt-spacing-*`, `--lt-border-radius`, …
+
+## Why Web Components?
+
+Web Components run natively in every browser without a framework runtime. This means:
+
+- **No adapter needed** for vanilla HTML, Vue, Svelte, or any future framework
+- **Encapsulation via Shadow DOM** — styles can't bleed in or out accidentally
+- **Reactive attributes** — properties reflect to HTML attributes, so server-rendered markup works
+
+React and Angular wrappers exist for cases where you want typed props and idiomatic event binding in those frameworks.
+
+## What's next?
+
+- [Installation](/getting-started/installation) — add Latty to your project
+- [Usage](/getting-started/usage) — start using components
+- [Theming](/getting-started/theming) — customize tokens to match your brand

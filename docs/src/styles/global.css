@@ -77,16 +77,6 @@ a:hover {
   text-decoration: underline;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--lt-spacing-4);
-}
-
-.prose {
-  max-width: 65ch;
-}
-
 .prose h1 {
   font-size: 2.5rem;
   margin-bottom: var(--lt-spacing-4);

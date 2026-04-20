@@ -1,135 +1,128 @@
 ---
 layout: ../../layouts/BaseLayout.astro
 title: Usage
-description: How to use Latty components in your application
+description: Start using Latty components in your project
 ---
 
 # Usage
 
-## Basic Usage
+## Vanilla HTML
 
-### 1. Import Design Tokens
-
-First, import the design tokens CSS file. This makes all CSS custom properties available:
-
-```js
-import '@latty/tokens/dist/tokens.css';
-```
-
-### 2. Import Components
-
-Import the components you need:
-
-```js
-// Import all components
-import '@latty/web';
-
-// Or import individual components
-import '@latty/web/button';
-import '@latty/web/dialog';
-import '@latty/web/table';
-```
-
-### 3. Use in HTML
-
-Use the components with the `lt-` prefix:
+The fastest way to get started — no build tool required:
 
 ```html
-<lt-button variant="primary" icon="save">
-  Save Changes
-</lt-button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="node_modules/@latty/tokens/dist/tokens.css">
+</head>
+<body>
+  <lt-button variant="primary" icon="save">Save changes</lt-button>
 
-<lt-textfield
-  label="Email"
-  type="email"
-  required
-  helper-text="Enter your email address"
-></lt-textfield>
-
-<lt-dialog title="Confirm Action" size="md">
-  <p>Are you sure you want to proceed?</p>
-  <div slot="footer">
-    <lt-button variant="secondary">Cancel</lt-button>
-    <lt-button variant="primary">Confirm</lt-button>
-  </div>
-</lt-dialog>
+  <script type="module">
+    import '@latty/web';
+  </script>
+</body>
+</html>
 ```
 
-## Framework-Specific Usage
+## With a bundler (Vite, Webpack, etc.)
 
-### React
+```js
+// entry.js
+import '@latty/tokens/dist/tokens.css';
+import '@latty/web';
+```
 
-Use the React wrapper package:
+```html
+<lt-button variant="primary">Click me</lt-button>
+
+<lt-textfield
+  label="Email address"
+  type="email"
+  required
+  helper-text="We'll never share your email"
+></lt-textfield>
+```
+
+## React
 
 ```tsx
 import '@latty/tokens/dist/tokens.css';
-import { Button, Dialog, Textfield } from '@latty/react';
+import '@latty/web';
 
-function App() {
-  const [open, setOpen] = useState(false);
-
+// Web Components work directly in JSX — no wrapper needed
+export function SaveButton() {
   return (
-    <>
-      <Button variant="primary" onClick={() => setOpen(true)}>
-        Open Dialog
-      </Button>
-
-      <Dialog 
-        title="My Dialog" 
-        open={open} 
-        onClose={() => setOpen(false)}
-      >
-        <p>Dialog content here</p>
-      </Dialog>
-    </>
+    <lt-button
+      variant="primary"
+      icon="save"
+      onClick={() => console.log('saved')}
+    >
+      Save changes
+    </lt-button>
   );
 }
 ```
 
-### Angular
+For full TypeScript prop types and idiomatic React events, use the `@latty/react` wrapper package instead.
 
-Use the Angular wrapper package:
+## Angular
+
+Add `CUSTOM_ELEMENTS_SCHEMA` to any module or standalone component that uses `lt-` elements:
 
 ```typescript
-// app.module.ts
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import '@latty/tokens/dist/tokens.css';
+import '@latty/web';
 
-@NgModule({
+@Component({
+  selector: 'app-root',
+  template: `
+    <lt-button variant="primary" (click)="save()">Save</lt-button>
+  `,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule {}
-```
-
-```html
-<!-- app.component.html -->
-<lt-button variant="primary" (click)="handleClick()">
-  Click me
-</lt-button>
-```
-
-## Working with Events
-
-Components emit custom events with the `lt-` prefix:
-
-```js
-const button = document.querySelector('lt-button');
-button.addEventListener('lt-click', (e) => {
-  console.log('Button clicked', e.detail);
-});
-
-const dialog = document.querySelector('lt-dialog');
-dialog.addEventListener('lt-close', () => {
-  console.log('Dialog closed');
-});
-```
-
-## Customizing Styles
-
-Override CSS custom properties to customize appearance:
-
-```css
-:root {
-  --lt-color-primary-500: #8b5cf6;
-  --lt-spacing-4: 2rem;
+export class AppComponent {
+  save() { /* ... */ }
 }
 ```
+
+## Listening to events
+
+Components dispatch standard DOM events:
+
+```js
+const dialog = document.querySelector('lt-dialog');
+
+dialog.addEventListener('lt-open', () => console.log('opened'));
+dialog.addEventListener('lt-close', () => console.log('closed'));
+```
+
+```js
+const textfield = document.querySelector('lt-textfield');
+
+textfield.addEventListener('lt-change', (e) => {
+  console.log(e.detail.value);
+});
+```
+
+## Setting properties programmatically
+
+Attributes handle strings and booleans. For richer data (e.g. table columns), use the JS property directly:
+
+```js
+const table = document.querySelector('lt-table');
+table.columns = [
+  { key: 'name', label: 'Name' },
+  { key: 'email', label: 'Email' },
+];
+table.data = [
+  { name: 'Alice', email: 'alice@example.com' },
+];
+```
+
+## What's next?
+
+- [Theming](/getting-started/theming) — customize tokens to match your brand
+- [Components](/components/button) — explore the full component catalog

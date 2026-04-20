@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Tab" description="Tab and tab group components">
+  <h1>Tab</h1>
+  <p>Tabbed navigation built from <code>lt-tab-group</code> (container) and <code>lt-tab</code> (individual tab). The active tab is controlled by <code>value</code> on the group.</p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="tab-playground">
+    <div slot="preview">
+      <lt-tab-group id="playground-tabs" value="overview">
+        <lt-tab label="Overview" value="overview" icon="home"></lt-tab>
+        <lt-tab label="Components" value="components" icon="cube"></lt-tab>
+        <lt-tab label="Settings" value="settings" icon="settings"></lt-tab>
+        <lt-tab label="Disabled" value="disabled" disabled></lt-tab>
+      </lt-tab-group>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">variant</label>
+        <select class="control-select" id="ctrl-variant">
+          <option value="default" selected>default</option>
+          <option value="pills">pills</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">size</label>
+        <select class="control-select" id="ctrl-size">
+          <option value="sm">sm</option>
+          <option value="md" selected>md</option>
+          <option value="lg">lg</option>
+        </select>
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-tab-group value="tab1">
+  <lt-tab label="Overview" value="tab1" icon="home"></lt-tab>
+  <lt-tab label="Settings" value="tab2" icon="settings"></lt-tab>
+  <lt-tab label="Disabled" value="tab3" disabled></lt-tab>
+</lt-tab-group>
+
+<script type="module">
+  document.querySelector('lt-tab-group').addEventListener('change', (e) => {
+    console.log('active tab:', e.detail.value);
+  });
+</script>
+  `} />
+
+  <h2>API — lt-tab-group</h2>
+  <ApiTable tag="lt-tab-group" />
+
+  <h2>API — lt-tab</h2>
+  <ApiTable tag="lt-tab" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const tabs = document.getElementById('playground-tabs') as any;
+  const codeEl = document.getElementById('tab-playground-code')!;
+
+  const state: Record<string, any> = { variant: 'default', size: 'md' };
+
+  function updateCode() {
+    const attrs = Object.entries(state)
+      .filter(([k, v]) => !(k === 'variant' && v === 'default') && !(k === 'size' && v === 'md'))
+      .map(([k, v]) => `${k}="${v}"`)
+      .join('\n  ');
+    codeEl.textContent = attrs
+      ? `<lt-tab-group ${attrs} value="overview">\n  <lt-tab label="Overview" value="overview" icon="home"></lt-tab>\n  <lt-tab label="Settings" value="settings" icon="settings"></lt-tab>\n</lt-tab-group>`
+      : `<lt-tab-group value="overview">\n  <lt-tab label="Overview" value="overview" icon="home"></lt-tab>\n  <lt-tab label="Settings" value="settings" icon="settings"></lt-tab>\n</lt-tab-group>`;
+  }
+
+  document.getElementById('ctrl-variant')?.addEventListener('change', (e) => {
+    state.variant = (e.target as HTMLSelectElement).value;
+    tabs.setAttribute('variant', state.variant);
+    updateCode();
+  });
+  document.getElementById('ctrl-size')?.addEventListener('change', (e) => {
+    state.size = (e.target as HTMLSelectElement).value;
+    tabs.setAttribute('size', state.size);
+    updateCode();
+  });
+
+  updateCode();
+</script>

@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Spinner" description="Loading indicator component">
+  <h1>Spinner</h1>
+  <p>A simple animated loading indicator. Use it to signal that content or an action is in progress.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-spinner" />
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-spinner size="md" variant="primary"></lt-spinner>
+
+<!-- Inherits the current text color -->
+<div style="color: var(--lt-color-success-500);">
+  <lt-spinner variant="current"></lt-spinner>
+</div>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-spinner" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>

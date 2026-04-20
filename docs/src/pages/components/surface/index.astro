@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Surface" description="Container with elevation and surface styling">
+  <h1>Surface</h1>
+  <p>A container that applies elevation shadows and surface background variants. Use it to build cards, panels, and layered layouts.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-surface" content="<p style='padding:1.5rem;'>Surface content goes here</p>" previewHeight="120px" />
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-surface elevation="2">
+  <p>Card content</p>
+</lt-surface>
+
+<lt-surface elevation="3" variant="outlined">
+  <p>Outlined panel</p>
+</lt-surface>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-surface" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>

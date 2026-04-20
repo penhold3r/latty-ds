@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Checkbox" description="Checkbox input component">
+  <h1>Checkbox</h1>
+  <p>A checkbox input with support for checked, indeterminate, and disabled states across multiple variants.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-checkbox" />
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-checkbox label="Accept terms and conditions"></lt-checkbox>
+<lt-checkbox label="Enable notifications" variant="success" checked></lt-checkbox>
+<lt-checkbox label="Unavailable option" disabled></lt-checkbox>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-checkbox" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>

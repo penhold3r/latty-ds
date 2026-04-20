@@ -1,0 +1,230 @@
+---
+/**
+ * Provides the same visual shell as ComponentPlayground for components that
+ * need custom JS initialization (lt-dialog, lt-select, lt-tab-group, lt-table).
+ *
+ * Slots:
+ *   preview  – the live component rendered in the top area
+ *   controls – the control rows in the bottom-left panel
+ *
+ * Props:
+ *   id         – unique id used to wire the copy button and code output
+ *   codeTarget – id of a hidden <template> or <pre> whose textContent is the
+ *                live code string; updated externally by the page's script
+ */
+
+interface Props {
+  id: string;
+  previewHeight?: string;
+}
+
+const { id, previewHeight = '140px' } = Astro.props;
+---
+
+<div class="playground" id={id}>
+
+  <div class="preview" style={`min-height: ${previewHeight}`}>
+    <div class="preview-stage">
+      <slot name="preview" />
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="controls">
+      <div class="section-label">Controls</div>
+      <slot name="controls" />
+    </div>
+
+    <div class="code-panel">
+      <div class="code-header">
+        <span class="section-label" style="color:var(--lt-color-neutral-500)">HTML</span>
+        <button class="copy-btn" id={`${id}-copy`} aria-label="Copy code">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          Copy
+        </button>
+      </div>
+      <pre class="code-pre"><code class="code-output" id={`${id}-code`}></code></pre>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.playground[id]').forEach((el) => {
+    const id = el.id;
+    const copyBtn = document.getElementById(`${id}-copy`);
+    const codeEl = document.getElementById(`${id}-code`);
+    if (!copyBtn || !codeEl) return;
+
+    copyBtn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(codeEl.textContent ?? '');
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => {
+        copyBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`;
+      }, 1500);
+    });
+  });
+</script>
+
+<style>
+  .playground {
+    border: 1px solid var(--lt-color-neutral-200);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: var(--lt-spacing-6) 0;
+    font-size: 0.875rem;
+  }
+
+  .preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--lt-spacing-10) var(--lt-spacing-8);
+    background: var(--lt-color-neutral-50);
+    border-bottom: 1px solid var(--lt-color-neutral-200);
+  }
+
+  .preview-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--lt-spacing-4);
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .bottom {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+  }
+
+  .controls {
+    border-right: 1px solid var(--lt-color-neutral-200);
+    background: var(--lt-color-neutral-50);
+  }
+
+  .section-label {
+    display: block;
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lt-color-neutral-500);
+    border-bottom: 1px solid var(--lt-color-neutral-200);
+    background: var(--lt-color-neutral-100);
+  }
+
+  .code-panel {
+    display: flex;
+    flex-direction: column;
+    background: var(--lt-color-neutral-900);
+    min-width: 0;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--lt-spacing-4);
+    border-bottom: 1px solid var(--lt-color-neutral-700);
+  }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: 1px solid var(--lt-color-neutral-600);
+    color: var(--lt-color-neutral-400);
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 150ms, border-color 150ms;
+    margin: var(--lt-spacing-2) 0;
+  }
+
+  .copy-btn:hover {
+    color: var(--lt-color-neutral-200);
+    border-color: var(--lt-color-neutral-400);
+  }
+
+  .code-pre {
+    margin: 0;
+    padding: var(--lt-spacing-4);
+    background: transparent;
+    overflow-x: auto;
+    flex: 1;
+  }
+
+  .code-output {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8125rem;
+    color: var(--lt-color-neutral-200);
+    background: none;
+    padding: 0;
+    white-space: pre;
+  }
+
+  /* Shared control row styles — used by pages that slot controls in */
+  .playground :global(.control-row) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    gap: var(--lt-spacing-3);
+    border-bottom: 1px solid var(--lt-color-neutral-100);
+    font-size: 0.8125rem;
+  }
+
+  .playground :global(.control-row:last-child) {
+    border-bottom: none;
+  }
+
+  .playground :global(.control-label) {
+    color: var(--lt-color-neutral-700);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .playground :global(.control-select),
+  .playground :global(.control-text) {
+    font-size: 0.8125rem;
+    padding: 3px 6px;
+    border: 1px solid var(--lt-color-neutral-300);
+    border-radius: 4px;
+    background: white;
+    color: var(--lt-color-neutral-900);
+    max-width: 120px;
+    width: 100%;
+  }
+
+  .playground :global(.control-select:focus),
+  .playground :global(.control-text:focus) {
+    outline: 2px solid var(--lt-color-primary-400);
+    outline-offset: 1px;
+    border-color: var(--lt-color-primary-400);
+  }
+
+  .playground :global(.control-toggle) {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--lt-color-primary-500);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 640px) {
+    .bottom {
+      grid-template-columns: 1fr;
+    }
+    .controls {
+      border-right: none;
+      border-bottom: 1px solid var(--lt-color-neutral-200);
+    }
+  }
+</style>

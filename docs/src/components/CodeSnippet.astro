@@ -1,0 +1,102 @@
+---
+import { Code } from 'astro:components';
+
+interface Props {
+  code: string;
+  lang?: string;
+  title?: string;
+}
+
+const { code, lang = 'html', title } = Astro.props;
+const snippetId = `snippet-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="snippet">
+  <div class="snippet-header">
+    <span class="snippet-lang">{title ?? lang}</span>
+    <button class="copy-btn" data-snippet-id={snippetId} aria-label="Copy code">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="9" y="9" width="13" height="13" rx="2"/>
+        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+      </svg>
+      Copy
+    </button>
+  </div>
+  <div id={snippetId} class="snippet-body">
+    <Code code={code.trim()} lang={lang} theme="github-dark" />
+  </div>
+</div>
+
+<style>
+  .snippet {
+    border-radius: 8px;
+    overflow: hidden;
+    margin: var(--lt-spacing-4) 0;
+    border: 1px solid var(--lt-color-neutral-700);
+  }
+
+  .snippet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    background: #161b22;
+    border-bottom: 1px solid var(--lt-color-neutral-700);
+  }
+
+  .snippet-lang {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8b949e;
+  }
+
+  .copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: 1px solid #30363d;
+    color: #8b949e;
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 150ms, border-color 150ms;
+  }
+
+  .copy-btn:hover {
+    color: #e6edf3;
+    border-color: #8b949e;
+  }
+
+  .snippet-body :global(pre) {
+    margin: 0;
+    padding: var(--lt-spacing-4) !important;
+    border-radius: 0;
+    background: #0d1117 !important;
+  }
+
+  .snippet-body :global(code) {
+    background: none;
+    padding: 0;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-snippet-id]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const id = (btn as HTMLElement).dataset.snippetId!;
+      const code = document.getElementById(id)?.textContent ?? '';
+      await navigator.clipboard.writeText(code.trim());
+      btn.textContent = 'Copied!';
+      setTimeout(() => {
+        btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`;
+      }, 1500);
+    });
+  });
+</script>

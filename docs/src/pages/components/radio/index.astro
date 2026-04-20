@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Radio" description="Radio button and radio group components">
+  <h1>Radio</h1>
+  <p>Radio buttons for single-selection within a group. Use <code>lt-radio-group</code> to manage a named group with a shared label, value, and validation state.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-radio" />
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-radio-group label="Preferred contact" name="contact" value="email">
+  <lt-radio label="Email" value="email"></lt-radio>
+  <lt-radio label="Phone" value="phone"></lt-radio>
+  <lt-radio label="Post" value="post" disabled></lt-radio>
+</lt-radio-group>
+  `} />
+
+  <h2>API — lt-radio</h2>
+  <ApiTable tag="lt-radio" />
+
+  <h2>API — lt-radio-group</h2>
+  <ApiTable tag="lt-radio-group" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>
