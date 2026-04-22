@@ -10,7 +10,12 @@
       "types": "./dist/public-types.d.ts",
       "default": "./dist/index.js"
     },
+    "./configure": {
+      "types": "./dist/configure.d.ts",
+      "default": "./dist/configure.js"
+    },
     "./tokens.css": "./dist/tokens.css",
+    "./semantic.css": "./dist/semantic.css",
     "./tokens.json": "./dist/tokens.json"
   },
   "scripts": {

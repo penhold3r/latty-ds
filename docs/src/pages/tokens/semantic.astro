@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import tokens from '@latty/tokens/tokens.json';
+
+type TokenEntry = [string, string];
+
+const semantic = (tokens as any).semantic as Record<string, string>;
+
+const groups: Record<string, TokenEntry[]> = {
+  text:        [],
+  bg:          [],
+  border:      [],
+  interactive: [],
+};
+
+for (const entry of Object.entries(semantic).sort(([a], [b]) => a.localeCompare(b))) {
+  const [key] = entry;
+  if (key.startsWith('text-'))        groups.text.push(entry);
+  else if (key.startsWith('bg-'))     groups.bg.push(entry);
+  else if (key.startsWith('border-')) groups.border.push(entry);
+  else                                groups.interactive.push(entry);
+}
+
+const groupMeta: Record<string, { label: string; description: string }> = {
+  text:        { label: 'Text',        description: 'Foreground / text colors. Use these instead of raw color steps for typography.' },
+  bg:          { label: 'Background',  description: 'Surface and fill colors for layouts, cards, and status regions.' },
+  border:      { label: 'Border',      description: 'Stroke colors for inputs, dividers, and focus rings.' },
+  interactive: { label: 'Interactive', description: 'Hover and active state backgrounds for buttons and clickable elements.' },
+};
+---
+
+<BaseLayout title="Semantic Tokens" description="Intent-based tokens that reference the primitive palette">
+  <h1>Semantic Tokens</h1>
+  <p>
+    Semantic tokens express <strong>intent</strong> rather than raw values. They reference primitive
+    tokens via <code>var()</code>, so theming only requires redefining this layer — not touching
+    component code.
+  </p>
+  <p>
+    Import in your stylesheet:
+  </p>
+  <pre><code>@import '@latty/tokens/semantic.css';</code></pre>
+  <p>
+    Or generate them at runtime with your own color palette:
+  </p>
+  <pre><code>import {'{ configure }'} from '@latty/tokens/configure';
+
+configure({'{'} colors: {'{ primary: \'#6366f1\' }'} {'}'});</code></pre>
+
+  {Object.entries(groups).map(([groupKey, entries]) => {
+    const meta = groupMeta[groupKey];
+    return (
+      <section style="margin-top: 2.5rem;">
+        <h2>{meta.label}</h2>
+        <p>{meta.description}</p>
+        <table class="token-table">
+          <thead>
+            <tr>
+              <th>Token</th>
+              <th>References</th>
+              <th>Preview</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entries.map(([key, ref]) => (
+              <tr>
+                <td><code>--lt-{key}</code></td>
+                <td><code>var(--lt-{ref})</code></td>
+                <td>
+                  <span
+                    class="swatch"
+                    style={`background: var(--lt-${ref}); border: 1px solid var(--lt-color-neutral-200);`}
+                  ></span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    );
+  })}
+</BaseLayout>
+
+<style>
+  .token-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+  }
+
+  .token-table th,
+  .token-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--lt-color-neutral-100);
+  }
+
+  .token-table th {
+    font-weight: 600;
+    color: var(--lt-color-neutral-600);
+    background: var(--lt-color-neutral-50);
+  }
+
+  .swatch {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    vertical-align: middle;
+  }
+</style>

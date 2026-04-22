@@ -50,3 +50,20 @@ export type Tokens = {
 };
 
 export type { TokenColorName, Config } from './';
+
+export interface LattyConfig {
+  colors?: {
+    primary?: string;
+    secondary?: string;
+    success?: string;
+    warning?: string;
+    error?: string;
+    info?: string;
+  };
+  font?: {
+    family?: string;
+  };
+  border?: {
+    radius?: string;
+  };
+}

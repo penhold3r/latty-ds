@@ -1,5 +1,6 @@
 @import './font-face.css';
 @import '@latty/tokens/tokens.css';
+@import '@latty/tokens/semantic.css';
 
 *,
 *::before,
