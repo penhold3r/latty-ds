@@ -5,9 +5,10 @@ interface Props {
   tag: string;
   content?: string;
   previewHeight?: string;
+  defaults?: Record<string, any>;
 }
 
-const { tag, content: slotContent = '', previewHeight = '140px' } = Astro.props;
+const { tag, content: slotContent = '', previewHeight = '140px', defaults: defaultOverrides = {} } = Astro.props;
 
 const component = (manifest as any)[tag];
 const members = (component?.members ?? []) as any[];
@@ -15,6 +16,7 @@ const members = (component?.members ?? []) as any[];
 const id = `playground-${Math.random().toString(36).slice(2, 8)}`;
 
 function defaultValue(member: any): any {
+  if (member.name in defaultOverrides) return defaultOverrides[member.name];
   if (member.default !== undefined && member.default !== '') return member.default;
   if (member.type === 'boolean') return false;
   if (member.type === 'select' && member.options?.length) return member.options[0];
@@ -220,6 +222,7 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
     justify-content: center;
     gap: var(--lt-spacing-4);
     flex-wrap: wrap;
+    width: 100%;
   }
 
   .bottom {

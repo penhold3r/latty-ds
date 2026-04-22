@@ -29,5 +29,5 @@
     "@latty/icons": "workspace:*",
     "lit": "^3.2.0"
   },
-  "customElements": "dist/custom-elements.json"
+  "customElements": "custom-elements.json"
 }

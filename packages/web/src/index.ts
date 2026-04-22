@@ -48,6 +48,7 @@
 
 export * from './components/accordion';
 export * from './components/button';
+export * from './components/chip';
 export * from './components/checkbox';
 export * from './components/dialog';
 export * from './components/list';
@@ -62,3 +63,4 @@ export * from './components/tab';
 export * from './components/tab-group';
 export * from './components/table';
 export * from './components/textfield';
+export * from './components/avatar';

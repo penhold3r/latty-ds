@@ -1,15 +1,23 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
 import CodeSnippet from '../../../components/CodeSnippet.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
-<BaseLayout title="Chip" description="Chip component">
+<BaseLayout title="Chip" description="Compact label for tags, filters, and attributes">
   <h1>Chip</h1>
-  <p>TODO: describe the Chip component.</p>
+  <p>Compact pill-shaped labels for tags, filters, status indicators, and attributes.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-chip" content="Design System" />
 
   <h2>Usage</h2>
-  <CodeSnippet code={`<lt-chip>Content</lt-chip>`} />
+  <CodeSnippet code={`
+<lt-chip variant="primary">Design</lt-chip>
+<lt-chip variant="success" appearance="outlined">Active</lt-chip>
+<lt-chip variant="error" deletable>Urgent</lt-chip>
+  `} />
 
   <h2>API</h2>
   <ApiTable tag="lt-chip" />

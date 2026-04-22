@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Avatar" description="User avatar with image, initials, and icon fallbacks">
+  <h1>Avatar</h1>
+  <p>Displays a user avatar. Falls back to initials derived from <code>name</code>, then to a generic person icon if neither is available.</p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-avatar" defaults={{ name: 'Jane Doe' }} />
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`
+<lt-avatar src="https://i.pravatar.cc/150" name="Jane Doe"></lt-avatar>
+<lt-avatar name="Jane Doe" size="lg"></lt-avatar>
+<lt-avatar name="Jane Doe" shape="square"></lt-avatar>
+<lt-avatar size="md"></lt-avatar>
+  `} />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-avatar" />
+</BaseLayout>
+
+<script>import '@latty/web';</script>

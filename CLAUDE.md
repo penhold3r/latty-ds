@@ -47,8 +47,8 @@ pnpm clean                  # Remove all dist directories
 ```
 
 ### Scaffolding
-```bash
-./scripts/new-component.sh <ComponentName>   # Scaffold a new component
+```
+/new-component <ComponentName> [--variants v1,v2] [--sizes sm,md,lg] [--disabled] [--events e1,e2]
 ```
 
 Creates all boilerplate in one shot: web component files, Vitest test, docs page, and sidebar entry. Use PascalCase (e.g. `Badge`, `DatePicker`). After running, fill in the logic, styles, types, and docs — everything else is wired up.
@@ -98,7 +98,7 @@ components/
 
 All custom elements use the `lt-` prefix (e.g., `lt-button`, `lt-spinner`). Components consume design tokens via CSS custom properties with the `--lt-` prefix.
 
-**Adding a new component**: always use `./scripts/new-component.sh <Name>` — it creates the 5 web package files, registers the export in `packages/web/src/index.js`, creates the docs page, and adds the sidebar entry alphabetically. Never create these manually.
+**Adding a new component**: always use the `/new-component <Name>` slash command — it creates the 5 web package files, registers the export in `packages/web/src/index.js`, creates the docs page, and adds the sidebar entry alphabetically. Never create these manually.
 
 ### Documentation Site
 

@@ -22,6 +22,17 @@ describe('<lt-chip>', () => {
     expect(el.shadowRoot!.querySelector('slot')).toBeTruthy();
   });
 
+  it('has default appearance of filled', () => {
+    expect(el.appearance).toBe('filled');
+    expect(el.getAttribute('appearance')).toBe('filled');
+  });
+
+  it('supports outlined appearance', async () => {
+    el.appearance = 'outlined';
+    await el.updateComplete;
+    expect(el.getAttribute('appearance')).toBe('outlined');
+  });
+
   it('has default variant of primary', () => {
     expect(el.variant).toBe('primary');
     expect(el.getAttribute('variant')).toBe('primary');
@@ -61,7 +72,26 @@ describe('<lt-chip>', () => {
     expect(el.hasAttribute('disabled')).toBe(true);
   });
 
-  it('dispatches lt-delete event', () => {
+  it('does not show delete button by default', () => {
+    expect(el.shadowRoot!.querySelector('.delete')).toBeNull();
+  });
+
+  it('shows delete button when deletable', async () => {
+    el.deletable = true;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.delete')).toBeTruthy();
+  });
+
+  it('dispatches lt-delete event when delete button clicked', async () => {
+    el.deletable = true;
+    await el.updateComplete;
+    let fired = false;
+    el.addEventListener('lt-delete', () => { fired = true; });
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.delete')!.click();
+    expect(fired).toBe(true);
+  });
+
+  it('dispatches lt-delete event via internal handler', () => {
     let fired = false;
     el.addEventListener('lt-delete', () => { fired = true; });
     (el as any)._handleDelete();

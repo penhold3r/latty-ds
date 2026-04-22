@@ -14,6 +14,7 @@ export const accordionStyles = css`
   :host {
     display: block;
     font-family: 'Asap', sans-serif;
+    width: 100%;
   }
 
   details {

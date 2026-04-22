@@ -10,7 +10,7 @@ import ApiTable from '../../../components/ApiTable.astro';
   <p>A collapsible section built on the native <code>&lt;details&gt;/&lt;summary&gt;</code> elements. Content placed in the default slot is shown when open.</p>
 
   <h2>Playground</h2>
-  <ComponentPlayground tag="lt-accordion" content="This is the collapsible content inside the accordion." previewHeight="80px" />
+  <ComponentPlayground tag="lt-accordion" content="This is the collapsible content inside the accordion." previewHeight="80px" defaults={{ label: "Section Title" }} />
 
   <h2>Usage</h2>
   <CodeSnippet code={`

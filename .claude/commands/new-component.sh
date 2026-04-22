@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Usage: ./scripts/new-component.sh <ComponentName> [flags]
+# Usage: /new-component <ComponentName> [flags]
 #
 # Flags:
 #   --variants v1,v2,...   Variant type + CSS skeleton + variant tests
@@ -8,7 +8,7 @@
 #   --events e1,e2         CustomEvent dispatch stubs + tests
 #
 # Example:
-#   ./scripts/new-component.sh Chip \
+#   /new-component Chip \
 #     --variants primary,secondary,neutral,success,warning,error,info \
 #     --sizes sm,md,lg \
 #     --disabled \
@@ -46,10 +46,10 @@ VARIANT_LIST=(); SIZE_LIST=(); EVENT_LIST=()
 [[ -n "$OPT_SIZES"    ]] && IFS=',' read -ra SIZE_LIST    <<< "$OPT_SIZES"
 [[ -n "$OPT_EVENTS"   ]] && IFS=',' read -ra EVENT_LIST   <<< "$OPT_EVENTS"
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 WEB_DIR="${REPO_ROOT}/packages/web/src/components/${NAME_LOWER}"
 DOCS_DIR="${REPO_ROOT}/docs/src/pages/components/${NAME_LOWER}"
-INDEX_JS="${REPO_ROOT}/packages/web/src/index.js"
+INDEX_JS="${REPO_ROOT}/packages/web/src/index.ts"
 SIDEBAR="${REPO_ROOT}/docs/src/components/Sidebar.astro"
 
 if [[ -d "$WEB_DIR" ]]; then
@@ -163,7 +163,7 @@ fi
   echo " *"
   echo " * @element ${TAG}"
   echo " * @slot - Default slot content"
-  for ev in "${EVENT_LIST[@]}"; do echo " * @fires lt-${ev}"; done
+  for ev in ${EVENT_LIST[@]+"${EVENT_LIST[@]}"}; do echo " * @fires lt-${ev}"; done
   echo " */"
   echo "@customElement('${TAG}')"
   echo "export class ${NAME_PASCAL} extends LitElement {"
@@ -182,7 +182,7 @@ fi
     echo "  @property({ type: Boolean, reflect: true }) disabled = false;"
   fi
 
-  for ev in "${EVENT_LIST[@]}"; do
+  for ev in ${EVENT_LIST[@]+"${EVENT_LIST[@]}"}; do
     cap="$(capitalize "$ev")"
     echo ""
     echo "  private _handle${cap}() {"
@@ -286,7 +286,7 @@ fi
     echo "  });"
   fi
 
-  for ev in "${EVENT_LIST[@]}"; do
+  for ev in ${EVENT_LIST[@]+"${EVENT_LIST[@]}"}; do
     cap="$(capitalize "$ev")"
     echo ""
     echo "  it('dispatches lt-${ev} event', () => {"
@@ -305,10 +305,10 @@ echo "✅  Created packages/web/src/components/${NAME_LOWER}/"
 # ── index.js export ───────────────────────────────────────────────────────────
 EXPORT_LINE="export * from './components/${NAME_LOWER}';"
 if grep -qF "$EXPORT_LINE" "$INDEX_JS"; then
-  echo "ℹ️   Export already present in index.js"
+  echo "ℹ️   Export already present in index.ts"
 else
   echo "$EXPORT_LINE" >> "$INDEX_JS"
-  echo "✅  Added export to packages/web/src/index.js"
+  echo "✅  Added export to packages/web/src/index.ts"
 fi
 
 # ── Docs page ─────────────────────────────────────────────────────────────────
@@ -316,16 +316,22 @@ mkdir -p "$DOCS_DIR"
 cat > "${DOCS_DIR}/index.astro" << EOF
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
 import CodeSnippet from '../../../components/CodeSnippet.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
-<BaseLayout title="${NAME_PASCAL}" description="${NAME_PASCAL} component">
+<BaseLayout title="${NAME_PASCAL}" description="TODO: describe the ${NAME_PASCAL} component">
   <h1>${NAME_PASCAL}</h1>
   <p>TODO: describe the ${NAME_PASCAL} component.</p>
 
+  <h2>Playground</h2>
+  {/* TODO: replace content with a real usage example once the component is implemented */}
+  <ComponentPlayground tag="${TAG}" content="${NAME_PASCAL}" />
+
   <h2>Usage</h2>
-  <CodeSnippet code={\`<${TAG}>Content</${TAG}>\`} />
+  {/* TODO: replace with real usage examples */}
+  <CodeSnippet code={\`<${TAG}>${NAME_PASCAL}</${TAG}>\`} />
 
   <h2>API</h2>
   <ApiTable tag="${TAG}" />
@@ -355,6 +361,12 @@ ${SIDEBAR_ENTRY}" "$SIDEBAR"
   fi
   echo "✅  Added sidebar entry for ${NAME_PASCAL}"
 fi
+
+# ── Build @latty/web ──────────────────────────────────────────────────────────
+echo ""
+echo "Building @latty/web to register ${NAME_PASCAL} in dist and manifest..."
+pnpm --filter @latty/web build
+echo "✅  @latty/web built"
 
 # ── Summary ───────────────────────────────────────────────────────────────────
 echo ""
