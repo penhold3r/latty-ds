@@ -1,15 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-radio component.
- *
- * Includes:
- * - Base radio styling with circular appearance
- * - Size variants (sm, md, lg)
- * - Visual variants (primary, secondary, success, error, info)
- * - Checked and disabled states
- * - Focus states for accessibility
- */
 export const radioStyles = css`
   :host {
     display: inline-block;
@@ -32,11 +22,10 @@ export const radioStyles = css`
     opacity: 0.6;
   }
 
-  /* Hide native radio */
   input[type='radio'] {
     appearance: none;
     border-radius: 50%;
-    border: 2px solid var(--lt-color-neutral-400);
+    border: 2px solid var(--lt-border-strong);
     cursor: pointer;
     flex-shrink: 0;
     margin: 0;
@@ -51,7 +40,7 @@ export const radioStyles = css`
   }
 
   input[type='radio']:focus-visible {
-    outline: 3px solid var(--lt-color-primary-200);
+    outline: 3px solid var(--lt-border-focus);
     outline-offset: 2px;
   }
 
@@ -59,7 +48,6 @@ export const radioStyles = css`
     cursor: not-allowed;
   }
 
-  /* Inner dot */
   .dot {
     background: white;
     border-radius: 50%;
@@ -72,9 +60,8 @@ export const radioStyles = css`
     display: block;
   }
 
-  /* Label */
   .label {
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
     user-select: none;
   }
 
@@ -127,58 +114,49 @@ export const radioStyles = css`
     font-size: 1.0625rem;
   }
 
-  /* Variant styles - Primary */
+  /* Variant styles */
   :host([variant='primary']) input[type='radio']:checked {
-    background: var(--lt-color-primary-500);
-    border-color: var(--lt-color-primary-500);
+    background: var(--lt-interactive-primary-bg);
+    border-color: var(--lt-interactive-primary-bg);
   }
-
   :host([variant='primary']) input[type='radio']:checked:hover:not(:disabled) {
-    background: var(--lt-color-primary-700);
-    border-color: var(--lt-color-primary-700);
+    background: var(--lt-interactive-primary-bg-hover);
+    border-color: var(--lt-interactive-primary-bg-hover);
   }
 
-  /* Variant styles - Secondary */
   :host([variant='secondary']) input[type='radio']:checked {
-    background: var(--lt-color-secondary-500);
-    border-color: var(--lt-color-secondary-500);
+    background: var(--lt-interactive-secondary-bg);
+    border-color: var(--lt-interactive-secondary-bg);
   }
-
   :host([variant='secondary']) input[type='radio']:checked:hover:not(:disabled) {
-    background: var(--lt-color-secondary-700);
-    border-color: var(--lt-color-secondary-700);
+    background: var(--lt-interactive-secondary-bg-hover);
+    border-color: var(--lt-interactive-secondary-bg-hover);
   }
 
-  /* Variant styles - Success */
   :host([variant='success']) input[type='radio']:checked {
-    background: var(--lt-color-success-500);
-    border-color: var(--lt-color-success-500);
+    background: var(--lt-interactive-success-bg);
+    border-color: var(--lt-interactive-success-bg);
   }
-
   :host([variant='success']) input[type='radio']:checked:hover:not(:disabled) {
-    background: var(--lt-color-success-700);
-    border-color: var(--lt-color-success-700);
+    background: var(--lt-interactive-success-bg-hover);
+    border-color: var(--lt-interactive-success-bg-hover);
   }
 
-  /* Variant styles - Error */
   :host([variant='error']) input[type='radio']:checked {
-    background: var(--lt-color-error-500);
-    border-color: var(--lt-color-error-500);
+    background: var(--lt-interactive-error-bg);
+    border-color: var(--lt-interactive-error-bg);
   }
-
   :host([variant='error']) input[type='radio']:checked:hover:not(:disabled) {
-    background: var(--lt-color-error-700);
-    border-color: var(--lt-color-error-700);
+    background: var(--lt-interactive-error-bg-hover);
+    border-color: var(--lt-interactive-error-bg-hover);
   }
 
-  /* Variant styles - Info */
   :host([variant='info']) input[type='radio']:checked {
-    background: var(--lt-color-info-500);
-    border-color: var(--lt-color-info-500);
+    background: var(--lt-interactive-info-bg);
+    border-color: var(--lt-interactive-info-bg);
   }
-
   :host([variant='info']) input[type='radio']:checked:hover:not(:disabled) {
-    background: var(--lt-color-info-700);
-    border-color: var(--lt-color-info-700);
+    background: var(--lt-interactive-info-bg-hover);
+    border-color: var(--lt-interactive-info-bg-hover);
   }
 `;

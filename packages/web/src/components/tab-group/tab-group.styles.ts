@@ -1,8 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-tab-group component.
- */
 export const tabGroupStyles = css`
   :host {
     display: block;
@@ -15,7 +12,7 @@ export const tabGroupStyles = css`
   }
 
   .tabs-container {
-    border-bottom: 1px solid var(--lt-color-neutral-200);
+    border-bottom: 1px solid var(--lt-border-default);
     display: flex;
     gap: var(--lt-spacing-1);
     overflow-x: auto;
@@ -27,7 +24,7 @@ export const tabGroupStyles = css`
   }
 
   .tabs-container::-webkit-scrollbar-track {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
   }
 
   .tabs-container::-webkit-scrollbar-thumb {
@@ -49,7 +46,7 @@ export const tabGroupStyles = css`
 
   /* Pills variant */
   :host([variant='pills']) .tabs-container {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
     border: none;
     border-radius: var(--lt-border-radius);
     gap: var(--lt-spacing-2);

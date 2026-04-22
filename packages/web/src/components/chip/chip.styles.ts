@@ -47,7 +47,6 @@ export const chipStyles = css`
     cursor: not-allowed;
   }
 
-  /* Disabled host */
   :host([disabled]) span[part='base'] {
     cursor: not-allowed;
     opacity: 0.5;
@@ -78,87 +77,87 @@ export const chipStyles = css`
 
   /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */
   :host([appearance='filled'][variant='primary']) span[part='base'] {
-    background: var(--lt-color-primary-100);
-    border-color: var(--lt-color-primary-200);
+    background: var(--lt-bg-primary-subtle);
+    border-color: var(--lt-border-primary);
     color: var(--lt-color-primary-800);
   }
 
   :host([appearance='filled'][variant='secondary']) span[part='base'] {
-    background: var(--lt-color-secondary-100);
-    border-color: var(--lt-color-secondary-200);
+    background: var(--lt-bg-secondary-subtle);
+    border-color: var(--lt-border-secondary);
     color: var(--lt-color-secondary-800);
   }
 
   :host([appearance='filled'][variant='neutral']) span[part='base'] {
-    background: var(--lt-color-neutral-100);
-    border-color: var(--lt-color-neutral-200);
+    background: var(--lt-bg-surface);
+    border-color: var(--lt-border-default);
     color: var(--lt-color-neutral-700);
   }
 
   :host([appearance='filled'][variant='success']) span[part='base'] {
-    background: var(--lt-color-success-100);
-    border-color: var(--lt-color-success-200);
+    background: var(--lt-bg-success-subtle);
+    border-color: var(--lt-border-success);
     color: var(--lt-color-success-800);
   }
 
   :host([appearance='filled'][variant='warning']) span[part='base'] {
-    background: var(--lt-color-warning-100);
-    border-color: var(--lt-color-warning-200);
+    background: var(--lt-bg-warning-subtle);
+    border-color: var(--lt-border-warning);
     color: var(--lt-color-warning-800);
   }
 
   :host([appearance='filled'][variant='error']) span[part='base'] {
-    background: var(--lt-color-error-100);
-    border-color: var(--lt-color-error-200);
+    background: var(--lt-bg-error-subtle);
+    border-color: var(--lt-border-error);
     color: var(--lt-color-error-800);
   }
 
   :host([appearance='filled'][variant='info']) span[part='base'] {
-    background: var(--lt-color-info-100);
-    border-color: var(--lt-color-info-200);
+    background: var(--lt-bg-info-subtle);
+    border-color: var(--lt-border-info);
     color: var(--lt-color-info-800);
   }
 
   /* ── Outlined (transparent bg, colored border and text) ──────────────── */
   :host([appearance='outlined'][variant='primary']) span[part='base'] {
     background: transparent;
-    border-color: var(--lt-color-primary-500);
+    border-color: var(--lt-border-primary-strong);
     color: var(--lt-color-primary-600);
   }
 
   :host([appearance='outlined'][variant='secondary']) span[part='base'] {
     background: transparent;
-    border-color: var(--lt-color-secondary-500);
+    border-color: var(--lt-border-secondary-strong);
     color: var(--lt-color-secondary-600);
   }
 
   :host([appearance='outlined'][variant='neutral']) span[part='base'] {
     background: transparent;
-    border-color: var(--lt-color-neutral-400);
+    border-color: var(--lt-border-strong);
     color: var(--lt-color-neutral-700);
   }
 
   :host([appearance='outlined'][variant='success']) span[part='base'] {
     background: transparent;
-    border-color: var(--lt-color-success-500);
+    border-color: var(--lt-border-success-strong);
     color: var(--lt-color-success-600);
   }
 
   :host([appearance='outlined'][variant='warning']) span[part='base'] {
     background: transparent;
-    border-color: var(--lt-color-warning-500);
+    border-color: var(--lt-border-warning-strong);
     color: var(--lt-color-warning-700);
   }
 
   :host([appearance='outlined'][variant='error']) span[part='base'] {
     background: transparent;
-    border-color: var(--lt-color-error-500);
+    border-color: var(--lt-border-error-strong);
     color: var(--lt-color-error-600);
   }
 
   :host([appearance='outlined'][variant='info']) span[part='base'] {
     background: transparent;
-    border-color: var(--lt-color-info-500);
+    border-color: var(--lt-border-info-strong);
     color: var(--lt-color-info-600);
   }
 `;

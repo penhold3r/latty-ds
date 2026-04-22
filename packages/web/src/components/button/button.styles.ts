@@ -1,17 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-button component.
- *
- * Includes:
- * - Base button styling with transitions
- * - Size variants (sm, md, lg)
- * - Visual variants (primary, secondary, neutral, and semantic colors)
- * - Loading state with spinner
- * - Icon positioning (start and end)
- * - Disabled and focus states
- * - Active/pressed state with translateY animation
- */
 export const buttonStyles = css`
   :host {
     display: inline-block;
@@ -43,7 +31,7 @@ export const buttonStyles = css`
   }
 
   button:focus-visible {
-    outline: 3px solid var(--lt-color-primary-200);
+    outline: 3px solid var(--lt-border-focus);
     outline-offset: 2px;
   }
 
@@ -72,27 +60,27 @@ export const buttonStyles = css`
     padding-inline: var(--lt-spacing-5);
   }
 
-  /* variants (background + border + text) */
+  /* variants — solid */
   :host([variant='primary']) button {
-    background: var(--lt-color-primary-500);
-    color: var(--lt-color-neutral-50);
+    background: var(--lt-interactive-primary-bg);
+    color: var(--lt-text-on-primary);
   }
   :host([variant='primary']) button:hover:not([disabled]) {
-    background: var(--lt-color-primary-700);
+    background: var(--lt-interactive-primary-bg-hover);
   }
   :host([variant='primary']) button:active:not([disabled]) {
-    background: var(--lt-color-primary-800);
+    background: var(--lt-interactive-primary-bg-active);
   }
 
   :host([variant='secondary']) button {
-    background: var(--lt-color-secondary-500);
-    color: var(--lt-color-neutral-50);
+    background: var(--lt-interactive-secondary-bg);
+    color: var(--lt-text-on-secondary);
   }
   :host([variant='secondary']) button:hover:not([disabled]) {
-    background: var(--lt-color-secondary-700);
+    background: var(--lt-interactive-secondary-bg-hover);
   }
   :host([variant='secondary']) button:active:not([disabled]) {
-    background: var(--lt-color-secondary-800);
+    background: var(--lt-interactive-secondary-bg-active);
   }
 
   :host([variant='neutral']) button {
@@ -106,80 +94,79 @@ export const buttonStyles = css`
     background: var(--lt-color-neutral-800);
   }
 
-  /* semantic variants */
   :host([variant='success']) button {
-    background: var(--lt-color-success-500);
-    color: var(--lt-color-neutral-50);
+    background: var(--lt-interactive-success-bg);
+    color: var(--lt-text-on-success);
   }
   :host([variant='success']) button:hover:not([disabled]) {
-    background: var(--lt-color-success-700);
+    background: var(--lt-interactive-success-bg-hover);
   }
   :host([variant='success']) button:active:not([disabled]) {
-    background: var(--lt-color-success-800);
+    background: var(--lt-interactive-success-bg-active);
   }
 
   :host([variant='warning']) button {
-    background: var(--lt-color-warning-500);
-    color: var(--lt-color-neutral-50);
+    background: var(--lt-interactive-warning-bg);
+    color: var(--lt-text-on-warning);
   }
   :host([variant='warning']) button:hover:not([disabled]) {
-    background: var(--lt-color-warning-700);
+    background: var(--lt-interactive-warning-bg-hover);
   }
   :host([variant='warning']) button:active:not([disabled]) {
-    background: var(--lt-color-warning-800);
+    background: var(--lt-interactive-warning-bg-active);
   }
 
   :host([variant='error']) button {
-    background: var(--lt-color-error-500);
-    color: var(--lt-color-neutral-50);
+    background: var(--lt-interactive-error-bg);
+    color: var(--lt-text-on-error);
   }
   :host([variant='error']) button:hover:not([disabled]) {
-    background: var(--lt-color-error-700);
+    background: var(--lt-interactive-error-bg-hover);
   }
   :host([variant='error']) button:active:not([disabled]) {
-    background: var(--lt-color-error-800);
+    background: var(--lt-interactive-error-bg-active);
   }
 
   :host([variant='info']) button {
-    background: var(--lt-color-info-500);
-    color: var(--lt-color-neutral-50);
+    background: var(--lt-interactive-info-bg);
+    color: var(--lt-text-on-info);
   }
   :host([variant='info']) button:hover:not([disabled]) {
-    background: var(--lt-color-info-700);
+    background: var(--lt-interactive-info-bg-hover);
   }
   :host([variant='info']) button:active:not([disabled]) {
-    background: var(--lt-color-info-800);
+    background: var(--lt-interactive-info-bg-active);
   }
 
   /* outlined appearance */
   :host([appearance='outlined'][variant='primary']) button {
     background: transparent;
-    border-color: var(--lt-color-primary-500);
+    border-color: var(--lt-border-primary-strong);
     color: var(--lt-color-primary-500);
   }
   :host([appearance='outlined'][variant='primary']) button:hover:not([disabled]) {
     background: var(--lt-color-primary-50);
     border-color: var(--lt-color-primary-700);
-    color: var(--lt-color-primary-700);
+    color: var(--lt-text-primary);
   }
   :host([appearance='outlined'][variant='primary']) button:active:not([disabled]) {
-    background: var(--lt-color-primary-100);
+    background: var(--lt-bg-primary-subtle);
     border-color: var(--lt-color-primary-800);
     color: var(--lt-color-primary-800);
   }
 
   :host([appearance='outlined'][variant='secondary']) button {
     background: transparent;
-    border-color: var(--lt-color-secondary-500);
+    border-color: var(--lt-border-secondary-strong);
     color: var(--lt-color-secondary-500);
   }
   :host([appearance='outlined'][variant='secondary']) button:hover:not([disabled]) {
     background: var(--lt-color-secondary-50);
     border-color: var(--lt-color-secondary-700);
-    color: var(--lt-color-secondary-700);
+    color: var(--lt-text-secondary);
   }
   :host([appearance='outlined'][variant='secondary']) button:active:not([disabled]) {
-    background: var(--lt-color-secondary-100);
+    background: var(--lt-bg-secondary-subtle);
     border-color: var(--lt-color-secondary-800);
     color: var(--lt-color-secondary-800);
   }
@@ -190,35 +177,35 @@ export const buttonStyles = css`
     color: var(--lt-color-neutral-700);
   }
   :host([appearance='outlined'][variant='neutral']) button:hover:not([disabled]) {
-    background: var(--lt-color-neutral-50);
+    background: var(--lt-bg-subtle);
     border-color: var(--lt-color-neutral-700);
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
   }
   :host([appearance='outlined'][variant='neutral']) button:active:not([disabled]) {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
     border-color: var(--lt-color-neutral-800);
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
   }
 
   :host([appearance='outlined'][variant='success']) button {
     background: transparent;
-    border-color: var(--lt-color-success-500);
+    border-color: var(--lt-border-success-strong);
     color: var(--lt-color-success-500);
   }
   :host([appearance='outlined'][variant='success']) button:hover:not([disabled]) {
     background: var(--lt-color-success-50);
     border-color: var(--lt-color-success-700);
-    color: var(--lt-color-success-700);
+    color: var(--lt-text-success);
   }
   :host([appearance='outlined'][variant='success']) button:active:not([disabled]) {
-    background: var(--lt-color-success-100);
+    background: var(--lt-bg-success-subtle);
     border-color: var(--lt-color-success-800);
     color: var(--lt-color-success-800);
   }
 
   :host([appearance='outlined'][variant='warning']) button {
     background: transparent;
-    border-color: var(--lt-color-warning-500);
+    border-color: var(--lt-border-warning-strong);
     color: var(--lt-color-warning-700);
   }
   :host([appearance='outlined'][variant='warning']) button:hover:not([disabled]) {
@@ -227,39 +214,39 @@ export const buttonStyles = css`
     color: var(--lt-color-warning-800);
   }
   :host([appearance='outlined'][variant='warning']) button:active:not([disabled]) {
-    background: var(--lt-color-warning-100);
+    background: var(--lt-bg-warning-subtle);
     border-color: var(--lt-color-warning-800);
     color: var(--lt-color-warning-900);
   }
 
   :host([appearance='outlined'][variant='error']) button {
     background: transparent;
-    border-color: var(--lt-color-error-500);
+    border-color: var(--lt-border-error-strong);
     color: var(--lt-color-error-500);
   }
   :host([appearance='outlined'][variant='error']) button:hover:not([disabled]) {
     background: var(--lt-color-error-50);
     border-color: var(--lt-color-error-700);
-    color: var(--lt-color-error-700);
+    color: var(--lt-text-error);
   }
   :host([appearance='outlined'][variant='error']) button:active:not([disabled]) {
-    background: var(--lt-color-error-100);
+    background: var(--lt-bg-error-subtle);
     border-color: var(--lt-color-error-800);
     color: var(--lt-color-error-800);
   }
 
   :host([appearance='outlined'][variant='info']) button {
     background: transparent;
-    border-color: var(--lt-color-info-500);
+    border-color: var(--lt-border-info-strong);
     color: var(--lt-color-info-500);
   }
   :host([appearance='outlined'][variant='info']) button:hover:not([disabled]) {
     background: var(--lt-color-info-50);
     border-color: var(--lt-color-info-700);
-    color: var(--lt-color-info-700);
+    color: var(--lt-text-info);
   }
   :host([appearance='outlined'][variant='info']) button:active:not([disabled]) {
-    background: var(--lt-color-info-100);
+    background: var(--lt-bg-info-subtle);
     border-color: var(--lt-color-info-800);
     color: var(--lt-color-info-800);
   }

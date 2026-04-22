@@ -9,7 +9,7 @@ export const avatarStyles = css`
 
   span[part='base'] {
     align-items: center;
-    background: var(--lt-color-neutral-200);
+    background: var(--lt-bg-overlay);
     box-sizing: border-box;
     color: var(--lt-color-neutral-700);
     display: inline-flex;
@@ -34,37 +34,37 @@ export const avatarStyles = css`
 
   /* ── Colors (fallback bg + text) ────────────────────────────────────── */
   :host([color='neutral']) span[part='base'] {
-    background: var(--lt-color-neutral-200);
+    background: var(--lt-bg-overlay);
     color: var(--lt-color-neutral-700);
   }
 
   :host([color='primary']) span[part='base'] {
-    background: var(--lt-color-primary-100);
+    background: var(--lt-bg-primary-subtle);
     color: var(--lt-color-primary-800);
   }
 
   :host([color='secondary']) span[part='base'] {
-    background: var(--lt-color-secondary-100);
+    background: var(--lt-bg-secondary-subtle);
     color: var(--lt-color-secondary-800);
   }
 
   :host([color='success']) span[part='base'] {
-    background: var(--lt-color-success-100);
+    background: var(--lt-bg-success-subtle);
     color: var(--lt-color-success-800);
   }
 
   :host([color='warning']) span[part='base'] {
-    background: var(--lt-color-warning-100);
+    background: var(--lt-bg-warning-subtle);
     color: var(--lt-color-warning-800);
   }
 
   :host([color='error']) span[part='base'] {
-    background: var(--lt-color-error-100);
+    background: var(--lt-bg-error-subtle);
     color: var(--lt-color-error-800);
   }
 
   :host([color='info']) span[part='base'] {
-    background: var(--lt-color-info-100);
+    background: var(--lt-bg-info-subtle);
     color: var(--lt-color-info-800);
   }
 

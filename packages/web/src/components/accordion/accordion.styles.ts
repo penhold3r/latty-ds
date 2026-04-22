@@ -1,15 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-accordion component.
- *
- * Includes:
- * - Native details/summary styling
- * - Smooth expand/collapse animation
- * - Visual variants (default, filled, outlined)
- * - Custom chevron icon
- * - Focus states for accessibility
- */
 export const accordionStyles = css`
   :host {
     display: block;
@@ -24,7 +14,6 @@ export const accordionStyles = css`
       border-color 120ms ease;
   }
 
-  /* Remove default marker */
   summary {
     cursor: pointer;
     list-style: none;
@@ -52,14 +41,14 @@ export const accordionStyles = css`
   }
 
   .summary-text {
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
     flex: 1;
     font-size: 1rem;
     font-weight: 500;
   }
 
   .chevron {
-    color: var(--lt-color-neutral-600);
+    color: var(--lt-text-subtle);
     flex-shrink: 0;
     height: 20px;
     transition: transform 200ms ease;
@@ -71,11 +60,11 @@ export const accordionStyles = css`
   }
 
   summary:hover .chevron {
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
   }
 
   summary:focus-visible {
-    outline: 3px solid var(--lt-color-primary-200);
+    outline: 3px solid var(--lt-border-focus);
     outline-offset: -3px;
   }
 
@@ -94,8 +83,8 @@ export const accordionStyles = css`
 
   /* Variant: default */
   :host([variant='default']) details {
-    background: var(--lt-color-neutral-50);
-    border: 1px solid var(--lt-color-neutral-200);
+    background: var(--lt-bg-subtle);
+    border: 1px solid var(--lt-border-default);
   }
 
   :host([variant='default']) details:hover {
@@ -104,12 +93,12 @@ export const accordionStyles = css`
 
   /* Variant: filled */
   :host([variant='filled']) details {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
     border: none;
   }
 
   :host([variant='filled']) details:hover {
-    background: var(--lt-color-neutral-200);
+    background: var(--lt-bg-overlay);
   }
 
   /* Variant: outlined */
@@ -119,7 +108,7 @@ export const accordionStyles = css`
   }
 
   :host([variant='outlined']) details:hover {
-    border-color: var(--lt-color-neutral-400);
+    border-color: var(--lt-border-strong);
   }
 
   /* Disabled state */

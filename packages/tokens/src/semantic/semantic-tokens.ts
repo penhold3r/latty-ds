@@ -34,7 +34,7 @@ export const buildSemanticTokens = (): SemanticTokenMap => {
   map['border-default'] = 'color-neutral-200';
   map['border-strong']  = 'color-neutral-400';
   map['border-subtle']  = 'color-neutral-100';
-  map['border-focus']   = 'color-primary-400';
+  map['border-focus']   = 'color-primary-200';
 
   for (const v of VARIANTS) {
     map[`border-${v}`]        = `color-${v}-200`;

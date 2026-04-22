@@ -1,17 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-textfield component.
- *
- * Includes:
- * - Base input styling with design tokens
- * - Size variants (sm, md, lg)
- * - Visual variants (default, success, warning, error)
- * - Icon positioning and styling (start icon, end icon)
- * - Password toggle and variant icon states
- * - Helper text styling
- * - Accessibility states (disabled, readonly, focus)
- */
 export const textfieldStyles = css`
   :host {
     display: inline-block;
@@ -71,24 +59,24 @@ export const textfieldStyles = css`
   }
 
   :host([variant='success']) .variant-icon {
-    color: var(--lt-color-success-500);
+    color: var(--lt-interactive-success-bg);
   }
 
   :host([variant='warning']) .variant-icon {
-    color: var(--lt-color-warning-500);
+    color: var(--lt-interactive-warning-bg);
   }
 
   :host([variant='error']) .variant-icon {
-    color: var(--lt-color-error-500);
+    color: var(--lt-interactive-error-bg);
   }
 
   input,
   textarea {
-    background: var(--lt-color-neutral-50);
+    background: var(--lt-bg-subtle);
     border-radius: var(--lt-border-radius);
     border: 1px solid var(--lt-color-neutral-300);
     box-sizing: border-box;
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
     font-family: inherit;
     font-weight: 400;
     transition:
@@ -105,24 +93,24 @@ export const textfieldStyles = css`
 
   input::placeholder,
   textarea::placeholder {
-    color: var(--lt-color-neutral-400);
+    color: var(--lt-text-muted);
   }
 
   input:hover:not(:disabled),
   textarea:hover:not(:disabled) {
-    border-color: var(--lt-color-neutral-400);
+    border-color: var(--lt-border-strong);
   }
 
   input:focus,
   textarea:focus {
-    border-color: var(--lt-color-primary-500);
-    box-shadow: 0 0 0 3px var(--lt-color-primary-100);
+    border-color: var(--lt-interactive-primary-bg);
+    box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle);
     outline: none;
   }
 
   input:disabled,
   textarea:disabled {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
     color: var(--lt-color-neutral-500);
     cursor: not-allowed;
   }
@@ -188,52 +176,52 @@ export const textfieldStyles = css`
   /* variants */
   :host([variant='success']) input,
   :host([variant='success']) textarea {
-    border-color: var(--lt-color-success-500);
+    border-color: var(--lt-border-success-strong);
   }
 
   :host([variant='success']) input:focus,
   :host([variant='success']) textarea:focus {
-    border-color: var(--lt-color-success-600);
-    box-shadow: 0 0 0 3px var(--lt-color-success-100);
+    border-color: var(--lt-interactive-success-bg-hover);
+    box-shadow: 0 0 0 3px var(--lt-bg-success-subtle);
   }
 
   :host([variant='warning']) input,
   :host([variant='warning']) textarea {
-    border-color: var(--lt-color-warning-500);
+    border-color: var(--lt-border-warning-strong);
   }
 
   :host([variant='warning']) input:focus,
   :host([variant='warning']) textarea:focus {
-    border-color: var(--lt-color-warning-600);
-    box-shadow: 0 0 0 3px var(--lt-color-warning-100);
+    border-color: var(--lt-interactive-warning-bg-hover);
+    box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle);
   }
 
   :host([variant='error']) input,
   :host([variant='error']) textarea {
-    border-color: var(--lt-color-error-500);
+    border-color: var(--lt-border-error-strong);
   }
 
   :host([variant='error']) input:focus,
   :host([variant='error']) textarea:focus {
-    border-color: var(--lt-color-error-600);
-    box-shadow: 0 0 0 3px var(--lt-color-error-100);
+    border-color: var(--lt-interactive-error-bg-hover);
+    box-shadow: 0 0 0 3px var(--lt-bg-error-subtle);
   }
 
   .helper-text {
-    color: var(--lt-color-neutral-600);
+    color: var(--lt-text-subtle);
     font-size: 0.75rem;
   }
 
   :host([variant='success']) .helper-text {
-    color: var(--lt-color-success-700);
+    color: var(--lt-text-success);
   }
 
   :host([variant='warning']) .helper-text {
-    color: var(--lt-color-warning-700);
+    color: var(--lt-text-warning);
   }
 
   :host([variant='error']) .helper-text {
-    color: var(--lt-color-error-700);
+    color: var(--lt-text-error);
   }
 
   .required-indicator {

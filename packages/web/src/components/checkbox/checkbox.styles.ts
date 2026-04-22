@@ -1,15 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-checkbox component.
- *
- * Includes:
- * - Base checkbox styling with custom appearance
- * - Size variants (sm, md, lg)
- * - Visual variants (primary, secondary, success, error, info)
- * - Checked, indeterminate, and disabled states
- * - Focus states for accessibility
- */
 export const checkboxStyles = css`
   :host {
     display: inline-block;
@@ -29,11 +19,10 @@ export const checkboxStyles = css`
     opacity: 0.6;
   }
 
-  /* Hide native checkbox */
   input[type='checkbox'] {
     appearance: none;
     border-radius: calc(var(--lt-border-radius) * 0.5);
-    border: 2px solid var(--lt-color-neutral-400);
+    border: 2px solid var(--lt-border-strong);
     cursor: pointer;
     flex-shrink: 0;
     margin: 0;
@@ -48,7 +37,7 @@ export const checkboxStyles = css`
   }
 
   input[type='checkbox']:focus-visible {
-    outline: 3px solid var(--lt-color-primary-200);
+    outline: 3px solid var(--lt-border-focus);
     outline-offset: 2px;
   }
 
@@ -56,7 +45,6 @@ export const checkboxStyles = css`
     cursor: not-allowed;
   }
 
-  /* Checkmark SVG icon */
   .checkmark {
     display: none;
     pointer-events: none;
@@ -68,9 +56,8 @@ export const checkboxStyles = css`
     display: block;
   }
 
-  /* Label */
   .label {
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
     user-select: none;
   }
 
@@ -123,68 +110,59 @@ export const checkboxStyles = css`
     font-size: 1.0625rem;
   }
 
-  /* Variant styles - Primary */
+  /* Variant styles */
   :host([variant='primary']) input[type='checkbox']:checked,
   :host([variant='primary']) input[type='checkbox']:indeterminate {
-    background: var(--lt-color-primary-500);
-    border-color: var(--lt-color-primary-500);
+    background: var(--lt-interactive-primary-bg);
+    border-color: var(--lt-interactive-primary-bg);
   }
-
   :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled),
   :host([variant='primary']) input[type='checkbox']:indeterminate:hover:not(:disabled) {
-    background: var(--lt-color-primary-700);
-    border-color: var(--lt-color-primary-700);
+    background: var(--lt-interactive-primary-bg-hover);
+    border-color: var(--lt-interactive-primary-bg-hover);
   }
 
-  /* Variant styles - Secondary */
   :host([variant='secondary']) input[type='checkbox']:checked,
   :host([variant='secondary']) input[type='checkbox']:indeterminate {
-    background: var(--lt-color-secondary-500);
-    border-color: var(--lt-color-secondary-500);
+    background: var(--lt-interactive-secondary-bg);
+    border-color: var(--lt-interactive-secondary-bg);
   }
-
   :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled),
   :host([variant='secondary']) input[type='checkbox']:indeterminate:hover:not(:disabled) {
-    background: var(--lt-color-secondary-700);
-    border-color: var(--lt-color-secondary-700);
+    background: var(--lt-interactive-secondary-bg-hover);
+    border-color: var(--lt-interactive-secondary-bg-hover);
   }
 
-  /* Variant styles - Success */
   :host([variant='success']) input[type='checkbox']:checked,
   :host([variant='success']) input[type='checkbox']:indeterminate {
-    background: var(--lt-color-success-500);
-    border-color: var(--lt-color-success-500);
+    background: var(--lt-interactive-success-bg);
+    border-color: var(--lt-interactive-success-bg);
   }
-
   :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled),
   :host([variant='success']) input[type='checkbox']:indeterminate:hover:not(:disabled) {
-    background: var(--lt-color-success-700);
-    border-color: var(--lt-color-success-700);
+    background: var(--lt-interactive-success-bg-hover);
+    border-color: var(--lt-interactive-success-bg-hover);
   }
 
-  /* Variant styles - Error */
   :host([variant='error']) input[type='checkbox']:checked,
   :host([variant='error']) input[type='checkbox']:indeterminate {
-    background: var(--lt-color-error-500);
-    border-color: var(--lt-color-error-500);
+    background: var(--lt-interactive-error-bg);
+    border-color: var(--lt-interactive-error-bg);
   }
-
   :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled),
   :host([variant='error']) input[type='checkbox']:indeterminate:hover:not(:disabled) {
-    background: var(--lt-color-error-700);
-    border-color: var(--lt-color-error-700);
+    background: var(--lt-interactive-error-bg-hover);
+    border-color: var(--lt-interactive-error-bg-hover);
   }
 
-  /* Variant styles - Info */
   :host([variant='info']) input[type='checkbox']:checked,
   :host([variant='info']) input[type='checkbox']:indeterminate {
-    background: var(--lt-color-info-500);
-    border-color: var(--lt-color-info-500);
+    background: var(--lt-interactive-info-bg);
+    border-color: var(--lt-interactive-info-bg);
   }
-
   :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled),
   :host([variant='info']) input[type='checkbox']:indeterminate:hover:not(:disabled) {
-    background: var(--lt-color-info-700);
-    border-color: var(--lt-color-info-700);
+    background: var(--lt-interactive-info-bg-hover);
+    border-color: var(--lt-interactive-info-bg-hover);
   }
 `;

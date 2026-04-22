@@ -1,14 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-list component.
- *
- * Includes:
- * - Base list styling with design tokens
- * - Size variants (sm, md, lg)
- * - Custom marker color support via CSS custom property
- * - Proper spacing between list items
- */
 export const listStyles = css`
   :host {
     display: block;
@@ -21,7 +12,7 @@ export const listStyles = css`
     margin: 0;
     padding: 0;
     list-style-position: outside;
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
   }
 
   ul {
@@ -32,7 +23,6 @@ export const listStyles = css`
     padding-left: var(--lt-spacing-5);
   }
 
-  /* Support both plain <li> and <lt-list-item> for backward compatibility */
   ::slotted(li),
   ::slotted(lt-list-item) {
     margin-bottom: var(--lt-spacing-2);
@@ -43,7 +33,6 @@ export const listStyles = css`
     margin-bottom: 0;
   }
 
-  /* Support for nested lt-list components */
   ::slotted(lt-list) {
     display: block;
     margin-top: var(--lt-spacing-2);
@@ -60,7 +49,6 @@ export const listStyles = css`
     margin-bottom: 0;
   }
 
-  /* Marker color using CSS custom property */
   ul ::slotted(li)::marker {
     color: var(--list-marker-color);
   }

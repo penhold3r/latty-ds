@@ -1,15 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-spinner component.
- *
- * Includes:
- * - Base rotating animation
- * - Size variants (sm, md, lg) using CSS custom properties
- * - Color variants (primary, secondary, neutral, current)
- * - Respects prefers-reduced-motion for accessibility
- * - Circular border with transparent segment for spinner effect
- */
 export const spinnerStyles = css`
   :host {
     --spinner-size: var(--lt-spacing-4, 1rem);
@@ -32,10 +22,10 @@ export const spinnerStyles = css`
 
   /* Color */
   :host([variant='primary']) {
-    --spinner-color: var(--lt-color-primary-500);
+    --spinner-color: var(--lt-interactive-primary-bg);
   }
   :host([variant='secondary']) {
-    --spinner-color: var(--lt-color-secondary-500);
+    --spinner-color: var(--lt-interactive-secondary-bg);
   }
   :host([variant='neutral']) {
     --spinner-color: var(--lt-color-neutral-500);

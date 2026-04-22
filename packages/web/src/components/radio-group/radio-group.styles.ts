@@ -1,15 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-radio-group component.
- *
- * Includes:
- * - Base group layout
- * - Vertical and horizontal orientations
- * - Label styling
- * - Helper text styling
- * - Error state
- */
 export const radioGroupStyles = css`
   :host {
     display: block;
@@ -23,7 +13,7 @@ export const radioGroupStyles = css`
   }
 
   .label {
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
     font-size: 0.875rem;
     font-weight: 500;
     margin-bottom: var(--lt-spacing-1);
@@ -49,12 +39,12 @@ export const radioGroupStyles = css`
   }
 
   .helper-text {
-    color: var(--lt-color-neutral-600);
+    color: var(--lt-text-subtle);
     font-size: 0.75rem;
     margin-top: var(--lt-spacing-1);
   }
 
   :host([error]) .helper-text {
-    color: var(--lt-color-error-700);
+    color: var(--lt-text-error);
   }
 `;

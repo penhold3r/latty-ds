@@ -1,16 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-select component.
- *
- * Includes:
- * - Base select styling with custom dropdown
- * - Size variants (sm, md, lg)
- * - Visual variants (default, success, warning, error)
- * - Disabled and focus states
- * - Custom dropdown menu with animations
- * - Option hover and selected states
- */
 export const selectStyles = css`
   :host {
     display: inline-block;
@@ -43,7 +32,7 @@ export const selectStyles = css`
 
   .select-trigger {
     align-items: center;
-    background: var(--lt-color-neutral-50);
+    background: var(--lt-bg-subtle);
     border-radius: var(--lt-border-radius);
     border: 1px solid var(--lt-color-neutral-300);
     box-sizing: border-box;
@@ -58,12 +47,12 @@ export const selectStyles = css`
   }
 
   .select-trigger:hover:not([aria-disabled='true']) {
-    border-color: var(--lt-color-neutral-400);
+    border-color: var(--lt-border-strong);
   }
 
   .select-trigger:focus-visible {
-    border-color: var(--lt-color-primary-500);
-    box-shadow: 0 0 0 3px var(--lt-color-primary-200);
+    border-color: var(--lt-interactive-primary-bg);
+    box-shadow: 0 0 0 3px var(--lt-border-focus);
     outline: none;
   }
 
@@ -73,7 +62,7 @@ export const selectStyles = css`
   }
 
   .select-value {
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -81,11 +70,11 @@ export const selectStyles = css`
   }
 
   .select-value.placeholder {
-    color: var(--lt-color-neutral-400);
+    color: var(--lt-text-muted);
   }
 
   .icon-end {
-    color: var(--lt-color-neutral-600);
+    color: var(--lt-text-subtle);
     flex-shrink: 0;
     transition: transform 120ms ease;
   }
@@ -130,7 +119,7 @@ export const selectStyles = css`
     border: none;
     border-radius: var(--lt-border-radius);
     box-sizing: border-box;
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
     cursor: pointer;
     display: flex;
     font-family: inherit;
@@ -140,23 +129,23 @@ export const selectStyles = css`
   }
 
   .option:hover:not([disabled]) {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
   }
 
   .option:focus-visible {
-    background: var(--lt-color-neutral-100);
-    outline: 2px solid var(--lt-color-primary-500);
+    background: var(--lt-bg-surface);
+    outline: 2px solid var(--lt-interactive-primary-bg);
     outline-offset: -2px;
   }
 
   .option[aria-selected='true'] {
-    background: var(--lt-color-primary-100);
-    color: var(--lt-color-primary-700);
+    background: var(--lt-bg-primary-subtle);
+    color: var(--lt-text-primary);
     font-weight: 500;
   }
 
   .option[disabled] {
-    color: var(--lt-color-neutral-400);
+    color: var(--lt-text-muted);
     cursor: not-allowed;
     opacity: 0.6;
   }
@@ -201,30 +190,30 @@ export const selectStyles = css`
 
   /* Variant styles */
   :host([variant='success']) .select-trigger {
-    border-color: var(--lt-color-success-500);
+    border-color: var(--lt-border-success-strong);
   }
 
   :host([variant='success']) .helper-text {
-    color: var(--lt-color-success-700);
+    color: var(--lt-text-success);
   }
 
   :host([variant='warning']) .select-trigger {
-    border-color: var(--lt-color-warning-500);
+    border-color: var(--lt-border-warning-strong);
   }
 
   :host([variant='warning']) .helper-text {
-    color: var(--lt-color-warning-700);
+    color: var(--lt-text-warning);
   }
 
   :host([variant='error']) .select-trigger {
-    border-color: var(--lt-color-error-500);
+    border-color: var(--lt-border-error-strong);
   }
 
   :host([variant='error']) .helper-text {
-    color: var(--lt-color-error-700);
+    color: var(--lt-text-error);
   }
 
   :host([variant='default']) .helper-text {
-    color: var(--lt-color-neutral-600);
+    color: var(--lt-text-subtle);
   }
 `;

@@ -1,8 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-tab component.
- */
 export const tabStyles = css`
   :host {
     display: inline-block;
@@ -14,7 +11,7 @@ export const tabStyles = css`
     background: transparent;
     border: none;
     border-bottom: 2px solid transparent;
-    color: var(--lt-color-neutral-600);
+    color: var(--lt-text-subtle);
     cursor: pointer;
     display: flex;
     font-family: inherit;
@@ -31,17 +28,17 @@ export const tabStyles = css`
   }
 
   .tab:hover:not(:disabled) {
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
   }
 
   .tab:focus-visible {
     color: var(--lt-color-primary-600);
-    outline: 2px solid var(--lt-color-primary-200);
+    outline: 2px solid var(--lt-border-focus);
     outline-offset: 2px;
   }
 
   :host([active]) .tab {
-    border-color: var(--lt-color-primary-500);
+    border-color: var(--lt-border-primary-strong);
     color: var(--lt-color-primary-600);
   }
 
@@ -85,7 +82,7 @@ export const tabStyles = css`
   }
 
   :host([data-variant='pills'][active]) .tab {
-    background: var(--lt-color-neutral-0);
+    background: var(--lt-bg-default);
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
     color: var(--lt-color-primary-600);
   }

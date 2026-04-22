@@ -21,7 +21,7 @@
   "scripts": {
     "build": "pnpm run build:scripts && pnpm run build:tokens && pnpm run build:types",
     "build:scripts": "tsup",
-    "build:tokens": "node ./dist-scripts/build-tokens.js",
+    "build:tokens": "node ./dist-scripts/tokens.js",
     "build:types": "tsc -p tsconfig.types.json",
     "clean": "rimraf dist dist-scripts"
   },

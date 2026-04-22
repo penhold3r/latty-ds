@@ -1,16 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-switch component.
- *
- * Includes:
- * - Toggle switch styling with track and thumb
- * - Size variants (sm, md, lg)
- * - Visual variants (primary, secondary, success, error, info)
- * - Checked and disabled states
- * - Smooth sliding animation
- * - Focus states for accessibility
- */
 export const switchStyles = css`
   :host {
     display: inline-block;
@@ -33,7 +22,6 @@ export const switchStyles = css`
     position: relative;
   }
 
-  /* Hide native checkbox */
   input[type='checkbox'] {
     appearance: none;
     background: var(--lt-color-neutral-300);
@@ -46,11 +34,11 @@ export const switchStyles = css`
   }
 
   input[type='checkbox']:hover:not(:disabled) {
-    background: var(--lt-color-neutral-400);
+    background: var(--lt-border-strong);
   }
 
   input[type='checkbox']:focus-visible {
-    outline: 3px solid var(--lt-color-primary-200);
+    outline: 3px solid var(--lt-border-focus);
     outline-offset: 2px;
   }
 
@@ -58,7 +46,6 @@ export const switchStyles = css`
     cursor: not-allowed;
   }
 
-  /* Thumb (sliding knob) */
   .thumb {
     background: white;
     border-radius: 50%;
@@ -68,9 +55,8 @@ export const switchStyles = css`
     transition: left 200ms ease;
   }
 
-  /* Label */
   .label {
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
     user-select: none;
   }
 
@@ -135,48 +121,39 @@ export const switchStyles = css`
     font-size: 1.0625rem;
   }
 
-  /* Variant styles - Primary */
+  /* Variant styles */
   :host([variant='primary']) input[type='checkbox']:checked {
-    background: var(--lt-color-primary-500);
+    background: var(--lt-interactive-primary-bg);
   }
-
   :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) {
-    background: var(--lt-color-primary-700);
+    background: var(--lt-interactive-primary-bg-hover);
   }
 
-  /* Variant styles - Secondary */
   :host([variant='secondary']) input[type='checkbox']:checked {
-    background: var(--lt-color-secondary-500);
+    background: var(--lt-interactive-secondary-bg);
   }
-
   :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) {
-    background: var(--lt-color-secondary-700);
+    background: var(--lt-interactive-secondary-bg-hover);
   }
 
-  /* Variant styles - Success */
   :host([variant='success']) input[type='checkbox']:checked {
-    background: var(--lt-color-success-500);
+    background: var(--lt-interactive-success-bg);
   }
-
   :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) {
-    background: var(--lt-color-success-700);
+    background: var(--lt-interactive-success-bg-hover);
   }
 
-  /* Variant styles - Error */
   :host([variant='error']) input[type='checkbox']:checked {
-    background: var(--lt-color-error-500);
+    background: var(--lt-interactive-error-bg);
   }
-
   :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) {
-    background: var(--lt-color-error-700);
+    background: var(--lt-interactive-error-bg-hover);
   }
 
-  /* Variant styles - Info */
   :host([variant='info']) input[type='checkbox']:checked {
-    background: var(--lt-color-info-500);
+    background: var(--lt-interactive-info-bg);
   }
-
   :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) {
-    background: var(--lt-color-info-700);
+    background: var(--lt-interactive-info-bg-hover);
   }
 `;

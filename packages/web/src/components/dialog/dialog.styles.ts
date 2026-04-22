@@ -1,16 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-dialog component.
- *
- * Includes:
- * - Backdrop overlay with opacity transition
- * - Dialog container with scale and opacity animation
- * - Size variants (sm, md, lg, xl, fullscreen)
- * - Header, body, and footer sections
- * - Close button positioning
- * - Scroll handling for long content
- */
 export const dialogStyles = css`
   :host {
     font-family: 'Asap', sans-serif;
@@ -39,7 +28,7 @@ export const dialogStyles = css`
 
   /* Dialog container */
   .dialog {
-    background: var(--lt-color-neutral-50);
+    background: var(--lt-bg-subtle);
     border-radius: var(--lt-border-radius);
     box-shadow:
       0 20px 25px -5px rgba(0, 0, 0, 0.1),
@@ -62,21 +51,10 @@ export const dialogStyles = css`
   }
 
   /* Size variants */
-  :host([size='sm']) .dialog {
-    max-width: 400px;
-  }
-
-  :host([size='md']) .dialog {
-    max-width: 600px;
-  }
-
-  :host([size='lg']) .dialog {
-    max-width: 800px;
-  }
-
-  :host([size='xl']) .dialog {
-    max-width: 1000px;
-  }
+  :host([size='sm']) .dialog { max-width: 400px; }
+  :host([size='md']) .dialog { max-width: 600px; }
+  :host([size='lg']) .dialog { max-width: 800px; }
+  :host([size='xl']) .dialog { max-width: 1000px; }
 
   :host([size='fullscreen']) .backdrop {
     padding: 0;
@@ -92,7 +70,7 @@ export const dialogStyles = css`
   /* Header */
   .header {
     align-items: center;
-    border-bottom: 1px solid var(--lt-color-neutral-200);
+    border-bottom: 1px solid var(--lt-border-default);
     display: flex;
     gap: var(--lt-spacing-4);
     padding: var(--lt-spacing-5);
@@ -104,7 +82,7 @@ export const dialogStyles = css`
   }
 
   .title {
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
     font-size: 1.25rem;
     font-weight: 600;
     line-height: 1.4;
@@ -127,16 +105,16 @@ export const dialogStyles = css`
   }
 
   .close-button:hover {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
     color: var(--lt-color-neutral-700);
   }
 
   .close-button:active {
-    background: var(--lt-color-neutral-200);
+    background: var(--lt-bg-overlay);
   }
 
   .close-button:focus-visible {
-    outline: 2px solid var(--lt-color-primary-500);
+    outline: 2px solid var(--lt-interactive-primary-bg);
     outline-offset: 2px;
   }
 
@@ -150,14 +128,13 @@ export const dialogStyles = css`
 
   /* Footer */
   .footer {
-    border-top: 1px solid var(--lt-color-neutral-200);
+    border-top: 1px solid var(--lt-border-default);
     display: flex;
     gap: var(--lt-spacing-3);
     justify-content: flex-end;
     padding: var(--lt-spacing-5);
   }
 
-  /* Hidden state */
   :host(:not([open])) .backdrop {
     pointer-events: none;
   }

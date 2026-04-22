@@ -1,17 +1,5 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-table component.
- *
- * Includes:
- * - Base table styling with borders
- * - Density variants (compact, normal, comfortable)
- * - Responsive modes (scroll, stack)
- * - Sortable column indicators
- * - Hover and stripe effects
- * - Sticky columns
- * - Mobile breakpoint handling
- */
 export const tableStyles = css`
   :host {
     display: block;
@@ -20,7 +8,6 @@ export const tableStyles = css`
     width: 100%;
   }
 
-  /* Table container for scroll mode */
   .table-container {
     overflow-x: auto;
     width: 100%;
@@ -30,7 +17,6 @@ export const tableStyles = css`
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Base table */
   table {
     border-collapse: collapse;
     width: 100%;
@@ -38,24 +24,19 @@ export const tableStyles = css`
 
   /* Header */
   thead {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
     border-bottom: 2px solid var(--lt-color-neutral-300);
   }
 
   th {
-    color: var(--lt-color-neutral-900);
+    color: var(--lt-text-default);
     font-weight: 600;
     text-align: left;
     white-space: nowrap;
   }
 
-  th[data-align='center'] {
-    text-align: center;
-  }
-
-  th[data-align='right'] {
-    text-align: right;
-  }
+  th[data-align='center'] { text-align: center; }
+  th[data-align='right']  { text-align: right; }
 
   /* Sortable headers */
   th.sortable {
@@ -65,7 +46,7 @@ export const tableStyles = css`
   }
 
   th.sortable:hover {
-    background: var(--lt-color-neutral-200);
+    background: var(--lt-bg-overlay);
   }
 
   th.sortable .header-content {
@@ -74,16 +55,11 @@ export const tableStyles = css`
     gap: var(--lt-spacing-2);
   }
 
-  th[data-align='center'] .header-content {
-    justify-content: center;
-  }
-
-  th[data-align='right'] .header-content {
-    justify-content: flex-end;
-  }
+  th[data-align='center'] .header-content { justify-content: center; }
+  th[data-align='right']  .header-content { justify-content: flex-end; }
 
   .sort-icon {
-    color: var(--lt-color-neutral-400);
+    color: var(--lt-text-muted);
     display: inline-flex;
     flex-shrink: 0;
     font-size: 0.875rem;
@@ -97,12 +73,12 @@ export const tableStyles = css`
   }
 
   th.sorted .sort-icon {
-    color: var(--lt-color-primary-500);
+    color: var(--lt-interactive-primary-bg);
   }
 
   /* Body */
   tbody tr {
-    border-bottom: 1px solid var(--lt-color-neutral-200);
+    border-bottom: 1px solid var(--lt-border-default);
     transition: background-color 120ms ease;
   }
 
@@ -111,28 +87,23 @@ export const tableStyles = css`
   }
 
   :host([hoverable]) tbody tr:hover {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
   }
 
   :host([striped]) tbody tr:nth-child(even) {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
   }
 
   :host([striped][hoverable]) tbody tr:nth-child(even):hover {
-    background: var(--lt-color-neutral-200);
+    background: var(--lt-bg-overlay);
   }
 
   td {
     color: var(--lt-color-neutral-700);
   }
 
-  td[data-align='center'] {
-    text-align: center;
-  }
-
-  td[data-align='right'] {
-    text-align: right;
-  }
+  td[data-align='center'] { text-align: center; }
+  td[data-align='right']  { text-align: right; }
 
   /* Density variants */
   :host([density='compact']) th,
@@ -152,7 +123,7 @@ export const tableStyles = css`
 
   /* Sticky columns */
   th.sticky {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
     left: 0;
     position: sticky;
@@ -160,35 +131,33 @@ export const tableStyles = css`
   }
 
   td.sticky {
-    background: white;
+    background: var(--lt-bg-default);
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
     left: 0;
     position: sticky;
     z-index: 1;
   }
 
-  /* Sticky columns with striped rows */
   :host([striped]) tbody tr:nth-child(even) td.sticky {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
   }
 
-  /* Sticky columns with hover */
   :host([hoverable]) tbody tr:hover td.sticky {
-    background: var(--lt-color-neutral-100);
+    background: var(--lt-bg-surface);
   }
 
   :host([striped][hoverable]) tbody tr:nth-child(even):hover td.sticky {
-    background: var(--lt-color-neutral-200);
+    background: var(--lt-bg-overlay);
   }
 
   /* Border styling */
   :host([bordered]) table {
-    border: 1px solid var(--lt-color-neutral-200);
+    border: 1px solid var(--lt-border-default);
   }
 
   :host([bordered]) th,
   :host([bordered]) td {
-    border-right: 1px solid var(--lt-color-neutral-200);
+    border-right: 1px solid var(--lt-border-default);
   }
 
   :host([bordered]) th:last-child,
@@ -237,9 +206,9 @@ export const tableStyles = css`
     }
 
     :host([responsive-mode='stack']) tr {
-      background: var(--lt-color-neutral-50);
+      background: var(--lt-bg-subtle);
       border-radius: var(--lt-border-radius);
-      border: 1px solid var(--lt-color-neutral-200);
+      border: 1px solid var(--lt-border-default);
       margin-bottom: var(--lt-spacing-3);
       padding: var(--lt-spacing-4);
     }
@@ -255,7 +224,7 @@ export const tableStyles = css`
 
     :host([responsive-mode='stack']) td::before {
       content: attr(data-label);
-      color: var(--lt-color-neutral-900);
+      color: var(--lt-text-default);
       font-weight: 600;
     }
 
@@ -264,16 +233,14 @@ export const tableStyles = css`
     }
   }
 
-  /* Hide columns on mobile */
   @media (max-width: 768px) {
     .hide-on-mobile {
       display: none;
     }
   }
 
-  /* Focus visible */
   th.sortable:focus-visible {
-    outline: 2px solid var(--lt-color-primary-500);
+    outline: 2px solid var(--lt-interactive-primary-bg);
     outline-offset: -2px;
   }
 `;
