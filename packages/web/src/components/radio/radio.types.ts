@@ -19,3 +19,5 @@ export type RadioSize = 'sm' | 'md' | 'lg';
  * - `info`: Blue color
  */
 export type RadioVariant = 'primary' | 'secondary' | 'success' | 'error' | 'info';
+
+export type RadioLabelPosition = 'left' | 'right';

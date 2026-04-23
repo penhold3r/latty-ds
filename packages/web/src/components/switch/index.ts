@@ -6,4 +6,4 @@
  */
 
 export { Switch } from './switch';
-export type { SwitchSize, SwitchVariant } from './switch.types';
+export type { SwitchSize, SwitchVariant, SwitchLabelPosition } from './switch.types';

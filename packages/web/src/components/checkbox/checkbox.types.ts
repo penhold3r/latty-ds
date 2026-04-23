@@ -19,3 +19,5 @@ export type CheckboxSize = 'sm' | 'md' | 'lg';
  * - `info`: Blue color
  */
 export type CheckboxVariant = 'primary' | 'secondary' | 'success' | 'error' | 'info';
+
+export type CheckboxLabelPosition = 'left' | 'right';

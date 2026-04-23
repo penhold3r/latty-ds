@@ -14,7 +14,12 @@ export const radioStyles = css`
   }
 
   .radio-container {
+    display: inline-flex;
     position: relative;
+  }
+
+  :host([label-position='left']) .radio-wrapper {
+    flex-direction: row-reverse;
   }
 
   :host([disabled]) .radio-wrapper {

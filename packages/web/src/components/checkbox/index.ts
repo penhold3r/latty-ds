@@ -6,4 +6,4 @@
  */
 
 export { Checkbox } from './checkbox';
-export type { CheckboxSize, CheckboxVariant } from './checkbox.types';
+export type { CheckboxSize, CheckboxVariant, CheckboxLabelPosition } from './checkbox.types';

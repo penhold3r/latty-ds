@@ -6,4 +6,4 @@
  */
 
 export { Radio } from './radio';
-export type { RadioSize, RadioVariant } from './radio.types';
+export type { RadioSize, RadioVariant, RadioLabelPosition } from './radio.types';

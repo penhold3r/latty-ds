@@ -29,6 +29,11 @@ function resolveUnion(typeName, componentDir) {
   return [...match[1].matchAll(/'([^']+)'/g)].map(m => m[1]);
 }
 
+/** Convert camelCase property name to kebab-case attribute name (Lit convention). */
+function toAttrName(propName) {
+  return propName.replace(/([A-Z])/g, '-$1').toLowerCase();
+}
+
 /** Strip surrounding quotes from a CEM default value like `"'primary'"`. */
 function parseDefault(raw) {
   if (raw === undefined || raw === null) return undefined;
@@ -37,13 +42,14 @@ function parseDefault(raw) {
 
 /** Convert a CEM field declaration into a manifest member, or null to skip. */
 function toMember(field, componentDir) {
-  const { name, type, default: rawDefault, privacy, static: isStatic } = field;
+  const { name: propName, attribute, type, default: rawDefault, privacy, static: isStatic } = field;
+  const name = attribute ?? toAttrName(propName);
 
   if (isStatic) return null;
   if (privacy === 'private' || privacy === 'protected') return null;
-  if (name.startsWith('_')) return null;
+  if (propName.startsWith('_')) return null;
   // Skip framework / LitElement lifecycle fields
-  if (['styles', 'shadowRoot', 'renderRoot', 'updateComplete'].includes(name)) return null;
+  if (['styles', 'shadowRoot', 'renderRoot', 'updateComplete'].includes(propName)) return null;
 
   const typeText = type?.text ?? 'string';
 

@@ -64,3 +64,4 @@ export * from './components/tab-group';
 export * from './components/table';
 export * from './components/textfield';
 export * from './components/avatar';
+export * from './components/badge';

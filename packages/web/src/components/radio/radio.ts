@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { radioStyles } from './radio.styles';
-import { RadioSize, RadioVariant } from './radio.types';
+import { RadioSize, RadioVariant, RadioLabelPosition } from './radio.types';
 
 /**
  * A customizable radio button component with support for multiple variants and sizes.
@@ -79,6 +79,12 @@ export class Radio extends LitElement {
    * @default ''
    */
   @property() label = '';
+
+  /**
+   * Position of the label relative to the radio button.
+   * @default 'right'
+   */
+  @property({ attribute: 'label-position', reflect: true }) labelPosition: RadioLabelPosition = 'right';
 
   /**
    * Name attribute for radio group.

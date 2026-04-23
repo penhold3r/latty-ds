@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout
+	title="Badge"
+	description="Compact status labels for categories, counts, and states"
+>
+	<h1>Badge</h1>
+	<p>
+		Compact pill-shaped labels for statuses, categories, and counts. Unlike chips, badges are non-interactive — use them
+		for display only. When no content is provided the badge collapses to a circle indicator.
+	</p>
+
+	<h2>Playground</h2>
+	<ComponentPlayground
+		tag="lt-badge"
+		content=""
+	/>
+
+	<h2>Usage</h2>
+	<CodeSnippet
+		code={`
+<!-- Pill badges -->
+<lt-badge variant="success" content="Active" />
+<lt-badge variant="error" appearance="solid" content="Failed" />
+<lt-badge variant="warning" appearance="outlined" content="Pending" />
+<lt-badge variant="primary" content="New" dot />
+
+<!-- Circle indicators (no content) -->
+<lt-badge variant="success" />
+<lt-badge variant="error" />
+<lt-badge variant="warning" />
+  `}
+	/>
+
+	<h2>API</h2>
+	<ApiTable tag="lt-badge" />
+</BaseLayout>
+
+<script>
+	import '@latty/web';
+</script>

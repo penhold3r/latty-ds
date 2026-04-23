@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { switchStyles } from './switch.styles';
-import { SwitchSize, SwitchVariant } from './switch.types';
+import { SwitchSize, SwitchVariant, SwitchLabelPosition } from './switch.types';
 
 /**
  * A toggle switch component with sliding animation.
@@ -74,6 +74,12 @@ export class Switch extends LitElement {
    * @default ''
    */
   @property() label = '';
+
+  /**
+   * Position of the label relative to the switch.
+   * @default 'right'
+   */
+  @property({ attribute: 'label-position', reflect: true }) labelPosition: SwitchLabelPosition = 'right';
 
   /**
    * Name attribute for form submission.

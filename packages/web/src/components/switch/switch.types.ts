@@ -19,3 +19,5 @@ export type SwitchSize = 'sm' | 'md' | 'lg';
  * - `info`: Blue color
  */
 export type SwitchVariant = 'primary' | 'secondary' | 'success' | 'error' | 'info';
+
+export type SwitchLabelPosition = 'left' | 'right';

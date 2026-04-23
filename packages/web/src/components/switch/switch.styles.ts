@@ -13,12 +13,17 @@ export const switchStyles = css`
     gap: var(--lt-spacing-2);
   }
 
+  :host([label-position='left']) .switch-wrapper {
+    flex-direction: row-reverse;
+  }
+
   :host([disabled]) .switch-wrapper {
     cursor: not-allowed;
     opacity: 0.6;
   }
 
   .switch-container {
+    display: inline-flex;
     position: relative;
   }
 

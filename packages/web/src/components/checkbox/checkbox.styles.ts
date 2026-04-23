@@ -14,6 +14,10 @@ export const checkboxStyles = css`
     position: relative;
   }
 
+  :host([label-position='left']) .checkbox-wrapper {
+    flex-direction: row-reverse;
+  }
+
   :host([disabled]) .checkbox-wrapper {
     cursor: not-allowed;
     opacity: 0.6;

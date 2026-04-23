@@ -9,8 +9,7 @@
         {
           "kind": "variable",
           "name": "accordionStyles",
-          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; width: 100%; } details { border-radius: var(--lt-border-radius); transition: background-color 120ms ease, border-color 120ms ease; } /* Remove default marker */ summary { cursor: pointer; list-style: none; user-select: none; border-radius: var(--lt-border-radius); overflow: hidden; } summary::-webkit-details-marker { display: none; } .summary-content { align-items: center; display: flex; gap: var(--lt-spacing-3); justify-content: space-between; padding: var(--lt-spacing-4); } .start-icon { color: var(--lt-color-neutral-700); flex-shrink: 0; font-size: 1.25rem; } .summary-text { color: var(--lt-color-neutral-900); flex: 1; font-size: 1rem; font-weight: 500; } .chevron { color: var(--lt-color-neutral-600); flex-shrink: 0; height: 20px; transition: transform 200ms ease; width: 20px; } details[open] .chevron { transform: rotate(180deg); } summary:hover .chevron { color: var(--lt-color-neutral-900); } summary:focus-visible { outline: 3px solid var(--lt-color-primary-200); outline-offset: -3px; } .content { height: 0; overflow: hidden; transition: height 200ms ease; } .content-inner { color: var(--lt-color-neutral-700); font-size: 0.9375rem; line-height: 1.6; padding: 0 var(--lt-spacing-4) var(--lt-spacing-4); } /* Variant: default */ :host([variant='default']) details { background: var(--lt-color-neutral-50); border: 1px solid var(--lt-color-neutral-200); } :host([variant='default']) details:hover { border-color: var(--lt-color-neutral-300); } /* Variant: filled */ :host([variant='filled']) details { background: var(--lt-color-neutral-100); border: none; } :host([variant='filled']) details:hover { background: var(--lt-color-neutral-200); } /* Variant: outlined */ :host([variant='outlined']) details { background: transparent; border: 1px solid var(--lt-color-neutral-300); } :host([variant='outlined']) details:hover { border-color: var(--lt-color-neutral-400); } /* Disabled state */ :host([disabled]) details { opacity: 0.6; pointer-events: none; } `",
-          "description": "Styles for the lt-accordion component.\n\nIncludes:\n- Native details/summary styling\n- Smooth expand/collapse animation\n- Visual variants (default, filled, outlined)\n- Custom chevron icon\n- Focus states for accessibility"
+          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; width: 100%; } details { border-radius: var(--lt-border-radius); transition: background-color 120ms ease, border-color 120ms ease; } summary { cursor: pointer; list-style: none; user-select: none; border-radius: var(--lt-border-radius); overflow: hidden; } summary::-webkit-details-marker { display: none; } .summary-content { align-items: center; display: flex; gap: var(--lt-spacing-3); justify-content: space-between; padding: var(--lt-spacing-4); } .start-icon { color: var(--lt-color-neutral-700); flex-shrink: 0; font-size: 1.25rem; } .summary-text { color: var(--lt-text-default); flex: 1; font-size: 1rem; font-weight: 500; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; height: 20px; transition: transform 200ms ease; width: 20px; } details[open] .chevron { transform: rotate(180deg); } summary:hover .chevron { color: var(--lt-text-default); } summary:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: -3px; } .content { height: 0; overflow: hidden; transition: height 200ms ease; } .content-inner { color: var(--lt-color-neutral-700); font-size: 0.9375rem; line-height: 1.6; padding: 0 var(--lt-spacing-4) var(--lt-spacing-4); } /* Variant: default */ :host([variant='default']) details { background: var(--lt-bg-subtle); border: 1px solid var(--lt-border-default); } :host([variant='default']) details:hover { border-color: var(--lt-color-neutral-300); } /* Variant: filled */ :host([variant='filled']) details { background: var(--lt-bg-surface); border: none; } :host([variant='filled']) details:hover { background: var(--lt-bg-overlay); } /* Variant: outlined */ :host([variant='outlined']) details { background: transparent; border: 1px solid var(--lt-color-neutral-300); } :host([variant='outlined']) details:hover { border-color: var(--lt-border-strong); } /* Disabled state */ :host([disabled]) details { opacity: 0.6; pointer-events: none; } `"
         }
       ],
       "exports": [
@@ -197,7 +196,7 @@
         {
           "kind": "variable",
           "name": "avatarStyles",
-          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-color-neutral-200); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Asap', sans-serif; font-weight: 500; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-color-neutral-200); color: var(--lt-color-neutral-700); } :host([color='primary']) span[part='base'] { background: var(--lt-color-primary-100); color: var(--lt-color-primary-800); } :host([color='secondary']) span[part='base'] { background: var(--lt-color-secondary-100); color: var(--lt-color-secondary-800); } :host([color='success']) span[part='base'] { background: var(--lt-color-success-100); color: var(--lt-color-success-800); } :host([color='warning']) span[part='base'] { background: var(--lt-color-warning-100); color: var(--lt-color-warning-800); } :host([color='error']) span[part='base'] { background: var(--lt-color-error-100); color: var(--lt-color-error-800); } :host([color='info']) span[part='base'] { background: var(--lt-color-info-100); color: var(--lt-color-info-800); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
+          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Asap', sans-serif; font-weight: 500; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-color-neutral-700); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-color-primary-800); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-color-secondary-800); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-color-success-800); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-color-warning-800); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-color-error-800); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-color-info-800); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
         }
       ],
       "exports": [
@@ -368,13 +367,253 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/checkbox/checkbox.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "checkboxStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } .checkbox-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); position: relative; } :host([label-position='left']) .checkbox-wrapper { flex-direction: row-reverse; } :host([disabled]) .checkbox-wrapper { cursor: not-allowed; opacity: 0.6; } input[type='checkbox'] { appearance: none; border-radius: calc(var(--lt-border-radius) * 0.5); border: 2px solid var(--lt-border-strong); cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='checkbox']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .checkmark { display: none; pointer-events: none; position: absolute; } input[type='checkbox']:checked ~ .checkmark, input[type='checkbox']:indeterminate ~ .checkmark { display: block; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 16px; width: 16px; } :host([size='sm']) .checkmark { height: 16px; width: 16px; left: 0; top: 0; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 20px; width: 20px; } :host([size='md']) .checkmark { height: 20px; width: 20px; left: 0; top: 0; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 24px; width: 24px; } :host([size='lg']) .checkmark { height: 24px; width: 24px; left: 0; top: 0; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked, :host([variant='primary']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-primary-bg); border-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='primary']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); border-color: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked, :host([variant='secondary']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-secondary-bg); border-color: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='secondary']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); border-color: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked, :host([variant='success']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-success-bg); border-color: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='success']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); border-color: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked, :host([variant='error']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-error-bg); border-color: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='error']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); border-color: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked, :host([variant='info']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-info-bg); border-color: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='info']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); border-color: var(--lt-interactive-info-bg-hover); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "checkboxStyles",
+          "declaration": {
+            "name": "checkboxStyles",
+            "module": "src/components/checkbox/checkbox.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/checkbox/checkbox.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A customizable checkbox component with support for multiple variants and sizes.",
+          "name": "Checkbox",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "checkboxStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "CheckboxVariant"
+              },
+              "default": "'primary'",
+              "description": "Visual variant that determines the color when checked."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "CheckboxSize"
+              },
+              "default": "'md'",
+              "description": "Size of the checkbox."
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is checked."
+            },
+            {
+              "kind": "field",
+              "name": "indeterminate",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is in indeterminate state.\nUsed for \"select all\" checkboxes when some items are selected."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the checkbox is required."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text displayed next to the checkbox."
+            },
+            {
+              "kind": "field",
+              "name": "labelPosition",
+              "type": {
+                "text": "CheckboxLabelPosition"
+              },
+              "default": "'right'",
+              "description": "Position of the label relative to the checkbox."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "'on'",
+              "description": "Value attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "input",
+              "type": {
+                "text": "HTMLInputElement"
+              },
+              "privacy": "private",
+              "description": "Reference to the native input element."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ],
+              "description": "Handles changes to the indeterminate property.\nUpdates the native input's indeterminate state."
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  },
+                  "description": "The native change event"
+                }
+              ],
+              "description": "Handles checkbox change events.\nUpdates the checked state and dispatches a custom change event."
+            },
+            {
+              "kind": "method",
+              "name": "renderCheckmark",
+              "privacy": "private",
+              "description": "Renders the checkbox icon based on state.\nShows checkmark when checked, minus when indeterminate."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "CustomEvent<{checked: boolean, indeterminate: boolean}>"
+              },
+              "description": "Dispatched when the checked state changes"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-checkbox",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Checkbox",
+          "declaration": {
+            "name": "Checkbox",
+            "module": "src/components/checkbox/checkbox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/checkbox/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Checkbox",
+          "declaration": {
+            "name": "Checkbox",
+            "module": "./checkbox"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "CheckboxSize",
+          "declaration": {
+            "name": "CheckboxSize",
+            "module": "./checkbox.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "CheckboxVariant",
+          "declaration": {
+            "name": "CheckboxVariant",
+            "module": "./checkbox.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "CheckboxLabelPosition",
+          "declaration": {
+            "name": "CheckboxLabelPosition",
+            "module": "./checkbox.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/button/button.styles.ts",
       "declarations": [
         {
           "kind": "variable",
           "name": "buttonStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } button { align-items: center; border-radius: var(--lt-border-radius); border: 1px solid transparent; box-sizing: border-box; cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } button:active { transform: translateY(1px); } button:focus-visible { outline: 3px solid var(--lt-color-primary-200); outline-offset: 2px; } button[disabled] { cursor: not-allowed; opacity: 0.6; transform: none; } /* sizes */ :host([size='sm']) button { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) button { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) button { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants (background + border + text) */ :host([variant='primary']) button { background: var(--lt-color-primary-500); color: var(--lt-color-neutral-50); } :host([variant='primary']) button:hover:not([disabled]) { background: var(--lt-color-primary-700); } :host([variant='primary']) button:active:not([disabled]) { background: var(--lt-color-primary-800); } :host([variant='secondary']) button { background: var(--lt-color-secondary-500); color: var(--lt-color-neutral-50); } :host([variant='secondary']) button:hover:not([disabled]) { background: var(--lt-color-secondary-700); } :host([variant='secondary']) button:active:not([disabled]) { background: var(--lt-color-secondary-800); } :host([variant='neutral']) button { background: var(--lt-color-neutral-500); color: var(--lt-color-neutral-50); } :host([variant='neutral']) button:hover:not([disabled]) { background: var(--lt-color-neutral-700); } :host([variant='neutral']) button:active:not([disabled]) { background: var(--lt-color-neutral-800); } /* semantic variants */ :host([variant='success']) button { background: var(--lt-color-success-500); color: var(--lt-color-neutral-50); } :host([variant='success']) button:hover:not([disabled]) { background: var(--lt-color-success-700); } :host([variant='success']) button:active:not([disabled]) { background: var(--lt-color-success-800); } :host([variant='warning']) button { background: var(--lt-color-warning-500); color: var(--lt-color-neutral-50); } :host([variant='warning']) button:hover:not([disabled]) { background: var(--lt-color-warning-700); } :host([variant='warning']) button:active:not([disabled]) { background: var(--lt-color-warning-800); } :host([variant='error']) button { background: var(--lt-color-error-500); color: var(--lt-color-neutral-50); } :host([variant='error']) button:hover:not([disabled]) { background: var(--lt-color-error-700); } :host([variant='error']) button:active:not([disabled]) { background: var(--lt-color-error-800); } :host([variant='info']) button { background: var(--lt-color-info-500); color: var(--lt-color-neutral-50); } :host([variant='info']) button:hover:not([disabled]) { background: var(--lt-color-info-700); } :host([variant='info']) button:active:not([disabled]) { background: var(--lt-color-info-800); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) button { background: transparent; border-color: var(--lt-color-primary-500); color: var(--lt-color-primary-500); } :host([appearance='outlined'][variant='primary']) button:hover:not([disabled]) { background: var(--lt-color-primary-50); border-color: var(--lt-color-primary-700); color: var(--lt-color-primary-700); } :host([appearance='outlined'][variant='primary']) button:active:not([disabled]) { background: var(--lt-color-primary-100); border-color: var(--lt-color-primary-800); color: var(--lt-color-primary-800); } :host([appearance='outlined'][variant='secondary']) button { background: transparent; border-color: var(--lt-color-secondary-500); color: var(--lt-color-secondary-500); } :host([appearance='outlined'][variant='secondary']) button:hover:not([disabled]) { background: var(--lt-color-secondary-50); border-color: var(--lt-color-secondary-700); color: var(--lt-color-secondary-700); } :host([appearance='outlined'][variant='secondary']) button:active:not([disabled]) { background: var(--lt-color-secondary-100); border-color: var(--lt-color-secondary-800); color: var(--lt-color-secondary-800); } :host([appearance='outlined'][variant='neutral']) button { background: transparent; border-color: var(--lt-color-neutral-500); color: var(--lt-color-neutral-700); } :host([appearance='outlined'][variant='neutral']) button:hover:not([disabled]) { background: var(--lt-color-neutral-50); border-color: var(--lt-color-neutral-700); color: var(--lt-color-neutral-900); } :host([appearance='outlined'][variant='neutral']) button:active:not([disabled]) { background: var(--lt-color-neutral-100); border-color: var(--lt-color-neutral-800); color: var(--lt-color-neutral-900); } :host([appearance='outlined'][variant='success']) button { background: transparent; border-color: var(--lt-color-success-500); color: var(--lt-color-success-500); } :host([appearance='outlined'][variant='success']) button:hover:not([disabled]) { background: var(--lt-color-success-50); border-color: var(--lt-color-success-700); color: var(--lt-color-success-700); } :host([appearance='outlined'][variant='success']) button:active:not([disabled]) { background: var(--lt-color-success-100); border-color: var(--lt-color-success-800); color: var(--lt-color-success-800); } :host([appearance='outlined'][variant='warning']) button { background: transparent; border-color: var(--lt-color-warning-500); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='warning']) button:hover:not([disabled]) { background: var(--lt-color-warning-50); border-color: var(--lt-color-warning-700); color: var(--lt-color-warning-800); } :host([appearance='outlined'][variant='warning']) button:active:not([disabled]) { background: var(--lt-color-warning-100); border-color: var(--lt-color-warning-800); color: var(--lt-color-warning-900); } :host([appearance='outlined'][variant='error']) button { background: transparent; border-color: var(--lt-color-error-500); color: var(--lt-color-error-500); } :host([appearance='outlined'][variant='error']) button:hover:not([disabled]) { background: var(--lt-color-error-50); border-color: var(--lt-color-error-700); color: var(--lt-color-error-700); } :host([appearance='outlined'][variant='error']) button:active:not([disabled]) { background: var(--lt-color-error-100); border-color: var(--lt-color-error-800); color: var(--lt-color-error-800); } :host([appearance='outlined'][variant='info']) button { background: transparent; border-color: var(--lt-color-info-500); color: var(--lt-color-info-500); } :host([appearance='outlined'][variant='info']) button:hover:not([disabled]) { background: var(--lt-color-info-50); border-color: var(--lt-color-info-700); color: var(--lt-color-info-700); } :host([appearance='outlined'][variant='info']) button:active:not([disabled]) { background: var(--lt-color-info-100); border-color: var(--lt-color-info-800); color: var(--lt-color-info-800); } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } `",
-          "description": "Styles for the lt-button component.\n\nIncludes:\n- Base button styling with transitions\n- Size variants (sm, md, lg)\n- Visual variants (primary, secondary, neutral, and semantic colors)\n- Loading state with spinner\n- Icon positioning (start and end)\n- Disabled and focus states\n- Active/pressed state with translateY animation"
+          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } button { align-items: center; border-radius: var(--lt-border-radius); border: 1px solid transparent; box-sizing: border-box; cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } button:active { transform: translateY(1px); } button:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } button[disabled] { cursor: not-allowed; opacity: 0.6; transform: none; } /* sizes */ :host([size='sm']) button { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) button { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) button { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) button { background: var(--lt-interactive-primary-bg); color: var(--lt-text-on-primary); } :host([variant='primary']) button:hover:not([disabled]) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='primary']) button:active:not([disabled]) { background: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) button { background: var(--lt-interactive-secondary-bg); color: var(--lt-text-on-secondary); } :host([variant='secondary']) button:hover:not([disabled]) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='secondary']) button:active:not([disabled]) { background: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) button { background: var(--lt-color-neutral-500); color: var(--lt-color-neutral-50); } :host([variant='neutral']) button:hover:not([disabled]) { background: var(--lt-color-neutral-700); } :host([variant='neutral']) button:active:not([disabled]) { background: var(--lt-color-neutral-800); } :host([variant='success']) button { background: var(--lt-interactive-success-bg); color: var(--lt-text-on-success); } :host([variant='success']) button:hover:not([disabled]) { background: var(--lt-interactive-success-bg-hover); } :host([variant='success']) button:active:not([disabled]) { background: var(--lt-interactive-success-bg-active); } :host([variant='warning']) button { background: var(--lt-interactive-warning-bg); color: var(--lt-text-on-warning); } :host([variant='warning']) button:hover:not([disabled]) { background: var(--lt-interactive-warning-bg-hover); } :host([variant='warning']) button:active:not([disabled]) { background: var(--lt-interactive-warning-bg-active); } :host([variant='error']) button { background: var(--lt-interactive-error-bg); color: var(--lt-text-on-error); } :host([variant='error']) button:hover:not([disabled]) { background: var(--lt-interactive-error-bg-hover); } :host([variant='error']) button:active:not([disabled]) { background: var(--lt-interactive-error-bg-active); } :host([variant='info']) button { background: var(--lt-interactive-info-bg); color: var(--lt-text-on-info); } :host([variant='info']) button:hover:not([disabled]) { background: var(--lt-interactive-info-bg-hover); } :host([variant='info']) button:active:not([disabled]) { background: var(--lt-interactive-info-bg-active); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) button { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-color-primary-500); } :host([appearance='outlined'][variant='primary']) button:hover:not([disabled]) { background: var(--lt-color-primary-50); border-color: var(--lt-color-primary-700); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='primary']) button:active:not([disabled]) { background: var(--lt-bg-primary-subtle); border-color: var(--lt-color-primary-800); color: var(--lt-color-primary-800); } :host([appearance='outlined'][variant='secondary']) button { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-color-secondary-500); } :host([appearance='outlined'][variant='secondary']) button:hover:not([disabled]) { background: var(--lt-color-secondary-50); border-color: var(--lt-color-secondary-700); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='secondary']) button:active:not([disabled]) { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-color-secondary-800); color: var(--lt-color-secondary-800); } :host([appearance='outlined'][variant='neutral']) button { background: transparent; border-color: var(--lt-color-neutral-500); color: var(--lt-color-neutral-700); } :host([appearance='outlined'][variant='neutral']) button:hover:not([disabled]) { background: var(--lt-bg-subtle); border-color: var(--lt-color-neutral-700); color: var(--lt-text-default); } :host([appearance='outlined'][variant='neutral']) button:active:not([disabled]) { background: var(--lt-bg-surface); border-color: var(--lt-color-neutral-800); color: var(--lt-text-default); } :host([appearance='outlined'][variant='success']) button { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-color-success-500); } :host([appearance='outlined'][variant='success']) button:hover:not([disabled]) { background: var(--lt-color-success-50); border-color: var(--lt-color-success-700); color: var(--lt-text-success); } :host([appearance='outlined'][variant='success']) button:active:not([disabled]) { background: var(--lt-bg-success-subtle); border-color: var(--lt-color-success-800); color: var(--lt-color-success-800); } :host([appearance='outlined'][variant='warning']) button { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='warning']) button:hover:not([disabled]) { background: var(--lt-color-warning-50); border-color: var(--lt-color-warning-700); color: var(--lt-color-warning-800); } :host([appearance='outlined'][variant='warning']) button:active:not([disabled]) { background: var(--lt-bg-warning-subtle); border-color: var(--lt-color-warning-800); color: var(--lt-color-warning-900); } :host([appearance='outlined'][variant='error']) button { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-color-error-500); } :host([appearance='outlined'][variant='error']) button:hover:not([disabled]) { background: var(--lt-color-error-50); border-color: var(--lt-color-error-700); color: var(--lt-text-error); } :host([appearance='outlined'][variant='error']) button:active:not([disabled]) { background: var(--lt-bg-error-subtle); border-color: var(--lt-color-error-800); color: var(--lt-color-error-800); } :host([appearance='outlined'][variant='info']) button { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-color-info-500); } :host([appearance='outlined'][variant='info']) button:hover:not([disabled]) { background: var(--lt-color-info-50); border-color: var(--lt-color-info-700); color: var(--lt-text-info); } :host([appearance='outlined'][variant='info']) button:active:not([disabled]) { background: var(--lt-bg-info-subtle); border-color: var(--lt-color-info-800); color: var(--lt-color-info-800); } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } `"
         }
       ],
       "exports": [
@@ -538,13 +777,330 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/chip/chip.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "chipStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Asap', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-color-primary-800); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-color-secondary-800); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-color-neutral-700); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-color-success-800); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-color-warning-800); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-color-error-800); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-color-info-800); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-color-primary-600); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-color-secondary-600); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-color-neutral-700); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-color-success-600); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-color-error-600); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-color-info-600); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "chipStyles",
+          "declaration": {
+            "name": "chipStyles",
+            "module": "src/components/chip/chip.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/chip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Compact label element for tags, filters, and attributes.",
+          "name": "Chip",
+          "slots": [
+            {
+              "description": "Label content",
+              "name": ""
+            },
+            {
+              "description": "Leading icon or avatar",
+              "name": "icon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "chipStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "ChipAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual appearance (filled tinted background or outlined border only)."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ChipVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ChipSize"
+              },
+              "default": "'md'",
+              "description": "Size (affects height, font, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables the chip and its delete button."
+            },
+            {
+              "kind": "field",
+              "name": "deletable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
+            },
+            {
+              "kind": "field",
+              "name": "_deleteIconSize",
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleDelete",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "lt-delete",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fires when the delete button is clicked (only when `deletable`)"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-chip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "src/components/chip/chip.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "./chip"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipVariant",
+          "declaration": {
+            "name": "ChipVariant",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipSize",
+          "declaration": {
+            "name": "ChipSize",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipAppearance",
+          "declaration": {
+            "name": "ChipAppearance",
+            "module": "./chip.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/badge.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "badgeStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Asap', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 500; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-color-primary-800); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-color-secondary-800); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-color-success-800); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-color-warning-800); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-color-error-800); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-color-neutral-700); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-color-primary-600); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-color-secondary-600); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-color-success-600); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-color-error-600); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-color-neutral-700); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: #fff; } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "badgeStyles",
+          "declaration": {
+            "name": "badgeStyles",
+            "module": "src/components/badge/badge.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/badge.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A compact status label for categories, counts, and states.",
+          "name": "Badge",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "badgeStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "BadgeAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual style: tinted fill, outline only, or full-color solid."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "BadgeVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "BadgeSize"
+              },
+              "default": "'md'",
+              "description": "Size."
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text. When empty the badge renders as a circle indicator."
+            },
+            {
+              "kind": "field",
+              "name": "dot",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show a leading status dot (only visible when content is set)."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-badge",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "src/components/badge/badge.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "./badge"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeVariant",
+          "declaration": {
+            "name": "BadgeVariant",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeSize",
+          "declaration": {
+            "name": "BadgeSize",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeAppearance",
+          "declaration": {
+            "name": "BadgeAppearance",
+            "module": "./badge.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/dialog/dialog.styles.ts",
       "declarations": [
         {
           "kind": "variable",
           "name": "dialogStyles",
-          "default": "css` :host { font-family: 'Asap', sans-serif; } /* Backdrop */ .backdrop { align-items: center; background: rgba(0, 0, 0, 0.5); display: flex; height: 100vh; justify-content: center; left: 0; opacity: 0; padding: var(--lt-spacing-4); position: fixed; top: 0; transition: opacity 200ms ease; width: 100vw; z-index: 1000; } :host([open]) .backdrop { opacity: 1; } /* Dialog container */ .dialog { background: var(--lt-color-neutral-50); border-radius: var(--lt-border-radius); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); display: flex; flex-direction: column; max-height: calc(100vh - var(--lt-spacing-8)); opacity: 0; position: relative; transform: scale(0.95); transition: opacity 200ms ease, transform 200ms ease; width: 100%; } :host([open]) .dialog { opacity: 1; transform: scale(1); } /* Size variants */ :host([size='sm']) .dialog { max-width: 400px; } :host([size='md']) .dialog { max-width: 600px; } :host([size='lg']) .dialog { max-width: 800px; } :host([size='xl']) .dialog { max-width: 1000px; } :host([size='fullscreen']) .backdrop { padding: 0; } :host([size='fullscreen']) .dialog { border-radius: 0; height: 100vh; max-height: 100vh; max-width: 100vw; } /* Header */ .header { align-items: center; border-bottom: 1px solid var(--lt-color-neutral-200); display: flex; gap: var(--lt-spacing-4); padding: var(--lt-spacing-5); position: relative; } .header-content { flex: 1; } .title { color: var(--lt-color-neutral-900); font-size: 1.25rem; font-weight: 600; line-height: 1.4; margin: 0; } .close-button { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: none; color: var(--lt-color-neutral-500); cursor: pointer; display: flex; height: 32px; justify-content: center; padding: 0; transition: all 120ms ease; width: 32px; } .close-button:hover { background: var(--lt-color-neutral-100); color: var(--lt-color-neutral-700); } .close-button:active { background: var(--lt-color-neutral-200); } .close-button:focus-visible { outline: 2px solid var(--lt-color-primary-500); outline-offset: 2px; } /* Body */ .body { color: var(--lt-color-neutral-700); flex: 1; overflow-y: auto; padding: var(--lt-spacing-5); } /* Footer */ .footer { border-top: 1px solid var(--lt-color-neutral-200); display: flex; gap: var(--lt-spacing-3); justify-content: flex-end; padding: var(--lt-spacing-5); } /* Hidden state */ :host(:not([open])) .backdrop { pointer-events: none; } `",
-          "description": "Styles for the lt-dialog component.\n\nIncludes:\n- Backdrop overlay with opacity transition\n- Dialog container with scale and opacity animation\n- Size variants (sm, md, lg, xl, fullscreen)\n- Header, body, and footer sections\n- Close button positioning\n- Scroll handling for long content"
+          "default": "css` :host { font-family: 'Asap', sans-serif; } /* Backdrop */ .backdrop { align-items: center; background: rgba(0, 0, 0, 0.5); display: flex; height: 100vh; justify-content: center; left: 0; opacity: 0; padding: var(--lt-spacing-4); position: fixed; top: 0; transition: opacity 200ms ease; width: 100vw; z-index: 1000; } :host([open]) .backdrop { opacity: 1; } /* Dialog container */ .dialog { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); display: flex; flex-direction: column; max-height: calc(100vh - var(--lt-spacing-8)); opacity: 0; position: relative; transform: scale(0.95); transition: opacity 200ms ease, transform 200ms ease; width: 100%; } :host([open]) .dialog { opacity: 1; transform: scale(1); } /* Size variants */ :host([size='sm']) .dialog { max-width: 400px; } :host([size='md']) .dialog { max-width: 600px; } :host([size='lg']) .dialog { max-width: 800px; } :host([size='xl']) .dialog { max-width: 1000px; } :host([size='fullscreen']) .backdrop { padding: 0; } :host([size='fullscreen']) .dialog { border-radius: 0; height: 100vh; max-height: 100vh; max-width: 100vw; } /* Header */ .header { align-items: center; border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-4); padding: var(--lt-spacing-5); position: relative; } .header-content { flex: 1; } .title { color: var(--lt-text-default); font-size: 1.25rem; font-weight: 600; line-height: 1.4; margin: 0; } .close-button { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: none; color: var(--lt-color-neutral-500); cursor: pointer; display: flex; height: 32px; justify-content: center; padding: 0; transition: all 120ms ease; width: 32px; } .close-button:hover { background: var(--lt-bg-surface); color: var(--lt-color-neutral-700); } .close-button:active { background: var(--lt-bg-overlay); } .close-button:focus-visible { outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: 2px; } /* Body */ .body { color: var(--lt-color-neutral-700); flex: 1; overflow-y: auto; padding: var(--lt-spacing-5); } /* Footer */ .footer { border-top: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-3); justify-content: flex-end; padding: var(--lt-spacing-5); } :host(:not([open])) .backdrop { pointer-events: none; } `"
         }
       ],
       "exports": [
@@ -808,405 +1364,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/chip/chip.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "chipStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Asap', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } /* Disabled host */ :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-color-primary-100); border-color: var(--lt-color-primary-200); color: var(--lt-color-primary-800); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-color-secondary-100); border-color: var(--lt-color-secondary-200); color: var(--lt-color-secondary-800); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-100); border-color: var(--lt-color-neutral-200); color: var(--lt-color-neutral-700); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-color-success-100); border-color: var(--lt-color-success-200); color: var(--lt-color-success-800); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-color-warning-100); border-color: var(--lt-color-warning-200); color: var(--lt-color-warning-800); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-color-error-100); border-color: var(--lt-color-error-200); color: var(--lt-color-error-800); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-color-info-100); border-color: var(--lt-color-info-200); color: var(--lt-color-info-800); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-color-primary-500); color: var(--lt-color-primary-600); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-color-secondary-500); color: var(--lt-color-secondary-600); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-color-neutral-400); color: var(--lt-color-neutral-700); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-color-success-500); color: var(--lt-color-success-600); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-color-warning-500); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-color-error-500); color: var(--lt-color-error-600); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-color-info-500); color: var(--lt-color-info-600); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "chipStyles",
-          "declaration": {
-            "name": "chipStyles",
-            "module": "src/components/chip/chip.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/chip.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Compact label element for tags, filters, and attributes.",
-          "name": "Chip",
-          "slots": [
-            {
-              "description": "Label content",
-              "name": ""
-            },
-            {
-              "description": "Leading icon or avatar",
-              "name": "icon"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "chipStyles"
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "ChipAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual appearance (filled tinted background or outlined border only)."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ChipVariant"
-              },
-              "default": "'primary'",
-              "description": "Color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ChipSize"
-              },
-              "default": "'md'",
-              "description": "Size (affects height, font, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disables the chip and its delete button."
-            },
-            {
-              "kind": "field",
-              "name": "deletable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
-            },
-            {
-              "kind": "field",
-              "name": "_deleteIconSize",
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleDelete",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "lt-delete",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Fires when the delete button is clicked (only when `deletable`)"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-chip",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Chip",
-          "declaration": {
-            "name": "Chip",
-            "module": "src/components/chip/chip.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Chip",
-          "declaration": {
-            "name": "Chip",
-            "module": "./chip"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipVariant",
-          "declaration": {
-            "name": "ChipVariant",
-            "module": "./chip.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipSize",
-          "declaration": {
-            "name": "ChipSize",
-            "module": "./chip.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipAppearance",
-          "declaration": {
-            "name": "ChipAppearance",
-            "module": "./chip.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/checkbox/checkbox.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "checkboxStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } .checkbox-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); position: relative; } :host([disabled]) .checkbox-wrapper { cursor: not-allowed; opacity: 0.6; } /* Hide native checkbox */ input[type='checkbox'] { appearance: none; border-radius: calc(var(--lt-border-radius) * 0.5); border: 2px solid var(--lt-color-neutral-400); cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='checkbox']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-color-primary-200); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } /* Checkmark SVG icon */ .checkmark { display: none; pointer-events: none; position: absolute; } input[type='checkbox']:checked ~ .checkmark, input[type='checkbox']:indeterminate ~ .checkmark { display: block; } /* Label */ .label { color: var(--lt-color-neutral-900); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 16px; width: 16px; } :host([size='sm']) .checkmark { height: 16px; width: 16px; left: 0; top: 0; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 20px; width: 20px; } :host([size='md']) .checkmark { height: 20px; width: 20px; left: 0; top: 0; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 24px; width: 24px; } :host([size='lg']) .checkmark { height: 24px; width: 24px; left: 0; top: 0; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles - Primary */ :host([variant='primary']) input[type='checkbox']:checked, :host([variant='primary']) input[type='checkbox']:indeterminate { background: var(--lt-color-primary-500); border-color: var(--lt-color-primary-500); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='primary']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-color-primary-700); border-color: var(--lt-color-primary-700); } /* Variant styles - Secondary */ :host([variant='secondary']) input[type='checkbox']:checked, :host([variant='secondary']) input[type='checkbox']:indeterminate { background: var(--lt-color-secondary-500); border-color: var(--lt-color-secondary-500); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='secondary']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-color-secondary-700); border-color: var(--lt-color-secondary-700); } /* Variant styles - Success */ :host([variant='success']) input[type='checkbox']:checked, :host([variant='success']) input[type='checkbox']:indeterminate { background: var(--lt-color-success-500); border-color: var(--lt-color-success-500); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='success']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-color-success-700); border-color: var(--lt-color-success-700); } /* Variant styles - Error */ :host([variant='error']) input[type='checkbox']:checked, :host([variant='error']) input[type='checkbox']:indeterminate { background: var(--lt-color-error-500); border-color: var(--lt-color-error-500); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='error']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-color-error-700); border-color: var(--lt-color-error-700); } /* Variant styles - Info */ :host([variant='info']) input[type='checkbox']:checked, :host([variant='info']) input[type='checkbox']:indeterminate { background: var(--lt-color-info-500); border-color: var(--lt-color-info-500); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='info']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-color-info-700); border-color: var(--lt-color-info-700); } `",
-          "description": "Styles for the lt-checkbox component.\n\nIncludes:\n- Base checkbox styling with custom appearance\n- Size variants (sm, md, lg)\n- Visual variants (primary, secondary, success, error, info)\n- Checked, indeterminate, and disabled states\n- Focus states for accessibility"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "checkboxStyles",
-          "declaration": {
-            "name": "checkboxStyles",
-            "module": "src/components/checkbox/checkbox.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/checkbox/checkbox.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A customizable checkbox component with support for multiple variants and sizes.",
-          "name": "Checkbox",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "checkboxStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "CheckboxVariant"
-              },
-              "default": "'primary'",
-              "description": "Visual variant that determines the color when checked."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "CheckboxSize"
-              },
-              "default": "'md'",
-              "description": "Size of the checkbox."
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is checked."
-            },
-            {
-              "kind": "field",
-              "name": "indeterminate",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is in indeterminate state.\nUsed for \"select all\" checkboxes when some items are selected."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the checkbox is required."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text displayed next to the checkbox."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "'on'",
-              "description": "Value attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "input",
-              "type": {
-                "text": "HTMLInputElement"
-              },
-              "privacy": "private",
-              "description": "Reference to the native input element."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changedProperties",
-                  "type": {
-                    "text": "Map<string, unknown>"
-                  }
-                }
-              ],
-              "description": "Handles changes to the indeterminate property.\nUpdates the native input's indeterminate state."
-            },
-            {
-              "kind": "method",
-              "name": "handleChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  },
-                  "description": "The native change event"
-                }
-              ],
-              "description": "Handles checkbox change events.\nUpdates the checked state and dispatches a custom change event."
-            },
-            {
-              "kind": "method",
-              "name": "renderCheckmark",
-              "privacy": "private",
-              "description": "Renders the checkbox icon based on state.\nShows checkmark when checked, minus when indeterminate."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "CustomEvent<{checked: boolean, indeterminate: boolean}>"
-              },
-              "description": "Dispatched when the checked state changes"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-checkbox",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Checkbox",
-          "declaration": {
-            "name": "Checkbox",
-            "module": "src/components/checkbox/checkbox.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/checkbox/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Checkbox",
-          "declaration": {
-            "name": "Checkbox",
-            "module": "./checkbox"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "CheckboxSize",
-          "declaration": {
-            "name": "CheckboxSize",
-            "module": "./checkbox.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "CheckboxVariant",
-          "declaration": {
-            "name": "CheckboxVariant",
-            "module": "./checkbox.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/list/index.ts",
       "declarations": [],
       "exports": [
@@ -1243,8 +1400,7 @@
         {
           "kind": "variable",
           "name": "listStyles",
-          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; --list-marker-color: var(--lt-color-neutral-500); } ul, ol { margin: 0; padding: 0; list-style-position: outside; color: var(--lt-color-neutral-900); } ul { padding-left: var(--lt-spacing-5); } ol { padding-left: var(--lt-spacing-5); } /* Support both plain <li> and <lt-list-item> for backward compatibility */ ::slotted(li), ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-2); } ::slotted(li:last-child), ::slotted(lt-list-item:last-child) { margin-bottom: 0; } /* Support for nested lt-list components */ ::slotted(lt-list) { display: block; margin-top: var(--lt-spacing-2); margin-bottom: var(--lt-spacing-2); padding-left: var(--lt-spacing-5); font-size: 0.9em; } ::slotted(lt-list:first-child) { margin-top: var(--lt-spacing-2); } ::slotted(lt-list:last-child) { margin-bottom: 0; } /* Marker color using CSS custom property */ ul ::slotted(li)::marker { color: var(--list-marker-color); } ol ::slotted(li)::marker { color: var(--list-marker-color); } /* Size variants */ :host([size='sm']) ul, :host([size='sm']) ol { font-size: 0.875rem; line-height: 1.5; } :host([size='sm']) ::slotted(li), :host([size='sm']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-1); } :host([size='md']) ul, :host([size='md']) ol { font-size: 1rem; line-height: 1.6; } :host([size='md']) ::slotted(li), :host([size='md']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-2); } :host([size='lg']) ul, :host([size='lg']) ol { font-size: 1.125rem; line-height: 1.7; } :host([size='lg']) ::slotted(li), :host([size='lg']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-3); } `",
-          "description": "Styles for the lt-list component.\n\nIncludes:\n- Base list styling with design tokens\n- Size variants (sm, md, lg)\n- Custom marker color support via CSS custom property\n- Proper spacing between list items"
+          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; --list-marker-color: var(--lt-color-neutral-500); } ul, ol { margin: 0; padding: 0; list-style-position: outside; color: var(--lt-text-default); } ul { padding-left: var(--lt-spacing-5); } ol { padding-left: var(--lt-spacing-5); } ::slotted(li), ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-2); } ::slotted(li:last-child), ::slotted(lt-list-item:last-child) { margin-bottom: 0; } ::slotted(lt-list) { display: block; margin-top: var(--lt-spacing-2); margin-bottom: var(--lt-spacing-2); padding-left: var(--lt-spacing-5); font-size: 0.9em; } ::slotted(lt-list:first-child) { margin-top: var(--lt-spacing-2); } ::slotted(lt-list:last-child) { margin-bottom: 0; } ul ::slotted(li)::marker { color: var(--list-marker-color); } ol ::slotted(li)::marker { color: var(--list-marker-color); } /* Size variants */ :host([size='sm']) ul, :host([size='sm']) ol { font-size: 0.875rem; line-height: 1.5; } :host([size='sm']) ::slotted(li), :host([size='sm']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-1); } :host([size='md']) ul, :host([size='md']) ol { font-size: 1rem; line-height: 1.6; } :host([size='md']) ::slotted(li), :host([size='md']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-2); } :host([size='lg']) ul, :host([size='lg']) ol { font-size: 1.125rem; line-height: 1.7; } :host([size='lg']) ::slotted(li), :host([size='lg']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-3); } `"
         }
       ],
       "exports": [
@@ -1468,6 +1624,14 @@
             "name": "RadioVariant",
             "module": "./radio.types"
           }
+        },
+        {
+          "kind": "js",
+          "name": "RadioLabelPosition",
+          "declaration": {
+            "name": "RadioLabelPosition",
+            "module": "./radio.types"
+          }
         }
       ]
     },
@@ -1478,8 +1642,7 @@
         {
           "kind": "variable",
           "name": "radioStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } .radio-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } .radio-container { position: relative; } :host([disabled]) .radio-wrapper { cursor: not-allowed; opacity: 0.6; } /* Hide native radio */ input[type='radio'] { appearance: none; border-radius: 50%; border: 2px solid var(--lt-color-neutral-400); cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='radio']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='radio']:focus-visible { outline: 3px solid var(--lt-color-primary-200); outline-offset: 2px; } input[type='radio']:disabled { cursor: not-allowed; } /* Inner dot */ .dot { background: white; border-radius: 50%; display: none; pointer-events: none; position: absolute; } input[type='radio']:checked ~ .dot { display: block; } /* Label */ .label { color: var(--lt-color-neutral-900); user-select: none; } /* Size variants */ :host([size='sm']) input[type='radio'] { height: 16px; width: 16px; } :host([size='sm']) .dot { height: 8px; width: 8px; left: 4px; top: 4px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='radio'] { height: 20px; width: 20px; } :host([size='md']) .dot { height: 10px; width: 10px; left: 5px; top: 5px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='radio'] { height: 24px; width: 24px; } :host([size='lg']) .dot { height: 12px; width: 12px; left: 6px; top: 6px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles - Primary */ :host([variant='primary']) input[type='radio']:checked { background: var(--lt-color-primary-500); border-color: var(--lt-color-primary-500); } :host([variant='primary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-color-primary-700); border-color: var(--lt-color-primary-700); } /* Variant styles - Secondary */ :host([variant='secondary']) input[type='radio']:checked { background: var(--lt-color-secondary-500); border-color: var(--lt-color-secondary-500); } :host([variant='secondary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-color-secondary-700); border-color: var(--lt-color-secondary-700); } /* Variant styles - Success */ :host([variant='success']) input[type='radio']:checked { background: var(--lt-color-success-500); border-color: var(--lt-color-success-500); } :host([variant='success']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-color-success-700); border-color: var(--lt-color-success-700); } /* Variant styles - Error */ :host([variant='error']) input[type='radio']:checked { background: var(--lt-color-error-500); border-color: var(--lt-color-error-500); } :host([variant='error']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-color-error-700); border-color: var(--lt-color-error-700); } /* Variant styles - Info */ :host([variant='info']) input[type='radio']:checked { background: var(--lt-color-info-500); border-color: var(--lt-color-info-500); } :host([variant='info']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-color-info-700); border-color: var(--lt-color-info-700); } `",
-          "description": "Styles for the lt-radio component.\n\nIncludes:\n- Base radio styling with circular appearance\n- Size variants (sm, md, lg)\n- Visual variants (primary, secondary, success, error, info)\n- Checked and disabled states\n- Focus states for accessibility"
+          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } .radio-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } .radio-container { display: inline-flex; position: relative; } :host([label-position='left']) .radio-wrapper { flex-direction: row-reverse; } :host([disabled]) .radio-wrapper { cursor: not-allowed; opacity: 0.6; } input[type='radio'] { appearance: none; border-radius: 50%; border: 2px solid var(--lt-border-strong); cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='radio']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='radio']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='radio']:disabled { cursor: not-allowed; } .dot { background: white; border-radius: 50%; display: none; pointer-events: none; position: absolute; } input[type='radio']:checked ~ .dot { display: block; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='radio'] { height: 16px; width: 16px; } :host([size='sm']) .dot { height: 8px; width: 8px; left: 4px; top: 4px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='radio'] { height: 20px; width: 20px; } :host([size='md']) .dot { height: 10px; width: 10px; left: 5px; top: 5px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='radio'] { height: 24px; width: 24px; } :host([size='lg']) .dot { height: 12px; width: 12px; left: 6px; top: 6px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='radio']:checked { background: var(--lt-interactive-primary-bg); border-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); border-color: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='radio']:checked { background: var(--lt-interactive-secondary-bg); border-color: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); border-color: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='radio']:checked { background: var(--lt-interactive-success-bg); border-color: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); border-color: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='radio']:checked { background: var(--lt-interactive-error-bg); border-color: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); border-color: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='radio']:checked { background: var(--lt-interactive-info-bg); border-color: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); border-color: var(--lt-interactive-info-bg-hover); } `"
         }
       ],
       "exports": [
@@ -1561,6 +1724,15 @@
               },
               "default": "''",
               "description": "Label text displayed next to the radio button."
+            },
+            {
+              "kind": "field",
+              "name": "labelPosition",
+              "type": {
+                "text": "RadioLabelPosition"
+              },
+              "default": "'right'",
+              "description": "Position of the label relative to the radio button."
             },
             {
               "kind": "field",
@@ -1658,8 +1830,7 @@
         {
           "kind": "variable",
           "name": "radioGroupStyles",
-          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; } .radio-group { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } .label { color: var(--lt-color-neutral-900); font-size: 0.875rem; font-weight: 500; margin-bottom: var(--lt-spacing-1); } .required-indicator { color: var(--lt-color-error-500); margin-left: var(--lt-spacing-1); } .radios-container { display: flex; gap: var(--lt-spacing-3); } :host([orientation='vertical']) .radios-container { flex-direction: column; } :host([orientation='horizontal']) .radios-container { flex-direction: row; flex-wrap: wrap; } .helper-text { color: var(--lt-color-neutral-600); font-size: 0.75rem; margin-top: var(--lt-spacing-1); } :host([error]) .helper-text { color: var(--lt-color-error-700); } `",
-          "description": "Styles for the lt-radio-group component.\n\nIncludes:\n- Base group layout\n- Vertical and horizontal orientations\n- Label styling\n- Helper text styling\n- Error state"
+          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; } .radio-group { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } .label { color: var(--lt-text-default); font-size: 0.875rem; font-weight: 500; margin-bottom: var(--lt-spacing-1); } .required-indicator { color: var(--lt-color-error-500); margin-left: var(--lt-spacing-1); } .radios-container { display: flex; gap: var(--lt-spacing-3); } :host([orientation='vertical']) .radios-container { flex-direction: column; } :host([orientation='horizontal']) .radios-container { flex-direction: row; flex-wrap: wrap; } .helper-text { color: var(--lt-text-subtle); font-size: 0.75rem; margin-top: var(--lt-spacing-1); } :host([error]) .helper-text { color: var(--lt-text-error); } `"
         }
       ],
       "exports": [
@@ -1874,8 +2045,7 @@
         {
           "kind": "variable",
           "name": "selectStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; position: relative; width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } label { color: var(--lt-color-neutral-700); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: var(--lt-spacing-1); } .select-container { position: relative; width: 100%; } .select-trigger { align-items: center; background: var(--lt-color-neutral-50); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-color-neutral-300); box-sizing: border-box; cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; transition: border-color 120ms ease, box-shadow 120ms ease; width: 100%; } .select-trigger:hover:not([aria-disabled='true']) { border-color: var(--lt-color-neutral-400); } .select-trigger:focus-visible { border-color: var(--lt-color-primary-500); box-shadow: 0 0 0 3px var(--lt-color-primary-200); outline: none; } .select-trigger[aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; } .select-value { color: var(--lt-color-neutral-900); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .select-value.placeholder { color: var(--lt-color-neutral-400); } .icon-end { color: var(--lt-color-neutral-600); flex-shrink: 0; transition: transform 120ms ease; } :host([open]) .icon-end { transform: rotate(180deg); } .dropdown { display: none; margin-top: var(--lt-spacing-1); max-height: 300px; position: absolute; width: 100%; z-index: 1000; } :host([open]) .dropdown { animation: slideDown 150ms ease; display: block; } .options-container { max-height: 300px; overflow: hidden auto; } @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } } .option { align-items: center; background: transparent; border: none; border-radius: var(--lt-border-radius); box-sizing: border-box; color: var(--lt-color-neutral-900); cursor: pointer; display: flex; font-family: inherit; text-align: left; transition: background-color 80ms ease; width: 100%; } .option:hover:not([disabled]) { background: var(--lt-color-neutral-100); } .option:focus-visible { background: var(--lt-color-neutral-100); outline: 2px solid var(--lt-color-primary-500); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-color-primary-100); color: var(--lt-color-primary-700); font-weight: 500; } .option[disabled] { color: var(--lt-color-neutral-400); cursor: not-allowed; opacity: 0.6; } .helper-text { font-size: 0.75rem; } /* Size variants */ :host([size='sm']) .select-trigger { font-size: 0.875rem; height: 32px; padding: 0 var(--lt-spacing-3); } :host([size='sm']) .option { font-size: 0.875rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([size='md']) .select-trigger { font-size: 1rem; height: 40px; padding: 0 var(--lt-spacing-4); } :host([size='md']) .option { font-size: 1rem; padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([size='lg']) .select-trigger { font-size: 1.0625rem; height: 48px; padding: 0 var(--lt-spacing-5); } :host([size='lg']) .option { font-size: 1.0625rem; padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* Variant styles */ :host([variant='success']) .select-trigger { border-color: var(--lt-color-success-500); } :host([variant='success']) .helper-text { color: var(--lt-color-success-700); } :host([variant='warning']) .select-trigger { border-color: var(--lt-color-warning-500); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } :host([variant='error']) .select-trigger { border-color: var(--lt-color-error-500); } :host([variant='error']) .helper-text { color: var(--lt-color-error-700); } :host([variant='default']) .helper-text { color: var(--lt-color-neutral-600); } `",
-          "description": "Styles for the lt-select component.\n\nIncludes:\n- Base select styling with custom dropdown\n- Size variants (sm, md, lg)\n- Visual variants (default, success, warning, error)\n- Disabled and focus states\n- Custom dropdown menu with animations\n- Option hover and selected states"
+          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; position: relative; width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } label { color: var(--lt-color-neutral-700); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: var(--lt-spacing-1); } .select-container { position: relative; width: 100%; } .select-trigger { align-items: center; background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-color-neutral-300); box-sizing: border-box; cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; transition: border-color 120ms ease, box-shadow 120ms ease; width: 100%; } .select-trigger:hover:not([aria-disabled='true']) { border-color: var(--lt-border-strong); } .select-trigger:focus-visible { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-border-focus); outline: none; } .select-trigger[aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; } .select-value { color: var(--lt-text-default); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .select-value.placeholder { color: var(--lt-text-muted); } .icon-end { color: var(--lt-text-subtle); flex-shrink: 0; transition: transform 120ms ease; } :host([open]) .icon-end { transform: rotate(180deg); } .dropdown { display: none; margin-top: var(--lt-spacing-1); max-height: 300px; position: absolute; width: 100%; z-index: 1000; } :host([open]) .dropdown { animation: slideDown 150ms ease; display: block; } .options-container { max-height: 300px; overflow: hidden auto; } @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } } .option { align-items: center; background: transparent; border: none; border-radius: var(--lt-border-radius); box-sizing: border-box; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; text-align: left; transition: background-color 80ms ease; width: 100%; } .option:hover:not([disabled]) { background: var(--lt-bg-surface); } .option:focus-visible { background: var(--lt-bg-surface); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 500; } .option[disabled] { color: var(--lt-text-muted); cursor: not-allowed; opacity: 0.6; } .helper-text { font-size: 0.75rem; } /* Size variants */ :host([size='sm']) .select-trigger { font-size: 0.875rem; height: 32px; padding: 0 var(--lt-spacing-3); } :host([size='sm']) .option { font-size: 0.875rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([size='md']) .select-trigger { font-size: 1rem; height: 40px; padding: 0 var(--lt-spacing-4); } :host([size='md']) .option { font-size: 1rem; padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([size='lg']) .select-trigger { font-size: 1.0625rem; height: 48px; padding: 0 var(--lt-spacing-5); } :host([size='lg']) .option { font-size: 1.0625rem; padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* Variant styles */ :host([variant='success']) .select-trigger { border-color: var(--lt-border-success-strong); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .select-trigger { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .select-trigger { border-color: var(--lt-border-error-strong); } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='default']) .helper-text { color: var(--lt-text-subtle); } `"
         }
       ],
       "exports": [
@@ -2138,8 +2308,7 @@
         {
           "kind": "variable",
           "name": "spinnerStyles",
-          "default": "css` :host { --spinner-size: var(--lt-spacing-4, 1rem); --spinner-color: currentColor; display: inline-block; line-height: 0; } /* Sizes */ :host([size='sm']) { --spinner-size: var(--lt-spacing-3, 0.75rem); } :host([size='md']) { --spinner-size: var(--lt-spacing-4, 1rem); } :host([size='lg']) { --spinner-size: var(--lt-spacing-6, 1.5rem); } /* Color */ :host([variant='primary']) { --spinner-color: var(--lt-color-primary-500); } :host([variant='secondary']) { --spinner-color: var(--lt-color-secondary-500); } :host([variant='neutral']) { --spinner-color: var(--lt-color-neutral-500); } :host([variant='current']) { --spinner-color: currentColor; } .spinner { animation: spin 700ms linear infinite; border-bottom-color: var(--spinner-color); border-left-color: var(--spinner-color); border-radius: 999px; border-right-color: transparent; border-style: solid; border-top-color: var(--spinner-color); border-width: 2px; box-sizing: border-box; display: block; height: var(--spinner-size); width: var(--spinner-size); } @keyframes spin { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } } `",
-          "description": "Styles for the lt-spinner component.\n\nIncludes:\n- Base rotating animation\n- Size variants (sm, md, lg) using CSS custom properties\n- Color variants (primary, secondary, neutral, current)\n- Respects prefers-reduced-motion for accessibility\n- Circular border with transparent segment for spinner effect"
+          "default": "css` :host { --spinner-size: var(--lt-spacing-4, 1rem); --spinner-color: currentColor; display: inline-block; line-height: 0; } /* Sizes */ :host([size='sm']) { --spinner-size: var(--lt-spacing-3, 0.75rem); } :host([size='md']) { --spinner-size: var(--lt-spacing-4, 1rem); } :host([size='lg']) { --spinner-size: var(--lt-spacing-6, 1.5rem); } /* Color */ :host([variant='primary']) { --spinner-color: var(--lt-interactive-primary-bg); } :host([variant='secondary']) { --spinner-color: var(--lt-interactive-secondary-bg); } :host([variant='neutral']) { --spinner-color: var(--lt-color-neutral-500); } :host([variant='current']) { --spinner-color: currentColor; } .spinner { animation: spin 700ms linear infinite; border-bottom-color: var(--spinner-color); border-left-color: var(--spinner-color); border-radius: 999px; border-right-color: transparent; border-style: solid; border-top-color: var(--spinner-color); border-width: 2px; box-sizing: border-box; display: block; height: var(--spinner-size); width: var(--spinner-size); } @keyframes spin { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } } `"
         }
       ],
       "exports": [
@@ -2249,8 +2418,7 @@
         {
           "kind": "variable",
           "name": "surfaceStyles",
-          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; } .surface { background: var(--lt-color-neutral-50); border-radius: var(--lt-border-radius); box-sizing: border-box; transition: box-shadow 120ms ease, border-color 120ms ease; } /* Elevation variants */ :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); } :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); } :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); } :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); } :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); } :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); } /* Visual variants */ :host([variant='filled']) .surface { border: none; } :host([variant='outlined']) .surface { background: transparent; border: 1px solid var(--lt-color-neutral-300); } :host([variant='outlined']:hover) .surface { border-color: var(--lt-color-neutral-400); } `",
-          "description": "Styles for the lt-surface component.\n\nIncludes:\n- Base surface styling with rounded corners\n- Elevation variants (0-5) using design token shadows\n- Visual variants (filled, outlined)\n- Flexible container with slot"
+          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; } .surface { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); box-sizing: border-box; transition: box-shadow 120ms ease, border-color 120ms ease; } /* Elevation variants */ :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); } :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); } :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); } :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); } :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); } :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); } /* Visual variants */ :host([variant='filled']) .surface { border: none; } :host([variant='outlined']) .surface { background: transparent; border: 1px solid var(--lt-color-neutral-300); } :host([variant='outlined']:hover) .surface { border-color: var(--lt-border-strong); } `"
         }
       ],
       "exports": [
@@ -2355,6 +2523,14 @@
             "name": "SwitchVariant",
             "module": "./switch.types"
           }
+        },
+        {
+          "kind": "js",
+          "name": "SwitchLabelPosition",
+          "declaration": {
+            "name": "SwitchLabelPosition",
+            "module": "./switch.types"
+          }
         }
       ]
     },
@@ -2365,8 +2541,7 @@
         {
           "kind": "variable",
           "name": "switchStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } .switch-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } :host([disabled]) .switch-wrapper { cursor: not-allowed; opacity: 0.6; } .switch-container { position: relative; } /* Hide native checkbox */ input[type='checkbox'] { appearance: none; background: var(--lt-color-neutral-300); border-radius: 999px; cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 200ms ease; } input[type='checkbox']:hover:not(:disabled) { background: var(--lt-color-neutral-400); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-color-primary-200); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } /* Thumb (sliding knob) */ .thumb { background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); pointer-events: none; position: absolute; transition: left 200ms ease; } /* Label */ .label { color: var(--lt-color-neutral-900); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 18px; width: 32px; } :host([size='sm']) .thumb { height: 14px; width: 14px; left: 2px; top: 2px; } :host([size='sm']) input[type='checkbox']:checked ~ .thumb { left: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 22px; width: 40px; } :host([size='md']) .thumb { height: 18px; width: 18px; left: 2px; top: 2px; } :host([size='md']) input[type='checkbox']:checked ~ .thumb { left: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 26px; width: 48px; } :host([size='lg']) .thumb { height: 22px; width: 22px; left: 2px; top: 2px; } :host([size='lg']) input[type='checkbox']:checked ~ .thumb { left: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles - Primary */ :host([variant='primary']) input[type='checkbox']:checked { background: var(--lt-color-primary-500); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-color-primary-700); } /* Variant styles - Secondary */ :host([variant='secondary']) input[type='checkbox']:checked { background: var(--lt-color-secondary-500); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-color-secondary-700); } /* Variant styles - Success */ :host([variant='success']) input[type='checkbox']:checked { background: var(--lt-color-success-500); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-color-success-700); } /* Variant styles - Error */ :host([variant='error']) input[type='checkbox']:checked { background: var(--lt-color-error-500); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-color-error-700); } /* Variant styles - Info */ :host([variant='info']) input[type='checkbox']:checked { background: var(--lt-color-info-500); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-color-info-700); } `",
-          "description": "Styles for the lt-switch component.\n\nIncludes:\n- Toggle switch styling with track and thumb\n- Size variants (sm, md, lg)\n- Visual variants (primary, secondary, success, error, info)\n- Checked and disabled states\n- Smooth sliding animation\n- Focus states for accessibility"
+          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } .switch-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } :host([label-position='left']) .switch-wrapper { flex-direction: row-reverse; } :host([disabled]) .switch-wrapper { cursor: not-allowed; opacity: 0.6; } .switch-container { display: inline-flex; position: relative; } input[type='checkbox'] { appearance: none; background: var(--lt-color-neutral-300); border-radius: 999px; cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 200ms ease; } input[type='checkbox']:hover:not(:disabled) { background: var(--lt-border-strong); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .thumb { background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); pointer-events: none; position: absolute; transition: left 200ms ease; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 18px; width: 32px; } :host([size='sm']) .thumb { height: 14px; width: 14px; left: 2px; top: 2px; } :host([size='sm']) input[type='checkbox']:checked ~ .thumb { left: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 22px; width: 40px; } :host([size='md']) .thumb { height: 18px; width: 18px; left: 2px; top: 2px; } :host([size='md']) input[type='checkbox']:checked ~ .thumb { left: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 26px; width: 48px; } :host([size='lg']) .thumb { height: 22px; width: 22px; left: 2px; top: 2px; } :host([size='lg']) input[type='checkbox']:checked ~ .thumb { left: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked { background: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked { background: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked { background: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked { background: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked { background: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); } `"
         }
       ],
       "exports": [
@@ -2448,6 +2623,15 @@
               },
               "default": "''",
               "description": "Label text displayed next to the switch."
+            },
+            {
+              "kind": "field",
+              "name": "labelPosition",
+              "type": {
+                "text": "SwitchLabelPosition"
+              },
+              "default": "'right'",
+              "description": "Position of the label relative to the switch."
             },
             {
               "kind": "field",
@@ -2545,8 +2729,7 @@
         {
           "kind": "variable",
           "name": "tabStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } .tab { align-items: center; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--lt-color-neutral-600); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; font-weight: 500; gap: var(--lt-spacing-2); outline: none; padding: var(--lt-spacing-3) var(--lt-spacing-4); transition: color 150ms ease, border-color 150ms ease; user-select: none; white-space: nowrap; } .tab:hover:not(:disabled) { color: var(--lt-color-neutral-900); } .tab:focus-visible { color: var(--lt-color-primary-600); outline: 2px solid var(--lt-color-primary-200); outline-offset: 2px; } :host([active]) .tab { border-color: var(--lt-color-primary-500); color: var(--lt-color-primary-600); } .tab:disabled { color: var(--lt-color-neutral-300); cursor: not-allowed; opacity: 0.5; } .icon { font-size: 1.125rem; } /* Size variants */ :host([size='sm']) .tab { font-size: 0.875rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([size='sm']) .icon { font-size: 1rem; } :host([size='lg']) .tab { font-size: 1rem; padding: var(--lt-spacing-4) var(--lt-spacing-5); } :host([size='lg']) .icon { font-size: 1.25rem; } /* Pills variant (applied by parent tab-group) */ :host([data-variant='pills']) .tab { border-bottom: none; border-radius: var(--lt-border-radius); transition: color 150ms ease, background-color 150ms ease, box-shadow 150ms ease; } :host([data-variant='pills'][active]) .tab { background: var(--lt-color-neutral-0); box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); color: var(--lt-color-primary-600); } `",
-          "description": "Styles for the lt-tab component."
+          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } .tab { align-items: center; background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--lt-text-subtle); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; font-weight: 500; gap: var(--lt-spacing-2); outline: none; padding: var(--lt-spacing-3) var(--lt-spacing-4); transition: color 150ms ease, border-color 150ms ease; user-select: none; white-space: nowrap; } .tab:hover:not(:disabled) { color: var(--lt-text-default); } .tab:focus-visible { color: var(--lt-color-primary-600); outline: 2px solid var(--lt-border-focus); outline-offset: 2px; } :host([active]) .tab { border-color: var(--lt-border-primary-strong); color: var(--lt-color-primary-600); } .tab:disabled { color: var(--lt-color-neutral-300); cursor: not-allowed; opacity: 0.5; } .icon { font-size: 1.125rem; } /* Size variants */ :host([size='sm']) .tab { font-size: 0.875rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([size='sm']) .icon { font-size: 1rem; } :host([size='lg']) .tab { font-size: 1rem; padding: var(--lt-spacing-4) var(--lt-spacing-5); } :host([size='lg']) .icon { font-size: 1.25rem; } /* Pills variant (applied by parent tab-group) */ :host([data-variant='pills']) .tab { border-bottom: none; border-radius: var(--lt-border-radius); transition: color 150ms ease, background-color 150ms ease, box-shadow 150ms ease; } :host([data-variant='pills'][active]) .tab { background: var(--lt-bg-default); box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); color: var(--lt-color-primary-600); } `"
         }
       ],
       "exports": [
@@ -2711,8 +2894,7 @@
         {
           "kind": "variable",
           "name": "tabGroupStyles",
-          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; } .tab-group { display: flex; flex-direction: column; } .tabs-container { border-bottom: 1px solid var(--lt-color-neutral-200); display: flex; gap: var(--lt-spacing-1); overflow-x: auto; scrollbar-width: thin; } .tabs-container::-webkit-scrollbar { height: 4px; } .tabs-container::-webkit-scrollbar-track { background: var(--lt-color-neutral-100); } .tabs-container::-webkit-scrollbar-thumb { background: var(--lt-color-neutral-300); border-radius: 2px; } .panels-container { padding: var(--lt-spacing-4) 0; } ::slotted([slot='panel']) { display: none; } ::slotted([slot='panel'][active]) { display: block; } /* Pills variant */ :host([variant='pills']) .tabs-container { background: var(--lt-color-neutral-100); border: none; border-radius: var(--lt-border-radius); gap: var(--lt-spacing-2); padding: var(--lt-spacing-1); } `",
-          "description": "Styles for the lt-tab-group component."
+          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; } .tab-group { display: flex; flex-direction: column; } .tabs-container { border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-1); overflow-x: auto; scrollbar-width: thin; } .tabs-container::-webkit-scrollbar { height: 4px; } .tabs-container::-webkit-scrollbar-track { background: var(--lt-bg-surface); } .tabs-container::-webkit-scrollbar-thumb { background: var(--lt-color-neutral-300); border-radius: 2px; } .panels-container { padding: var(--lt-spacing-4) 0; } ::slotted([slot='panel']) { display: none; } ::slotted([slot='panel'][active]) { display: block; } /* Pills variant */ :host([variant='pills']) .tabs-container { background: var(--lt-bg-surface); border: none; border-radius: var(--lt-border-radius); gap: var(--lt-spacing-2); padding: var(--lt-spacing-1); } `"
         }
       ],
       "exports": [
@@ -2950,8 +3132,7 @@
         {
           "kind": "variable",
           "name": "tableStyles",
-          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; overflow: hidden; width: 100%; } /* Table container for scroll mode */ .table-container { overflow-x: auto; width: 100%; } :host([responsive-mode='scroll']) .table-container { -webkit-overflow-scrolling: touch; } /* Base table */ table { border-collapse: collapse; width: 100%; } /* Header */ thead { background: var(--lt-color-neutral-100); border-bottom: 2px solid var(--lt-color-neutral-300); } th { color: var(--lt-color-neutral-900); font-weight: 600; text-align: left; white-space: nowrap; } th[data-align='center'] { text-align: center; } th[data-align='right'] { text-align: right; } /* Sortable headers */ th.sortable { cursor: pointer; user-select: none; transition: background-color 120ms ease; } th.sortable:hover { background: var(--lt-color-neutral-200); } th.sortable .header-content { align-items: center; display: flex; gap: var(--lt-spacing-2); } th[data-align='center'] .header-content { justify-content: center; } th[data-align='right'] .header-content { justify-content: flex-end; } .sort-icon { color: var(--lt-color-neutral-400); display: inline-flex; flex-shrink: 0; font-size: 0.875rem; opacity: 0; transition: opacity 120ms ease; } th.sortable:hover .sort-icon, th.sorted .sort-icon { opacity: 1; } th.sorted .sort-icon { color: var(--lt-color-primary-500); } /* Body */ tbody tr { border-bottom: 1px solid var(--lt-color-neutral-200); transition: background-color 120ms ease; } tbody tr:last-child { border-bottom: none; } :host([hoverable]) tbody tr:hover { background: var(--lt-color-neutral-100); } :host([striped]) tbody tr:nth-child(even) { background: var(--lt-color-neutral-100); } :host([striped][hoverable]) tbody tr:nth-child(even):hover { background: var(--lt-color-neutral-200); } td { color: var(--lt-color-neutral-700); } td[data-align='center'] { text-align: center; } td[data-align='right'] { text-align: right; } /* Density variants */ :host([density='compact']) th, :host([density='compact']) td { padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([density='normal']) th, :host([density='normal']) td { padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([density='comfortable']) th, :host([density='comfortable']) td { padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* Sticky columns */ th.sticky { background: var(--lt-color-neutral-100); box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05); left: 0; position: sticky; z-index: 2; } td.sticky { background: white; box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05); left: 0; position: sticky; z-index: 1; } /* Sticky columns with striped rows */ :host([striped]) tbody tr:nth-child(even) td.sticky { background: var(--lt-color-neutral-100); } /* Sticky columns with hover */ :host([hoverable]) tbody tr:hover td.sticky { background: var(--lt-color-neutral-100); } :host([striped][hoverable]) tbody tr:nth-child(even):hover td.sticky { background: var(--lt-color-neutral-200); } /* Border styling */ :host([bordered]) table { border: 1px solid var(--lt-color-neutral-200); } :host([bordered]) th, :host([bordered]) td { border-right: 1px solid var(--lt-color-neutral-200); } :host([bordered]) th:last-child, :host([bordered]) td:last-child { border-right: none; } /* Empty state */ .empty-state { color: var(--lt-color-neutral-500); padding: var(--lt-spacing-8); text-align: center; } /* Loading state */ .loading-overlay { align-items: center; background: rgba(255, 255, 255, 0.8); display: flex; height: 100%; justify-content: center; left: 0; position: absolute; top: 0; width: 100%; z-index: 10; } /* Stack mode for mobile */ @media (max-width: 768px) { :host([responsive-mode='stack']) .table-container { overflow-x: visible; } :host([responsive-mode='stack']) table, :host([responsive-mode='stack']) thead, :host([responsive-mode='stack']) tbody, :host([responsive-mode='stack']) th, :host([responsive-mode='stack']) td, :host([responsive-mode='stack']) tr { display: block; } :host([responsive-mode='stack']) thead { display: none; } :host([responsive-mode='stack']) tr { background: var(--lt-color-neutral-50); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-color-neutral-200); margin-bottom: var(--lt-spacing-3); padding: var(--lt-spacing-4); } :host([responsive-mode='stack']) td { border: none; display: grid; gap: var(--lt-spacing-2); grid-template-columns: 120px 1fr; padding: var(--lt-spacing-2) 0; text-align: left; } :host([responsive-mode='stack']) td::before { content: attr(data-label); color: var(--lt-color-neutral-900); font-weight: 600; } :host([responsive-mode='stack']) td:last-child { padding-bottom: 0; } } /* Hide columns on mobile */ @media (max-width: 768px) { .hide-on-mobile { display: none; } } /* Focus visible */ th.sortable:focus-visible { outline: 2px solid var(--lt-color-primary-500); outline-offset: -2px; } `",
-          "description": "Styles for the lt-table component.\n\nIncludes:\n- Base table styling with borders\n- Density variants (compact, normal, comfortable)\n- Responsive modes (scroll, stack)\n- Sortable column indicators\n- Hover and stripe effects\n- Sticky columns\n- Mobile breakpoint handling"
+          "default": "css` :host { display: block; font-family: 'Asap', sans-serif; overflow: hidden; width: 100%; } .table-container { overflow-x: auto; width: 100%; } :host([responsive-mode='scroll']) .table-container { -webkit-overflow-scrolling: touch; } table { border-collapse: collapse; width: 100%; } /* Header */ thead { background: var(--lt-bg-surface); border-bottom: 2px solid var(--lt-color-neutral-300); } th { color: var(--lt-text-default); font-weight: 600; text-align: left; white-space: nowrap; } th[data-align='center'] { text-align: center; } th[data-align='right'] { text-align: right; } /* Sortable headers */ th.sortable { cursor: pointer; user-select: none; transition: background-color 120ms ease; } th.sortable:hover { background: var(--lt-bg-overlay); } th.sortable .header-content { align-items: center; display: flex; gap: var(--lt-spacing-2); } th[data-align='center'] .header-content { justify-content: center; } th[data-align='right'] .header-content { justify-content: flex-end; } .sort-icon { color: var(--lt-text-muted); display: inline-flex; flex-shrink: 0; font-size: 0.875rem; opacity: 0; transition: opacity 120ms ease; } th.sortable:hover .sort-icon, th.sorted .sort-icon { opacity: 1; } th.sorted .sort-icon { color: var(--lt-interactive-primary-bg); } /* Body */ tbody tr { border-bottom: 1px solid var(--lt-border-default); transition: background-color 120ms ease; } tbody tr:last-child { border-bottom: none; } :host([hoverable]) tbody tr:hover { background: var(--lt-bg-surface); } :host([striped]) tbody tr:nth-child(even) { background: var(--lt-bg-surface); } :host([striped][hoverable]) tbody tr:nth-child(even):hover { background: var(--lt-bg-overlay); } td { color: var(--lt-color-neutral-700); } td[data-align='center'] { text-align: center; } td[data-align='right'] { text-align: right; } /* Density variants */ :host([density='compact']) th, :host([density='compact']) td { padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([density='normal']) th, :host([density='normal']) td { padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([density='comfortable']) th, :host([density='comfortable']) td { padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* Sticky columns */ th.sticky { background: var(--lt-bg-surface); box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05); left: 0; position: sticky; z-index: 2; } td.sticky { background: var(--lt-bg-default); box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05); left: 0; position: sticky; z-index: 1; } :host([striped]) tbody tr:nth-child(even) td.sticky { background: var(--lt-bg-surface); } :host([hoverable]) tbody tr:hover td.sticky { background: var(--lt-bg-surface); } :host([striped][hoverable]) tbody tr:nth-child(even):hover td.sticky { background: var(--lt-bg-overlay); } /* Border styling */ :host([bordered]) table { border: 1px solid var(--lt-border-default); } :host([bordered]) th, :host([bordered]) td { border-right: 1px solid var(--lt-border-default); } :host([bordered]) th:last-child, :host([bordered]) td:last-child { border-right: none; } /* Empty state */ .empty-state { color: var(--lt-color-neutral-500); padding: var(--lt-spacing-8); text-align: center; } /* Loading state */ .loading-overlay { align-items: center; background: rgba(255, 255, 255, 0.8); display: flex; height: 100%; justify-content: center; left: 0; position: absolute; top: 0; width: 100%; z-index: 10; } /* Stack mode for mobile */ @media (max-width: 768px) { :host([responsive-mode='stack']) .table-container { overflow-x: visible; } :host([responsive-mode='stack']) table, :host([responsive-mode='stack']) thead, :host([responsive-mode='stack']) tbody, :host([responsive-mode='stack']) th, :host([responsive-mode='stack']) td, :host([responsive-mode='stack']) tr { display: block; } :host([responsive-mode='stack']) thead { display: none; } :host([responsive-mode='stack']) tr { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); margin-bottom: var(--lt-spacing-3); padding: var(--lt-spacing-4); } :host([responsive-mode='stack']) td { border: none; display: grid; gap: var(--lt-spacing-2); grid-template-columns: 120px 1fr; padding: var(--lt-spacing-2) 0; text-align: left; } :host([responsive-mode='stack']) td::before { content: attr(data-label); color: var(--lt-text-default); font-weight: 600; } :host([responsive-mode='stack']) td:last-child { padding-bottom: 0; } } @media (max-width: 768px) { .hide-on-mobile { display: none; } } th.sortable:focus-visible { outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } `"
         }
       ],
       "exports": [
@@ -3349,8 +3530,7 @@
         {
           "kind": "variable",
           "name": "textfieldStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); width: 100%; } label { color: var(--lt-color-neutral-700); font-size: 0.875rem; font-weight: 500; } .input-container { position: relative; width: 100%; display: flex; align-items: center; gap: var(--lt-spacing-2); } .icon-start, .icon-end { color: var(--lt-color-neutral-500); flex-shrink: 0; position: absolute; pointer-events: none; } .icon-start { left: var(--lt-spacing-3); } .icon-end { right: var(--lt-spacing-3); } .password-toggle { pointer-events: auto; cursor: pointer; transition: color 120ms ease; } .password-toggle:hover { color: var(--lt-color-neutral-700); } .variant-icon { pointer-events: none; } :host([variant='success']) .variant-icon { color: var(--lt-color-success-500); } :host([variant='warning']) .variant-icon { color: var(--lt-color-warning-500); } :host([variant='error']) .variant-icon { color: var(--lt-color-error-500); } input, textarea { background: var(--lt-color-neutral-50); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-color-neutral-300); box-sizing: border-box; color: var(--lt-color-neutral-900); font-family: inherit; font-weight: 400; transition: border-color 120ms ease, box-shadow 120ms ease; width: 100%; } textarea { min-height: 80px; padding-block: var(--lt-spacing-3); resize: vertical; } input::placeholder, textarea::placeholder { color: var(--lt-color-neutral-400); } input:hover:not(:disabled), textarea:hover:not(:disabled) { border-color: var(--lt-color-neutral-400); } input:focus, textarea:focus { border-color: var(--lt-color-primary-500); box-shadow: 0 0 0 3px var(--lt-color-primary-100); outline: none; } input:disabled, textarea:disabled { background: var(--lt-color-neutral-100); color: var(--lt-color-neutral-500); cursor: not-allowed; } /* sizes */ :host([size='sm']) input, :host([size='sm']) textarea { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='sm']) input.has-start-icon, :host([size='sm']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='sm']) input.has-end-icon, :host([size='sm']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='md']) input, :host([size='md']) textarea { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='md']) input.has-start-icon, :host([size='md']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='md']) input.has-end-icon, :host([size='md']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='lg']) input, :host([size='lg']) textarea { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } :host([size='lg']) input.has-start-icon, :host([size='lg']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) input.has-end-icon, :host([size='lg']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) .icon-start, :host([size='lg']) .icon-end { width: 24px; height: 24px; } /* variants */ :host([variant='success']) input, :host([variant='success']) textarea { border-color: var(--lt-color-success-500); } :host([variant='success']) input:focus, :host([variant='success']) textarea:focus { border-color: var(--lt-color-success-600); box-shadow: 0 0 0 3px var(--lt-color-success-100); } :host([variant='warning']) input, :host([variant='warning']) textarea { border-color: var(--lt-color-warning-500); } :host([variant='warning']) input:focus, :host([variant='warning']) textarea:focus { border-color: var(--lt-color-warning-600); box-shadow: 0 0 0 3px var(--lt-color-warning-100); } :host([variant='error']) input, :host([variant='error']) textarea { border-color: var(--lt-color-error-500); } :host([variant='error']) input:focus, :host([variant='error']) textarea:focus { border-color: var(--lt-color-error-600); box-shadow: 0 0 0 3px var(--lt-color-error-100); } .helper-text { color: var(--lt-color-neutral-600); font-size: 0.75rem; } :host([variant='success']) .helper-text { color: var(--lt-color-success-700); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } :host([variant='error']) .helper-text { color: var(--lt-color-error-700); } .required-indicator { color: var(--lt-color-error-500); } `",
-          "description": "Styles for the lt-textfield component.\n\nIncludes:\n- Base input styling with design tokens\n- Size variants (sm, md, lg)\n- Visual variants (default, success, warning, error)\n- Icon positioning and styling (start icon, end icon)\n- Password toggle and variant icon states\n- Helper text styling\n- Accessibility states (disabled, readonly, focus)"
+          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); width: 100%; } label { color: var(--lt-color-neutral-700); font-size: 0.875rem; font-weight: 500; } .input-container { position: relative; width: 100%; display: flex; align-items: center; gap: var(--lt-spacing-2); } .icon-start, .icon-end { color: var(--lt-color-neutral-500); flex-shrink: 0; position: absolute; pointer-events: none; } .icon-start { left: var(--lt-spacing-3); } .icon-end { right: var(--lt-spacing-3); } .password-toggle { pointer-events: auto; cursor: pointer; transition: color 120ms ease; } .password-toggle:hover { color: var(--lt-color-neutral-700); } .variant-icon { pointer-events: none; } :host([variant='success']) .variant-icon { color: var(--lt-interactive-success-bg); } :host([variant='warning']) .variant-icon { color: var(--lt-interactive-warning-bg); } :host([variant='error']) .variant-icon { color: var(--lt-interactive-error-bg); } input, textarea { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-color-neutral-300); box-sizing: border-box; color: var(--lt-text-default); font-family: inherit; font-weight: 400; transition: border-color 120ms ease, box-shadow 120ms ease; width: 100%; } textarea { min-height: 80px; padding-block: var(--lt-spacing-3); resize: vertical; } input::placeholder, textarea::placeholder { color: var(--lt-text-muted); } input:hover:not(:disabled), textarea:hover:not(:disabled) { border-color: var(--lt-border-strong); } input:focus, textarea:focus { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); outline: none; } input:disabled, textarea:disabled { background: var(--lt-bg-surface); color: var(--lt-color-neutral-500); cursor: not-allowed; } /* sizes */ :host([size='sm']) input, :host([size='sm']) textarea { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='sm']) input.has-start-icon, :host([size='sm']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='sm']) input.has-end-icon, :host([size='sm']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='md']) input, :host([size='md']) textarea { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='md']) input.has-start-icon, :host([size='md']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='md']) input.has-end-icon, :host([size='md']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='lg']) input, :host([size='lg']) textarea { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } :host([size='lg']) input.has-start-icon, :host([size='lg']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) input.has-end-icon, :host([size='lg']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) .icon-start, :host([size='lg']) .icon-end { width: 24px; height: 24px; } /* variants */ :host([variant='success']) input, :host([variant='success']) textarea { border-color: var(--lt-border-success-strong); } :host([variant='success']) input:focus, :host([variant='success']) textarea:focus { border-color: var(--lt-interactive-success-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input, :host([variant='warning']) textarea { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) input:focus, :host([variant='warning']) textarea:focus { border-color: var(--lt-interactive-warning-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input, :host([variant='error']) textarea { border-color: var(--lt-border-error-strong); } :host([variant='error']) input:focus, :host([variant='error']) textarea:focus { border-color: var(--lt-interactive-error-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); font-size: 0.75rem; } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .helper-text { color: var(--lt-text-error); } .required-indicator { color: var(--lt-color-error-500); } `"
         }
       ],
       "exports": [

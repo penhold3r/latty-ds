@@ -2,7 +2,7 @@ import { LitElement, html, svg } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { checkboxStyles } from './checkbox.styles';
-import { CheckboxSize, CheckboxVariant } from './checkbox.types';
+import { CheckboxSize, CheckboxVariant, CheckboxLabelPosition } from './checkbox.types';
 
 /**
  * A customizable checkbox component with support for multiple variants and sizes.
@@ -80,6 +80,12 @@ export class Checkbox extends LitElement {
    * @default ''
    */
   @property() label = '';
+
+  /**
+   * Position of the label relative to the checkbox.
+   * @default 'right'
+   */
+  @property({ attribute: 'label-position', reflect: true }) labelPosition: CheckboxLabelPosition = 'right';
 
   /**
    * Name attribute for form submission.
