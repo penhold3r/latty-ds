@@ -20,12 +20,12 @@ describe('<lt-dialog>', () => {
   });
 
   it('renders when open', async () => {
-    expect(el.shadowRoot!.querySelector('.dialog')).toBeFalsy();
+    expect(el.shadowRoot!.querySelector('lt-surface')).toBeFalsy();
 
     el.open = true;
     await el.updateComplete;
 
-    const dialog = el.shadowRoot!.querySelector('.dialog');
+    const dialog = el.shadowRoot!.querySelector('lt-surface');
     expect(dialog).toBeTruthy();
   });
 
@@ -98,7 +98,7 @@ describe('<lt-dialog>', () => {
     el.open = true;
     await el.updateComplete;
 
-    const dialog = el.shadowRoot!.querySelector('.dialog');
+    const dialog = el.shadowRoot!.querySelector('lt-surface');
     expect(dialog?.getAttribute('role')).toBe('dialog');
     expect(dialog?.getAttribute('aria-modal')).toBe('true');
     expect(dialog?.getAttribute('aria-labelledby')).toBe('dialog-title');
@@ -200,7 +200,7 @@ describe('<lt-dialog>', () => {
     el.open = true;
     await el.updateComplete;
 
-    const dialog = el.shadowRoot!.querySelector('.dialog') as HTMLElement;
+    const dialog = el.shadowRoot!.querySelector('lt-surface') as HTMLElement;
     dialog.click();
     await el.updateComplete;
 

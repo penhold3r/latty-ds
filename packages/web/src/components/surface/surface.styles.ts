@@ -7,7 +7,7 @@ export const surfaceStyles = css`
   }
 
   .surface {
-    background: var(--lt-bg-subtle);
+    background: var(--_surface-bg, var(--lt-bg-subtle));
     border-radius: var(--lt-border-radius);
     box-sizing: border-box;
     transition:

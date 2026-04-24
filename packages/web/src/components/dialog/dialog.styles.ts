@@ -26,13 +26,32 @@ export const dialogStyles = css`
     opacity: 1;
   }
 
-  /* Dialog container */
-  .dialog {
-    background: var(--lt-bg-subtle);
-    border-radius: var(--lt-border-radius);
-    box-shadow:
-      0 20px 25px -5px rgba(0, 0, 0, 0.1),
-      0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  :host(:not([open])) .backdrop {
+    pointer-events: none;
+  }
+
+  /* lt-surface host — flex item inside .backdrop, sized per size variant */
+  lt-surface {
+    width: 100%;
+  }
+
+  :host([size='sm']) lt-surface { max-width: 400px; }
+  :host([size='md']) lt-surface { max-width: 600px; }
+  :host([size='lg']) lt-surface { max-width: 800px; }
+  :host([size='xl']) lt-surface { max-width: 1000px; }
+
+  :host([size='fullscreen']) .backdrop {
+    padding: 0;
+  }
+
+  :host([size='fullscreen']) lt-surface {
+    height: 100vh;
+    max-height: 100vh;
+    max-width: 100vw;
+  }
+
+  /* lt-surface inner div — layout and animation */
+  lt-surface::part(surface) {
     display: flex;
     flex-direction: column;
     max-height: calc(100vh - var(--lt-spacing-8));
@@ -42,29 +61,16 @@ export const dialogStyles = css`
     transition:
       opacity 200ms ease,
       transform 200ms ease;
-    width: 100%;
   }
 
-  :host([open]) .dialog {
+  :host([open]) lt-surface::part(surface) {
     opacity: 1;
     transform: scale(1);
   }
 
-  /* Size variants */
-  :host([size='sm']) .dialog { max-width: 400px; }
-  :host([size='md']) .dialog { max-width: 600px; }
-  :host([size='lg']) .dialog { max-width: 800px; }
-  :host([size='xl']) .dialog { max-width: 1000px; }
-
-  :host([size='fullscreen']) .backdrop {
-    padding: 0;
-  }
-
-  :host([size='fullscreen']) .dialog {
+  :host([size='fullscreen']) lt-surface::part(surface) {
     border-radius: 0;
-    height: 100vh;
     max-height: 100vh;
-    max-width: 100vw;
   }
 
   /* Header */
@@ -133,9 +139,5 @@ export const dialogStyles = css`
     gap: var(--lt-spacing-3);
     justify-content: flex-end;
     padding: var(--lt-spacing-5);
-  }
-
-  :host(:not([open])) .backdrop {
-    pointer-events: none;
   }
 `;

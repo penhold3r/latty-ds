@@ -5,6 +5,7 @@
  *
  * Available components:
  * - Accordion: Collapsible content using native details/summary
+ * - Alert: TODO: describe the Alert component
  * - Button: Interactive button with multiple variants and loading states
  * - Checkbox: Checkbox input with support for indeterminate state
  * - Dialog: Modal dialog with backdrop and accessibility features
@@ -16,10 +17,12 @@
  * - Spinner: Loading indicator with customizable size and color
  * - Textfield: Text input with validation states and password toggle
  * - Select: Dropdown select with customizable options and variants
+ * - Snackbar: TODO: describe the Snackbar component
  * - Surface: Container component with elevation and surface styling
  * - Tab: Individual tab element for use within tab groups
  * - TabGroup: Container for managing tabbed interfaces
  * - Table: Data table with sorting and responsive design
+ * - Tooltip: Floating label anchored to a trigger element
  *
  * @packageDocumentation
  *
@@ -65,3 +68,6 @@ export * from './components/table';
 export * from './components/textfield';
 export * from './components/avatar';
 export * from './components/badge';
+export * from './components/tooltip';
+export * from './components/snackbar';
+export * from './components/alert';

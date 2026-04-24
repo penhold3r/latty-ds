@@ -5,6 +5,7 @@ import { dialogStyles } from './dialog.styles';
 import { DialogSize } from './dialog.types';
 
 import '@latty/icons';
+import '../surface/surface';
 
 /**
  * Dialog component (modal) with backdrop, animations, and accessibility features.
@@ -87,7 +88,7 @@ export class Dialog extends LitElement {
    */
   @property({ type: Boolean, attribute: 'close-on-escape' }) closeOnEscape = true;
 
-  @query('.dialog') private dialogElement?: HTMLElement;
+  @query('lt-surface') private dialogElement?: HTMLElement;
   private previouslyFocusedElement?: HTMLElement;
 
   /**
@@ -200,8 +201,8 @@ export class Dialog extends LitElement {
 
     return html`
       <div class="backdrop" @click=${this.handleBackdropClick} part="backdrop">
-        <div
-          class="dialog"
+        <lt-surface
+          elevation="4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="dialog-title"
@@ -239,7 +240,7 @@ export class Dialog extends LitElement {
                 </div>
               `
             : ''}
-        </div>
+        </lt-surface>
       </div>
     `;
   }

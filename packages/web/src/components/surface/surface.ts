@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 import { surfaceStyles } from './surface.styles';
 import { SurfaceElevation, SurfaceVariant } from './surface.types';
@@ -50,9 +51,20 @@ export class Surface extends LitElement {
    */
   @property({ reflect: true }) variant: SurfaceVariant = 'filled';
 
+  /** Background color. Accepts a hex value (#1a1a2e) or a token name (--lt-color-primary-600). */
+  @property({ attribute: 'background-color', reflect: true }) backgroundColor = '';
+
+  private _resolve(value: string): string {
+    return value.startsWith('--') ? `var(${value})` : value;
+  }
+
   render() {
+    const style = this.backgroundColor
+      ? { '--_surface-bg': this._resolve(this.backgroundColor) }
+      : {};
+
     return html`
-      <div class="surface">
+      <div class="surface" part="surface" style=${styleMap(style)}>
         <slot></slot>
       </div>
     `;

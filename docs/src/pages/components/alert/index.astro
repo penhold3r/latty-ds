@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout
+  title="Alert"
+  description="Inline notification for persistent contextual feedback"
+>
+  <h1>Alert</h1>
+  <p>
+    An inline notification that stays visible until the user dismisses it or the condition
+    resolves. Use alerts for persistent feedback — validation errors, warnings, or status
+    messages that need to remain on screen. For transient confirmations, use
+    <a href="/components/snackbar">Snackbar</a> instead.
+  </p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-alert" content="Your changes have been saved to the server." />
+
+  <h2>Usage</h2>
+  <CodeSnippet
+    code={`<!-- Variants -->
+<lt-alert variant="success">Changes saved successfully</lt-alert>
+<lt-alert variant="warning">Your session expires in 5 minutes</lt-alert>
+<lt-alert variant="error">Failed to submit — please try again</lt-alert>
+<lt-alert variant="info">A new version is available</lt-alert>
+
+<!-- Appearances -->
+<lt-alert variant="info" appearance="filled">Filled (default) — tinted background with border</lt-alert>
+<lt-alert variant="info" appearance="outlined">Outlined — white background with border</lt-alert>
+<lt-alert variant="info" appearance="solid">Solid — solid color, no border</lt-alert>
+
+<!-- With icon -->
+<lt-alert variant="success" with-icon>Upload complete</lt-alert>
+
+<!-- With title -->
+<lt-alert variant="error" title="Payment failed" with-icon closable>
+  Your card was declined. Please update your billing details.
+</lt-alert>
+
+<!-- Rich content -->
+<lt-alert variant="warning" with-icon>
+  Storage is almost full — <a href="/settings">manage storage</a>
+</lt-alert>
+
+<!-- Dismissible -->
+<lt-alert variant="info" closable>This banner can be dismissed</lt-alert>
+
+<script type="module">
+  document.querySelector('lt-alert').addEventListener('lt-close', () => {
+    console.log('alert dismissed');
+  });
+<\/script>`}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-alert" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

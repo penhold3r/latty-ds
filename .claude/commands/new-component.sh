@@ -302,13 +302,34 @@ fi
 
 echo "✅  Created packages/web/src/components/${NAME_LOWER}/"
 
-# ── index.js export ───────────────────────────────────────────────────────────
+# ── src/index.ts export + JSDoc ───────────────────────────────────────────────
 EXPORT_LINE="export * from './components/${NAME_LOWER}';"
 if grep -qF "$EXPORT_LINE" "$INDEX_JS"; then
   echo "ℹ️   Export already present in index.ts"
 else
   echo "$EXPORT_LINE" >> "$INDEX_JS"
   echo "✅  Added export to packages/web/src/index.ts"
+fi
+
+# Insert JSDoc entry alphabetically inside the " * - ComponentName: ..." block
+JSDOC_LINE=" * - ${NAME_PASCAL}: TODO: describe the ${NAME_PASCAL} component"
+if ! grep -qF "$JSDOC_LINE" "$INDEX_JS"; then
+  # Find the last " * - " entry and insert our line after the alphabetically preceding one
+  PREV_DOC=$(grep " \* - " "$INDEX_JS" \
+    | sed "s/ \* - \([A-Za-z]*\):.*/\1/" \
+    | { cat; echo "${NAME_PASCAL}"; } \
+    | sort \
+    | grep -B1 "^${NAME_PASCAL}$" \
+    | head -1)
+
+  if [[ "$PREV_DOC" == "${NAME_PASCAL}" ]]; then
+    # Goes first — insert before the first " * - " line
+    sed -i '' "/ \* - /{ N; s/\( \* - \)/$(echo "$JSDOC_LINE" | sed 's/[\/&]/\\&/g')\n\1/; P; D; }" "$INDEX_JS" 2>/dev/null || true
+  else
+    sed -i '' "/ \* - ${PREV_DOC}:/a\\
+${JSDOC_LINE}" "$INDEX_JS"
+  fi
+  echo "✅  Updated JSDoc listing in packages/web/src/index.ts"
 fi
 
 # ── Docs page ─────────────────────────────────────────────────────────────────

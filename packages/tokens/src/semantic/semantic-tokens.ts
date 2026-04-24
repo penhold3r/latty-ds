@@ -14,7 +14,7 @@ export const buildSemanticTokens = (): SemanticTokenMap => {
 
   for (const v of VARIANTS) {
     map[`text-${v}`]    = `color-${v}-700`;
-    map[`text-on-${v}`] = (v === 'warning' || v === 'success') ? 'color-neutral-900' : 'color-white';
+    map[`text-on-${v}`] = 'color-white';
   }
 
   // Background

@@ -14,7 +14,14 @@
 
 html {
   -webkit-font-smoothing: antialiased;
-  font-family: 'Asap', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    'Asap',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   color: var(--lt-color-neutral-900);
   background: var(--lt-color-neutral-50);
 }
@@ -76,6 +83,11 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+.page-layout {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .prose h1 {

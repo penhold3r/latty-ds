@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout
+  title="Snackbar"
+  description="Brief notification that appears temporarily at the bottom of the viewport"
+>
+  <h1>Snackbar</h1>
+  <p>
+    A brief, non-blocking notification anchored to the bottom of the viewport. Snackbars
+    auto-dismiss after a configurable delay and can optionally include an action button.
+    Use them for short feedback messages — confirmations, undo prompts, or transient alerts.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="snackbar-playground" previewHeight="auto">
+    <div slot="preview">
+      <lt-button variant="primary" id="show-snackbar">Show snackbar</lt-button>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">variant</label>
+        <select class="control-select" id="ctrl-variant">
+          <option value="default" selected>default</option>
+          <option value="success">success</option>
+          <option value="warning">warning</option>
+          <option value="error">error</option>
+          <option value="info">info</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">action-label</label>
+        <input class="control-input" type="text" id="ctrl-action" placeholder="e.g. Undo" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">duration (ms)</label>
+        <input class="control-input" type="number" id="ctrl-duration" value="4000" min="0" step="500" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">closable</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-closable" checked />
+      </div>
+      <div class="control-row">
+        <label class="control-label">with-icon</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-with-icon" />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <lt-snackbar id="playground-snackbar" variant="default" duration="4000">Changes saved successfully</lt-snackbar>
+
+  <h2>Usage</h2>
+  <CodeSnippet
+    code={`<!-- Basic -->
+<lt-snackbar id="sb">Changes saved</lt-snackbar>
+<lt-button onclick="document.getElementById('sb').show()">Save</lt-button>
+
+<!-- Variants -->
+<lt-snackbar variant="success">Upload complete</lt-snackbar>
+<lt-snackbar variant="warning">Low disk space</lt-snackbar>
+<lt-snackbar variant="error">Request failed</lt-snackbar>
+<lt-snackbar variant="info">Update available</lt-snackbar>
+
+<!-- Rich content -->
+<lt-snackbar variant="error">
+  Failed to save <strong>report.pdf</strong> — <a href="#">retry</a>
+</lt-snackbar>
+
+<!-- With action button -->
+<lt-snackbar action-label="Undo">Message deleted</lt-snackbar>
+
+<!-- Persistent (no auto-dismiss) -->
+<lt-snackbar duration="0" variant="warning">You are offline</lt-snackbar>
+
+<!-- Without close button -->
+<lt-snackbar duration="2000" closable="false">Saving…</lt-snackbar>
+
+<script type="module">
+  const sb = document.getElementById('sb');
+  sb.addEventListener('lt-action', () => { /* handle undo */ });
+  sb.show();
+</script>`}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-snackbar" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const snackbar = document.getElementById('playground-snackbar') as any;
+  const codeEl = document.getElementById('snackbar-playground-code')!;
+
+  const state: Record<string, string | boolean | number> = {
+    variant: 'default',
+    'action-label': '',
+    duration: 4000,
+    closable: true,
+    'with-icon': false,
+  };
+
+  function applyState() {
+    snackbar.variant = state.variant as string;
+    snackbar.duration = state.duration as number;
+    snackbar.closable = state.closable as boolean;
+    if (state['action-label']) {
+      snackbar.setAttribute('action-label', state['action-label'] as string);
+    } else {
+      snackbar.removeAttribute('action-label');
+    }
+    snackbar.withIcon = state['with-icon'] as boolean;
+  }
+
+  function updateCode() {
+    const attrs: string[] = [];
+    if (state.variant !== 'default') attrs.push(`variant="${state.variant}"`);
+    if (state['action-label']) attrs.push(`action-label="${state['action-label']}"`);
+    if (state.duration !== 4000) attrs.push(`duration="${state.duration}"`);
+    if (!state.closable) attrs.push(`closable="false"`);
+    if (state['with-icon']) attrs.push(`with-icon`);
+    const attrsStr = attrs.length ? '\n  ' + attrs.join('\n  ') + '\n' : '';
+    codeEl.textContent = `<lt-snackbar${attrsStr}>Changes saved successfully</lt-snackbar>`;
+  }
+
+  document.getElementById('show-snackbar')?.addEventListener('click', () => {
+    applyState();
+    snackbar.show();
+  });
+
+  document.getElementById('ctrl-variant')?.addEventListener('change', (e) => {
+    state.variant = (e.target as HTMLSelectElement).value;
+    updateCode();
+  });
+
+  document.getElementById('ctrl-action')?.addEventListener('input', (e) => {
+    state['action-label'] = (e.target as HTMLInputElement).value;
+    updateCode();
+  });
+
+  document.getElementById('ctrl-duration')?.addEventListener('input', (e) => {
+    state.duration = Number((e.target as HTMLInputElement).value);
+    updateCode();
+  });
+
+  document.getElementById('ctrl-closable')?.addEventListener('change', (e) => {
+    state.closable = (e.target as HTMLInputElement).checked;
+    updateCode();
+  });
+
+  document.getElementById('ctrl-with-icon')?.addEventListener('change', (e) => {
+    state['with-icon'] = (e.target as HTMLInputElement).checked;
+    updateCode();
+  });
+
+  updateCode();
+</script>
