@@ -172,10 +172,6 @@ describe('<lt-list>', () => {
     // SOLUTION: Use <lt-list-item> instead of <li> for nested lists.
     // The <lt-list-item> component renders <li> in its shadow DOM, which
     // avoids the HTML parser issue.
-    console.log('Parent innerHTML:', parentList.innerHTML);
-    console.log('Nested list innerHTML:', nestedList.innerHTML);
-    console.log('Nested list children:', nestedList.querySelectorAll('li').length);
-
     // This demonstrates the bug - nested list has 0 li items
     const nestedItems = nestedList.querySelectorAll('li');
     expect(nestedItems.length).toBe(0); // This is why we created lt-list-item!

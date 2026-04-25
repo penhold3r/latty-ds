@@ -1,7 +1,8 @@
 import { LitElement, html, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import { tableStyles } from './table.styles';
 import {
@@ -59,7 +60,7 @@ import '@latty/icons';
  * ```
  */
 @customElement('lt-table')
-export class Table<T = any> extends LitElement {
+export class Table<T = Record<string, unknown>> extends LitElement {
   static styles = tableStyles;
 
   /**
@@ -118,6 +119,13 @@ export class Table<T = any> extends LitElement {
   @property({ attribute: 'empty-message' }) emptyMessage = 'No data available';
 
   /**
+   * Field name to use as a stable row identity key for efficient DOM reuse during sorts/updates.
+   * When omitted, falls back to the row's JSON representation.
+   * @default ''
+   */
+  @property({ attribute: 'row-key' }) rowKey = '';
+
+  /**
    * Current sort state (controlled externally).
    * If not provided, sorting is managed internally.
    */
@@ -140,7 +148,7 @@ export class Table<T = any> extends LitElement {
     return this.sort ?? this.internalSort;
   }
 
-  updated(changedProperties: Map<string, unknown>) {
+  willUpdate(changedProperties: Map<string, unknown>) {
     if (
       changedProperties.has('data') ||
       changedProperties.has('sort') ||
@@ -236,22 +244,18 @@ export class Table<T = any> extends LitElement {
   /**
    * Gets a cell value from a row using a key (supports nested keys).
    */
-  private getCellValue(row: any, key: string): any {
-    return key.split('.').reduce((obj, k) => obj?.[k], row);
+  private getCellValue(row: unknown, key: string): unknown {
+    return key.split('.').reduce((obj: Record<string, unknown>, k) => obj?.[k] as Record<string, unknown>, row as Record<string, unknown>);
   }
 
   /**
    * Renders a cell's content.
    */
-  private renderCell(column: TableColumn<T>, row: T, rowIndex: number): any {
+  private renderCell(column: TableColumn<T>, row: T, rowIndex: number): unknown {
     const value = this.getCellValue(row, column.key);
 
     if (column.render) {
-      const rendered = column.render(value, row, rowIndex);
-      if (rendered instanceof HTMLElement) {
-        return rendered;
-      }
-      return unsafeHTML(String(rendered));
+      return column.render(value, row, rowIndex);
     }
 
     return value ?? '';
@@ -282,7 +286,12 @@ export class Table<T = any> extends LitElement {
           ${this.columns.map(
             (column) => html`
               <th
-                class=${this.getHeaderClass(column)}
+                class=${classMap({
+                  sortable: !!column.sortable,
+                  sorted: this.currentSort?.key === column.key,
+                  sticky: !!column.sticky,
+                  'hide-on-mobile': !!column.hideOnMobile,
+                })}
                 data-align=${column.align || 'left'}
                 @click=${() => this.handleHeaderClick(column)}
                 @keydown=${(e: KeyboardEvent) => {
@@ -292,7 +301,17 @@ export class Table<T = any> extends LitElement {
                   }
                 }}
                 tabindex=${column.sortable ? '0' : '-1'}
-                style=${this.getColumnStyle(column)}
+                aria-sort=${column.sortable
+                  ? this.currentSort?.key === column.key
+                    ? this.currentSort.direction === 'asc'
+                      ? 'ascending'
+                      : 'descending'
+                    : 'none'
+                  : nothing}
+                style=${styleMap({
+                  ...(column.width ? { width: column.width } : {}),
+                  ...(column.minWidth ? { minWidth: column.minWidth } : {}),
+                })}
               >
                 ${column.sortable
                   ? html`
@@ -330,16 +349,24 @@ export class Table<T = any> extends LitElement {
       <tbody>
         ${repeat(
           this.sortedData,
-          (row, index) => index,
+          (row) => this.rowKey
+            ? (row as Record<string, unknown>)[this.rowKey]
+            : JSON.stringify(row),
           (row, index) => html`
             <tr>
               ${this.columns.map(
                 (column) => html`
                   <td
-                    class=${this.getCellClass(column)}
+                    class=${classMap({
+                      sticky: !!column.sticky,
+                      'hide-on-mobile': !!column.hideOnMobile,
+                    })}
                     data-align=${column.align || 'left'}
                     data-label=${column.label}
-                    style=${this.getColumnStyle(column)}
+                    style=${styleMap({
+                      ...(column.width ? { width: column.width } : {}),
+                      ...(column.minWidth ? { minWidth: column.minWidth } : {}),
+                    })}
                   >
                     ${this.renderCell(column, row, index)}
                   </td>
@@ -350,65 +377,6 @@ export class Table<T = any> extends LitElement {
         )}
       </tbody>
     `;
-  }
-
-  /**
-   * Gets the CSS class for a header cell.
-   */
-  private getHeaderClass(column: TableColumn<T>): string {
-    const classes = [];
-
-    if (column.sortable) {
-      classes.push('sortable');
-    }
-
-    if (this.currentSort?.key === column.key) {
-      classes.push('sorted');
-    }
-
-    if (column.sticky) {
-      classes.push('sticky');
-    }
-
-    if (column.hideOnMobile) {
-      classes.push('hide-on-mobile');
-    }
-
-    return classes.join(' ');
-  }
-
-  /**
-   * Gets the CSS class for a body cell.
-   */
-  private getCellClass(column: TableColumn<T>): string {
-    const classes = [];
-
-    if (column.sticky) {
-      classes.push('sticky');
-    }
-
-    if (column.hideOnMobile) {
-      classes.push('hide-on-mobile');
-    }
-
-    return classes.join(' ');
-  }
-
-  /**
-   * Gets the inline style for a column.
-   */
-  private getColumnStyle(column: TableColumn<T>): string {
-    const styles: string[] = [];
-
-    if (column.width) {
-      styles.push(`width: ${column.width}`);
-    }
-
-    if (column.minWidth) {
-      styles.push(`min-width: ${column.minWidth}`);
-    }
-
-    return styles.join('; ');
   }
 
   render() {

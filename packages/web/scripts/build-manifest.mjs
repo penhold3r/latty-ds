@@ -110,4 +110,5 @@ for (const mod of cem.modules) {
 }
 
 writeFileSync(join(root, 'dist/manifest.json'), JSON.stringify(manifest, null, 2));
+// eslint-disable-next-line no-console
 console.log(`manifest.json → ${Object.keys(manifest).length} components`);

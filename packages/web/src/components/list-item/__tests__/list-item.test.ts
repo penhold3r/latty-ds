@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import type { ListItem } from '../list-item';
+import { ListItem } from '../list-item';
 import '../list-item';
 
 describe('<lt-list-item>', () => {
@@ -30,7 +30,7 @@ describe('<lt-list-item>', () => {
 
   it('defines display: list-item in styles', () => {
     // Note: jsdom may not compute the style correctly, so we check the style definition exists
-    const styleContent = el.constructor.styles.toString();
+    const styleContent = (el.constructor as typeof ListItem).styles!.toString();
     expect(styleContent).toContain('display');
     expect(styleContent).toContain('list-item');
   });

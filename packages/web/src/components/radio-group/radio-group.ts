@@ -91,34 +91,24 @@ export class RadioGroup extends LitElement {
   @queryAssignedElements({ selector: 'lt-radio' })
   private radios!: Radio[];
 
-  /**
-   * Lifecycle: Called after the element's DOM has been updated.
-   * Sets up radio buttons with the group name and handles initial checked state.
-   */
+  private _attached = new WeakSet<Radio>();
+
   firstUpdated() {
-    this.updateRadios();
+    this._syncRadios();
+    const checkedRadio = this.radios?.find((r) => r.checked);
+    if (checkedRadio && !this.value) {
+      this.value = checkedRadio.value;
+    }
   }
 
-  /**
-   * Updates all radio buttons in the group with the correct name and sets up event listeners.
-   * @private
-   */
-  private updateRadios() {
+  private _syncRadios() {
     if (!this.radios) return;
-
     this.radios.forEach((radio) => {
-      // Set the name attribute on all radios
-      if (this.name) {
-        radio.name = this.name;
+      if (this.name) radio.name = this.name;
+      if (!this._attached.has(radio)) {
+        radio.addEventListener('change', this.handleRadioChange as EventListener);
+        this._attached.add(radio);
       }
-
-      // Sync initial value
-      if (radio.checked) {
-        this.value = radio.value;
-      }
-
-      // Listen for changes
-      radio.addEventListener('change', this.handleRadioChange as EventListener);
     });
   }
 
@@ -158,7 +148,7 @@ export class RadioGroup extends LitElement {
    * @private
    */
   private handleSlotChange() {
-    this.updateRadios();
+    this._syncRadios();
   }
 
   /**

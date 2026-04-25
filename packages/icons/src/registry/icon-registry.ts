@@ -68,6 +68,7 @@ class IconRegistry {
     if (this.providers.has(providerName)) {
       this.defaultProvider = providerName;
     } else {
+      // eslint-disable-next-line no-console
       console.warn(`Provider "${providerName}" not found`);
     }
   }

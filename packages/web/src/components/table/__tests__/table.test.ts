@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { html } from 'lit';
 import type { Table } from '../table';
 import type { TableColumn, SortChangeDetail } from '../table.types';
 import '../table';
@@ -285,13 +286,13 @@ describe('<lt-table>', () => {
       {
         key: 'name',
         label: 'Name',
-        render: (value: string) => `<strong>${value}</strong>`,
+        render: (value) => html`<strong>${value}</strong>`,
       },
     ];
     await el.updateComplete;
 
     const nameCell = el.shadowRoot!.querySelectorAll('tbody tr')[0].querySelectorAll('td')[1];
-    expect(nameCell.innerHTML).toContain('<strong>Alice</strong>');
+    expect(nameCell.querySelector('strong')?.textContent).toBe('Alice');
   });
 
   it('supports custom sort function', async () => {
@@ -322,7 +323,7 @@ describe('<lt-table>', () => {
   it('handles null/undefined values in sorting', async () => {
     el.data = [
       { id: 1, name: 'Alice', age: 30 },
-      { id: 2, name: null as any, age: 25 },
+      { id: 2, name: null as unknown as string, age: 25 },
       { id: 3, name: 'Charlie', age: 35 },
     ];
     await el.updateComplete;

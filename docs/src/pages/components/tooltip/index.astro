@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import CodeSnippet from '../../../components/CodeSnippet.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout
+	title="Tooltip"
+	description="Floating label that appears on hover or focus of a trigger element"
+>
+	<h1>Tooltip</h1>
+	<p>
+		A non-interactive floating label anchored to a trigger element. Tooltips appear on hover and
+		keyboard focus, and disappear when the user moves away. Use them to describe controls whose
+		purpose isn't fully obvious from their visible label.
+	</p>
+
+	<h2>Playground</h2>
+	<ComponentPlayground
+		tag="lt-tooltip"
+		content="Hover me"
+		defaults={{ content: 'This is a tooltip' }}
+	/>
+
+	<h2>Usage</h2>
+	<CodeSnippet
+		code={`<!-- Positions -->
+<lt-tooltip content="Above" position="top"><button>Top</button></lt-tooltip>
+<lt-tooltip content="Below" position="bottom"><button>Bottom</button></lt-tooltip>
+<lt-tooltip content="Left side" position="left"><button>Left</button></lt-tooltip>
+<lt-tooltip content="Right side" position="right"><button>Right</button></lt-tooltip>
+
+<!-- Custom colors -->
+<lt-tooltip content="Primary" background-color="--lt-color-primary-600" color="#fff">
+  <button>Token bg</button>
+</lt-tooltip>
+<lt-tooltip content="Custom" background-color="#1a1a2e" color="#e0e0ff">
+  <button>Hex colors</button>
+</lt-tooltip>
+
+<!-- Disabled -->
+<lt-tooltip content="You can't do that" disabled>
+  <button disabled>Locked</button>
+</lt-tooltip>`}
+	/>
+
+	<h2>API</h2>
+	<ApiTable tag="lt-tooltip" />
+</BaseLayout>
+
+<script>
+	import '@latty/web';
+</script>

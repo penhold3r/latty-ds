@@ -94,6 +94,7 @@ describe('<lt-chip>', () => {
   it('dispatches lt-delete event via internal handler', () => {
     let fired = false;
     el.addEventListener('lt-delete', () => { fired = true; });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (el as any)._handleDelete();
     expect(fired).toBe(true);
   });

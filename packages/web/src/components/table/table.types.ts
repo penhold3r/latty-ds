@@ -28,7 +28,7 @@ export type CellAlign = 'left' | 'center' | 'right';
 /**
  * Configuration for a table column.
  */
-export interface TableColumn<T = any> {
+export interface TableColumn<T = Record<string, unknown>> {
   /**
    * Unique key for this column (used to access data).
    */
@@ -76,9 +76,10 @@ export interface TableColumn<T = any> {
 
   /**
    * Custom renderer function for cell content.
+   * Return a Lit TemplateResult (html`...`) or an HTMLElement for safe rendering.
    * If not provided, the value is displayed as-is.
    */
-  render?: (value: any, row: T, index: number) => string | HTMLElement;
+  render?: (value: unknown, row: T, index: number) => unknown;
 
   /**
    * Whether this column should be sticky (fixed) when scrolling.

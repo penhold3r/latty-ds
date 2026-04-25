@@ -6,13 +6,11 @@
     "lib": ["ES2020", "DOM"],
     "declaration": true,
     "strict": true,
-    "baseUrl": "./",
-    "ignoreDeprecations": "5.0",
 
     "paths": {
-      "@web/*": ["packages/web/src/*"],
-      "@tokens/*": ["packages/tokens/src/*"],
-      "@utils/*": ["packages/utils/src/*"]
+      "@web/*": ["./packages/web/src/*"],
+      "@tokens/*": ["./packages/tokens/src/*"],
+      "@utils/*": ["./packages/utils/src/*"]
     }
   }
 }

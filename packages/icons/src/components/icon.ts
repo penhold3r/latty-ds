@@ -131,6 +131,7 @@ export class Icon extends LitElement {
     if (svg) {
       this.svgContent = this.cleanSVG(svg);
     } else {
+      // eslint-disable-next-line no-console
       console.warn(`Icon "${this.name}" not found in registry`);
       this.svgContent = '';
     }

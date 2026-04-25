@@ -8,7 +8,7 @@ Design token package for the Latty Design System. Generates CSS custom propertie
 
 The build pipeline takes `tokens.config.json` as input and runs in three steps:
 
-```
+```text
 tokens.config.json
        ↓
   tsup (compile build script)
@@ -188,7 +188,7 @@ Key semantic tokens:
 
 ## Source structure
 
-```
+```text
 src/
   constants/       Shared constants (color steps, spacing base, default radius/font)
   types/           TypeScript type definitions (Tokens, LattyConfig, palette types, …)

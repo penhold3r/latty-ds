@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 
 import { accordionStyles } from './accordion.styles';
 import { AccordionVariant } from './accordion.types';
@@ -69,21 +69,18 @@ export class Accordion extends LitElement {
    */
   @property({ type: Boolean, reflect: true }) disabled = false;
 
-  /**
-   * Syncs the details element state after updates.
-   */
+  @query('details') private _details!: HTMLDetailsElement;
+  @query('.content') private _content!: HTMLElement;
+  @query('.content-inner') private _contentInner!: HTMLElement;
+
+  private _animating = false;
+
   protected updated(changedProperties: Map<string, unknown>) {
     super.updated(changedProperties);
 
-    if (changedProperties.has('open')) {
-      const details = this.shadowRoot!.querySelector('details') as HTMLDetailsElement;
-      const content = this.shadowRoot!.querySelector('.content') as HTMLElement;
-
-      // Only sync if we're not mid-animation
-      if (!content.style.height || content.style.height === 'auto') {
-        details.open = this.open;
-        content.style.height = this.open ? 'auto' : '0px';
-      }
+    if (changedProperties.has('open') && !this._animating) {
+      this._details.open = this.open;
+      this._content.style.height = this.open ? 'auto' : '0px';
     }
   }
 
@@ -96,28 +93,27 @@ export class Accordion extends LitElement {
 
     if (this.disabled) return;
 
-    const details = this.shadowRoot!.querySelector('details') as HTMLDetailsElement;
-    const content = this.shadowRoot!.querySelector('.content') as HTMLElement;
-    const contentInner = this.shadowRoot!.querySelector('.content-inner') as HTMLElement;
+    this._animating = true;
 
     if (this.open) {
       // Closing - keep details open during animation
-      const startHeight = contentInner.offsetHeight;
+      const startHeight = this._contentInner.offsetHeight;
       this.open = false;
 
-      content.style.height = `${startHeight}px`;
+      this._content.style.height = `${startHeight}px`;
       requestAnimationFrame(() => {
-        content.style.height = '0px';
+        this._content.style.height = '0px';
       });
     } else {
-      // Opening
-      details.open = true;
+      // Opening — read offsetHeight synchronously after setting details.open so the
+      // browser has committed the open state and the layout reflects the full content height.
+      this._details.open = true;
       this.open = true;
-      const endHeight = contentInner.offsetHeight;
+      const endHeight = this._contentInner.offsetHeight;
 
-      content.style.height = '0px';
+      this._content.style.height = '0px';
       requestAnimationFrame(() => {
-        content.style.height = `${endHeight}px`;
+        this._content.style.height = `${endHeight}px`;
       });
     }
 
@@ -135,13 +131,12 @@ export class Accordion extends LitElement {
    * @private
    */
   private handleTransitionEnd() {
-    const details = this.shadowRoot!.querySelector('details') as HTMLDetailsElement;
-    const content = this.shadowRoot!.querySelector('.content') as HTMLElement;
+    this._animating = false;
 
     if (this.open) {
-      content.style.height = 'auto';
+      this._content.style.height = 'auto';
     } else {
-      details.open = false;
+      this._details.open = false;
     }
   }
 

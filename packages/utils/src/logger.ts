@@ -1,7 +1,5 @@
-/**
- * Controls whether info logs should be suppressed.
- * Set via LATTY_SILENT environment variable.
- */
+/* eslint-disable no-console */
+
 const SILENT = process.env.LATTY_SILENT === 'true';
 
 /**
