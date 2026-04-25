@@ -105,17 +105,21 @@ This is a pnpm workspace monorepo with the following packages:
 
 ### Design Tokens Build Process
 
-The `@latty/tokens` package has a unique multi-step build:
+The `@latty/tokens` package has a unique multi-step build (`pnpm run build:scripts && build:tokens && build:types`):
 
-1. **Build scripts**: `tsup` bundles `src/scripts/build-tokens.ts` into `dist-scripts/`
-2. **Generate tokens**: Node executes `dist-scripts/build-tokens.js` which:
-   - Reads `tokens.config.json` (base color values)
-   - Generates color palettes with tints/shades using culori
+1. **Build scripts**: `tsup` bundles `src/build/tokens.ts` into `dist-scripts/tokens.js`. `@latty/utils` is inlined via `noExternal` so the script is fully self-contained.
+2. **Generate tokens**: Node executes `dist-scripts/tokens.js` which:
+   - Reads `tokens.config.json` (base hex values for each semantic color)
+   - Generates full color palettes with tints/shades using culori (OKLCH)
    - Builds spacing scales (rem and px variants)
    - Outputs `dist/tokens.css`, `dist/tokens.json`, `dist/tokens.js`
-3. **Type definitions**: `tsc -p tsconfig.types.json` generates public type definitions
+   - Outputs `dist/semantic.css` (semantic token layer — maps raw tokens to role-based vars)
+3. **Browser runtime**: `tsup` also bundles `src/configure/index.ts` → `dist/configure.js` (the `configure()` API for runtime theming)
+4. **Type definitions**: `tsc -p tsconfig.types.json` generates public type definitions into `dist/`
 
 Spacing tokens have special handling: `spacing.rem["4"]` becomes `--lt-spacing-4`, while `spacing.px["4"]` becomes `--lt-spacing-px-4`.
+
+To add a new color, use `/new-token color <name> <hex>` — do not edit `tokens.config.json` by hand.
 
 ### Web Components
 
@@ -135,7 +139,7 @@ components/
 
 All custom elements use the `lt-` prefix (e.g., `lt-button`, `lt-spinner`). Components consume design tokens via CSS custom properties with the `--lt-` prefix.
 
-**Adding a new component**: always use the `/new-component <Name>` slash command — it creates the 5 web package files, registers the export in `packages/web/src/index.js`, creates the docs page, and adds the sidebar entry alphabetically. Never create these manually.
+**Adding a new component**: always use the `/new-component <Name>` slash command — it creates the 5 web package files, registers the export in `packages/web/src/index.ts`, creates the docs page, and adds the sidebar entry alphabetically. Never create these manually. After scaffolding, run `pnpm codegen:wrappers` to regenerate the React wrappers.
 
 **Reuse existing components**: before writing custom CSS for a new component, check whether an existing component can provide the same structure. For example, `lt-surface` provides background, elevation (shadow), and border-radius — new components that need a styled container should use it rather than hand-rolling those styles. Import the dependency with a side-effect import (e.g. `import '../surface/surface'`) and use `::part(surface)` to style layout internals from the consumer's shadow DOM.
 
@@ -170,14 +174,23 @@ Documentation pages can:
 - Include interactive examples with `<script>` tags
 - Import Astro components for reusable patterns
 
-### TypeScript Path Aliases
+### Package Boundaries
 
-The workspace uses path aliases defined in `tsconfig.base.json`:
-- `@web/*` → `packages/web/src/*`
-- `@tokens/*` → `packages/tokens/src/*`
-- `@utils/*` → `packages/utils/src/*`
+`tsconfig.base.json` defines no path aliases. The rule is:
 
-These are resolved in Vite/Vitest via `vite-tsconfig-paths` plugin and in build via `tsc-alias`.
+- **Within a package**: use relative imports (`../foo/bar`)
+- **Across packages**: use the package name declared as a `workspace:*` dep (`@latty/utils`, `@latty/web`, etc.)
+- **Never**: use relative imports that leave a package root (e.g. `../../other-package/`)
+
+The `pnpm check:boundaries` script (also runs on `git push`) enforces this and exits 1 on any violation.
+
+Cross-package dependencies must be declared in the consuming package's `package.json`. Currently wired:
+
+- `@latty/web` depends on `@latty/icons` and `@latty/tokens` (CSS only)
+- `@latty/tokens` depends on `@latty/utils`
+- `@latty/react` depends on `@latty/web`
+
+Vitest resolves imports at test time via `vite-tsconfig-paths` (no aliases needed).
 
 ### Creating Documentation
 
