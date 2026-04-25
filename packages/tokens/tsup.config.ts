@@ -9,6 +9,7 @@ export default defineConfig([
     platform: 'node',
     target: 'node20',
     bundle: true,
+    noExternal: ['@latty/utils'],
     splitting: false,
     sourcemap: false,
     clean: true,

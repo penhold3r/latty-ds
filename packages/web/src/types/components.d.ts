@@ -1,5 +1,5 @@
-import type { Button } from '@web/components/button';
-import type { Spinner } from '@web/components/spinner';
+import type { Button } from '../components/button';
+import type { Spinner } from '../components/spinner';
 
 declare global {
   interface HTMLElementTagNameMap {
