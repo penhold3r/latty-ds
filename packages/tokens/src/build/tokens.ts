@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 
-import { logger } from '@utils/logger';
-import type { Config } from '@tokens/types';
+import { logger } from '@latty/utils';
+import type { Config } from '../types/';
 
 import { buildTokens, tokensToCss, semanticTokensToCss } from '../core/';
 import { buildSemanticTokens } from '../semantic/';

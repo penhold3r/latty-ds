@@ -1,4 +1,4 @@
-import type { PaletteFlat } from '@tokens/types';
+import type { PaletteFlat } from '../types/';
 
 /**
  * Elevation level type (0-5)

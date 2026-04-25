@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { buttonStyles } from './button.styles';
 import { ButtonAppearance, ButtonSize, ButtonVariant } from './button.types';
 
-import '@web/components/spinner';
+import '../spinner/';
 import '@latty/icons';
 
 /**

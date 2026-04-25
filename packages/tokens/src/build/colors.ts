@@ -5,10 +5,10 @@
  * @module scripts/build-colors
  */
 
-import { generateBWColors, generateNeutralScale, generatePalettes } from '@tokens/colors';
-import { STEPS } from '@tokens/constants';
-import { ColorName, Config, MutedColorName, Palette, PaletteFlat } from '@tokens/types';
-import { Tokens } from '@tokens/types/public-types';
+import { generateBWColors, generateNeutralScale, generatePalettes } from '../colors/';
+import { STEPS } from '../constants/';
+import { ColorName, Config, MutedColorName, Palette, PaletteFlat } from '../types/';
+import { Tokens } from '../types/public-types';
 
 /**
  * Flattens a step-based palette with numeric keys into string-keyed format.

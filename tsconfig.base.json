@@ -7,10 +7,5 @@
     "declaration": true,
     "strict": true,
 
-    "paths": {
-      "@web/*": ["./packages/web/src/*"],
-      "@tokens/*": ["./packages/tokens/src/*"],
-      "@utils/*": ["./packages/utils/src/*"]
-    }
   }
 }

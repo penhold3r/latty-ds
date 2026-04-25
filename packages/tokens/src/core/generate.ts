@@ -1,8 +1,8 @@
-import type { Config } from '@tokens/types';
-import type { Tokens } from '@tokens/types/public-types';
+import type { Config } from '../types/';
+import type { Tokens } from '../types/public-types';
 import type { SemanticTokenMap } from '../semantic/';
 
-import { DEFAULT_BORDER_RADIUS, DEFAULT_FONT_FAMILY } from '@tokens/constants';
+import { DEFAULT_BORDER_RADIUS, DEFAULT_FONT_FAMILY } from '../constants/';
 import { buildSpacing } from '../spacing/';
 import { buildElevation } from '../elevation/';
 import { addSystemColors, buildColorTokens } from '../build/colors';

@@ -1,6 +1,6 @@
 import { formatHex, converter } from 'culori';
 
-import type { Oklch, Palette } from '@tokens/types';
+import type { Oklch, Palette } from '../types/';
 import { L_BY_STEP, L_BY_STEP_NEUTRAL, STEPS } from '../constants/';
 
 /**

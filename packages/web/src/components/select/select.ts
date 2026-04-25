@@ -4,7 +4,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { selectStyles } from './select.styles';
 import { SelectOption, SelectSize, SelectVariant } from './select.types';
 import '@latty/icons';
-import '@web/components/surface';
+import '../surface/';
 
 /**
  * A customizable select dropdown component with support for multiple variants and sizes.

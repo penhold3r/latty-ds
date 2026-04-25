@@ -1,7 +1,7 @@
-import type { Config } from '@tokens/types';
-import type { LattyConfig } from '@tokens/types/public-types';
+import type { Config } from '../types/';
+import type { LattyConfig } from '../types/public-types';
 
-import { DEFAULT_BORDER_RADIUS, DEFAULT_FONT_FAMILY } from '@tokens/constants';
+import { DEFAULT_BORDER_RADIUS, DEFAULT_FONT_FAMILY } from '../constants/';
 import { buildTokens, tokensToCss, semanticTokensToCss } from '../core/';
 import { buildSemanticTokens } from '../semantic/';
 

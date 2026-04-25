@@ -1,5 +1,5 @@
-import { REM_BASE_PX, SPACE_BASE_PX, SPACE_STEPS } from '@tokens/constants';
-import type { SpaceIndex, SpaceScale, SpacingTokens } from '@tokens/types';
+import { REM_BASE_PX, SPACE_BASE_PX, SPACE_STEPS } from '../constants/';
+import type { SpaceIndex, SpaceScale, SpacingTokens } from '../types/';
 
 /**
  * Generates the complete spacing scale in both px and rem units.
