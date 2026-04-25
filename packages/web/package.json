@@ -19,7 +19,8 @@
     "build:ts": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "build:assets": "mkdir -p dist/css dist/fonts && cp -R src/css/* dist/css/ && cp -R src/font/* dist/fonts/",
     "build:manifest": "cem analyze --config cem.config.mjs && node scripts/build-manifest.mjs",
-    "build": "pnpm run clean && pnpm run build:ts && pnpm run build:assets && pnpm run build:manifest"
+    "build": "pnpm run clean && pnpm run build:ts && pnpm run build:assets && pnpm run build:manifest",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",

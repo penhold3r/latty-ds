@@ -23,6 +23,7 @@
     "build:scripts": "tsup",
     "build:tokens": "node ./dist-scripts/tokens.js",
     "build:types": "tsc -p tsconfig.types.json",
+    "typecheck": "tsc --noEmit",
     "clean": "rimraf dist dist-scripts"
   },
   "devDependencies": {

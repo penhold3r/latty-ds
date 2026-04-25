@@ -1,0 +1,94 @@
+{
+  "generated": "2026-04-25T01:31:34.980Z",
+  "totalGzip": 36612,
+  "components": {
+    "accordion": {
+      "raw": 4918,
+      "gzip": 1732
+    },
+    "alert": {
+      "raw": 5743,
+      "gzip": 1681
+    },
+    "avatar": {
+      "raw": 4374,
+      "gzip": 1350
+    },
+    "badge": {
+      "raw": 6652,
+      "gzip": 1513
+    },
+    "button": {
+      "raw": 11580,
+      "gzip": 2214
+    },
+    "checkbox": {
+      "raw": 7268,
+      "gzip": 1824
+    },
+    "chip": {
+      "raw": 6199,
+      "gzip": 1569
+    },
+    "dialog": {
+      "raw": 8191,
+      "gzip": 2492
+    },
+    "list": {
+      "raw": 2632,
+      "gzip": 898
+    },
+    "list-item": {
+      "raw": 629,
+      "gzip": 412
+    },
+    "radio": {
+      "raw": 5612,
+      "gzip": 1541
+    },
+    "radio-group": {
+      "raw": 3094,
+      "gzip": 1218
+    },
+    "select": {
+      "raw": 10356,
+      "gzip": 2947
+    },
+    "snackbar": {
+      "raw": 7268,
+      "gzip": 2178
+    },
+    "spinner": {
+      "raw": 1980,
+      "gzip": 831
+    },
+    "surface": {
+      "raw": 2074,
+      "gzip": 860
+    },
+    "switch": {
+      "raw": 5415,
+      "gzip": 1554
+    },
+    "tab": {
+      "raw": 3144,
+      "gzip": 1238
+    },
+    "tab-group": {
+      "raw": 5960,
+      "gzip": 1908
+    },
+    "table": {
+      "raw": 10555,
+      "gzip": 3020
+    },
+    "textfield": {
+      "raw": 9245,
+      "gzip": 2266
+    },
+    "tooltip": {
+      "raw": 4288,
+      "gzip": 1366
+    }
+  }
+}

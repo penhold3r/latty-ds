@@ -39,6 +39,8 @@ pnpm test:ui                # Open Vitest UI
 ### Linting
 ```bash
 pnpm lint                   # Run ESLint
+pnpm typecheck              # Type-check all packages (tsc --noEmit)
+pnpm check:boundaries       # Detect cross-package relative imports
 ```
 
 ### Cleaning
@@ -46,12 +48,46 @@ pnpm lint                   # Run ESLint
 pnpm clean                  # Remove all dist directories
 ```
 
-### Scaffolding
+### Code generation
+
+```bash
+pnpm codegen:wrappers       # Regenerate React wrappers from custom-elements.json
 ```
+
+Run this after adding or modifying web components so `@latty/react` stays in sync.
+
+### Bundle size
+```bash
+pnpm bundle-size            # Print per-component gzip sizes + diff vs baseline
+pnpm bundle-size:update     # Same, and write new baseline to bundle-report.json
+```
+
+Commit `bundle-report.json` updates when intentionally adding code. The `--fail-on-regression` flag (used in CI) exits 1 if any component grows ≥ 10%.
+
+### Scaffolding
+
+```bash
 /new-component <ComponentName> [--variants v1,v2] [--sizes sm,md,lg] [--disabled] [--events e1,e2]
 ```
 
 Creates all boilerplate in one shot: web component files, Vitest test, docs page, and sidebar entry. Use PascalCase (e.g. `Badge`, `DatePicker`). After running, fill in the logic, styles, types, and docs — everything else is wired up.
+
+```bash
+/new-token color <name> <hex>
+```
+
+Adds a new color to the design system: registers it in `COLOR_NAMES`, updates `tokens.config.json`, and rebuilds `@latty/tokens`. Example: `/new-token color purple #a855f7`.
+
+### Commit conventions
+
+Commits must follow [Conventional Commits](https://www.conventionalcommits.org/). The `commit-msg` hook enforces this via commitlint.
+
+Format: `type(scope): subject`
+
+Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`, `perf`, `ci`, `build`
+Valid scopes: `tokens`, `web`, `icons`, `react`, `angular`, `utils`, `docs`, `scripts`, `deps`, `config`, `ci`, `release`
+
+Example: `feat(web): add tooltip component`
 
 ## Architecture
 
@@ -84,7 +120,8 @@ Spacing tokens have special handling: `spacing.rem["4"]` becomes `--lt-spacing-4
 ### Web Components
 
 Components in `@latty/web` follow this structure:
-```
+
+```text
 components/
   button/
     button.ts           # LitElement component
@@ -106,7 +143,7 @@ All custom elements use the `lt-` prefix (e.g., `lt-button`, `lt-spinner`). Comp
 
 The `@latty/docs` package uses Astro with MDX for documentation:
 
-```
+```text
 docs/
   src/
     pages/              # Documentation pages (auto-routed)

@@ -78,5 +78,12 @@ export default defineConfig([
     rules: {
       'no-console': 'error'
     }
+  },
+  {
+    // CLI scripts are allowed to use console for output
+    files: ['scripts/**'],
+    rules: {
+      'no-console': 'off'
+    }
   }
 ]);
