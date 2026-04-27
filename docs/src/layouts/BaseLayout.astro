@@ -9,6 +9,7 @@ interface Props {
 
 const { title, description = 'A framework-agnostic design system built on design tokens and Web Components' } =
 	Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!doctype html>
@@ -26,7 +27,7 @@ const { title, description = 'A framework-agnostic design system built on design
 		<link
 			rel="icon"
 			type="image/svg+xml"
-			href="/favicon.svg"
+			href={`${base}/favicon.svg`}
 		/>
 		<meta
 			name="generator"
@@ -61,7 +62,7 @@ const { title, description = 'A framework-agnostic design system built on design
 						</svg>
 					</button>
 					<a
-						href="/"
+						href={`${base}/`}
 						class="wordmark"
 					>
 						<span class="wordmark-accent">Latty</span>

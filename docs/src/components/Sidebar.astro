@@ -1,5 +1,6 @@
 ---
 const currentPath = Astro.url.pathname;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const nav = [
   {
@@ -33,7 +34,6 @@ const nav = [
       { label: 'Tooltip', href: '/components/tooltip' },
       { label: 'Table', href: '/components/table' },
       { label: 'Textfield', href: '/components/textfield' },
-      { label: 'Dialog', href: '/components/dialog' },
     ],
   },
   {
@@ -54,7 +54,8 @@ const nav = [
 ];
 
 function isActive(href: string) {
-  return currentPath === href || currentPath === href + '/';
+  const full = base + href;
+  return currentPath === full || currentPath === full + '/';
 }
 
 function isSectionActive(items: { href: string }[]) {
@@ -80,7 +81,7 @@ function isSectionActive(items: { href: string }[]) {
           {section.items.map((item) => (
             <li>
               <a
-                href={item.href}
+                href={base + item.href}
                 class:list={['nav-link', { 'is-active': isActive(item.href) }]}
                 aria-current={isActive(item.href) ? 'page' : undefined}
               >
