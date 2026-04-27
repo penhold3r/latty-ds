@@ -54,5 +54,8 @@ export type { IconSize, IconDefinition, IconProvider, IconConfig } from './types
 // Auto-register iconoir as default provider
 import { iconRegistry } from './registry/icon-registry';
 import { iconoirProvider } from './providers/iconoir.provider';
+import { lattyIcons } from './icons';
 
 iconRegistry.registerProvider(iconoirProvider, true);
+// Latty-owned SVGs override iconoir equivalents as they are added
+iconRegistry.registerIcons(lattyIcons);

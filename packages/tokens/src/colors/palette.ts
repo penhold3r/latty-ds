@@ -25,22 +25,25 @@ const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(ma
 
 /**
  * Create a perceptual ramp around a base OKLCH color.
- * - Keeps hue constant
- * - Moves lightness across steps
- * - Adjusts chroma with a curve so extremes don’t look dirty/neon
+ *
+ * Lightness is rescaled piecewise around `lPivot` so step 50 always lands
+ * near L=0.93 (the canonical light anchor) and step 900 near L=0.27 (the
+ * canonical dark anchor), with the pivot step landing exactly on `lPivot`.
+ * This guarantees a full light-to-dark range regardless of where the brand
+ * color sits in lightness space.
  */
 const rampFromBase = (
   base: Oklch,
   opts?: {
-    chromaScale?: number; // overall saturation multiplier
-    lShift?: number; // lightness bias
-    midBoost?: number; // extra saturation around 400–700 (0.0 = none)
-    darkClamp?: number; // max chroma for 800–900
+    chromaScale?: number;   // overall saturation multiplier
+    lPivot?: number;        // lightness to anchor at step 500 (defaults to L_BY_STEP[500])
+    midBoost?: number;      // extra saturation around 400–700 (0.0 = none)
+    darkClamp?: number;     // max chroma for 800–900
     minChromaFactor?: number; // cMin = cMax * this
   }
 ): Palette => {
   const chromaScale = opts?.chromaScale ?? 1;
-  const lShift = opts?.lShift ?? 0;
+  const lPivot = opts?.lPivot ?? L_BY_STEP[500];
   const midBoost = opts?.midBoost ?? 0;
   const darkClamp = opts?.darkClamp ?? 0.06;
   const minChromaFactor = opts?.minChromaFactor ?? 0.08;
@@ -50,8 +53,26 @@ const rampFromBase = (
 
   const cMax = clamp(base.c * chromaScale, 0, 0.5);
 
+  const c500 = L_BY_STEP[500];
+  const c50  = L_BY_STEP[50];
+  const c900 = L_BY_STEP[900];
+
   for (const step of STEPS) {
-    const lTarget = clamp(L_BY_STEP[step] + lShift, 0, 1);
+    const canonical = L_BY_STEP[step];
+
+    // Proportionally stretch each half so the full range [c50, c900] is
+    // preserved while the pivot step maps to lPivot.
+    let lTarget: number;
+    if (canonical >= c500) {
+      // Light side: map [c500, c50] → [lPivot, c50]
+      const t = (canonical - c500) / (c50 - c500);
+      lTarget = lPivot + t * (c50 - lPivot);
+    } else {
+      // Dark side: map [c500, c900] → [lPivot, c900]
+      const t = (canonical - c500) / (c900 - c500);
+      lTarget = lPivot + t * (c900 - lPivot);
+    }
+    lTarget = clamp(lTarget, 0, 1);
 
     const t = STEPS.indexOf(step) / (STEPS.length - 1); // 0..1 (50 -> 900)
     const peak = clamp(1 - Math.pow(Math.abs(t - 0.55) / 0.55, 1.7), 0, 1);
@@ -97,16 +118,18 @@ export const generatePalettes = (hex: string, useMuted?: boolean) => {
 
   const main = rampFromBase(base, {
     chromaScale: 1.0,
-    lShift: 0,
+    lPivot: base.l,
     midBoost: 0.0,
     darkClamp: 0.06
   });
+  // Pin 500 to the exact input hex to avoid OKLCH → hex round-trip drift.
+  main[500] = formatHex(hex);
 
-  // Muted = clearly desaturated (pastel), slightly lifted
+  // Muted = clearly desaturated (pastel), pivot slightly lifted from the base.
   const muted = useMuted
     ? rampFromBase(base, {
         chromaScale: 0.2,
-        lShift: +0.04,
+        lPivot: clamp(base.l + 0.04, 0, 1),
         midBoost: -0.2,
         darkClamp: 0.045,
         minChromaFactor: 0.06

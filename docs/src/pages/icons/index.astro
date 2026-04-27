@@ -1,0 +1,400 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CodeSnippet from '../../components/CodeSnippet.astro';
+
+const iconGroups = [
+  {
+    label: 'Navigation',
+    icons: ['arrow-left', 'arrow-right', 'arrow-up', 'arrow-down', 'nav-arrow-left', 'nav-arrow-right'],
+  },
+  {
+    label: 'Actions',
+    icons: ['check', 'xmark', 'plus', 'minus', 'edit', 'trash', 'save', 'download', 'upload'],
+  },
+  {
+    label: 'UI Elements',
+    icons: ['search', 'menu', 'settings', 'home', 'user', 'bell'],
+  },
+  {
+    label: 'Feedback',
+    icons: ['info-circle', 'warning-triangle', 'check-circle', 'xmark-circle'],
+  },
+  {
+    label: 'Interaction',
+    icons: ['eye-open', 'eye-close'],
+  },
+  {
+    label: 'Shapes',
+    icons: ['heart', 'star'],
+  },
+  {
+    label: 'Social',
+    icons: ['x', 'instagram', 'whatsapp', 'github', 'youtube', 'linkedin'],
+  },
+];
+
+const sizes = [
+  { name: 'xs', px: '12px' },
+  { name: 'sm', px: '16px' },
+  { name: 'md', px: '20px' },
+  { name: 'lg', px: '24px' },
+  { name: 'xl', px: '32px' },
+];
+---
+
+<BaseLayout title="Icons" description="Scalable icon component powered by Iconoir with a pluggable provider system">
+  <h1>Icons</h1>
+  <p>
+    The <code>&lt;lt-icon&gt;</code> component renders SVG icons from a registry. Latty ships a curated set of
+    <a href="https://iconoir.com" target="_blank" rel="noopener">Iconoir</a> icons out of the box. Click any icon below
+    to copy its usage snippet.
+  </p>
+
+  <h2>Installation</h2>
+  <p>Icons are included in <code>@latty/web</code> — no extra package needed for basic usage:</p>
+  <CodeSnippet code={`import '@latty/web'; // registers <lt-icon> along with all other components`} />
+  <p>If you only need icons (no other components), install the icons package directly:</p>
+  <CodeSnippet code={`# pnpm
+pnpm add @latty/icons
+
+# npm
+npm install @latty/icons
+
+# yarn
+yarn add @latty/icons`} />
+  <CodeSnippet code={`import '@latty/icons'; // registers <lt-icon> and the default Iconoir provider`} />
+
+  <h2>Available Icons</h2>
+
+  <div class="size-filter">
+    <span class="size-filter-label">Size</span>
+    {sizes.map((s) => (
+      <button class="size-btn" data-size={s.name} aria-pressed="false">{s.name}</button>
+    ))}
+  </div>
+
+  {iconGroups.map((group) => (
+    <div class="icon-group">
+      <h3 class="group-label">{group.label}</h3>
+      <div class="icon-grid">
+        {group.icons.map((name) => (
+          <button
+            class="icon-tile"
+            data-name={name}
+            title={`Copy <lt-icon name="${name}" />`}
+            aria-label={`Copy usage for ${name}`}
+          >
+            <lt-icon name={name} size="md" class="icon-preview" />
+            <span class="icon-name">{name}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  ))}
+
+  <div class="copy-toast" aria-live="polite" aria-atomic="true"></div>
+
+  <h2>Sizes</h2>
+  <div class="sizes-row">
+    {sizes.map((s) => (
+      <div class="size-demo">
+        <lt-icon name="star" size={s.name} />
+        <span class="size-name">{s.name}</span>
+        <span class="size-px">{s.px}</span>
+      </div>
+    ))}
+  </div>
+
+  <h2>Usage</h2>
+  <CodeSnippet code={`import '@latty/icons';
+
+<!-- Default size (md = 20px) -->
+<lt-icon name="star" />
+
+<!-- With explicit size -->
+<lt-icon name="arrow-right" size="lg" />
+
+<!-- Color is inherited from CSS -->
+<lt-icon name="check-circle" style="color: var(--lt-color-success-500)" />`} />
+
+  <h3>Custom icons</h3>
+  <CodeSnippet code={`import { iconRegistry } from '@latty/icons';
+
+// Register a single icon
+iconRegistry.registerIcon('my-logo', '<svg viewBox="0 0 24 24">...</svg>');
+
+// Register multiple at once
+iconRegistry.registerIcons({
+  'brand-x': '<svg>...</svg>',
+  'brand-y': '<svg>...</svg>',
+});`} />
+
+  <h2>API</h2>
+  <div class="api-table-wrap">
+    <table class="api-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Type</th>
+          <th>Default</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code class="prop-name">name</code></td>
+          <td><code class="prop-type">string</code></td>
+          <td><code class="prop-default">—</code></td>
+          <td class="prop-desc">Icon identifier (e.g. <code>'arrow-left'</code>, <code>'check-circle'</code>).</td>
+        </tr>
+        <tr>
+          <td><code class="prop-name">size</code></td>
+          <td><code class="prop-type">'xs' | 'sm' | 'md' | 'lg' | 'xl'</code></td>
+          <td><code class="prop-default">'md'</code></td>
+          <td class="prop-desc">Rendered size — 12 / 16 / 20 / 24 / 32 px.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</BaseLayout>
+
+<script>
+  import '@latty/icons';
+
+  // ── Size filter ──────────────────────────────────────────────────────────────
+  let activeSize = 'md';
+
+  document.querySelectorAll<HTMLButtonElement>('.size-btn').forEach((btn) => {
+    if (btn.dataset.size === activeSize) btn.setAttribute('aria-pressed', 'true');
+
+    btn.addEventListener('click', () => {
+      activeSize = btn.dataset.size!;
+      document.querySelectorAll<HTMLButtonElement>('.size-btn').forEach((b) => {
+        b.setAttribute('aria-pressed', b.dataset.size === activeSize ? 'true' : 'false');
+      });
+      document.querySelectorAll<any>('.icon-preview').forEach((el) => {
+        el.size = activeSize;
+      });
+    });
+  });
+
+  // ── Click-to-copy ────────────────────────────────────────────────────────────
+  const toast = document.querySelector<HTMLElement>('.copy-toast')!;
+  let toastTimer: ReturnType<typeof setTimeout>;
+
+  document.querySelectorAll<HTMLButtonElement>('.icon-tile').forEach((tile) => {
+    tile.addEventListener('click', async () => {
+      const name = tile.dataset.name!;
+      const snippet = `<lt-icon name="${name}" />`;
+      await navigator.clipboard.writeText(snippet);
+
+      clearTimeout(toastTimer);
+      toast.textContent = `Copied: ${snippet}`;
+      toast.classList.add('is-visible');
+      toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2000);
+    });
+  });
+</script>
+
+<style>
+  /* ── Size filter ─────────────────────────────────────────────────────────── */
+  .size-filter {
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-2);
+    margin-bottom: var(--lt-spacing-6);
+    flex-wrap: wrap;
+  }
+
+  .size-filter-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--lt-color-neutral-500);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: var(--lt-spacing-1);
+  }
+
+  .size-btn {
+    padding: var(--lt-spacing-1) var(--lt-spacing-3);
+    border-radius: 999px;
+    border: 1px solid var(--lt-color-neutral-300);
+    background: none;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    color: var(--lt-color-neutral-600);
+    transition: background 120ms, border-color 120ms, color 120ms;
+  }
+
+  .size-btn:hover {
+    background: var(--lt-color-neutral-100);
+    color: var(--lt-color-neutral-900);
+  }
+
+  .size-btn[aria-pressed='true'] {
+    background: var(--lt-color-primary-100);
+    border-color: var(--lt-color-primary-400);
+    color: var(--lt-color-primary-700);
+    font-weight: 600;
+  }
+
+  /* ── Icon groups ─────────────────────────────────────────────────────────── */
+  .icon-group {
+    margin-bottom: var(--lt-spacing-6);
+  }
+
+  .group-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lt-color-neutral-500);
+    margin: 0 0 var(--lt-spacing-3);
+  }
+
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: var(--lt-spacing-2);
+  }
+
+  /* ── Icon tile ───────────────────────────────────────────────────────────── */
+  .icon-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--lt-spacing-2);
+    padding: var(--lt-spacing-4) var(--lt-spacing-2);
+    background: none;
+    border: 1px solid var(--lt-color-neutral-200);
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--lt-color-neutral-700);
+    transition: background 120ms, border-color 120ms, color 120ms, transform 80ms;
+    min-height: 72px;
+  }
+
+  .icon-tile:hover {
+    background: var(--lt-color-primary-50);
+    border-color: var(--lt-color-primary-200);
+    color: var(--lt-color-primary-700);
+    transform: translateY(-1px);
+  }
+
+  .icon-tile:active {
+    transform: translateY(0);
+  }
+
+  .icon-name {
+    font-size: 0.6875rem;
+    text-align: center;
+    line-height: 1.3;
+    word-break: break-all;
+    color: inherit;
+  }
+
+  /* ── Toast ───────────────────────────────────────────────────────────────── */
+  .copy-toast {
+    position: fixed;
+    bottom: var(--lt-spacing-6);
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: var(--lt-color-neutral-900);
+    color: var(--lt-color-neutral-50);
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-family: monospace;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms, transform 150ms;
+    z-index: 1000;
+    white-space: nowrap;
+  }
+
+  .copy-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── Sizes demo ──────────────────────────────────────────────────────────── */
+  .sizes-row {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--lt-spacing-8);
+    padding: var(--lt-spacing-6);
+    background: var(--lt-color-neutral-50);
+    border: 1px solid var(--lt-color-neutral-200);
+    border-radius: 8px;
+    margin-bottom: var(--lt-spacing-6);
+    flex-wrap: wrap;
+  }
+
+  .size-demo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--lt-spacing-2);
+    color: var(--lt-color-neutral-700);
+  }
+
+  .size-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--lt-color-neutral-700);
+  }
+
+  .size-px {
+    font-size: 0.75rem;
+    color: var(--lt-color-neutral-400);
+  }
+
+  /* ── API table (mirrors ApiTable.astro styles) ───────────────────────────── */
+  .api-table-wrap {
+    overflow-x: auto;
+    margin: var(--lt-spacing-4) 0;
+    border: 1px solid var(--lt-color-neutral-200);
+    border-radius: 8px;
+  }
+
+  .api-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .api-table thead {
+    background: var(--lt-color-neutral-100);
+  }
+
+  .api-table th {
+    text-align: left;
+    padding: var(--lt-spacing-3) var(--lt-spacing-4);
+    font-weight: 600;
+    color: var(--lt-color-neutral-700);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--lt-color-neutral-200);
+    white-space: nowrap;
+  }
+
+  .api-table td {
+    padding: var(--lt-spacing-3) var(--lt-spacing-4);
+    border-bottom: 1px solid var(--lt-color-neutral-100);
+    vertical-align: top;
+  }
+
+  .api-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .api-table tr:hover td {
+    background: var(--lt-color-neutral-50);
+  }
+
+  .prop-name { color: var(--lt-color-primary-700); white-space: nowrap; }
+  .prop-type { color: var(--lt-color-secondary-700); font-size: 0.8125rem; }
+  .prop-default { color: var(--lt-color-neutral-600); white-space: nowrap; }
+  .prop-desc { color: var(--lt-color-neutral-700); line-height: 1.5; }
+</style>

@@ -147,12 +147,15 @@ export class Icon extends LitElement {
    * @private
    */
   private cleanSVG(svg: string): string {
-    // Remove width/height attributes to allow CSS sizing
-    // Keep viewBox for proper scaling
-    return svg
-      .replace(/\s*width="[^"]*"/g, '')
-      .replace(/\s*height="[^"]*"/g, '')
-      .replace(/\s*stroke-width="[^"]*"/g, '');
+    // Strip width, height, and stroke-width only from the root <svg> tag so
+    // child elements can carry their own stroke-width without being affected.
+    return svg.replace(/<svg([^>]*)>/, (_, attrs: string) => {
+      const cleaned = attrs
+        .replace(/\s*width="[^"]*"/g, '')
+        .replace(/\s*height="[^"]*"/g, '')
+        .replace(/\s*stroke-width="[^"]*"/g, '');
+      return `<svg${cleaned}>`;
+    });
   }
 
   /**

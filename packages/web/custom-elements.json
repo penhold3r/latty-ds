@@ -223,182 +223,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "avatarStyles",
-          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Asap', sans-serif; font-weight: 500; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-color-neutral-700); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-color-primary-800); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-color-secondary-800); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-color-success-800); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-color-warning-800); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-color-error-800); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-color-info-800); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "avatarStyles",
-          "declaration": {
-            "name": "avatarStyles",
-            "module": "src/components/avatar/avatar.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
-          "name": "Avatar",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "avatarStyles"
-            },
-            {
-              "kind": "field",
-              "name": "src",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "URL of the avatar image."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Full name used to derive initials when no image is available."
-            },
-            {
-              "kind": "field",
-              "name": "alt",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Accessible label for the image (defaults to `name`)."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "AvatarSize"
-              },
-              "default": "'md'",
-              "description": "Size of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "shape",
-              "type": {
-                "text": "AvatarShape"
-              },
-              "default": "'circle'",
-              "description": "Shape of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "AvatarColor"
-              },
-              "default": "'neutral'",
-              "description": "Background color used for the initials and icon fallback states."
-            },
-            {
-              "kind": "field",
-              "name": "_imgError",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_initials",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleImgError",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-avatar",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "src/components/avatar/avatar.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "./avatar"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarSize",
-          "declaration": {
-            "name": "AvatarSize",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarShape",
-          "declaration": {
-            "name": "AvatarShape",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarColor",
-          "declaration": {
-            "name": "AvatarColor",
-            "module": "./avatar.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/alert/alert.styles.ts",
       "declarations": [
         {
@@ -710,6 +534,351 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/avatar/avatar.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "avatarStyles",
+          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Asap', sans-serif; font-weight: 500; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-color-neutral-700); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-color-primary-800); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-color-secondary-800); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-color-success-800); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-color-warning-800); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-color-error-800); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-color-info-800); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "avatarStyles",
+          "declaration": {
+            "name": "avatarStyles",
+            "module": "src/components/avatar/avatar.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/avatar/avatar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
+          "name": "Avatar",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "avatarStyles"
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "URL of the avatar image."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Full name used to derive initials when no image is available."
+            },
+            {
+              "kind": "field",
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Accessible label for the image (defaults to `name`)."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "AvatarSize"
+              },
+              "default": "'md'",
+              "description": "Size of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "shape",
+              "type": {
+                "text": "AvatarShape"
+              },
+              "default": "'circle'",
+              "description": "Shape of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "AvatarColor"
+              },
+              "default": "'neutral'",
+              "description": "Background color used for the initials and icon fallback states."
+            },
+            {
+              "kind": "field",
+              "name": "_imgError",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_initials",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleImgError",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-avatar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Avatar",
+          "declaration": {
+            "name": "Avatar",
+            "module": "src/components/avatar/avatar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/avatar/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Avatar",
+          "declaration": {
+            "name": "Avatar",
+            "module": "./avatar"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarSize",
+          "declaration": {
+            "name": "AvatarSize",
+            "module": "./avatar.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarShape",
+          "declaration": {
+            "name": "AvatarShape",
+            "module": "./avatar.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarColor",
+          "declaration": {
+            "name": "AvatarColor",
+            "module": "./avatar.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/button/button.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "buttonStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } button { align-items: center; border-radius: var(--lt-border-radius); border: 1px solid transparent; box-sizing: border-box; cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } button:active { transform: translateY(1px); } button:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } button[disabled] { cursor: not-allowed; opacity: 0.6; transform: none; } /* sizes */ :host([size='sm']) button { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) button { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) button { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) button { background: var(--lt-interactive-primary-bg); color: var(--lt-text-on-primary); } :host([variant='primary']) button:hover:not([disabled]) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='primary']) button:active:not([disabled]) { background: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) button { background: var(--lt-interactive-secondary-bg); color: var(--lt-text-on-secondary); } :host([variant='secondary']) button:hover:not([disabled]) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='secondary']) button:active:not([disabled]) { background: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) button { background: var(--lt-color-neutral-500); color: var(--lt-color-neutral-50); } :host([variant='neutral']) button:hover:not([disabled]) { background: var(--lt-color-neutral-700); } :host([variant='neutral']) button:active:not([disabled]) { background: var(--lt-color-neutral-800); } :host([variant='success']) button { background: var(--lt-interactive-success-bg); color: var(--lt-text-on-success); } :host([variant='success']) button:hover:not([disabled]) { background: var(--lt-interactive-success-bg-hover); } :host([variant='success']) button:active:not([disabled]) { background: var(--lt-interactive-success-bg-active); } :host([variant='warning']) button { background: var(--lt-interactive-warning-bg); color: var(--lt-text-on-warning); } :host([variant='warning']) button:hover:not([disabled]) { background: var(--lt-interactive-warning-bg-hover); } :host([variant='warning']) button:active:not([disabled]) { background: var(--lt-interactive-warning-bg-active); } :host([variant='error']) button { background: var(--lt-interactive-error-bg); color: var(--lt-text-on-error); } :host([variant='error']) button:hover:not([disabled]) { background: var(--lt-interactive-error-bg-hover); } :host([variant='error']) button:active:not([disabled]) { background: var(--lt-interactive-error-bg-active); } :host([variant='info']) button { background: var(--lt-interactive-info-bg); color: var(--lt-text-on-info); } :host([variant='info']) button:hover:not([disabled]) { background: var(--lt-interactive-info-bg-hover); } :host([variant='info']) button:active:not([disabled]) { background: var(--lt-interactive-info-bg-active); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) button { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-color-primary-500); } :host([appearance='outlined'][variant='primary']) button:hover:not([disabled]) { background: var(--lt-color-primary-50); border-color: var(--lt-color-primary-700); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='primary']) button:active:not([disabled]) { background: var(--lt-bg-primary-subtle); border-color: var(--lt-color-primary-800); color: var(--lt-color-primary-800); } :host([appearance='outlined'][variant='secondary']) button { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-color-secondary-500); } :host([appearance='outlined'][variant='secondary']) button:hover:not([disabled]) { background: var(--lt-color-secondary-50); border-color: var(--lt-color-secondary-700); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='secondary']) button:active:not([disabled]) { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-color-secondary-800); color: var(--lt-color-secondary-800); } :host([appearance='outlined'][variant='neutral']) button { background: transparent; border-color: var(--lt-color-neutral-500); color: var(--lt-color-neutral-700); } :host([appearance='outlined'][variant='neutral']) button:hover:not([disabled]) { background: var(--lt-bg-subtle); border-color: var(--lt-color-neutral-700); color: var(--lt-text-default); } :host([appearance='outlined'][variant='neutral']) button:active:not([disabled]) { background: var(--lt-bg-surface); border-color: var(--lt-color-neutral-800); color: var(--lt-text-default); } :host([appearance='outlined'][variant='success']) button { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-color-success-500); } :host([appearance='outlined'][variant='success']) button:hover:not([disabled]) { background: var(--lt-color-success-50); border-color: var(--lt-color-success-700); color: var(--lt-text-success); } :host([appearance='outlined'][variant='success']) button:active:not([disabled]) { background: var(--lt-bg-success-subtle); border-color: var(--lt-color-success-800); color: var(--lt-color-success-800); } :host([appearance='outlined'][variant='warning']) button { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='warning']) button:hover:not([disabled]) { background: var(--lt-color-warning-50); border-color: var(--lt-color-warning-700); color: var(--lt-color-warning-800); } :host([appearance='outlined'][variant='warning']) button:active:not([disabled]) { background: var(--lt-bg-warning-subtle); border-color: var(--lt-color-warning-800); color: var(--lt-color-warning-900); } :host([appearance='outlined'][variant='error']) button { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-color-error-500); } :host([appearance='outlined'][variant='error']) button:hover:not([disabled]) { background: var(--lt-color-error-50); border-color: var(--lt-color-error-700); color: var(--lt-text-error); } :host([appearance='outlined'][variant='error']) button:active:not([disabled]) { background: var(--lt-bg-error-subtle); border-color: var(--lt-color-error-800); color: var(--lt-color-error-800); } :host([appearance='outlined'][variant='info']) button { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-color-info-500); } :host([appearance='outlined'][variant='info']) button:hover:not([disabled]) { background: var(--lt-color-info-50); border-color: var(--lt-color-info-700); color: var(--lt-text-info); } :host([appearance='outlined'][variant='info']) button:active:not([disabled]) { background: var(--lt-bg-info-subtle); border-color: var(--lt-color-info-800); color: var(--lt-color-info-800); } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "buttonStyles",
+          "declaration": {
+            "name": "buttonStyles",
+            "module": "src/components/button/button.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/button/button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Button component with multiple variants, sizes, appearances, and loading state support.",
+          "name": "Button",
+          "slots": [
+            {
+              "description": "Button label/content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "buttonStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ButtonVariant"
+              },
+              "default": "'primary'",
+              "description": "Visual variant that determines the button's color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "ButtonAppearance"
+              },
+              "default": "'filled'",
+              "description": "Appearance style (filled or outlined)."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ButtonSize"
+              },
+              "default": "'md'",
+              "description": "Size of the button (affects height, font size, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is in loading state.\nShows a spinner and disables interaction."
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name to display at the start of the button."
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name to display at the end of the button."
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "description": "Renders the button with optional icons and loading spinner."
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Button",
+          "declaration": {
+            "name": "Button",
+            "module": "src/components/button/button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/button/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Button",
+          "declaration": {
+            "name": "Button",
+            "module": "./button"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonAppearance",
+          "declaration": {
+            "name": "ButtonAppearance",
+            "module": "./button.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonSize",
+          "declaration": {
+            "name": "ButtonSize",
+            "module": "./button.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonVariant",
+          "declaration": {
+            "name": "ButtonVariant",
+            "module": "./button.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/checkbox/checkbox.styles.ts",
       "declarations": [
         {
@@ -945,349 +1114,6 @@
           "declaration": {
             "name": "CheckboxLabelPosition",
             "module": "./checkbox.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/button.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "buttonStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Asap', sans-serif; } button { align-items: center; border-radius: var(--lt-border-radius); border: 1px solid transparent; box-sizing: border-box; cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } button:active { transform: translateY(1px); } button:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } button[disabled] { cursor: not-allowed; opacity: 0.6; transform: none; } /* sizes */ :host([size='sm']) button { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) button { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) button { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) button { background: var(--lt-interactive-primary-bg); color: var(--lt-text-on-primary); } :host([variant='primary']) button:hover:not([disabled]) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='primary']) button:active:not([disabled]) { background: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) button { background: var(--lt-interactive-secondary-bg); color: var(--lt-text-on-secondary); } :host([variant='secondary']) button:hover:not([disabled]) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='secondary']) button:active:not([disabled]) { background: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) button { background: var(--lt-color-neutral-500); color: var(--lt-color-neutral-50); } :host([variant='neutral']) button:hover:not([disabled]) { background: var(--lt-color-neutral-700); } :host([variant='neutral']) button:active:not([disabled]) { background: var(--lt-color-neutral-800); } :host([variant='success']) button { background: var(--lt-interactive-success-bg); color: var(--lt-text-on-success); } :host([variant='success']) button:hover:not([disabled]) { background: var(--lt-interactive-success-bg-hover); } :host([variant='success']) button:active:not([disabled]) { background: var(--lt-interactive-success-bg-active); } :host([variant='warning']) button { background: var(--lt-interactive-warning-bg); color: var(--lt-text-on-warning); } :host([variant='warning']) button:hover:not([disabled]) { background: var(--lt-interactive-warning-bg-hover); } :host([variant='warning']) button:active:not([disabled]) { background: var(--lt-interactive-warning-bg-active); } :host([variant='error']) button { background: var(--lt-interactive-error-bg); color: var(--lt-text-on-error); } :host([variant='error']) button:hover:not([disabled]) { background: var(--lt-interactive-error-bg-hover); } :host([variant='error']) button:active:not([disabled]) { background: var(--lt-interactive-error-bg-active); } :host([variant='info']) button { background: var(--lt-interactive-info-bg); color: var(--lt-text-on-info); } :host([variant='info']) button:hover:not([disabled]) { background: var(--lt-interactive-info-bg-hover); } :host([variant='info']) button:active:not([disabled]) { background: var(--lt-interactive-info-bg-active); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) button { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-color-primary-500); } :host([appearance='outlined'][variant='primary']) button:hover:not([disabled]) { background: var(--lt-color-primary-50); border-color: var(--lt-color-primary-700); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='primary']) button:active:not([disabled]) { background: var(--lt-bg-primary-subtle); border-color: var(--lt-color-primary-800); color: var(--lt-color-primary-800); } :host([appearance='outlined'][variant='secondary']) button { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-color-secondary-500); } :host([appearance='outlined'][variant='secondary']) button:hover:not([disabled]) { background: var(--lt-color-secondary-50); border-color: var(--lt-color-secondary-700); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='secondary']) button:active:not([disabled]) { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-color-secondary-800); color: var(--lt-color-secondary-800); } :host([appearance='outlined'][variant='neutral']) button { background: transparent; border-color: var(--lt-color-neutral-500); color: var(--lt-color-neutral-700); } :host([appearance='outlined'][variant='neutral']) button:hover:not([disabled]) { background: var(--lt-bg-subtle); border-color: var(--lt-color-neutral-700); color: var(--lt-text-default); } :host([appearance='outlined'][variant='neutral']) button:active:not([disabled]) { background: var(--lt-bg-surface); border-color: var(--lt-color-neutral-800); color: var(--lt-text-default); } :host([appearance='outlined'][variant='success']) button { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-color-success-500); } :host([appearance='outlined'][variant='success']) button:hover:not([disabled]) { background: var(--lt-color-success-50); border-color: var(--lt-color-success-700); color: var(--lt-text-success); } :host([appearance='outlined'][variant='success']) button:active:not([disabled]) { background: var(--lt-bg-success-subtle); border-color: var(--lt-color-success-800); color: var(--lt-color-success-800); } :host([appearance='outlined'][variant='warning']) button { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='warning']) button:hover:not([disabled]) { background: var(--lt-color-warning-50); border-color: var(--lt-color-warning-700); color: var(--lt-color-warning-800); } :host([appearance='outlined'][variant='warning']) button:active:not([disabled]) { background: var(--lt-bg-warning-subtle); border-color: var(--lt-color-warning-800); color: var(--lt-color-warning-900); } :host([appearance='outlined'][variant='error']) button { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-color-error-500); } :host([appearance='outlined'][variant='error']) button:hover:not([disabled]) { background: var(--lt-color-error-50); border-color: var(--lt-color-error-700); color: var(--lt-text-error); } :host([appearance='outlined'][variant='error']) button:active:not([disabled]) { background: var(--lt-bg-error-subtle); border-color: var(--lt-color-error-800); color: var(--lt-color-error-800); } :host([appearance='outlined'][variant='info']) button { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-color-info-500); } :host([appearance='outlined'][variant='info']) button:hover:not([disabled]) { background: var(--lt-color-info-50); border-color: var(--lt-color-info-700); color: var(--lt-text-info); } :host([appearance='outlined'][variant='info']) button:active:not([disabled]) { background: var(--lt-bg-info-subtle); border-color: var(--lt-color-info-800); color: var(--lt-color-info-800); } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "buttonStyles",
-          "declaration": {
-            "name": "buttonStyles",
-            "module": "src/components/button/button.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Button component with multiple variants, sizes, appearances, and loading state support.",
-          "name": "Button",
-          "slots": [
-            {
-              "description": "Button label/content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "buttonStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ButtonVariant"
-              },
-              "default": "'primary'",
-              "description": "Visual variant that determines the button's color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "ButtonAppearance"
-              },
-              "default": "'filled'",
-              "description": "Appearance style (filled or outlined)."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ButtonSize"
-              },
-              "default": "'md'",
-              "description": "Size of the button (affects height, font size, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "loading",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is in loading state.\nShows a spinner and disables interaction."
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon name to display at the start of the button."
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon name to display at the end of the button."
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "description": "Renders the button with optional icons and loading spinner."
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-button",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Button",
-          "declaration": {
-            "name": "Button",
-            "module": "src/components/button/button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Button",
-          "declaration": {
-            "name": "Button",
-            "module": "./button"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonAppearance",
-          "declaration": {
-            "name": "ButtonAppearance",
-            "module": "./button.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonSize",
-          "declaration": {
-            "name": "ButtonSize",
-            "module": "./button.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonVariant",
-          "declaration": {
-            "name": "ButtonVariant",
-            "module": "./button.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/chip.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "chipStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Asap', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-color-primary-800); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-color-secondary-800); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-color-neutral-700); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-color-success-800); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-color-warning-800); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-color-error-800); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-color-info-800); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-color-primary-600); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-color-secondary-600); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-color-neutral-700); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-color-success-600); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-color-error-600); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-color-info-600); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "chipStyles",
-          "declaration": {
-            "name": "chipStyles",
-            "module": "src/components/chip/chip.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/chip.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Compact label element for tags, filters, and attributes.",
-          "name": "Chip",
-          "slots": [
-            {
-              "description": "Label content",
-              "name": ""
-            },
-            {
-              "description": "Leading icon or avatar",
-              "name": "icon"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "chipStyles"
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "ChipAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual appearance (filled tinted background or outlined border only)."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ChipVariant"
-              },
-              "default": "'primary'",
-              "description": "Color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ChipSize"
-              },
-              "default": "'md'",
-              "description": "Size (affects height, font, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disables the chip and its delete button."
-            },
-            {
-              "kind": "field",
-              "name": "deletable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
-            },
-            {
-              "kind": "field",
-              "name": "_deleteIconSize",
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleDelete",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "lt-delete",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Fires when the delete button is clicked (only when `deletable`)"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-chip",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Chip",
-          "declaration": {
-            "name": "Chip",
-            "module": "src/components/chip/chip.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Chip",
-          "declaration": {
-            "name": "Chip",
-            "module": "./chip"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipVariant",
-          "declaration": {
-            "name": "ChipVariant",
-            "module": "./chip.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipSize",
-          "declaration": {
-            "name": "ChipSize",
-            "module": "./chip.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipAppearance",
-          "declaration": {
-            "name": "ChipAppearance",
-            "module": "./chip.types"
           }
         }
       ]
@@ -1557,6 +1383,180 @@
           "declaration": {
             "name": "DialogSize",
             "module": "./dialog.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/chip.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "chipStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Asap', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-color-primary-800); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-color-secondary-800); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-color-neutral-700); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-color-success-800); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-color-warning-800); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-color-error-800); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-color-info-800); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-color-primary-600); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-color-secondary-600); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-color-neutral-700); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-color-success-600); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-color-error-600); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-color-info-600); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "chipStyles",
+          "declaration": {
+            "name": "chipStyles",
+            "module": "src/components/chip/chip.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/chip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Compact label element for tags, filters, and attributes.",
+          "name": "Chip",
+          "slots": [
+            {
+              "description": "Label content",
+              "name": ""
+            },
+            {
+              "description": "Leading icon or avatar",
+              "name": "icon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "chipStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "ChipAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual appearance (filled tinted background or outlined border only)."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ChipVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ChipSize"
+              },
+              "default": "'md'",
+              "description": "Size (affects height, font, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables the chip and its delete button."
+            },
+            {
+              "kind": "field",
+              "name": "deletable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
+            },
+            {
+              "kind": "field",
+              "name": "_deleteIconSize",
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleDelete",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "lt-delete",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fires when the delete button is clicked (only when `deletable`)"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-chip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "src/components/chip/chip.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "./chip"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipVariant",
+          "declaration": {
+            "name": "ChipVariant",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipSize",
+          "declaration": {
+            "name": "ChipSize",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipAppearance",
+          "declaration": {
+            "name": "ChipAppearance",
+            "module": "./chip.types"
           }
         }
       ]
