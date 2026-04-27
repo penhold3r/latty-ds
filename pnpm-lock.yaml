@@ -134,9 +134,6 @@ importers:
 
   packages/icons:
     dependencies:
-      iconoir:
-        specifier: ^7.10.0
-        version: 7.11.0
       lit:
         specifier: ^3.2.0
         version: 3.3.2
@@ -2762,9 +2759,6 @@ packages:
     resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
     engines: {node: '>=18'}
     hasBin: true
-
-  iconoir@7.11.0:
-    resolution: {integrity: sha512-F9T/E08aJBaQ+VOBjn+ChWKn3hFwsaK5VZ024OFMxdDaxKjLGDpU/OsU7MO9wXM+mDs4ZImypdXIn0fFZAXKmA==}
 
   iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
@@ -7221,8 +7215,6 @@ snapshots:
   human-signals@2.1.0: {}
 
   husky@9.1.7: {}
-
-  iconoir@7.11.0: {}
 
   iconv-lite@0.4.24:
     dependencies:
