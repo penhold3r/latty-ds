@@ -123,7 +123,7 @@ export const generatePalettes = (hex: string, useMuted?: boolean) => {
     darkClamp: 0.06
   });
   // Pin 500 to the exact input hex to avoid OKLCH → hex round-trip drift.
-  main[500] = formatHex(hex);
+  main[500] = formatHex(hex) ?? hex;
 
   // Muted = clearly desaturated (pastel), pivot slightly lifted from the base.
   const muted = useMuted
