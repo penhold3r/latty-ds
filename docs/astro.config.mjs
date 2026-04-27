@@ -10,8 +10,8 @@ const root = resolve(__dirname, '..');
 // https://astro.build/config
 export default defineConfig({
   integrations: [mdx()],
-  site: 'https://penhold3r.github.io',
-  base: '/latty-ds',
+  site: process.env.SITE_URL ?? 'https://penhold3r.github.io',
+  base: process.env.BASE_PATH ?? '',
   vite: {
     server: {
       // Allow Vite to serve files from outside the docs directory

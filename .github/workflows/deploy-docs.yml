@@ -28,6 +28,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm docs:build
+        env:
+          SITE_URL: https://penhold3r.github.io
+          BASE_PATH: /latty-ds
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/dist
