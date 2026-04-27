@@ -1,0 +1,4 @@
+export const collapseSvg =
+  '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+  '<path d="M21 3L14 10M14 10H20M14 10V4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21L10 14M10 14H4M10 14V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+  '</svg>';

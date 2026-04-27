@@ -1,5 +1,5 @@
-export const xSvg =
-  '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-  '<path d="M16.8198 20.7684L3.75317 3.96836C3.44664 3.57425 3.72749 3 4.22678 3H6.70655C6.8917 3 7.06649 3.08548 7.18016 3.23164L20.2468 20.0316C20.5534 20.4258 20.2725 21 19.7732 21H17.2935C17.1083 21 16.9335 20.9145 16.8198 20.7684Z" stroke="currentColor" stroke-width="2"/>' +
-  '<path d="M20 3L4 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
-  '</svg>';
+export const xSvg = `
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 32 32">
+	<path fill="currentColor" stroke-width="0" d="M18.42,14.009L27.891,3h-2.244l-8.224,9.559L10.855,3H3.28l9.932,14.455L3.28,29h2.244l8.684-10.095,6.936,10.095h7.576l-10.301-14.991h0Zm-3.074,3.573l-1.006-1.439L6.333,4.69h3.447l6.462,9.243,1.006,1.439,8.4,12.015h-3.447l-6.854-9.804h0Z"></path>
+</svg>
+`;

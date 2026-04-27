@@ -1,0 +1,5 @@
+export const saveSvg =
+  '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+  '<path d="M19 21H5C3.895 21 3 20.105 3 19V5C3 3.895 3.895 3 5 3H16L21 8V19C21 20.105 20.105 21 19 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+  '<path d="M17 21V13H7V21M7 3V8H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+  '</svg>';

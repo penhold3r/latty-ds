@@ -4,6 +4,8 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { checkboxStyles } from './checkbox.styles';
 import { CheckboxSize, CheckboxVariant, CheckboxLabelPosition } from './checkbox.types';
 
+import '@latty/icons';
+
 /**
  * A customizable checkbox component with support for multiple variants and sizes.
  *
@@ -144,18 +146,10 @@ export class Checkbox extends LitElement {
    */
   private renderCheckmark() {
     if (this.indeterminate) {
-      return html`
-        <svg class="checkmark" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 8h10" stroke="white" stroke-width="2" stroke-linecap="round" />
-        </svg>
-      `;
+      return html`<lt-icon class="checkmark" name="minus"></lt-icon>`;
     }
     if (this.checked) {
-      return html`
-        <svg class="checkmark" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 8l3 3 7-7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      `;
+      return html`<lt-icon class="checkmark" name="check"></lt-icon>`;
     }
     return html``;
   }

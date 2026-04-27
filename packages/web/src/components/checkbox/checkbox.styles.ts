@@ -50,6 +50,7 @@ export const checkboxStyles = css`
   }
 
   .checkmark {
+    color: white;
     display: none;
     pointer-events: none;
     position: absolute;

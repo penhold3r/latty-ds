@@ -140,24 +140,6 @@ export class Accordion extends LitElement {
     }
   }
 
-  /**
-   * Renders the chevron icon SVG.
-   * @private
-   */
-  private renderChevron() {
-    return html`
-      <svg class="chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M5 7.5L10 12.5L15 7.5"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    `;
-  }
-
   render() {
     return html`
       <details>
@@ -167,7 +149,7 @@ export class Accordion extends LitElement {
             <span class="summary-text">
               <slot name="summary">${this.label}</slot>
             </span>
-            ${this.renderChevron()}
+            <lt-icon class="chevron" name="caret-down" size="md"></lt-icon>
           </div>
         </summary>
         <div class="content" @transitionend=${this.handleTransitionEnd}>

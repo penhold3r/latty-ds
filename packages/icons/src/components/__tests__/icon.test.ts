@@ -108,10 +108,9 @@ describe('<lt-icon>', () => {
     expect(el.getAttribute('name')).toBe('test');
   });
 
-  it('renders common icons from iconoir provider', async () => {
+  it('renders built-in icons from the registry', async () => {
     el.name = 'check';
     await el.updateComplete;
-    await el.updateComplete; // Wait for the icon to be loaded and rendered
 
     const svg = el.shadowRoot!.querySelector('svg');
     expect(svg).toBeTruthy();

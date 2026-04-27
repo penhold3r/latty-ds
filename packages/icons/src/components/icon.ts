@@ -106,10 +106,10 @@ export class Icon extends LitElement {
   }
 
   /**
-   * Lifecycle: Property changed.
-   * Reloads icon when name changes.
+   * Lifecycle: Before render.
+   * Reloads icon when name changes so svgContent is ready for the same render pass.
    */
-  updated(changedProperties: Map<string, unknown>) {
+  willUpdate(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('name')) {
       this.loadIcon();
     }

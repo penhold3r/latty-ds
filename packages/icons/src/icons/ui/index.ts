@@ -1,9 +1,15 @@
-import { searchSvg } from './search';
-import { menuSvg } from './menu';
-import { settingsSvg } from './settings';
-import { homeSvg } from './home';
-import { userSvg } from './user';
 import { bellSvg } from './bell';
+import { calendarSvg } from './calendar';
+import { chartSvg } from './chart';
+import { clockSvg } from './clock';
+import { folderSvg } from './folder';
+import { homeSvg } from './home';
+import { mailSvg } from './mail';
+import { menuSvg } from './menu';
+import { phoneSvg } from './phone';
+import { searchSvg } from './search';
+import { settingsSvg } from './settings';
+import { userSvg } from './user';
 
 export const uiIcons: Record<string, string> = {
   'search': searchSvg,
@@ -12,4 +18,10 @@ export const uiIcons: Record<string, string> = {
   'home': homeSvg,
   'user': userSvg,
   'bell': bellSvg,
+  'calendar': calendarSvg,
+  'clock': clockSvg,
+  'mail': mailSvg,
+  'phone': phoneSvg,
+  'chart': chartSvg,
+  'folder': folderSvg,
 };

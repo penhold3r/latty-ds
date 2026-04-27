@@ -263,7 +263,7 @@ export class Select extends LitElement {
             <span class="select-value ${hasValue ? '' : 'placeholder'}">
               ${hasValue ? selectedLabel : this.placeholder}
             </span>
-            <lt-icon class="icon-end" name="nav-arrow-down"></lt-icon>
+            <lt-icon class="icon-end" name="caret-down"></lt-icon>
           </div>
           <lt-surface class="dropdown" elevation="2" role="listbox">
             <div class="options-container">

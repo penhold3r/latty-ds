@@ -18,17 +18,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   <div class="features">
     <div class="feature">
-      <div class="feature-icon">◆</div>
+      <div class="feature-icon"><lt-icon name="diamond" size="lg"></lt-icon></div>
       <h3>Tokens first</h3>
       <p>Design tokens are the single source of truth. They generate CSS custom properties, JSON exports, and TypeScript types — change once, update everywhere.</p>
     </div>
     <div class="feature">
-      <div class="feature-icon">⬡</div>
+      <div class="feature-icon"><lt-icon name="hexagon" size="lg"></lt-icon></div>
       <h3>Framework agnostic</h3>
       <p>Built on Web Components, Latty works natively in vanilla HTML, React, Angular, Vue, Svelte, or any other framework without wrappers.</p>
     </div>
     <div class="feature">
-      <div class="feature-icon">◎</div>
+      <div class="feature-icon"><lt-icon name="double-circle" size="lg"></lt-icon></div>
       <h3>Fully themeable</h3>
       <p>Every visual decision is a CSS custom property. Override tokens globally or per-component to create a completely custom brand.</p>
     </div>
@@ -45,6 +45,10 @@ import '@latty/web';</code></pre>
     <a href="/getting-started/installation" class="link-more">Full installation guide →</a>
   </div>
 </BaseLayout>
+
+<script>
+  import '@latty/icons';
+</script>
 
 <style>
   .hero {
@@ -141,9 +145,9 @@ import '@latty/web';</code></pre>
   }
 
   .feature-icon {
-    font-size: 1.25rem;
     color: var(--lt-color-primary-500);
     margin-bottom: var(--lt-spacing-3);
+    display: flex;
   }
 
   .feature h3 {
