@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -54,36 +54,37 @@ import ApiTable from '../../../components/ApiTable.astro';
   <lt-snackbar id="playground-snackbar" variant="default" duration="4000">Changes saved successfully</lt-snackbar>
 
   <h2>Usage</h2>
-  <CodeSnippet
-    code={`<!-- Basic -->
+  <FrameworkTabs
+    html={`
 <lt-snackbar id="sb">Changes saved</lt-snackbar>
 <lt-button onclick="document.getElementById('sb').show()">Save</lt-button>
 
-<!-- Variants -->
 <lt-snackbar variant="success">Upload complete</lt-snackbar>
 <lt-snackbar variant="warning">Low disk space</lt-snackbar>
 <lt-snackbar variant="error">Request failed</lt-snackbar>
 <lt-snackbar variant="info">Update available</lt-snackbar>
 
-<!-- Rich content -->
-<lt-snackbar variant="error">
-  Failed to save <strong>report.pdf</strong> — <a href="#">retry</a>
-</lt-snackbar>
-
-<!-- With action button -->
 <lt-snackbar action-label="Undo">Message deleted</lt-snackbar>
 
-<!-- Persistent (no auto-dismiss) -->
 <lt-snackbar duration="0" variant="warning">You are offline</lt-snackbar>
+    `}
+    react={`
+import { useRef } from 'react';
+import { Snackbar, Button } from '@latty/react';
+import type { Snackbar as SnackbarEl } from '@latty/web';
 
-<!-- Without close button -->
-<lt-snackbar duration="2000" closable="false">Saving…</lt-snackbar>
-
-<script type="module">
-  const sb = document.getElementById('sb');
-  sb.addEventListener('lt-action', () => { /* handle undo */ });
-  sb.show();
-</script>`}
+function Example() {
+  const ref = useRef<SnackbarEl>(null);
+  return (
+    <>
+      <Button variant="primary" onClick={() => ref.current?.show()}>Save</Button>
+      <Snackbar ref={ref} variant="success" actionLabel="Undo">
+        Changes saved
+      </Snackbar>
+    </>
+  );
+}
+    `}
   />
 
   <h2>API</h2>

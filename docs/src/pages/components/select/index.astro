@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -44,7 +44,8 @@ import ApiTable from '../../../components/ApiTable.astro';
   </PlaygroundShell>
 
   <h2>Usage</h2>
-  <CodeSnippet code={`
+  <FrameworkTabs
+    html={`
 <lt-select id="my-select" label="Country" placeholder="Select a country"></lt-select>
 
 <script type="module">
@@ -55,8 +56,25 @@ import ApiTable from '../../../components/ApiTable.astro';
     { value: 'ca', label: 'Canada' },
   ];
   select.addEventListener('change', (e) => console.log(e.detail.value));
-</script>
-  `} />
+<\/script>
+    `}
+    react={`
+import { Select } from '@latty/react';
+
+const options = [
+  { value: 'us', label: 'United States' },
+  { value: 'gb', label: 'United Kingdom' },
+  { value: 'ca', label: 'Canada' },
+];
+
+<Select
+  label="Country"
+  placeholder="Select a country"
+  options={options}
+  onChange={(e) => console.log(e.detail.value)}
+/>
+    `}
+  />
 
   <h2>API</h2>
   <ApiTable tag="lt-select" />

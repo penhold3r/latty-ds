@@ -338,7 +338,7 @@ cat > "${DOCS_DIR}/index.astro" << EOF
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -351,8 +351,15 @@ import ApiTable from '../../../components/ApiTable.astro';
   <ComponentPlayground tag="${TAG}" content="${NAME_PASCAL}" />
 
   <h2>Usage</h2>
-  {/* TODO: replace with real usage examples */}
-  <CodeSnippet code={\`<${TAG}>${NAME_PASCAL}</${TAG}>\`} />
+  {/* TODO: add html and react usage examples */}
+  <FrameworkTabs
+    html={\`<${TAG}>${NAME_PASCAL}</${TAG}>\`}
+    react={\`
+import { ${NAME_PASCAL} } from '@latty/react';
+
+<${NAME_PASCAL}>${NAME_PASCAL}</${NAME_PASCAL}>
+    \`}
+  />
 
   <h2>API</h2>
   <ApiTable tag="${TAG}" />

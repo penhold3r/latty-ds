@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -43,7 +43,8 @@ import ApiTable from '../../../components/ApiTable.astro';
   </PlaygroundShell>
 
   <h2>Usage</h2>
-  <CodeSnippet code={`
+  <FrameworkTabs
+    html={`
 <lt-table id="my-table" hoverable striped></lt-table>
 
 <script type="module">
@@ -58,8 +59,26 @@ import ApiTable from '../../../components/ApiTable.astro';
     { name: 'Bob',     role: 'Designer', status: 'Active' },
     { name: 'Charlie', role: 'Manager',  status: 'Away' },
   ];
-</script>
-  `} />
+<\/script>
+    `}
+    react={`
+import { Table } from '@latty/react';
+
+const columns = [
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'role', label: 'Role' },
+  { key: 'status', label: 'Status' },
+];
+
+const data = [
+  { name: 'Alice', role: 'Engineer', status: 'Active' },
+  { name: 'Bob', role: 'Designer', status: 'Active' },
+  { name: 'Charlie', role: 'Manager', status: 'Away' },
+];
+
+<Table columns={columns} data={data} hoverable striped />
+    `}
+  />
 
   <h2>API</h2>
   <ApiTable tag="lt-table" />

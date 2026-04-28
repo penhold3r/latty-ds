@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -13,13 +13,24 @@ import ApiTable from '../../../components/ApiTable.astro';
   <ComponentPlayground tag="lt-radio" />
 
   <h2>Usage</h2>
-  <CodeSnippet code={`
+  <FrameworkTabs
+    html={`
 <lt-radio-group label="Preferred contact" name="contact" value="email">
   <lt-radio label="Email" value="email"></lt-radio>
   <lt-radio label="Phone" value="phone"></lt-radio>
   <lt-radio label="Post" value="post" disabled></lt-radio>
 </lt-radio-group>
-  `} />
+    `}
+    react={`
+import { RadioGroup, Radio } from '@latty/react';
+
+<RadioGroup label="Preferred contact" name="contact" value="email">
+  <Radio label="Email" value="email" />
+  <Radio label="Phone" value="phone" />
+  <Radio label="Post" value="post" disabled />
+</RadioGroup>
+    `}
+  />
 
   <h2>API — lt-radio</h2>
   <ApiTable tag="lt-radio" />

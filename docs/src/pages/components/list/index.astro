@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -13,7 +13,8 @@ import ApiTable from '../../../components/ApiTable.astro';
   <ComponentPlayground tag="lt-list" content="<lt-list-item>First item</lt-list-item><lt-list-item>Second item</lt-list-item><lt-list-item>Third item</lt-list-item>" previewHeight="120px" />
 
   <h2>Usage</h2>
-  <CodeSnippet code={`
+  <FrameworkTabs
+    html={`
 <lt-list>
   <lt-list-item>Design tokens</lt-list-item>
   <lt-list-item>Web Components</lt-list-item>
@@ -25,7 +26,23 @@ import ApiTable from '../../../components/ApiTable.astro';
   <lt-list-item>Import tokens CSS</lt-list-item>
   <lt-list-item>Use components</lt-list-item>
 </lt-list>
-  `} />
+    `}
+    react={`
+import { List, ListItem } from '@latty/react';
+
+<List>
+  <ListItem>Design tokens</ListItem>
+  <ListItem>Web Components</ListItem>
+  <ListItem>Framework wrappers</ListItem>
+</List>
+
+<List type="ordered">
+  <ListItem>Install packages</ListItem>
+  <ListItem>Import tokens CSS</ListItem>
+  <ListItem>Use components</ListItem>
+</List>
+    `}
+  />
 
   <h2>API — lt-list</h2>
   <ApiTable tag="lt-list" />

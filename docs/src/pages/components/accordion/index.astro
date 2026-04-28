@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -13,7 +13,8 @@ import ApiTable from '../../../components/ApiTable.astro';
   <ComponentPlayground tag="lt-accordion" content="This is the collapsible content inside the accordion." previewHeight="80px" defaults={{ label: "Section Title" }} />
 
   <h2>Usage</h2>
-  <CodeSnippet code={`
+  <FrameworkTabs
+    html={`
 <lt-accordion label="What is Latty?">
   Latty is a framework-agnostic design system built on design tokens and Web Components.
 </lt-accordion>
@@ -21,7 +22,19 @@ import ApiTable from '../../../components/ApiTable.astro';
 <lt-accordion label="Installation" icon="download" open>
   Install with: pnpm add @latty/tokens @latty/web
 </lt-accordion>
-  `} />
+    `}
+    react={`
+import { Accordion } from '@latty/react';
+
+<Accordion label="What is Latty?">
+  Latty is a framework-agnostic design system built on design tokens and Web Components.
+</Accordion>
+
+<Accordion label="Installation" icon="download" open>
+  Install with: pnpm add @latty/tokens @latty/web
+</Accordion>
+    `}
+  />
 
   <h2>API</h2>
   <ApiTable tag="lt-accordion" />

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -39,7 +39,8 @@ import ApiTable from '../../../components/ApiTable.astro';
   </PlaygroundShell>
 
   <h2>Usage</h2>
-  <CodeSnippet code={`
+  <FrameworkTabs
+    html={`
 <lt-tab-group value="tab1">
   <lt-tab label="Overview" value="tab1" icon="home"></lt-tab>
   <lt-tab label="Settings" value="tab2" icon="settings"></lt-tab>
@@ -50,8 +51,18 @@ import ApiTable from '../../../components/ApiTable.astro';
   document.querySelector('lt-tab-group').addEventListener('change', (e) => {
     console.log('active tab:', e.detail.value);
   });
-</script>
-  `} />
+<\/script>
+    `}
+    react={`
+import { TabGroup, Tab } from '@latty/react';
+
+<TabGroup value="tab1" onChange={(e) => console.log('active tab:', e.detail.value)}>
+  <Tab label="Overview" value="tab1" icon="home" />
+  <Tab label="Settings" value="tab2" icon="settings" />
+  <Tab label="Disabled" value="tab3" disabled />
+</TabGroup>
+    `}
+  />
 
   <h2>API — lt-tab-group</h2>
   <ApiTable tag="lt-tab-group" />

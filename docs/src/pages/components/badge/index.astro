@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -22,19 +22,29 @@ import ApiTable from '../../../components/ApiTable.astro';
 	/>
 
 	<h2>Usage</h2>
-	<CodeSnippet
-		code={`
-<!-- Pill badges -->
+	<FrameworkTabs
+		html={`
 <lt-badge variant="success" content="Active" />
 <lt-badge variant="error" appearance="solid" content="Failed" />
 <lt-badge variant="warning" appearance="outlined" content="Pending" />
 <lt-badge variant="primary" content="New" dot />
 
-<!-- Circle indicators (no content) -->
 <lt-badge variant="success" />
 <lt-badge variant="error" />
 <lt-badge variant="warning" />
-  `}
+		`}
+		react={`
+import { Badge } from '@latty/react';
+
+<Badge variant="success" content="Active" />
+<Badge variant="error" appearance="solid" content="Failed" />
+<Badge variant="warning" appearance="outlined" content="Pending" />
+<Badge variant="primary" content="New" dot />
+
+<Badge variant="success" />
+<Badge variant="error" />
+<Badge variant="warning" />
+		`}
 	/>
 
 	<h2>API</h2>

@@ -1,0 +1,93 @@
+---
+import CodeSnippet from './CodeSnippet.astro';
+
+interface Props {
+  html: string;
+  react: string;
+}
+
+const { html, react } = Astro.props;
+---
+
+<div class="framework-tabs">
+  <div class="ft-tablist" role="tablist" aria-label="Framework">
+    <button class="ft-tab ft-tab--active" role="tab" aria-selected="true" data-ft-target="html">
+      Web Component
+    </button>
+    <button class="ft-tab" role="tab" aria-selected="false" data-ft-target="react">
+      React
+    </button>
+  </div>
+  <div data-ft-panel="html">
+    <CodeSnippet code={html} lang="html" />
+  </div>
+  <div class="ft-hidden" data-ft-panel="react">
+    <CodeSnippet code={react} lang="tsx" />
+  </div>
+</div>
+
+<style>
+  .framework-tabs {
+    margin: var(--lt-spacing-4) 0;
+  }
+
+  .ft-tablist {
+    display: flex;
+    gap: var(--lt-spacing-1);
+    margin-bottom: var(--lt-spacing-2);
+  }
+
+  .ft-tab {
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--lt-color-neutral-300);
+    background: transparent;
+    color: var(--lt-color-neutral-500);
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: color 150ms, border-color 150ms, background 150ms;
+  }
+
+  .ft-tab:hover {
+    color: var(--lt-color-neutral-800);
+    border-color: var(--lt-color-neutral-500);
+  }
+
+  .ft-tab--active {
+    background: var(--lt-color-primary-100);
+    border-color: var(--lt-color-primary-400);
+    color: var(--lt-color-primary-700);
+  }
+
+  .ft-hidden {
+    display: none;
+  }
+
+  .framework-tabs :global(.snippet) {
+    margin: 0;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.framework-tabs').forEach((container) => {
+    const tabs = container.querySelectorAll<HTMLButtonElement>('[data-ft-target]');
+    const panels = container.querySelectorAll<HTMLElement>('[data-ft-panel]');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.ftTarget!;
+
+        tabs.forEach((t) => {
+          t.classList.toggle('ft-tab--active', t === tab);
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+        });
+
+        panels.forEach((panel) => {
+          panel.classList.toggle('ft-hidden', panel.dataset.ftPanel !== target);
+        });
+      });
+    });
+  });
+</script>

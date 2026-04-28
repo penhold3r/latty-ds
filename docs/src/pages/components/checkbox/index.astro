@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -13,11 +13,20 @@ import ApiTable from '../../../components/ApiTable.astro';
   <ComponentPlayground tag="lt-checkbox" />
 
   <h2>Usage</h2>
-  <CodeSnippet code={`
+  <FrameworkTabs
+    html={`
 <lt-checkbox label="Accept terms and conditions"></lt-checkbox>
 <lt-checkbox label="Enable notifications" variant="success" checked></lt-checkbox>
 <lt-checkbox label="Unavailable option" disabled></lt-checkbox>
-  `} />
+    `}
+    react={`
+import { Checkbox } from '@latty/react';
+
+<Checkbox label="Accept terms and conditions" />
+<Checkbox label="Enable notifications" variant="success" checked />
+<Checkbox label="Unavailable option" disabled />
+    `}
+  />
 
   <h2>API</h2>
   <ApiTable tag="lt-checkbox" />

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -24,25 +24,33 @@ import ApiTable from '../../../components/ApiTable.astro';
 	/>
 
 	<h2>Usage</h2>
-	<CodeSnippet
-		code={`<!-- Positions -->
+	<FrameworkTabs
+		html={`
 <lt-tooltip content="Above" position="top"><button>Top</button></lt-tooltip>
 <lt-tooltip content="Below" position="bottom"><button>Bottom</button></lt-tooltip>
 <lt-tooltip content="Left side" position="left"><button>Left</button></lt-tooltip>
 <lt-tooltip content="Right side" position="right"><button>Right</button></lt-tooltip>
 
-<!-- Custom colors -->
 <lt-tooltip content="Primary" background-color="--lt-color-primary-600" color="#fff">
   <button>Token bg</button>
 </lt-tooltip>
-<lt-tooltip content="Custom" background-color="#1a1a2e" color="#e0e0ff">
-  <button>Hex colors</button>
-</lt-tooltip>
 
-<!-- Disabled -->
 <lt-tooltip content="You can't do that" disabled>
   <button disabled>Locked</button>
-</lt-tooltip>`}
+</lt-tooltip>
+		`}
+		react={`
+import { Tooltip } from '@latty/react';
+
+<Tooltip content="Above" position="top"><button>Top</button></Tooltip>
+<Tooltip content="Below" position="bottom"><button>Bottom</button></Tooltip>
+<Tooltip content="Left side" position="left"><button>Left</button></Tooltip>
+<Tooltip content="Right side" position="right"><button>Right</button></Tooltip>
+
+<Tooltip content="Primary" backgroundColor="--lt-color-primary-600" color="#fff">
+  <button>Token bg</button>
+</Tooltip>
+		`}
 	/>
 
 	<h2>API</h2>

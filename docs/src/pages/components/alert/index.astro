@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -21,39 +21,33 @@ import ApiTable from '../../../components/ApiTable.astro';
   <ComponentPlayground tag="lt-alert" content="Your changes have been saved to the server." />
 
   <h2>Usage</h2>
-  <CodeSnippet
-    code={`<!-- Variants -->
+  <FrameworkTabs
+    html={`
 <lt-alert variant="success">Changes saved successfully</lt-alert>
 <lt-alert variant="warning">Your session expires in 5 minutes</lt-alert>
 <lt-alert variant="error">Failed to submit — please try again</lt-alert>
 <lt-alert variant="info">A new version is available</lt-alert>
 
-<!-- Appearances -->
-<lt-alert variant="info" appearance="filled">Filled (default) — tinted background with border</lt-alert>
-<lt-alert variant="info" appearance="outlined">Outlined — white background with border</lt-alert>
-<lt-alert variant="info" appearance="solid">Solid — solid color, no border</lt-alert>
-
-<!-- With icon -->
-<lt-alert variant="success" with-icon>Upload complete</lt-alert>
-
-<!-- With title -->
 <lt-alert variant="error" title="Payment failed" with-icon closable>
   Your card was declined. Please update your billing details.
 </lt-alert>
 
-<!-- Rich content -->
-<lt-alert variant="warning" with-icon>
-  Storage is almost full — <a href="/settings">manage storage</a>
-</lt-alert>
-
-<!-- Dismissible -->
 <lt-alert variant="info" closable>This banner can be dismissed</lt-alert>
+    `}
+    react={`
+import { Alert } from '@latty/react';
 
-<script type="module">
-  document.querySelector('lt-alert').addEventListener('lt-close', () => {
-    console.log('alert dismissed');
-  });
-<\/script>`}
+<Alert variant="success">Changes saved successfully</Alert>
+<Alert variant="warning">Your session expires in 5 minutes</Alert>
+<Alert variant="error">Failed to submit — please try again</Alert>
+<Alert variant="info">A new version is available</Alert>
+
+<Alert variant="error" title="Payment failed" withIcon closable>
+  Your card was declined. Please update your billing details.
+</Alert>
+
+<Alert variant="info" closable>This banner can be dismissed</Alert>
+    `}
   />
 
   <h2>API</h2>

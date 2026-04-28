@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -48,7 +48,8 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-dialog>
 
   <h2>Usage</h2>
-  <CodeSnippet code={`
+  <FrameworkTabs
+    html={`
 <lt-button variant="primary" id="open-btn">Open dialog</lt-button>
 
 <lt-dialog id="my-dialog" title="Confirm action" size="sm">
@@ -63,8 +64,37 @@ import ApiTable from '../../../components/ApiTable.astro';
   const dialog = document.getElementById('my-dialog');
   document.getElementById('open-btn').addEventListener('click', () => dialog.open = true);
   document.getElementById('cancel-btn').addEventListener('click', () => dialog.open = false);
-</script>
-  `} />
+<\/script>
+    `}
+    react={`
+import { useState } from 'react';
+import { Dialog, Button } from '@latty/react';
+
+function Example() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant="primary" onClick={() => setOpen(true)}>
+        Open dialog
+      </Button>
+      <Dialog
+        open={open}
+        title="Confirm action"
+        size="sm"
+        onLtDialogClose={() => setOpen(false)}
+      >
+        <p>Are you sure you want to proceed?</p>
+        <div slot="footer">
+          <Button variant="neutral" appearance="outlined"
+            onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="primary">Confirm</Button>
+        </div>
+      </Dialog>
+    </>
+  );
+}
+    `}
+  />
 
   <h2>API</h2>
   <ApiTable tag="lt-dialog" />

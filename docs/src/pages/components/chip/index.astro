@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
-import CodeSnippet from '../../../components/CodeSnippet.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
@@ -13,11 +13,20 @@ import ApiTable from '../../../components/ApiTable.astro';
   <ComponentPlayground tag="lt-chip" content="Design System" />
 
   <h2>Usage</h2>
-  <CodeSnippet code={`
+  <FrameworkTabs
+    html={`
 <lt-chip variant="primary">Design</lt-chip>
 <lt-chip variant="success" appearance="outlined">Active</lt-chip>
 <lt-chip variant="error" deletable>Urgent</lt-chip>
-  `} />
+    `}
+    react={`
+import { Chip } from '@latty/react';
+
+<Chip variant="primary">Design</Chip>
+<Chip variant="success" appearance="outlined">Active</Chip>
+<Chip variant="error" deletable>Urgent</Chip>
+    `}
+  />
 
   <h2>API</h2>
   <ApiTable tag="lt-chip" />
