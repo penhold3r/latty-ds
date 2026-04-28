@@ -1,25 +1,21 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
-import type { Select as SelectEl } from '@latty/web';
+import type { RadioGroup as RadioGroupEl } from '@latty/web';
 
-export type SelectProps = {
-  variant?: SelectEl['variant'];
-  size?: SelectEl['size'];
-  value?: string;
-  placeholder?: string;
+export type RadioGroupProps = {
   label?: string;
+  name?: string;
+  value?: string;
+  orientation?: RadioGroupEl['orientation'];
   helperText?: string;
-  disabled?: boolean;
+  error?: boolean;
   required?: boolean;
-  options?: SelectEl['options'];
-  isOpen?: boolean;
-  handleDocumentClick?: string;
   onChange?: (event: CustomEvent) => void;
   children?: ReactNode;
 };
 
-export const Select = forwardRef<SelectEl, SelectProps>(
-  function Select({ onChange, children, ...props }, forwardedRef) {
-    const innerRef = useRef<SelectEl>(null);
+export const RadioGroup = forwardRef<RadioGroupEl, RadioGroupProps>(
+  function RadioGroup({ onChange, children, ...props }, forwardedRef) {
+    const innerRef = useRef<RadioGroupEl>(null);
 
     useImperativeHandle(forwardedRef, () => innerRef.current!);
 
@@ -32,10 +28,10 @@ export const Select = forwardRef<SelectEl, SelectProps>(
     }, [onChange]);
 
     return (
-      <lt-select ref={innerRef} {...(props as Record<string, unknown>)}>
+      <lt-radio-group ref={innerRef} {...(props as Record<string, unknown>)}>
         {children}
-      </lt-select>
+      </lt-radio-group>
     );
   }
 );
-Select.displayName = 'Select';
+RadioGroup.displayName = 'RadioGroup';

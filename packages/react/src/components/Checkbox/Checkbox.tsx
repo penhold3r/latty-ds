@@ -12,7 +12,6 @@ export type CheckboxProps = {
   labelPosition?: CheckboxEl['labelPosition'];
   name?: string;
   value?: string;
-  input?: CheckboxEl['input'];
   onChange?: (event: CustomEvent) => void;
   children?: ReactNode;
 };

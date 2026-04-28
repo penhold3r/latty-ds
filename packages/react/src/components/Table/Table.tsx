@@ -13,9 +13,6 @@ export type TableProps = {
   emptyMessage?: string;
   rowKey?: string;
   sort?: TableEl['sort'];
-  internalSort?: TableEl['internalSort'];
-  sortedData?: TableEl['sortedData'];
-  currentSort?: TableEl['currentSort'];
   onLtSortChange?: (event: CustomEvent) => void;
   children?: ReactNode;
 };

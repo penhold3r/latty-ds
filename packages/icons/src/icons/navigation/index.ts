@@ -11,7 +11,7 @@ import { externalSvg } from './external';
 import { locationSvg } from './location';
 import { returnSvg } from './return';
 
-export const navigationIcons: Record<string, string> = {
+export const navigationIcons = {
   'arrow-down': arrowDownSvg,
   'arrow-left': arrowLeftSvg,
   'arrow-right': arrowRightSvg,
@@ -24,4 +24,4 @@ export const navigationIcons: Record<string, string> = {
   'location': locationSvg,
   'return': returnSvg,
   'compass': compassSvg,
-};
+} as const;

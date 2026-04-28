@@ -11,7 +11,7 @@ import { starSvg } from './star';
 import { sunSvg } from './sun';
 import { triangleSvg } from './triangle';
 
-export const shapeIcons: Record<string, string> = {
+export const shapeIcons = {
   'heart': heartSvg,
   'star': starSvg,
   'diamond': diamondSvg,
@@ -24,4 +24,4 @@ export const shapeIcons: Record<string, string> = {
   'lightning': lightningSvg,
   'moon': moonSvg,
   'sun': sunSvg,
-};
+} as const;

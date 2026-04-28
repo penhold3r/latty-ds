@@ -6,7 +6,7 @@ import { interactionIcons } from './interaction';
 import { shapeIcons } from './shapes';
 import { socialIcons } from './social';
 
-export const lattyIcons: Record<string, string> = {
+export const lattyIcons = {
   ...navigationIcons,
   ...actionIcons,
   ...uiIcons,
@@ -14,4 +14,6 @@ export const lattyIcons: Record<string, string> = {
   ...interactionIcons,
   ...shapeIcons,
   ...socialIcons,
-};
+} as const;
+
+export type LattyIconName = keyof typeof lattyIcons;

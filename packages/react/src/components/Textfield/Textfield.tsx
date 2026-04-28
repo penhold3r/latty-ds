@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
-import type { Textfield as TextfieldEl } from '@latty/web';
+import type { Textfield as TextfieldEl, LattyIconName } from '@latty/web';
 
 export type TextfieldProps = {
   variant?: TextfieldEl['variant'];
@@ -12,9 +12,8 @@ export type TextfieldProps = {
   disabled?: boolean;
   required?: boolean;
   readonly?: boolean;
-  iconStart?: string;
+  iconStart?: LattyIconName;
   rows?: number;
-  isPasswordVisible?: boolean;
   onInput?: (event: CustomEvent) => void;
   onChange?: (event: CustomEvent) => void;
   children?: ReactNode;

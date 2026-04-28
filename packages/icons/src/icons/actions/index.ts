@@ -11,7 +11,7 @@ import { trashSvg } from './trash';
 import { uploadSvg } from './upload';
 import { xmarkSvg } from './xmark';
 
-export const actionIcons: Record<string, string> = {
+export const actionIcons = {
   'check': checkSvg,
   'xmark': xmarkSvg,
   'plus': plusSvg,
@@ -24,4 +24,4 @@ export const actionIcons: Record<string, string> = {
   'copy': copySvg,
   'share': shareSvg,
   'link': linkSvg,
-};
+} as const;

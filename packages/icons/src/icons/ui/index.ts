@@ -11,7 +11,7 @@ import { searchSvg } from './search';
 import { settingsSvg } from './settings';
 import { userSvg } from './user';
 
-export const uiIcons: Record<string, string> = {
+export const uiIcons = {
   'search': searchSvg,
   'menu': menuSvg,
   'settings': settingsSvg,
@@ -24,4 +24,4 @@ export const uiIcons: Record<string, string> = {
   'phone': phoneSvg,
   'chart': chartSvg,
   'folder': folderSvg,
-};
+} as const;

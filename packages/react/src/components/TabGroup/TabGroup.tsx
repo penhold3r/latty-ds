@@ -5,9 +5,6 @@ export type TabGroupProps = {
   value?: string;
   variant?: TabGroupEl['variant'];
   size?: TabGroupEl['size'];
-  tabs?: TabGroupEl['tabs'];
-  panels?: TabGroupEl['panels'];
-  handleTabClick?: string;
   onChange?: (event: CustomEvent) => void;
   children?: ReactNode;
 };

@@ -11,7 +11,7 @@ import { thumbUpSvg } from './thumb-up';
 import { warningTriangleSvg } from './warning-triangle';
 import { xmarkCircleSvg } from './xmark-circle';
 
-export const feedbackIcons: Record<string, string> = {
+export const feedbackIcons = {
   'info-circle': infoCircleSvg,
   'check-circle': checkCircleSvg,
   'xmark-circle': xmarkCircleSvg,
@@ -24,4 +24,4 @@ export const feedbackIcons: Record<string, string> = {
   'thumb-down': thumbDownSvg,
   'fire': fireSvg,
   'lock': lockSvg,
-};
+} as const;

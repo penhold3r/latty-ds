@@ -8,9 +8,6 @@ export type DialogProps = {
   hideCloseButton?: boolean;
   closeOnBackdropClick?: boolean;
   closeOnEscape?: boolean;
-  dialogElement?: DialogEl['dialogElement'];
-  previouslyFocusedElement?: DialogEl['previouslyFocusedElement'];
-  handleKeydown?: string;
   onLtDialogOpen?: (event: CustomEvent) => void;
   onLtDialogClose?: (event: CustomEvent) => void;
   children?: ReactNode;

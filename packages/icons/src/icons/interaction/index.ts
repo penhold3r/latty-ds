@@ -11,7 +11,7 @@ import { undoSvg } from './undo';
 import { zoomInSvg } from './zoom-in';
 import { zoomOutSvg } from './zoom-out';
 
-export const interactionIcons: Record<string, string> = {
+export const interactionIcons = {
   'eye': eyeOpenSvg,
   'eye-off': eyeCloseSvg,
   'zoom-in': zoomInSvg,
@@ -24,4 +24,4 @@ export const interactionIcons: Record<string, string> = {
   'rotate-cw': rotateCwSvg,
   'undo': undoSvg,
   'redo': redoSvg,
-};
+} as const;

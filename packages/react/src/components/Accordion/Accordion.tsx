@@ -1,9 +1,9 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
-import type { Accordion as AccordionEl } from '@latty/web';
+import type { Accordion as AccordionEl, LattyIconName } from '@latty/web';
 
 export type AccordionProps = {
   label?: string;
-  icon?: string;
+  icon?: LattyIconName;
   variant?: AccordionEl['variant'];
   open?: boolean;
   disabled?: boolean;

@@ -1,10 +1,10 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
-import type { Tab as TabEl } from '@latty/web';
+import type { Tab as TabEl, LattyIconName } from '@latty/web';
 
 export type TabProps = {
   label?: string;
   value?: string;
-  icon?: string;
+  icon?: LattyIconName;
   active?: boolean;
   disabled?: boolean;
   size?: TabEl['size'];

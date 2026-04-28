@@ -11,7 +11,7 @@ import { whatsappSvg } from './whatsapp';
 import { xSvg } from './x';
 import { youtubeSvg } from './youtube';
 
-export const socialIcons: Record<string, string> = {
+export const socialIcons = {
   'x': xSvg,
   'instagram': instagramSvg,
   'github': githubSvg,
@@ -24,4 +24,4 @@ export const socialIcons: Record<string, string> = {
   'telegram': telegramSvg,
   'slack': slackSvg,
   'dribbble': dribbbleSvg,
-};
+} as const;

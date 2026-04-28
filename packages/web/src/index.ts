@@ -49,6 +49,8 @@
  * ```
  */
 
+export type { LattyIconName } from '@latty/icons';
+
 export * from './components/accordion';
 export * from './components/button';
 export * from './components/chip';

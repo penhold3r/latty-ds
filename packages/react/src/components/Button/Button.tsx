@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
-import type { Button as ButtonEl } from '@latty/web';
+import type { Button as ButtonEl, LattyIconName } from '@latty/web';
 
 export type ButtonProps = {
   variant?: ButtonEl['variant'];
@@ -7,8 +7,8 @@ export type ButtonProps = {
   size?: ButtonEl['size'];
   disabled?: boolean;
   loading?: boolean;
-  icon?: string;
-  iconEnd?: string;
+  icon?: LattyIconName;
+  iconEnd?: LattyIconName;
   children?: ReactNode;
 };
 
