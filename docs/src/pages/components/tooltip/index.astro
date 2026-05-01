@@ -51,6 +51,18 @@ import { Tooltip } from '@latty/react';
   <button>Token bg</button>
 </Tooltip>
 		`}
+		vue={`
+<template>
+  <lt-tooltip content="Above" position="top"><button>Top</button></lt-tooltip>
+  <lt-tooltip content="Below" position="bottom"><button>Bottom</button></lt-tooltip>
+  <lt-tooltip content="Left side" position="left"><button>Left</button></lt-tooltip>
+  <lt-tooltip content="Right side" position="right"><button>Right</button></lt-tooltip>
+
+  <lt-tooltip content="Primary" background-color="--lt-color-primary-600" color="#fff">
+    <button>Token bg</button>
+  </lt-tooltip>
+</template>
+		`}
 	/>
 
 	<h2>API</h2>

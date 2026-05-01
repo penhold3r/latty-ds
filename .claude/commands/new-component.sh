@@ -351,13 +351,18 @@ import ApiTable from '../../../components/ApiTable.astro';
   <ComponentPlayground tag="${TAG}" content="${NAME_PASCAL}" />
 
   <h2>Usage</h2>
-  {/* TODO: add html and react usage examples */}
+  {/* TODO: add html, react, and vue usage examples */}
   <FrameworkTabs
     html={\`<${TAG}>${NAME_PASCAL}</${TAG}>\`}
     react={\`
 import { ${NAME_PASCAL} } from '@latty/react';
 
 <${NAME_PASCAL}>${NAME_PASCAL}</${NAME_PASCAL}>
+    \`}
+    vue={\`
+<template>
+  <${TAG}>${NAME_PASCAL}</${TAG}>
+</template>
     \`}
   />
 

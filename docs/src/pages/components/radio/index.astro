@@ -30,6 +30,15 @@ import { RadioGroup, Radio } from '@latty/react';
   <Radio label="Post" value="post" disabled />
 </RadioGroup>
     `}
+    vue={`
+<template>
+  <lt-radio-group label="Preferred contact" name="contact" value="email">
+    <lt-radio label="Email" value="email"></lt-radio>
+    <lt-radio label="Phone" value="phone"></lt-radio>
+    <lt-radio label="Post" value="post" disabled></lt-radio>
+  </lt-radio-group>
+</template>
+    `}
   />
 
   <h2>API — lt-radio</h2>

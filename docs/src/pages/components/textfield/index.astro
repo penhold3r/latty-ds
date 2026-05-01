@@ -46,6 +46,23 @@ import { Textfield } from '@latty/react';
   placeholder="Tell us about yourself..."
 />
     `}
+    vue={`
+<template>
+  <lt-textfield label="Email" type="email" placeholder="you@example.com" required></lt-textfield>
+
+  <lt-textfield
+    label="Password"
+    type="password"
+    helper-text="Minimum 8 characters"
+  ></lt-textfield>
+
+  <lt-textfield
+    label="Bio"
+    type="multiline"
+    placeholder="Tell us about yourself..."
+  ></lt-textfield>
+</template>
+    `}
   />
 
   <h2>API</h2>

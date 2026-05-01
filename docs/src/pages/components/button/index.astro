@@ -26,6 +26,17 @@ import { Button } from '@latty/react';
 <Button variant="primary" appearance="outlined" icon="download">Download</Button>
 <Button variant="error" icon="trash" loading>Deleting…</Button>
     `}
+    vue={`
+<script setup lang="ts">
+function save() { /* ... */ }
+</script>
+
+<template>
+  <lt-button variant="primary" @click="save">Save changes</lt-button>
+  <lt-button variant="primary" appearance="outlined" icon="download">Download</lt-button>
+  <lt-button variant="error" icon="trash" loading>Deleting…</lt-button>
+</template>
+    `}
   />
 
   <h2>API</h2>

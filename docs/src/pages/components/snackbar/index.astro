@@ -85,6 +85,19 @@ function Example() {
   );
 }
     `}
+    vue={`
+<script setup>
+import { ref } from 'vue'
+const snackbar = ref(null)
+</script>
+
+<template>
+  <lt-button variant="primary" @click="snackbar?.show()">Save</lt-button>
+  <lt-snackbar ref="snackbar" variant="success" action-label="Undo">
+    Changes saved
+  </lt-snackbar>
+</template>
+    `}
   />
 
   <h2>API</h2>

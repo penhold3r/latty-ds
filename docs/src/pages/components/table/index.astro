@@ -78,6 +78,25 @@ const data = [
 
 <Table columns={columns} data={data} hoverable striped />
     `}
+    vue={`
+<script setup lang="ts">
+const columns = [
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'role', label: 'Role' },
+  { key: 'status', label: 'Status' },
+]
+
+const data = [
+  { name: 'Alice', role: 'Engineer', status: 'Active' },
+  { name: 'Bob', role: 'Designer', status: 'Active' },
+  { name: 'Charlie', role: 'Manager', status: 'Away' },
+]
+</script>
+
+<template>
+  <lt-table :columns="columns" :data="data" hoverable striped></lt-table>
+</template>
+    `}
   />
 
   <h2>API</h2>

@@ -4,9 +4,10 @@ import CodeSnippet from './CodeSnippet.astro';
 interface Props {
   html: string;
   react: string;
+  vue?: string;
 }
 
-const { html, react } = Astro.props;
+const { html, react, vue } = Astro.props;
 ---
 
 <div class="framework-tabs">
@@ -17,6 +18,11 @@ const { html, react } = Astro.props;
     <button class="ft-tab" role="tab" aria-selected="false" data-ft-target="react">
       React
     </button>
+    {vue && (
+      <button class="ft-tab" role="tab" aria-selected="false" data-ft-target="vue">
+        Vue
+      </button>
+    )}
   </div>
   <div data-ft-panel="html">
     <CodeSnippet code={html} lang="html" />
@@ -24,6 +30,11 @@ const { html, react } = Astro.props;
   <div class="ft-hidden" data-ft-panel="react">
     <CodeSnippet code={react} lang="tsx" />
   </div>
+  {vue && (
+    <div class="ft-hidden" data-ft-panel="vue">
+      <CodeSnippet code={vue} lang="vue" />
+    </div>
+  )}
 </div>
 
 <style>

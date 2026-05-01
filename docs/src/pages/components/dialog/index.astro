@@ -94,6 +94,26 @@ function Example() {
   );
 }
     `}
+    vue={`
+<script setup lang="ts">
+import { ref } from 'vue'
+const open = ref(false)
+</script>
+
+<template>
+  <lt-button variant="primary" @click="open = true">Open dialog</lt-button>
+
+  <lt-dialog :open="open" title="Confirm action" size="sm"
+    @lt-dialog-close="open = false">
+    <p>Are you sure you want to proceed?</p>
+    <div slot="footer">
+      <lt-button variant="neutral" appearance="outlined"
+        @click="open = false">Cancel</lt-button>
+      <lt-button variant="primary">Confirm</lt-button>
+    </div>
+  </lt-dialog>
+</template>
+    `}
   />
 
   <h2>API</h2>

@@ -47,46 +47,53 @@ import '@latty/web';
 
 ## React
 
-```tsx
-import '@latty/tokens/dist/tokens.css';
-import '@latty/web';
+Use the `@latty/react` wrapper package for typed components and idiomatic React events:
 
-// Web Components work directly in JSX — no wrapper needed
-export function SaveButton() {
+```tsx
+import { Button, Textfield } from '@latty/react';
+
+export function Example() {
   return (
-    <lt-button
-      variant="primary"
-      icon="save"
-      onClick={() => console.log('saved')}
-    >
+    <Button variant="primary" icon="save" onClick={() => console.log('saved')}>
       Save changes
-    </lt-button>
+    </Button>
   );
 }
 ```
 
-For full TypeScript prop types and idiomatic React events, use the `@latty/react` wrapper package instead.
+## Vue
 
-## Angular
+Vue 3 supports Web Components natively. Add one-time configuration in your app entry:
 
-Add `CUSTOM_ELEMENTS_SCHEMA` to any module or standalone component that uses `lt-` elements:
+```ts
+// main.ts
+import { createApp } from 'vue'
+import '@latty/tokens/dist/tokens.css'
+import '@latty/web'
+import App from './App.vue'
 
-```typescript
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import '@latty/tokens/dist/tokens.css';
-import '@latty/web';
-
-@Component({
-  selector: 'app-root',
-  template: `
-    <lt-button variant="primary" (click)="save()">Save</lt-button>
-  `,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-})
-export class AppComponent {
-  save() { /* ... */ }
-}
+const app = createApp(App)
+app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('lt-')
+app.mount('#app')
 ```
+
+Then use `lt-*` elements directly in any component template. Use Vue's `@event` syntax for listeners and `:prop` for reactive bindings:
+
+```vue
+<script setup lang="ts">
+function save() { /* ... */ }
+function onEmail(e: Event) {
+  console.log((e as CustomEvent).detail.value)
+}
+</script>
+
+<template>
+  <lt-button variant="primary" @click="save">Save changes</lt-button>
+  <lt-textfield label="Email" type="email" @lt-change="onEmail"></lt-textfield>
+</template>
+```
+
+No wrapper package needed — `lt-*` elements work natively in Vue templates.
 
 ## Listening to events
 

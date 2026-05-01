@@ -62,6 +62,16 @@ import { TabGroup, Tab } from '@latty/react';
   <Tab label="Disabled" value="tab3" disabled />
 </TabGroup>
     `}
+    vue={`
+<template>
+  <lt-tab-group value="tab1"
+    @change="(e) => console.log('active tab:', e.detail.value)">
+    <lt-tab label="Overview" value="tab1" icon="home"></lt-tab>
+    <lt-tab label="Settings" value="tab2" icon="settings"></lt-tab>
+    <lt-tab label="Disabled" value="tab3" disabled></lt-tab>
+  </lt-tab-group>
+</template>
+    `}
   />
 
   <h2>API — lt-tab-group</h2>

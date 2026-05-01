@@ -74,6 +74,24 @@ const options = [
   onChange={(e) => console.log(e.detail.value)}
 />
     `}
+    vue={`
+<script setup lang="ts">
+const options = [
+  { value: 'us', label: 'United States' },
+  { value: 'gb', label: 'United Kingdom' },
+  { value: 'ca', label: 'Canada' },
+]
+</script>
+
+<template>
+  <lt-select
+    label="Country"
+    placeholder="Select a country"
+    :options="options"
+    @change="(e) => console.log(e.detail.value)"
+  ></lt-select>
+</template>
+    `}
   />
 
   <h2>API</h2>

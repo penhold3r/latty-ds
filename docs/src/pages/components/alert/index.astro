@@ -48,6 +48,20 @@ import { Alert } from '@latty/react';
 
 <Alert variant="info" closable>This banner can be dismissed</Alert>
     `}
+    vue={`
+<template>
+  <lt-alert variant="success">Changes saved successfully</lt-alert>
+  <lt-alert variant="warning">Your session expires in 5 minutes</lt-alert>
+  <lt-alert variant="error">Failed to submit — please try again</lt-alert>
+  <lt-alert variant="info">A new version is available</lt-alert>
+
+  <lt-alert variant="error" title="Payment failed" with-icon closable>
+    Your card was declined. Please update your billing details.
+  </lt-alert>
+
+  <lt-alert variant="info" closable>This banner can be dismissed</lt-alert>
+</template>
+    `}
   />
 
   <h2>API</h2>
