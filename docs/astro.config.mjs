@@ -3,15 +3,21 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import { fileURLToPath } from 'url';
 import { resolve, dirname } from 'path';
+import { rehypePrefixLinks } from './src/plugins/rehype-prefix-links.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
+
+const basePath = process.env.BASE_PATH ?? '';
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [mdx()],
   site: process.env.SITE_URL ?? 'https://penhold3r.github.io',
-  base: process.env.BASE_PATH ?? '',
+  base: basePath,
+  markdown: {
+    rehypePlugins: [[rehypePrefixLinks, basePath]],
+  },
   vite: {
     server: {
       // Allow Vite to serve files from outside the docs directory
