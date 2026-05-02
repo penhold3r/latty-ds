@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Dropdown" description="A floating menu anchored to a trigger element">
+  <h1>Dropdown</h1>
+  <p>
+    A floating menu that opens from a trigger element. Supports keyboard navigation
+    (Arrow keys, Escape, Home/End), outside-click to dismiss, and optional link items via the
+    <code>href</code> attribute on <code>lt-dropdown-item</code>.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="dropdown-playground" previewHeight="auto">
+    <div slot="preview" style="padding: 2rem; display: flex; justify-content: center; min-height: 220px; align-items: flex-start;">
+      <lt-dropdown id="playground-dropdown" placement="bottom-start">
+        <lt-button slot="trigger" variant="outlined">Options</lt-button>
+        <lt-dropdown-item>Profile</lt-dropdown-item>
+        <lt-dropdown-item>Settings</lt-dropdown-item>
+        <lt-dropdown-item id="playground-item-disabled">Admin Panel</lt-dropdown-item>
+        <lt-dropdown-item>Sign out</lt-dropdown-item>
+      </lt-dropdown>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">placement</label>
+        <select class="control-select" id="ctrl-placement">
+          <option value="bottom-start" selected>bottom-start</option>
+          <option value="bottom-end">bottom-end</option>
+          <option value="bottom">bottom</option>
+          <option value="top-start">top-start</option>
+          <option value="top-end">top-end</option>
+          <option value="top">top</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">disabled item</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-disabled-item" />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`
+<lt-dropdown>
+  <lt-button slot="trigger" variant="outlined">Options</lt-button>
+  <lt-dropdown-item>Profile</lt-dropdown-item>
+  <lt-dropdown-item>Settings</lt-dropdown-item>
+  <lt-dropdown-item disabled>Admin Panel</lt-dropdown-item>
+  <lt-dropdown-item>Sign out</lt-dropdown-item>
+</lt-dropdown>
+
+<!-- Anchor items -->
+<lt-dropdown>
+  <lt-button slot="trigger">Links</lt-button>
+  <lt-dropdown-item href="/profile">Profile</lt-dropdown-item>
+  <lt-dropdown-item href="/settings">Settings</lt-dropdown-item>
+</lt-dropdown>
+
+<!-- Top placement -->
+<lt-dropdown placement="top-start">
+  <lt-button slot="trigger">Open above</lt-button>
+  <lt-dropdown-item>Item 1</lt-dropdown-item>
+  <lt-dropdown-item>Item 2</lt-dropdown-item>
+</lt-dropdown>
+
+<!-- Listen for selection -->
+<lt-dropdown id="my-menu">
+  <lt-button slot="trigger">Actions</lt-button>
+  <lt-dropdown-item>Edit</lt-dropdown-item>
+  <lt-dropdown-item>Delete</lt-dropdown-item>
+</lt-dropdown>
+<script>
+  document.getElementById('my-menu').addEventListener('lt-select', (e) => {
+    console.log('Selected:', e.detail.item.textContent);
+  });
+</script>
+    `}
+    react={`
+import { Dropdown, DropdownItem } from '@latty/react';
+import { Button } from '@latty/react';
+
+function ActionsMenu() {
+  return (
+    <Dropdown onLtSelect={(e) => console.log('Selected:', e.detail.item.textContent)}>
+      <Button slot="trigger" variant="outlined">Options</Button>
+      <DropdownItem>Profile</DropdownItem>
+      <DropdownItem>Settings</DropdownItem>
+      <DropdownItem disabled>Admin Panel</DropdownItem>
+      <DropdownItem>Sign out</DropdownItem>
+    </Dropdown>
+  );
+}
+    `}
+    vue={`
+<script setup>
+import { ref } from 'vue'
+
+function onSelect(e) {
+  console.log('Selected:', e.detail.item.textContent)
+}
+</script>
+
+<template>
+  <lt-dropdown @lt-select="onSelect">
+    <lt-button slot="trigger" variant="outlined">Options</lt-button>
+    <lt-dropdown-item>Profile</lt-dropdown-item>
+    <lt-dropdown-item>Settings</lt-dropdown-item>
+    <lt-dropdown-item disabled>Admin Panel</lt-dropdown-item>
+    <lt-dropdown-item>Sign out</lt-dropdown-item>
+  </lt-dropdown>
+</template>
+    `}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-dropdown" />
+  <ApiTable tag="lt-dropdown-item" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const dropdown = document.getElementById('playground-dropdown') as any;
+  const disabledItem = document.getElementById('playground-item-disabled') as any;
+  const codeEl = document.getElementById('dropdown-playground-code')!;
+
+  const state = {
+    placement: 'bottom-start',
+    disabledItem: false,
+  };
+
+  function applyState() {
+    dropdown.placement = state.placement;
+    disabledItem.disabled = state.disabledItem;
+  }
+
+  function updateCode() {
+    const placementAttr = state.placement !== 'bottom-start' ? ` placement="${state.placement}"` : '';
+    const disabledAttr = state.disabledItem ? ' disabled' : '';
+    codeEl.textContent = `<lt-dropdown${placementAttr}>
+  <lt-button slot="trigger" variant="outlined">Options</lt-button>
+  <lt-dropdown-item>Profile</lt-dropdown-item>
+  <lt-dropdown-item>Settings</lt-dropdown-item>
+  <lt-dropdown-item${disabledAttr}>Admin Panel</lt-dropdown-item>
+  <lt-dropdown-item>Sign out</lt-dropdown-item>
+</lt-dropdown>`;
+  }
+
+  document.getElementById('ctrl-placement')?.addEventListener('change', (e) => {
+    state.placement = (e.target as HTMLSelectElement).value;
+    applyState();
+    updateCode();
+  });
+
+  document.getElementById('ctrl-disabled-item')?.addEventListener('change', (e) => {
+    state.disabledItem = (e.target as HTMLInputElement).checked;
+    applyState();
+    updateCode();
+  });
+
+  updateCode();
+</script>
