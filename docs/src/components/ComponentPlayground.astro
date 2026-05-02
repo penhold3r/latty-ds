@@ -26,8 +26,14 @@ function defaultValue(member: any): any {
 const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]));
 ---
 
-<div class="playground" id={id} data-tag={tag} data-content={slotContent} data-members={JSON.stringify(members)} data-defaults={JSON.stringify(defaults)}>
-
+<div
+  class="playground"
+  id={id}
+  data-tag={tag}
+  data-content={slotContent}
+  data-members={JSON.stringify(members)}
+  data-defaults={JSON.stringify(defaults)}
+>
   <!-- Preview -->
   <div class="preview" style={`min-height: ${previewHeight}`}>
     <div class="preview-stage" id={`${id}-stage`}></div>
@@ -35,68 +41,75 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
 
   <!-- Controls + Code -->
   <div class="bottom">
-
     <div class="controls">
       <div class="section-label">Controls</div>
-      {members.map((member) => {
-        const val = defaultValue(member);
-        const label = member.name
-          .split('-')
-          .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(' ');
+      {
+        members.map((member) => {
+          const val = defaultValue(member);
+          const label = member.name
+            .split('-')
+            .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(' ');
 
-        return (
-          <div class="control-row">
-            <label class="control-label" for={`${id}-${member.name}`}>{label}</label>
-            {member.type === 'boolean' ? (
-              <input
-                class="control-toggle"
-                type="checkbox"
-                id={`${id}-${member.name}`}
-                data-prop={member.name}
-                data-type="boolean"
-                checked={val === true}
-              />
-            ) : member.type === 'select' ? (
-              <select
-                class="control-select"
-                id={`${id}-${member.name}`}
-                data-prop={member.name}
-                data-type="select"
-              >
-                {member.options?.map((opt: string) => (
-                  <option value={opt} selected={opt === val}>{opt}</option>
-                ))}
-              </select>
-            ) : (
-              <input
-                class="control-text"
-                type={member.type === 'number' ? 'number' : 'text'}
-                id={`${id}-${member.name}`}
-                data-prop={member.name}
-                data-type={member.type}
-                value={String(val)}
-              />
-            )}
-          </div>
-        );
-      })}
+          return (
+            <div class="control-row">
+              <label class="control-label" for={`${id}-${member.name}`}>
+                {label}
+              </label>
+              {member.type === 'boolean' ? (
+                <input
+                  class="control-toggle"
+                  type="checkbox"
+                  id={`${id}-${member.name}`}
+                  data-prop={member.name}
+                  data-type="boolean"
+                  checked={val === true}
+                />
+              ) : member.type === 'select' ? (
+                <select class="control-select" id={`${id}-${member.name}`} data-prop={member.name} data-type="select">
+                  {member.options?.map((opt: string) => (
+                    <option value={opt} selected={opt === val}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  class="control-text"
+                  type={member.type === 'number' ? 'number' : 'text'}
+                  id={`${id}-${member.name}`}
+                  data-prop={member.name}
+                  data-type={member.type}
+                  value={String(val)}
+                />
+              )}
+            </div>
+          );
+        })
+      }
     </div>
 
     <div class="code-panel">
       <div class="code-header">
         <span class="section-label" style="color: var(--lt-color-neutral-500)">HTML</span>
         <button class="copy-btn" id={`${id}-copy`} aria-label="Copy code">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2"/>
-            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
           </svg>
           Copy
         </button>
       </div>
-      <pre class="code-pre"><code class="code-output" id={`${id}-code`}></code></pre>
+      <pre class="code-pre"><code class="code-output" id={`${id}-code`} /></pre>
     </div>
-
   </div>
 </div>
 
@@ -134,9 +147,7 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
       const type = input.dataset.type!;
 
       input.addEventListener(type === 'boolean' ? 'change' : 'input', () => {
-        state[propName] = type === 'boolean'
-          ? (input as HTMLInputElement).checked
-          : input.value;
+        state[propName] = type === 'boolean' ? (input as HTMLInputElement).checked : input.value;
         applyState();
         updateCode();
       });
@@ -155,7 +166,11 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
       members.forEach((member) => {
         const value = state[member.name];
         if (member.type === 'boolean') {
-          value ? el.setAttribute(member.name, '') : el.removeAttribute(member.name);
+          if (value) {
+            el.setAttribute(member.name, '');
+          } else {
+            el.removeAttribute(member.name);
+          }
         } else if (value !== '' && value !== undefined) {
           el.setAttribute(member.name, String(value));
         } else {
@@ -177,15 +192,11 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
       });
 
       if (!attrParts.length) {
-        return slotContent
-          ? `<${tag}>\n  ${slotContent}\n</${tag}>`
-          : `<${tag}></${tag}>`;
+        return slotContent ? `<${tag}>\n  ${slotContent}\n</${tag}>` : `<${tag}></${tag}>`;
       }
 
       const attrs = '\n  ' + attrParts.join('\n  ') + '\n';
-      return slotContent
-        ? `<${tag}${attrs}>\n  ${slotContent}\n</${tag}>`
-        : `<${tag}${attrs}></${tag}>`;
+      return slotContent ? `<${tag}${attrs}>\n  ${slotContent}\n</${tag}>` : `<${tag}${attrs}></${tag}>`;
     }
 
     function updateCode() {
@@ -321,7 +332,9 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
     border-radius: 4px;
     cursor: pointer;
     font-family: inherit;
-    transition: color 150ms, border-color 150ms;
+    transition:
+      color 150ms,
+      border-color 150ms;
     margin: var(--lt-spacing-2) 0;
   }
 

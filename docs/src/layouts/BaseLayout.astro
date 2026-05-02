@@ -3,246 +3,218 @@ import '../styles/global.css';
 import Sidebar from '../components/Sidebar.astro';
 
 interface Props {
-	title: string;
-	description?: string;
+  title: string;
+  description?: string;
 }
 
 const { title, description = 'A framework-agnostic design system built on design tokens and Web Components' } =
-	Astro.props;
+  Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta
-			name="description"
-			content={description}
-		/>
-		<meta
-			name="viewport"
-			content="width=device-width"
-		/>
-		<link
-			rel="icon"
-			type="image/svg+xml"
-			href={`${base}/favicon.svg`}
-		/>
-		<meta
-			name="generator"
-			content={Astro.generator}
-		/>
-		<title>{title} | Latty</title>
-	</head>
-	<body>
-		<header class="topbar">
-			<div class="topbar-inner">
-				<div class="topbar-start">
-					<button
-						class="menu-toggle"
-						id="menu-toggle"
-						aria-label="Toggle navigation"
-						aria-expanded="false"
-						aria-controls="sidebar"
-					>
-						<svg
-							width="20"
-							height="20"
-							viewBox="0 0 20 20"
-							fill="none"
-							aria-hidden="true"
-						>
-							<path
-								d="M3 5h14M3 10h14M3 15h14"
-								stroke="currentColor"
-								stroke-width="1.5"
-								stroke-linecap="round"
-							></path>
-						</svg>
-					</button>
-					<a
-						href={`${base}/`}
-						class="wordmark"
-					>
-						<span class="wordmark-accent">Latty</span>
-					</a>
-				</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | Latty</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="topbar-start">
+          <button
+            class="menu-toggle"
+            id="menu-toggle"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+            aria-controls="sidebar"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            </svg>
+          </button>
+          <a href={`${base}/`} class="wordmark">
+            <span class="wordmark-accent">Latty</span>
+          </a>
+        </div>
 
-				<div class="topbar-end">
-					<a
-						href="https://github.com/yourusername/latty-ds"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="github-link"
-						aria-label="GitHub"
-					>
-						<lt-icon name="github" size="md" aria-hidden="true"></lt-icon>
-					</a>
-				</div>
-			</div>
-		</header>
+        <div class="topbar-end">
+          <a
+            href="https://github.com/yourusername/latty-ds"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="github-link"
+            aria-label="GitHub"
+          >
+            <lt-icon name="github" size="md" aria-hidden="true"></lt-icon>
+          </a>
+        </div>
+      </div>
+    </header>
 
-		<div
-			id="overlay"
-			class="overlay"
-			aria-hidden="true"
-		>
-		</div>
+    <div id="overlay" class="overlay" aria-hidden="true"></div>
 
-		<div class="page-layout">
-			<Sidebar />
-			<main class="content">
-				<article class="prose">
-					<slot />
-				</article>
-			</main>
-		</div>
-	</body>
+    <div class="page-layout">
+      <Sidebar />
+      <main class="content">
+        <article class="prose">
+          <slot />
+        </article>
+      </main>
+    </div>
+  </body>
 </html>
 
 <style>
-	:root {
-		--topbar-height: 56px;
-		--sidebar-width: 240px;
-	}
+  :root {
+    --topbar-height: 56px;
+    --sidebar-width: 240px;
+  }
 
-	.topbar {
-		position: sticky;
-		top: 0;
-		z-index: 200;
-		height: var(--topbar-height);
-		background: var(--lt-color-primary-500);
-		border-bottom: 1px solid var(--lt-color-neutral-200);
-	}
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    height: var(--topbar-height);
+    background: var(--lt-color-primary-500);
+    border-bottom: 1px solid var(--lt-color-neutral-200);
+  }
 
-	.topbar-inner {
-		height: 100%;
-		max-width: 1400px;
-		margin: 0 auto;
-		padding: 0 var(--lt-spacing-4);
-		display: flex;
-		align-items: center;
-		gap: var(--lt-spacing-4);
-	}
+  .topbar-inner {
+    height: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--lt-spacing-4);
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-4);
+  }
 
-	.topbar-start {
-		display: flex;
-		align-items: center;
-		gap: var(--lt-spacing-3);
-		flex: 1;
-	}
+  .topbar-start {
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-3);
+    flex: 1;
+  }
 
-	.menu-toggle {
-		display: none;
-		background: none;
-		border: none;
-		cursor: pointer;
-		color: var(--lt-color-neutral-700);
-		padding: var(--lt-spacing-1);
-		border-radius: 4px;
-	}
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--lt-color-neutral-700);
+    padding: var(--lt-spacing-1);
+    border-radius: 4px;
+  }
 
-	.menu-toggle:hover {
-		background: var(--lt-color-neutral-100);
-	}
+  .menu-toggle:hover {
+    background: var(--lt-color-neutral-100);
+  }
 
-	.wordmark {
-		font-size: 1.25rem;
-		font-weight: 700;
-		color: var(--lt-color-neutral-900);
-		text-decoration: none;
-	}
+  .wordmark {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--lt-color-neutral-900);
+    text-decoration: none;
+  }
 
-	.wordmark-accent {
-		color: var(--lt-color-primary-50);
-	}
+  .wordmark-accent {
+    color: var(--lt-color-primary-50);
+  }
 
-	.topbar-end {
-		display: flex;
-		align-items: center;
-	}
+  .topbar-end {
+    display: flex;
+    align-items: center;
+  }
 
-	.github-link {
-		display: flex;
-		align-items: center;
-		color: var(--lt-color-neutral-50);
-		padding: var(--lt-spacing-1);
-		border-radius: 4px;
-		transition: color 150ms;
-	}
+  .github-link {
+    display: flex;
+    align-items: center;
+    color: var(--lt-color-neutral-50);
+    padding: var(--lt-spacing-1);
+    border-radius: 4px;
+    transition: color 150ms;
+  }
 
-	.github-link:hover {
-		color: var(--lt-color-neutral-900);
-	}
+  .github-link:hover {
+    color: var(--lt-color-neutral-900);
+  }
 
-	.overlay {
-		display: none;
-		position: fixed;
-		inset: 0;
-		top: var(--topbar-height);
-		background: rgba(0, 0, 0, 0.4);
-		z-index: 99;
-	}
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    top: var(--topbar-height);
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 99;
+  }
 
-	.overlay.is-open {
-		display: block;
-	}
+  .overlay.is-open {
+    display: block;
+  }
 
-	.page-layout {
-		display: flex;
-		min-height: calc(100vh - var(--topbar-height));
-	}
+  .page-layout {
+    display: flex;
+    min-height: calc(100vh - var(--topbar-height));
+  }
 
-	.content {
-		flex: 1;
-		min-width: 0;
-		padding: var(--lt-spacing-8) var(--lt-spacing-10);
-	}
+  .content {
+    flex: 1;
+    min-width: 0;
+    padding: var(--lt-spacing-8) var(--lt-spacing-10);
+  }
 
-	.prose {
-		width: 100%;
-	}
+  .prose {
+    width: 100%;
+  }
 
-	@media (max-width: 768px) {
-		.menu-toggle {
-			display: flex;
-		}
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: flex;
+    }
 
-		.content {
-			padding: var(--lt-spacing-6) var(--lt-spacing-4);
-		}
-	}
+    .content {
+      padding: var(--lt-spacing-6) var(--lt-spacing-4);
+    }
+  }
 </style>
 
 <script>
-	import '@latty/icons';
+  import '@latty/icons';
 
-	const toggle = document.getElementById('menu-toggle');
-	const sidebar = document.getElementById('sidebar');
-	const overlay = document.getElementById('overlay');
+  const toggle = document.getElementById('menu-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
 
-	function openSidebar() {
-		sidebar?.classList.add('is-open');
-		overlay?.classList.add('is-open');
-		toggle?.setAttribute('aria-expanded', 'true');
-	}
+  function openSidebar() {
+    sidebar?.classList.add('is-open');
+    overlay?.classList.add('is-open');
+    toggle?.setAttribute('aria-expanded', 'true');
+  }
 
-	function closeSidebar() {
-		sidebar?.classList.remove('is-open');
-		overlay?.classList.remove('is-open');
-		toggle?.setAttribute('aria-expanded', 'false');
-	}
+  function closeSidebar() {
+    sidebar?.classList.remove('is-open');
+    overlay?.classList.remove('is-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+  }
 
-	toggle?.addEventListener('click', () => {
-		const isOpen = sidebar?.classList.contains('is-open');
-		isOpen ? closeSidebar() : openSidebar();
-	});
+  toggle?.addEventListener('click', () => {
+    const isOpen = sidebar?.classList.contains('is-open');
+    if (isOpen) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
 
-	overlay?.addEventListener('click', closeSidebar);
+  overlay?.addEventListener('click', closeSidebar);
 
-	// Close sidebar on nav link click (mobile)
-	sidebar?.querySelectorAll('a').forEach(link => {
-		link.addEventListener('click', closeSidebar);
-	});
+  // Close sidebar on nav link click (mobile)
+  sidebar?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeSidebar);
+  });
 </script>

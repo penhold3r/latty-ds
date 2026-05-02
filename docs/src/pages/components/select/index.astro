@@ -7,7 +7,10 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <BaseLayout title="Select" description="Dropdown select component">
   <h1>Select</h1>
-  <p>A custom dropdown with labels, placeholder, helper text, and validation states. The <code>options</code> property is set via JavaScript as an array of <code>&#123; value, label &#125;</code> objects.</p>
+  <p>
+    A custom dropdown with labels, placeholder, helper text, and validation states. The <code>options</code> property is set
+    via JavaScript as an array of <code>&#123; value, label &#125;</code> objects.
+  </p>
 
   <h2>Playground</h2>
   <PlaygroundShell id="select-playground">
@@ -109,7 +112,7 @@ const options = [
     { value: 'gb', label: 'United Kingdom' },
     { value: 'ca', label: 'Canada' },
     { value: 'de', label: 'Germany' },
-    { value: 'fr', label: 'France' },
+    { value: 'fr', label: 'France' }
   ];
 
   const state: Record<string, any> = { variant: 'default', size: 'md', disabled: false, required: false };
@@ -117,7 +120,7 @@ const options = [
   function updateCode() {
     const attrs = Object.entries(state)
       .filter(([k, v]) => v !== false && !(k === 'variant' && v === 'default') && !(k === 'size' && v === 'md'))
-      .map(([k, v]) => v === true ? k : `${k}="${v}"`)
+      .map(([k, v]) => (v === true ? k : `${k}="${v}"`))
       .join('\n  ');
     codeEl.textContent = attrs
       ? `<lt-select\n  ${attrs}\n  label="Country"\n  placeholder="Select a country"\n></lt-select>`
@@ -138,7 +141,11 @@ const options = [
     document.getElementById(`ctrl-${attr}`)?.addEventListener('change', (e) => {
       const checked = (e.target as HTMLInputElement).checked;
       state[attr] = checked;
-      checked ? select.setAttribute(attr, '') : select.removeAttribute(attr);
+      if (checked) {
+        select.setAttribute(attr, '');
+      } else {
+        select.removeAttribute(attr);
+      }
       updateCode();
     });
   });

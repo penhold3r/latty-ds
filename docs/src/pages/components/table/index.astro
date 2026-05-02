@@ -7,7 +7,10 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <BaseLayout title="Table" description="Data table with sorting and responsive design">
   <h1>Table</h1>
-  <p>A data table with sortable columns, density options, and striped rows. Columns and data are set via JavaScript properties.</p>
+  <p>
+    A data table with sortable columns, density options, and striped rows. Columns and data are set via JavaScript
+    properties.
+  </p>
 
   <h2>Playground</h2>
   <PlaygroundShell id="table-playground" previewHeight="auto">
@@ -110,24 +113,30 @@ const data = [
   const codeEl = document.getElementById('table-playground-code')!;
 
   table.columns = [
-    { key: 'name',   label: 'Name',   sortable: true },
-    { key: 'email',  label: 'Email' },
-    { key: 'role',   label: 'Role',   sortable: true },
-    { key: 'status', label: 'Status' },
+    { key: 'name', label: 'Name', sortable: true },
+    { key: 'email', label: 'Email' },
+    { key: 'role', label: 'Role', sortable: true },
+    { key: 'status', label: 'Status' }
   ];
   table.data = [
-    { name: 'Alice Martin',   email: 'alice@example.com', role: 'Engineer', status: 'Active' },
-    { name: 'Bob Chen',       email: 'bob@example.com',   role: 'Designer', status: 'Active' },
-    { name: 'Carol Williams', email: 'carol@example.com', role: 'Manager',  status: 'Away' },
-    { name: 'David Kim',      email: 'david@example.com', role: 'Engineer', status: 'Active' },
+    { name: 'Alice Martin', email: 'alice@example.com', role: 'Engineer', status: 'Active' },
+    { name: 'Bob Chen', email: 'bob@example.com', role: 'Designer', status: 'Active' },
+    { name: 'Carol Williams', email: 'carol@example.com', role: 'Manager', status: 'Away' },
+    { name: 'David Kim', email: 'david@example.com', role: 'Engineer', status: 'Active' }
   ];
 
-  const state: Record<string, any> = { density: 'normal', hoverable: true, striped: false, bordered: false, loading: false };
+  const state: Record<string, any> = {
+    density: 'normal',
+    hoverable: true,
+    striped: false,
+    bordered: false,
+    loading: false
+  };
 
   function updateCode() {
     const attrs = Object.entries(state)
       .filter(([k, v]) => v !== false && !(k === 'density' && v === 'normal'))
-      .map(([k, v]) => v === true ? k : `${k}="${v}"`)
+      .map(([k, v]) => (v === true ? k : `${k}="${v}"`))
       .join(' ');
     codeEl.textContent = `<lt-table${attrs ? ' ' + attrs : ''}></lt-table>`;
   }
@@ -146,7 +155,11 @@ const data = [
     const ctrl = document.getElementById(`ctrl-${attr}`) as HTMLInputElement;
     ctrl?.addEventListener('change', () => {
       state[attr] = ctrl.checked;
-      ctrl.checked ? table.setAttribute(attr, '') : table.removeAttribute(attr);
+      if (ctrl.checked) {
+        table.setAttribute(attr, '');
+      } else {
+        table.removeAttribute(attr);
+      }
       updateCode();
     });
   });

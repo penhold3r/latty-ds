@@ -7,7 +7,10 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <BaseLayout title="Dialog" description="Modal dialog component">
   <h1>Dialog</h1>
-  <p>A modal dialog with backdrop, keyboard trap, and focus management. Supports a <code>footer</code> slot for actions. Emits <code>lt-open</code> and <code>lt-close</code> events.</p>
+  <p>
+    A modal dialog with backdrop, keyboard trap, and focus management. Supports a <code>footer</code> slot for actions. Emits
+    <code>lt-open</code> and <code>lt-close</code> events.
+  </p>
 
   <h2>Playground</h2>
   <PlaygroundShell id="dialog-playground">
@@ -131,15 +134,15 @@ const open = ref(false)
   function updateCode() {
     const attrs = Object.entries(state)
       .filter(([, v]) => v !== false && v !== 'md')
-      .map(([k, v]) => v === true ? k : `${k}="${v}"`)
+      .map(([k, v]) => (v === true ? k : `${k}="${v}"`))
       .join('\n  ');
     codeEl.textContent = attrs
       ? `<lt-dialog\n  ${attrs}\n  title="Example dialog"\n></lt-dialog>`
       : `<lt-dialog title="Example dialog"></lt-dialog>`;
   }
 
-  document.getElementById('open-dialog')?.addEventListener('click', () => dialog.open = true);
-  document.getElementById('cancel-dialog')?.addEventListener('click', () => dialog.open = false);
+  document.getElementById('open-dialog')?.addEventListener('click', () => (dialog.open = true));
+  document.getElementById('cancel-dialog')?.addEventListener('click', () => (dialog.open = false));
 
   document.getElementById('ctrl-size')?.addEventListener('change', (e) => {
     state.size = (e.target as HTMLSelectElement).value;
@@ -147,11 +150,19 @@ const open = ref(false)
     updateCode();
   });
 
-  [['ctrl-hide-close', 'hide-close-button'], ['ctrl-backdrop', 'close-on-backdrop-click'], ['ctrl-escape', 'close-on-escape']].forEach(([ctrlId, attr]) => {
+  [
+    ['ctrl-hide-close', 'hide-close-button'],
+    ['ctrl-backdrop', 'close-on-backdrop-click'],
+    ['ctrl-escape', 'close-on-escape']
+  ].forEach(([ctrlId, attr]) => {
     document.getElementById(ctrlId)?.addEventListener('change', (e) => {
       const checked = (e.target as HTMLInputElement).checked;
       (state as any)[attr] = checked;
-      checked ? dialog.setAttribute(attr, '') : dialog.removeAttribute(attr);
+      if (checked) {
+        dialog.setAttribute(attr, '');
+      } else {
+        dialog.removeAttribute(attr);
+      }
       updateCode();
     });
   });

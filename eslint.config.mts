@@ -4,6 +4,7 @@ import tseslint from 'typescript-eslint';
 import json from '@eslint/json';
 import markdown from '@eslint/markdown';
 import css from '@eslint/css';
+import astro from 'eslint-plugin-astro';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
@@ -73,6 +74,15 @@ export default defineConfig([
     plugins: { css },
     language: 'css/css',
     extends: ['css/recommended']
+  },
+  ...astro.configs['flat/recommended'],
+  {
+    // Astro frontmatter and <script> blocks (virtual *.astro/*.ts) frequently cast
+    // to custom element types or untyped JSON — keep any as a warning, not an error.
+    files: ['**/*.astro', '**/*.astro/*.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
   },
   {
     rules: {
