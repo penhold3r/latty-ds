@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Slider" description="A range input for selecting a numeric value within a bounded range">
+  <h1>Slider</h1>
+  <p>
+    A styled range input for selecting a numeric value between a minimum and maximum.
+    Supports size variants, labels, and exposes <code>lt-input</code> / <code>lt-change</code> events
+    with the current numeric value in the event detail.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="slider-playground" previewHeight="auto">
+    <div slot="preview" style="padding: 1.5rem; min-width: 300px;">
+      <lt-slider id="playground-slider" label="Volume" value="40" min="0" max="100" step="1"></lt-slider>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">size</label>
+        <select class="control-select" id="ctrl-size">
+          <option value="sm">sm</option>
+          <option value="md" selected>md</option>
+          <option value="lg">lg</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">min</label>
+        <input class="control-input" type="number" id="ctrl-min" value="0" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">max</label>
+        <input class="control-input" type="number" id="ctrl-max" value="100" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">step</label>
+        <input class="control-input" type="number" id="ctrl-step" value="1" min="1" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">label</label>
+        <input class="control-input" type="text" id="ctrl-label" value="Volume" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">show-tooltip</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-show-tooltip" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">disabled</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-disabled" />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`
+<lt-slider label="Volume" value="40" min="0" max="100" step="1"></lt-slider>
+
+<!-- Sizes -->
+<lt-slider size="sm" label="Small" value="50"></lt-slider>
+<lt-slider size="md" label="Medium" value="50"></lt-slider>
+<lt-slider size="lg" label="Large" value="50"></lt-slider>
+
+<!-- Show value tooltip -->
+<lt-slider label="Volume" value="40" show-tooltip></lt-slider>
+
+<!-- Disabled -->
+<lt-slider label="Disabled" value="60" disabled></lt-slider>
+
+<!-- Listen for events -->
+<lt-slider id="vol" label="Volume" value="0"></lt-slider>
+<script>
+  document.getElementById('vol').addEventListener('lt-input', (e) => {
+    console.log('Value:', e.detail.value);
+  });
+</script>
+    `}
+    react={`
+import { Slider } from '@latty/react';
+
+function VolumeControl() {
+  const [volume, setVolume] = useState(40);
+
+  return (
+    <Slider
+      label="Volume"
+      value={volume}
+      min={0}
+      max={100}
+      step={1}
+      onLtInput={(e) => setVolume(e.detail.value)}
+    />
+  );
+}
+    `}
+    vue={`
+<script setup>
+import { ref } from 'vue'
+const volume = ref(40)
+</script>
+
+<template>
+  <lt-slider
+    label="Volume"
+    :value="volume"
+    :min="0"
+    :max="100"
+    :step="1"
+    @lt-input="volume = $event.detail.value"
+  ></lt-slider>
+</template>
+    `}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-slider" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const slider = document.getElementById('playground-slider') as any;
+  const codeEl = document.getElementById('slider-playground-code')!;
+
+  const state: Record<string, string | boolean | number> = {
+    size: 'md',
+    min: 0,
+    max: 100,
+    step: 1,
+    label: 'Volume',
+    showTooltip: false,
+    disabled: false,
+  };
+
+  function applyState() {
+    slider.size = state.size;
+    slider.min = state.min;
+    slider.max = state.max;
+    slider.step = state.step;
+    slider.label = state.label;
+    slider.showTooltip = state.showTooltip;
+    slider.disabled = state.disabled;
+  }
+
+  function updateCode() {
+    const attrs: string[] = [];
+    if (state.label) attrs.push(`label="${state.label}"`);
+    if (state.size !== 'md') attrs.push(`size="${state.size}"`);
+    if (state.min !== 0) attrs.push(`min="${state.min}"`);
+    if (state.max !== 100) attrs.push(`max="${state.max}"`);
+    if (state.step !== 1) attrs.push(`step="${state.step}"`);
+    if (state.showTooltip) attrs.push('show-tooltip');
+    if (state.disabled) attrs.push('disabled');
+    const attrsStr = attrs.length ? '\n  ' + attrs.join('\n  ') + '\n' : '';
+    codeEl.textContent = `<lt-slider${attrsStr}></lt-slider>`;
+  }
+
+  document.getElementById('ctrl-size')?.addEventListener('change', (e) => {
+    state.size = (e.target as HTMLSelectElement).value;
+    applyState();
+    updateCode();
+  });
+
+  document.getElementById('ctrl-min')?.addEventListener('input', (e) => {
+    state.min = Number((e.target as HTMLInputElement).value);
+    applyState();
+    updateCode();
+  });
+
+  document.getElementById('ctrl-max')?.addEventListener('input', (e) => {
+    state.max = Number((e.target as HTMLInputElement).value);
+    applyState();
+    updateCode();
+  });
+
+  document.getElementById('ctrl-step')?.addEventListener('input', (e) => {
+    state.step = Number((e.target as HTMLInputElement).value);
+    applyState();
+    updateCode();
+  });
+
+  document.getElementById('ctrl-label')?.addEventListener('input', (e) => {
+    state.label = (e.target as HTMLInputElement).value;
+    applyState();
+    updateCode();
+  });
+
+  document.getElementById('ctrl-show-tooltip')?.addEventListener('change', (e) => {
+    state.showTooltip = (e.target as HTMLInputElement).checked;
+    applyState();
+    updateCode();
+  });
+
+  document.getElementById('ctrl-disabled')?.addEventListener('change', (e) => {
+    state.disabled = (e.target as HTMLInputElement).checked;
+    applyState();
+    updateCode();
+  });
+
+  updateCode();
+</script>

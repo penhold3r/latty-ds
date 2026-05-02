@@ -9,6 +9,7 @@
  * - Button: Interactive button with multiple variants and loading states
  * - Checkbox: Checkbox input with support for indeterminate state
  * - Dialog: Modal dialog with backdrop and accessibility features
+ * - Dropdown: TODO: describe the Dropdown component
  * - List: Ordered and unordered lists with customizable marker colors
  * - ListItem: List item component that enables proper nesting of lists
  * - Radio: Radio button for single selection within a group
@@ -17,6 +18,7 @@
  * - Spinner: Loading indicator with customizable size and color
  * - Textfield: Text input with validation states and password toggle
  * - Select: Dropdown select with customizable options and variants
+ * - Slider: TODO: describe the Slider component
  * - Snackbar: TODO: describe the Snackbar component
  * - Surface: Container component with elevation and surface styling
  * - Tab: Individual tab element for use within tab groups
@@ -73,3 +75,5 @@ export * from './components/badge';
 export * from './components/tooltip';
 export * from './components/snackbar';
 export * from './components/alert';
+export * from './components/slider';
+export * from './components/dropdown';
