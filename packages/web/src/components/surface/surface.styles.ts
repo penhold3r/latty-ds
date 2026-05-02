@@ -29,8 +29,8 @@ export const surfaceStyles = css`
   }
 
   :host([variant='outlined']) .surface {
-    background: transparent;
-    border: 1px solid var(--lt-color-neutral-300);
+    background: var(--_surface-bg, transparent);
+    border: 1px solid var(--lt-border-default);
   }
 
   :host([variant='outlined']:hover) .surface {
