@@ -10,6 +10,7 @@
 import { readFileSync, readdirSync } from 'fs';
 import { resolve, join, relative, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { logger } from '@latty/utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -53,8 +54,8 @@ for (const pkgEntry of readdirSync(PACKAGES_DIR, { withFileTypes: true })) {
       if (!imp.startsWith('.')) continue;
       const resolved = resolve(dirname(file), imp);
       if (relative(pkgRoot, resolved).startsWith('..')) {
-        console.error(`VIOLATION: ${relative(ROOT, file)}`);
-        console.error(`  imports '${imp}' which resolves outside package root\n`);
+        logger.error(`VIOLATION: ${relative(ROOT, file)}`);
+        logger.error(`  imports '${imp}' which resolves outside package root`);
         violations++;
       }
     }
@@ -62,8 +63,8 @@ for (const pkgEntry of readdirSync(PACKAGES_DIR, { withFileTypes: true })) {
 }
 
 if (violations > 0) {
-  console.error(`${violations} cross-package boundary violation(s) found.`);
+  logger.error(`${violations} cross-package boundary violation(s) found.`);
   process.exit(1);
 }
 
-console.log('✓ No cross-package boundary violations found.');
+logger.success('No cross-package boundary violations found.');

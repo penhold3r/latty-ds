@@ -16,6 +16,7 @@ import { gzipSync } from 'zlib';
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { logger } from '@latty/utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -42,8 +43,8 @@ const entries = readdirSync(COMPONENTS_DIR, { withFileTypes: true })
 const results = {};
 let regressions = 0;
 
-console.log('\n  Component               raw (B)   gzip (B)   Δ gzip\n' +
-            '  ─────────────────────────────────────────────────────');
+process.stdout.write('\n  Component               raw (B)   gzip (B)   Δ gzip\n' +
+                     '  ─────────────────────────────────────────────────────\n');
 
 for (const { name, entry } of entries) {
   const built = await esbuild.build({
@@ -87,7 +88,7 @@ for (const { name, entry } of entries) {
   const col1 = name.padEnd(24);
   const col2 = String(raw).padStart(8);
   const col3 = String(gzip).padStart(9);
-  console.log(`  ${col1}${col2}  ${col3}   ${delta}${flag}`);
+  process.stdout.write(`  ${col1}${col2}  ${col3}   ${delta}${flag}\n`);
 }
 
 // ── Summary ────────────────────────────────────────────────────────────────────
@@ -95,14 +96,14 @@ const totalGzip = Object.values(results).reduce((s, r) => s + r.gzip, 0);
 const prevTotalGzip = Object.values(prev.components ?? {}).reduce((s, r) => s + (r.gzip ?? 0), 0);
 const totalDiff = prevTotalGzip > 0 ? totalGzip - prevTotalGzip : null;
 
-console.log('  ─────────────────────────────────────────────────────');
 const totalLine = totalDiff != null
   ? `${totalGzip} B  (${totalDiff >= 0 ? '+' : ''}${totalDiff} B vs last run)`
   : `${totalGzip} B`;
-console.log(`  Total gzip: ${totalLine}\n`);
+process.stdout.write('  ─────────────────────────────────────────────────────\n');
+process.stdout.write(`  Total gzip: ${totalLine}\n\n`);
 
 if (regressions > 0) {
-  console.warn(`  ⚠️  ${regressions} component(s) grew ≥ ${THRESHOLD_PCT}%.`);
+  logger.warn(`${regressions} component(s) grew ≥ ${THRESHOLD_PCT}%.`);
 }
 
 // ── Write report ────────────────────────────────────────────────────────────────
@@ -113,7 +114,7 @@ if (UPDATE) {
     components: results,
   };
   writeFileSync(REPORT_PATH, JSON.stringify(report, null, 2) + '\n', 'utf8');
-  console.log(`  ✓ bundle-report.json updated.\n`);
+  logger.success('bundle-report.json updated.');
 }
 
 if (FAIL_ON_REGRESSION && regressions > 0) process.exit(1);

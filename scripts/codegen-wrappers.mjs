@@ -14,6 +14,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { resolve, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { logger } from '@latty/utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -139,5 +140,5 @@ const indexLines = components
 
 writeFileSync(REACT_INDEX, indexLines + '\n', 'utf8');
 
-console.log(`\n✅  ${components.length} React wrappers written → packages/react/src/components/`);
-console.log('   Run: pnpm --filter @latty/react build');
+logger.success(`${components.length} React wrappers written → packages/react/src/components/`);
+logger.info('Run: pnpm --filter @latty/react build');
