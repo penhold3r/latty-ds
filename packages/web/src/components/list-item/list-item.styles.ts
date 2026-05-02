@@ -9,10 +9,6 @@ import { css } from 'lit';
 export const listItemStyles = css`
   :host {
     display: list-item;
-  }
-
-  li {
-    /* Reset list-item margin/padding to let parent control spacing */
     margin: 0;
     padding: 0;
   }

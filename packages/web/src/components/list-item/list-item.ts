@@ -42,6 +42,6 @@ export class ListItem extends LitElement {
   static styles = listItemStyles;
 
   render() {
-    return html`<li><slot></slot></li>`;
+    return html`<slot></slot>`;
   }
 }
