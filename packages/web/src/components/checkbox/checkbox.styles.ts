@@ -11,6 +11,11 @@ export const checkboxStyles = css`
     cursor: pointer;
     display: inline-flex;
     gap: var(--lt-spacing-2);
+  }
+
+  .box {
+    display: inline-flex;
+    flex-shrink: 0;
     position: relative;
   }
 
@@ -28,7 +33,6 @@ export const checkboxStyles = css`
     border-radius: calc(var(--lt-border-radius) * 0.5);
     border: 2px solid var(--lt-border-strong);
     cursor: pointer;
-    flex-shrink: 0;
     margin: 0;
     position: relative;
     transition:
@@ -50,15 +54,18 @@ export const checkboxStyles = css`
   }
 
   .checkmark {
+    align-items: center;
     color: white;
     display: none;
+    inset: 0;
+    justify-content: center;
     pointer-events: none;
     position: absolute;
   }
 
   input[type='checkbox']:checked ~ .checkmark,
   input[type='checkbox']:indeterminate ~ .checkmark {
-    display: block;
+    display: flex;
   }
 
   .label {
@@ -72,13 +79,6 @@ export const checkboxStyles = css`
     width: 16px;
   }
 
-  :host([size='sm']) .checkmark {
-    height: 16px;
-    width: 16px;
-    left: 0;
-    top: 0;
-  }
-
   :host([size='sm']) .label {
     font-size: 0.875rem;
   }
@@ -88,13 +88,6 @@ export const checkboxStyles = css`
     width: 20px;
   }
 
-  :host([size='md']) .checkmark {
-    height: 20px;
-    width: 20px;
-    left: 0;
-    top: 0;
-  }
-
   :host([size='md']) .label {
     font-size: 1rem;
   }
@@ -102,13 +95,6 @@ export const checkboxStyles = css`
   :host([size='lg']) input[type='checkbox'] {
     height: 24px;
     width: 24px;
-  }
-
-  :host([size='lg']) .checkmark {
-    height: 24px;
-    width: 24px;
-    left: 0;
-    top: 0;
   }
 
   :host([size='lg']) .label {

@@ -157,18 +157,20 @@ export class Checkbox extends LitElement {
   render() {
     return html`
       <label class="checkbox-wrapper">
-        <input
-          type="checkbox"
-          .checked=${this.checked}
-          ?disabled=${this.disabled}
-          ?required=${this.required}
-          name=${this.name}
-          value=${this.value}
-          @change=${this.handleChange}
-          aria-label=${this.label || 'checkbox'}
-          aria-checked=${this.indeterminate ? 'mixed' : this.checked ? 'true' : 'false'}
-        />
-        ${this.renderCheckmark()}
+        <span class="box">
+          <input
+            type="checkbox"
+            .checked=${this.checked}
+            ?disabled=${this.disabled}
+            ?required=${this.required}
+            name=${this.name}
+            value=${this.value}
+            @change=${this.handleChange}
+            aria-label=${this.label || 'checkbox'}
+            aria-checked=${this.indeterminate ? 'mixed' : this.checked ? 'true' : 'false'}
+          />
+          ${this.renderCheckmark()}
+        </span>
         ${this.label ? html`<span class="label">${this.label}</span>` : ''}
       </label>
     `;
