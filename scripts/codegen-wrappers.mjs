@@ -21,7 +21,7 @@ const CEM_PATH = join(ROOT, 'packages/web/custom-elements.json');
 const REACT_COMPONENTS_DIR = join(ROOT, 'packages/react/src/components');
 const REACT_INDEX = join(ROOT, 'packages/react/src/index.ts');
 
-const SKIP_FIELDS = new Set(['styles', 'render', 'updated', 'renderChevron']);
+const SKIP_FIELDS = new Set(['styles', 'render', 'updated', 'renderChevron', 'shadowRootOptions']);
 const SIMPLE_TYPES = new Set(['string', 'boolean', 'number']);
 const ICON_FIELDS = new Set(['icon', 'iconEnd', 'iconStart']);
 
