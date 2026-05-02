@@ -9,6 +9,7 @@ export type ButtonProps = {
   loading?: boolean;
   icon?: LattyIconName;
   iconEnd?: LattyIconName;
+  fullWidth?: boolean;
   children?: ReactNode;
 };
 

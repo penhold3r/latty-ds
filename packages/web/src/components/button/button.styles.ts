@@ -6,6 +6,15 @@ export const buttonStyles = css`
     font-family: 'Asap', sans-serif;
   }
 
+  :host([full-width]) {
+    display: block;
+    width: 100%;
+  }
+
+  :host([full-width]) button {
+    width: 100%;
+  }
+
   button {
     align-items: center;
     border-radius: var(--lt-border-radius);

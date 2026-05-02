@@ -92,6 +92,12 @@ export class Button extends LitElement {
   @property({ attribute: 'icon-end' }) iconEnd = '';
 
   /**
+   * Whether the button stretches to fill its container's width.
+   * @default false
+   */
+  @property({ type: Boolean, attribute: 'full-width', reflect: true }) fullWidth = false;
+
+  /**
    * Renders the button with optional icons and loading spinner.
    */
   render() {
