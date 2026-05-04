@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const textfieldStyles = css`
   :host {
     display: inline-block;
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
     width: 100%;
   }
 
@@ -226,5 +226,11 @@ export const textfieldStyles = css`
 
   .required-indicator {
     color: var(--lt-color-error-500);
+  }
+
+  :host([uppercase]) label {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.05rem;
+    text-transform: lowercase;
   }
 `;

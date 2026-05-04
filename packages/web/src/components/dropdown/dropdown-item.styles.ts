@@ -13,7 +13,7 @@ export const dropdownItemStyles = css`
     color: var(--lt-text-default);
     cursor: pointer;
     display: flex;
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
     font-size: 0.875rem;
     gap: var(--lt-spacing-2);
     padding: var(--lt-spacing-2) var(--lt-spacing-4);

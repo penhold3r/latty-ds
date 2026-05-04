@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const selectStyles = css`
   :host {
     display: inline-block;
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
     position: relative;
     width: 100%;
   }

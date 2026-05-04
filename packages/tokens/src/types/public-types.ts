@@ -26,7 +26,7 @@ import type { ElevationTokens } from '../elevation/';
  *     square: false
  *   },
  *   typography: {
- *     fontFamily: "Asap, sans-serif"
+ *     fontFamily: "Nobile, sans-serif"
  *   },
  *   elevation: {
  *     "0": "none",

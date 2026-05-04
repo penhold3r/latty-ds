@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const accordionStyles = css`
   :host {
     display: block;
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
     width: 100%;
   }
 
@@ -115,5 +115,11 @@ export const accordionStyles = css`
   :host([disabled]) details {
     opacity: 0.6;
     pointer-events: none;
+  }
+
+  :host([uppercase]) .summary-text {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.05rem;
+    text-transform: lowercase;
   }
 `;

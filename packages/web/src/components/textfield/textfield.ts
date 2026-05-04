@@ -122,6 +122,12 @@ export class Textfield extends LitElement {
   @property({ type: Number }) rows = 3;
 
   /**
+   * Renders the label in small caps with wider letter spacing.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) uppercase = false;
+
+  /**
    * Internal state tracking password visibility for password-type inputs.
    * @private
    */

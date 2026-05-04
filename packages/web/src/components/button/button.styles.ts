@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const buttonStyles = css`
   :host {
     display: inline-block;
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
   }
 
   :host([full-width]) {
@@ -281,5 +281,11 @@ export const buttonStyles = css`
     align-items: center;
     display: inline-flex;
     justify-content: center;
+  }
+
+  :host([uppercase]) button {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.05rem;
+    text-transform: lowercase;
   }
 `;

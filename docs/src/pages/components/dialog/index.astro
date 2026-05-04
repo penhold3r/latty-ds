@@ -39,6 +39,10 @@ import ApiTable from '../../../components/ApiTable.astro';
         <label class="control-label">close-on-escape</label>
         <input class="control-toggle" type="checkbox" id="ctrl-escape" checked />
       </div>
+      <div class="control-row">
+        <label class="control-label">uppercase</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-uppercase" />
+      </div>
     </div>
   </PlaygroundShell>
 
@@ -129,7 +133,13 @@ const open = ref(false)
   const dialog = document.getElementById('playground-dialog') as any;
   const codeEl = document.getElementById('dialog-playground-code')!;
 
-  const state = { size: 'md', 'hide-close-button': false, 'close-on-backdrop-click': true, 'close-on-escape': true };
+  const state = {
+    size: 'md',
+    'hide-close-button': false,
+    'close-on-backdrop-click': true,
+    'close-on-escape': true,
+    uppercase: false
+  };
 
   function updateCode() {
     const attrs = Object.entries(state)
@@ -153,7 +163,8 @@ const open = ref(false)
   [
     ['ctrl-hide-close', 'hide-close-button'],
     ['ctrl-backdrop', 'close-on-backdrop-click'],
-    ['ctrl-escape', 'close-on-escape']
+    ['ctrl-escape', 'close-on-escape'],
+    ['ctrl-uppercase', 'uppercase']
   ].forEach(([ctrlId, attr]) => {
     document.getElementById(ctrlId)?.addEventListener('change', (e) => {
       const checked = (e.target as HTMLInputElement).checked;

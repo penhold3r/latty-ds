@@ -25,7 +25,7 @@ export const avatarStyles = css`
   }
 
   .initials {
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
     font-weight: 500;
     letter-spacing: 0.02em;
     line-height: 1;

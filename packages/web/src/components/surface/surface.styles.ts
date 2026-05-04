@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const surfaceStyles = css`
   :host {
     display: block;
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
   }
 
   .surface {

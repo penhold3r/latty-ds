@@ -98,6 +98,12 @@ export class Button extends LitElement {
   @property({ type: Boolean, attribute: 'full-width', reflect: true }) fullWidth = false;
 
   /**
+   * Renders the button label in small caps with wider letter spacing.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) uppercase = false;
+
+  /**
    * Renders the button with optional icons and loading spinner.
    */
   render() {

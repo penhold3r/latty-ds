@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const alertStyles = css`
   :host {
     display: block;
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
     opacity: 1;
     transform: translateY(0);
     transition: opacity 200ms ease, transform 200ms ease;
@@ -138,5 +138,11 @@ export const alertStyles = css`
 
   .close:hover {
     opacity: 1;
+  }
+
+  :host([uppercase]) .title {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.05rem;
+    text-transform: lowercase;
   }
 `;

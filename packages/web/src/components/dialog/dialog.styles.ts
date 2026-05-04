@@ -2,7 +2,7 @@ import { css } from 'lit';
 
 export const dialogStyles = css`
   :host {
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
   }
 
   /* Backdrop */
@@ -139,5 +139,11 @@ export const dialogStyles = css`
     gap: var(--lt-spacing-3);
     justify-content: flex-end;
     padding: var(--lt-spacing-5);
+  }
+
+  :host([uppercase]) .title {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.05rem;
+    text-transform: lowercase;
   }
 `;

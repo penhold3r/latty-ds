@@ -11,7 +11,7 @@ export const tooltipStyles = css`
     background: var(--_tooltip-bg, var(--lt-color-neutral-900));
     border-radius: 4px;
     color: var(--_tooltip-color, #fff);
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
     font-size: 0.75rem;
     line-height: 1.4;
     opacity: 0;

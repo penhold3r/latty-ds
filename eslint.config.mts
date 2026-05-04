@@ -73,7 +73,11 @@ export default defineConfig([
     files: ['**/*.css'],
     plugins: { css },
     language: 'css/css',
-    extends: ['css/recommended']
+    extends: ['css/recommended'],
+    rules: {
+      // --lt-* custom properties are defined at runtime by @latty/tokens
+      'css/no-invalid-properties': 'off',
+    },
   },
   ...astro.configs['flat/recommended'],
   {

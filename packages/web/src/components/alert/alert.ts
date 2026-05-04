@@ -48,6 +48,9 @@ export class Alert extends LitElement {
   /** Show a dismiss button. Clicking it fires lt-close and removes the element. */
   @property({ type: Boolean, reflect: true }) closable = false;
 
+  /** Renders the title in small caps with wider letter spacing. */
+  @property({ type: Boolean, reflect: true }) uppercase = false;
+
   private static readonly _iconMap: Record<AlertVariant, string> = {
     default: 'info-circle',
     success: 'check-circle',

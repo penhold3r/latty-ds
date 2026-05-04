@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const badgeStyles = css`
   :host {
     display: inline-flex;
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
     vertical-align: middle;
   }
 

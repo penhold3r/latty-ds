@@ -88,6 +88,12 @@ export class Dialog extends LitElement {
    */
   @property({ type: Boolean, attribute: 'close-on-escape' }) closeOnEscape = true;
 
+  /**
+   * Renders the dialog title in small caps with wider letter spacing.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) uppercase = false;
+
   @query('lt-surface') private dialogElement?: HTMLElement;
   private previouslyFocusedElement?: HTMLElement;
 

@@ -69,6 +69,12 @@ export class Accordion extends LitElement {
    */
   @property({ type: Boolean, reflect: true }) disabled = false;
 
+  /**
+   * Renders the header label in small caps with wider letter spacing.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) uppercase = false;
+
   @query('details') private _details!: HTMLDetailsElement;
   @query('.content') private _content!: HTMLElement;
   @query('.content-inner') private _contentInner!: HTMLElement;

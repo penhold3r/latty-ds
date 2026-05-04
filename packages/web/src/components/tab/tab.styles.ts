@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const tabStyles = css`
   :host {
     display: inline-block;
-    font-family: 'Asap', sans-serif;
+    font-family: 'Nobile', sans-serif;
   }
 
   .tab {
