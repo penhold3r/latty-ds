@@ -5,6 +5,8 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { listStyles } from './list.styles';
 import { ListType, ListSize } from './list.types';
 
+import './list-item';
+
 /**
  * A customizable list component supporting both ordered and unordered lists.
  *

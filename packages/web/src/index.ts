@@ -12,7 +12,6 @@
  * - Dropdown: TODO: describe the Dropdown component
  * - Header: TODO: describe the Header component
  * - List: Ordered and unordered lists with customizable marker colors
- * - ListItem: List item component that enables proper nesting of lists
  * - Radio: Radio button for single selection within a group
  * - RadioGroup: Container for managing radio button groups
  * - Switch: Toggle switch with sliding animation
@@ -60,7 +59,6 @@ export * from './components/chip';
 export * from './components/checkbox';
 export * from './components/dialog';
 export * from './components/list';
-export * from './components/list-item';
 export * from './components/radio';
 export * from './components/radio-group';
 export * from './components/select';
