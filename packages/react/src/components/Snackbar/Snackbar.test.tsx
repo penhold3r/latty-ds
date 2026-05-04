@@ -19,7 +19,7 @@ describe('Snackbar', () => {
   });
 
   it('forwards ref to lt-snackbar element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Snackbar ref={ref}>Message</Snackbar>);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-snackbar');
   });

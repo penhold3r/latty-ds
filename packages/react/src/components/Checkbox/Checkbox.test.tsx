@@ -24,7 +24,7 @@ describe('Checkbox', () => {
   });
 
   it('forwards ref to lt-checkbox element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Checkbox ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-checkbox');
   });

@@ -24,7 +24,7 @@ describe('Select', () => {
   });
 
   it('forwards ref to lt-select element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Select ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-select');
   });

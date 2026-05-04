@@ -24,7 +24,7 @@ describe('Tab', () => {
   });
 
   it('forwards ref to lt-tab element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Tab ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-tab');
   });

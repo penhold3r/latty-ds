@@ -24,7 +24,7 @@ describe('Badge', () => {
   });
 
   it('forwards ref to lt-badge element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Badge ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-badge');
   });

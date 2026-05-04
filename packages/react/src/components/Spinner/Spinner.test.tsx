@@ -19,7 +19,7 @@ describe('Spinner', () => {
   });
 
   it('forwards ref to lt-spinner element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Spinner ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-spinner');
   });

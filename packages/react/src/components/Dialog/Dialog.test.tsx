@@ -24,7 +24,7 @@ describe('Dialog', () => {
   });
 
   it('forwards ref to lt-dialog element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Dialog ref={ref}>Content</Dialog>);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-dialog');
   });

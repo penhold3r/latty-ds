@@ -24,7 +24,7 @@ describe('Tooltip', () => {
   });
 
   it('forwards ref to lt-tooltip element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Tooltip ref={ref}><span>Hover</span></Tooltip>);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-tooltip');
   });

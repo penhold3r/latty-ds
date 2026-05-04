@@ -24,7 +24,7 @@ describe('Avatar', () => {
   });
 
   it('forwards ref to lt-avatar element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Avatar ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-avatar');
   });

@@ -24,7 +24,7 @@ describe('Table', () => {
   });
 
   it('forwards ref to lt-table element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Table ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-table');
   });

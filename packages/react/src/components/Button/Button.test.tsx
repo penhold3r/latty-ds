@@ -29,7 +29,7 @@ describe('Button', () => {
   });
 
   it('forwards ref to lt-button element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Button ref={ref}>Click</Button>);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-button');
   });

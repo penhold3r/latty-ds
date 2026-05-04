@@ -1,2 +1,4 @@
 pnpm check:boundaries
 pnpm typecheck
+pnpm lint
+pnpm test

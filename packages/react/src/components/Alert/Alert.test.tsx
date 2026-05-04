@@ -24,7 +24,7 @@ describe('Alert', () => {
   });
 
   it('forwards ref to lt-alert element', () => {
-    const ref = createRef<any>();
+    const ref = createRef<HTMLElement>();
     render(<Alert ref={ref}>Message</Alert>);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-alert');
   });
