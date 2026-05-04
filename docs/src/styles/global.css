@@ -124,3 +124,33 @@ a:hover {
 .prose li {
   margin-bottom: var(--lt-spacing-2);
 }
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--lt-spacing-6);
+  font-size: 0.95rem;
+}
+
+.prose th {
+  text-align: left;
+  padding: var(--lt-spacing-2) var(--lt-spacing-4);
+  background: var(--lt-color-neutral-100);
+  border-bottom: 2px solid var(--lt-color-neutral-200);
+  font-weight: 600;
+  color: var(--lt-color-neutral-900);
+}
+
+.prose td {
+  padding: var(--lt-spacing-2) var(--lt-spacing-4);
+  border-bottom: 1px solid var(--lt-color-neutral-200);
+  vertical-align: top;
+}
+
+.prose tr:last-child td {
+  border-bottom: none;
+}
+
+.prose tbody tr:hover {
+  background: var(--lt-color-neutral-50);
+}

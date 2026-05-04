@@ -78,6 +78,12 @@ Creates all boilerplate in one shot: web component files, Vitest test, docs page
 
 Adds a new color to the design system: registers it in `COLOR_NAMES`, updates `tokens.config.json`, and rebuilds `@latty/tokens`. Example: `/new-token color purple #a855f7`.
 
+```bash
+/new-icon <category> <icon-name>
+```
+
+Creates an icon stub in `packages/icons/src/icons/<category>/`, registers it in the category index, and adds it to the docs gallery. If the category doesn't exist it is created and wired into the top-level `src/icons/index.ts`. Fill in the SVG markup after scaffolding. SVG conventions: `viewBox="0 0 24 24" fill="none"` on the root `<svg>`; `stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"` on each shape.
+
 ### Commit conventions
 
 Commits must follow [Conventional Commits](https://www.conventionalcommits.org/). The `commit-msg` hook enforces this via commitlint.
@@ -89,6 +95,10 @@ Valid scopes: `tokens`, `web`, `icons`, `react`, `angular`, `utils`, `docs`, `sc
 
 Example: `feat(web): add tooltip component`
 
+Subject max length is 100 characters (longer than conventional default). Body lines may be up to 120 characters.
+
+The `pre-push` hook also runs `pnpm check:boundaries && pnpm typecheck` before every push — fix any violations before pushing rather than skipping the hook.
+
 ## Architecture
 
 ### Monorepo Structure
@@ -99,8 +109,8 @@ This is a pnpm workspace monorepo with the following packages:
 - **@latty/web** - Web Components built with Lit (uses `lt-` prefix for custom elements)
 - **@latty/icons** - Icon components using Iconoir library with pluggable provider system
 - **@latty/docs** - Astro-based documentation site with MDX support and live component demos
-- **@latty/react** - React wrappers for web components
-- **@latty/angular** - Angular wrappers for web components
+- **@latty/react** - React wrappers for web components (auto-generated from `custom-elements.json`)
+- **@latty/angular** - Angular wrappers stub — not yet implemented; consumers should use the web components directly via `CUSTOM_ELEMENTS_SCHEMA`
 - **@latty/utils** - Shared utilities
 
 ### Design Tokens Build Process
@@ -140,6 +150,10 @@ components/
 All custom elements use the `lt-` prefix (e.g., `lt-button`, `lt-spinner`). Components consume design tokens via CSS custom properties with the `--lt-` prefix.
 
 **Adding a new component**: always use the `/new-component <Name>` slash command — it creates the 5 web package files, registers the export in `packages/web/src/index.ts`, creates the docs page, and adds the sidebar entry alphabetically. Never create these manually. After scaffolding, run `pnpm codegen:wrappers` to regenerate the React wrappers.
+
+**Custom Elements Manifest**: `pnpm build` in `@latty/web` runs `cem analyze` (via `cem.config.mjs`) to generate `custom-elements.json` at the package root. This manifest is what `pnpm codegen:wrappers` reads to produce React wrappers — always rebuild the web package before running codegen after changing component APIs.
+
+**Font assets**: `pnpm build` in `@latty/web` also copies Nobile font files to `dist/fonts/` and `src/css/` to `dist/css/`. The package exports `dist/css/font-face.css` and `dist/css/latty.css` for consumers who want to load fonts and base styles without a bundler.
 
 **Reuse existing components**: before writing custom CSS for a new component, check whether an existing component can provide the same structure. For example, `lt-surface` provides background, elevation (shadow), and border-radius — new components that need a styled container should use it rather than hand-rolling those styles. Import the dependency with a side-effect import (e.g. `import '../surface/surface'`) and use `::part(surface)` to style layout internals from the consumer's shadow DOM.
 
@@ -223,9 +237,22 @@ Per `ARCHITECTURE.md`:
 ## Testing
 
 Tests use Vitest with jsdom environment. Test files are located at `packages/**/src/**/*.test.ts`. The configuration includes:
-- Global test utilities enabled
-- Setup file at `./vitest.setup.ts`
+
+- Global test utilities enabled (`describe`, `it`, `expect`, `vi` available without imports)
+- Setup file at `./vitest.setup.ts` — imports `@testing-library/jest-dom` for DOM matchers
 - Path aliases via `vite-tsconfig-paths`
+
+**Lit component testing**: Lit renders asynchronously. After setting properties or calling `requestUpdate()`, always `await el.updateComplete` before asserting on the DOM or shadow root.
+
+## Tooling
+
+**ESLint**: Uses v9 flat config (`eslint.config.mts`) with Astro, JSON, CSS, and Markdown support. CSS rules allow unknown `--lt-*` custom properties (`allowUnknownVariables: true`) since they are resolved at runtime by `@latty/tokens`. `no-console` is an error — use the `logger` utility from `@latty/utils` in scripts instead.
+
+**Prettier**: `printWidth: 120`, `singleQuote: true`, `trailingComma: "none"`. Includes `prettier-plugin-astro` for `.astro` file formatting.
+
+## CI/CD
+
+The docs site deploys automatically to GitHub Pages on every push to `main` via `.github/workflows/deploy-docs.yml`. The workflow installs with `--frozen-lockfile` and runs `pnpm docs:build`. No manual deploy step is needed.
 
 ## Node Version
 

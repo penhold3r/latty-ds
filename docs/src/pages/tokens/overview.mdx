@@ -6,13 +6,14 @@ description: Design tokens in the Latty Design System
 
 # Design Tokens
 
-Design tokens are the single source of truth for every visual decision in Latty. They are generated at build time from `tokens.config.json` and shipped as three artifacts:
+Design tokens are the single source of truth for every visual decision in Latty. They are shipped as four artifacts:
 
-| Output | Path | Use case |
+| Output | Import path | Use case |
 |---|---|---|
-| CSS custom properties | `@latty/tokens/dist/tokens.css` | Any browser context |
-| JSON | `@latty/tokens/dist/tokens.json` | Tooling, documentation |
-| JavaScript module | `@latty/tokens/dist/tokens.js` | JS/TS consumers |
+| Primitive CSS custom properties | `@latty/tokens/tokens.css` | Any browser context |
+| Semantic CSS custom properties | `@latty/tokens/semantic.css` | Role-based token overrides |
+| JSON | `@latty/tokens/tokens.json` | Tooling, documentation |
+| JavaScript module | `@latty/tokens` | JS/TS consumers |
 
 ## Token categories
 
@@ -22,39 +23,37 @@ Design tokens are the single source of truth for every visual decision in Latty.
 | Spacing | `--lt-spacing-*` | `--lt-spacing-4` |
 | Border radius | `--lt-border-radius` | `0.5rem` |
 | Elevation | `--lt-elevation-*` | `--lt-elevation-2` |
-| Typography | `--lt-font-family` | `"Nobile", sans-serif` |
+| Typography | `--lt-typography-fontFamily` | `"Nobile", sans-serif` |
 
 ## Import
 
 ```css
-@import '@latty/tokens/dist/tokens.css';
+@import '@latty/tokens/tokens.css';
+@import '@latty/tokens/semantic.css'; /* optional semantic layer */
 ```
 
 ```js
-import '@latty/tokens/dist/tokens.css';       // CSS vars in browser
-import tokens from '@latty/tokens/dist/tokens.js'; // JS object
+import '@latty/tokens/tokens.css';        // CSS vars in browser
+import { tokens } from '@latty/tokens';   // JS object
 ```
 
 ## Customization
 
-Override any token on `:root` after the import to theme the system:
+Override any token on `:root` after the import:
 
 ```css
-@import '@latty/tokens/dist/tokens.css';
+@import '@latty/tokens/tokens.css';
 
 :root {
   --lt-border-radius: 2px;
-  --lt-font-family: 'Inter', sans-serif;
+  --lt-typography-fontFamily: 'Inter', sans-serif;
 }
 ```
 
-For brand-level color changes, edit `tokens.config.json` and rebuild:
-
-```bash
-pnpm --filter @latty/tokens build
-```
+For runtime theming use the `configure()` API — see the [Theming](/getting-started/theming) guide.
 
 ## Explore
 
 - [Colors](/tokens/colors) — full palette browser for all semantic colors
 - [Spacing](/tokens/spacing) — visual spacing scale
+- [Semantic tokens](/tokens/semantic) — role-based token reference

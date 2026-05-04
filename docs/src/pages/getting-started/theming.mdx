@@ -8,53 +8,57 @@ description: Customize Latty's look and feel with design tokens
 
 ## How the color system works
 
-Colors are defined as a single base hex value per semantic in `tokens.config.json`. The build script takes each base and generates a full 10-step palette (50–900) using the OKLCH color space for perceptually uniform tints and shades:
-
-```json
-{
-  "color": {
-    "primary": "#05b8e1",
-    "secondary": "#e26d05",
-    "success": "#22c55e",
-    "warning": "#eeb308",
-    "error": "#ef4444",
-    "info": "#0ea5e9"
-  }
-}
-```
-
-The output is a full palette of CSS custom properties:
+Each semantic color (primary, secondary, success, etc.) is a single base hue that Latty expands into a full 10-step palette (50–900) using the OKLCH color space for perceptually uniform tints and shades:
 
 ```css
---lt-color-primary-50:  #e1eaed;
---lt-color-primary-100: #b8e3f2;
---lt-color-primary-200: #83cde7;
+--lt-color-primary-50:  #f2e5df;
+--lt-color-primary-100: #ffd0b6;
+--lt-color-primary-200: #ffb186;
 /* ... */
---lt-color-primary-500: #0097be;
+--lt-color-primary-500: #fe6d03;
 /* ... */
---lt-color-primary-900: #002f3e;
+--lt-color-primary-900: #3e1c0a;
 ```
 
 Components reference specific shades — `500` for interactive elements, `100` for backgrounds, `700` for hover states, etc.
 
 ## Changing the brand color
 
-Edit `tokens.config.json` and rebuild the tokens package:
+Use `configure()` from `@latty/tokens/configure` to apply a custom theme. Call it once at your app's entry point, before any components render:
 
-```bash
-pnpm --filter @latty/tokens build
+```ts
+import { configure } from '@latty/tokens/configure';
+
+configure({
+  colors: { primary: '#6366f1', secondary: '#f59e0b' },
+  font:   { family: 'Inter, sans-serif' },
+  border: { radius: '0.375rem' },
+});
 ```
 
-The build regenerates the entire palette from the new base value. This is the right approach for brand-level changes because all 10 shades stay perceptually balanced relative to each other.
+`configure()` generates the full token palette from your base colors — all 10 shades stay perceptually balanced — and injects them as a `<style id="lt-tokens">` element into `<head>`. Calling it again replaces the previous values.
 
-## Runtime overrides
+All options are optional — omit any key to keep the default.
 
-You can override individual CSS vars at runtime without a rebuild. This is useful for one-off adjustments or experimenting, but keep in mind that only the shades you explicitly set will change — the rest of the auto-generated palette remains:
+### SSR
+
+For server-side rendering use `createStyleSheet()`, which returns the CSS string instead of touching the DOM:
+
+```ts
+import { createStyleSheet } from '@latty/tokens/configure';
+
+const css = createStyleSheet({ colors: { primary: '#6366f1' } });
+// inject `css` into a <style> tag in your server-rendered HTML
+```
+
+## Fine-tuning with CSS overrides
+
+Override individual tokens directly in your stylesheet for one-off adjustments or scoped changes:
 
 ```css
 :root {
-  --lt-border-radius: 2px;   /* sharper corners */
-  --lt-font-family: 'Inter', system-ui, sans-serif;
+  --lt-border-radius: 2px;                          /* sharper corners */
+  --lt-typography-fontFamily: 'Inter', sans-serif;  /* swap font */
 }
 ```
 
@@ -67,9 +71,7 @@ Scoped to a section of the page:
 }
 ```
 
-## Spacing scale
-
-The spacing scale is based on a 4px grid. Step 1 = 4px, step 4 = 16px, step 8 = 32px. Override individual steps if needed:
+Spacing can only be overridden this way — it is not available through `configure()`:
 
 ```css
 :root {
@@ -79,7 +81,7 @@ The spacing scale is based on a 4px grid. Step 1 = 4px, step 4 = 16px, step 8 = 
 
 ## Dark mode
 
-Redefine the token values under a dark selector. Since components only reference CSS vars, every component updates automatically:
+Redefine the neutral palette under a dark selector. Since components only reference CSS vars, every component updates automatically:
 
 ```css
 @media (prefers-color-scheme: dark) {
