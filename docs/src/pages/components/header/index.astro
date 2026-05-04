@@ -1,0 +1,146 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout
+  title="Header"
+  description="A layout component that organises content into a sticky app bar with before, logo, content, and after slots."
+>
+  <h1>Header</h1>
+  <p>
+    A presentational layout component that arranges content into a horizontal strip. It provides four named slots — <code
+      >before</code
+    >, <code>logo</code>, <code>content</code>, and <code>after</code> — and sits sticky at the top of the page by default.
+  </p>
+
+  <h2>Playground</h2>
+
+  <PlaygroundShell id="header-playground" previewHeight="auto">
+    <div slot="preview" style="width:100%;padding:0">
+      <lt-header id="demo-header">
+        <span slot="before" style="display:flex;align-items:center">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line
+              x1="3"
+              y1="18"
+              x2="21"
+              y2="18"></line></svg
+          >
+        </span>
+        <span slot="logo" style="font-weight:600;font-size:1.125rem;letter-spacing:-0.01em">Latty</span>
+        <span slot="content" style="display:flex;gap:1rem;padding:0 1rem">
+          <a href="#" style="text-decoration:none;color:inherit;opacity:0.85;font-size:0.9rem">Docs</a>
+          <a href="#" style="text-decoration:none;color:inherit;opacity:0.85;font-size:0.9rem">Components</a>
+          <a href="#" style="text-decoration:none;color:inherit;opacity:0.85;font-size:0.9rem">Tokens</a>
+        </span>
+        <span slot="after" style="display:flex;align-items:center">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path></svg
+          >
+        </span>
+      </lt-header>
+    </div>
+
+    <div slot="controls">
+      <div class="control-row">
+        <span class="control-label">variant</span>
+        <select class="control-select" id="ctrl-variant">
+          <option value="primary" selected>primary</option>
+          <option value="surface">surface</option>
+        </select>
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+
+  <FrameworkTabs
+    html={`<lt-header>
+  <span slot="before"><!-- hamburger icon --></span>
+  <span slot="logo">Brand</span>
+  <nav slot="content">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+  </nav>
+  <span slot="after"><!-- user avatar --></span>
+</lt-header>`}
+    react={`import { Header } from '@latty/react';
+
+<Header
+  before={<HamburgerIcon />}
+  logo={<Brand />}
+  after={<UserAvatar />}
+>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+  </nav>
+</Header>`}
+    vue={`<template>
+  <lt-header>
+    <span slot="before"><!-- hamburger icon --></span>
+    <span slot="logo">Brand</span>
+    <nav slot="content">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+    </nav>
+    <span slot="after"><!-- user avatar --></span>
+  </lt-header>
+</template>`}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-header" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>
+
+<script>
+  const header = document.getElementById('demo-header') as HTMLElement & { variant: string };
+  const variantCtrl = document.getElementById('ctrl-variant') as HTMLSelectElement;
+  const codeEl = document.getElementById('header-playground-code');
+
+  function updateCode() {
+    const variant = header.getAttribute('variant') ?? 'primary';
+    const variantAttr = variant === 'primary' ? '' : ` variant="${variant}"`;
+    if (codeEl) {
+      codeEl.textContent = `<lt-header${variantAttr}>
+  <span slot="before"><!-- hamburger icon --></span>
+  <span slot="logo">Brand</span>
+  <nav slot="content">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+  </nav>
+  <span slot="after"><!-- user avatar --></span>
+</lt-header>`;
+    }
+  }
+
+  variantCtrl?.addEventListener('change', () => {
+    header.setAttribute('variant', variantCtrl.value);
+    updateCode();
+  });
+
+  updateCode();
+</script>

@@ -9,8 +9,8 @@ const nav = [
       { label: 'What is Latty?', href: '/getting-started/introduction' },
       { label: 'Installation', href: '/getting-started/installation' },
       { label: 'Usage', href: '/getting-started/usage' },
-      { label: 'Theming', href: '/getting-started/theming' },
-    ],
+      { label: 'Theming', href: '/getting-started/theming' }
+    ]
   },
   {
     label: 'Components',
@@ -24,6 +24,7 @@ const nav = [
       { label: 'Chip', href: '/components/chip' },
       { label: 'Dialog', href: '/components/dialog' },
       { label: 'Dropdown', href: '/components/dropdown' },
+      { label: 'Header', href: '/components/header' },
       { label: 'List', href: '/components/list' },
       { label: 'Radio', href: '/components/radio' },
       { label: 'Select', href: '/components/select' },
@@ -35,14 +36,12 @@ const nav = [
       { label: 'Tab', href: '/components/tab' },
       { label: 'Tooltip', href: '/components/tooltip' },
       { label: 'Table', href: '/components/table' },
-      { label: 'Textfield', href: '/components/textfield' },
-    ],
+      { label: 'Textfield', href: '/components/textfield' }
+    ]
   },
   {
     label: 'Icons',
-    items: [
-      { label: 'Overview', href: '/icons' },
-    ],
+    items: [{ label: 'Overview', href: '/icons' }]
   },
   {
     label: 'Tokens',
@@ -50,9 +49,9 @@ const nav = [
       { label: 'Overview', href: '/tokens/overview' },
       { label: 'Colors', href: '/tokens/colors' },
       { label: 'Spacing', href: '/tokens/spacing' },
-      { label: 'Semantic Tokens', href: '/tokens/semantic' },
-    ],
-  },
+      { label: 'Semantic Tokens', href: '/tokens/semantic' }
+    ]
+  }
 ];
 
 function isActive(href: string) {
@@ -67,33 +66,41 @@ function isSectionActive(items: { href: string }[]) {
 
 <nav class="sidebar" id="sidebar" aria-label="Documentation navigation">
   <div class="sidebar-inner">
-    {nav.map((section) => (
-      <div class="nav-section" class:list={[{ 'is-open': isSectionActive(section.items) }]}>
-        <button
-          class="nav-section-toggle"
-          aria-expanded={isSectionActive(section.items) ? 'true' : 'false'}
-          data-section-toggle
-        >
-          <span>{section.label}</span>
-          <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-            <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <ul class="nav-items" role="list">
-          {section.items.map((item) => (
-            <li>
-              <a
-                href={base + item.href}
-                class:list={['nav-link', { 'is-active': isActive(item.href) }]}
-                aria-current={isActive(item.href) ? 'page' : undefined}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))}
+    {
+      nav.map((section) => (
+        <div class="nav-section" class:list={[{ 'is-open': isSectionActive(section.items) }]}>
+          <button
+            class="nav-section-toggle"
+            aria-expanded={isSectionActive(section.items) ? 'true' : 'false'}
+            data-section-toggle
+          >
+            <span>{section.label}</span>
+            <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path
+                d="M2 4l4 4 4-4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <ul class="nav-items" role="list">
+            {section.items.map((item) => (
+              <li>
+                <a
+                  href={base + item.href}
+                  class:list={['nav-link', { 'is-active': isActive(item.href) }]}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
   </div>
 </nav>
 
@@ -171,7 +178,10 @@ function isSectionActive(items: { href: string }[]) {
     text-decoration: none;
     font-size: 0.875rem;
     border-left: 2px solid transparent;
-    transition: color 150ms, border-color 150ms, background 150ms;
+    transition:
+      color 150ms,
+      border-color 150ms,
+      background 150ms;
   }
 
   .nav-link:hover {

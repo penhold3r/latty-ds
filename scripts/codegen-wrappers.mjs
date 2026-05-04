@@ -11,7 +11,7 @@
  *
  * Run: node scripts/codegen-wrappers.mjs
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { resolve, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { logger } from '@latty/utils';
@@ -124,13 +124,20 @@ ${name}.displayName = '${name}';
 
   const compDir = join(REACT_COMPONENTS_DIR, name);
   mkdirSync(compDir, { recursive: true });
-  writeFileSync(join(compDir, `${name}.tsx`), componentContent, 'utf8');
+
+  const compPath = join(compDir, `${name}.tsx`);
+  if (existsSync(compPath) && readFileSync(compPath, 'utf8').startsWith('// codegen:manual')) {
+    process.stdout.write(`  ✓ ${name}/ (manual)\n`);
+  } else {
+    writeFileSync(compPath, componentContent, 'utf8');
+    process.stdout.write(`  ✓ ${name}/\n`);
+  }
+
   writeFileSync(
     join(compDir, 'index.ts'),
     `export { ${name}, type ${name}Props } from './${name}';\n`,
     'utf8'
   );
-  process.stdout.write(`  ✓ ${name}/\n`);
 }
 
 // ── Regenerate root index ─────────────────────────────────────────────────────

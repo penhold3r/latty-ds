@@ -10,6 +10,7 @@
  * - Checkbox: Checkbox input with support for indeterminate state
  * - Dialog: Modal dialog with backdrop and accessibility features
  * - Dropdown: TODO: describe the Dropdown component
+ * - Header: TODO: describe the Header component
  * - List: Ordered and unordered lists with customizable marker colors
  * - ListItem: List item component that enables proper nesting of lists
  * - Radio: Radio button for single selection within a group
@@ -77,3 +78,4 @@ export * from './components/snackbar';
 export * from './components/alert';
 export * from './components/slider';
 export * from './components/dropdown';
+export * from './components/header';
