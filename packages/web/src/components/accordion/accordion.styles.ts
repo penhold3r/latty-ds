@@ -43,8 +43,6 @@ export const accordionStyles = css`
   .summary-text {
     color: var(--lt-text-default);
     flex: 1;
-    font-size: 1rem;
-    font-weight: 600;
   }
 
   .chevron {
@@ -117,7 +115,7 @@ export const accordionStyles = css`
     pointer-events: none;
   }
 
-  :host([uppercase]) .summary-text {
+  :host([uppercase]) .summary-text::part(base) {
     font-variant-caps: small-caps;
     letter-spacing: 0.05rem;
     text-transform: lowercase;

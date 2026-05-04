@@ -105,9 +105,6 @@ export const alertStyles = css`
   }
 
   .title {
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.4;
     margin: 0 0 var(--lt-spacing-1);
   }
 
@@ -140,7 +137,7 @@ export const alertStyles = css`
     opacity: 1;
   }
 
-  :host([uppercase]) .title {
+  :host([uppercase]) .title::part(base) {
     font-variant-caps: small-caps;
     letter-spacing: 0.05rem;
     text-transform: lowercase;

@@ -89,10 +89,6 @@ export const dialogStyles = css`
 
   .title {
     color: var(--lt-text-default);
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.4;
-    margin: 0;
   }
 
   .close-button {
@@ -141,7 +137,7 @@ export const dialogStyles = css`
     padding: var(--lt-spacing-5);
   }
 
-  :host([uppercase]) .title {
+  :host([uppercase]) .title::part(base) {
     font-variant-caps: small-caps;
     letter-spacing: 0.05rem;
     text-transform: lowercase;

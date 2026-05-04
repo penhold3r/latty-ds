@@ -16,8 +16,6 @@ export const selectStyles = css`
 
   label {
     color: var(--lt-color-neutral-700);
-    font-size: 0.875rem;
-    font-weight: 600;
   }
 
   .required-indicator {
@@ -150,8 +148,7 @@ export const selectStyles = css`
     opacity: 0.6;
   }
 
-  .helper-text {
-    font-size: 0.75rem;
+  .helper-text::part(base) {
     font-weight: 200;
   }
 

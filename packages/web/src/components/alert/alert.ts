@@ -5,6 +5,7 @@ import { alertStyles } from './alert.styles';
 import type { AlertVariant, AlertAppearance } from './alert.types';
 
 import '@latty/icons';
+import '../text/text';
 
 /**
  * Inline notification for persistent contextual feedback.
@@ -79,7 +80,7 @@ export class Alert extends LitElement {
             ></lt-icon>`
           : ''}
         <div class="body">
-          ${this.title ? html`<p class="title" part="title">${this.title}</p>` : ''}
+          ${this.title ? html`<lt-text variant="h6" as="p" class="title" part="title">${this.title}</lt-text>` : ''}
           <div class="content" part="content"><slot></slot></div>
         </div>
         ${this.closable

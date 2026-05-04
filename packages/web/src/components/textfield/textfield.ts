@@ -4,6 +4,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { textfieldStyles } from './textfield.styles';
 import { TextfieldSize, TextfieldType, TextfieldVariant } from './textfield.types';
 import '@latty/icons';
+import '../text/text';
 
 /**
  * A customizable text input component with support for multiple variants, sizes, and input types.
@@ -227,7 +228,7 @@ export class Textfield extends LitElement {
         ${this.label
           ? html`
               <label>
-                ${this.label}
+                <lt-text variant="label" as="span">${this.label}</lt-text>
                 ${this.required ? html`<span class="required-indicator">*</span>` : ''}
               </label>
             `
@@ -275,7 +276,7 @@ export class Textfield extends LitElement {
               `
             : ''}
         </div>
-        ${this.helperText ? html`<div class="helper-text">${this.helperText}</div>` : ''}
+        ${this.helperText ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>` : ''}
       </div>
     `;
   }

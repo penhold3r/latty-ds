@@ -4,6 +4,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 
 import { tooltipStyles } from './tooltip.styles';
 import type { TooltipPosition } from './tooltip.types';
+import '../text/text';
 
 let _tooltipIdCounter = 0;
 
@@ -79,7 +80,7 @@ export class Tooltip extends LitElement {
         aria-hidden="true"
         style=${tooltipStyle}
       >
-        ${this.content}
+        <lt-text variant="caption" as="span">${this.content}</lt-text>
         <span class="arrow" part="arrow"></span>
       </div>
     `;

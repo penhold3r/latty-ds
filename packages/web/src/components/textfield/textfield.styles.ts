@@ -16,8 +16,6 @@ export const textfieldStyles = css`
 
   label {
     color: var(--lt-color-neutral-700);
-    font-size: 0.875rem;
-    font-weight: 600;
   }
 
   .input-container {
@@ -209,7 +207,9 @@ export const textfieldStyles = css`
 
   .helper-text {
     color: var(--lt-text-subtle);
-    font-size: 0.75rem;
+  }
+
+  .helper-text::part(base) {
     font-weight: 200;
   }
 
@@ -229,7 +229,7 @@ export const textfieldStyles = css`
     color: var(--lt-color-error-500);
   }
 
-  :host([uppercase]) label {
+  :host([uppercase]) label lt-text::part(base) {
     font-variant-caps: small-caps;
     letter-spacing: 0.05rem;
     text-transform: lowercase;

@@ -6,6 +6,7 @@ import { DialogSize } from './dialog.types';
 
 import '@latty/icons';
 import '../surface/surface';
+import '../text/text';
 
 /**
  * Dialog component (modal) with backdrop, animations, and accessibility features.
@@ -218,7 +219,7 @@ export class Dialog extends LitElement {
           <div class="header" part="header">
             <div class="header-content">
               <slot name="header">
-                ${this.title ? html`<h2 id="dialog-title" class="title">${this.title}</h2>` : ''}
+                ${this.title ? html`<lt-text variant="h4" as="h2" id="dialog-title" class="title">${this.title}</lt-text>` : ''}
               </slot>
             </div>
             ${!this.hideCloseButton

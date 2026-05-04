@@ -5,6 +5,7 @@ import { accordionStyles } from './accordion.styles';
 import { AccordionVariant } from './accordion.types';
 
 import '@latty/icons';
+import '../text/text';
 
 /**
  * An accordion component using native details/summary elements.
@@ -152,9 +153,9 @@ export class Accordion extends LitElement {
         <summary @click=${this.handleSummaryClick}>
           <div class="summary-content">
             ${this.icon ? html`<lt-icon class="start-icon" name="${this.icon}"></lt-icon>` : ''}
-            <span class="summary-text">
+            <lt-text variant="h6" as="span" class="summary-text">
               <slot name="summary">${this.label}</slot>
-            </span>
+            </lt-text>
             <lt-icon class="chevron" name="caret-down" size="md"></lt-icon>
           </div>
         </summary>

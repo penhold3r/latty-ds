@@ -4,6 +4,7 @@ import { customElement, property, queryAssignedElements } from 'lit/decorators.j
 import { radioGroupStyles } from './radio-group.styles';
 import { RadioGroupOrientation } from './radio-group.types';
 import type { Radio } from '../radio/radio';
+import '../text/text';
 
 /**
  * A container component that manages a group of radio buttons.
@@ -169,7 +170,7 @@ export class RadioGroup extends LitElement {
         ${this.label
           ? html`
               <div class="label">
-                ${this.label}
+                <lt-text variant="label" as="span">${this.label}</lt-text>
                 ${this.required ? html`<span class="required-indicator">*</span>` : ''}
               </div>
             `
@@ -177,7 +178,7 @@ export class RadioGroup extends LitElement {
         <div class="radios-container">
           <slot @slotchange=${this.handleSlotChange}></slot>
         </div>
-        ${this.helperText ? html`<div class="helper-text">${this.helperText}</div>` : ''}
+        ${this.helperText ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>` : ''}
       </div>
     `;
   }

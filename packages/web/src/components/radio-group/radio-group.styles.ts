@@ -14,8 +14,6 @@ export const radioGroupStyles = css`
 
   .label {
     color: var(--lt-text-default);
-    font-size: 0.875rem;
-    font-weight: 600;
     margin-bottom: var(--lt-spacing-1);
   }
 
@@ -40,9 +38,11 @@ export const radioGroupStyles = css`
 
   .helper-text {
     color: var(--lt-text-subtle);
-    font-size: 0.75rem;
-    font-weight: 200;
     margin-top: var(--lt-spacing-1);
+  }
+
+  .helper-text::part(base) {
+    font-weight: 200;
   }
 
   :host([error]) .helper-text {

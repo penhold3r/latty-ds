@@ -5,6 +5,7 @@ import { selectStyles } from './select.styles';
 import { SelectOption, SelectSize, SelectVariant } from './select.types';
 import '@latty/icons';
 import '../surface/';
+import '../text/text';
 
 /**
  * A customizable select dropdown component with support for multiple variants and sizes.
@@ -243,7 +244,7 @@ export class Select extends LitElement {
         ${this.label
           ? html`
               <label>
-                ${this.label}
+                <lt-text variant="label" as="span">${this.label}</lt-text>
                 ${this.required ? html`<span class="required-indicator">*</span>` : ''}
               </label>
             `
@@ -289,7 +290,7 @@ export class Select extends LitElement {
             </div>
           </lt-surface>
         </div>
-        ${this.helperText ? html`<div class="helper-text">${this.helperText}</div>` : ''}
+        ${this.helperText ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>` : ''}
       </div>
     `;
   }
