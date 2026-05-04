@@ -24,7 +24,7 @@ describe('Surface', () => {
   });
 
   it('forwards ref to lt-surface element', () => {
-    const ref = createRef<HTMLElement>();
+    const ref = createRef<any>();
     render(<Surface ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-surface');
   });

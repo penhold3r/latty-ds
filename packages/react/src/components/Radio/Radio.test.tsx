@@ -24,7 +24,7 @@ describe('Radio', () => {
   });
 
   it('forwards ref to lt-radio element', () => {
-    const ref = createRef<HTMLElement>();
+    const ref = createRef<any>();
     render(<Radio ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-radio');
   });

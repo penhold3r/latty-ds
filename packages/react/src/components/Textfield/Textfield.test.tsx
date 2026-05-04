@@ -24,7 +24,7 @@ describe('Textfield', () => {
   });
 
   it('forwards ref to lt-textfield element', () => {
-    const ref = createRef<HTMLElement>();
+    const ref = createRef<any>();
     render(<Textfield ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-textfield');
   });

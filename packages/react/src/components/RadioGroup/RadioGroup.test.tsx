@@ -24,7 +24,7 @@ describe('RadioGroup', () => {
   });
 
   it('forwards ref to lt-radio-group element', () => {
-    const ref = createRef<HTMLElement>();
+    const ref = createRef<any>();
     render(<RadioGroup ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-radio-group');
   });

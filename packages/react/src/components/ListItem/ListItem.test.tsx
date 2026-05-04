@@ -14,7 +14,7 @@ describe('ListItem', () => {
   });
 
   it('forwards ref to lt-list-item element', () => {
-    const ref = createRef<HTMLElement>();
+    const ref = createRef<any>();
     render(<ListItem ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-list-item');
   });

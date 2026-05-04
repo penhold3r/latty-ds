@@ -19,7 +19,7 @@ describe('Accordion', () => {
   });
 
   it('forwards ref to lt-accordion element', () => {
-    const ref = createRef<HTMLElement>();
+    const ref = createRef<any>();
     render(<Accordion ref={ref}>Content</Accordion>);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-accordion');
   });

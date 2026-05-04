@@ -24,7 +24,7 @@ describe('List', () => {
   });
 
   it('forwards ref to lt-list element', () => {
-    const ref = createRef<HTMLElement>();
+    const ref = createRef<any>();
     render(<List ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-list');
   });

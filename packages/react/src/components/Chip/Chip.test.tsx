@@ -24,7 +24,7 @@ describe('Chip', () => {
   });
 
   it('forwards ref to lt-chip element', () => {
-    const ref = createRef<HTMLElement>();
+    const ref = createRef<any>();
     render(<Chip ref={ref}>Label</Chip>);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-chip');
   });

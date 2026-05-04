@@ -19,7 +19,7 @@ describe('TabGroup', () => {
   });
 
   it('forwards ref to lt-tab-group element', () => {
-    const ref = createRef<HTMLElement>();
+    const ref = createRef<any>();
     render(<TabGroup ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-tab-group');
   });
