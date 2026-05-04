@@ -43,30 +43,30 @@ export const navItemStyles = css`
     border: none;
     background: none;
     cursor: pointer;
-    color: var(--lt-color-neutral-700);
+    color: inherit;
     font-size: 0.9375rem;
     font-family: inherit;
     text-decoration: none;
     text-align: left;
-    transition:
-      background 120ms,
-      color 120ms;
+    transition: background 120ms;
     white-space: nowrap;
   }
 
   .item-trigger:hover {
-    background: var(--lt-color-neutral-100);
-    color: var(--lt-color-neutral-900);
+    background: color-mix(in srgb, currentColor 10%, transparent);
+  }
+
+  .item-trigger:active {
+    background: color-mix(in srgb, currentColor 18%, transparent);
   }
 
   :host([active]) .item-trigger {
-    background: var(--lt-color-primary-50);
-    color: var(--lt-color-primary-700);
+    background: color-mix(in srgb, currentColor 15%, transparent);
     font-weight: 600;
   }
 
   :host([disabled]) .item-trigger {
-    color: var(--lt-color-neutral-400);
+    opacity: 0.4;
     pointer-events: none;
   }
 
@@ -82,7 +82,8 @@ export const navItemStyles = css`
   /* Chevron rotates when open */
   .chevron {
     flex-shrink: 0;
-    color: var(--lt-color-neutral-400);
+    color: inherit;
+    opacity: 0.6;
     transition: transform 180ms ease;
   }
 
@@ -122,6 +123,7 @@ export const navItemStyles = css`
     left: 0;
     min-width: 160px;
     background: var(--lt-color-neutral-0, #fff);
+    color: var(--lt-color-neutral-700);
     border: 1px solid var(--lt-color-neutral-200);
     border-radius: 8px;
     box-shadow:

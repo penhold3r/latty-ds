@@ -21,42 +21,17 @@ import ApiTable from '../../../components/ApiTable.astro';
   <PlaygroundShell id="header-playground" previewHeight="auto">
     <div slot="preview" style="width:100%;padding:0">
       <lt-header id="demo-header">
-        <span slot="before" style="display:flex;align-items:center">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line
-              x1="3"
-              y1="18"
-              x2="21"
-              y2="18"></line></svg
-          >
-        </span>
+        <lt-icon slot="before" name="menu"></lt-icon>
         <span slot="logo" style="font-weight:600;font-size:1.125rem;letter-spacing:-0.01em">Latty</span>
-        <span slot="content" style="display:flex;gap:1rem;padding:0 1rem">
-          <a href="#" style="text-decoration:none;color:inherit;opacity:0.85;font-size:0.9rem">Docs</a>
-          <a href="#" style="text-decoration:none;color:inherit;opacity:0.85;font-size:0.9rem">Components</a>
-          <a href="#" style="text-decoration:none;color:inherit;opacity:0.85;font-size:0.9rem">Tokens</a>
-        </span>
-        <span slot="after" style="display:flex;align-items:center">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path></svg
-          >
-        </span>
+        <lt-nav slot="content" orientation="horizontal">
+          <lt-nav-item href="#" label="Home"></lt-nav-item>
+          <lt-nav-item href="#" label="About"></lt-nav-item>
+          <lt-nav-item label="More">
+            <lt-nav-item href="#" label="Blog"></lt-nav-item>
+            <lt-nav-item href="#" label="Changelog"></lt-nav-item>
+          </lt-nav-item>
+        </lt-nav>
+        <lt-icon slot="after" name="user"></lt-icon>
       </lt-header>
     </div>
 
@@ -75,35 +50,46 @@ import ApiTable from '../../../components/ApiTable.astro';
 
   <FrameworkTabs
     html={`<lt-header>
-  <span slot="before"><!-- hamburger icon --></span>
+  <lt-icon slot="before" name="menu"></lt-icon>
   <span slot="logo">Brand</span>
-  <nav slot="content">
-    <a href="/">Home</a>
-    <a href="/about">About</a>
-  </nav>
-  <span slot="after"><!-- user avatar --></span>
+  <lt-nav slot="content" orientation="horizontal">
+    <lt-nav-item href="/" label="Home"></lt-nav-item>
+    <lt-nav-item href="/about" label="About"></lt-nav-item>
+    <lt-nav-item label="More">
+      <lt-nav-item href="/blog" label="Blog"></lt-nav-item>
+      <lt-nav-item href="/changelog" label="Changelog"></lt-nav-item>
+    </lt-nav-item>
+  </lt-nav>
+  <lt-icon slot="after" name="user"></lt-icon>
 </lt-header>`}
-    react={`import { Header } from '@latty/react';
+    react={`import { Header, Nav, NavItem, Icon } from '@latty/react';
 
-<Header
-  before={<HamburgerIcon />}
-  logo={<Brand />}
-  after={<UserAvatar />}
->
-  <nav>
-    <a href="/">Home</a>
-    <a href="/about">About</a>
-  </nav>
+<Header>
+  <Icon slot="before" name="menu" />
+  <span slot="logo">Brand</span>
+  <Nav slot="content" orientation="horizontal">
+    <NavItem href="/" label="Home" />
+    <NavItem href="/about" label="About" />
+    <NavItem label="More">
+      <NavItem href="/blog" label="Blog" />
+      <NavItem href="/changelog" label="Changelog" />
+    </NavItem>
+  </Nav>
+  <Icon slot="after" name="user" />
 </Header>`}
     vue={`<template>
   <lt-header>
-    <span slot="before"><!-- hamburger icon --></span>
+    <lt-icon slot="before" name="menu"></lt-icon>
     <span slot="logo">Brand</span>
-    <nav slot="content">
-      <a href="/">Home</a>
-      <a href="/about">About</a>
-    </nav>
-    <span slot="after"><!-- user avatar --></span>
+    <lt-nav slot="content" orientation="horizontal">
+      <lt-nav-item href="/" label="Home"></lt-nav-item>
+      <lt-nav-item href="/about" label="About"></lt-nav-item>
+      <lt-nav-item label="More">
+        <lt-nav-item href="/blog" label="Blog"></lt-nav-item>
+        <lt-nav-item href="/changelog" label="Changelog"></lt-nav-item>
+      </lt-nav-item>
+    </lt-nav>
+    <lt-icon slot="after" name="user"></lt-icon>
   </lt-header>
 </template>`}
   />
@@ -126,13 +112,17 @@ import ApiTable from '../../../components/ApiTable.astro';
     const variantAttr = variant === 'primary' ? '' : ` variant="${variant}"`;
     if (codeEl) {
       codeEl.textContent = `<lt-header${variantAttr}>
-  <span slot="before"><!-- hamburger icon --></span>
+  <lt-icon slot="before" name="menu"></lt-icon>
   <span slot="logo">Brand</span>
-  <nav slot="content">
-    <a href="/">Home</a>
-    <a href="/about">About</a>
-  </nav>
-  <span slot="after"><!-- user avatar --></span>
+  <lt-nav slot="content" orientation="horizontal">
+    <lt-nav-item href="/" label="Home"></lt-nav-item>
+    <lt-nav-item href="/about" label="About"></lt-nav-item>
+    <lt-nav-item label="More">
+      <lt-nav-item href="/blog" label="Blog"></lt-nav-item>
+      <lt-nav-item href="/changelog" label="Changelog"></lt-nav-item>
+    </lt-nav-item>
+  </lt-nav>
+  <lt-icon slot="after" name="user"></lt-icon>
 </lt-header>`;
     }
   }
