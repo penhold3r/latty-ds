@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout
+  title="Text"
+  description="Renders text with a predefined typographic style. Covers display sizes, headings, body copy, captions, and overlines."
+>
+  <h1>Text</h1>
+  <p>
+    Renders text with a predefined typographic style. The rendered HTML tag matches the variant by default and can be
+    overridden with the <code>as</code> attribute when the visual style should not affect the document outline.
+  </p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-text" content="The quick brown fox jumps over the lazy dog" />
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`<!-- Display -->
+<lt-text variant="display-2xl">Display 2XL</lt-text>
+<lt-text variant="display-xl">Display XL</lt-text>
+<lt-text variant="display-lg">Display LG</lt-text>
+
+<!-- Headings -->
+<lt-text variant="h1">Heading 1</lt-text>
+<lt-text variant="h2">Heading 2</lt-text>
+<lt-text variant="h3">Heading 3</lt-text>
+
+<!-- Body -->
+<lt-text variant="lead">Lead paragraph copy.</lt-text>
+<lt-text variant="body">Regular body text.</lt-text>
+<lt-text variant="body-sm">Small body text.</lt-text>
+
+<!-- Inline -->
+<lt-text variant="caption">Caption text</lt-text>
+<lt-text variant="overline">Overline label</lt-text>
+
+<!-- Override tag without changing style -->
+<lt-text variant="h1" as="h2">Visually h1, semantically h2</lt-text>`}
+    react={`
+import { Text } from '@latty/react';
+
+<Text variant="h1">Heading 1</Text>
+<Text variant="lead">Lead paragraph copy.</Text>
+<Text variant="body">Regular body text.</Text>
+<Text variant="overline">Category</Text>
+<Text variant="h1" as="h2">Visually h1, semantically h2</Text>
+    `}
+    vue={`
+<template>
+  <lt-text variant="h1">Heading 1</lt-text>
+  <lt-text variant="lead">Lead paragraph copy.</lt-text>
+  <lt-text variant="body">Regular body text.</lt-text>
+  <lt-text variant="overline">Category</lt-text>
+  <lt-text variant="h1" as="h2">Visually h1, semantically h2</lt-text>
+</template>
+    `}
+  />
+
+  <h2>Type scale</h2>
+  <div id="type-scale" class="type-scale"></div>
+
+  <h2>API</h2>
+  <ApiTable tag="lt-text" />
+</BaseLayout>
+
+<style>
+  .type-scale {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px solid var(--lt-color-neutral-200);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: var(--lt-spacing-6) 0;
+  }
+
+  .scale-row {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--lt-color-neutral-100);
+  }
+
+  .scale-row:last-child {
+    border-bottom: none;
+  }
+
+  .scale-meta {
+    font-size: 0.6875rem;
+    color: var(--lt-color-neutral-400);
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+    width: 14rem;
+    flex-shrink: 0;
+  }
+</style>
+
+<script>
+  import '@latty/web';
+
+  type VariantMeta = { label: string; size: string; weight: string; extra?: string };
+
+  const VARIANTS: [string, VariantMeta][] = [
+    ['display-2xl', { label: 'Display 2XL', size: '4.5rem', weight: '200' }],
+    ['display-xl', { label: 'Display XL', size: '3.75rem', weight: '200' }],
+    ['display-lg', { label: 'Display LG', size: '3rem', weight: '200' }],
+    ['h1', { label: 'Heading 1', size: '2.5rem', weight: '600' }],
+    ['h2', { label: 'Heading 2', size: '2rem', weight: '600' }],
+    ['h3', { label: 'Heading 3', size: '1.5rem', weight: '600' }],
+    ['h4', { label: 'Heading 4', size: '1.25rem', weight: '600' }],
+    ['h5', { label: 'Heading 5', size: '1.125rem', weight: '600' }],
+    ['h6', { label: 'Heading 6', size: '1rem', weight: '600' }],
+    ['lead', { label: 'Lead', size: '1.25rem', weight: '400' }],
+    ['body', { label: 'Body', size: '1rem', weight: '400' }],
+    ['body-sm', { label: 'Body SM', size: '0.875rem', weight: '400' }],
+    ['caption', { label: 'Caption', size: '0.75rem', weight: '400' }],
+    ['overline', { label: 'Overline', size: '0.6875rem', weight: '600', extra: 'uppercase' }]
+  ];
+
+  const container = document.getElementById('type-scale')!;
+
+  for (const [variant, meta] of VARIANTS) {
+    const row = document.createElement('div');
+    row.className = 'scale-row';
+
+    const metaEl = document.createElement('span');
+    metaEl.className = 'scale-meta';
+    metaEl.textContent = `${meta.size} / ${meta.weight}${meta.extra ? ' / ' + meta.extra : ''}`;
+
+    const textEl = document.createElement('lt-text') as any;
+    textEl.variant = variant;
+    textEl.textContent = meta.label;
+
+    row.appendChild(metaEl);
+    row.appendChild(textEl);
+    container.appendChild(row);
+  }
+</script>

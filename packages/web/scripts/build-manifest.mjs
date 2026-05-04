@@ -79,8 +79,11 @@ function toMember(field, componentDir) {
     return null;
   }
 
+  // Strip `| ''` / `'' |` suffixes that just represent an "unset" sentinel
+  const resolvedType = typeText.replace(/\s*\|\s*''/g, '').replace(/^''\s*\|\s*/g, '').trim();
+
   // Union / named type — try to resolve from *.types.ts
-  const options = resolveUnion(typeText, componentDir);
+  const options = resolveUnion(resolvedType, componentDir);
   if (options?.length) {
     const def = parseDefault(rawDefault) ?? options[0];
     return { name, type: 'select', options, default: def };

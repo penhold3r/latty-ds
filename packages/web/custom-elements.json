@@ -4,228 +4,6 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/components/accordion/accordion.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "accordionStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; width: 100%; } details { border-radius: var(--lt-border-radius); transition: background-color 120ms ease, border-color 120ms ease; } summary { cursor: pointer; list-style: none; user-select: none; border-radius: var(--lt-border-radius); overflow: hidden; } summary::-webkit-details-marker { display: none; } .summary-content { align-items: center; display: flex; gap: var(--lt-spacing-3); justify-content: space-between; padding: var(--lt-spacing-4); } .start-icon { color: var(--lt-color-neutral-700); flex-shrink: 0; font-size: 1.25rem; } .summary-text { color: var(--lt-text-default); flex: 1; font-size: 1rem; font-weight: 600; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; height: 20px; transition: transform 200ms ease; width: 20px; } details[open] .chevron { transform: rotate(180deg); } summary:hover .chevron { color: var(--lt-text-default); } summary:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: -3px; } .content { height: 0; overflow: hidden; transition: height 200ms ease; } .content-inner { color: var(--lt-color-neutral-700); font-size: 0.9375rem; line-height: 1.6; padding: 0 var(--lt-spacing-4) var(--lt-spacing-4); } /* Variant: default */ :host([variant='default']) details { background: var(--lt-bg-subtle); border: 1px solid var(--lt-border-default); } :host([variant='default']) details:hover { border-color: var(--lt-color-neutral-300); } /* Variant: filled */ :host([variant='filled']) details { background: var(--lt-bg-surface); border: none; } :host([variant='filled']) details:hover { background: var(--lt-bg-overlay); } /* Variant: outlined */ :host([variant='outlined']) details { background: transparent; border: 1px solid var(--lt-color-neutral-300); } :host([variant='outlined']) details:hover { border-color: var(--lt-border-strong); } /* Disabled state */ :host([disabled]) details { opacity: 0.6; pointer-events: none; } :host([uppercase]) .summary-text { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "accordionStyles",
-          "declaration": {
-            "name": "accordionStyles",
-            "module": "src/components/accordion/accordion.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/accordion/accordion.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "An accordion component using native details/summary elements.\nProvides collapsible content sections with smooth animations.",
-          "name": "Accordion",
-          "slots": [
-            {
-              "description": "Content to display when accordion is expanded",
-              "name": ""
-            },
-            {
-              "description": "Custom content for the summary/header (defaults to label property)",
-              "name": "summary"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "accordionStyles"
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label/title text for the accordion header."
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon name to display at the start of the header."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "AccordionVariant"
-              },
-              "default": "'default'",
-              "description": "Visual variant of the accordion."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the accordion is initially open."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the accordion is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the header label in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "_details",
-              "type": {
-                "text": "HTMLDetailsElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_content",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_contentInner",
-              "type": {
-                "text": "HTMLElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_animating",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "privacy": "protected",
-              "parameters": [
-                {
-                  "name": "changedProperties",
-                  "type": {
-                    "text": "Map<string, unknown>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleSummaryClick",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ],
-              "description": "Handles click on summary to animate the accordion."
-            },
-            {
-              "kind": "method",
-              "name": "handleTransitionEnd",
-              "privacy": "private",
-              "description": "Handles the end of the transition to clear inline styles."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "toggle",
-              "type": {
-                "text": "CustomEvent<{open: boolean}>"
-              },
-              "description": "Dispatched when the accordion is opened or closed"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-accordion",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Accordion",
-          "declaration": {
-            "name": "Accordion",
-            "module": "src/components/accordion/accordion.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/accordion/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Accordion",
-          "declaration": {
-            "name": "Accordion",
-            "module": "./accordion"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AccordionVariant",
-          "declaration": {
-            "name": "AccordionVariant",
-            "module": "./accordion.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/alert/alert.styles.ts",
       "declarations": [
         {
@@ -396,193 +174,6 @@
           "declaration": {
             "name": "AlertAppearance",
             "module": "./alert.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/button.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "buttonStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } :host([full-width]) { display: block; width: 100%; } :host([full-width]) button { width: 100%; } button { align-items: center; border-radius: var(--lt-border-radius); border: 1px solid transparent; box-sizing: border-box; cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } button:active { transform: translateY(1px); } button:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } button[disabled] { cursor: not-allowed; opacity: 0.6; transform: none; } /* sizes */ :host([size='sm']) button { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) button { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) button { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) button { background: var(--lt-interactive-primary-bg); color: var(--lt-text-on-primary); } :host([variant='primary']) button:hover:not([disabled]) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='primary']) button:active:not([disabled]) { background: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) button { background: var(--lt-interactive-secondary-bg); color: var(--lt-text-on-secondary); } :host([variant='secondary']) button:hover:not([disabled]) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='secondary']) button:active:not([disabled]) { background: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) button { background: var(--lt-color-neutral-500); color: var(--lt-color-neutral-50); } :host([variant='neutral']) button:hover:not([disabled]) { background: var(--lt-color-neutral-700); } :host([variant='neutral']) button:active:not([disabled]) { background: var(--lt-color-neutral-800); } :host([variant='success']) button { background: var(--lt-interactive-success-bg); color: var(--lt-text-on-success); } :host([variant='success']) button:hover:not([disabled]) { background: var(--lt-interactive-success-bg-hover); } :host([variant='success']) button:active:not([disabled]) { background: var(--lt-interactive-success-bg-active); } :host([variant='warning']) button { background: var(--lt-interactive-warning-bg); color: var(--lt-text-on-warning); } :host([variant='warning']) button:hover:not([disabled]) { background: var(--lt-interactive-warning-bg-hover); } :host([variant='warning']) button:active:not([disabled]) { background: var(--lt-interactive-warning-bg-active); } :host([variant='error']) button { background: var(--lt-interactive-error-bg); color: var(--lt-text-on-error); } :host([variant='error']) button:hover:not([disabled]) { background: var(--lt-interactive-error-bg-hover); } :host([variant='error']) button:active:not([disabled]) { background: var(--lt-interactive-error-bg-active); } :host([variant='info']) button { background: var(--lt-interactive-info-bg); color: var(--lt-text-on-info); } :host([variant='info']) button:hover:not([disabled]) { background: var(--lt-interactive-info-bg-hover); } :host([variant='info']) button:active:not([disabled]) { background: var(--lt-interactive-info-bg-active); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) button { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-color-primary-500); } :host([appearance='outlined'][variant='primary']) button:hover:not([disabled]) { background: var(--lt-color-primary-50); border-color: var(--lt-color-primary-700); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='primary']) button:active:not([disabled]) { background: var(--lt-bg-primary-subtle); border-color: var(--lt-color-primary-800); color: var(--lt-color-primary-800); } :host([appearance='outlined'][variant='secondary']) button { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-color-secondary-500); } :host([appearance='outlined'][variant='secondary']) button:hover:not([disabled]) { background: var(--lt-color-secondary-50); border-color: var(--lt-color-secondary-700); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='secondary']) button:active:not([disabled]) { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-color-secondary-800); color: var(--lt-color-secondary-800); } :host([appearance='outlined'][variant='neutral']) button { background: transparent; border-color: var(--lt-color-neutral-500); color: var(--lt-color-neutral-700); } :host([appearance='outlined'][variant='neutral']) button:hover:not([disabled]) { background: var(--lt-bg-subtle); border-color: var(--lt-color-neutral-700); color: var(--lt-text-default); } :host([appearance='outlined'][variant='neutral']) button:active:not([disabled]) { background: var(--lt-bg-surface); border-color: var(--lt-color-neutral-800); color: var(--lt-text-default); } :host([appearance='outlined'][variant='success']) button { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-color-success-500); } :host([appearance='outlined'][variant='success']) button:hover:not([disabled]) { background: var(--lt-color-success-50); border-color: var(--lt-color-success-700); color: var(--lt-text-success); } :host([appearance='outlined'][variant='success']) button:active:not([disabled]) { background: var(--lt-bg-success-subtle); border-color: var(--lt-color-success-800); color: var(--lt-color-success-800); } :host([appearance='outlined'][variant='warning']) button { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='warning']) button:hover:not([disabled]) { background: var(--lt-color-warning-50); border-color: var(--lt-color-warning-700); color: var(--lt-color-warning-800); } :host([appearance='outlined'][variant='warning']) button:active:not([disabled]) { background: var(--lt-bg-warning-subtle); border-color: var(--lt-color-warning-800); color: var(--lt-color-warning-900); } :host([appearance='outlined'][variant='error']) button { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-color-error-500); } :host([appearance='outlined'][variant='error']) button:hover:not([disabled]) { background: var(--lt-color-error-50); border-color: var(--lt-color-error-700); color: var(--lt-text-error); } :host([appearance='outlined'][variant='error']) button:active:not([disabled]) { background: var(--lt-bg-error-subtle); border-color: var(--lt-color-error-800); color: var(--lt-color-error-800); } :host([appearance='outlined'][variant='info']) button { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-color-info-500); } :host([appearance='outlined'][variant='info']) button:hover:not([disabled]) { background: var(--lt-color-info-50); border-color: var(--lt-color-info-700); color: var(--lt-text-info); } :host([appearance='outlined'][variant='info']) button:active:not([disabled]) { background: var(--lt-bg-info-subtle); border-color: var(--lt-color-info-800); color: var(--lt-color-info-800); } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } :host([uppercase]) button { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "buttonStyles",
-          "declaration": {
-            "name": "buttonStyles",
-            "module": "src/components/button/button.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Button component with multiple variants, sizes, appearances, and loading state support.",
-          "name": "Button",
-          "slots": [
-            {
-              "description": "Button label/content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "buttonStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ButtonVariant"
-              },
-              "default": "'primary'",
-              "description": "Visual variant that determines the button's color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "ButtonAppearance"
-              },
-              "default": "'filled'",
-              "description": "Appearance style (filled or outlined)."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ButtonSize"
-              },
-              "default": "'md'",
-              "description": "Size of the button (affects height, font size, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "loading",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is in loading state.\nShows a spinner and disables interaction."
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon name to display at the start of the button."
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon name to display at the end of the button."
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button stretches to fill its container's width."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the button label in small caps with wider letter spacing."
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "description": "Renders the button with optional icons and loading spinner."
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-button",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Button",
-          "declaration": {
-            "name": "Button",
-            "module": "src/components/button/button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Button",
-          "declaration": {
-            "name": "Button",
-            "module": "./button"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonAppearance",
-          "declaration": {
-            "name": "ButtonAppearance",
-            "module": "./button.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonSize",
-          "declaration": {
-            "name": "ButtonSize",
-            "module": "./button.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonVariant",
-          "declaration": {
-            "name": "ButtonVariant",
-            "module": "./button.types"
           }
         }
       ]
@@ -909,6 +500,228 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/accordion/accordion.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "accordionStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; width: 100%; } details { border-radius: var(--lt-border-radius); transition: background-color 120ms ease, border-color 120ms ease; } summary { cursor: pointer; list-style: none; user-select: none; border-radius: var(--lt-border-radius); overflow: hidden; } summary::-webkit-details-marker { display: none; } .summary-content { align-items: center; display: flex; gap: var(--lt-spacing-3); justify-content: space-between; padding: var(--lt-spacing-4); } .start-icon { color: var(--lt-color-neutral-700); flex-shrink: 0; font-size: 1.25rem; } .summary-text { color: var(--lt-text-default); flex: 1; font-size: 1rem; font-weight: 600; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; height: 20px; transition: transform 200ms ease; width: 20px; } details[open] .chevron { transform: rotate(180deg); } summary:hover .chevron { color: var(--lt-text-default); } summary:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: -3px; } .content { height: 0; overflow: hidden; transition: height 200ms ease; } .content-inner { color: var(--lt-color-neutral-700); font-size: 0.9375rem; line-height: 1.6; padding: 0 var(--lt-spacing-4) var(--lt-spacing-4); } /* Variant: default */ :host([variant='default']) details { background: var(--lt-bg-subtle); border: 1px solid var(--lt-border-default); } :host([variant='default']) details:hover { border-color: var(--lt-color-neutral-300); } /* Variant: filled */ :host([variant='filled']) details { background: var(--lt-bg-surface); border: none; } :host([variant='filled']) details:hover { background: var(--lt-bg-overlay); } /* Variant: outlined */ :host([variant='outlined']) details { background: transparent; border: 1px solid var(--lt-color-neutral-300); } :host([variant='outlined']) details:hover { border-color: var(--lt-border-strong); } /* Disabled state */ :host([disabled]) details { opacity: 0.6; pointer-events: none; } :host([uppercase]) .summary-text { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "accordionStyles",
+          "declaration": {
+            "name": "accordionStyles",
+            "module": "src/components/accordion/accordion.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/accordion/accordion.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "An accordion component using native details/summary elements.\nProvides collapsible content sections with smooth animations.",
+          "name": "Accordion",
+          "slots": [
+            {
+              "description": "Content to display when accordion is expanded",
+              "name": ""
+            },
+            {
+              "description": "Custom content for the summary/header (defaults to label property)",
+              "name": "summary"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "accordionStyles"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label/title text for the accordion header."
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name to display at the start of the header."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "AccordionVariant"
+              },
+              "default": "'default'",
+              "description": "Visual variant of the accordion."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the accordion is initially open."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the accordion is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the header label in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "_details",
+              "type": {
+                "text": "HTMLDetailsElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_content",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_contentInner",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_animating",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleSummaryClick",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ],
+              "description": "Handles click on summary to animate the accordion."
+            },
+            {
+              "kind": "method",
+              "name": "handleTransitionEnd",
+              "privacy": "private",
+              "description": "Handles the end of the transition to clear inline styles."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "toggle",
+              "type": {
+                "text": "CustomEvent<{open: boolean}>"
+              },
+              "description": "Dispatched when the accordion is opened or closed"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-accordion",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Accordion",
+          "declaration": {
+            "name": "Accordion",
+            "module": "src/components/accordion/accordion.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/accordion/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Accordion",
+          "declaration": {
+            "name": "Accordion",
+            "module": "./accordion"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AccordionVariant",
+          "declaration": {
+            "name": "AccordionVariant",
+            "module": "./accordion.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/checkbox/checkbox.styles.ts",
       "declarations": [
         {
@@ -1144,6 +957,193 @@
           "declaration": {
             "name": "CheckboxLabelPosition",
             "module": "./checkbox.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/button/button.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "buttonStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } :host([full-width]) { display: block; width: 100%; } :host([full-width]) button { width: 100%; } button { align-items: center; border-radius: var(--lt-border-radius); border: 1px solid transparent; box-sizing: border-box; cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } button:active { transform: translateY(1px); } button:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } button[disabled] { cursor: not-allowed; opacity: 0.6; transform: none; } /* sizes */ :host([size='sm']) button { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) button { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) button { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) button { background: var(--lt-interactive-primary-bg); color: var(--lt-text-on-primary); } :host([variant='primary']) button:hover:not([disabled]) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='primary']) button:active:not([disabled]) { background: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) button { background: var(--lt-interactive-secondary-bg); color: var(--lt-text-on-secondary); } :host([variant='secondary']) button:hover:not([disabled]) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='secondary']) button:active:not([disabled]) { background: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) button { background: var(--lt-color-neutral-500); color: var(--lt-color-neutral-50); } :host([variant='neutral']) button:hover:not([disabled]) { background: var(--lt-color-neutral-700); } :host([variant='neutral']) button:active:not([disabled]) { background: var(--lt-color-neutral-800); } :host([variant='success']) button { background: var(--lt-interactive-success-bg); color: var(--lt-text-on-success); } :host([variant='success']) button:hover:not([disabled]) { background: var(--lt-interactive-success-bg-hover); } :host([variant='success']) button:active:not([disabled]) { background: var(--lt-interactive-success-bg-active); } :host([variant='warning']) button { background: var(--lt-interactive-warning-bg); color: var(--lt-text-on-warning); } :host([variant='warning']) button:hover:not([disabled]) { background: var(--lt-interactive-warning-bg-hover); } :host([variant='warning']) button:active:not([disabled]) { background: var(--lt-interactive-warning-bg-active); } :host([variant='error']) button { background: var(--lt-interactive-error-bg); color: var(--lt-text-on-error); } :host([variant='error']) button:hover:not([disabled]) { background: var(--lt-interactive-error-bg-hover); } :host([variant='error']) button:active:not([disabled]) { background: var(--lt-interactive-error-bg-active); } :host([variant='info']) button { background: var(--lt-interactive-info-bg); color: var(--lt-text-on-info); } :host([variant='info']) button:hover:not([disabled]) { background: var(--lt-interactive-info-bg-hover); } :host([variant='info']) button:active:not([disabled]) { background: var(--lt-interactive-info-bg-active); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) button { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-color-primary-500); } :host([appearance='outlined'][variant='primary']) button:hover:not([disabled]) { background: var(--lt-color-primary-50); border-color: var(--lt-color-primary-700); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='primary']) button:active:not([disabled]) { background: var(--lt-bg-primary-subtle); border-color: var(--lt-color-primary-800); color: var(--lt-color-primary-800); } :host([appearance='outlined'][variant='secondary']) button { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-color-secondary-500); } :host([appearance='outlined'][variant='secondary']) button:hover:not([disabled]) { background: var(--lt-color-secondary-50); border-color: var(--lt-color-secondary-700); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='secondary']) button:active:not([disabled]) { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-color-secondary-800); color: var(--lt-color-secondary-800); } :host([appearance='outlined'][variant='neutral']) button { background: transparent; border-color: var(--lt-color-neutral-500); color: var(--lt-color-neutral-700); } :host([appearance='outlined'][variant='neutral']) button:hover:not([disabled]) { background: var(--lt-bg-subtle); border-color: var(--lt-color-neutral-700); color: var(--lt-text-default); } :host([appearance='outlined'][variant='neutral']) button:active:not([disabled]) { background: var(--lt-bg-surface); border-color: var(--lt-color-neutral-800); color: var(--lt-text-default); } :host([appearance='outlined'][variant='success']) button { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-color-success-500); } :host([appearance='outlined'][variant='success']) button:hover:not([disabled]) { background: var(--lt-color-success-50); border-color: var(--lt-color-success-700); color: var(--lt-text-success); } :host([appearance='outlined'][variant='success']) button:active:not([disabled]) { background: var(--lt-bg-success-subtle); border-color: var(--lt-color-success-800); color: var(--lt-color-success-800); } :host([appearance='outlined'][variant='warning']) button { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-color-warning-700); } :host([appearance='outlined'][variant='warning']) button:hover:not([disabled]) { background: var(--lt-color-warning-50); border-color: var(--lt-color-warning-700); color: var(--lt-color-warning-800); } :host([appearance='outlined'][variant='warning']) button:active:not([disabled]) { background: var(--lt-bg-warning-subtle); border-color: var(--lt-color-warning-800); color: var(--lt-color-warning-900); } :host([appearance='outlined'][variant='error']) button { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-color-error-500); } :host([appearance='outlined'][variant='error']) button:hover:not([disabled]) { background: var(--lt-color-error-50); border-color: var(--lt-color-error-700); color: var(--lt-text-error); } :host([appearance='outlined'][variant='error']) button:active:not([disabled]) { background: var(--lt-bg-error-subtle); border-color: var(--lt-color-error-800); color: var(--lt-color-error-800); } :host([appearance='outlined'][variant='info']) button { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-color-info-500); } :host([appearance='outlined'][variant='info']) button:hover:not([disabled]) { background: var(--lt-color-info-50); border-color: var(--lt-color-info-700); color: var(--lt-text-info); } :host([appearance='outlined'][variant='info']) button:active:not([disabled]) { background: var(--lt-bg-info-subtle); border-color: var(--lt-color-info-800); color: var(--lt-color-info-800); } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } :host([uppercase]) button { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "buttonStyles",
+          "declaration": {
+            "name": "buttonStyles",
+            "module": "src/components/button/button.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/button/button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Button component with multiple variants, sizes, appearances, and loading state support.",
+          "name": "Button",
+          "slots": [
+            {
+              "description": "Button label/content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "buttonStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ButtonVariant"
+              },
+              "default": "'primary'",
+              "description": "Visual variant that determines the button's color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "ButtonAppearance"
+              },
+              "default": "'filled'",
+              "description": "Appearance style (filled or outlined)."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ButtonSize"
+              },
+              "default": "'md'",
+              "description": "Size of the button (affects height, font size, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is in loading state.\nShows a spinner and disables interaction."
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name to display at the start of the button."
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name to display at the end of the button."
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button stretches to fill its container's width."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the button label in small caps with wider letter spacing."
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "description": "Renders the button with optional icons and loading spinner."
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Button",
+          "declaration": {
+            "name": "Button",
+            "module": "src/components/button/button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/button/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Button",
+          "declaration": {
+            "name": "Button",
+            "module": "./button"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonAppearance",
+          "declaration": {
+            "name": "ButtonAppearance",
+            "module": "./button.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonSize",
+          "declaration": {
+            "name": "ButtonSize",
+            "module": "./button.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonVariant",
+          "declaration": {
+            "name": "ButtonVariant",
+            "module": "./button.types"
           }
         }
       ]
@@ -2105,6 +2105,217 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/list/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "List",
+          "declaration": {
+            "name": "List",
+            "module": "./list"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ListItem",
+          "declaration": {
+            "name": "ListItem",
+            "module": "./list-item"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ListType",
+          "declaration": {
+            "name": "ListType",
+            "module": "./list.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ListSize",
+          "declaration": {
+            "name": "ListSize",
+            "module": "./list.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/list/list-item.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "listItemStyles",
+          "default": "css` :host { display: list-item; margin: 0; padding: 0; } `",
+          "description": "Styles for the lt-list-item component.\n\nThe component renders a <li> element in shadow DOM with minimal styling.\nMost styling is inherited from the parent lt-list component."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "listItemStyles",
+          "declaration": {
+            "name": "listItemStyles",
+            "module": "src/components/list/list-item.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/list/list-item.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A list item component that renders a `<li>` element in shadow DOM.\n\nThis component solves the HTML parser issue where nested `<lt-list>` components\ncannot contain plain `<li>` elements due to browser parsing rules. By wrapping\nthe `<li>` in a custom element's shadow DOM, we can properly nest lists.",
+          "name": "ListItem",
+          "slots": [
+            {
+              "description": "Default slot for list item content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "listItemStyles"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-list-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ListItem",
+          "declaration": {
+            "name": "ListItem",
+            "module": "src/components/list/list-item.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/list/list.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "listStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; --list-marker-color: var(--lt-color-neutral-500); } ul, ol { margin: 0; padding: 0; list-style-position: outside; color: var(--lt-text-default); } ul { padding-left: var(--lt-spacing-5); } ol { padding-left: var(--lt-spacing-5); } ::slotted(li), ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-2); } ::slotted(li:last-child), ::slotted(lt-list-item:last-child) { margin-bottom: 0; } ::slotted(lt-list) { display: block; margin-top: var(--lt-spacing-2); margin-bottom: var(--lt-spacing-2); padding-left: var(--lt-spacing-5); font-size: 0.9em; } ::slotted(lt-list:first-child) { margin-top: var(--lt-spacing-2); } ::slotted(lt-list:last-child) { margin-bottom: 0; } ul ::slotted(li)::marker { color: var(--list-marker-color); } ol ::slotted(li)::marker { color: var(--list-marker-color); } /* Size variants */ :host([size='sm']) ul, :host([size='sm']) ol { font-size: 0.875rem; line-height: 1.5; } :host([size='sm']) ::slotted(li), :host([size='sm']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-1); } :host([size='md']) ul, :host([size='md']) ol { font-size: 1rem; line-height: 1.6; } :host([size='md']) ::slotted(li), :host([size='md']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-2); } :host([size='lg']) ul, :host([size='lg']) ol { font-size: 1.125rem; line-height: 1.7; } :host([size='lg']) ::slotted(li), :host([size='lg']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-3); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "listStyles",
+          "declaration": {
+            "name": "listStyles",
+            "module": "src/components/list/list.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/list/list.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A customizable list component supporting both ordered and unordered lists.",
+          "name": "List",
+          "cssProperties": [
+            {
+              "description": "Color of the bullet points or numbers (default: neutral-500)",
+              "name": "--list-marker-color"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The underlying `<ul>` or `<ol>` element",
+              "name": "list"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for list items (`<li>` elements)",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "listStyles"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "ListType"
+              },
+              "default": "'unordered'",
+              "description": "Type of list to render."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ListSize"
+              },
+              "default": "'md'",
+              "description": "Size of the list items."
+            },
+            {
+              "kind": "field",
+              "name": "markerColor",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Custom color for the list markers (bullets or numbers).\nAccepts any valid CSS color value."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-list",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "List",
+          "declaration": {
+            "name": "List",
+            "module": "src/components/list/list.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/nav/index.ts",
       "declarations": [],
       "exports": [
@@ -2432,211 +2643,204 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/list/index.ts",
+      "path": "src/components/radio/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "List",
+          "name": "Radio",
           "declaration": {
-            "name": "List",
-            "module": "./list"
+            "name": "Radio",
+            "module": "./radio"
           }
         },
         {
           "kind": "js",
-          "name": "ListItem",
+          "name": "RadioSize",
           "declaration": {
-            "name": "ListItem",
-            "module": "./list-item"
+            "name": "RadioSize",
+            "module": "./radio.types"
           }
         },
         {
           "kind": "js",
-          "name": "ListType",
+          "name": "RadioVariant",
           "declaration": {
-            "name": "ListType",
-            "module": "./list.types"
+            "name": "RadioVariant",
+            "module": "./radio.types"
           }
         },
         {
           "kind": "js",
-          "name": "ListSize",
+          "name": "RadioLabelPosition",
           "declaration": {
-            "name": "ListSize",
-            "module": "./list.types"
+            "name": "RadioLabelPosition",
+            "module": "./radio.types"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/list/list-item.styles.ts",
+      "path": "src/components/radio/radio.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "listItemStyles",
-          "default": "css` :host { display: list-item; margin: 0; padding: 0; } `",
-          "description": "Styles for the lt-list-item component.\n\nThe component renders a <li> element in shadow DOM with minimal styling.\nMost styling is inherited from the parent lt-list component."
+          "name": "radioStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .radio-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } .radio-container { display: inline-flex; position: relative; } :host([label-position='left']) .radio-wrapper { flex-direction: row-reverse; } :host([disabled]) .radio-wrapper { cursor: not-allowed; opacity: 0.6; } input[type='radio'] { appearance: none; border-radius: 50%; border: 2px solid var(--lt-border-strong); cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='radio']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='radio']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='radio']:disabled { cursor: not-allowed; } .dot { background: white; border-radius: 50%; display: none; pointer-events: none; position: absolute; } input[type='radio']:checked ~ .dot { display: block; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='radio'] { height: 16px; width: 16px; } :host([size='sm']) .dot { height: 8px; width: 8px; left: 4px; top: 4px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='radio'] { height: 20px; width: 20px; } :host([size='md']) .dot { height: 10px; width: 10px; left: 5px; top: 5px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='radio'] { height: 24px; width: 24px; } :host([size='lg']) .dot { height: 12px; width: 12px; left: 6px; top: 6px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='radio']:checked { background: var(--lt-interactive-primary-bg); border-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); border-color: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='radio']:checked { background: var(--lt-interactive-secondary-bg); border-color: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); border-color: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='radio']:checked { background: var(--lt-interactive-success-bg); border-color: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); border-color: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='radio']:checked { background: var(--lt-interactive-error-bg); border-color: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); border-color: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='radio']:checked { background: var(--lt-interactive-info-bg); border-color: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); border-color: var(--lt-interactive-info-bg-hover); } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "listItemStyles",
+          "name": "radioStyles",
           "declaration": {
-            "name": "listItemStyles",
-            "module": "src/components/list/list-item.styles.ts"
+            "name": "radioStyles",
+            "module": "src/components/radio/radio.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/list/list-item.ts",
+      "path": "src/components/radio/radio.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "A list item component that renders a `<li>` element in shadow DOM.\n\nThis component solves the HTML parser issue where nested `<lt-list>` components\ncannot contain plain `<li>` elements due to browser parsing rules. By wrapping\nthe `<li>` in a custom element's shadow DOM, we can properly nest lists.",
-          "name": "ListItem",
-          "slots": [
-            {
-              "description": "Default slot for list item content",
-              "name": ""
-            }
-          ],
+          "description": "A customizable radio button component with support for multiple variants and sizes.",
+          "name": "Radio",
           "members": [
             {
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "listItemStyles"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-list-item",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "ListItem",
-          "declaration": {
-            "name": "ListItem",
-            "module": "src/components/list/list-item.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/list/list.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "listStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; --list-marker-color: var(--lt-color-neutral-500); } ul, ol { margin: 0; padding: 0; list-style-position: outside; color: var(--lt-text-default); } ul { padding-left: var(--lt-spacing-5); } ol { padding-left: var(--lt-spacing-5); } ::slotted(li), ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-2); } ::slotted(li:last-child), ::slotted(lt-list-item:last-child) { margin-bottom: 0; } ::slotted(lt-list) { display: block; margin-top: var(--lt-spacing-2); margin-bottom: var(--lt-spacing-2); padding-left: var(--lt-spacing-5); font-size: 0.9em; } ::slotted(lt-list:first-child) { margin-top: var(--lt-spacing-2); } ::slotted(lt-list:last-child) { margin-bottom: 0; } ul ::slotted(li)::marker { color: var(--list-marker-color); } ol ::slotted(li)::marker { color: var(--list-marker-color); } /* Size variants */ :host([size='sm']) ul, :host([size='sm']) ol { font-size: 0.875rem; line-height: 1.5; } :host([size='sm']) ::slotted(li), :host([size='sm']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-1); } :host([size='md']) ul, :host([size='md']) ol { font-size: 1rem; line-height: 1.6; } :host([size='md']) ::slotted(li), :host([size='md']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-2); } :host([size='lg']) ul, :host([size='lg']) ol { font-size: 1.125rem; line-height: 1.7; } :host([size='lg']) ::slotted(li), :host([size='lg']) ::slotted(lt-list-item) { margin-bottom: var(--lt-spacing-3); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "listStyles",
-          "declaration": {
-            "name": "listStyles",
-            "module": "src/components/list/list.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/list/list.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A customizable list component supporting both ordered and unordered lists.",
-          "name": "List",
-          "cssProperties": [
-            {
-              "description": "Color of the bullet points or numbers (default: neutral-500)",
-              "name": "--list-marker-color"
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The underlying `<ul>` or `<ol>` element",
-              "name": "list"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Default slot for list items (`<li>` elements)",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "listStyles"
+              "default": "radioStyles"
             },
             {
               "kind": "field",
-              "name": "type",
+              "name": "variant",
               "type": {
-                "text": "ListType"
+                "text": "RadioVariant"
               },
-              "default": "'unordered'",
-              "description": "Type of list to render."
+              "default": "'primary'",
+              "description": "Visual variant that determines the color when checked."
             },
             {
               "kind": "field",
               "name": "size",
               "type": {
-                "text": "ListSize"
+                "text": "RadioSize"
               },
               "default": "'md'",
-              "description": "Size of the list items."
+              "description": "Size of the radio button."
             },
             {
               "kind": "field",
-              "name": "markerColor",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the radio is checked."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the radio is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the radio is required."
+            },
+            {
+              "kind": "field",
+              "name": "label",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "Custom color for the list markers (bullets or numbers).\nAccepts any valid CSS color value."
+              "description": "Label text displayed next to the radio button."
+            },
+            {
+              "kind": "field",
+              "name": "labelPosition",
+              "type": {
+                "text": "RadioLabelPosition"
+              },
+              "default": "'right'",
+              "description": "Position of the label relative to the radio button."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name attribute for radio group.\nAll radios with the same name belong to the same group."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Value attribute for form submission."
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  },
+                  "description": "The native change event"
+                }
+              ],
+              "description": "Handles radio change events.\nUpdates the checked state and dispatches a custom change event."
             },
             {
               "kind": "method",
               "name": "render"
             }
           ],
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "CustomEvent<{value: string, checked: boolean}>"
+              },
+              "description": "Dispatched when the radio is selected"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
-          "tagName": "lt-list",
+          "tagName": "lt-radio",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "List",
+          "name": "Radio",
           "declaration": {
-            "name": "List",
-            "module": "src/components/list/list.ts"
+            "name": "Radio",
+            "module": "src/components/radio/radio.ts"
           }
         }
       ]
@@ -2840,551 +3044,6 @@
           "declaration": {
             "name": "RadioGroup",
             "module": "src/components/radio-group/radio-group.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/slider/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Slider",
-          "declaration": {
-            "name": "Slider",
-            "module": "./slider"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SliderSize",
-          "declaration": {
-            "name": "SliderSize",
-            "module": "./slider.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/slider/slider.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "sliderStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; width: 100%; } .label { color: var(--lt-text-default); display: block; font-size: 0.875rem; margin-bottom: var(--lt-spacing-1); user-select: none; } .track-wrap { align-items: center; display: flex; width: 100%; } /* lt-tooltip fills the track-wrap so the input stays full-width */ .track-wrap lt-tooltip { display: block; width: 100%; } /* Position the tooltip above the thumb rather than the track center */ lt-tooltip::part(tooltip) { left: var(--_thumb-left, 50%); } input[type='range'] { appearance: none; background: linear-gradient( to right, var(--lt-interactive-primary-bg) var(--_fill, 0%), var(--lt-border-strong) var(--_fill, 0%) ); border-radius: 9999px; cursor: pointer; display: block; height: var(--_track-h, 6px); outline: none; transition: background 0ms; width: 100%; } input[type='range']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 3px; } input[type='range']:hover:not(:disabled) { --lt-interactive-primary-bg: var(--lt-interactive-primary-bg-hover); } input[type='range']:active:not(:disabled) { --lt-interactive-primary-bg: var(--lt-interactive-primary-bg-active); } /* Thumb — WebKit */ input[type='range']::-webkit-slider-thumb { appearance: none; background: var(--lt-interactive-primary-bg); border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25); cursor: pointer; height: var(--_thumb-size, 18px); transition: transform 100ms ease; width: var(--_thumb-size, 18px); } input[type='range']::-webkit-slider-thumb:hover { transform: scale(1.15); } input[type='range']:active::-webkit-slider-thumb { transform: scale(1.05); } /* Thumb — Firefox */ input[type='range']::-moz-range-thumb { appearance: none; background: var(--lt-interactive-primary-bg); border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25); cursor: pointer; height: var(--_thumb-size, 18px); transition: transform 100ms ease; width: var(--_thumb-size, 18px); } /* Track — Firefox */ input[type='range']::-moz-range-track { background: var(--lt-border-strong); border-radius: 9999px; height: var(--_track-h, 6px); } input[type='range']::-moz-range-progress { background: var(--lt-interactive-primary-bg); border-radius: 9999px; height: var(--_track-h, 6px); } /* Sizes */ :host([size='sm']) { --_track-h: 4px; --_thumb-size: 14px; } :host([size='md']) { --_track-h: 6px; --_thumb-size: 18px; } :host([size='lg']) { --_track-h: 8px; --_thumb-size: 22px; } /* Disabled */ :host([disabled]) { opacity: 0.5; } :host([disabled]) input[type='range'] { cursor: not-allowed; pointer-events: none; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "sliderStyles",
-          "declaration": {
-            "name": "sliderStyles",
-            "module": "src/components/slider/slider.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/slider/slider.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A range slider component for selecting a numeric value within a range.",
-          "name": "Slider",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "sliderStyles"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "SliderSize"
-              },
-              "default": "'md'"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "showTooltip",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show the current value in a tooltip above the thumb."
-            },
-            {
-              "kind": "field",
-              "name": "min",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "max",
-              "type": {
-                "text": "number"
-              },
-              "default": "100"
-            },
-            {
-              "kind": "field",
-              "name": "step",
-              "type": {
-                "text": "number"
-              },
-              "default": "1"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "number"
-              },
-              "default": "0"
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label displayed above the track"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute for form submission"
-            },
-            {
-              "kind": "field",
-              "name": "input",
-              "type": {
-                "text": "HTMLInputElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_fillPercent",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_thumbSizePx",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "number"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "updated"
-            },
-            {
-              "kind": "method",
-              "name": "_onInput",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_onChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "lt-input",
-              "type": {
-                "text": "CustomEvent<{value: number}>"
-              },
-              "description": "Dispatched on every value change while dragging"
-            },
-            {
-              "name": "lt-change",
-              "type": {
-                "text": "CustomEvent<{value: number}>"
-              },
-              "description": "Dispatched when the user commits a value (mouseup/keyup)"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-slider",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Slider",
-          "declaration": {
-            "name": "Slider",
-            "module": "src/components/slider/slider.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/spinner/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Spinner",
-          "declaration": {
-            "name": "Spinner",
-            "module": "./spinner"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SpinnerSize",
-          "declaration": {
-            "name": "SpinnerSize",
-            "module": "./spinner.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SpinnerVariant",
-          "declaration": {
-            "name": "SpinnerVariant",
-            "module": "./spinner.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/spinner/spineer.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "spinnerStyles",
-          "default": "css` :host { --spinner-size: var(--lt-spacing-4, 1rem); --spinner-color: currentColor; display: inline-block; line-height: 0; } /* Sizes */ :host([size='sm']) { --spinner-size: var(--lt-spacing-3, 0.75rem); } :host([size='md']) { --spinner-size: var(--lt-spacing-4, 1rem); } :host([size='lg']) { --spinner-size: var(--lt-spacing-6, 1.5rem); } /* Color */ :host([variant='primary']) { --spinner-color: var(--lt-interactive-primary-bg); } :host([variant='secondary']) { --spinner-color: var(--lt-interactive-secondary-bg); } :host([variant='neutral']) { --spinner-color: var(--lt-color-neutral-500); } :host([variant='current']) { --spinner-color: currentColor; } .spinner { animation: spin 700ms linear infinite; border-bottom-color: var(--spinner-color); border-left-color: var(--spinner-color); border-radius: 999px; border-right-color: transparent; border-style: solid; border-top-color: var(--spinner-color); border-width: 2px; box-sizing: border-box; display: block; height: var(--spinner-size); width: var(--spinner-size); } @keyframes spin { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "spinnerStyles",
-          "declaration": {
-            "name": "spinnerStyles",
-            "module": "src/components/spinner/spineer.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/spinner/spinner.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Spinner component for indicating loading states.",
-          "name": "Spinner",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "spinnerStyles"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "SpinnerSize"
-              },
-              "default": "'md'",
-              "description": "Size of the spinner."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "SpinnerVariant"
-              },
-              "default": "'current'",
-              "description": "Color variant of the spinner.\n'current' inherits color from parent element."
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "description": "Renders the spinner element.\nHidden from assistive technologies with aria-hidden."
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-spinner",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Spinner",
-          "declaration": {
-            "name": "Spinner",
-            "module": "src/components/spinner/spinner.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Radio",
-          "declaration": {
-            "name": "Radio",
-            "module": "./radio"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "RadioSize",
-          "declaration": {
-            "name": "RadioSize",
-            "module": "./radio.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "RadioVariant",
-          "declaration": {
-            "name": "RadioVariant",
-            "module": "./radio.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "RadioLabelPosition",
-          "declaration": {
-            "name": "RadioLabelPosition",
-            "module": "./radio.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio/radio.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "radioStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .radio-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } .radio-container { display: inline-flex; position: relative; } :host([label-position='left']) .radio-wrapper { flex-direction: row-reverse; } :host([disabled]) .radio-wrapper { cursor: not-allowed; opacity: 0.6; } input[type='radio'] { appearance: none; border-radius: 50%; border: 2px solid var(--lt-border-strong); cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='radio']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='radio']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='radio']:disabled { cursor: not-allowed; } .dot { background: white; border-radius: 50%; display: none; pointer-events: none; position: absolute; } input[type='radio']:checked ~ .dot { display: block; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='radio'] { height: 16px; width: 16px; } :host([size='sm']) .dot { height: 8px; width: 8px; left: 4px; top: 4px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='radio'] { height: 20px; width: 20px; } :host([size='md']) .dot { height: 10px; width: 10px; left: 5px; top: 5px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='radio'] { height: 24px; width: 24px; } :host([size='lg']) .dot { height: 12px; width: 12px; left: 6px; top: 6px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='radio']:checked { background: var(--lt-interactive-primary-bg); border-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); border-color: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='radio']:checked { background: var(--lt-interactive-secondary-bg); border-color: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); border-color: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='radio']:checked { background: var(--lt-interactive-success-bg); border-color: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); border-color: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='radio']:checked { background: var(--lt-interactive-error-bg); border-color: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); border-color: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='radio']:checked { background: var(--lt-interactive-info-bg); border-color: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); border-color: var(--lt-interactive-info-bg-hover); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "radioStyles",
-          "declaration": {
-            "name": "radioStyles",
-            "module": "src/components/radio/radio.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio/radio.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A customizable radio button component with support for multiple variants and sizes.",
-          "name": "Radio",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "radioStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "RadioVariant"
-              },
-              "default": "'primary'",
-              "description": "Visual variant that determines the color when checked."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "RadioSize"
-              },
-              "default": "'md'",
-              "description": "Size of the radio button."
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the radio is checked."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the radio is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the radio is required."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text displayed next to the radio button."
-            },
-            {
-              "kind": "field",
-              "name": "labelPosition",
-              "type": {
-                "text": "RadioLabelPosition"
-              },
-              "default": "'right'",
-              "description": "Position of the label relative to the radio button."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute for radio group.\nAll radios with the same name belong to the same group."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Value attribute for form submission."
-            },
-            {
-              "kind": "method",
-              "name": "handleChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  },
-                  "description": "The native change event"
-                }
-              ],
-              "description": "Handles radio change events.\nUpdates the checked state and dispatches a custom change event."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "CustomEvent<{value: string, checked: boolean}>"
-              },
-              "description": "Dispatched when the radio is selected"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-radio",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Radio",
-          "declaration": {
-            "name": "Radio",
-            "module": "src/components/radio/radio.ts"
           }
         }
       ]
@@ -3662,6 +3321,258 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/spinner/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Spinner",
+          "declaration": {
+            "name": "Spinner",
+            "module": "./spinner"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SpinnerSize",
+          "declaration": {
+            "name": "SpinnerSize",
+            "module": "./spinner.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SpinnerVariant",
+          "declaration": {
+            "name": "SpinnerVariant",
+            "module": "./spinner.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/spinner/spineer.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "spinnerStyles",
+          "default": "css` :host { --spinner-size: var(--lt-spacing-4, 1rem); --spinner-color: currentColor; display: inline-block; line-height: 0; } /* Sizes */ :host([size='sm']) { --spinner-size: var(--lt-spacing-3, 0.75rem); } :host([size='md']) { --spinner-size: var(--lt-spacing-4, 1rem); } :host([size='lg']) { --spinner-size: var(--lt-spacing-6, 1.5rem); } /* Color */ :host([variant='primary']) { --spinner-color: var(--lt-interactive-primary-bg); } :host([variant='secondary']) { --spinner-color: var(--lt-interactive-secondary-bg); } :host([variant='neutral']) { --spinner-color: var(--lt-color-neutral-500); } :host([variant='current']) { --spinner-color: currentColor; } .spinner { animation: spin 700ms linear infinite; border-bottom-color: var(--spinner-color); border-left-color: var(--spinner-color); border-radius: 999px; border-right-color: transparent; border-style: solid; border-top-color: var(--spinner-color); border-width: 2px; box-sizing: border-box; display: block; height: var(--spinner-size); width: var(--spinner-size); } @keyframes spin { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "spinnerStyles",
+          "declaration": {
+            "name": "spinnerStyles",
+            "module": "src/components/spinner/spineer.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/spinner/spinner.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Spinner component for indicating loading states.",
+          "name": "Spinner",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "spinnerStyles"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "SpinnerSize"
+              },
+              "default": "'md'",
+              "description": "Size of the spinner."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "SpinnerVariant"
+              },
+              "default": "'current'",
+              "description": "Color variant of the spinner.\n'current' inherits color from parent element."
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "description": "Renders the spinner element.\nHidden from assistive technologies with aria-hidden."
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-spinner",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Spinner",
+          "declaration": {
+            "name": "Spinner",
+            "module": "src/components/spinner/spinner.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/surface/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Surface",
+          "declaration": {
+            "name": "Surface",
+            "module": "./surface"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SurfaceElevation",
+          "declaration": {
+            "name": "SurfaceElevation",
+            "module": "./surface.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SurfaceVariant",
+          "declaration": {
+            "name": "SurfaceVariant",
+            "module": "./surface.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/surface/surface.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "surfaceStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .surface { background: var(--_surface-bg, var(--lt-bg-subtle)); border-radius: var(--lt-border-radius); box-sizing: border-box; transition: box-shadow 120ms ease, border-color 120ms ease; } /* Elevation variants */ :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); } :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); } :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); } :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); } :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); } :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); } /* Visual variants */ :host([variant='filled']) .surface { border: none; } :host([variant='outlined']) .surface { background: var(--_surface-bg, transparent); border: 1px solid var(--lt-border-default); } :host([variant='outlined']:hover) .surface { border-color: var(--lt-border-strong); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "surfaceStyles",
+          "declaration": {
+            "name": "surfaceStyles",
+            "module": "src/components/surface/surface.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/surface/surface.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A container component that provides elevation and surface styling.\nUsed for cards, dropdowns, modals, and other elevated UI elements.",
+          "name": "Surface",
+          "slots": [
+            {
+              "description": "Content to be displayed within the surface",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "surfaceStyles"
+            },
+            {
+              "kind": "field",
+              "name": "elevation",
+              "type": {
+                "text": "SurfaceElevation"
+              },
+              "default": "'1'",
+              "description": "Elevation level that determines shadow depth."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "SurfaceVariant"
+              },
+              "default": "'filled'",
+              "description": "Visual variant that determines border and background."
+            },
+            {
+              "kind": "field",
+              "name": "backgroundColor",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color. Accepts a hex value (#1a1a2e) or a token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "method",
+              "name": "_resolve",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-surface",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Surface",
+          "declaration": {
+            "name": "Surface",
+            "module": "src/components/surface/surface.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/snackbar/index.ts",
       "declarations": [],
       "exports": [
@@ -3902,118 +3813,191 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/surface/index.ts",
+      "path": "src/components/slider/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Surface",
+          "name": "Slider",
           "declaration": {
-            "name": "Surface",
-            "module": "./surface"
+            "name": "Slider",
+            "module": "./slider"
           }
         },
         {
           "kind": "js",
-          "name": "SurfaceElevation",
+          "name": "SliderSize",
           "declaration": {
-            "name": "SurfaceElevation",
-            "module": "./surface.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SurfaceVariant",
-          "declaration": {
-            "name": "SurfaceVariant",
-            "module": "./surface.types"
+            "name": "SliderSize",
+            "module": "./slider.types"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/surface/surface.styles.ts",
+      "path": "src/components/slider/slider.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "surfaceStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .surface { background: var(--_surface-bg, var(--lt-bg-subtle)); border-radius: var(--lt-border-radius); box-sizing: border-box; transition: box-shadow 120ms ease, border-color 120ms ease; } /* Elevation variants */ :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); } :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); } :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); } :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); } :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); } :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); } /* Visual variants */ :host([variant='filled']) .surface { border: none; } :host([variant='outlined']) .surface { background: var(--_surface-bg, transparent); border: 1px solid var(--lt-border-default); } :host([variant='outlined']:hover) .surface { border-color: var(--lt-border-strong); } `"
+          "name": "sliderStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; width: 100%; } .label { color: var(--lt-text-default); display: block; font-size: 0.875rem; margin-bottom: var(--lt-spacing-1); user-select: none; } .track-wrap { align-items: center; display: flex; width: 100%; } /* lt-tooltip fills the track-wrap so the input stays full-width */ .track-wrap lt-tooltip { display: block; width: 100%; } /* Position the tooltip above the thumb rather than the track center */ lt-tooltip::part(tooltip) { left: var(--_thumb-left, 50%); } input[type='range'] { appearance: none; background: linear-gradient( to right, var(--lt-interactive-primary-bg) var(--_fill, 0%), var(--lt-border-strong) var(--_fill, 0%) ); border-radius: 9999px; cursor: pointer; display: block; height: var(--_track-h, 6px); outline: none; transition: background 0ms; width: 100%; } input[type='range']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 3px; } input[type='range']:hover:not(:disabled) { --lt-interactive-primary-bg: var(--lt-interactive-primary-bg-hover); } input[type='range']:active:not(:disabled) { --lt-interactive-primary-bg: var(--lt-interactive-primary-bg-active); } /* Thumb — WebKit */ input[type='range']::-webkit-slider-thumb { appearance: none; background: var(--lt-interactive-primary-bg); border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25); cursor: pointer; height: var(--_thumb-size, 18px); transition: transform 100ms ease; width: var(--_thumb-size, 18px); } input[type='range']::-webkit-slider-thumb:hover { transform: scale(1.15); } input[type='range']:active::-webkit-slider-thumb { transform: scale(1.05); } /* Thumb — Firefox */ input[type='range']::-moz-range-thumb { appearance: none; background: var(--lt-interactive-primary-bg); border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25); cursor: pointer; height: var(--_thumb-size, 18px); transition: transform 100ms ease; width: var(--_thumb-size, 18px); } /* Track — Firefox */ input[type='range']::-moz-range-track { background: var(--lt-border-strong); border-radius: 9999px; height: var(--_track-h, 6px); } input[type='range']::-moz-range-progress { background: var(--lt-interactive-primary-bg); border-radius: 9999px; height: var(--_track-h, 6px); } /* Sizes */ :host([size='sm']) { --_track-h: 4px; --_thumb-size: 14px; } :host([size='md']) { --_track-h: 6px; --_thumb-size: 18px; } :host([size='lg']) { --_track-h: 8px; --_thumb-size: 22px; } /* Disabled */ :host([disabled]) { opacity: 0.5; } :host([disabled]) input[type='range'] { cursor: not-allowed; pointer-events: none; } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "surfaceStyles",
+          "name": "sliderStyles",
           "declaration": {
-            "name": "surfaceStyles",
-            "module": "src/components/surface/surface.styles.ts"
+            "name": "sliderStyles",
+            "module": "src/components/slider/slider.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/surface/surface.ts",
+      "path": "src/components/slider/slider.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "A container component that provides elevation and surface styling.\nUsed for cards, dropdowns, modals, and other elevated UI elements.",
-          "name": "Surface",
-          "slots": [
-            {
-              "description": "Content to be displayed within the surface",
-              "name": ""
-            }
-          ],
+          "description": "A range slider component for selecting a numeric value within a range.",
+          "name": "Slider",
           "members": [
             {
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "surfaceStyles"
+              "default": "sliderStyles"
             },
             {
               "kind": "field",
-              "name": "elevation",
+              "name": "size",
               "type": {
-                "text": "SurfaceElevation"
+                "text": "SliderSize"
               },
-              "default": "'1'",
-              "description": "Elevation level that determines shadow depth."
+              "default": "'md'"
             },
             {
               "kind": "field",
-              "name": "variant",
+              "name": "disabled",
               "type": {
-                "text": "SurfaceVariant"
+                "text": "boolean"
               },
-              "default": "'filled'",
-              "description": "Visual variant that determines border and background."
+              "default": "false"
             },
             {
               "kind": "field",
-              "name": "backgroundColor",
+              "name": "showTooltip",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show the current value in a tooltip above the thumb."
+            },
+            {
+              "kind": "field",
+              "name": "min",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "number"
+              },
+              "default": "100"
+            },
+            {
+              "kind": "field",
+              "name": "step",
+              "type": {
+                "text": "number"
+              },
+              "default": "1"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "label",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "Background color. Accepts a hex value (#1a1a2e) or a token name (--lt-color-primary-600)."
+              "description": "Label displayed above the track"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name attribute for form submission"
+            },
+            {
+              "kind": "field",
+              "name": "input",
+              "type": {
+                "text": "HTMLInputElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_fillPercent",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "method",
-              "name": "_resolve",
+              "name": "_thumbSizePx",
               "privacy": "private",
               "return": {
                 "type": {
-                  "text": "string"
+                  "text": "number"
                 }
-              },
+              }
+            },
+            {
+              "kind": "method",
+              "name": "updated"
+            },
+            {
+              "kind": "method",
+              "name": "_onInput",
+              "privacy": "private",
               "parameters": [
                 {
-                  "name": "value",
+                  "name": "e",
                   "type": {
-                    "text": "string"
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
                   }
                 }
               ]
@@ -4023,225 +4007,37 @@
               "name": "render"
             }
           ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-surface",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Surface",
-          "declaration": {
-            "name": "Surface",
-            "module": "src/components/surface/surface.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/switch/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Switch",
-          "declaration": {
-            "name": "Switch",
-            "module": "./switch"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SwitchSize",
-          "declaration": {
-            "name": "SwitchSize",
-            "module": "./switch.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SwitchVariant",
-          "declaration": {
-            "name": "SwitchVariant",
-            "module": "./switch.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SwitchLabelPosition",
-          "declaration": {
-            "name": "SwitchLabelPosition",
-            "module": "./switch.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/switch/switch.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "switchStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .switch-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } :host([label-position='left']) .switch-wrapper { flex-direction: row-reverse; } :host([disabled]) .switch-wrapper { cursor: not-allowed; opacity: 0.6; } .switch-container { display: inline-flex; position: relative; } input[type='checkbox'] { appearance: none; background: var(--lt-color-neutral-300); border-radius: 999px; cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 200ms ease; } input[type='checkbox']:hover:not(:disabled) { background: var(--lt-border-strong); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .thumb { background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); pointer-events: none; position: absolute; transition: left 200ms ease; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 18px; width: 32px; } :host([size='sm']) .thumb { height: 14px; width: 14px; left: 2px; top: 2px; } :host([size='sm']) input[type='checkbox']:checked ~ .thumb { left: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 22px; width: 40px; } :host([size='md']) .thumb { height: 18px; width: 18px; left: 2px; top: 2px; } :host([size='md']) input[type='checkbox']:checked ~ .thumb { left: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 26px; width: 48px; } :host([size='lg']) .thumb { height: 22px; width: 22px; left: 2px; top: 2px; } :host([size='lg']) input[type='checkbox']:checked ~ .thumb { left: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked { background: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked { background: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked { background: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked { background: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked { background: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "switchStyles",
-          "declaration": {
-            "name": "switchStyles",
-            "module": "src/components/switch/switch.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/switch/switch.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A toggle switch component with sliding animation.\nInternally uses a checkbox input with custom toggle styling.",
-          "name": "Switch",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "switchStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "SwitchVariant"
-              },
-              "default": "'primary'",
-              "description": "Visual variant that determines the color when checked."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "SwitchSize"
-              },
-              "default": "'md'",
-              "description": "Size of the switch."
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the switch is checked (on)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the switch is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the switch is required."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text displayed next to the switch."
-            },
-            {
-              "kind": "field",
-              "name": "labelPosition",
-              "type": {
-                "text": "SwitchLabelPosition"
-              },
-              "default": "'right'",
-              "description": "Position of the label relative to the switch."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "'on'",
-              "description": "Value attribute for form submission."
-            },
-            {
-              "kind": "method",
-              "name": "handleChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  },
-                  "description": "The native change event"
-                }
-              ],
-              "description": "Handles switch change events.\nUpdates the checked state and dispatches a custom change event."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
           "events": [
             {
-              "name": "change",
+              "name": "lt-input",
               "type": {
-                "text": "CustomEvent<{checked: boolean}>"
+                "text": "CustomEvent<{value: number}>"
               },
-              "description": "Dispatched when the switch state changes"
+              "description": "Dispatched on every value change while dragging"
+            },
+            {
+              "name": "lt-change",
+              "type": {
+                "text": "CustomEvent<{value: number}>"
+              },
+              "description": "Dispatched when the user commits a value (mouseup/keyup)"
             }
           ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
-          "tagName": "lt-switch",
+          "tagName": "lt-slider",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Switch",
+          "name": "Slider",
           "declaration": {
-            "name": "Switch",
-            "module": "src/components/switch/switch.ts"
+            "name": "Slider",
+            "module": "src/components/slider/slider.ts"
           }
         }
       ]
@@ -4597,6 +4393,474 @@
           "declaration": {
             "name": "Tab",
             "module": "src/components/tab/tab.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/switch/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Switch",
+          "declaration": {
+            "name": "Switch",
+            "module": "./switch"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SwitchSize",
+          "declaration": {
+            "name": "SwitchSize",
+            "module": "./switch.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SwitchVariant",
+          "declaration": {
+            "name": "SwitchVariant",
+            "module": "./switch.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SwitchLabelPosition",
+          "declaration": {
+            "name": "SwitchLabelPosition",
+            "module": "./switch.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/switch/switch.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "switchStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .switch-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } :host([label-position='left']) .switch-wrapper { flex-direction: row-reverse; } :host([disabled]) .switch-wrapper { cursor: not-allowed; opacity: 0.6; } .switch-container { display: inline-flex; position: relative; } input[type='checkbox'] { appearance: none; background: var(--lt-color-neutral-300); border-radius: 999px; cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 200ms ease; } input[type='checkbox']:hover:not(:disabled) { background: var(--lt-border-strong); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .thumb { background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); pointer-events: none; position: absolute; transition: left 200ms ease; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 18px; width: 32px; } :host([size='sm']) .thumb { height: 14px; width: 14px; left: 2px; top: 2px; } :host([size='sm']) input[type='checkbox']:checked ~ .thumb { left: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 22px; width: 40px; } :host([size='md']) .thumb { height: 18px; width: 18px; left: 2px; top: 2px; } :host([size='md']) input[type='checkbox']:checked ~ .thumb { left: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 26px; width: 48px; } :host([size='lg']) .thumb { height: 22px; width: 22px; left: 2px; top: 2px; } :host([size='lg']) input[type='checkbox']:checked ~ .thumb { left: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked { background: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked { background: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked { background: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked { background: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked { background: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "switchStyles",
+          "declaration": {
+            "name": "switchStyles",
+            "module": "src/components/switch/switch.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/switch/switch.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A toggle switch component with sliding animation.\nInternally uses a checkbox input with custom toggle styling.",
+          "name": "Switch",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "switchStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "SwitchVariant"
+              },
+              "default": "'primary'",
+              "description": "Visual variant that determines the color when checked."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "SwitchSize"
+              },
+              "default": "'md'",
+              "description": "Size of the switch."
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the switch is checked (on)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the switch is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the switch is required."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text displayed next to the switch."
+            },
+            {
+              "kind": "field",
+              "name": "labelPosition",
+              "type": {
+                "text": "SwitchLabelPosition"
+              },
+              "default": "'right'",
+              "description": "Position of the label relative to the switch."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "'on'",
+              "description": "Value attribute for form submission."
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  },
+                  "description": "The native change event"
+                }
+              ],
+              "description": "Handles switch change events.\nUpdates the checked state and dispatches a custom change event."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "CustomEvent<{checked: boolean}>"
+              },
+              "description": "Dispatched when the switch state changes"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-switch",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Switch",
+          "declaration": {
+            "name": "Switch",
+            "module": "src/components/switch/switch.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Text",
+          "declaration": {
+            "name": "Text",
+            "module": "./text"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/text.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "textStyles",
+          "default": "css` :host { display: block; color: inherit; } /* Inline variants sit in text flow */ :host([variant='caption']), :host([variant='overline']) { display: inline; } [part='base'] { margin: 0; color: inherit; font-family: var(--lt-typography-fontfamily); } /* ── Display ─────────────────────────────────────────────────────────── */ :host([variant='display-2xl']) [part='base'] { font-size: 4.5rem; font-weight: 200; line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-xl']) [part='base'] { font-size: 3.75rem; font-weight: 200; line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-lg']) [part='base'] { font-size: 3rem; font-weight: 200; line-height: 1.15; letter-spacing: -0.01em; } /* ── Headings ─────────────────────────────────────────────────────────── */ :host([variant='h1']) [part='base'] { font-size: 2.25rem; font-weight: 600; line-height: 1.2; letter-spacing: -0.01em; } :host([variant='h2']) [part='base'] { font-size: 1.875rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; } :host([variant='h3']) [part='base'] { font-size: 1.5rem; font-weight: 600; line-height: 1.3; } :host([variant='h4']) [part='base'] { font-size: 1.25rem; font-weight: 600; line-height: 1.35; } :host([variant='h5']) [part='base'] { font-size: 1.125rem; font-weight: 600; line-height: 1.4; } :host([variant='h6']) [part='base'] { font-size: 1rem; font-weight: 600; line-height: 1.4; } /* ── Body ─────────────────────────────────────────────────────────────── */ :host([variant='lead']) [part='base'] { font-size: 1.25rem; font-weight: 400; line-height: 1.6; } :host([variant='body']) [part='base'], :host(:not([variant])) [part='base'] { font-size: 1rem; font-weight: 400; line-height: 1.6; } :host([variant='body-sm']) [part='base'] { font-size: 0.875rem; font-weight: 400; line-height: 1.6; } /* ── Inline ───────────────────────────────────────────────────────────── */ :host([variant='caption']) [part='base'] { font-size: 0.75rem; font-weight: 400; line-height: 1.5; } :host([variant='overline']) [part='base'] { font-size: 0.6875rem; font-weight: 600; line-height: 1.2; letter-spacing: 0.08em; text-transform: uppercase; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "textStyles",
+          "declaration": {
+            "name": "textStyles",
+            "module": "src/components/text/text.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/text.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Renders text with a predefined typographic style. The rendered HTML tag\nmatches the variant by default but can be overridden with the `as` attribute\nfor cases where the visual style should not affect the document outline.",
+          "name": "Text",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "textStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "TextVariant"
+              },
+              "default": "'body'",
+              "description": "Typographic style to apply."
+            },
+            {
+              "kind": "field",
+              "name": "as",
+              "type": {
+                "text": "TextTag | ''"
+              },
+              "default": "''",
+              "description": "HTML tag to render. Defaults to the semantic tag for the chosen variant."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-text",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Text",
+          "declaration": {
+            "name": "Text",
+            "module": "src/components/text/text.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tooltip/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Tooltip",
+          "declaration": {
+            "name": "Tooltip",
+            "module": "./tooltip"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TooltipPosition",
+          "declaration": {
+            "name": "TooltipPosition",
+            "module": "./tooltip.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tooltip/tooltip.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "tooltipStyles",
+          "default": "css` :host { display: inline-block; position: relative; --_offset: 8px; } .tooltip { background: var(--_tooltip-bg, var(--lt-color-neutral-900)); border-radius: 4px; color: var(--_tooltip-color, #fff); font-family: 'Hanken Grotesk', sans-serif; font-size: 0.75rem; line-height: 1.4; opacity: 0; padding: var(--lt-spacing-1) var(--lt-spacing-2); pointer-events: none; position: absolute; transition: opacity 150ms ease, visibility 150ms ease; visibility: hidden; white-space: nowrap; z-index: 1000; } .arrow { border: 5px solid transparent; height: 0; position: absolute; width: 0; } :host(:hover) .tooltip, :host(:focus-within) .tooltip { opacity: 1; visibility: visible; } :host([disabled]) .tooltip, :host(:not([content])) .tooltip, :host([content='']) .tooltip { display: none; } /* ── Top (default) ──────────────────────────── */ :host(:not([position])) .tooltip, :host([position='top']) .tooltip { bottom: calc(100% + var(--_offset)); left: 50%; transform: translateX(-50%); } :host(:not([position])) .arrow, :host([position='top']) .arrow { border-top-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); left: 50%; top: 100%; transform: translateX(-50%); } /* ── Bottom ─────────────────────────────────── */ :host([position='bottom']) .tooltip { left: 50%; top: calc(100% + var(--_offset)); transform: translateX(-50%); } :host([position='bottom']) .arrow { border-bottom-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); bottom: 100%; left: 50%; transform: translateX(-50%); } /* ── Left ───────────────────────────────────── */ :host([position='left']) .tooltip { right: calc(100% + var(--_offset)); top: 50%; transform: translateY(-50%); } :host([position='left']) .arrow { border-left-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); left: 100%; top: 50%; transform: translateY(-50%); } /* ── Right ──────────────────────────────────── */ :host([position='right']) .tooltip { left: calc(100% + var(--_offset)); top: 50%; transform: translateY(-50%); } :host([position='right']) .arrow { border-right-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); right: 100%; top: 50%; transform: translateY(-50%); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "tooltipStyles",
+          "declaration": {
+            "name": "tooltipStyles",
+            "module": "src/components/tooltip/tooltip.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tooltip/tooltip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Floating label that appears on hover or focus of its trigger element.",
+          "name": "Tooltip",
+          "slots": [
+            {
+              "description": "The trigger element the tooltip is anchored to.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "tooltipStyles"
+            },
+            {
+              "kind": "field",
+              "name": "_tooltipId",
+              "privacy": "private",
+              "default": "`lt-tooltip-${++_tooltipIdCounter}`"
+            },
+            {
+              "kind": "field",
+              "name": "_slot",
+              "type": {
+                "text": "HTMLSlotElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Tooltip label text."
+            },
+            {
+              "kind": "field",
+              "name": "position",
+              "type": {
+                "text": "TooltipPosition"
+              },
+              "default": "'top'",
+              "description": "Position of the tooltip relative to the trigger: top, bottom, left, or right."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Prevent the tooltip from showing."
+            },
+            {
+              "kind": "field",
+              "name": "backgroundColor",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Tooltip background color. Accepts a hex value (#1a1a2e) or a token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Tooltip text color. Accepts a hex value (#ffffff) or a token name (--lt-color-neutral-50)."
+            },
+            {
+              "kind": "method",
+              "name": "_resolve",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "lt-tooltip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Tooltip",
+          "declaration": {
+            "name": "Tooltip",
+            "module": "src/components/tooltip/tooltip.ts"
           }
         }
       ]
@@ -5268,177 +5532,6 @@
           "declaration": {
             "name": "Table",
             "module": "src/components/table/table.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Tooltip",
-          "declaration": {
-            "name": "Tooltip",
-            "module": "./tooltip"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TooltipPosition",
-          "declaration": {
-            "name": "TooltipPosition",
-            "module": "./tooltip.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/tooltip.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "tooltipStyles",
-          "default": "css` :host { display: inline-block; position: relative; --_offset: 8px; } .tooltip { background: var(--_tooltip-bg, var(--lt-color-neutral-900)); border-radius: 4px; color: var(--_tooltip-color, #fff); font-family: 'Hanken Grotesk', sans-serif; font-size: 0.75rem; line-height: 1.4; opacity: 0; padding: var(--lt-spacing-1) var(--lt-spacing-2); pointer-events: none; position: absolute; transition: opacity 150ms ease, visibility 150ms ease; visibility: hidden; white-space: nowrap; z-index: 1000; } .arrow { border: 5px solid transparent; height: 0; position: absolute; width: 0; } :host(:hover) .tooltip, :host(:focus-within) .tooltip { opacity: 1; visibility: visible; } :host([disabled]) .tooltip, :host(:not([content])) .tooltip, :host([content='']) .tooltip { display: none; } /* ── Top (default) ──────────────────────────── */ :host(:not([position])) .tooltip, :host([position='top']) .tooltip { bottom: calc(100% + var(--_offset)); left: 50%; transform: translateX(-50%); } :host(:not([position])) .arrow, :host([position='top']) .arrow { border-top-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); left: 50%; top: 100%; transform: translateX(-50%); } /* ── Bottom ─────────────────────────────────── */ :host([position='bottom']) .tooltip { left: 50%; top: calc(100% + var(--_offset)); transform: translateX(-50%); } :host([position='bottom']) .arrow { border-bottom-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); bottom: 100%; left: 50%; transform: translateX(-50%); } /* ── Left ───────────────────────────────────── */ :host([position='left']) .tooltip { right: calc(100% + var(--_offset)); top: 50%; transform: translateY(-50%); } :host([position='left']) .arrow { border-left-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); left: 100%; top: 50%; transform: translateY(-50%); } /* ── Right ──────────────────────────────────── */ :host([position='right']) .tooltip { left: calc(100% + var(--_offset)); top: 50%; transform: translateY(-50%); } :host([position='right']) .arrow { border-right-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); right: 100%; top: 50%; transform: translateY(-50%); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "tooltipStyles",
-          "declaration": {
-            "name": "tooltipStyles",
-            "module": "src/components/tooltip/tooltip.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/tooltip.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Floating label that appears on hover or focus of its trigger element.",
-          "name": "Tooltip",
-          "slots": [
-            {
-              "description": "The trigger element the tooltip is anchored to.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "tooltipStyles"
-            },
-            {
-              "kind": "field",
-              "name": "_tooltipId",
-              "privacy": "private",
-              "default": "`lt-tooltip-${++_tooltipIdCounter}`"
-            },
-            {
-              "kind": "field",
-              "name": "_slot",
-              "type": {
-                "text": "HTMLSlotElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Tooltip label text."
-            },
-            {
-              "kind": "field",
-              "name": "position",
-              "type": {
-                "text": "TooltipPosition"
-              },
-              "default": "'top'",
-              "description": "Position of the tooltip relative to the trigger: top, bottom, left, or right."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Prevent the tooltip from showing."
-            },
-            {
-              "kind": "field",
-              "name": "backgroundColor",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Tooltip background color. Accepts a hex value (#1a1a2e) or a token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Tooltip text color. Accepts a hex value (#ffffff) or a token name (--lt-color-neutral-50)."
-            },
-            {
-              "kind": "method",
-              "name": "_resolve",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "firstUpdated",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "lt-tooltip",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Tooltip",
-          "declaration": {
-            "name": "Tooltip",
-            "module": "src/components/tooltip/tooltip.ts"
           }
         }
       ]

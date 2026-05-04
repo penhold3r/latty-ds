@@ -25,6 +25,7 @@
  * - Tab: Individual tab element for use within tab groups
  * - TabGroup: Container for managing tabbed interfaces
  * - Table: Data table with sorting and responsive design
+ * - Text: TODO: describe the Text component
  * - Tooltip: Floating label anchored to a trigger element
  *
  * @packageDocumentation
@@ -80,3 +81,4 @@ export * from './components/dropdown';
 export * from './components/header';
 export * from './components/nav';
 export * from './components/link';
+export * from './components/text';
