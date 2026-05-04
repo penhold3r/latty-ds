@@ -7,7 +7,7 @@
 
 import { generateBWColors, generateNeutralScale, generatePalettes } from '../colors/';
 import { STEPS } from '../constants/';
-import { ColorName, Config, MutedColorName, Palette, PaletteFlat } from '../types/';
+import { Config, Palette, PaletteFlat } from '../types/';
 import { Tokens } from '../types/public-types';
 
 /**
@@ -57,13 +57,13 @@ export const toStepObj = (pal: Palette): PaletteFlat =>
 export const buildColorTokens = (cfg: Config): Tokens['color'] => {
   const color = {} as Tokens['color'];
 
-  for (const [name, value] of Object.entries(cfg.color) as [ColorName, string][]) {
+  for (const [name, value] of Object.entries(cfg.color)) {
     const palettes = generatePalettes(value, true);
 
     color[name] = toStepObj(palettes.main);
 
     if (palettes.muted) {
-      color[`${name}-muted` as MutedColorName] = toStepObj(palettes.muted);
+      color[`${name}-muted`] = toStepObj(palettes.muted);
     }
   }
 

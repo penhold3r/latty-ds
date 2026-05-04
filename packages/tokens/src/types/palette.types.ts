@@ -73,7 +73,7 @@ export type TokenColorName = ColorName | MutedColorName | SystemColorName;
  * ```
  */
 export type Config = {
-  color: Record<ColorName, string>;
+  color: Record<string, string>;
 };
 
 /**

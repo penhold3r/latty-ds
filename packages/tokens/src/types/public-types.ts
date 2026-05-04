@@ -1,4 +1,4 @@
-import type { PaletteFlat, TokenColorName } from './palette.types';
+import type { PaletteFlat } from './palette.types';
 import type { SpacingTokens } from './spacing.types';
 import type { ElevationTokens } from '../elevation/';
 
@@ -37,7 +37,7 @@ import type { ElevationTokens } from '../elevation/';
  * ```
  */
 export type Tokens = {
-  color: Record<TokenColorName, PaletteFlat>;
+  color: Record<string, PaletteFlat | string>;
   spacing: SpacingTokens;
   border: {
     radius: string;
@@ -49,17 +49,11 @@ export type Tokens = {
   elevation: ElevationTokens;
 };
 
-export type { TokenColorName, Config } from './';
+export type { Config, TokenColorName } from './';
 
 export interface LattyConfig {
-  colors?: {
-    primary?: string;
-    secondary?: string;
-    success?: string;
-    warning?: string;
-    error?: string;
-    info?: string;
-  };
+  /** Built-in names: primary, secondary, success, warning, error, info. Any additional name generates a new palette. */
+  colors?: Record<string, string>;
   font?: {
     family?: string;
   };

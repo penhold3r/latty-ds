@@ -34,6 +34,18 @@ describe('createStyleSheet', () => {
     expect(css).toContain('--lt-border-radius: 0.25rem');
   });
 
+  it('generates a full palette for an arbitrary custom color name', () => {
+    const css = createStyleSheet({ colors: { tertiary: '#a855f7' } });
+    expect(css).toContain('--lt-color-tertiary-500');
+    expect(css).toContain('--lt-color-tertiary-muted-500');
+  });
+
+  it('custom palette does not replace built-in palettes', () => {
+    const css = createStyleSheet({ colors: { tertiary: '#a855f7' } });
+    expect(css).toContain('--lt-color-primary-500');
+    expect(css).toContain('--lt-color-tertiary-500');
+  });
+
   it('semantic tokens use var() references, not raw hex', () => {
     const css = createStyleSheet();
     const semanticSection = css.split('/* Semantic tokens */')[1];

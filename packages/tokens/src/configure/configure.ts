@@ -17,7 +17,7 @@ const DEFAULTS: Required<LattyConfig> = {
 };
 
 const toInternalConfig = (userConfig: LattyConfig): Config => ({
-  color: { ...DEFAULTS.colors, ...userConfig.colors } as Config['color'],
+  color: { ...DEFAULTS.colors, ...userConfig.colors },
 });
 
 /**
