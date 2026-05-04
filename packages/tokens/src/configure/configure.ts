@@ -4,18 +4,14 @@ import type { LattyConfig } from '../types/public-types';
 import { DEFAULT_BORDER_RADIUS, DEFAULT_FONT_FAMILY } from '../constants/';
 import { buildTokens, tokensToCss, semanticTokensToCss } from '../core/';
 import { buildSemanticTokens } from '../semantic/';
+import tokensConfig from '../../tokens.config.json';
 
 export type { LattyConfig };
 
+const SEMANTIC_CSS = semanticTokensToCss(buildSemanticTokens());
+
 const DEFAULTS: Required<LattyConfig> = {
-  colors: {
-    primary:   '#05b8e1',
-    secondary: '#e26d05',
-    success:   '#22c55e',
-    warning:   '#eeb308',
-    error:     '#ef4444',
-    info:      '#0ea5e9',
-  },
+  colors: tokensConfig.color,
   font:   { family: DEFAULT_FONT_FAMILY },
   border: { radius: DEFAULT_BORDER_RADIUS },
 };
@@ -40,8 +36,7 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
     tokens = { ...tokens, border: { ...tokens.border, radius: userConfig.border.radius } };
   }
 
-  const semanticMap = buildSemanticTokens();
-  return tokensToCss(tokens) + '\n' + semanticTokensToCss(semanticMap);
+  return tokensToCss(tokens) + '\n' + SEMANTIC_CSS;
 };
 
 /**
