@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Link" description="A styled anchor element with primary color and optional external-link behaviour.">
+  <h1>Link</h1>
+  <p>
+    A styled anchor element. Uses the primary color by default with an underline on hover. Set <code>external</code> to open
+    in a new tab and display a trailing external-link icon.
+  </p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-link" content="Visit site" attrs={{ href: 'https://example.com' }} />
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`<lt-link href="https://example.com">Visit site</lt-link>
+<lt-link href="https://example.com" external>Open in new tab</lt-link>`}
+    react={`
+import { Link } from '@latty/react';
+
+<Link href="https://example.com">Visit site</Link>
+<Link href="https://example.com" external>Open in new tab</Link>
+    `}
+    vue={`
+<template>
+  <lt-link href="https://example.com">Visit site</lt-link>
+  <lt-link href="https://example.com" external>Open in new tab</lt-link>
+</template>
+    `}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-link" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

@@ -11,6 +11,7 @@
  * - Dialog: Modal dialog with backdrop and accessibility features
  * - Dropdown: TODO: describe the Dropdown component
  * - Header: TODO: describe the Header component
+ * - Link: TODO: describe the Link component
  * - List: Ordered and unordered lists with customizable marker colors
  * - Radio: Radio button for single selection within a group
  * - RadioGroup: Container for managing radio button groups
@@ -78,3 +79,4 @@ export * from './components/slider';
 export * from './components/dropdown';
 export * from './components/header';
 export * from './components/nav';
+export * from './components/link';
