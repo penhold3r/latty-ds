@@ -8,6 +8,7 @@ export type DialogProps = {
   hideCloseButton?: boolean;
   closeOnBackdropClick?: boolean;
   closeOnEscape?: boolean;
+  uppercase?: boolean;
   onLtDialogOpen?: (event: CustomEvent) => void;
   onLtDialogClose?: (event: CustomEvent) => void;
   children?: ReactNode;

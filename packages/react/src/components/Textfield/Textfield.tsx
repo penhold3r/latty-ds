@@ -14,6 +14,7 @@ export type TextfieldProps = {
   readonly?: boolean;
   iconStart?: LattyIconName;
   rows?: number;
+  uppercase?: boolean;
   onInput?: (event: CustomEvent) => void;
   onChange?: (event: CustomEvent) => void;
   children?: ReactNode;

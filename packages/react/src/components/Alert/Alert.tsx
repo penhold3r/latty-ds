@@ -7,6 +7,7 @@ export type AlertProps = {
   title?: string;
   withIcon?: boolean;
   closable?: boolean;
+  uppercase?: boolean;
   onLtClose?: (event: CustomEvent) => void;
   children?: ReactNode;
 };

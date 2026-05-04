@@ -11,6 +11,7 @@ export { Dropdown, type DropdownProps } from './components/Dropdown';
 export { List, type ListProps } from './components/List';
 export { Radio, type RadioProps } from './components/Radio';
 export { Header, type HeaderProps } from './components/Header';
+export { Icon, type IconProps } from './components/Icon';
 export { ListItem, type ListItemProps } from './components/ListItem';
 export { Select, type SelectProps } from './components/Select';
 export { Snackbar, type SnackbarProps } from './components/Snackbar';

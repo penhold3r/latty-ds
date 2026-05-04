@@ -7,6 +7,7 @@ export type AccordionProps = {
   variant?: AccordionEl['variant'];
   open?: boolean;
   disabled?: boolean;
+  uppercase?: boolean;
   onToggle?: (event: CustomEvent) => void;
   children?: ReactNode;
 };
