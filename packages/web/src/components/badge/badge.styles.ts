@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const badgeStyles = css`
   :host {
     display: inline-flex;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
     vertical-align: middle;
   }
 
@@ -13,7 +13,7 @@ export const badgeStyles = css`
     border: 1px solid transparent;
     box-sizing: border-box;
     display: inline-flex;
-    font-weight: 500;
+    font-weight: 600;
     gap: var(--lt-spacing-1);
     line-height: 1;
     user-select: none;

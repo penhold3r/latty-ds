@@ -2,7 +2,7 @@ import { css } from 'lit';
 
 export const dialogStyles = css`
   :host {
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
   }
 
   /* Backdrop */

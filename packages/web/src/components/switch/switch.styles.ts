@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const switchStyles = css`
   :host {
     display: inline-block;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
   }
 
   .switch-wrapper {

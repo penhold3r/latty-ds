@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const accordionStyles = css`
   :host {
     display: block;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
     width: 100%;
   }
 
@@ -44,7 +44,7 @@ export const accordionStyles = css`
     color: var(--lt-text-default);
     flex: 1;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .chevron {

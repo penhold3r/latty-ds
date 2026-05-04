@@ -25,8 +25,8 @@ export const avatarStyles = css`
   }
 
   .initials {
-    font-family: 'Nobile', sans-serif;
-    font-weight: 500;
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 600;
     letter-spacing: 0.02em;
     line-height: 1;
     user-select: none;

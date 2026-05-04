@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const selectStyles = css`
   :host {
     display: inline-block;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
     position: relative;
     width: 100%;
   }
@@ -17,7 +17,7 @@ export const selectStyles = css`
   label {
     color: var(--lt-color-neutral-700);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .required-indicator {
@@ -141,7 +141,7 @@ export const selectStyles = css`
   .option[aria-selected='true'] {
     background: var(--lt-bg-primary-subtle);
     color: var(--lt-text-primary);
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .option[disabled] {
@@ -152,6 +152,7 @@ export const selectStyles = css`
 
   .helper-text {
     font-size: 0.75rem;
+    font-weight: 200;
   }
 
   /* Size variants */

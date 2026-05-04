@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const sliderStyles = css`
   :host {
     display: block;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
     width: 100%;
   }
 

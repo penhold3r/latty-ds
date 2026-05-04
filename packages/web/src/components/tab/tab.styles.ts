@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const tabStyles = css`
   :host {
     display: inline-block;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
   }
 
   .tab {
@@ -16,7 +16,7 @@ export const tabStyles = css`
     display: flex;
     font-family: inherit;
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: 600;
     gap: var(--lt-spacing-2);
     outline: none;
     padding: var(--lt-spacing-3) var(--lt-spacing-4);

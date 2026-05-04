@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const chipStyles = css`
   :host {
     display: inline-flex;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
     vertical-align: middle;
   }
 

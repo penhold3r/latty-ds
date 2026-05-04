@@ -27,7 +27,7 @@ export const snackbarStyles = css`
     align-items: center;
     color: var(--lt-text-inverse);
     display: flex;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
     font-size: 0.875rem;
     gap: var(--lt-spacing-2);
     line-height: 1.4;

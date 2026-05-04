@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const radioGroupStyles = css`
   :host {
     display: block;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
   }
 
   .radio-group {
@@ -15,7 +15,7 @@ export const radioGroupStyles = css`
   .label {
     color: var(--lt-text-default);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: var(--lt-spacing-1);
   }
 
@@ -41,6 +41,7 @@ export const radioGroupStyles = css`
   .helper-text {
     color: var(--lt-text-subtle);
     font-size: 0.75rem;
+    font-weight: 200;
     margin-top: var(--lt-spacing-1);
   }
 

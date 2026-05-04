@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const textfieldStyles = css`
   :host {
     display: inline-block;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
     width: 100%;
   }
 
@@ -17,7 +17,7 @@ export const textfieldStyles = css`
   label {
     color: var(--lt-color-neutral-700);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .input-container {
@@ -210,6 +210,7 @@ export const textfieldStyles = css`
   .helper-text {
     color: var(--lt-text-subtle);
     font-size: 0.75rem;
+    font-weight: 200;
   }
 
   :host([variant='success']) .helper-text {

@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const listStyles = css`
   :host {
     display: block;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
     --list-marker-color: var(--lt-color-neutral-500);
   }
 

@@ -13,7 +13,7 @@ export const dropdownItemStyles = css`
     color: var(--lt-text-default);
     cursor: pointer;
     display: flex;
-    font-family: 'Nobile', sans-serif;
+    font-family: 'Hanken Grotesk', sans-serif;
     font-size: 0.875rem;
     gap: var(--lt-spacing-2);
     padding: var(--lt-spacing-2) var(--lt-spacing-4);
@@ -35,7 +35,7 @@ export const dropdownItemStyles = css`
   :host([selected]) .item {
     background: var(--lt-bg-primary-subtle);
     color: var(--lt-text-primary);
-    font-weight: 500;
+    font-weight: 600;
   }
 
   :host([disabled]) {
