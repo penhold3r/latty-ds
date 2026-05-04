@@ -13,6 +13,8 @@ export { Radio, type RadioProps } from './components/Radio';
 export { Header, type HeaderProps } from './components/Header';
 export { Icon, type IconProps } from './components/Icon';
 export { ListItem, type ListItemProps } from './components/ListItem';
+export { Nav, type NavProps } from './components/Nav';
+export { NavItem, type NavItemProps } from './components/NavItem';
 export { Select, type SelectProps } from './components/Select';
 export { Snackbar, type SnackbarProps } from './components/Snackbar';
 export { Spinner, type SpinnerProps } from './components/Spinner';

@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Navigation" description="Horizontal and vertical nav with nested collapsible items">
+  <h1>Navigation</h1>
+  <p>
+    The <code>&lt;lt-nav&gt;</code> component renders a list of links either horizontally or vertically. Nest
+    <code>&lt;lt-nav-item&gt;</code> elements to create collapsible groups — in vertical mode they expand inline; in horizontal
+    mode they drop down as a panel.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="nav-playground" previewHeight="auto">
+    <div slot="preview">
+      <div class="preview-row">
+        <div class="preview-col">
+          <p class="preview-label">Vertical</p>
+          <lt-nav id="nav-vertical">
+            <lt-nav-item href="#" label="Dashboard" icon="home"></lt-nav-item>
+            <lt-nav-item label="Settings" icon="settings">
+              <lt-nav-item href="#" label="Profile"></lt-nav-item>
+              <lt-nav-item href="#" label="Security"></lt-nav-item>
+            </lt-nav-item>
+            <lt-nav-item href="#" label="Help" icon="question-circle"></lt-nav-item>
+          </lt-nav>
+        </div>
+        <div class="preview-col">
+          <p class="preview-label">Horizontal</p>
+          <lt-nav orientation="horizontal" id="nav-horizontal">
+            <lt-nav-item href="#" label="Home"></lt-nav-item>
+            <lt-nav-item label="Products">
+              <lt-nav-item href="#" label="Product A"></lt-nav-item>
+              <lt-nav-item href="#" label="Product B"></lt-nav-item>
+            </lt-nav-item>
+            <lt-nav-item href="#" label="About"></lt-nav-item>
+          </lt-nav>
+        </div>
+      </div>
+    </div>
+    <div slot="controls">
+      <label>
+        Active item
+        <select id="ctrl-active">
+          <option value="Dashboard">Dashboard</option>
+          <option value="Help">Help</option>
+          <option value="Home">Home</option>
+        </select>
+      </label>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`import '@latty/web';
+
+<!-- Vertical navigation (default) -->
+<lt-nav>
+  <lt-nav-item href="/dashboard" label="Dashboard" icon="home" active></lt-nav-item>
+  <lt-nav-item label="Settings" icon="settings">
+    <lt-nav-item href="/settings/profile" label="Profile"></lt-nav-item>
+    <lt-nav-item href="/settings/security" label="Security"></lt-nav-item>
+  </lt-nav-item>
+  <lt-nav-item href="/help" label="Help" icon="question-circle"></lt-nav-item>
+</lt-nav>
+
+<!-- Horizontal navigation with dropdown groups -->
+<lt-nav orientation="horizontal">
+  <lt-nav-item href="/" label="Home"></lt-nav-item>
+  <lt-nav-item label="Products">
+    <lt-nav-item href="/products/a" label="Product A"></lt-nav-item>
+    <lt-nav-item href="/products/b" label="Product B"></lt-nav-item>
+  </lt-nav-item>
+  <lt-nav-item href="/about" label="About"></lt-nav-item>
+</lt-nav>`}
+    react={`import { Nav, NavItem } from '@latty/react';
+
+{/* Vertical navigation (default) */}
+<Nav>
+  <NavItem href="/dashboard" label="Dashboard" icon="home" active />
+  <NavItem label="Settings" icon="settings">
+    <NavItem href="/settings/profile" label="Profile" />
+    <NavItem href="/settings/security" label="Security" />
+  </NavItem>
+  <NavItem href="/help" label="Help" icon="question-circle" />
+</Nav>
+
+{/* Horizontal navigation with dropdown groups */}
+<Nav orientation="horizontal">
+  <NavItem href="/" label="Home" />
+  <NavItem label="Products">
+    <NavItem href="/products/a" label="Product A" />
+    <NavItem href="/products/b" label="Product B" />
+  </NavItem>
+  <NavItem href="/about" label="About" />
+</Nav>`}
+  />
+
+  <h2>API — lt-nav</h2>
+  <ApiTable tag="lt-nav" />
+
+  <h2>API — lt-nav-item</h2>
+  <ApiTable tag="lt-nav-item" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const ctrlActive = document.getElementById('ctrl-active') as HTMLSelectElement;
+
+  ctrlActive?.addEventListener('change', () => {
+    const val = ctrlActive.value;
+    document.querySelectorAll<any>('lt-nav-item').forEach((el) => {
+      el.active = el.label === val;
+    });
+  });
+</script>
+
+<style>
+  .preview-row {
+    display: flex;
+    gap: var(--lt-spacing-10);
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .preview-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lt-spacing-2);
+    min-width: 200px;
+  }
+
+  .preview-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--lt-color-neutral-500);
+    margin: 0;
+  }
+</style>

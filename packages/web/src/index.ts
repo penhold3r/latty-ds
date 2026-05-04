@@ -79,3 +79,4 @@ export * from './components/alert';
 export * from './components/slider';
 export * from './components/dropdown';
 export * from './components/header';
+export * from './components/nav';
