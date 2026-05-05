@@ -38,7 +38,7 @@ export const navItemStyles = css`
     align-items: center;
     gap: var(--lt-spacing-2);
     width: 100%;
-    padding: var(--lt-spacing-2) var(--lt-spacing-3);
+    padding: var(--lt-nav-item-padding, var(--lt-spacing-2) var(--lt-spacing-3));
     border-radius: 6px;
     border: none;
     background: none;
