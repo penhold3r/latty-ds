@@ -4,26 +4,42 @@ title: Tokens Overview
 description: Design tokens in the Latty Design System
 ---
 
+import StaticTable from '../../components/StaticTable.astro';
+
 # Design Tokens
 
 Design tokens are the single source of truth for every visual decision in Latty. They are shipped as four artifacts:
 
-| Output | Import path | Use case |
-|---|---|---|
-| Primitive CSS custom properties | `@latty/tokens/tokens.css` | Any browser context |
-| Semantic CSS custom properties | `@latty/tokens/semantic.css` | Role-based token overrides |
-| JSON | `@latty/tokens/tokens.json` | Tooling, documentation |
-| JavaScript module | `@latty/tokens` | JS/TS consumers |
+<StaticTable
+  columns={[
+    { key: 'output', label: 'Output' },
+    { key: 'path', label: 'Import path', code: true },
+    { key: 'use', label: 'Use case' }
+  ]}
+  rows={[
+    { output: 'Primitive CSS custom properties', path: '@latty/tokens/tokens.css', use: 'Any browser context' },
+    { output: 'Semantic CSS custom properties', path: '@latty/tokens/semantic.css', use: 'Role-based token overrides' },
+    { output: 'JSON', path: '@latty/tokens/tokens.json', use: 'Tooling, documentation' },
+    { output: 'JavaScript module', path: '@latty/tokens', use: 'JS/TS consumers' }
+  ]}
+/>
 
 ## Token categories
 
-| Category | CSS prefix | Example |
-|---|---|---|
-| Colors | `--lt-color-*` | `--lt-color-primary-500` |
-| Spacing | `--lt-spacing-*` | `--lt-spacing-4` |
-| Border radius | `--lt-border-radius` | `0.5rem` |
-| Elevation | `--lt-elevation-*` | `--lt-elevation-2` |
-| Typography | `--lt-typography-fontFamily` | `"Hanken Grotesk", sans-serif` |
+<StaticTable
+  columns={[
+    { key: 'cat', label: 'Category' },
+    { key: 'prefix', label: 'CSS prefix', code: true },
+    { key: 'ex', label: 'Example', code: true }
+  ]}
+  rows={[
+    { cat: 'Colors', prefix: '--lt-color-*', ex: '--lt-color-primary-500' },
+    { cat: 'Spacing', prefix: '--lt-spacing-*', ex: '--lt-spacing-4' },
+    { cat: 'Border radius', prefix: '--lt-border-radius', ex: '0.5rem' },
+    { cat: 'Elevation', prefix: '--lt-elevation-*', ex: '--lt-elevation-2' },
+    { cat: 'Typography', prefix: '--lt-typography-fontFamily', ex: '"Hanken Grotesk", sans-serif' }
+  ]}
+/>
 
 ## Import
 
