@@ -8,7 +8,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   description="A framework-agnostic design system built on design tokens and Web Components"
 >
   <div class="hero">
-    <div class="hero-badge">Design System</div>
+    <lt-badge content="Design System"></lt-badge>
     <h1 class="hero-title">Structure beneath<br />every interface</h1>
     <p class="hero-subtitle">
       A lattice is an invisible grid that gives things their shape — every crystal, every fabric, every well-built UI.
@@ -56,7 +56,7 @@ import '@latty/web';</code></pre>
     <pre><code class="language-html">&lt;lt-button variant="primary" icon="save"&gt;Save changes&lt;/lt-button&gt;
 
 &lt;lt-textfield label="Email" type="email" required&gt;&lt;/lt-textfield&gt;</code></pre>
-    <a href={`${base}/getting-started/installation`} class="link-more">Full installation guide →</a>
+    <lt-link href={`${base}/getting-started/installation`}>Full installation guide →</lt-link>
   </div>
 </BaseLayout>
 
@@ -70,20 +70,6 @@ import '@latty/web';</code></pre>
     padding: var(--lt-spacing-10) 0 var(--lt-spacing-12);
     border-bottom: 1px solid var(--lt-color-neutral-200);
     margin-bottom: var(--lt-spacing-10);
-  }
-
-  .hero-badge {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--lt-color-primary-600);
-    background: var(--lt-color-primary-50);
-    border: 1px solid var(--lt-color-primary-200);
-    padding: 3px 10px;
-    border-radius: 99px;
-    margin-bottom: var(--lt-spacing-4);
   }
 
   .hero-title {
@@ -190,11 +176,8 @@ import '@latty/web';</code></pre>
     margin-bottom: var(--lt-spacing-3);
   }
 
-  .link-more {
+  lt-link {
     display: inline-block;
     margin-top: var(--lt-spacing-4);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--lt-color-primary-600);
   }
 </style>

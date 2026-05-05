@@ -22,7 +22,6 @@ const { id, previewHeight = '140px' } = Astro.props;
 ---
 
 <div class="playground" id={id}>
-
   <div class="preview" style={`min-height: ${previewHeight}`}>
     <div class="preview-stage">
       <slot name="preview" />
@@ -38,15 +37,11 @@ const { id, previewHeight = '140px' } = Astro.props;
     <div class="code-panel">
       <div class="code-header">
         <span class="section-label" style="color:var(--lt-color-neutral-500)">HTML</span>
-        <button class="copy-btn" id={`${id}-copy`} aria-label="Copy code">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <rect x="9" y="9" width="13" height="13" rx="2"/>
-            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-          </svg>
-          Copy
-        </button>
+        <lt-button size="sm" variant="neutral" appearance="outlined" id={`${id}-copy`} aria-label="Copy code"
+          >Copy</lt-button
+        >
       </div>
-      <pre class="code-pre"><code class="code-output" id={`${id}-code`}></code></pre>
+      <pre class="code-pre"><code class="code-output" id={`${id}-code`} /></pre>
     </div>
   </div>
 </div>
@@ -62,7 +57,7 @@ const { id, previewHeight = '140px' } = Astro.props;
       await navigator.clipboard.writeText(codeEl.textContent ?? '');
       copyBtn.textContent = 'Copied!';
       setTimeout(() => {
-        copyBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`;
+        copyBtn.textContent = 'Copy';
       }, 1500);
     });
   });
@@ -130,27 +125,6 @@ const { id, previewHeight = '140px' } = Astro.props;
     justify-content: space-between;
     padding: 0 var(--lt-spacing-4);
     border-bottom: 1px solid var(--lt-color-neutral-700);
-  }
-
-  .copy-btn {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: none;
-    border: 1px solid var(--lt-color-neutral-600);
-    color: var(--lt-color-neutral-400);
-    font-size: 0.75rem;
-    padding: 3px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: color 150ms, border-color 150ms;
-    margin: var(--lt-spacing-2) 0;
-  }
-
-  .copy-btn:hover {
-    color: var(--lt-color-neutral-200);
-    border-color: var(--lt-color-neutral-400);
   }
 
   .code-pre {

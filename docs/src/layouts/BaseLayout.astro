@@ -23,36 +23,30 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <title>{title} | Latty</title>
   </head>
   <body>
-    <header class="topbar">
-      <div class="topbar-inner">
-        <div class="topbar-start">
-          <button
-            class="menu-toggle"
-            id="menu-toggle"
-            aria-label="Toggle navigation"
-            aria-expanded="false"
-            aria-controls="sidebar"
-          >
-            <lt-icon name="menu" size="md" aria-hidden="true"></lt-icon>
-          </button>
-          <a href={`${base}/`} class="wordmark">
-            <span class="wordmark-accent">Latty</span>
-          </a>
-        </div>
-
-        <div class="topbar-end">
-          <a
-            href="https://github.com/yourusername/latty-ds"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="github-link"
-            aria-label="GitHub"
-          >
-            <lt-icon name="github" size="md" aria-hidden="true"></lt-icon>
-          </a>
-        </div>
-      </div>
-    </header>
+    <lt-header variant="primary" class="topbar">
+      <button
+        slot="before"
+        class="menu-toggle"
+        id="menu-toggle"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+        aria-controls="sidebar"
+      >
+        <lt-icon name="menu" size="md" aria-hidden="true"></lt-icon>
+      </button>
+      <a slot="logo" href={`${base}/`} class="wordmark">
+        <span class="wordmark-accent">Latty</span>
+      </a>
+      <lt-link
+        slot="after"
+        href="https://github.com/yourusername/latty-ds"
+        external
+        class="github-link"
+        aria-label="GitHub"
+      >
+        <lt-icon name="github" size="md" aria-hidden="true"></lt-icon>
+      </lt-link>
+    </lt-header>
 
     <div id="overlay" class="overlay" aria-hidden="true"></div>
 
@@ -69,34 +63,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 <style>
   :root {
-    --topbar-height: 56px;
+    --topbar-height: 64px;
     --sidebar-width: 240px;
   }
 
   .topbar {
-    position: sticky;
-    top: 0;
     z-index: 200;
-    height: var(--topbar-height);
-    background: var(--lt-color-primary-500);
-    border-bottom: 1px solid var(--lt-color-neutral-200);
-  }
-
-  .topbar-inner {
-    height: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 var(--lt-spacing-4);
-    display: flex;
-    align-items: center;
-    gap: var(--lt-spacing-4);
-  }
-
-  .topbar-start {
-    display: flex;
-    align-items: center;
-    gap: var(--lt-spacing-3);
-    flex: 1;
   }
 
   .menu-toggle {
@@ -104,19 +76,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-color-neutral-100);
     padding: var(--lt-spacing-1);
     border-radius: 4px;
   }
 
   .menu-toggle:hover {
-    background: var(--lt-color-neutral-100);
+    background: color-mix(in srgb, white 15%, transparent);
   }
 
   .wordmark {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--lt-color-neutral-900);
     text-decoration: none;
   }
 
@@ -124,22 +95,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     color: var(--lt-color-primary-50);
   }
 
-  .topbar-end {
-    display: flex;
-    align-items: center;
-  }
-
-  .github-link {
-    display: flex;
-    align-items: center;
+  .github-link::part(base) {
     color: var(--lt-color-neutral-50);
-    padding: var(--lt-spacing-1);
-    border-radius: 4px;
-    transition: color 150ms;
   }
 
-  .github-link:hover {
-    color: var(--lt-color-neutral-900);
+  .github-link::part(base):hover {
+    color: var(--lt-color-neutral-200);
   }
 
   .overlay {
@@ -173,6 +134,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   @media (max-width: 768px) {
     .menu-toggle {
       display: flex;
+      align-items: center;
     }
 
     .content {
@@ -182,6 +144,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 </style>
 
 <script>
+  import '@latty/web';
   import '@latty/icons';
 
   const toggle = document.getElementById('menu-toggle');

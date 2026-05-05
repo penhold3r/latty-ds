@@ -14,13 +14,9 @@ const snippetId = `snippet-${Math.random().toString(36).slice(2, 8)}`;
 <div class="snippet">
   <div class="snippet-header">
     <span class="snippet-lang">{title ?? lang}</span>
-    <button class="copy-btn" data-snippet-id={snippetId} aria-label="Copy code">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <rect x="9" y="9" width="13" height="13" rx="2"/>
-        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-      </svg>
-      Copy
-    </button>
+    <lt-button size="sm" variant="neutral" appearance="outlined" data-snippet-id={snippetId} aria-label="Copy code"
+      >Copy</lt-button
+    >
   </div>
   <div id={snippetId} class="snippet-body">
     <Code code={code.trim()} lang={lang} theme="github-dark" />
@@ -52,26 +48,6 @@ const snippetId = `snippet-${Math.random().toString(36).slice(2, 8)}`;
     color: #8b949e;
   }
 
-  .copy-btn {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: none;
-    border: 1px solid #30363d;
-    color: #8b949e;
-    font-size: 0.75rem;
-    padding: 3px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: color 150ms, border-color 150ms;
-  }
-
-  .copy-btn:hover {
-    color: #e6edf3;
-    border-color: #8b949e;
-  }
-
   .snippet-body :global(pre) {
     margin: 0;
     padding: var(--lt-spacing-4) !important;
@@ -88,6 +64,8 @@ const snippetId = `snippet-${Math.random().toString(36).slice(2, 8)}`;
 </style>
 
 <script>
+  import '@latty/web';
+
   document.querySelectorAll('[data-snippet-id]').forEach((btn) => {
     btn.addEventListener('click', async () => {
       const id = (btn as HTMLElement).dataset.snippetId!;
@@ -95,7 +73,7 @@ const snippetId = `snippet-${Math.random().toString(36).slice(2, 8)}`;
       await navigator.clipboard.writeText(code.trim());
       btn.textContent = 'Copied!';
       setTimeout(() => {
-        btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`;
+        btn.textContent = 'Copy';
       }, 1500);
     });
   });
