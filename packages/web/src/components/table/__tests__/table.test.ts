@@ -364,4 +364,80 @@ describe('<lt-table>', () => {
     const firstCell = el.shadowRoot!.querySelectorAll('tbody tr')[0].querySelectorAll('td')[0];
     expect(firstCell.getAttribute('data-label')).toBe('ID');
   });
+
+  describe('JSON string attribute initialization (SSR use case)', () => {
+    it('renders columns from a JSON attribute string', async () => {
+      const ssrEl = document.createElement('lt-table') as Table<TestData>;
+      ssrEl.setAttribute('columns', JSON.stringify(columns));
+      ssrEl.setAttribute('data', JSON.stringify(data));
+      document.body.appendChild(ssrEl);
+      await ssrEl.updateComplete;
+
+      const headers = ssrEl.shadowRoot!.querySelectorAll('th');
+      expect(headers.length).toBe(3);
+      expect(headers[0].textContent).toContain('ID');
+      expect(headers[1].textContent).toContain('Name');
+      expect(headers[2].textContent).toContain('Age');
+
+      const rows = ssrEl.shadowRoot!.querySelectorAll('tbody tr');
+      expect(rows.length).toBe(3);
+      ssrEl.remove();
+    });
+
+    it('renders cell data correctly when set via JSON attributes', async () => {
+      const ssrEl = document.createElement('lt-table') as Table<TestData>;
+      ssrEl.setAttribute('columns', JSON.stringify(columns));
+      ssrEl.setAttribute('data', JSON.stringify(data));
+      document.body.appendChild(ssrEl);
+      await ssrEl.updateComplete;
+
+      const firstRow = ssrEl.shadowRoot!.querySelectorAll('tbody tr')[0];
+      const cells = firstRow.querySelectorAll('td');
+      expect(cells[0].textContent?.trim()).toBe('1');
+      expect(cells[1].textContent?.trim()).toBe('Alice');
+      expect(cells[2].textContent?.trim()).toBe('30');
+      ssrEl.remove();
+    });
+
+    it('falls back to empty array on malformed columns JSON', async () => {
+      const ssrEl = document.createElement('lt-table') as Table<TestData>;
+      ssrEl.setAttribute('columns', 'not valid json');
+      ssrEl.setAttribute('data', JSON.stringify(data));
+      document.body.appendChild(ssrEl);
+      await ssrEl.updateComplete;
+
+      const headers = ssrEl.shadowRoot!.querySelectorAll('th');
+      expect(headers.length).toBe(0);
+      ssrEl.remove();
+    });
+
+    it('falls back to empty array on malformed data JSON', async () => {
+      const ssrEl = document.createElement('lt-table') as Table<TestData>;
+      ssrEl.setAttribute('columns', JSON.stringify(columns));
+      ssrEl.setAttribute('data', '{bad json}');
+      document.body.appendChild(ssrEl);
+      await ssrEl.updateComplete;
+
+      const emptyState = ssrEl.shadowRoot!.querySelector('.empty-state');
+      expect(emptyState).toBeTruthy();
+      ssrEl.remove();
+    });
+
+    it('supports sorting when initialized via JSON attributes', async () => {
+      const ssrEl = document.createElement('lt-table') as Table<TestData>;
+      ssrEl.setAttribute('columns', JSON.stringify(columns));
+      ssrEl.setAttribute('data', JSON.stringify(data));
+      document.body.appendChild(ssrEl);
+      await ssrEl.updateComplete;
+
+      const nameHeader = ssrEl.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
+      nameHeader.click();
+      await ssrEl.updateComplete;
+      await ssrEl.updateComplete;
+
+      const firstRowName = ssrEl.shadowRoot!.querySelectorAll('tbody tr')[0].querySelectorAll('td')[1];
+      expect(firstRowName.textContent?.trim()).toBe('Alice');
+      ssrEl.remove();
+    });
+  });
 });

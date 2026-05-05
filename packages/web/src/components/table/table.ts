@@ -13,6 +13,18 @@ import {
   SortChangeDetail,
 } from './table.types';
 
+const jsonArrayConverter = {
+  fromAttribute(value: string | null): unknown[] {
+    if (value === null) return [];
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+};
+
 import '@latty/icons';
 
 /**
@@ -65,15 +77,18 @@ export class Table<T = Record<string, unknown>> extends LitElement {
 
   /**
    * Column definitions for the table.
+   * Accepts a JS array (`.columns = [...]`) or a JSON string attribute (`columns='[...]'`).
+   * When passed as JSON, only serializable fields are supported (no `render` or `sortFn`).
    * @default []
    */
-  @property({ type: Array }) columns: TableColumn<T>[] = [];
+  @property({ converter: jsonArrayConverter }) columns: TableColumn<T>[] = [];
 
   /**
    * Data rows for the table.
+   * Accepts a JS array (`.data = [...]`) or a JSON string attribute (`data='[...]'`).
    * @default []
    */
-  @property({ type: Array }) data: T[] = [];
+  @property({ converter: jsonArrayConverter }) data: T[] = [];
 
   /**
    * Density/spacing of the table.
@@ -163,18 +178,20 @@ export class Table<T = Record<string, unknown>> extends LitElement {
    * Updates the sorted data based on current sort state.
    */
   private updateSortedData() {
+    const data = this.data ?? [];
     if (!this.currentSort) {
-      this.sortedData = [...this.data];
+      this.sortedData = [...data];
       return;
     }
 
-    const column = this.columns.find((col) => col.key === this.currentSort!.key);
+    const columns = this.columns ?? [];
+    const column = columns.find((col) => col.key === this.currentSort!.key);
     if (!column) {
-      this.sortedData = [...this.data];
+      this.sortedData = [...data];
       return;
     }
 
-    const sorted = [...this.data].sort((a, b) => {
+    const sorted = [...data].sort((a, b) => {
       // Use custom sort function if provided
       if (column.sortFn) {
         return column.sortFn(a, b, this.currentSort!.direction);
@@ -283,7 +300,7 @@ export class Table<T = Record<string, unknown>> extends LitElement {
     return html`
       <thead>
         <tr>
-          ${this.columns.map(
+          ${(this.columns ?? []).map(
             (column) => html`
               <th
                 class=${classMap({
@@ -333,11 +350,12 @@ export class Table<T = Record<string, unknown>> extends LitElement {
    * Renders the table body.
    */
   private renderBody() {
+    const columns = this.columns ?? [];
     if (this.sortedData.length === 0) {
       return html`
         <tbody>
           <tr>
-            <td colspan=${this.columns.length} class="empty-state">
+            <td colspan=${columns.length} class="empty-state">
               ${this.emptyMessage}
             </td>
           </tr>
@@ -354,7 +372,7 @@ export class Table<T = Record<string, unknown>> extends LitElement {
             : JSON.stringify(row),
           (row, index) => html`
             <tr>
-              ${this.columns.map(
+              ${columns.map(
                 (column) => html`
                   <td
                     class=${classMap({
