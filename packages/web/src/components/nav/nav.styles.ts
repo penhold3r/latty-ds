@@ -44,7 +44,7 @@ export const navItemStyles = css`
     background: none;
     cursor: pointer;
     color: inherit;
-    font-size: 0.9375rem;
+    font-size: var(--lt-nav-item-font-size, 0.9375rem);
     font-family: inherit;
     text-decoration: none;
     text-align: left;
