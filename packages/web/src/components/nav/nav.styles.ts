@@ -61,7 +61,8 @@ export const navItemStyles = css`
   }
 
   :host([active]) .item-trigger {
-    background: color-mix(in srgb, currentColor 15%, transparent);
+    background: var(--lt-nav-item-active-bg, color-mix(in srgb, currentColor 15%, transparent));
+    color: var(--lt-nav-item-active-color, inherit);
     font-weight: 600;
   }
 

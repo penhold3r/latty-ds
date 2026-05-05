@@ -71,13 +71,19 @@ describe('<lt-accordion>', () => {
   });
 
   it('supports all variants', async () => {
-    const variants = ['default', 'filled', 'outlined'] as const;
+    const variants = ['default', 'filled', 'outlined', 'clean'] as const;
 
     for (const variant of variants) {
       el.variant = variant;
       await el.updateComplete;
       expect(el.getAttribute('variant')).toBe(variant);
     }
+  });
+
+  it('clean variant reflects on host', async () => {
+    el.variant = 'clean';
+    await el.updateComplete;
+    expect(el.getAttribute('variant')).toBe('clean');
   });
 
   it('can change variant', async () => {

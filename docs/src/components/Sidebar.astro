@@ -75,29 +75,18 @@ function isSectionActive(items: { href: string }[]) {
   <div class="sidebar-inner">
     {
       nav.map((section) => (
-        <div class="nav-section" class:list={[{ 'is-open': isSectionActive(section.items) }]}>
-          <button
-            class="nav-section-toggle"
-            aria-expanded={isSectionActive(section.items) ? 'true' : 'false'}
-            data-section-toggle
-          >
-            <span>{section.label}</span>
-            <lt-icon name="caret-down" size="xs" class="chevron" aria-hidden="true" />
-          </button>
-          <ul class="nav-items" role="list">
+        <lt-accordion
+          variant="clean"
+          uppercase
+          label={section.label}
+          open={isSectionActive(section.items) || undefined}
+        >
+          <lt-nav>
             {section.items.map((item) => (
-              <li>
-                <a
-                  href={base + item.href}
-                  class:list={['nav-link', { 'is-active': isActive(item.href) }]}
-                  aria-current={isActive(item.href) ? 'page' : undefined}
-                >
-                  {item.label}
-                </a>
-              </li>
+              <lt-nav-item href={base + item.href} label={item.label} active={isActive(item.href) || undefined} />
             ))}
-          </ul>
-        </div>
+          </lt-nav>
+        </lt-accordion>
       ))
     }
   </div>
@@ -114,86 +103,22 @@ function isSectionActive(items: { href: string }[]) {
     border-right: 1px solid var(--lt-color-neutral-200);
     background: var(--lt-color-neutral-50);
     padding: var(--lt-spacing-4) 0;
+
+    /* Accordion header: compact section label style */
+    --lt-accordion-summary-padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    --lt-accordion-content-padding: 0;
+    --lt-accordion-header-color: var(--lt-color-neutral-500);
+    --lt-accordion-header-font-size: 0.75rem;
+    --lt-accordion-header-font-weight: 600;
+
+    /* Nav item active state: primary blue */
+    --lt-nav-item-active-bg: var(--lt-color-primary-50);
+    --lt-nav-item-active-color: var(--lt-color-primary-600);
   }
 
   .sidebar-inner {
     display: flex;
     flex-direction: column;
-    gap: var(--lt-spacing-2);
-  }
-
-  .nav-section {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .nav-section-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: var(--lt-spacing-2) var(--lt-spacing-4);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--lt-color-neutral-500);
-    text-align: left;
-  }
-
-  .nav-section-toggle:hover {
-    color: var(--lt-color-neutral-700);
-  }
-
-  .chevron {
-    flex-shrink: 0;
-    transition: transform 200ms ease;
-  }
-
-  .nav-section.is-open .chevron {
-    transform: rotate(180deg);
-  }
-
-  .nav-items {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: none;
-    flex-direction: column;
-  }
-
-  .nav-section.is-open .nav-items {
-    display: flex;
-  }
-
-  .nav-link {
-    display: block;
-    padding: var(--lt-spacing-2) var(--lt-spacing-4);
-    padding-left: calc(var(--lt-spacing-4) + var(--lt-spacing-2));
-    color: var(--lt-color-neutral-700);
-    text-decoration: none;
-    font-size: 0.875rem;
-    border-left: 2px solid transparent;
-    transition:
-      color 150ms,
-      border-color 150ms,
-      background 150ms;
-  }
-
-  .nav-link:hover {
-    color: var(--lt-color-neutral-900);
-    background: var(--lt-color-neutral-100);
-    text-decoration: none;
-  }
-
-  .nav-link.is-active {
-    color: var(--lt-color-primary-600);
-    border-left-color: var(--lt-color-primary-500);
-    background: var(--lt-color-primary-50);
-    font-weight: 500;
   }
 
   @media (max-width: 768px) {
@@ -213,14 +138,3 @@ function isSectionActive(items: { href: string }[]) {
     }
   }
 </style>
-
-<script>
-  // Section toggles
-  document.querySelectorAll('[data-section-toggle]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const section = btn.closest('.nav-section');
-      const isOpen = section?.classList.toggle('is-open');
-      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    });
-  });
-</script>

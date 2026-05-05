@@ -31,7 +31,7 @@ export const accordionStyles = css`
     display: flex;
     gap: var(--lt-spacing-3);
     justify-content: space-between;
-    padding: var(--lt-spacing-4);
+    padding: var(--lt-accordion-summary-padding, var(--lt-spacing-4));
   }
 
   .start-icon {
@@ -41,8 +41,13 @@ export const accordionStyles = css`
   }
 
   .summary-text {
-    color: var(--lt-text-default);
+    color: var(--lt-accordion-header-color, var(--lt-text-default));
     flex: 1;
+  }
+
+  .summary-text::part(base) {
+    font-size: var(--lt-accordion-header-font-size, 1rem);
+    font-weight: var(--lt-accordion-header-font-weight, 600);
   }
 
   .chevron {
@@ -76,7 +81,7 @@ export const accordionStyles = css`
     color: var(--lt-color-neutral-700);
     font-size: 0.9375rem;
     line-height: 1.6;
-    padding: 0 var(--lt-spacing-4) var(--lt-spacing-4);
+    padding: var(--lt-accordion-content-padding, 0 var(--lt-spacing-4) var(--lt-spacing-4));
   }
 
   /* Variant: default */
@@ -107,6 +112,12 @@ export const accordionStyles = css`
 
   :host([variant='outlined']) details:hover {
     border-color: var(--lt-border-strong);
+  }
+
+  /* Variant: clean */
+  :host([variant='clean']) details {
+    background: transparent;
+    border: none;
   }
 
   /* Disabled state */
