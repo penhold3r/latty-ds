@@ -60,10 +60,18 @@ import '@latty/icons';
  * ];
  * ```
  *
+ * Via JS property assignment (supports `render` and `sortFn`):
+ * ```javascript
+ * const table = document.querySelector('lt-table');
+ * table.columns = columns;
+ * table.data = data;
+ * ```
+ *
+ * Via JSON string attributes (SSR / Astro templates, no render/sortFn):
  * ```html
  * <lt-table
- *   .columns=${columns}
- *   .data=${data}
+ *   columns='[{"key":"name","label":"Name","sortable":true}]'
+ *   data='[{"name":"John Doe"}]'
  *   density="normal"
  *   responsive-mode="scroll"
  *   hoverable
