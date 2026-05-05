@@ -24,7 +24,7 @@ export class Header extends LitElement {
 
   render() {
     return html`
-      <header>
+      <header part="inner">
         <slot name="before"></slot>
         <slot name="logo"></slot>
         <div class="content"><slot name="content"></slot></div>
