@@ -75,12 +75,7 @@ function isSectionActive(items: { href: string }[]) {
   <div class="sidebar-inner">
     {
       nav.map((section) => (
-        <lt-accordion
-          variant="clean"
-          uppercase
-          label={section.label}
-          open={isSectionActive(section.items) || undefined}
-        >
+        <lt-accordion variant="clean" label={section.label} open={isSectionActive(section.items) || undefined}>
           <lt-nav>
             {section.items.map((item) => (
               <lt-nav-item href={base + item.href} label={item.label} active={isActive(item.href) || undefined} />
@@ -104,12 +99,12 @@ function isSectionActive(items: { href: string }[]) {
     background: var(--lt-color-neutral-50);
     padding: var(--lt-spacing-4) 0;
 
-    /* Accordion header: compact section label style */
+    /* Accordion header: bold section title */
     --lt-accordion-summary-padding: var(--lt-spacing-2) var(--lt-spacing-4);
     --lt-accordion-content-padding: 0;
-    --lt-accordion-header-color: var(--lt-color-neutral-500);
-    --lt-accordion-header-font-size: 0.75rem;
-    --lt-accordion-header-font-weight: 600;
+    --lt-accordion-header-color: var(--lt-color-neutral-800);
+    --lt-accordion-header-font-size: 0.875rem;
+    --lt-accordion-header-font-weight: 700;
 
     /* Nav item sizing and active state */
     --lt-nav-item-font-size: 0.875rem;

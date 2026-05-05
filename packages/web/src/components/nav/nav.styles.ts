@@ -99,10 +99,6 @@ export const navItemStyles = css`
     transition: height 200ms ease;
   }
 
-  :host([open]) .children {
-    /* height is set imperatively */
-  }
-
   .children-inner {
     padding-left: var(--lt-spacing-4);
     padding-top: var(--lt-spacing-1);
