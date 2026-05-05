@@ -37,15 +37,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <a slot="logo" href={`${base}/`} class="wordmark">
         <span class="wordmark-accent">Latty</span>
       </a>
-      <lt-link
+      <a
         slot="after"
         href="https://github.com/yourusername/latty-ds"
-        external
+        target="_blank"
+        rel="noopener noreferrer"
         class="github-link"
         aria-label="GitHub"
       >
         <lt-icon name="github" size="md" aria-hidden="true"></lt-icon>
-      </lt-link>
+      </a>
     </lt-header>
 
     <div id="overlay" class="overlay" aria-hidden="true"></div>
@@ -95,11 +96,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     color: var(--lt-color-primary-50);
   }
 
-  .github-link::part(base) {
+  .github-link {
     color: var(--lt-color-neutral-50);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: var(--lt-spacing-1);
+    border-radius: 4px;
   }
 
-  .github-link::part(base):hover {
+  .github-link:hover {
     color: var(--lt-color-neutral-200);
   }
 
@@ -128,7 +134,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   }
 
   .prose {
-    width: 100%;
+    max-width: 768px;
   }
 
   @media (max-width: 768px) {
