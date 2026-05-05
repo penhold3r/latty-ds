@@ -5,51 +5,24 @@ import tokens from '@latty/tokens/tokens.json';
 const spacing = (tokens as any).spacing;
 const steps = Object.keys(spacing.rem).sort((a, b) => Number(a) - Number(b));
 
-// Base = 16px, step * 4px
-function toPx(step: string) {
-  return Number(step) * 4;
-}
+const rows = steps.map((step) => ({
+  step,
+  varName: step === '0' ? '--lt-spacing-0' : `--lt-spacing-${step}`,
+  rem: spacing.rem[step],
+  px: spacing.px[step],
+  barPx: Math.min(Number(step) * 4, 320)
+}));
 ---
 
 <BaseLayout title="Spacing" description="Spacing tokens in the Latty Design System">
   <h1>Spacing</h1>
   <p>
-    A 4px grid system with 25 steps (0–24), providing 0px to 96px in 4px increments.
-    Each step is available in both <code>rem</code> (canonical) and <code>px</code> units.
+    A 4px grid system with 25 steps (0–24), providing 0px to 96px in 4px increments. Each step is available in both <code
+      >rem</code
+    > (canonical) and <code>px</code> units.
   </p>
 
-  <div class="scale">
-    <div class="scale-header">
-      <span>Step</span>
-      <span>CSS variable</span>
-      <span>Value</span>
-      <span>px</span>
-      <span class="bar-col">Visual</span>
-    </div>
-
-    {steps.map((step) => {
-      const remVal = spacing.rem[step];
-      const pxVal = spacing.px[step];
-      const px = toPx(step);
-      const varName = step === '0' ? '--lt-spacing-0' : `--lt-spacing-${step}`;
-
-      return (
-        <div class="scale-row">
-          <span class="step-num">{step}</span>
-          <code class="var-name">{varName}</code>
-          <span class="val-rem">{remVal}</span>
-          <span class="val-px">{pxVal}</span>
-          <div class="bar-col">
-            <div
-              class="bar"
-              style={`width: ${Math.min(px, 320)}px`}
-              title={pxVal}
-            ></div>
-          </div>
-        </div>
-      );
-    })}
-  </div>
+  <lt-table id="spacing-table" data={JSON.stringify(rows)} density="compact" hoverable></lt-table>
 
   <h2>Usage</h2>
   <div class="usage-grid">
@@ -73,79 +46,11 @@ function toPx(step: string) {
 </BaseLayout>
 
 <style>
-  .scale {
+  #spacing-table {
     border: 1px solid var(--lt-color-neutral-200);
     border-radius: 8px;
-    overflow: hidden;
-    margin: var(--lt-spacing-6) 0;
     font-size: 0.8125rem;
-  }
-
-  .scale-header,
-  .scale-row {
-    display: grid;
-    grid-template-columns: 48px 180px 72px 60px 1fr;
-    align-items: center;
-    gap: var(--lt-spacing-4);
-    padding: var(--lt-spacing-2) var(--lt-spacing-4);
-  }
-
-  .scale-header {
-    background: var(--lt-color-neutral-100);
-    border-bottom: 1px solid var(--lt-color-neutral-200);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--lt-color-neutral-500);
-  }
-
-  .scale-row {
-    border-bottom: 1px solid var(--lt-color-neutral-100);
-  }
-
-  .scale-row:last-child {
-    border-bottom: none;
-  }
-
-  .scale-row:hover {
-    background: var(--lt-color-neutral-50);
-  }
-
-  .step-num {
-    font-weight: 600;
-    color: var(--lt-color-neutral-500);
-    text-align: right;
-  }
-
-  .var-name {
-    color: var(--lt-color-primary-700);
-    font-size: 0.8rem;
-    white-space: nowrap;
-  }
-
-  .val-rem {
-    color: var(--lt-color-neutral-700);
-    font-family: monospace;
-  }
-
-  .val-px {
-    color: var(--lt-color-neutral-500);
-    font-family: monospace;
-  }
-
-  .bar-col {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-  }
-
-  .bar {
-    height: 8px;
-    background: var(--lt-color-primary-400);
-    border-radius: 2px;
-    min-width: 2px;
-    transition: width 150ms;
+    margin: var(--lt-spacing-6) 0;
   }
 
   .usage-grid {
@@ -168,18 +73,77 @@ function toPx(step: string) {
   }
 
   @media (max-width: 640px) {
-    .scale-header,
-    .scale-row {
-      grid-template-columns: 40px 1fr 60px;
-    }
-    .scale-header span:nth-child(3),
-    .scale-header span:nth-child(4),
-    .scale-row .val-rem,
-    .scale-row .val-px {
-      display: none;
-    }
     .usage-grid {
       grid-template-columns: 1fr;
     }
   }
 </style>
+
+<script>
+  import '@latty/web';
+
+  const el = document.getElementById('spacing-table') as any;
+  if (el) {
+    el.columns = [
+      {
+        key: 'step',
+        label: 'Step',
+        width: '52px',
+        align: 'right',
+        render(v: unknown) {
+          const span = document.createElement('span');
+          span.style.cssText = 'font-weight: 600; color: var(--lt-color-neutral-500);';
+          span.textContent = String(v);
+          return span;
+        }
+      },
+      {
+        key: 'varName',
+        label: 'CSS variable',
+        width: '196px',
+        render(v: unknown) {
+          const code = document.createElement('code');
+          code.style.cssText = 'color: var(--lt-color-primary-700); font-size: 0.8rem; white-space: nowrap;';
+          code.textContent = String(v);
+          return code;
+        }
+      },
+      {
+        key: 'rem',
+        label: 'Value',
+        width: '72px',
+        hideOnMobile: true,
+        render(v: unknown) {
+          const span = document.createElement('span');
+          span.style.cssText = 'font-family: monospace; color: var(--lt-color-neutral-700);';
+          span.textContent = String(v);
+          return span;
+        }
+      },
+      {
+        key: 'px',
+        label: 'px',
+        width: '60px',
+        hideOnMobile: true,
+        render(v: unknown) {
+          const span = document.createElement('span');
+          span.style.cssText = 'font-family: monospace; color: var(--lt-color-neutral-500);';
+          span.textContent = String(v);
+          return span;
+        }
+      },
+      {
+        key: 'barPx',
+        label: 'Visual',
+        render(v: unknown) {
+          const wrap = document.createElement('div');
+          wrap.style.cssText = 'display: flex; align-items: center;';
+          const bar = document.createElement('div');
+          bar.style.cssText = `height: 8px; background: var(--lt-color-primary-400); border-radius: 2px; min-width: 2px; width: ${Math.max(Number(v), 2)}px;`;
+          wrap.appendChild(bar);
+          return wrap;
+        }
+      }
+    ];
+  }
+</script>
