@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+---
+
+<BaseLayout title="Skeleton" description="A loading placeholder that mimics the shape of content.">
+  <h1>Skeleton</h1>
+  <p>
+    A shimmering placeholder used while content is loading. Matches the shape of the real content to reduce layout shift
+    and signal progress to the user.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="skeleton-playground" previewHeight="auto">
+    <div slot="preview" style="display:flex;flex-direction:column;gap:1rem;padding:1.5rem;max-width:320px;">
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <lt-skeleton variant="circle" width="40px" height="40px"></lt-skeleton>
+        <div style="flex:1;display:flex;flex-direction:column;gap:0.5rem;">
+          <lt-skeleton variant="text" width="60%"></lt-skeleton>
+          <lt-skeleton variant="text" width="40%"></lt-skeleton>
+        </div>
+      </div>
+      <lt-skeleton height="120px"></lt-skeleton>
+      <lt-skeleton variant="text"></lt-skeleton>
+      <lt-skeleton variant="text" width="80%"></lt-skeleton>
+    </div>
+    <div slot="controls"></div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`<!-- Default rect -->
+<lt-skeleton></lt-skeleton>
+<lt-skeleton height="200px"></lt-skeleton>
+
+<!-- Text line -->
+<lt-skeleton variant="text" width="60%"></lt-skeleton>
+
+<!-- Avatar circle -->
+<lt-skeleton variant="circle" width="48px" height="48px"></lt-skeleton>
+
+<!-- Disable shimmer -->
+<lt-skeleton animated="false"></lt-skeleton>`}
+    react={`import { Skeleton } from '@latty/react';
+
+<Skeleton />
+<Skeleton height="200px" />
+<Skeleton variant="text" width="60%" />
+<Skeleton variant="circle" width="48px" height="48px" />`}
+    vue={`<template>
+  <lt-skeleton></lt-skeleton>
+  <lt-skeleton height="200px"></lt-skeleton>
+  <lt-skeleton variant="text" width="60%"></lt-skeleton>
+  <lt-skeleton variant="circle" width="48px" height="48px"></lt-skeleton>
+</template>`}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-skeleton" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

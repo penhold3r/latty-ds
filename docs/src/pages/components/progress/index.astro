@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Progress" description="A horizontal bar that shows how far along a process is.">
+  <h1>Progress</h1>
+  <p>
+    A progress bar for showing completion of a task or process. Supports determinate values (0–100), color variants,
+    three sizes, and an indeterminate animation for unknown durations.
+  </p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-progress" previewHeight="80px" />
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`<!-- Determinate -->
+<lt-progress value="40"></lt-progress>
+<lt-progress value="75" variant="success"></lt-progress>
+<lt-progress value="60" variant="warning"></lt-progress>
+<lt-progress value="30" variant="error"></lt-progress>
+
+<!-- Sizes -->
+<lt-progress value="50" size="sm"></lt-progress>
+<lt-progress value="50" size="md"></lt-progress>
+<lt-progress value="50" size="lg"></lt-progress>
+
+<!-- Indeterminate -->
+<lt-progress indeterminate></lt-progress>`}
+    react={`import { Progress } from '@latty/react';
+
+<Progress value={40} />
+<Progress value={75} variant="success" />
+<Progress indeterminate />`}
+    vue={`<template>
+  <lt-progress :value="40"></lt-progress>
+  <lt-progress :value="75" variant="success"></lt-progress>
+  <lt-progress indeterminate></lt-progress>
+</template>`}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-progress" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

@@ -19,17 +19,21 @@ const nav = [
       { label: 'Alert', href: '/components/alert' },
       { label: 'Avatar', href: '/components/avatar' },
       { label: 'Badge', href: '/components/badge' },
+      { label: 'Breadcrumb', href: '/components/breadcrumb' },
       { label: 'Button', href: '/components/button' },
       { label: 'Checkbox', href: '/components/checkbox' },
       { label: 'Chip', href: '/components/chip' },
       { label: 'Dialog', href: '/components/dialog' },
+      { label: 'Divider', href: '/components/divider' },
       { label: 'Dropdown', href: '/components/dropdown' },
       { label: 'Header', href: '/components/header' },
       { label: 'Link', href: '/components/link' },
       { label: 'List', href: '/components/list' },
       { label: 'Navigation', href: '/components/navigation' },
+      { label: 'Progress', href: '/components/progress' },
       { label: 'Radio', href: '/components/radio' },
       { label: 'Select', href: '/components/select' },
+      { label: 'Skeleton', href: '/components/skeleton' },
       { label: 'Slider', href: '/components/slider' },
       { label: 'Snackbar', href: '/components/snackbar' },
       { label: 'Spinner', href: '/components/spinner' },
@@ -78,15 +82,7 @@ function isSectionActive(items: { href: string }[]) {
             data-section-toggle
           >
             <span>{section.label}</span>
-            <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path
-                d="M2 4l4 4 4-4"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <lt-icon name="caret-down" size="xs" class="chevron" aria-hidden="true" />
           </button>
           <ul class="nav-items" role="list">
             {section.items.map((item) => (
@@ -153,8 +149,8 @@ function isSectionActive(items: { href: string }[]) {
   }
 
   .chevron {
-    transition: transform 200ms ease;
     flex-shrink: 0;
+    transition: transform 200ms ease;
   }
 
   .nav-section.is-open .chevron {

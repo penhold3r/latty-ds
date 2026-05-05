@@ -82,3 +82,7 @@ export * from './components/header';
 export * from './components/nav';
 export * from './components/link';
 export * from './components/text';
+export * from './components/breadcrumb';
+export * from './components/divider';
+export * from './components/progress';
+export * from './components/skeleton';

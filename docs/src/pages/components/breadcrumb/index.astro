@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+---
+
+<BaseLayout title="Breadcrumb" description="A navigation trail that shows the user's location in the app hierarchy.">
+  <h1>Breadcrumb</h1>
+  <p>
+    A secondary navigation that shows the path from the root to the current page. The last item is marked as <code
+      >current</code
+    > and rendered as non-linked text.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="breadcrumb-playground" previewHeight="auto">
+    <div slot="preview" style="padding:1.5rem;">
+      <lt-breadcrumb>
+        <lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
+        <lt-breadcrumb-item href="/components">Components</lt-breadcrumb-item>
+        <lt-breadcrumb-item current>Breadcrumb</lt-breadcrumb-item>
+      </lt-breadcrumb>
+    </div>
+    <div slot="controls"></div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`<lt-breadcrumb>
+  <lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
+  <lt-breadcrumb-item href="/components">Components</lt-breadcrumb-item>
+  <lt-breadcrumb-item current>Breadcrumb</lt-breadcrumb-item>
+</lt-breadcrumb>`}
+    react={`import { Breadcrumb, BreadcrumbItem } from '@latty/react';
+
+<Breadcrumb>
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/components">Components</BreadcrumbItem>
+  <BreadcrumbItem current>Breadcrumb</BreadcrumbItem>
+</Breadcrumb>`}
+    vue={`<template>
+  <lt-breadcrumb>
+    <lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
+    <lt-breadcrumb-item href="/components">Components</lt-breadcrumb-item>
+    <lt-breadcrumb-item current>Breadcrumb</lt-breadcrumb-item>
+  </lt-breadcrumb>
+</template>`}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-breadcrumb" />
+  <ApiTable tag="lt-breadcrumb-item" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

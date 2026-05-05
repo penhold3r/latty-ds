@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+---
+
+<BaseLayout title="Divider" description="A visual separator between content sections.">
+  <h1>Divider</h1>
+  <p>
+    A thin line that separates content. Supports horizontal and vertical orientations, dashed and dotted styles, and an
+    optional centered label.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="divider-playground" previewHeight="auto">
+    <div slot="preview" style="display:flex;flex-direction:column;gap:1.5rem;padding:1.5rem;">
+      <lt-divider></lt-divider>
+      <lt-divider label="or"></lt-divider>
+      <lt-divider variant="dashed"></lt-divider>
+      <lt-divider variant="dotted"></lt-divider>
+      <div style="display:flex;height:60px;align-items:stretch;gap:1rem;">
+        <span>Left</span>
+        <lt-divider orientation="vertical"></lt-divider>
+        <span>Right</span>
+      </div>
+    </div>
+    <div slot="controls"></div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`<!-- Horizontal (default) -->
+<lt-divider></lt-divider>
+
+<!-- With label -->
+<lt-divider label="or"></lt-divider>
+
+<!-- Line styles -->
+<lt-divider variant="dashed"></lt-divider>
+<lt-divider variant="dotted"></lt-divider>
+
+<!-- Vertical -->
+<div style="display:flex;height:48px;align-items:stretch;">
+  <span>Left</span>
+  <lt-divider orientation="vertical"></lt-divider>
+  <span>Right</span>
+</div>`}
+    react={`import { Divider } from '@latty/react';
+
+<Divider />
+<Divider label="or" />
+<Divider variant="dashed" />
+<Divider orientation="vertical" />`}
+    vue={`<template>
+  <lt-divider></lt-divider>
+  <lt-divider label="or"></lt-divider>
+  <lt-divider variant="dashed"></lt-divider>
+  <lt-divider orientation="vertical"></lt-divider>
+</template>`}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-divider" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>
