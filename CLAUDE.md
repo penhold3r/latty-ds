@@ -91,13 +91,31 @@ Commits must follow [Conventional Commits](https://www.conventionalcommits.org/)
 Format: `type(scope): subject`
 
 Valid types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `style`, `perf`, `ci`, `build`
-Valid scopes: `tokens`, `web`, `icons`, `react`, `angular`, `utils`, `docs`, `scripts`, `deps`, `config`, `ci`, `release`
+Valid scopes: `tokens`, `web`, `icons`, `react`, `utils`, `docs`, `scripts`, `deps`, `config`, `ci`, `release`
 
 Example: `feat(web): add tooltip component`
 
 Subject max length is 100 characters (longer than conventional default). Body lines may be up to 120 characters.
 
 The `pre-push` hook also runs `pnpm check:boundaries && pnpm typecheck` before every push — fix any violations before pushing rather than skipping the hook.
+
+### Releasing
+
+All five publishable packages (`@latty/tokens`, `@latty/web`, `@latty/icons`, `@latty/react`, `@latty/utils`) are versioned together using Lerna with fixed versioning.
+
+```bash
+pnpm release          # Bump versions via conventional commits, commit, and tag
+```
+
+This runs `lerna version --conventional-commits`, which:
+1. Inspects commits since the last tag to determine the version bump
+2. Updates `version` in each package's `package.json` and `lerna.json`
+3. Creates a `chore(release): publish vX.Y.Z` commit and a `vX.Y.Z` git tag
+4. Pushes the commit and tag to `origin`
+
+CI then picks up the tag and runs `lerna publish from-git` to publish to npm (see `.github/workflows/publish.yml`). Two secrets must be set in the GitHub repo: `NPM_TOKEN` (npm publish token) and `GH_TOKEN` (GitHub PAT with write access, needed to push version bumps).
+
+To do a dry run without pushing: `pnpm exec lerna version --conventional-commits --no-push`.
 
 ## Architecture
 
@@ -110,7 +128,6 @@ This is a pnpm workspace monorepo with the following packages:
 - **@latty/icons** - Icon components using Iconoir library with pluggable provider system
 - **@latty/docs** - Astro-based documentation site with MDX support and live component demos
 - **@latty/react** - React wrappers for web components (auto-generated from `custom-elements.json`)
-- **@latty/angular** - Angular wrappers stub — not yet implemented; consumers should use the web components directly via `CUSTOM_ELEMENTS_SCHEMA`
 - **@latty/utils** - Shared utilities
 
 ### Design Tokens Build Process

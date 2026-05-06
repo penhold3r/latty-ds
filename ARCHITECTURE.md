@@ -11,12 +11,12 @@
 
 Latty follows a layered architecture where design tokens are the foundation:
 
-```
+```text
 @latty/tokens (design tokens)
     ↓
 @latty/web (Web Components)
     ↓
-@latty/react, @latty/angular (framework wrappers)
+@latty/react (framework wrappers)
 ```
 
 ### Design Tokens System
@@ -147,7 +147,7 @@ Built with **Lit** framework using TypeScript decorators.
 
 Standard file organization:
 
-```
+```text
 components/
   {component}/
     {component}.ts           # LitElement component
@@ -190,8 +190,7 @@ Monorepo managed by **pnpm workspaces**:
 - **@latty/tokens** - Design token generation system
 - **@latty/web** - Web Components (Lit-based)
 - **@latty/icons** - Icon registry and components (uses Iconoir)
-- **@latty/react** - React wrappers (planned)
-- **@latty/angular** - Angular wrappers (planned)
+- **@latty/react** - React wrappers
 - **@latty/utils** - Shared utilities (logger, strings, etc.)
 
 #### TypeScript Path Aliases
@@ -228,7 +227,7 @@ Each package has its own build strategy:
 - **@latty/tokens**: Multi-step build (tsup → node → tsc)
 - **@latty/web**: TypeScript compilation + asset copying (CSS, fonts)
 - **@latty/icons**: TypeScript compilation
-- **@latty/react/angular**: TypeScript compilation
+- **@latty/react**: TypeScript compilation
 
 #### Build Dependencies
 

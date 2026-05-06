@@ -10,7 +10,6 @@ export default {
         'web',
         'icons',
         'react',
-        'angular',
         'utils',
         'docs',
         'scripts',

@@ -25,7 +25,7 @@ tokens.config.json          ← base brand colors
        ↓
 @latty/web                  ← Lit Web Components that consume CSS vars
        ↓
-@latty/react / @latty/angular  ← thin framework wrappers (optional)
+@latty/react               ← thin React wrappers (optional)
 ```
 
 Components never hardcode colors, sizes, or spacing — they only reference `--lt-*` custom properties. This means a single token change ripples through every component automatically.
@@ -41,8 +41,7 @@ Components never hardcode colors, sizes, or spacing — they only reference `--l
     { pkg: '@latty/tokens', desc: 'Generates CSS vars, JSON, and JS from brand config' },
     { pkg: '@latty/web', desc: '16 Lit Web Components with lt- prefix' },
     { pkg: '@latty/icons', desc: 'Icon system backed by Iconoir (800+ icons), pluggable' },
-    { pkg: '@latty/react', desc: 'React wrappers around @latty/web' },
-    { pkg: '@latty/angular', desc: 'Angular wrappers around @latty/web' }
+    { pkg: '@latty/react', desc: 'React wrappers around @latty/web' }
   ]}
 />
 
@@ -62,7 +61,7 @@ Web Components run natively in every browser without a framework runtime. This m
 - **Encapsulation via Shadow DOM** — styles can't bleed in or out accidentally
 - **Reactive attributes** — properties reflect to HTML attributes, so server-rendered markup works
 
-React and Angular wrappers exist for cases where you want typed props and idiomatic event binding in those frameworks.
+A React wrapper (`@latty/react`) is available for cases where you want typed props and idiomatic event binding.
 
 ## What's next?
 

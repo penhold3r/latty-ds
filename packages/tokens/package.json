@@ -1,7 +1,18 @@
 {
   "name": "@latty/tokens",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "Design tokens for the Latty design system — generates CSS custom properties, JSON, and JavaScript exports from a single config file",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/penhold3r/latty-ds.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://penhold3r.github.io/latty-ds",
+  "keywords": ["design-system", "design-tokens", "css-variables", "css-custom-properties", "tokens", "latty"],
+  "publishConfig": { "access": "public" },
+  "files": ["dist", "README.md", "LICENSE"],
+  "sideEffects": ["**/*.css"],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/public-types.d.ts",
@@ -27,13 +38,11 @@
     "clean": "rimraf dist dist-scripts"
   },
   "devDependencies": {
+    "@types/culori": "^4.0.1",
     "typescript": "^5.5.4"
   },
   "dependencies": {
     "@latty/utils": "workspace:*",
-    "@types/culori": "^4.0.1",
-    "culori": "^4.0.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "culori": "^4.0.2"
   }
 }

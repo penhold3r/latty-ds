@@ -1,7 +1,18 @@
 {
   "name": "@latty/icons",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "Icon components for the Latty design system — pluggable icon registry with Iconoir as the default provider",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/penhold3r/latty-ds.git",
+    "directory": "packages/icons"
+  },
+  "homepage": "https://penhold3r.github.io/latty-ds",
+  "keywords": ["design-system", "icons", "iconoir", "web-components", "icon-registry", "latty"],
+  "publishConfig": { "access": "public" },
+  "files": ["dist", "README.md", "LICENSE"],
+  "sideEffects": true,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

@@ -1,6 +1,18 @@
 {
   "name": "@latty/react",
   "version": "0.1.0",
+  "description": "React wrappers for the Latty design system — typed React components backed by @latty/web",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/penhold3r/latty-ds.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://penhold3r.github.io/latty-ds",
+  "keywords": ["design-system", "react", "web-components", "ui", "latty"],
+  "publishConfig": { "access": "public" },
+  "files": ["dist", "README.md", "LICENSE"],
+  "sideEffects": false,
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

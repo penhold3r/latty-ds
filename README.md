@@ -12,7 +12,6 @@ Framework-agnostic design system built on design tokens and Web Components. One 
 | `@latty/web` | Web Components (`lt-` prefix, built with Lit) |
 | `@latty/icons` | Icon components with pluggable provider system |
 | `@latty/react` | React wrappers for web components |
-| `@latty/angular` | Angular wrappers for web components |
 | `@latty/utils` | Shared utilities |
 
 ## Quick start
