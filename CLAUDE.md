@@ -244,6 +244,8 @@ Tests use Vitest with jsdom environment. Test files are located at `packages/**/
 
 **Lit component testing**: Lit renders asynchronously. After setting properties or calling `requestUpdate()`, always `await el.updateComplete` before asserting on the DOM or shadow root.
 
+**Iterating over variants/sizes/appearances**: use `it.each([...] as const)('reflects %s variant to attribute', ...)` — never a `for...of` or `forEach` loop inside an `it` block. Each value becomes its own named test row, making failures easier to pinpoint. The `vitest/prefer-each` ESLint rule (`eslint.config.mts`) enforces the related pattern of not generating `it()` calls via loops inside `describe` blocks; the inside-`it` form is a convention enforced by this note.
+
 ## Tooling
 
 **ESLint**: Uses v9 flat config (`eslint.config.mts`) with Astro, JSON, CSS, and Markdown support. CSS rules allow unknown `--lt-*` custom properties (`allowUnknownVariables: true`) since they are resolved at runtime by `@latty/tokens`. `no-console` is an error — use the `logger` utility from `@latty/utils` in scripts instead.

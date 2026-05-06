@@ -33,22 +33,16 @@ describe('<lt-alert>', () => {
     expect(el.getAttribute('appearance')).toBe('filled');
   });
 
-  it('supports all appearances', async () => {
-    const appearances = ['filled', 'outlined', 'solid'] as const;
-    for (const appearance of appearances) {
-      el.appearance = appearance;
-      await el.updateComplete;
-      expect(el.getAttribute('appearance')).toBe(appearance);
-    }
+  it.each(['filled', 'outlined', 'solid'] as const)('reflects %s appearance to attribute', async (appearance) => {
+    el.appearance = appearance;
+    await el.updateComplete;
+    expect(el.getAttribute('appearance')).toBe(appearance);
   });
 
-  it('supports all variants', async () => {
-    const variants = ['default', 'success', 'warning', 'error', 'info'] as const;
-    for (const variant of variants) {
-      el.variant = variant;
-      await el.updateComplete;
-      expect(el.getAttribute('variant')).toBe(variant);
-    }
+  it.each(['default', 'success', 'warning', 'error', 'info'] as const)('reflects %s variant to attribute', async (variant) => {
+    el.variant = variant;
+    await el.updateComplete;
+    expect(el.getAttribute('variant')).toBe(variant);
   });
 
   it('renders slot for body content', () => {

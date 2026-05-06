@@ -5,6 +5,7 @@ import json from '@eslint/json';
 import markdown from '@eslint/markdown';
 import css from '@eslint/css';
 import astro from 'eslint-plugin-astro';
+import vitest from '@vitest/eslint-plugin';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
@@ -92,8 +93,10 @@ export default defineConfig([
     // Test files routinely need any for ref generics and mock shapes that don't
     // match the full element interface — warn rather than error.
     files: ['**/*.test.ts', '**/*.test.tsx'],
+    plugins: { vitest },
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
+      'vitest/prefer-each': 'error',
     },
   },
   {

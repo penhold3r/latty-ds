@@ -70,26 +70,10 @@ describe('<lt-accordion>', () => {
     expect(slot).toBeTruthy();
   });
 
-  it('supports all variants', async () => {
-    const variants = ['default', 'filled', 'outlined', 'clean'] as const;
-
-    for (const variant of variants) {
-      el.variant = variant;
-      await el.updateComplete;
-      expect(el.getAttribute('variant')).toBe(variant);
-    }
-  });
-
-  it('clean variant reflects on host', async () => {
-    el.variant = 'clean';
+  it.each(['default', 'filled', 'outlined', 'clean'] as const)('reflects %s variant to attribute', async (variant) => {
+    el.variant = variant;
     await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe('clean');
-  });
-
-  it('can change variant', async () => {
-    el.variant = 'filled';
-    await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe('filled');
+    expect(el.getAttribute('variant')).toBe(variant);
   });
 
   it('dispatches toggle event when opened', async () => {

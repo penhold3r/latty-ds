@@ -54,14 +54,10 @@ describe('<lt-tab>', () => {
     expect(button?.hasAttribute('disabled')).toBe(true);
   });
 
-  it('supports all sizes', async () => {
-    const sizes = ['sm', 'md', 'lg'] as const;
-
-    for (const size of sizes) {
-      el.size = size;
-      await el.updateComplete;
-      expect(el.getAttribute('size')).toBe(size);
-    }
+  it.each(['sm', 'md', 'lg'] as const)('reflects %s size to attribute', async (size) => {
+    el.size = size;
+    await el.updateComplete;
+    expect(el.getAttribute('size')).toBe(size);
   });
 
   it('renders icon when provided', async () => {

@@ -27,13 +27,10 @@ describe('<lt-skeleton>', () => {
     expect(el.hasAttribute('animated')).toBe(true);
   });
 
-  it('supports all variants', async () => {
-    const variants = ['text', 'circle', 'rect'] as const;
-    for (const v of variants) {
-      el.variant = v;
-      await el.updateComplete;
-      expect(el.getAttribute('variant')).toBe(v);
-    }
+  it.each(['text', 'circle', 'rect'] as const)('reflects %s variant to attribute', async (variant) => {
+    el.variant = variant;
+    await el.updateComplete;
+    expect(el.getAttribute('variant')).toBe(variant);
   });
 
   it('applies custom width via inline style', async () => {

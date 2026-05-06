@@ -34,13 +34,10 @@ describe('<lt-badge>', () => {
     expect(el.getAttribute('variant')).toBe('primary');
   });
 
-  it('supports all variants', async () => {
-    const variants = ['primary', 'secondary', 'success', 'warning', 'error', 'neutral'] as const;
-    for (const variant of variants) {
-      el.variant = variant;
-      await el.updateComplete;
-      expect(el.getAttribute('variant')).toBe(variant);
-    }
+  it.each(['primary', 'secondary', 'success', 'warning', 'error', 'neutral'] as const)('reflects %s variant to attribute', async (variant) => {
+    el.variant = variant;
+    await el.updateComplete;
+    expect(el.getAttribute('variant')).toBe(variant);
   });
 
   it('has default size of md', () => {
@@ -48,12 +45,9 @@ describe('<lt-badge>', () => {
     expect(el.getAttribute('size')).toBe('md');
   });
 
-  it('supports all sizes', async () => {
-    const sizes = ['sm', 'md', 'lg'] as const;
-    for (const size of sizes) {
-      el.size = size;
-      await el.updateComplete;
-      expect(el.getAttribute('size')).toBe(size);
-    }
+  it.each(['sm', 'md', 'lg'] as const)('reflects %s size to attribute', async (size) => {
+    el.size = size;
+    await el.updateComplete;
+    expect(el.getAttribute('size')).toBe(size);
   });
 });

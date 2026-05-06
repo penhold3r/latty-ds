@@ -42,18 +42,6 @@ describe('<lt-button>', () => {
     expect(el.getAttribute('appearance')).toBe('filled');
   });
 
-  it('can change variant', async () => {
-    el.variant = 'secondary';
-    await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe('secondary');
-  });
-
-  it('can change size', async () => {
-    el.size = 'lg';
-    await el.updateComplete;
-    expect(el.getAttribute('size')).toBe('lg');
-  });
-
   it('is not disabled by default', () => {
     const btn = el.shadowRoot!.querySelector('button')!;
     expect(el.disabled).toBe(false);
@@ -93,39 +81,21 @@ describe('<lt-button>', () => {
     expect(slot).toBeFalsy();
   });
 
-  it('supports all variants', async () => {
-    const variants = ['primary', 'secondary', 'neutral', 'success', 'warning', 'error', 'info'] as const;
-
-    for (const variant of variants) {
-      el.variant = variant;
-      await el.updateComplete;
-      expect(el.getAttribute('variant')).toBe(variant);
-    }
-  });
-
-  it('supports all sizes', async () => {
-    const sizes = ['sm', 'md', 'lg'] as const;
-
-    for (const size of sizes) {
-      el.size = size;
-      await el.updateComplete;
-      expect(el.getAttribute('size')).toBe(size);
-    }
-  });
-
-  it('supports all appearances', async () => {
-    const appearances = ['filled', 'outlined'] as const;
-
-    for (const appearance of appearances) {
-      el.appearance = appearance;
-      await el.updateComplete;
-      expect(el.getAttribute('appearance')).toBe(appearance);
-    }
-  });
-
-  it('can change appearance', async () => {
-    el.appearance = 'outlined';
+  it.each(['primary', 'secondary', 'neutral', 'success', 'warning', 'error', 'info'] as const)('reflects %s variant to attribute', async (variant) => {
+    el.variant = variant;
     await el.updateComplete;
-    expect(el.getAttribute('appearance')).toBe('outlined');
+    expect(el.getAttribute('variant')).toBe(variant);
+  });
+
+  it.each(['sm', 'md', 'lg'] as const)('reflects %s size to attribute', async (size) => {
+    el.size = size;
+    await el.updateComplete;
+    expect(el.getAttribute('size')).toBe(size);
+  });
+
+  it.each(['filled', 'outlined'] as const)('reflects %s appearance to attribute', async (appearance) => {
+    el.appearance = appearance;
+    await el.updateComplete;
+    expect(el.getAttribute('appearance')).toBe(appearance);
   });
 });

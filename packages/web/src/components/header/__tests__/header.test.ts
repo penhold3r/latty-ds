@@ -27,12 +27,9 @@ describe('<lt-header>', () => {
     expect(el.getAttribute('variant')).toBe('primary');
   });
 
-  it('supports all variants', async () => {
-    const variants = ['primary', 'surface'] as const;
-    for (const variant of variants) {
-      el.variant = variant;
-      await el.updateComplete;
-      expect(el.getAttribute('variant')).toBe(variant);
-    }
+  it.each(['primary', 'surface'] as const)('reflects %s variant to attribute', async (variant) => {
+    el.variant = variant;
+    await el.updateComplete;
+    expect(el.getAttribute('variant')).toBe(variant);
   });
 });

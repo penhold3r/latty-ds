@@ -61,21 +61,15 @@ describe('<lt-progress>', () => {
     expect(track.getAttribute('aria-valuenow')).toBe('0');
   });
 
-  it('supports all variants', async () => {
-    const variants = ['primary', 'success', 'warning', 'error', 'neutral'] as const;
-    for (const v of variants) {
-      el.variant = v;
-      await el.updateComplete;
-      expect(el.getAttribute('variant')).toBe(v);
-    }
+  it.each(['primary', 'success', 'warning', 'error', 'neutral'] as const)('reflects %s variant to attribute', async (variant) => {
+    el.variant = variant;
+    await el.updateComplete;
+    expect(el.getAttribute('variant')).toBe(variant);
   });
 
-  it('supports all sizes', async () => {
-    const sizes = ['sm', 'md', 'lg'] as const;
-    for (const s of sizes) {
-      el.size = s;
-      await el.updateComplete;
-      expect(el.getAttribute('size')).toBe(s);
-    }
+  it.each(['sm', 'md', 'lg'] as const)('reflects %s size to attribute', async (size) => {
+    el.size = size;
+    await el.updateComplete;
+    expect(el.getAttribute('size')).toBe(size);
   });
 });
