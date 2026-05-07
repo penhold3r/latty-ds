@@ -18,7 +18,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     <div slot="preview">
       <div class="preview-row">
         <div class="preview-col">
-          <p class="preview-label">Vertical</p>
+          <lt-text variant="overline" style="color:var(--lt-color-neutral-500)">Vertical</lt-text>
           <lt-nav id="nav-vertical">
             <lt-nav-item href="#" label="Dashboard" icon="home"></lt-nav-item>
             <lt-nav-item label="Settings" icon="settings">
@@ -29,7 +29,7 @@ import ApiTable from '../../../components/ApiTable.astro';
           </lt-nav>
         </div>
         <div class="preview-col">
-          <p class="preview-label">Horizontal</p>
+          <lt-text variant="overline" style="color:var(--lt-color-neutral-500)">Horizontal</lt-text>
           <lt-nav orientation="horizontal" id="nav-horizontal">
             <lt-nav-item href="#" label="Home"></lt-nav-item>
             <lt-nav-item label="Products">
@@ -132,14 +132,5 @@ import ApiTable from '../../../components/ApiTable.astro';
     flex-direction: column;
     gap: var(--lt-spacing-2);
     min-width: 200px;
-  }
-
-  .preview-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--lt-color-neutral-500);
-    margin: 0;
   }
 </style>

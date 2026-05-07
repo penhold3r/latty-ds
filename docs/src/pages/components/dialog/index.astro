@@ -47,7 +47,9 @@ import ApiTable from '../../../components/ApiTable.astro';
   </PlaygroundShell>
 
   <lt-dialog id="playground-dialog" title="Example dialog" size="md">
-    <p>This is the dialog content. Try changing the controls to see how the dialog behaves.</p>
+    <lt-text variant="body"
+      >This is the dialog content. Try changing the controls to see how the dialog behaves.</lt-text
+    >
     <div slot="footer">
       <lt-button variant="neutral" appearance="outlined" id="cancel-dialog">Cancel</lt-button>
       <lt-button variant="primary">Confirm</lt-button>
