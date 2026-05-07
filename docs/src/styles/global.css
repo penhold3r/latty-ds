@@ -90,6 +90,12 @@ a:hover {
   margin: 0 auto;
 }
 
+main.content {
+  border-right: 2px solid var(--lt-color-neutral-200);
+  display: flex;
+  justify-content: center;
+}
+
 .prose h1 {
   font-size: 2.5rem;
   margin-bottom: var(--lt-spacing-4);

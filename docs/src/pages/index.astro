@@ -10,14 +10,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <div class="hero">
     <lt-badge content="Design System"></lt-badge>
     <lt-text variant="display-lg" as="h1" class="hero-title">Structure beneath<br />every interface</lt-text>
-    <p class="hero-subtitle">
+    <lt-text variant="lead" class="hero-subtitle">
       A lattice is an invisible grid that gives things their shape — every crystal, every fabric, every well-built UI.
       Latty is that grid for your product: design tokens as the structure, Web Components as the surface. Change the
       lattice, everything moves with it.
-    </p>
+    </lt-text>
     <div class="hero-actions">
-      <a href={`${base}/getting-started/introduction`} class="btn-primary">Get started</a>
-      <a href={`${base}/components/button`} class="btn-secondary">Browse components</a>
+      <lt-button href={`${base}/getting-started/introduction`} variant="primary" size="lg">Get started</lt-button>
+      <lt-button href={`${base}/components/button`} variant="neutral" appearance="outlined" size="lg"
+        >Browse components</lt-button
+      >
     </div>
   </div>
 
@@ -49,7 +51,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </div>
 
   <div class="quick-start">
-    <h2>Quick start</h2>
+    <lt-text variant="h2" as="h2" class="quick-start-heading">Quick start</lt-text>
     <pre><code>pnpm add @latty/tokens @latty/web</code></pre>
     <pre><code class="language-js">import '@latty/tokens/dist/tokens.css';
 import '@latty/web';</code></pre>
@@ -79,9 +81,7 @@ import '@latty/web';</code></pre>
   }
 
   .hero-subtitle {
-    font-size: 1.125rem;
     color: var(--lt-color-neutral-600);
-    line-height: 1.7;
     margin-bottom: var(--lt-spacing-6);
   }
 
@@ -89,43 +89,6 @@ import '@latty/web';</code></pre>
     display: flex;
     gap: var(--lt-spacing-3);
     flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--lt-spacing-3) var(--lt-spacing-5);
-    background: var(--lt-color-primary-500);
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background 150ms;
-  }
-
-  .btn-primary:hover {
-    background: var(--lt-color-primary-600);
-    text-decoration: none;
-  }
-
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--lt-spacing-3) var(--lt-spacing-5);
-    background: var(--lt-color-neutral-100);
-    color: var(--lt-color-neutral-800);
-    font-weight: 600;
-    font-size: 0.9375rem;
-    border-radius: 8px;
-    text-decoration: none;
-    border: 1px solid var(--lt-color-neutral-200);
-    transition: background 150ms;
-  }
-
-  .btn-secondary:hover {
-    background: var(--lt-color-neutral-200);
-    text-decoration: none;
   }
 
   .features {
@@ -158,9 +121,7 @@ import '@latty/web';</code></pre>
     margin-bottom: var(--lt-spacing-12);
   }
 
-  .quick-start h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
+  .quick-start-heading {
     color: var(--lt-color-neutral-900);
     margin-bottom: var(--lt-spacing-4);
   }
