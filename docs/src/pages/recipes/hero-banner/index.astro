@@ -1,0 +1,191 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import RecipePreview from '../../../components/RecipePreview.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+---
+
+<BaseLayout
+  title="Hero Banner"
+  description="A full-width banner with a background image overlay, headline, subtext, and CTA buttons."
+>
+  <h1>Hero Banner</h1>
+  <p>
+    A full-width call-to-action section with a photographic background, headline, supporting copy, and two action
+    buttons — ideal for landing pages and feature announcements.
+  </p>
+
+  <h2>Preview</h2>
+  <RecipePreview>
+    <div class="hero-wrap">
+      <div class="hero">
+        <lt-badge content="Now available" class="hero-badge"></lt-badge>
+        <lt-text variant="display-lg" class="hero-title">Build faster with Latty</lt-text>
+        <lt-text variant="lead" class="hero-sub">
+          Design tokens and Web Components that work natively in any framework.
+        </lt-text>
+        <div class="hero-actions">
+          <lt-button variant="primary" size="lg">Get started</lt-button>
+          <lt-button class="hero-outline" variant="neutral" appearance="outlined" size="lg">View docs</lt-button>
+        </div>
+      </div>
+    </div>
+  </RecipePreview>
+
+  <h2>Code</h2>
+  <FrameworkTabs
+    html={`<div class="hero">
+  <lt-badge content="Now available" class="hero-badge"></lt-badge>
+  <lt-text variant="display-lg" class="hero-title">Build faster with Latty</lt-text>
+  <lt-text variant="lead" class="hero-sub">
+    Design tokens and Web Components that work natively in any framework.
+  </lt-text>
+  <div class="hero-actions">
+    <lt-button variant="primary" size="lg">Get started</lt-button>
+    <lt-button class="hero-outline" variant="neutral" appearance="outlined" size="lg">View docs</lt-button>
+  </div>
+</div>
+
+<style>
+  .hero {
+    background:
+      linear-gradient(rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)),
+      url('https://picsum.photos/seed/hero-banner/1200/500') center / cover no-repeat;
+    border-radius: 12px;
+    padding: var(--lt-spacing-12) var(--lt-spacing-10);
+    text-align: center;
+  }
+  .hero-badge { display: inline-block; margin-bottom: var(--lt-spacing-4); }
+  .hero-title { --lt-text-weight: 700; color: #fff; margin-bottom: var(--lt-spacing-4); }
+  .hero-sub   { color: rgba(255, 255, 255, 0.85); margin-bottom: var(--lt-spacing-8); }
+  .hero-actions { display: flex; gap: var(--lt-spacing-3); justify-content: center; flex-wrap: wrap; }
+  .hero-outline::part(base) { border-color: rgba(255, 255, 255, 0.7); color: #fff; }
+  .hero-outline::part(base):hover { background: rgba(255, 255, 255, 0.1); border-color: #fff; }
+</style>`}
+    react={`import { Badge, Text, Button } from '@latty/react';
+import styles from './HeroBanner.module.css';
+
+export default function HeroBanner() {
+  return (
+    <div className={styles.hero}>
+      <Badge content="Now available" className={styles.heroBadge} />
+      <Text variant="display-lg" className={styles.heroTitle}>
+        Build faster with Latty
+      </Text>
+      <Text variant="lead" className={styles.heroSub}>
+        Design tokens and Web Components that work natively in any framework.
+      </Text>
+      <div className={styles.heroActions}>
+        <Button variant="primary" size="lg">Get started</Button>
+        <Button className={styles.heroOutline} variant="neutral" appearance="outlined" size="lg">
+          View docs
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+/* HeroBanner.module.css */
+/*
+.hero {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)),
+    url('https://picsum.photos/seed/hero-banner/1200/500') center / cover no-repeat;
+  border-radius: 12px;
+  padding: var(--lt-spacing-12) var(--lt-spacing-10);
+  text-align: center;
+}
+.heroBadge  { display: inline-block; margin-bottom: var(--lt-spacing-4); }
+.heroTitle  { --lt-text-weight: 700; color: #fff; margin-bottom: var(--lt-spacing-4); }
+.heroSub    { color: rgba(255, 255, 255, 0.85); margin-bottom: var(--lt-spacing-8); }
+.heroActions { display: flex; gap: var(--lt-spacing-3); justify-content: center; flex-wrap: wrap; }
+.heroOutline::part(base) { border-color: rgba(255, 255, 255, 0.7); color: #fff; }
+.heroOutline::part(base):hover { background: rgba(255, 255, 255, 0.1); border-color: #fff; }
+*/`}
+    vue={`<template>
+  <div class="hero">
+    <lt-badge content="Now available" class="hero-badge"></lt-badge>
+    <lt-text variant="display-lg" class="hero-title">Build faster with Latty</lt-text>
+    <lt-text variant="lead" class="hero-sub">
+      Design tokens and Web Components that work natively in any framework.
+    </lt-text>
+    <div class="hero-actions">
+      <lt-button variant="primary" size="lg">Get started</lt-button>
+      <lt-button class="hero-outline" variant="neutral" appearance="outlined" size="lg">View docs</lt-button>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+  .hero {
+    background:
+      linear-gradient(rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)),
+      url('https://picsum.photos/seed/hero-banner/1200/500') center / cover no-repeat;
+    border-radius: 12px;
+    padding: var(--lt-spacing-12) var(--lt-spacing-10);
+    text-align: center;
+  }
+  .hero-badge { display: inline-block; margin-bottom: var(--lt-spacing-4); }
+  .hero-title { --lt-text-weight: 700; color: #fff; margin-bottom: var(--lt-spacing-4); }
+  .hero-sub   { color: rgba(255, 255, 255, 0.85); margin-bottom: var(--lt-spacing-8); }
+  .hero-actions { display: flex; gap: var(--lt-spacing-3); justify-content: center; flex-wrap: wrap; }
+  :deep(.hero-outline::part(base)) { border-color: rgba(255, 255, 255, 0.7); color: #fff; }
+  :deep(.hero-outline::part(base):hover) { background: rgba(255, 255, 255, 0.1); border-color: #fff; }
+</style>`}
+  />
+
+  <h2>Components</h2>
+  <p><code>lt-badge</code>, <code>lt-text</code>, <code>lt-button</code></p>
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+  import '@latty/icons';
+</script>
+
+<style>
+  .hero-wrap {
+    width: 100%;
+  }
+
+  .hero {
+    background:
+      linear-gradient(rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)),
+      url('https://picsum.photos/seed/hero-banner/1200/500') center / cover no-repeat;
+    border-radius: 12px;
+    padding: var(--lt-spacing-12) var(--lt-spacing-10);
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    margin-bottom: var(--lt-spacing-4);
+  }
+
+  .hero-title {
+    --lt-text-weight: 700;
+    color: #fff;
+    margin-bottom: var(--lt-spacing-4);
+  }
+
+  .hero-sub {
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: var(--lt-spacing-8);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--lt-spacing-3);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-outline::part(base) {
+    border-color: rgba(255, 255, 255, 0.7);
+    color: #fff;
+  }
+
+  .hero-outline::part(base):hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+  }
+</style>

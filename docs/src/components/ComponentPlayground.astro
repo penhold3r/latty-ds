@@ -6,9 +6,17 @@ interface Props {
   content?: string;
   previewHeight?: string;
   defaults?: Record<string, any>;
+  /** Makes the component fill the full preview stage width — use for inherently full-width components like lt-progress. */
+  stretch?: boolean;
 }
 
-const { tag, content: slotContent = '', previewHeight = '140px', defaults: defaultOverrides = {} } = Astro.props;
+const {
+  tag,
+  content: slotContent = '',
+  previewHeight = '140px',
+  defaults: defaultOverrides = {},
+  stretch = false
+} = Astro.props;
 
 const component = (manifest as any)[tag];
 const members = (component?.members ?? []) as any[];
@@ -33,6 +41,7 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
   data-content={slotContent}
   data-members={JSON.stringify(members)}
   data-defaults={JSON.stringify(defaults)}
+  data-stretch={stretch ? 'true' : undefined}
 >
   <!-- Preview -->
   <div class="preview" style={`min-height: ${previewHeight}`}>
@@ -45,7 +54,7 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
       <div class="section-label">Controls</div>
       {
         members.map((member) => {
-          const val = defaultValue(member);
+          const val = defaults[member.name];
           const label = member.name
             .split('-')
             .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
@@ -123,6 +132,7 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
     // Build component element
     const el = document.createElement(tag);
     if (slotContent) el.innerHTML = slotContent;
+    if ((playground as HTMLElement).dataset.stretch === 'true') el.style.width = '100%';
     stage.appendChild(el);
 
     applyState();

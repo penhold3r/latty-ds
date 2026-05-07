@@ -1,0 +1,175 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import RecipePreview from '../../../components/RecipePreview.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+---
+
+<BaseLayout
+  title="Stats Widget"
+  description="A dashboard metrics panel with icon, value, label, and progress bar for each stat."
+>
+  <h1>Stats Widget</h1>
+  <p>
+    A dashboard metrics panel showing key numbers at a glance — each tile pairs an icon, a value, a label, and a
+    progress bar to convey both quantity and relative scale.
+  </p>
+
+  <h2>Preview</h2>
+  <RecipePreview>
+    <lt-surface variant="outlined" elevation="0" style="max-width: 460px; width: 100%;">
+      <div style="padding: var(--lt-spacing-6);">
+        <lt-text variant="h5" style="color: var(--lt-color-neutral-900); margin-bottom: var(--lt-spacing-5);"
+          >Overview</lt-text
+        >
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--lt-spacing-5);">
+          <div style="display: flex; flex-direction: column; gap: var(--lt-spacing-2);">
+            <div style="display: flex; align-items: center; gap: var(--lt-spacing-2);">
+              <lt-icon name="chart" style="color: var(--lt-color-success-500);"></lt-icon>
+              <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500);">Revenue</lt-text>
+            </div>
+            <lt-text variant="h3" style="color: var(--lt-color-neutral-900);">$24.5k</lt-text>
+            <lt-progress value="72" variant="success"></lt-progress>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: var(--lt-spacing-2);">
+            <div style="display: flex; align-items: center; gap: var(--lt-spacing-2);">
+              <lt-icon name="user" style="color: var(--lt-color-primary-500);"></lt-icon>
+              <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500);">Users</lt-text>
+            </div>
+            <lt-text variant="h3" style="color: var(--lt-color-neutral-900);">1,284</lt-text>
+            <lt-progress value="58" variant="primary"></lt-progress>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: var(--lt-spacing-2);">
+            <div style="display: flex; align-items: center; gap: var(--lt-spacing-2);">
+              <lt-icon name="check-circle" style="color: var(--lt-color-success-500);"></lt-icon>
+              <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500);">Tasks done</lt-text>
+            </div>
+            <lt-text variant="h3" style="color: var(--lt-color-neutral-900);">94%</lt-text>
+            <lt-progress value="94" variant="success"></lt-progress>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: var(--lt-spacing-2);">
+            <div style="display: flex; align-items: center; gap: var(--lt-spacing-2);">
+              <lt-icon name="warning-triangle" style="color: var(--lt-color-warning-500);"></lt-icon>
+              <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500);">Issues</lt-text>
+            </div>
+            <lt-text variant="h3" style="color: var(--lt-color-neutral-900);">12</lt-text>
+            <lt-progress value="24" variant="warning"></lt-progress>
+          </div>
+        </div>
+      </div>
+    </lt-surface>
+  </RecipePreview>
+
+  <h2>Code</h2>
+  <FrameworkTabs
+    html={`<lt-surface variant="outlined" elevation="0" style="max-width: 460px; width: 100%;">
+  <div style="padding: var(--lt-spacing-6);">
+    <lt-text variant="h5" style="color: var(--lt-color-neutral-900); margin-bottom: var(--lt-spacing-5);">Overview</lt-text>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--lt-spacing-5);">
+
+      <div style="display: flex; flex-direction: column; gap: var(--lt-spacing-2);">
+        <div style="display: flex; align-items: center; gap: var(--lt-spacing-2);">
+          <lt-icon name="chart" style="color: var(--lt-color-success-500);"></lt-icon>
+          <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500);">Revenue</lt-text>
+        </div>
+        <lt-text variant="h3" style="color: var(--lt-color-neutral-900);">$24.5k</lt-text>
+        <lt-progress value="72" variant="success"></lt-progress>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: var(--lt-spacing-2);">
+        <div style="display: flex; align-items: center; gap: var(--lt-spacing-2);">
+          <lt-icon name="user" style="color: var(--lt-color-primary-500);"></lt-icon>
+          <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500);">Users</lt-text>
+        </div>
+        <lt-text variant="h3" style="color: var(--lt-color-neutral-900);">1,284</lt-text>
+        <lt-progress value="58" variant="primary"></lt-progress>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: var(--lt-spacing-2);">
+        <div style="display: flex; align-items: center; gap: var(--lt-spacing-2);">
+          <lt-icon name="check-circle" style="color: var(--lt-color-success-500);"></lt-icon>
+          <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500);">Tasks done</lt-text>
+        </div>
+        <lt-text variant="h3" style="color: var(--lt-color-neutral-900);">94%</lt-text>
+        <lt-progress value="94" variant="success"></lt-progress>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: var(--lt-spacing-2);">
+        <div style="display: flex; align-items: center; gap: var(--lt-spacing-2);">
+          <lt-icon name="warning-triangle" style="color: var(--lt-color-warning-500);"></lt-icon>
+          <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500);">Issues</lt-text>
+        </div>
+        <lt-text variant="h3" style="color: var(--lt-color-neutral-900);">12</lt-text>
+        <lt-progress value="24" variant="warning"></lt-progress>
+      </div>
+
+    </div>
+  </div>
+</lt-surface>`}
+    react={`import { Surface, Icon, Text, Progress } from '@latty/react';
+
+const stats = [
+  { icon: 'chart',       iconColor: 'var(--lt-color-success-500)',  label: 'Revenue',    value: '$24.5k', progress: 72,  variant: 'success' },
+  { icon: 'user',           iconColor: 'var(--lt-color-primary-500)',  label: 'Users',      value: '1,284',  progress: 58,  variant: 'primary' },
+  { icon: 'check-circle',   iconColor: 'var(--lt-color-success-500)',  label: 'Tasks done', value: '94%',    progress: 94,  variant: 'success' },
+  { icon: 'warning-triangle', iconColor: 'var(--lt-color-warning-500)', label: 'Issues',   value: '12',     progress: 24,  variant: 'warning' },
+];
+
+export default function StatsWidget() {
+  return (
+    <Surface variant="outlined" elevation="0" style={{ maxWidth: 460, width: '100%' }}>
+      <div style={{ padding: 'var(--lt-spacing-6)' }}>
+        <Text variant="h5" style={{ color: 'var(--lt-color-neutral-900)', marginBottom: 'var(--lt-spacing-5)' }}>
+          Overview
+        </Text>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--lt-spacing-5)' }}>
+          {stats.map((stat) => (
+            <div key={stat.label} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--lt-spacing-2)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--lt-spacing-2)' }}>
+                <Icon name={stat.icon} style={{ color: stat.iconColor }} />
+                <Text variant="body-sm" style={{ color: 'var(--lt-color-neutral-500)' }}>{stat.label}</Text>
+              </div>
+              <Text variant="h3" style={{ color: 'var(--lt-color-neutral-900)' }}>{stat.value}</Text>
+              <Progress value={stat.progress} variant={stat.variant} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </Surface>
+  );
+}`}
+    vue={`<script setup>
+const stats = [
+  { icon: 'chart',         iconColor: 'var(--lt-color-success-500)',  label: 'Revenue',    value: '$24.5k', progress: 72,  variant: 'success' },
+  { icon: 'user',             iconColor: 'var(--lt-color-primary-500)',  label: 'Users',      value: '1,284',  progress: 58,  variant: 'primary' },
+  { icon: 'check-circle',     iconColor: 'var(--lt-color-success-500)',  label: 'Tasks done', value: '94%',    progress: 94,  variant: 'success' },
+  { icon: 'warning-triangle', iconColor: 'var(--lt-color-warning-500)', label: 'Issues',    value: '12',     progress: 24,  variant: 'warning' },
+];
+</script>
+
+<template>
+  <lt-surface variant="outlined" elevation="0" style="max-width: 460px; width: 100%;">
+    <div style="padding: var(--lt-spacing-6);">
+      <lt-text variant="h5" style="color: var(--lt-color-neutral-900); margin-bottom: var(--lt-spacing-5);">Overview</lt-text>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--lt-spacing-5);">
+        <div v-for="stat in stats" :key="stat.label" style="display: flex; flex-direction: column; gap: var(--lt-spacing-2);">
+          <div style="display: flex; align-items: center; gap: var(--lt-spacing-2);">
+            <lt-icon :name="stat.icon" :style="{ color: stat.iconColor }"></lt-icon>
+            <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500);">{{ stat.label }}</lt-text>
+          </div>
+          <lt-text variant="h3" style="color: var(--lt-color-neutral-900);">{{ stat.value }}</lt-text>
+          <lt-progress :value="stat.progress" :variant="stat.variant"></lt-progress>
+        </div>
+      </div>
+    </div>
+  </lt-surface>
+</template>`}
+  />
+
+  <h2>Components</h2>
+  <p><code>lt-surface</code>, <code>lt-icon</code>, <code>lt-text</code>, <code>lt-progress</code></p>
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+  import '@latty/icons';
+</script>

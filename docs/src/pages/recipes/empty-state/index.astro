@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import RecipePreview from '../../../components/RecipePreview.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+---
+
+<BaseLayout title="Empty State" description="A zero-data placeholder with icon, message, and a call to action.">
+  <h1>Empty State</h1>
+  <p>
+    The zero-data placeholder every app needs — communicates context, reduces confusion, and gives users a clear next
+    step.
+  </p>
+
+  <h2>Preview</h2>
+  <RecipePreview>
+    <div
+      style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: var(--lt-spacing-10) var(--lt-spacing-8); max-width: 380px;"
+    >
+      <div
+        style="width: 72px; height: 72px; border-radius: 50%; background: var(--lt-color-primary-50); display: flex; align-items: center; justify-content: center; margin-bottom: var(--lt-spacing-5);"
+      >
+        <lt-icon name="folder" size="lg" style="color: var(--lt-color-primary-500);"></lt-icon>
+      </div>
+      <lt-text variant="h4" style="color: var(--lt-color-neutral-900); margin-bottom: var(--lt-spacing-2);"
+        >No items yet</lt-text
+      >
+      <lt-text variant="body" style="color: var(--lt-color-neutral-600); margin-bottom: var(--lt-spacing-6);">
+        Get started by creating your first item. It only takes a few seconds.
+      </lt-text>
+      <lt-button variant="primary" icon="plus">Create item</lt-button>
+      <lt-link href="#" style="margin-top: var(--lt-spacing-3); display: block;">Learn more →</lt-link>
+    </div>
+  </RecipePreview>
+
+  <h2>Code</h2>
+  <FrameworkTabs
+    html={`<div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: var(--lt-spacing-10) var(--lt-spacing-8); max-width: 380px;">
+  <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--lt-color-primary-50); display: flex; align-items: center; justify-content: center; margin-bottom: var(--lt-spacing-5);">
+    <lt-icon name="folder" size="lg" style="color: var(--lt-color-primary-500);"></lt-icon>
+  </div>
+  <lt-text variant="h4" style="color: var(--lt-color-neutral-900); margin-bottom: var(--lt-spacing-2);">No items yet</lt-text>
+  <lt-text variant="body" style="color: var(--lt-color-neutral-600); margin-bottom: var(--lt-spacing-6);">
+    Get started by creating your first item. It only takes a few seconds.
+  </lt-text>
+  <lt-button variant="primary" icon="plus">Create item</lt-button>
+  <lt-link href="/docs" style="margin-top: var(--lt-spacing-3); display: block;">Learn more →</lt-link>
+</div>`}
+    react={`import { Icon, Text, Button, Link } from '@latty/react';
+
+export default function EmptyState() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: 'var(--lt-spacing-10) var(--lt-spacing-8)', maxWidth: 380 }}>
+      <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'var(--lt-color-primary-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 'var(--lt-spacing-5)' }}>
+        <Icon name="folder" size="lg" style={{ color: 'var(--lt-color-primary-500)' }} />
+      </div>
+      <Text variant="h4" style={{ color: 'var(--lt-color-neutral-900)', marginBottom: 'var(--lt-spacing-2)' }}>
+        No items yet
+      </Text>
+      <Text variant="body" style={{ color: 'var(--lt-color-neutral-600)', marginBottom: 'var(--lt-spacing-6)' }}>
+        Get started by creating your first item. It only takes a few seconds.
+      </Text>
+      <Button variant="primary" icon="plus">Create item</Button>
+      <Link href="/docs" style={{ marginTop: 'var(--lt-spacing-3)', display: 'block' }}>Learn more →</Link>
+    </div>
+  );
+}`}
+    vue={`<template>
+  <div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: var(--lt-spacing-10) var(--lt-spacing-8); max-width: 380px;">
+    <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--lt-color-primary-50); display: flex; align-items: center; justify-content: center; margin-bottom: var(--lt-spacing-5);">
+      <lt-icon name="folder" size="lg" style="color: var(--lt-color-primary-500);"></lt-icon>
+    </div>
+    <lt-text variant="h4" style="color: var(--lt-color-neutral-900); margin-bottom: var(--lt-spacing-2);">No items yet</lt-text>
+    <lt-text variant="body" style="color: var(--lt-color-neutral-600); margin-bottom: var(--lt-spacing-6);">
+      Get started by creating your first item. It only takes a few seconds.
+    </lt-text>
+    <lt-button variant="primary" icon="plus">Create item</lt-button>
+    <lt-link href="/docs" style="margin-top: var(--lt-spacing-3); display: block;">Learn more →</lt-link>
+  </div>
+</template>`}
+  />
+
+  <h2>Components</h2>
+  <p><code>lt-icon</code>, <code>lt-text</code>, <code>lt-button</code>, <code>lt-link</code></p>
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+  import '@latty/icons';
+</script>

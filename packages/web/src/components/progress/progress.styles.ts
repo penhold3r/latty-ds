@@ -27,9 +27,9 @@ export const progressStyles = css`
   /* ── Variants ───────────────────────────────────────────────────────────── */
 
   :host([variant='primary']) [part='fill'] { background: var(--lt-interactive-primary-bg); }
-  :host([variant='success']) [part='fill'] { background: var(--lt-bg-success-strong); }
-  :host([variant='warning']) [part='fill'] { background: var(--lt-bg-warning-strong); }
-  :host([variant='error']) [part='fill'] { background: var(--lt-bg-error-strong); }
+  :host([variant='success']) [part='fill'] { background: var(--lt-interactive-success-bg); }
+  :host([variant='warning']) [part='fill'] { background: var(--lt-interactive-warning-bg); }
+  :host([variant='error']) [part='fill'] { background: var(--lt-interactive-error-bg); }
   :host([variant='neutral']) [part='fill'] { background: var(--lt-color-neutral-600); }
 
   /* ── Indeterminate ──────────────────────────────────────────────────────── */

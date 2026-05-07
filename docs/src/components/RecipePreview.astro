@@ -1,0 +1,27 @@
+---
+interface Props {
+  previewHeight?: string;
+}
+
+const { previewHeight = 'auto' } = Astro.props;
+---
+
+<div class="recipe-preview" style={previewHeight !== 'auto' ? `min-height: ${previewHeight}` : undefined}>
+  <slot />
+</div>
+
+<style>
+  .recipe-preview {
+    align-items: center;
+    background: var(--lt-color-neutral-50);
+    border-radius: 10px;
+    border: 1px solid var(--lt-color-neutral-200);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--lt-spacing-6);
+    justify-content: center;
+    margin: var(--lt-spacing-6) 0;
+    overflow: hidden;
+    padding: var(--lt-spacing-10) var(--lt-spacing-8);
+  }
+</style>

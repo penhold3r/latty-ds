@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import RecipePreview from '../../../components/RecipePreview.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+---
+
+<BaseLayout
+  title="Login Form"
+  description="A sign-in form with email, password, remember me checkbox, and forgot password link."
+>
+  <h1>Login Form</h1>
+  <p>
+    A complete sign-in form composed from form primitives — demonstrates how textfields, checkbox, button, and link work
+    together in a real authentication flow.
+  </p>
+
+  <h2>Preview</h2>
+  <RecipePreview>
+    <lt-surface variant="outlined" elevation="1" style="max-width: 360px; width: 100%; border-radius: 12px;">
+      <div style="padding: var(--lt-spacing-8); display: flex; flex-direction: column; gap: var(--lt-spacing-4);">
+        <div style="text-align: center; margin-bottom: var(--lt-spacing-2);">
+          <lt-text variant="h4" style="color: var(--lt-color-neutral-900);">Welcome back</lt-text>
+          <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500); margin-top: var(--lt-spacing-1);">
+            Sign in to your account
+          </lt-text>
+        </div>
+        <lt-textfield label="Email" type="email" placeholder="you@example.com"></lt-textfield>
+        <lt-textfield label="Password" type="password" placeholder="••••••••"></lt-textfield>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <lt-checkbox label="Remember me"></lt-checkbox>
+          <lt-link href="#">Forgot password?</lt-link>
+        </div>
+        <lt-button variant="primary" full-width>Sign in</lt-button>
+        <lt-divider></lt-divider>
+        <lt-text variant="body-sm" style="text-align: center; color: var(--lt-color-neutral-500);">
+          Don't have an account? <lt-link href="#">Sign up</lt-link>
+        </lt-text>
+      </div>
+    </lt-surface>
+  </RecipePreview>
+
+  <h2>Code</h2>
+  <FrameworkTabs
+    html={`<lt-surface variant="outlined" elevation="1" style="max-width: 360px; width: 100%; border-radius: 12px;">
+  <div style="padding: var(--lt-spacing-8); display: flex; flex-direction: column; gap: var(--lt-spacing-4);">
+    <div style="text-align: center; margin-bottom: var(--lt-spacing-2);">
+      <lt-text variant="h4" style="color: var(--lt-color-neutral-900);">Welcome back</lt-text>
+      <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500); margin-top: var(--lt-spacing-1);">
+        Sign in to your account
+      </lt-text>
+    </div>
+    <lt-textfield label="Email" type="email" placeholder="you@example.com"></lt-textfield>
+    <lt-textfield label="Password" type="password" placeholder="••••••••"></lt-textfield>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <lt-checkbox label="Remember me"></lt-checkbox>
+      <lt-link href="/auth/reset">Forgot password?</lt-link>
+    </div>
+    <lt-button variant="primary" full-width>Sign in</lt-button>
+    <lt-divider></lt-divider>
+    <lt-text variant="body-sm" style="text-align: center; color: var(--lt-color-neutral-500);">
+      Don't have an account? <lt-link href="/auth/register">Sign up</lt-link>
+    </lt-text>
+  </div>
+</lt-surface>`}
+    react={`import { Surface, Text, Textfield, Checkbox, Button, Link, Divider } from '@latty/react';
+
+export default function LoginForm() {
+  return (
+    <Surface variant="outlined" elevation="1" style={{ maxWidth: 360, width: '100%', borderRadius: 12 }}>
+      <div style={{ padding: 'var(--lt-spacing-8)', display: 'flex', flexDirection: 'column', gap: 'var(--lt-spacing-4)' }}>
+        <div style={{ textAlign: 'center', marginBottom: 'var(--lt-spacing-2)' }}>
+          <Text variant="h4" style={{ color: 'var(--lt-color-neutral-900)' }}>Welcome back</Text>
+          <Text variant="body-sm" style={{ color: 'var(--lt-color-neutral-500)', marginTop: 'var(--lt-spacing-1)' }}>
+            Sign in to your account
+          </Text>
+        </div>
+        <Textfield label="Email" type="email" placeholder="you@example.com" />
+        <Textfield label="Password" type="password" placeholder="••••••••" />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Checkbox label="Remember me" />
+          <Link href="/auth/reset">Forgot password?</Link>
+        </div>
+        <Button variant="primary" fullWidth>Sign in</Button>
+        <Divider />
+        <Text variant="body-sm" style={{ textAlign: 'center', color: 'var(--lt-color-neutral-500)' }}>
+          Don't have an account? <Link href="/auth/register">Sign up</Link>
+        </Text>
+      </div>
+    </Surface>
+  );
+}`}
+    vue={`<template>
+  <lt-surface variant="outlined" elevation="1" style="max-width: 360px; width: 100%; border-radius: 12px;">
+    <div style="padding: var(--lt-spacing-8); display: flex; flex-direction: column; gap: var(--lt-spacing-4);">
+      <div style="text-align: center; margin-bottom: var(--lt-spacing-2);">
+        <lt-text variant="h4" style="color: var(--lt-color-neutral-900);">Welcome back</lt-text>
+        <lt-text variant="body-sm" style="color: var(--lt-color-neutral-500); margin-top: var(--lt-spacing-1);">
+          Sign in to your account
+        </lt-text>
+      </div>
+      <lt-textfield label="Email" type="email" placeholder="you@example.com"></lt-textfield>
+      <lt-textfield label="Password" type="password" placeholder="••••••••"></lt-textfield>
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <lt-checkbox label="Remember me"></lt-checkbox>
+        <lt-link href="/auth/reset">Forgot password?</lt-link>
+      </div>
+      <lt-button variant="primary" full-width>Sign in</lt-button>
+      <lt-divider></lt-divider>
+      <lt-text variant="body-sm" style="text-align: center; color: var(--lt-color-neutral-500);">
+        Don't have an account? <lt-link href="/auth/register">Sign up</lt-link>
+      </lt-text>
+    </div>
+  </lt-surface>
+</template>`}
+  />
+
+  <h2>Components</h2>
+  <p>
+    <code>lt-surface</code>, <code>lt-text</code>, <code>lt-textfield</code>, <code>lt-checkbox</code>, <code
+      >lt-button</code
+    >, <code>lt-link</code>, <code>lt-divider</code>
+  </p>
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+  import '@latty/icons';
+</script>
