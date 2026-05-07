@@ -24,15 +24,22 @@ const VARIANT_TAG: Record<TextVariant, TextTag> = {
 };
 
 /**
- * Renders text with a predefined typographic style. The rendered HTML tag
- * matches the variant by default but can be overridden with the `as` attribute
- * for cases where the visual style should not affect the document outline.
+ * Renders text with a predefined typographic style. Display and heading variants
+ * (display-2xl → h3) use fluid `clamp()` font sizes that scale between a mobile
+ * minimum and a desktop maximum. The rendered HTML tag matches the variant by
+ * default but can be overridden with the `as` attribute.
+ *
+ * Override font-weight on any variant with `--lt-text-weight`:
+ * ```css
+ * lt-text { --lt-text-weight: 700; }
+ * ```
  *
  * @element lt-text
+ * @cssprop [--lt-text-weight] - Overrides the default font-weight for the variant.
  *
  * @example
  * ```html
- * <lt-text variant="h1">Page title</lt-text>
+ * <lt-text variant="display-lg" as="h1">Hero heading</lt-text>
  * <lt-text variant="h2" as="h3">Visually h2, semantically h3</lt-text>
  * <lt-text variant="lead">Introductory paragraph.</lt-text>
  * <lt-text variant="overline">Category</lt-text>

@@ -9,7 +9,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 >
   <div class="hero">
     <lt-badge content="Design System"></lt-badge>
-    <h1 class="hero-title">Structure beneath<br />every interface</h1>
+    <lt-text variant="display-lg" as="h1" class="hero-title">Structure beneath<br />every interface</lt-text>
     <p class="hero-subtitle">
       A lattice is an invisible grid that gives things their shape — every crystal, every fabric, every well-built UI.
       Latty is that grid for your product: design tokens as the structure, Web Components as the surface. Change the
@@ -73,9 +73,7 @@ import '@latty/web';</code></pre>
   }
 
   .hero-title {
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 700;
-    line-height: 1.15;
+    --lt-text-weight: 700;
     color: var(--lt-color-neutral-900);
     margin-bottom: var(--lt-spacing-4);
   }
