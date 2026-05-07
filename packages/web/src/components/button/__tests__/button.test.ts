@@ -98,4 +98,62 @@ describe('<lt-button>', () => {
     await el.updateComplete;
     expect(el.getAttribute('appearance')).toBe(appearance);
   });
+
+  describe('href / link rendering', () => {
+    it('renders an anchor when href is set', async () => {
+      el.href = '/dashboard';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('a')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('button')).toBeFalsy();
+    });
+
+    it('renders a button when href is empty', () => {
+      expect(el.shadowRoot!.querySelector('button')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('a')).toBeFalsy();
+    });
+
+    it('sets href on the anchor', async () => {
+      el.href = '/dashboard';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('a')!.getAttribute('href')).toBe('/dashboard');
+    });
+
+    it('forwards target to anchor', async () => {
+      el.href = '/dashboard';
+      el.target = '_blank';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('a')!.getAttribute('target')).toBe('_blank');
+    });
+
+    it('auto-sets rel=noopener noreferrer when target=_blank', async () => {
+      el.href = '/dashboard';
+      el.target = '_blank';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('a')!.getAttribute('rel')).toBe('noopener noreferrer');
+    });
+
+    it('uses explicit rel when provided', async () => {
+      el.href = '/dashboard';
+      el.target = '_blank';
+      el.rel = 'noopener';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('a')!.getAttribute('rel')).toBe('noopener');
+    });
+
+    it('sets aria-disabled on anchor when disabled', async () => {
+      el.href = '/dashboard';
+      el.disabled = true;
+      await el.updateComplete;
+      const a = el.shadowRoot!.querySelector('a')!;
+      expect(a.getAttribute('aria-disabled')).toBe('true');
+      expect(a.getAttribute('tabindex')).toBe('-1');
+    });
+
+    it('sets aria-disabled on anchor when loading', async () => {
+      el.href = '/dashboard';
+      el.loading = true;
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('a')!.getAttribute('aria-disabled')).toBe('true');
+    });
+  });
 });

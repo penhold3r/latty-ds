@@ -1,5 +1,6 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 import { buttonStyles } from './button.styles';
 import { ButtonAppearance, ButtonSize, ButtonVariant } from './button.types';
@@ -20,28 +21,23 @@ import '@latty/icons';
  * - Icon support at start and end positions
  * - Disabled state
  * - Accessible with aria-busy for loading state
+ * - Renders as `<a>` when `href` is provided (link button)
  *
  * @slot - Button label/content
  *
  * @example
  * ```html
- * <lt-button variant="primary" size="md">
- *   Click me
- * </lt-button>
+ * <lt-button variant="primary" size="md">Click me</lt-button>
  * ```
  *
  * @example
  * ```html
- * <lt-button variant="success" appearance="outlined" icon="check">
- *   Save
- * </lt-button>
+ * <lt-button href="/dashboard" variant="primary">Go to dashboard</lt-button>
  * ```
  *
  * @example
  * ```html
- * <lt-button variant="error" appearance="outlined" icon="trash" disabled>
- *   Delete
- * </lt-button>
+ * <lt-button href="https://example.com" target="_blank" variant="secondary">Open link</lt-button>
  * ```
  */
 @customElement('lt-button')
@@ -104,20 +100,49 @@ export class Button extends LitElement {
   @property({ type: Boolean, reflect: true }) uppercase = false;
 
   /**
-   * Renders the button with optional icons and loading spinner.
+   * When set, renders an `<a>` tag instead of `<button>`.
+   * All visual styles and states are preserved.
    */
+  @property() href = '';
+
+  /**
+   * Forwarded to the anchor's `target` attribute when `href` is set.
+   */
+  @property() target = '';
+
+  /**
+   * Forwarded to the anchor's `rel` attribute when `href` is set.
+   * Defaults to `noopener noreferrer` when `target="_blank"` and `rel` is not specified.
+   */
+  @property() rel = '';
+
   render() {
     const isDisabled = this.disabled || this.loading;
+    const inner = this.loading
+      ? html`<lt-spinner></lt-spinner>`
+      : html`
+          ${this.icon ? html`<lt-icon class="icon-start" name=${this.icon}></lt-icon>` : ''}
+          <slot></slot>
+          ${this.iconEnd ? html`<lt-icon class="icon-end" name=${this.iconEnd}></lt-icon>` : ''}
+        `;
+
+    if (this.href) {
+      const rel = this.rel || (this.target === '_blank' ? 'noopener noreferrer' : undefined);
+      return html`
+        <a
+          part="base"
+          href=${this.href}
+          target=${ifDefined(this.target || undefined)}
+          rel=${ifDefined(rel)}
+          aria-disabled=${isDisabled ? 'true' : nothing}
+          tabindex=${isDisabled ? '-1' : nothing}
+        >${inner}</a>
+      `;
+    }
 
     return html`
-      <button ?disabled=${isDisabled} aria-busy=${this.loading ? 'true' : 'false'}>
-        ${this.loading
-          ? html`<lt-spinner></lt-spinner>`
-          : html`
-              ${this.icon ? html`<lt-icon class="icon-start" name=${this.icon}></lt-icon>` : ''}
-              <slot></slot>
-              ${this.iconEnd ? html`<lt-icon class="icon-end" name=${this.iconEnd}></lt-icon>` : ''}
-            `}
+      <button part="base" ?disabled=${isDisabled} aria-busy=${this.loading ? 'true' : 'false'}>
+        ${inner}
       </button>
     `;
   }
