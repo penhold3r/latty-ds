@@ -17,8 +17,43 @@ describe('<lt-image>', () => {
     expect(el.shadowRoot).toBeTruthy();
   });
 
-  it('projects slot content', () => {
-    el.textContent = 'Hello';
-    expect(el.shadowRoot!.querySelector('slot')).toBeTruthy();
+  it('renders an img element', () => {
+    expect(el.shadowRoot!.querySelector('img')).toBeTruthy();
+  });
+
+  it('reflects src and alt onto the img', async () => {
+    el.src = 'image.png';
+    el.alt = 'A photo';
+    await el.updateComplete;
+    const img = el.shadowRoot!.querySelector('img')!;
+    expect(img.getAttribute('src')).toBe('image.png');
+    expect(img.getAttribute('alt')).toBe('A photo');
+  });
+
+  it('reflects responsive attribute', async () => {
+    el.responsive = true;
+    await el.updateComplete;
+    expect(el.hasAttribute('responsive')).toBe(true);
+  });
+
+  it('applies default border-radius when rounded is empty string', async () => {
+    el.rounded = '';
+    await el.updateComplete;
+    const img = el.shadowRoot!.querySelector('img')!;
+    expect(img.getAttribute('style')).toContain('border-radius');
+  });
+
+  it('applies custom border-radius when rounded has a value', async () => {
+    el.rounded = '50%';
+    await el.updateComplete;
+    const img = el.shadowRoot!.querySelector('img')!;
+    expect(img.getAttribute('style')).toContain('50%');
+  });
+
+  it('applies no border-radius when rounded is null', async () => {
+    el.rounded = null;
+    await el.updateComplete;
+    const img = el.shadowRoot!.querySelector('img')!;
+    expect(img.getAttribute('style') ?? '').toBe('');
   });
 });
