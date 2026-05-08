@@ -11,6 +11,7 @@
  * - Dialog: Modal dialog with backdrop and accessibility features
  * - Dropdown: TODO: describe the Dropdown component
  * - Header: TODO: describe the Header component
+ * - Image: TODO: describe the Image component
  * - Link: TODO: describe the Link component
  * - List: Ordered and unordered lists with customizable marker colors
  * - Radio: Radio button for single selection within a group
@@ -19,6 +20,7 @@
  * - Spinner: Loading indicator with customizable size and color
  * - Textfield: Text input with validation states and password toggle
  * - Select: Dropdown select with customizable options and variants
+ * - SidePanel: TODO: describe the SidePanel component
  * - Slider: TODO: describe the Slider component
  * - Snackbar: TODO: describe the Snackbar component
  * - Surface: Container component with elevation and surface styling
@@ -86,3 +88,5 @@ export * from './components/breadcrumb';
 export * from './components/divider';
 export * from './components/progress';
 export * from './components/skeleton';
+export * from './components/sidepanel';
+export * from './components/image';

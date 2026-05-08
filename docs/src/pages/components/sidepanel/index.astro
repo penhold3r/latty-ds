@@ -1,0 +1,205 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout
+  title="SidePanel"
+  description="A slide-in panel anchored to any edge of the viewport, with a backdrop overlay."
+>
+  <h1>SidePanel</h1>
+  <p>
+    A slide-in panel that overlays the page from any edge. Use it for navigation drawers, filter panels, detail views,
+    or any contextual content that shouldn't interrupt the main flow.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="sidepanel-playground" previewHeight="auto">
+    <div slot="preview">
+      <lt-button variant="primary" id="open-panel">Open panel</lt-button>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">anchor</label>
+        <select class="control-select" id="ctrl-anchor">
+          <option value="left" selected>left</option>
+          <option value="right">right</option>
+          <option value="top">top</option>
+          <option value="bottom">bottom</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">size</label>
+        <input class="control-input" type="text" id="ctrl-size" value="320px" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">label</label>
+        <input class="control-input" type="text" id="ctrl-label" value="Panel title" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">hide-close-button</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-hide-close" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">backdrop-blur</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-blur" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">overlay-opacity</label>
+        <input class="control-input" type="range" min="0" max="1" step="0.05" value="0.45" id="ctrl-overlay-opacity" />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <lt-sidepanel id="playground-panel" anchor="left" size="320px" label="Panel title">
+    <div style="padding: var(--lt-spacing-5);">
+      <lt-text variant="body-sm" style="color: var(--lt-color-neutral-600);">
+        Panel content goes here — navigation links, filters, a detail view, or a form.
+      </lt-text>
+    </div>
+  </lt-sidepanel>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`<lt-button onclick="document.getElementById('panel').open = true">Open</lt-button>
+
+<lt-sidepanel id="panel" label="Settings" anchor="left" size="320px">
+  <div style="padding: var(--lt-spacing-5);">
+    <p>Panel content goes here.</p>
+  </div>
+</lt-sidepanel>
+
+<script>
+  document.getElementById('panel').addEventListener('lt-close', () => {
+    document.getElementById('panel').open = false;
+  });
+</script>
+
+<!-- Hide the built-in close button -->
+<lt-sidepanel label="No close btn" hide-close-button>...</lt-sidepanel>`}
+    react={`import { useState } from 'react';
+import { SidePanel, Button } from '@latty/react';
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="primary" onClick={() => setOpen(true)}>Open panel</Button>
+
+      <SidePanel
+        open={open}
+        label="Settings"
+        anchor="left"
+        size="320px"
+        onLtClose={() => setOpen(false)}
+      >
+        <div style={{ padding: 'var(--lt-spacing-5)' }}>
+          <p>Panel content goes here.</p>
+        </div>
+      </SidePanel>
+    </>
+  );
+}`}
+    vue={`<script setup>
+import { ref } from 'vue'
+const open = ref(false)
+</script>
+
+<template>
+  <lt-button variant="primary" @click="open = true">Open panel</lt-button>
+
+  <lt-sidepanel
+    :open="open"
+    label="Settings"
+    anchor="left"
+    size="320px"
+    @lt-close="open = false"
+  >
+    <div style="padding: var(--lt-spacing-5);">
+      <p>Panel content goes here.</p>
+    </div>
+  </lt-sidepanel>
+</template>`}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-sidepanel" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+  import '@latty/icons';
+
+  const panel = document.getElementById('playground-panel') as any;
+  const codeEl = document.getElementById('sidepanel-playground-code')!;
+
+  const state = {
+    anchor: 'left',
+    size: '320px',
+    label: 'Panel title',
+    hideCloseButton: false,
+    backdropBlur: false,
+    overlayOpacity: 0.45
+  };
+
+  function updateCode() {
+    const attrs: string[] = [];
+    if (state.anchor !== 'left') attrs.push(`anchor="${state.anchor}"`);
+    if (state.size !== '320px') attrs.push(`size="${state.size}"`);
+    if (state.label) attrs.push(`label="${state.label}"`);
+    if (state.hideCloseButton) attrs.push('hide-close-button');
+    if (state.backdropBlur) attrs.push('backdrop-blur');
+    if (state.overlayOpacity !== 0.45) attrs.push(`overlay-opacity="${state.overlayOpacity}"`);
+    const str = attrs.length ? '\n  ' + attrs.join('\n  ') + '\n' : '';
+    codeEl.textContent = `<lt-sidepanel${str}>...</lt-sidepanel>`;
+  }
+
+  document.getElementById('open-panel')?.addEventListener('click', () => {
+    panel.open = true;
+  });
+
+  panel.addEventListener('lt-close', () => {
+    panel.open = false;
+  });
+
+  document.getElementById('ctrl-anchor')?.addEventListener('change', (e) => {
+    state.anchor = (e.target as HTMLSelectElement).value;
+    panel.anchor = state.anchor;
+    updateCode();
+  });
+
+  document.getElementById('ctrl-size')?.addEventListener('input', (e) => {
+    state.size = (e.target as HTMLInputElement).value;
+    panel.size = state.size;
+    updateCode();
+  });
+
+  document.getElementById('ctrl-label')?.addEventListener('input', (e) => {
+    state.label = (e.target as HTMLInputElement).value;
+    panel.label = state.label;
+    updateCode();
+  });
+
+  document.getElementById('ctrl-hide-close')?.addEventListener('change', (e) => {
+    state.hideCloseButton = (e.target as HTMLInputElement).checked;
+    panel.hideCloseButton = state.hideCloseButton;
+    updateCode();
+  });
+
+  document.getElementById('ctrl-blur')?.addEventListener('change', (e) => {
+    state.backdropBlur = (e.target as HTMLInputElement).checked;
+    panel.backdropBlur = state.backdropBlur;
+    updateCode();
+  });
+
+  document.getElementById('ctrl-overlay-opacity')?.addEventListener('input', (e) => {
+    state.overlayOpacity = parseFloat((e.target as HTMLInputElement).value);
+    panel.overlayOpacity = state.overlayOpacity;
+    updateCode();
+  });
+
+  updateCode();
+</script>

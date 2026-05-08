@@ -8,7 +8,7 @@ export const dialogStyles = css`
   /* Backdrop */
   .backdrop {
     align-items: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, var(--_overlay-opacity, 0.5));
     display: flex;
     height: 100vh;
     justify-content: center;

@@ -1,45 +1,45 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
-import type { NavItem as NavItemEl } from '@latty/web';
+import type { NavItem as NavItemEl, LattyIconName } from '@latty/web';
 
 export type NavItemProps = {
   href?: string;
   label?: string;
-  icon?: string;
+  icon?: LattyIconName;
   active?: boolean;
   disabled?: boolean;
   open?: boolean;
+  orientation?: NavItemEl['orientation'];
+  onLtNavItemClick?: (event: CustomEvent) => void;
+  onLtNavCollapse?: (event: CustomEvent) => void;
   children?: ReactNode;
-  onLtNavItemClick?: (e: CustomEvent<{ href: string; label: string }>) => void;
-  onLtNavCollapse?: (e: CustomEvent<{ open: boolean }>) => void;
 };
 
-export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
-  { children, onLtNavItemClick, onLtNavCollapse, ...props },
-  forwardedRef
-) {
-  const innerRef = useRef<NavItemEl>(null);
-  useImperativeHandle(forwardedRef, () => innerRef.current!);
+export const NavItem = forwardRef<NavItemEl, NavItemProps>(
+  function NavItem({ onLtNavItemClick, onLtNavCollapse, children, ...props }, forwardedRef) {
+    const innerRef = useRef<NavItemEl>(null);
 
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el || !onLtNavItemClick) return;
-    const h = (ev: Event) => onLtNavItemClick(ev as CustomEvent<{ href: string; label: string }>);
-    el.addEventListener('lt-nav-item-click', h);
-    return () => el.removeEventListener('lt-nav-item-click', h);
-  }, [onLtNavItemClick]);
+    useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el || !onLtNavCollapse) return;
-    const h = (ev: Event) => onLtNavCollapse(ev as CustomEvent<{ open: boolean }>);
-    el.addEventListener('lt-nav-collapse', h);
-    return () => el.removeEventListener('lt-nav-collapse', h);
-  }, [onLtNavCollapse]);
+    useEffect(() => {
+      const el = innerRef.current;
+      if (!el || !onLtNavItemClick) return;
+      const h = (ev: Event) => onLtNavItemClick!(ev as CustomEvent);
+      el.addEventListener('lt-nav-item-click', h);
+      return () => el.removeEventListener('lt-nav-item-click', h);
+    }, [onLtNavItemClick]);
+    useEffect(() => {
+      const el = innerRef.current;
+      if (!el || !onLtNavCollapse) return;
+      const h = (ev: Event) => onLtNavCollapse!(ev as CustomEvent);
+      el.addEventListener('lt-nav-collapse', h);
+      return () => el.removeEventListener('lt-nav-collapse', h);
+    }, [onLtNavCollapse]);
 
-  return (
-    <lt-nav-item ref={innerRef} {...(props as Record<string, unknown>)}>
-      {children}
-    </lt-nav-item>
-  );
-});
+    return (
+      <lt-nav-item ref={innerRef} {...(props as Record<string, unknown>)}>
+        {children}
+      </lt-nav-item>
+    );
+  }
+);
 NavItem.displayName = 'NavItem';

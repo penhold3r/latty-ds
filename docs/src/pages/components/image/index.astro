@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+
+const DEMO_SRC = 'https://picsum.photos/seed/lt-image/800/500';
+---
+
+<BaseLayout title="Image" description="A lightweight image wrapper with rounded corners and responsive fill support.">
+  <h1>Image</h1>
+  <p>
+    A lightweight wrapper around <code>&lt;img&gt;</code> that adds rounded corners and responsive fill behaviour. Use <code
+      >rounded</code
+    > for border-radius and <code>responsive</code> to make the image cover its container.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="image-playground" previewHeight="auto">
+    <div
+      slot="preview"
+      style="padding: var(--lt-spacing-5); display: flex; flex-direction: column; align-items: center; gap: var(--lt-spacing-2);"
+    >
+      <div
+        id="resize-container"
+        style="resize: both; overflow: hidden; width: 480px; height: 280px; min-width: 120px; min-height: 80px; max-width: 100%; border: 1px dashed var(--lt-border-default); border-radius: var(--lt-border-radius);"
+      >
+        <lt-image id="playground-image" src={DEMO_SRC} alt="Demo image" style="width: 100%; height: 100%;"></lt-image>
+      </div>
+      <span style="font-size: 11px; color: var(--lt-color-neutral-400); user-select: none;">drag corner to resize</span>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">rounded</label>
+        <input
+          class="control-input"
+          type="text"
+          id="ctrl-rounded"
+          placeholder='e.g. 8px, 50%, 4px 8px — or "default"'
+        />
+      </div>
+      <div class="control-row">
+        <label class="control-label">responsive</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-responsive" />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`<!-- Default -->
+<lt-image src="photo.jpg" alt="A scenic view"></lt-image>
+
+<!-- Rounded — uses design system default radius -->
+<lt-image src="photo.jpg" alt="A scenic view" rounded></lt-image>
+
+<!-- Rounded with custom value (1–4 CSS values) -->
+<lt-image src="photo.jpg" alt="A scenic view" rounded="50%"></lt-image>
+<lt-image src="photo.jpg" alt="A scenic view" rounded="4px 16px"></lt-image>
+
+<!-- Responsive — fills its container with object-fit: cover -->
+<div style="width: 400px; height: 240px;">
+  <lt-image src="photo.jpg" alt="A scenic view" responsive rounded></lt-image>
+</div>`}
+    react={`import { Image } from '@latty/react';
+
+// Default
+<Image src="photo.jpg" alt="A scenic view" />
+
+// Rounded (default radius)
+<Image src="photo.jpg" alt="A scenic view" rounded />
+<Image src="photo.jpg" alt="A scenic view" rounded="50%" />
+
+// Responsive fill
+<div style={{ width: 400, height: 240 }}>
+  <Image src="photo.jpg" alt="A scenic view" responsive rounded />
+</div>`}
+    vue={`<template>
+  <!-- Default -->
+  <lt-image src="photo.jpg" alt="A scenic view" />
+
+  <!-- Rounded -->
+  <lt-image src="photo.jpg" alt="A scenic view" rounded />
+  <lt-image src="photo.jpg" alt="A scenic view" rounded="50%" />
+
+  <!-- Responsive fill -->
+  <div style="width: 400px; height: 240px;">
+    <lt-image src="photo.jpg" alt="A scenic view" responsive rounded />
+  </div>
+</template>`}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-image" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const img = document.getElementById('playground-image') as any;
+  const codeEl = document.getElementById('image-playground-code')!;
+
+  const state = { rounded: null as string | null, responsive: false };
+
+  function updateCode() {
+    const parts = [`src="photo.jpg"`, `alt="A scenic view"`];
+    if (state.rounded !== null) {
+      parts.push(state.rounded ? `rounded="${state.rounded}"` : 'rounded');
+    }
+    if (state.responsive) parts.push('responsive');
+    codeEl.textContent = `<lt-image\n  ${parts.join('\n  ')}\n></lt-image>`;
+  }
+
+  document.getElementById('ctrl-rounded')?.addEventListener('input', (e) => {
+    const val = (e.target as HTMLInputElement).value.trim();
+    if (val === '') {
+      state.rounded = null;
+      img.removeAttribute('rounded');
+    } else if (val === 'default') {
+      state.rounded = '';
+      img.setAttribute('rounded', '');
+    } else {
+      state.rounded = val;
+      img.setAttribute('rounded', val);
+    }
+    updateCode();
+  });
+
+  document.getElementById('ctrl-responsive')?.addEventListener('change', (e) => {
+    state.responsive = (e.target as HTMLInputElement).checked;
+    img.responsive = state.responsive;
+    updateCode();
+  });
+
+  updateCode();
+</script>

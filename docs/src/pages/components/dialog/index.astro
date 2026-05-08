@@ -43,6 +43,14 @@ import ApiTable from '../../../components/ApiTable.astro';
         <label class="control-label">uppercase</label>
         <input class="control-toggle" type="checkbox" id="ctrl-uppercase" />
       </div>
+      <div class="control-row">
+        <label class="control-label">backdrop-blur</label>
+        <input class="control-toggle" type="checkbox" id="ctrl-blur" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">overlay-opacity</label>
+        <input class="control-input" type="range" min="0" max="1" step="0.05" value="0.5" id="ctrl-overlay-opacity" />
+      </div>
     </div>
   </PlaygroundShell>
 
@@ -140,12 +148,14 @@ const open = ref(false)
     'hide-close-button': false,
     'close-on-backdrop-click': true,
     'close-on-escape': true,
-    uppercase: false
+    uppercase: false,
+    'backdrop-blur': false,
+    'overlay-opacity': 0.5 as number
   };
 
   function updateCode() {
     const attrs = Object.entries(state)
-      .filter(([, v]) => v !== false && v !== 'md')
+      .filter(([k, v]) => v !== false && !(k === 'size' && v === 'md') && !(k === 'overlay-opacity' && v === 0.5))
       .map(([k, v]) => (v === true ? k : `${k}="${v}"`))
       .join('\n  ');
     codeEl.textContent = attrs
@@ -166,7 +176,8 @@ const open = ref(false)
     ['ctrl-hide-close', 'hide-close-button'],
     ['ctrl-backdrop', 'close-on-backdrop-click'],
     ['ctrl-escape', 'close-on-escape'],
-    ['ctrl-uppercase', 'uppercase']
+    ['ctrl-uppercase', 'uppercase'],
+    ['ctrl-blur', 'backdrop-blur']
   ].forEach(([ctrlId, attr]) => {
     document.getElementById(ctrlId)?.addEventListener('change', (e) => {
       const checked = (e.target as HTMLInputElement).checked;
@@ -178,6 +189,12 @@ const open = ref(false)
       }
       updateCode();
     });
+  });
+
+  document.getElementById('ctrl-overlay-opacity')?.addEventListener('input', (e) => {
+    state['overlay-opacity'] = parseFloat((e.target as HTMLInputElement).value);
+    dialog.overlayOpacity = state['overlay-opacity'];
+    updateCode();
   });
 
   updateCode();

@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { dialogStyles } from './dialog.styles';
+import { backdropFeatureStyles } from '../shared/backdrop.styles';
 import { DialogSize } from './dialog.types';
 
 import '@latty/icons';
@@ -51,7 +52,7 @@ import '../text/text';
  */
 @customElement('lt-dialog')
 export class Dialog extends LitElement {
-  static styles = dialogStyles;
+  static styles = [dialogStyles, backdropFeatureStyles];
 
   /**
    * Size of the dialog (affects max width).
@@ -94,6 +95,18 @@ export class Dialog extends LitElement {
    * @default false
    */
   @property({ type: Boolean, reflect: true }) uppercase = false;
+
+  /**
+   * Apply a frosted-glass blur effect to the backdrop.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true, attribute: 'backdrop-blur' }) backdropBlur = false;
+
+  /**
+   * Backdrop darkness as an alpha value from 0 (transparent) to 1 (opaque).
+   * @default 0.5
+   */
+  @property({ type: Number, attribute: 'overlay-opacity' }) overlayOpacity = 0.5;
 
   @query('lt-surface') private dialogElement?: HTMLElement;
   private previouslyFocusedElement?: HTMLElement;
@@ -207,7 +220,7 @@ export class Dialog extends LitElement {
     }
 
     return html`
-      <div class="backdrop" @click=${this.handleBackdropClick} part="backdrop">
+      <div class="backdrop" style="--_overlay-opacity: ${this.overlayOpacity}" @click=${this.handleBackdropClick} part="backdrop">
         <lt-surface
           elevation="4"
           role="dialog"

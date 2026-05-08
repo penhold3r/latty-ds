@@ -11,6 +11,9 @@ export type ButtonProps = {
   iconEnd?: LattyIconName;
   fullWidth?: boolean;
   uppercase?: boolean;
+  href?: string;
+  target?: string;
+  rel?: string;
   children?: ReactNode;
 };
 
