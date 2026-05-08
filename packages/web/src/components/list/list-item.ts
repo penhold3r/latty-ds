@@ -1,7 +1,9 @@
-import { LitElement, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { LitElement, html, nothing } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 import { listItemStyles } from './list-item.styles';
+
+import '@latty/icons';
 
 /**
  * A list item component that renders a `<li>` element in shadow DOM.
@@ -24,16 +26,12 @@ import { listItemStyles } from './list-item.styles';
  * ```
  *
  * @example
- * Nested lists:
+ * With icons:
  * ```html
  * <lt-list>
- *   <lt-list-item>
- *     Main item
- *     <lt-list type="ordered">
- *       <lt-list-item>Nested item 1</lt-list-item>
- *       <lt-list-item>Nested item 2</lt-list-item>
- *     </lt-list>
- *   </lt-list-item>
+ *   <lt-list-item icon="check">Done</lt-list-item>
+ *   <lt-list-item icon="clock">Pending</lt-list-item>
+ *   <lt-list-item icon="info" icon-end="arrow-right">Details</lt-list-item>
  * </lt-list>
  * ```
  */
@@ -41,7 +39,19 @@ import { listItemStyles } from './list-item.styles';
 export class ListItem extends LitElement {
   static styles = listItemStyles;
 
+  /** Icon name to display before the item content. */
+  @property() icon = '';
+
+  /** Icon name to display after the item content. */
+  @property({ attribute: 'icon-end' }) iconEnd = '';
+
   render() {
-    return html`<slot></slot>`;
+    return html`
+      <div class="inner">
+        ${this.icon ? html`<lt-icon class="icon-start" name=${this.icon}></lt-icon>` : nothing}
+        <slot></slot>
+        ${this.iconEnd ? html`<lt-icon class="icon-end" name=${this.iconEnd}></lt-icon>` : nothing}
+      </div>
+    `;
   }
 }

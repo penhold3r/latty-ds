@@ -1,8 +1,9 @@
 import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
-import type { ListItem as ListItemEl } from '@latty/web';
+import type { ListItem as ListItemEl, LattyIconName } from '@latty/web';
 
 export type ListItemProps = {
-
+  icon?: LattyIconName;
+  iconEnd?: LattyIconName;
   children?: ReactNode;
 };
 

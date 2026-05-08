@@ -1,15 +1,21 @@
 import { css } from 'lit';
 
-/**
- * Styles for the lt-list-item component.
- *
- * The component renders a <li> element in shadow DOM with minimal styling.
- * Most styling is inherited from the parent lt-list component.
- */
 export const listItemStyles = css`
   :host {
     display: list-item;
     margin: 0;
     padding: 0;
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-2);
+  }
+
+  lt-icon {
+    flex-shrink: 0;
+    color: var(--lt-color-neutral-500);
+    font-size: inherit;
   }
 `;

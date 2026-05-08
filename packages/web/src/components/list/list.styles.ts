@@ -41,6 +41,24 @@ export const listStyles = css`
     font-size: 0.9em;
   }
 
+  /* No marker */
+  :host([no-marker]) ul,
+  :host([no-marker]) ol {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  /* Divider */
+  :host([divider]) ::slotted(lt-list-item) {
+    border-bottom: 1px solid var(--lt-border-default);
+    padding-bottom: var(--lt-spacing-2);
+  }
+
+  :host([divider]) ::slotted(lt-list-item:last-child) {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
   ::slotted(lt-list:first-child) {
     margin-top: var(--lt-spacing-2);
   }

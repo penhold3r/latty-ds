@@ -81,6 +81,19 @@ export class List extends LitElement {
    */
   @property({ attribute: 'marker-color' }) markerColor = '';
 
+  /**
+   * Whether to show a divider line between list items.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) divider = false;
+
+  /**
+   * Whether to hide the list markers (bullets or numbers).
+   * Also removes the left indent reserved for the marker.
+   * @default false
+   */
+  @property({ type: Boolean, attribute: 'no-marker', reflect: true }) noMarker = false;
+
   render() {
     const isOrdered = this.type === 'ordered';
     const styles = this.markerColor

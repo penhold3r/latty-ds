@@ -5,6 +5,8 @@ export type ListProps = {
   type?: ListEl['type'];
   size?: ListEl['size'];
   markerColor?: string;
+  divider?: boolean;
+  noMarker?: boolean;
   children?: ReactNode;
 };
 

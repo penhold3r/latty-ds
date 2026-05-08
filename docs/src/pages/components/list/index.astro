@@ -7,53 +7,129 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <BaseLayout title="List" description="Ordered and unordered list components">
   <h1>List</h1>
-  <p>Styled list component supporting ordered and unordered types. Nest <code>lt-list-item</code> elements inside.</p>
+  <p>
+    Styled list component supporting ordered and unordered types, optional icons on each item, and an optional divider
+    between items. Use <code>lt-list-item</code> for items that need icons or proper nesting behavior.
+  </p>
 
   <h2>Playground</h2>
-  <ComponentPlayground tag="lt-list" content="<lt-list-item>First item</lt-list-item><lt-list-item>Second item</lt-list-item><lt-list-item>Third item</lt-list-item>" previewHeight="120px" />
+  <ComponentPlayground
+    tag="lt-list"
+    content={'<lt-list-item icon="check">First item</lt-list-item><lt-list-item icon="clock">Second item</lt-list-item><lt-list-item icon="info">Third item</lt-list-item>'}
+    previewHeight="140px"
+  />
 
   <h2>Usage</h2>
   <FrameworkTabs
     html={`
+<!-- Basic unordered list -->
 <lt-list>
   <lt-list-item>Design tokens</lt-list-item>
   <lt-list-item>Web Components</lt-list-item>
   <lt-list-item>Framework wrappers</lt-list-item>
 </lt-list>
 
+<!-- Ordered list -->
 <lt-list type="ordered">
   <lt-list-item>Install packages</lt-list-item>
   <lt-list-item>Import tokens CSS</lt-list-item>
   <lt-list-item>Use components</lt-list-item>
 </lt-list>
+
+<!-- With icons -->
+<lt-list>
+  <lt-list-item icon="check">Task completed</lt-list-item>
+  <lt-list-item icon="clock">In progress</lt-list-item>
+  <lt-list-item icon="info" icon-end="arrow-right">View details</lt-list-item>
+</lt-list>
+
+<!-- With dividers -->
+<lt-list divider>
+  <lt-list-item icon="user">Profile</lt-list-item>
+  <lt-list-item icon="settings">Settings</lt-list-item>
+  <lt-list-item icon="sign-out">Sign out</lt-list-item>
+</lt-list>
+
+<!-- No marker — useful with icons or custom layouts -->
+<lt-list no-marker>
+  <lt-list-item icon="check">Feature one</lt-list-item>
+  <lt-list-item icon="check">Feature two</lt-list-item>
+  <lt-list-item icon="check">Feature three</lt-list-item>
+</lt-list>
     `}
     react={`
 import { List, ListItem } from '@latty/react';
 
+{/* Basic unordered list */}
 <List>
   <ListItem>Design tokens</ListItem>
   <ListItem>Web Components</ListItem>
   <ListItem>Framework wrappers</ListItem>
 </List>
 
+{/* Ordered list */}
 <List type="ordered">
   <ListItem>Install packages</ListItem>
   <ListItem>Import tokens CSS</ListItem>
   <ListItem>Use components</ListItem>
 </List>
+
+{/* With icons */}
+<List>
+  <ListItem icon="check">Task completed</ListItem>
+  <ListItem icon="clock">In progress</ListItem>
+  <ListItem icon="info" iconEnd="arrow-right">View details</ListItem>
+</List>
+
+{/* With dividers */}
+<List divider>
+  <ListItem icon="user">Profile</ListItem>
+  <ListItem icon="settings">Settings</ListItem>
+  <ListItem icon="sign-out">Sign out</ListItem>
+</List>
+
+{/* No marker */}
+<List noMarker>
+  <ListItem icon="check">Feature one</ListItem>
+  <ListItem icon="check">Feature two</ListItem>
+  <ListItem icon="check">Feature three</ListItem>
+</List>
     `}
     vue={`
 <template>
+  <!-- Basic unordered list -->
   <lt-list>
     <lt-list-item>Design tokens</lt-list-item>
     <lt-list-item>Web Components</lt-list-item>
     <lt-list-item>Framework wrappers</lt-list-item>
   </lt-list>
 
+  <!-- Ordered list -->
   <lt-list type="ordered">
     <lt-list-item>Install packages</lt-list-item>
     <lt-list-item>Import tokens CSS</lt-list-item>
     <lt-list-item>Use components</lt-list-item>
+  </lt-list>
+
+  <!-- With icons -->
+  <lt-list>
+    <lt-list-item icon="check">Task completed</lt-list-item>
+    <lt-list-item icon="clock">In progress</lt-list-item>
+    <lt-list-item icon="info" icon-end="arrow-right">View details</lt-list-item>
+  </lt-list>
+
+  <!-- With dividers -->
+  <lt-list divider>
+    <lt-list-item icon="user">Profile</lt-list-item>
+    <lt-list-item icon="settings">Settings</lt-list-item>
+    <lt-list-item icon="sign-out">Sign out</lt-list-item>
+  </lt-list>
+
+  <!-- No marker -->
+  <lt-list no-marker>
+    <lt-list-item icon="check">Feature one</lt-list-item>
+    <lt-list-item icon="check">Feature two</lt-list-item>
+    <lt-list-item icon="check">Feature three</lt-list-item>
   </lt-list>
 </template>
     `}
@@ -66,4 +142,6 @@ import { List, ListItem } from '@latty/react';
   <ApiTable tag="lt-list-item" />
 </BaseLayout>
 
-<script>import '@latty/web';</script>
+<script>
+  import '@latty/web';
+</script>
