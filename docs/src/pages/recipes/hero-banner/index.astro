@@ -19,7 +19,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
     <div class="hero-wrap">
       <div class="hero">
         <lt-badge content="Now available" class="hero-badge"></lt-badge>
-        <lt-text variant="display-lg" class="hero-title">Build faster with Latty</lt-text>
+        <lt-text variant="display-lg" as="h1" class="hero-title">Build faster with Latty</lt-text>
         <lt-text variant="lead" class="hero-sub">
           Design tokens and Web Components that work natively in any framework.
         </lt-text>
@@ -35,7 +35,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
   <FrameworkTabs
     html={`<div class="hero">
   <lt-badge content="Now available" class="hero-badge"></lt-badge>
-  <lt-text variant="display-lg" class="hero-title">Build faster with Latty</lt-text>
+  <lt-text variant="display-lg" as="h1" class="hero-title">Build faster with Latty</lt-text>
   <lt-text variant="lead" class="hero-sub">
     Design tokens and Web Components that work natively in any framework.
   </lt-text>
@@ -55,7 +55,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
     text-align: center;
   }
   .hero-badge { display: inline-block; margin-bottom: var(--lt-spacing-4); }
-  .hero-title { --lt-text-weight: 700; color: #fff; margin-bottom: var(--lt-spacing-4); }
+  .hero-title { color: #fff; margin-bottom: var(--lt-spacing-4); }
   .hero-sub   { color: rgba(255, 255, 255, 0.85); margin-bottom: var(--lt-spacing-8); }
   .hero-actions { display: flex; gap: var(--lt-spacing-3); justify-content: center; flex-wrap: wrap; }
   .hero-outline::part(base) { border-color: rgba(255, 255, 255, 0.7); color: #fff; }
@@ -68,7 +68,7 @@ export default function HeroBanner() {
   return (
     <div className={styles.hero}>
       <Badge content="Now available" className={styles.heroBadge} />
-      <Text variant="display-lg" className={styles.heroTitle}>
+      <Text variant="display-lg" as="h1" className={styles.heroTitle}>
         Build faster with Latty
       </Text>
       <Text variant="lead" className={styles.heroSub}>
@@ -95,7 +95,7 @@ export default function HeroBanner() {
   text-align: center;
 }
 .heroBadge  { display: inline-block; margin-bottom: var(--lt-spacing-4); }
-.heroTitle  { --lt-text-weight: 700; color: #fff; margin-bottom: var(--lt-spacing-4); }
+.heroTitle  { color: #fff; margin-bottom: var(--lt-spacing-4); }
 .heroSub    { color: rgba(255, 255, 255, 0.85); margin-bottom: var(--lt-spacing-8); }
 .heroActions { display: flex; gap: var(--lt-spacing-3); justify-content: center; flex-wrap: wrap; }
 .heroOutline::part(base) { border-color: rgba(255, 255, 255, 0.7); color: #fff; }
@@ -104,7 +104,7 @@ export default function HeroBanner() {
     vue={`<template>
   <div class="hero">
     <lt-badge content="Now available" class="hero-badge"></lt-badge>
-    <lt-text variant="display-lg" class="hero-title">Build faster with Latty</lt-text>
+    <lt-text variant="display-lg" as="h1" class="hero-title">Build faster with Latty</lt-text>
     <lt-text variant="lead" class="hero-sub">
       Design tokens and Web Components that work natively in any framework.
     </lt-text>
@@ -162,7 +162,6 @@ export default function HeroBanner() {
   }
 
   .hero-title {
-    --lt-text-weight: 700;
     color: #fff;
     margin-bottom: var(--lt-spacing-4);
   }
