@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Sidebar from '../components/Sidebar.astro';
+import lernaJson from '../../../lerna.json';
 
 interface Props {
   title: string;
@@ -10,6 +11,7 @@ interface Props {
 const { title, description = 'A framework-agnostic design system built on design tokens and Web Components' } =
   Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const version = `v${lernaJson.version}`;
 ---
 
 <!doctype html>
@@ -36,6 +38,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </button>
       <a slot="logo" href={`${base}/`} class="wordmark">
         <span class="wordmark-accent">Latty</span>
+        <span class="version-badge">{version}</span>
       </a>
       <a
         slot="after"
@@ -96,10 +99,26 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     font-size: 1.25rem;
     font-weight: 700;
     text-decoration: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
   }
 
   .wordmark-accent {
     color: var(--lt-color-primary-50);
+  }
+
+  .version-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+    align-self: center;
+    line-height: 1.6;
   }
 
   .github-link {
