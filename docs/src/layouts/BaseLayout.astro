@@ -220,7 +220,6 @@ const year = new Date().getFullYear();
     toggle?.setAttribute('aria-expanded', 'false');
   });
 
-  // Close panel when a nav link is clicked
   navPanel?.addEventListener('lt-nav-item-click', (e: Event) => {
     const { href } = (e as CustomEvent).detail;
     if (href) navPanel.hide();
