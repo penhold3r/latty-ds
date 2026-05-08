@@ -144,12 +144,6 @@ importers:
         specifier: ^6.1.4
         version: 6.1.4(@types/node@25.2.1)(jiti@2.6.1)(rollup@4.57.1)(typescript@5.9.3)(yaml@2.8.3)
 
-  packages/angular:
-    devDependencies:
-      typescript:
-        specifier: ^5.5.4
-        version: 5.9.3
-
   packages/icons:
     dependencies:
       lit:
@@ -196,19 +190,13 @@ importers:
       '@latty/utils':
         specifier: workspace:*
         version: link:../utils
-      '@types/culori':
-        specifier: ^4.0.1
-        version: 4.0.1
       culori:
         specifier: ^4.0.2
         version: 4.0.2
-      react:
-        specifier: ^18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
     devDependencies:
+      '@types/culori':
+        specifier: ^4.0.1
+        version: 4.0.1
       typescript:
         specifier: ^5.5.4
         version: 5.9.3
