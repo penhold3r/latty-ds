@@ -12,6 +12,7 @@ const { title, description = 'A framework-agnostic design system built on design
   Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const version = `v${lernaJson.version}`;
+const year = new Date().getFullYear();
 ---
 
 <!doctype html>
@@ -32,7 +33,7 @@ const version = `v${lernaJson.version}`;
         id="menu-toggle"
         aria-label="Toggle navigation"
         aria-expanded="false"
-        aria-controls="sidebar"
+        aria-controls="nav-panel"
       >
         <lt-icon name="menu" size="md" aria-hidden="true"></lt-icon>
       </button>
@@ -52,7 +53,9 @@ const version = `v${lernaJson.version}`;
       </a>
     </lt-header>
 
-    <div id="overlay" class="overlay" aria-hidden="true"></div>
+    <lt-sidepanel id="nav-panel" anchor="left" size="240px" hide-close-button>
+      <Sidebar inPanel={true} />
+    </lt-sidepanel>
 
     <div class="page-layout">
       <Sidebar />
@@ -62,6 +65,10 @@ const version = `v${lernaJson.version}`;
         </article>
       </main>
     </div>
+
+    <footer class="footer">
+      <p class="footer-copy">© {year} Latty Design System. All rights reserved.</p>
+    </footer>
   </body>
 </html>
 
@@ -134,24 +141,37 @@ const version = `v${lernaJson.version}`;
     color: var(--lt-color-neutral-200);
   }
 
-  .overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
+  /* Anchor the nav panel below the topbar */
+  #nav-panel::part(panel),
+  #nav-panel::part(overlay) {
     top: var(--topbar-height);
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 99;
   }
 
-  .overlay.is-open {
-    display: block;
+  :global(body) {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 
   .page-layout {
     display: flex;
-    min-height: calc(100vh - var(--topbar-height));
+    flex: 1;
     max-width: var(--page-max-width);
     margin: 0 auto;
+    width: 100%;
+  }
+
+  .footer {
+    background: var(--lt-color-primary-100);
+    border-top: 1px solid var(--lt-color-primary-200);
+    padding: var(--lt-spacing-8) var(--lt-spacing-10);
+    text-align: center;
+  }
+
+  .footer-copy {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--lt-color-primary-800);
   }
 
   .content {
@@ -173,6 +193,11 @@ const version = `v${lernaJson.version}`;
     .content {
       padding: var(--lt-spacing-6) var(--lt-spacing-4);
     }
+
+    /* Hide the static sidebar — lt-sidepanel handles mobile nav */
+    .page-layout > :global(.sidebar) {
+      display: none;
+    }
   }
 </style>
 
@@ -180,36 +205,24 @@ const version = `v${lernaJson.version}`;
   import '@latty/web';
   import '@latty/icons';
 
-  const toggle = document.getElementById('menu-toggle');
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('overlay');
+  import type { SidePanel } from '@latty/web';
 
-  function openSidebar() {
-    sidebar?.classList.add('is-open');
-    overlay?.classList.add('is-open');
-    toggle?.setAttribute('aria-expanded', 'true');
-  }
-
-  function closeSidebar() {
-    sidebar?.classList.remove('is-open');
-    overlay?.classList.remove('is-open');
-    toggle?.setAttribute('aria-expanded', 'false');
-  }
+  const toggle = document.getElementById('menu-toggle') as HTMLButtonElement | null;
+  const navPanel = document.getElementById('nav-panel') as (HTMLElement & SidePanel) | null;
 
   toggle?.addEventListener('click', () => {
-    const isOpen = sidebar?.classList.contains('is-open');
-    if (isOpen) {
-      closeSidebar();
-    } else {
-      openSidebar();
-    }
+    navPanel?.toggle();
+    toggle.setAttribute('aria-expanded', String(navPanel?.open ?? false));
   });
 
-  overlay?.addEventListener('click', closeSidebar);
+  // Sync aria-expanded when panel closes via backdrop, Escape, or other means
+  navPanel?.addEventListener('lt-close', () => {
+    toggle?.setAttribute('aria-expanded', 'false');
+  });
 
-  // Close sidebar on nav link click (mobile) — lt-nav-item-click is composed and bubbles out of shadow DOM
-  sidebar?.addEventListener('lt-nav-item-click', (e) => {
+  // Close panel when a nav link is clicked
+  navPanel?.addEventListener('lt-nav-item-click', (e: Event) => {
     const { href } = (e as CustomEvent).detail;
-    if (href) closeSidebar();
+    if (href) navPanel.hide();
   });
 </script>

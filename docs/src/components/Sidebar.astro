@@ -1,4 +1,9 @@
 ---
+interface Props {
+  inPanel?: boolean;
+}
+const { inPanel = false } = Astro.props;
+
 const currentPath = Astro.url.pathname;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -84,7 +89,11 @@ function isSectionActive(items: { href: string }[]) {
 }
 ---
 
-<nav class="sidebar" id="sidebar" aria-label="Documentation navigation">
+<nav
+  class:list={['sidebar', inPanel && 'sidebar--in-panel']}
+  id={inPanel ? undefined : 'sidebar'}
+  aria-label="Documentation navigation"
+>
   <div class="sidebar-inner">
     {
       nav.map((section) => (
@@ -131,20 +140,11 @@ function isSectionActive(items: { href: string }[]) {
     flex-direction: column;
   }
 
-  @media (max-width: 768px) {
-    .sidebar {
-      position: fixed;
-      top: var(--topbar-height, 56px);
-      left: 0;
-      z-index: 100;
-      height: calc(100vh - var(--topbar-height, 56px));
-      transform: translateX(-100%);
-      transition: transform 250ms ease;
-      box-shadow: 4px 0 16px rgba(0, 0, 0, 0.1);
-    }
-
-    .sidebar.is-open {
-      transform: translateX(0);
-    }
+  .sidebar--in-panel {
+    width: 100%;
+    position: static;
+    height: 100%;
+    border-right: none;
+    flex: 1;
   }
 </style>
