@@ -39,7 +39,7 @@
  * ```
  *
  * ```html
- * <lt-button variant="primary" icon="save" loading>
+ * <lt-button variant="primary" icon-start="save" loading>
  *   Save Changes
  * </lt-button>
  *

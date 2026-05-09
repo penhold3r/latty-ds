@@ -6,4 +6,4 @@
  */
 
 export { Surface } from './surface';
-export type { SurfaceElevation, SurfaceVariant } from './surface.types';
+export type { SurfaceElevation, SurfaceAppearance } from './surface.types';

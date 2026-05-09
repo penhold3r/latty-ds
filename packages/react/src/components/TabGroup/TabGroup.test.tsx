@@ -13,9 +13,9 @@ describe('TabGroup', () => {
     expect(container.querySelector('lt-tab-group')?.getAttribute('value')).toBe('settings');
   });
 
-  it('passes variant as attribute', () => {
-    const { container } = render(<TabGroup variant="pills" />);
-    expect(container.querySelector('lt-tab-group')?.getAttribute('variant')).toBe('pills');
+  it('passes appearance as attribute', () => {
+    const { container } = render(<TabGroup appearance="pills" />);
+    expect(container.querySelector('lt-tab-group')?.getAttribute('appearance')).toBe('pills');
   });
 
   it('forwards ref to lt-tab-group element', () => {

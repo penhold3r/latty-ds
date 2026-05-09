@@ -1,2 +1,2 @@
 export { Skeleton } from './skeleton';
-export type { SkeletonVariant } from './skeleton.types';
+export type { SkeletonShape } from './skeleton.types';

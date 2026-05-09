@@ -3,7 +3,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
 import { tooltipStyles } from './tooltip.styles';
-import type { TooltipPosition } from './tooltip.types';
+import type { TooltipPlacement } from './tooltip.types';
 import '../text/text';
 
 let _tooltipIdCounter = 0;
@@ -24,7 +24,7 @@ let _tooltipIdCounter = 0;
  *
  * @example
  * ```html
- * <lt-tooltip content="Opens in a new tab" position="bottom"
+ * <lt-tooltip content="Opens in a new tab" placement="bottom"
  *   background-color="--lt-color-primary-600" color="#fff">
  *   <a href="#">Learn more</a>
  * </lt-tooltip>
@@ -41,8 +41,8 @@ export class Tooltip extends LitElement {
   /** Tooltip label text. */
   @property({ reflect: true }) content = '';
 
-  /** Position of the tooltip relative to the trigger: top, bottom, left, or right. */
-  @property({ reflect: true }) position: TooltipPosition = 'top';
+  /** Placement of the tooltip relative to the trigger: top, bottom, left, or right. */
+  @property({ reflect: true }) placement: TooltipPlacement = 'top';
 
   /** Prevent the tooltip from showing. */
   @property({ type: Boolean, reflect: true }) disabled = false;

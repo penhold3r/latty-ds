@@ -5,7 +5,7 @@
 /**
  * Valid variants for a tab group.
  */
-export type TabGroupVariant = 'default' | 'pills';
+export type TabGroupAppearance = 'default' | 'pills';
 
 /**
  * Valid sizes for a tab group.

@@ -52,8 +52,11 @@ export class Snackbar extends LitElement {
   /** Label for the optional action button. */
   @property({ attribute: 'action-label', reflect: true }) actionLabel = '';
 
-  /** Show a leading icon matching the variant (no icon for the default variant). */
-  @property({ attribute: 'with-icon', type: Boolean, reflect: true }) withIcon = false;
+  /**
+   * Icon to show before the message. Leave empty for auto (shows variant icon for status variants),
+   * set to `"none"` to suppress, or pass any icon name to override.
+   */
+  @property({ reflect: true }) icon = '';
 
   private _timer?: ReturnType<typeof setTimeout>;
 
@@ -122,12 +125,20 @@ export class Snackbar extends LitElement {
     info: '--lt-interactive-info-bg',
   };
 
+  private get _resolvedIcon(): string {
+    if (this.icon === 'none') return '';
+    if (this.icon) return this.icon;
+    if (this.variant === 'default') return '';
+    return Snackbar._iconMap[this.variant] ?? '';
+  }
+
   render() {
+    const iconName = this._resolvedIcon;
     return html`
       <lt-surface elevation="5" background-color=${Snackbar._bgMap[this.variant]}>
         <div class="inner" role="status" aria-live="polite" part="base">
-          ${this.withIcon && Snackbar._iconMap[this.variant]
-            ? html`<lt-icon class="variant-icon" name=${Snackbar._iconMap[this.variant]!} part="icon"></lt-icon>`
+          ${iconName
+            ? html`<lt-icon class="variant-icon" name=${iconName} part="icon"></lt-icon>`
             : ''}
           <span class="message" part="message">
             <slot></slot>

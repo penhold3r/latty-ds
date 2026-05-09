@@ -97,7 +97,7 @@ function isSectionActive(items: { href: string }[]) {
   <div class="sidebar-inner">
     {
       nav.map((section) => (
-        <lt-accordion variant="clean" label={section.label} open={isSectionActive(section.items) || undefined}>
+        <lt-accordion appearance="clean" label={section.label} open={isSectionActive(section.items) || undefined}>
           <lt-nav>
             {section.items.map((item) => (
               <lt-nav-item href={base + item.href} label={item.label} active={isActive(item.href) || undefined} />

@@ -39,7 +39,7 @@ import ApiTable from '../../../components/ApiTable.astro';
         <input class="control-input" type="text" id="ctrl-label" value="Panel title" />
       </div>
       <div class="control-row">
-        <label class="control-label">hide-close-button</label>
+        <label class="control-label">no-close-button</label>
         <input class="control-toggle" type="checkbox" id="ctrl-hide-close" />
       </div>
       <div class="control-row">
@@ -78,7 +78,7 @@ import ApiTable from '../../../components/ApiTable.astro';
 </script>
 
 <!-- Hide the built-in close button -->
-<lt-sidepanel label="No close btn" hide-close-button>...</lt-sidepanel>`}
+<lt-sidepanel label="No close btn" no-close-button>...</lt-sidepanel>`}
     react={`import { useState } from 'react';
 import { SidePanel, Button } from '@latty/react';
 
@@ -140,7 +140,7 @@ const open = ref(false)
     anchor: 'left',
     size: '320px',
     label: 'Panel title',
-    hideCloseButton: false,
+    noCloseButton: false,
     backdropBlur: false,
     overlayOpacity: 0.45
   };
@@ -150,7 +150,7 @@ const open = ref(false)
     if (state.anchor !== 'left') attrs.push(`anchor="${state.anchor}"`);
     if (state.size !== '320px') attrs.push(`size="${state.size}"`);
     if (state.label) attrs.push(`label="${state.label}"`);
-    if (state.hideCloseButton) attrs.push('hide-close-button');
+    if (state.noCloseButton) attrs.push('no-close-button');
     if (state.backdropBlur) attrs.push('backdrop-blur');
     if (state.overlayOpacity !== 0.45) attrs.push(`overlay-opacity="${state.overlayOpacity}"`);
     const str = attrs.length ? '\n  ' + attrs.join('\n  ') + '\n' : '';
@@ -184,8 +184,8 @@ const open = ref(false)
   });
 
   document.getElementById('ctrl-hide-close')?.addEventListener('change', (e) => {
-    state.hideCloseButton = (e.target as HTMLInputElement).checked;
-    panel.hideCloseButton = state.hideCloseButton;
+    state.noCloseButton = (e.target as HTMLInputElement).checked;
+    panel.noCloseButton = state.noCloseButton;
     updateCode();
   });
 

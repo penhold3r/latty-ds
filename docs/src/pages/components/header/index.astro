@@ -37,7 +37,7 @@ import ApiTable from '../../../components/ApiTable.astro';
 
     <div slot="controls">
       <div class="control-row">
-        <span class="control-label">variant</span>
+        <span class="control-label">background</span>
         <select class="control-select" id="ctrl-variant">
           <option value="primary" selected>primary</option>
           <option value="surface">surface</option>
@@ -103,13 +103,13 @@ import ApiTable from '../../../components/ApiTable.astro';
 </script>
 
 <script>
-  const header = document.getElementById('demo-header') as HTMLElement & { variant: string };
+  const header = document.getElementById('demo-header') as HTMLElement & { background: string };
   const variantCtrl = document.getElementById('ctrl-variant') as HTMLSelectElement;
   const codeEl = document.getElementById('header-playground-code');
 
   function updateCode() {
-    const variant = header.getAttribute('variant') ?? 'primary';
-    const variantAttr = variant === 'primary' ? '' : ` variant="${variant}"`;
+    const background = header.getAttribute('background') ?? 'primary';
+    const variantAttr = background === 'primary' ? '' : ` background="${background}"`;
     if (codeEl) {
       codeEl.textContent = `<lt-header${variantAttr}>
   <lt-icon slot="before" name="menu"></lt-icon>
@@ -128,7 +128,7 @@ import ApiTable from '../../../components/ApiTable.astro';
   }
 
   variantCtrl?.addEventListener('change', () => {
-    header.setAttribute('variant', variantCtrl.value);
+    header.setAttribute('background', variantCtrl.value);
     updateCode();
   });
 

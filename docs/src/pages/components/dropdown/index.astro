@@ -8,16 +8,19 @@ import ApiTable from '../../../components/ApiTable.astro';
 <BaseLayout title="Dropdown" description="A floating menu anchored to a trigger element">
   <h1>Dropdown</h1>
   <p>
-    A floating menu that opens from a trigger element. Supports keyboard navigation
-    (Arrow keys, Escape, Home/End), outside-click to dismiss, and optional link items via the
+    A floating menu that opens from a trigger element. Supports keyboard navigation (Arrow keys, Escape, Home/End),
+    outside-click to dismiss, and optional link items via the
     <code>href</code> attribute on <code>lt-dropdown-item</code>.
   </p>
 
   <h2>Playground</h2>
   <PlaygroundShell id="dropdown-playground" previewHeight="auto">
-    <div slot="preview" style="padding: 2rem; display: flex; justify-content: center; min-height: 220px; align-items: flex-start;">
+    <div
+      slot="preview"
+      style="padding: 2rem; display: flex; justify-content: center; min-height: 220px; align-items: flex-start;"
+    >
       <lt-dropdown id="playground-dropdown" placement="bottom-start">
-        <lt-button slot="trigger" variant="outlined">Options</lt-button>
+        <lt-button slot="trigger" appearance="outlined">Options</lt-button>
         <lt-dropdown-item>Profile</lt-dropdown-item>
         <lt-dropdown-item>Settings</lt-dropdown-item>
         <lt-dropdown-item id="playground-item-disabled">Admin Panel</lt-dropdown-item>
@@ -47,7 +50,7 @@ import ApiTable from '../../../components/ApiTable.astro';
   <FrameworkTabs
     html={`
 <lt-dropdown>
-  <lt-button slot="trigger" variant="outlined">Options</lt-button>
+  <lt-button slot="trigger" appearance="outlined">Options</lt-button>
   <lt-dropdown-item>Profile</lt-dropdown-item>
   <lt-dropdown-item>Settings</lt-dropdown-item>
   <lt-dropdown-item disabled>Admin Panel</lt-dropdown-item>
@@ -87,7 +90,7 @@ import { Button } from '@latty/react';
 function ActionsMenu() {
   return (
     <Dropdown onLtSelect={(e) => console.log('Selected:', e.detail.item.textContent)}>
-      <Button slot="trigger" variant="outlined">Options</Button>
+      <Button slot="trigger" appearance="outlined">Options</Button>
       <DropdownItem>Profile</DropdownItem>
       <DropdownItem>Settings</DropdownItem>
       <DropdownItem disabled>Admin Panel</DropdownItem>
@@ -107,7 +110,7 @@ function onSelect(e) {
 
 <template>
   <lt-dropdown @lt-select="onSelect">
-    <lt-button slot="trigger" variant="outlined">Options</lt-button>
+    <lt-button slot="trigger" appearance="outlined">Options</lt-button>
     <lt-dropdown-item>Profile</lt-dropdown-item>
     <lt-dropdown-item>Settings</lt-dropdown-item>
     <lt-dropdown-item disabled>Admin Panel</lt-dropdown-item>
@@ -131,7 +134,7 @@ function onSelect(e) {
 
   const state = {
     placement: 'bottom-start',
-    disabledItem: false,
+    disabledItem: false
   };
 
   function applyState() {
@@ -143,7 +146,7 @@ function onSelect(e) {
     const placementAttr = state.placement !== 'bottom-start' ? ` placement="${state.placement}"` : '';
     const disabledAttr = state.disabledItem ? ' disabled' : '';
     codeEl.textContent = `<lt-dropdown${placementAttr}>
-  <lt-button slot="trigger" variant="outlined">Options</lt-button>
+  <lt-button slot="trigger" appearance="outlined">Options</lt-button>
   <lt-dropdown-item>Profile</lt-dropdown-item>
   <lt-dropdown-item>Settings</lt-dropdown-item>
   <lt-dropdown-item${disabledAttr}>Admin Panel</lt-dropdown-item>

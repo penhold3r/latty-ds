@@ -15,7 +15,7 @@ import ApiTable from '../../../components/ApiTable.astro';
   <h2>Playground</h2>
   <ComponentPlayground
     tag="lt-list"
-    content={'<lt-list-item icon="check">First item</lt-list-item><lt-list-item icon="clock">Second item</lt-list-item><lt-list-item icon="info">Third item</lt-list-item>'}
+    content={'<lt-list-item icon-start="check">First item</lt-list-item><lt-list-item icon-start="clock">Second item</lt-list-item><lt-list-item icon-start="info">Third item</lt-list-item>'}
     previewHeight="140px"
   />
 
@@ -38,23 +38,23 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <!-- With icons -->
 <lt-list>
-  <lt-list-item icon="check">Task completed</lt-list-item>
-  <lt-list-item icon="clock">In progress</lt-list-item>
-  <lt-list-item icon="info" icon-end="arrow-right">View details</lt-list-item>
+  <lt-list-item icon-start="check">Task completed</lt-list-item>
+  <lt-list-item icon-start="clock">In progress</lt-list-item>
+  <lt-list-item icon-start="info" icon-end="arrow-right">View details</lt-list-item>
 </lt-list>
 
 <!-- With dividers -->
 <lt-list divider>
-  <lt-list-item icon="user">Profile</lt-list-item>
-  <lt-list-item icon="settings">Settings</lt-list-item>
-  <lt-list-item icon="sign-out">Sign out</lt-list-item>
+  <lt-list-item icon-start="user">Profile</lt-list-item>
+  <lt-list-item icon-start="settings">Settings</lt-list-item>
+  <lt-list-item icon-start="sign-out">Sign out</lt-list-item>
 </lt-list>
 
 <!-- No marker — useful with icons or custom layouts -->
 <lt-list no-marker>
-  <lt-list-item icon="check">Feature one</lt-list-item>
-  <lt-list-item icon="check">Feature two</lt-list-item>
-  <lt-list-item icon="check">Feature three</lt-list-item>
+  <lt-list-item icon-start="check">Feature one</lt-list-item>
+  <lt-list-item icon-start="check">Feature two</lt-list-item>
+  <lt-list-item icon-start="check">Feature three</lt-list-item>
 </lt-list>
     `}
     react={`
@@ -76,23 +76,23 @@ import { List, ListItem } from '@latty/react';
 
 {/* With icons */}
 <List>
-  <ListItem icon="check">Task completed</ListItem>
-  <ListItem icon="clock">In progress</ListItem>
-  <ListItem icon="info" iconEnd="arrow-right">View details</ListItem>
+  <ListItem iconStart="check">Task completed</ListItem>
+  <ListItem iconStart="clock">In progress</ListItem>
+  <ListItem iconStart="info" iconEnd="arrow-right">View details</ListItem>
 </List>
 
 {/* With dividers */}
 <List divider>
-  <ListItem icon="user">Profile</ListItem>
-  <ListItem icon="settings">Settings</ListItem>
-  <ListItem icon="sign-out">Sign out</ListItem>
+  <ListItem iconStart="user">Profile</ListItem>
+  <ListItem iconStart="settings">Settings</ListItem>
+  <ListItem iconStart="sign-out">Sign out</ListItem>
 </List>
 
 {/* No marker */}
 <List noMarker>
-  <ListItem icon="check">Feature one</ListItem>
-  <ListItem icon="check">Feature two</ListItem>
-  <ListItem icon="check">Feature three</ListItem>
+  <ListItem iconStart="check">Feature one</ListItem>
+  <ListItem iconStart="check">Feature two</ListItem>
+  <ListItem iconStart="check">Feature three</ListItem>
 </List>
     `}
     vue={`
@@ -113,23 +113,23 @@ import { List, ListItem } from '@latty/react';
 
   <!-- With icons -->
   <lt-list>
-    <lt-list-item icon="check">Task completed</lt-list-item>
-    <lt-list-item icon="clock">In progress</lt-list-item>
-    <lt-list-item icon="info" icon-end="arrow-right">View details</lt-list-item>
+    <lt-list-item icon-start="check">Task completed</lt-list-item>
+    <lt-list-item icon-start="clock">In progress</lt-list-item>
+    <lt-list-item icon-start="info" icon-end="arrow-right">View details</lt-list-item>
   </lt-list>
 
   <!-- With dividers -->
   <lt-list divider>
-    <lt-list-item icon="user">Profile</lt-list-item>
-    <lt-list-item icon="settings">Settings</lt-list-item>
-    <lt-list-item icon="sign-out">Sign out</lt-list-item>
+    <lt-list-item icon-start="user">Profile</lt-list-item>
+    <lt-list-item icon-start="settings">Settings</lt-list-item>
+    <lt-list-item icon-start="sign-out">Sign out</lt-list-item>
   </lt-list>
 
   <!-- No marker -->
   <lt-list no-marker>
-    <lt-list-item icon="check">Feature one</lt-list-item>
-    <lt-list-item icon="check">Feature two</lt-list-item>
-    <lt-list-item icon="check">Feature three</lt-list-item>
+    <lt-list-item icon-start="check">Feature one</lt-list-item>
+    <lt-list-item icon-start="check">Feature two</lt-list-item>
+    <lt-list-item icon-start="check">Feature three</lt-list-item>
   </lt-list>
 </template>
     `}

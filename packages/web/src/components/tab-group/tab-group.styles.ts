@@ -45,7 +45,7 @@ export const tabGroupStyles = css`
   }
 
   /* Pills variant */
-  :host([variant='pills']) .tabs-container {
+  :host([appearance='pills']) .tabs-container {
     background: var(--lt-bg-surface);
     border: none;
     border-radius: var(--lt-border-radius);

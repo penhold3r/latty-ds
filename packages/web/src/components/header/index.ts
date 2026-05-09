@@ -1,2 +1,2 @@
 export { Header } from './header';
-export type { HeaderVariant } from './header.types';
+export type { HeaderBackground } from './header.types';

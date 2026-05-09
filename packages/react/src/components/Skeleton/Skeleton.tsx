@@ -2,7 +2,7 @@ import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
 import type { Skeleton as SkeletonEl } from '@latty/web';
 
 export type SkeletonProps = {
-  variant?: SkeletonEl['variant'];
+  shape?: SkeletonEl['shape'];
   width?: string;
   height?: string;
   animated?: boolean;

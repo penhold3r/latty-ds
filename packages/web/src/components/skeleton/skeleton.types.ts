@@ -1,1 +1,1 @@
-export type SkeletonVariant = 'text' | 'circle' | 'rect';
+export type SkeletonShape = 'text' | 'circle' | 'rect';

@@ -20,10 +20,10 @@ describe('<lt-alert>', () => {
     expect(el.shadowRoot).toBeTruthy();
   });
 
-  it('defaults: variant=default, appearance=filled, withIcon=false, closable=false, title=""', () => {
+  it('defaults: variant=default, appearance=filled, icon="", closable=false, title=""', () => {
     expect(el.variant).toBe('default');
     expect(el.appearance).toBe('filled');
-    expect(el.withIcon).toBe(false);
+    expect(el.icon).toBe('');
     expect(el.closable).toBe(false);
     expect(el.title).toBe('');
   });
@@ -54,8 +54,21 @@ describe('<lt-alert>', () => {
     expect(el.shadowRoot!.querySelector('.icon')).toBeNull();
   });
 
-  it('renders icon when with-icon is true', async () => {
-    el.withIcon = true;
+  it('renders icon automatically for status variants', async () => {
+    el.variant = 'success';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.icon')).toBeTruthy();
+  });
+
+  it('suppresses icon when icon="none"', async () => {
+    el.variant = 'success';
+    el.icon = 'none';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.icon')).toBeNull();
+  });
+
+  it('uses custom icon when icon is set', async () => {
+    el.icon = 'check';
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('.icon')).toBeTruthy();
   });

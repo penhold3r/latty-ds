@@ -6,4 +6,4 @@
  */
 
 export { Accordion } from './accordion';
-export type { AccordionVariant } from './accordion.types';
+export type { AccordionAppearance } from './accordion.types';

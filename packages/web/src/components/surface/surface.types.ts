@@ -12,10 +12,10 @@
 export type SurfaceElevation = '0' | '1' | '2' | '3' | '4' | '5';
 
 /**
- * Visual variant of the surface component.
+ * Visual appearance of the surface component.
  * Determines the border and background styling.
  *
  * - `filled`: Solid background with no border
  * - `outlined`: Transparent background with border
  */
-export type SurfaceVariant = 'filled' | 'outlined';
+export type SurfaceAppearance = 'filled' | 'outlined';

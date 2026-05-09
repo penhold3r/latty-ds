@@ -20,12 +20,12 @@ import ApiTable from '../../../components/ApiTable.astro';
         <div class="preview-col">
           <lt-text variant="overline" style="color:var(--lt-color-neutral-500)">Vertical</lt-text>
           <lt-nav id="nav-vertical">
-            <lt-nav-item href="#" label="Dashboard" icon="home"></lt-nav-item>
-            <lt-nav-item label="Settings" icon="settings">
+            <lt-nav-item href="#" label="Dashboard" icon-start="home"></lt-nav-item>
+            <lt-nav-item label="Settings" icon-start="settings">
               <lt-nav-item href="#" label="Profile"></lt-nav-item>
               <lt-nav-item href="#" label="Security"></lt-nav-item>
             </lt-nav-item>
-            <lt-nav-item href="#" label="Help" icon="question-circle"></lt-nav-item>
+            <lt-nav-item href="#" label="Help" icon-start="question-circle"></lt-nav-item>
           </lt-nav>
         </div>
         <div class="preview-col">
@@ -59,12 +59,12 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <!-- Vertical navigation (default) -->
 <lt-nav>
-  <lt-nav-item href="/dashboard" label="Dashboard" icon="home" active></lt-nav-item>
-  <lt-nav-item label="Settings" icon="settings">
+  <lt-nav-item href="/dashboard" label="Dashboard" icon-start="home" active></lt-nav-item>
+  <lt-nav-item label="Settings" icon-start="settings">
     <lt-nav-item href="/settings/profile" label="Profile"></lt-nav-item>
     <lt-nav-item href="/settings/security" label="Security"></lt-nav-item>
   </lt-nav-item>
-  <lt-nav-item href="/help" label="Help" icon="question-circle"></lt-nav-item>
+  <lt-nav-item href="/help" label="Help" icon-start="question-circle"></lt-nav-item>
 </lt-nav>
 
 <!-- Horizontal navigation with dropdown groups -->
@@ -80,12 +80,12 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 {/* Vertical navigation (default) */}
 <Nav>
-  <NavItem href="/dashboard" label="Dashboard" icon="home" active />
-  <NavItem label="Settings" icon="settings">
+  <NavItem href="/dashboard" label="Dashboard" iconStart="home" active />
+  <NavItem label="Settings" iconStart="settings">
     <NavItem href="/settings/profile" label="Profile" />
     <NavItem href="/settings/security" label="Security" />
   </NavItem>
-  <NavItem href="/help" label="Help" icon="question-circle" />
+  <NavItem href="/help" label="Help" iconStart="question-circle" />
 </Nav>
 
 {/* Horizontal navigation with dropdown groups */}

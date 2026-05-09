@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 
 import { tabGroupStyles } from './tab-group.styles';
-import { TabGroupSize, TabGroupVariant } from './tab-group.types';
+import { TabGroupSize, TabGroupAppearance } from './tab-group.types';
 import type { Tab } from '../tab/tab';
 
 import '../tab/tab';
@@ -30,10 +30,10 @@ import '../tab/tab';
  *
  * @example
  * ```html
- * <lt-tab-group variant="pills" value="home">
- *   <lt-tab value="home" icon="home" label="Home"></lt-tab>
- *   <lt-tab value="search" icon="search" label="Search"></lt-tab>
- *   <lt-tab value="settings" icon="settings" label="Settings"></lt-tab>
+ * <lt-tab-group appearance="pills" value="home">
+ *   <lt-tab value="home" icon-start="home" label="Home"></lt-tab>
+ *   <lt-tab value="search" icon-start="search" label="Search"></lt-tab>
+ *   <lt-tab value="settings" icon-start="settings" label="Settings"></lt-tab>
  *
  *   <div slot="panel" data-value="home">Home content</div>
  *   <div slot="panel" data-value="search">Search content</div>
@@ -52,10 +52,10 @@ export class TabGroup extends LitElement {
   @property() value = '';
 
   /**
-   * Visual variant of the tab group.
+   * Visual appearance of the tab group.
    * @default 'default'
    */
-  @property({ reflect: true }) variant: TabGroupVariant = 'default';
+  @property({ reflect: true }) appearance: TabGroupAppearance = 'default';
 
   /**
    * Size of the tabs.
@@ -100,7 +100,7 @@ export class TabGroup extends LitElement {
       tab.active = tab.value === this.value;
 
       // Set variant attribute for styling
-      if (this.variant === 'pills') {
+      if (this.appearance === 'pills') {
         tab.setAttribute('data-variant', 'pills');
       } else {
         tab.removeAttribute('data-variant');
@@ -182,7 +182,7 @@ export class TabGroup extends LitElement {
       this.updatePanels();
     }
 
-    if (changedProperties.has('size') || changedProperties.has('variant')) {
+    if (changedProperties.has('size') || changedProperties.has('appearance')) {
       this.updateTabs();
     }
   }

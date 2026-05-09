@@ -16,7 +16,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 
   <h2>Preview</h2>
   <RecipePreview>
-    <lt-surface class="content-card" variant="outlined" elevation="1" style="max-width: 300px; display: block;">
+    <lt-surface class="content-card" appearance="outlined" elevation="1" style="max-width: 300px; display: block;">
       <img
         src="https://picsum.photos/seed/content-card/600/360"
         alt="Card cover"
@@ -35,7 +35,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 
   <h2>Code</h2>
   <FrameworkTabs
-    html={`<lt-surface class="content-card" variant="outlined" elevation="1" style="max-width: 300px; display: block;">
+    html={`<lt-surface class="content-card" appearance="outlined" elevation="1" style="max-width: 300px; display: block;">
   <img
     src="https://picsum.photos/seed/content-card/600/360"
     alt="Card cover"
@@ -65,7 +65,7 @@ export default function ContentCard() {
   return (
     <Surface
       className={styles.card}
-      variant="outlined"
+      appearance="outlined"
       elevation="1"
       style={{ maxWidth: 300, display: 'block' }}
     >
@@ -98,7 +98,7 @@ export default function ContentCard() {
     vue={`<template>
   <lt-surface
     class="content-card"
-    variant="outlined"
+    appearance="outlined"
     elevation="1"
     style="max-width: 300px; display: block;"
   >

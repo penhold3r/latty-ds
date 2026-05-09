@@ -64,9 +64,9 @@ export const dividerStyles = css`
     writing-mode: vertical-rl;
   }
 
-  /* ── Variants ───────────────────────────────────────────────────────────── */
+  /* ── Appearances ────────────────────────────────────────────────────────── */
 
-  :host([variant='solid']) { --_divider-style: solid; }
-  :host([variant='dashed']) { --_divider-style: dashed; }
-  :host([variant='dotted']) { --_divider-style: dotted; }
+  :host([appearance='solid']) { --_divider-style: solid; }
+  :host([appearance='dashed']) { --_divider-style: dashed; }
+  :host([appearance='dotted']) { --_divider-style: dotted; }
 `;

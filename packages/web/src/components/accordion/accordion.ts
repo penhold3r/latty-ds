@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { accordionStyles } from './accordion.styles';
-import { AccordionVariant } from './accordion.types';
+import { AccordionAppearance } from './accordion.types';
 
 import '@latty/icons';
 import '../text/text';
@@ -27,7 +27,7 @@ import '../text/text';
  *
  * @example
  * ```html
- * <lt-accordion variant="filled" label="Features" icon="settings" open>
+ * <lt-accordion appearance="filled" label="Features" icon-start="settings" open>
  *   <ul>
  *     <li>Design tokens</li>
  *     <li>Web Components</li>
@@ -50,13 +50,13 @@ export class Accordion extends LitElement {
    * Icon name to display at the start of the header.
    * @default ''
    */
-  @property() icon = '';
+  @property({ attribute: 'icon-start' }) iconStart = '';
 
   /**
-   * Visual variant of the accordion.
+   * Visual appearance of the accordion.
    * @default 'default'
    */
-  @property({ reflect: true }) variant: AccordionVariant = 'default';
+  @property({ reflect: true }) appearance: AccordionAppearance = 'default';
 
   /**
    * Whether the accordion is initially open.
@@ -152,7 +152,7 @@ export class Accordion extends LitElement {
       <details>
         <summary @click=${this.handleSummaryClick}>
           <div class="summary-content">
-            ${this.icon ? html`<lt-icon class="start-icon" name="${this.icon}"></lt-icon>` : ''}
+            ${this.iconStart ? html`<lt-icon class="start-icon" name="${this.iconStart}"></lt-icon>` : ''}
             <lt-text variant="h6" as="span" class="summary-text">
               <slot name="summary">${this.label}</slot>
             </lt-text>

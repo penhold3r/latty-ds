@@ -22,14 +22,14 @@ describe('<lt-header>', () => {
     expect(el.shadowRoot!.querySelector('slot')).toBeTruthy();
   });
 
-  it('has default variant of primary', () => {
-    expect(el.variant).toBe('primary');
-    expect(el.getAttribute('variant')).toBe('primary');
+  it('has default background of primary', () => {
+    expect(el.background).toBe('primary');
+    expect(el.getAttribute('background')).toBe('primary');
   });
 
-  it.each(['primary', 'surface'] as const)('reflects %s variant to attribute', async (variant) => {
-    el.variant = variant;
+  it.each(['primary', 'surface'] as const)('reflects %s background to attribute', async (background) => {
+    el.background = background;
     await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe(variant);
+    expect(el.getAttribute('background')).toBe(background);
   });
 });

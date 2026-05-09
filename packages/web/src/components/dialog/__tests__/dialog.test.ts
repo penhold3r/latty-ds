@@ -77,9 +77,9 @@ describe('<lt-dialog>', () => {
     expect(closeButton).toBeTruthy();
   });
 
-  it('hides close button when hideCloseButton is true', async () => {
+  it('hides close button when noCloseButton is true', async () => {
     el.open = true;
-    el.hideCloseButton = true;
+    el.noCloseButton = true;
     await el.updateComplete;
 
     const closeButton = el.shadowRoot!.querySelector('.close-button');
@@ -259,7 +259,7 @@ describe('<lt-dialog>', () => {
     expect(el.closeOnEscape).toBe(true);
   });
 
-  it('has default hideCloseButton of false', () => {
-    expect(el.hideCloseButton).toBe(false);
+  it('has default noCloseButton of false', () => {
+    expect(el.noCloseButton).toBe(false);
   });
 });

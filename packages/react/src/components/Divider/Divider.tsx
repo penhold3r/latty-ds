@@ -3,7 +3,7 @@ import type { Divider as DividerEl } from '@latty/web';
 
 export type DividerProps = {
   orientation?: DividerEl['orientation'];
-  variant?: DividerEl['variant'];
+  appearance?: DividerEl['appearance'];
   label?: string;
   children?: ReactNode;
 };

@@ -28,7 +28,7 @@ import ApiTable from '../../../components/ApiTable.astro';
         </select>
       </div>
       <div class="control-row">
-        <label class="control-label">hide-close-button</label>
+        <label class="control-label">no-close-button</label>
         <input class="control-toggle" type="checkbox" id="ctrl-hide-close" />
       </div>
       <div class="control-row">
@@ -145,7 +145,7 @@ const open = ref(false)
 
   const state = {
     size: 'md',
-    'hide-close-button': false,
+    'no-close-button': false,
     'close-on-backdrop-click': true,
     'close-on-escape': true,
     uppercase: false,
@@ -173,7 +173,7 @@ const open = ref(false)
   });
 
   [
-    ['ctrl-hide-close', 'hide-close-button'],
+    ['ctrl-hide-close', 'no-close-button'],
     ['ctrl-backdrop', 'close-on-backdrop-click'],
     ['ctrl-escape', 'close-on-escape'],
     ['ctrl-uppercase', 'uppercase'],

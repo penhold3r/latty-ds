@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
 import { skeletonStyles } from './skeleton.styles';
-import type { SkeletonVariant } from './skeleton.types';
+import type { SkeletonShape } from './skeleton.types';
 
 /**
  * A loading placeholder that mimics the shape of content while data is being fetched.
@@ -13,9 +13,9 @@ import type { SkeletonVariant } from './skeleton.types';
  * @example
  * ```html
  * <lt-skeleton></lt-skeleton>
- * <lt-skeleton variant="text" width="60%"></lt-skeleton>
- * <lt-skeleton variant="circle" width="48px" height="48px"></lt-skeleton>
- * <lt-skeleton variant="rect" height="200px"></lt-skeleton>
+ * <lt-skeleton shape="text" width="60%"></lt-skeleton>
+ * <lt-skeleton shape="circle" width="48px" height="48px"></lt-skeleton>
+ * <lt-skeleton shape="rect" height="200px"></lt-skeleton>
  * ```
  */
 @customElement('lt-skeleton')
@@ -23,10 +23,10 @@ export class Skeleton extends LitElement {
   static styles = skeletonStyles;
 
   /**
-   * Shape variant of the skeleton placeholder.
+   * Shape of the skeleton placeholder.
    * @default 'rect'
    */
-  @property({ reflect: true }) variant: SkeletonVariant = 'rect';
+  @property({ reflect: true }) shape: SkeletonShape = 'rect';
 
   /**
    * Width of the skeleton. Accepts any CSS length value (e.g. '100%', '200px').

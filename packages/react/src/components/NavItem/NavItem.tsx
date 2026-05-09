@@ -4,7 +4,7 @@ import type { NavItem as NavItemEl, LattyIconName } from '@latty/web';
 export type NavItemProps = {
   href?: string;
   label?: string;
-  icon?: LattyIconName;
+  iconStart?: LattyIconName;
   active?: boolean;
   disabled?: boolean;
   open?: boolean;

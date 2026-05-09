@@ -4,7 +4,7 @@ import type { Slider as SliderEl } from '@latty/web';
 export type SliderProps = {
   size?: SliderEl['size'];
   disabled?: boolean;
-  showTooltip?: boolean;
+  tooltip?: boolean;
   min?: number;
   max?: number;
   step?: number;

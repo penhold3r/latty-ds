@@ -27,9 +27,9 @@ describe('<lt-accordion>', () => {
     expect(summary).toBeTruthy();
   });
 
-  it('has default variant of default', () => {
-    expect(el.variant).toBe('default');
-    expect(el.getAttribute('variant')).toBe('default');
+  it('has default appearance of default', () => {
+    expect(el.appearance).toBe('default');
+    expect(el.getAttribute('appearance')).toBe('default');
   });
 
   it('is not open by default', () => {
@@ -70,10 +70,10 @@ describe('<lt-accordion>', () => {
     expect(slot).toBeTruthy();
   });
 
-  it.each(['default', 'filled', 'outlined', 'clean'] as const)('reflects %s variant to attribute', async (variant) => {
-    el.variant = variant;
+  it.each(['default', 'filled', 'outlined', 'clean'] as const)('reflects %s appearance to attribute', async (appearance) => {
+    el.appearance = appearance;
     await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe(variant);
+    expect(el.getAttribute('appearance')).toBe(appearance);
   });
 
   it('dispatches toggle event when opened', async () => {

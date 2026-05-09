@@ -6,7 +6,9 @@ export type SidePanelProps = {
   anchor?: SidePanelEl['anchor'];
   size?: string;
   label?: string;
-  hideCloseButton?: boolean;
+  noCloseButton?: boolean;
+  backdropBlur?: boolean;
+  overlayOpacity?: number;
   onLtClose?: (event: CustomEvent) => void;
   children?: ReactNode;
 };

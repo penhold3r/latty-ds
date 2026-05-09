@@ -13,9 +13,9 @@ describe('Surface', () => {
     expect(container.querySelector('lt-surface')?.getAttribute('elevation')).toBe('2');
   });
 
-  it('passes variant as attribute', () => {
-    const { container } = render(<Surface variant="outlined" />);
-    expect(container.querySelector('lt-surface')?.getAttribute('variant')).toBe('outlined');
+  it('passes appearance as attribute', () => {
+    const { container } = render(<Surface appearance="outlined" />);
+    expect(container.querySelector('lt-surface')?.getAttribute('appearance')).toBe('outlined');
   });
 
   it('renders children', () => {

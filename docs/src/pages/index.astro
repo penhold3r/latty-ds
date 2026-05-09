@@ -24,7 +24,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   </div>
 
   <div class="features">
-    <lt-surface variant="outlined" elevation="0" background-color="--lt-bg-subtle" class="feature">
+    <lt-surface appearance="outlined" elevation="0" background-color="--lt-bg-subtle" class="feature">
       <div class="feature-icon"><lt-icon name="diamond" size="lg"></lt-icon></div>
       <lt-text variant="h6">Tokens first</lt-text>
       <lt-text variant="body-sm">
@@ -32,7 +32,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         types — change once, update everywhere.
       </lt-text>
     </lt-surface>
-    <lt-surface variant="outlined" elevation="0" background-color="--lt-bg-subtle" class="feature">
+    <lt-surface appearance="outlined" elevation="0" background-color="--lt-bg-subtle" class="feature">
       <div class="feature-icon"><lt-icon name="hexagon" size="lg"></lt-icon></div>
       <lt-text variant="h6">Framework agnostic</lt-text>
       <lt-text variant="body-sm">
@@ -40,7 +40,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         framework without wrappers.
       </lt-text>
     </lt-surface>
-    <lt-surface variant="outlined" elevation="0" background-color="--lt-bg-subtle" class="feature">
+    <lt-surface appearance="outlined" elevation="0" background-color="--lt-bg-subtle" class="feature">
       <div class="feature-icon"><lt-icon name="double-circle" size="lg"></lt-icon></div>
       <lt-text variant="h6">Fully themeable</lt-text>
       <lt-text variant="body-sm">
@@ -55,7 +55,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <pre><code>pnpm add @latty/tokens @latty/web</code></pre>
     <pre><code class="language-js">import '@latty/tokens/dist/tokens.css';
 import '@latty/web';</code></pre>
-    <pre><code class="language-html">&lt;lt-button variant="primary" icon="save"&gt;Save changes&lt;/lt-button&gt;
+    <pre><code class="language-html">&lt;lt-button variant="primary" icon-start="save"&gt;Save changes&lt;/lt-button&gt;
 
 &lt;lt-textfield label="Email" type="email" required&gt;&lt;/lt-textfield&gt;</code></pre>
     <lt-link href={`${base}/getting-started/installation`}>Full installation guide →</lt-link>

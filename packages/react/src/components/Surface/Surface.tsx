@@ -3,7 +3,7 @@ import type { Surface as SurfaceEl } from '@latty/web';
 
 export type SurfaceProps = {
   elevation?: SurfaceEl['elevation'];
-  variant?: SurfaceEl['variant'];
+  appearance?: SurfaceEl['appearance'];
   backgroundColor?: string;
   children?: ReactNode;
 };

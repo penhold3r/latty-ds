@@ -1,1 +1,1 @@
-export type HeaderVariant = 'primary' | 'surface';
+export type HeaderBackground = 'primary' | 'surface';

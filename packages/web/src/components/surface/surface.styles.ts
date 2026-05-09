@@ -23,17 +23,17 @@ export const surfaceStyles = css`
   :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); }
   :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); }
 
-  /* Visual variants */
-  :host([variant='filled']) .surface {
+  /* Visual appearances */
+  :host([appearance='filled']) .surface {
     border: none;
   }
 
-  :host([variant='outlined']) .surface {
+  :host([appearance='outlined']) .surface {
     background: var(--_surface-bg, transparent);
     border: 1px solid var(--lt-border-default);
   }
 
-  :host([variant='outlined']:hover) .surface {
+  :host([appearance='outlined']:hover) .surface {
     border-color: var(--lt-border-strong);
   }
 `;

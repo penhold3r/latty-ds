@@ -25,7 +25,7 @@ import '../text/text';
  *
  * @example
  * ```html
- * <lt-alert variant="error" with-icon closable>
+ * <lt-alert variant="error" closable>
  *   Failed to save — <a href="#">retry</a>
  * </lt-alert>
  * ```
@@ -43,8 +43,11 @@ export class Alert extends LitElement {
   /** Optional bold heading above the body content. */
   @property({ reflect: true }) title = '';
 
-  /** Show a leading icon matching the variant. */
-  @property({ attribute: 'with-icon', type: Boolean, reflect: true }) withIcon = false;
+  /**
+   * Icon to show before the body. Leave empty for auto (shows variant icon for status variants),
+   * set to `"none"` to suppress, or pass any icon name to override.
+   */
+  @property({ reflect: true }) icon = '';
 
   /** Show a dismiss button. Clicking it fires lt-close and removes the element. */
   @property({ type: Boolean, reflect: true }) closable = false;
@@ -69,13 +72,21 @@ export class Alert extends LitElement {
     setTimeout(() => this.remove(), 200);
   }
 
+  private get _resolvedIcon(): string {
+    if (this.icon === 'none') return '';
+    if (this.icon) return this.icon;
+    if (this.variant === 'default') return '';
+    return Alert._iconMap[this.variant] ?? '';
+  }
+
   render() {
+    const iconName = this._resolvedIcon;
     return html`
       <div class="inner" part="base" role="alert">
-        ${this.withIcon
+        ${iconName
           ? html`<lt-icon
               class="icon"
-              name=${Alert._iconMap[this.variant]}
+              name=${iconName}
               part="icon"
             ></lt-icon>`
           : ''}

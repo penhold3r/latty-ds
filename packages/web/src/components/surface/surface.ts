@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
 import { surfaceStyles } from './surface.styles';
-import { SurfaceElevation, SurfaceVariant } from './surface.types';
+import { SurfaceElevation, SurfaceAppearance } from './surface.types';
 
 /**
  * A container component that provides elevation and surface styling.
@@ -22,7 +22,7 @@ import { SurfaceElevation, SurfaceVariant } from './surface.types';
  *
  * @example
  * ```html
- * <lt-surface variant="outlined" elevation="0">
+ * <lt-surface appearance="outlined" elevation="0">
  *   <p>This is an outlined surface with no shadow</p>
  * </lt-surface>
  * ```
@@ -46,10 +46,10 @@ export class Surface extends LitElement {
   @property({ reflect: true }) elevation: SurfaceElevation = '1';
 
   /**
-   * Visual variant that determines border and background.
+   * Visual appearance that determines border and background.
    * @default 'filled'
    */
-  @property({ reflect: true }) variant: SurfaceVariant = 'filled';
+  @property({ reflect: true }) appearance: SurfaceAppearance = 'filled';
 
   /** Background color. Accepts a hex value (#1a1a2e) or a token name (--lt-color-primary-600). */
   @property({ attribute: 'background-color', reflect: true }) backgroundColor = '';

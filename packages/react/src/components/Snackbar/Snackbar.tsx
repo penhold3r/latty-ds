@@ -7,7 +7,7 @@ export type SnackbarProps = {
   open?: boolean;
   closable?: boolean;
   actionLabel?: string;
-  withIcon?: boolean;
+  icon?: string;
   onLtShow?: (event: CustomEvent) => void;
   onLtHide?: (event: CustomEvent) => void;
   onLtAction?: (event: CustomEvent) => void;

@@ -3,8 +3,8 @@ import type { Accordion as AccordionEl, LattyIconName } from '@latty/web';
 
 export type AccordionProps = {
   label?: string;
-  icon?: LattyIconName;
-  variant?: AccordionEl['variant'];
+  iconStart?: LattyIconName;
+  appearance?: AccordionEl['appearance'];
   open?: boolean;
   disabled?: boolean;
   uppercase?: boolean;

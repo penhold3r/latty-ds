@@ -5,7 +5,7 @@ export type AlertProps = {
   variant?: AlertEl['variant'];
   appearance?: AlertEl['appearance'];
   title?: string;
-  withIcon?: boolean;
+  icon?: string;
   closable?: boolean;
   uppercase?: boolean;
   onLtClose?: (event: CustomEvent) => void;

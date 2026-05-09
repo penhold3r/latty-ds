@@ -25,9 +25,9 @@ describe('<lt-surface>', () => {
     expect(el.getAttribute('elevation')).toBe('1');
   });
 
-  it('has default variant of filled', () => {
-    expect(el.variant).toBe('filled');
-    expect(el.getAttribute('variant')).toBe('filled');
+  it('has default appearance of filled', () => {
+    expect(el.appearance).toBe('filled');
+    expect(el.getAttribute('appearance')).toBe('filled');
   });
 
   it('can change elevation', async () => {
@@ -36,10 +36,10 @@ describe('<lt-surface>', () => {
     expect(el.getAttribute('elevation')).toBe('3');
   });
 
-  it('can change variant', async () => {
-    el.variant = 'outlined';
+  it('can change appearance', async () => {
+    el.appearance = 'outlined';
     await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe('outlined');
+    expect(el.getAttribute('appearance')).toBe('outlined');
   });
 
   it('supports all elevation levels', async () => {
@@ -52,14 +52,10 @@ describe('<lt-surface>', () => {
     }
   });
 
-  it('supports all variants', async () => {
-    const variants = ['filled', 'outlined'] as const;
-
-    for (const variant of variants) {
-      el.variant = variant;
-      await el.updateComplete;
-      expect(el.getAttribute('variant')).toBe(variant);
-    }
+  it.each(['filled', 'outlined'] as const)('reflects %s appearance to attribute', async (appearance) => {
+    el.appearance = appearance;
+    await el.updateComplete;
+    expect(el.getAttribute('appearance')).toBe(appearance);
   });
 
   it('renders slotted content', async () => {

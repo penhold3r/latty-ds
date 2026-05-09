@@ -16,15 +16,15 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
   <PlaygroundShell id="skeleton-playground" previewHeight="auto">
     <div slot="preview" style="display:flex;flex-direction:column;gap:1rem;padding:1.5rem;max-width:320px;">
       <div style="display:flex;align-items:center;gap:0.75rem;">
-        <lt-skeleton variant="circle" width="40px" height="40px"></lt-skeleton>
+        <lt-skeleton shape="circle" width="40px" height="40px"></lt-skeleton>
         <div style="flex:1;display:flex;flex-direction:column;gap:0.5rem;">
-          <lt-skeleton variant="text" width="60%"></lt-skeleton>
-          <lt-skeleton variant="text" width="40%"></lt-skeleton>
+          <lt-skeleton shape="text" width="60%"></lt-skeleton>
+          <lt-skeleton shape="text" width="40%"></lt-skeleton>
         </div>
       </div>
       <lt-skeleton height="120px"></lt-skeleton>
-      <lt-skeleton variant="text"></lt-skeleton>
-      <lt-skeleton variant="text" width="80%"></lt-skeleton>
+      <lt-skeleton shape="text"></lt-skeleton>
+      <lt-skeleton shape="text" width="80%"></lt-skeleton>
     </div>
     <div slot="controls"></div>
   </PlaygroundShell>
@@ -36,10 +36,10 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
 <lt-skeleton height="200px"></lt-skeleton>
 
 <!-- Text line -->
-<lt-skeleton variant="text" width="60%"></lt-skeleton>
+<lt-skeleton shape="text" width="60%"></lt-skeleton>
 
 <!-- Avatar circle -->
-<lt-skeleton variant="circle" width="48px" height="48px"></lt-skeleton>
+<lt-skeleton shape="circle" width="48px" height="48px"></lt-skeleton>
 
 <!-- Disable shimmer -->
 <lt-skeleton animated="false"></lt-skeleton>`}
@@ -47,13 +47,13 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
 
 <Skeleton />
 <Skeleton height="200px" />
-<Skeleton variant="text" width="60%" />
-<Skeleton variant="circle" width="48px" height="48px" />`}
+<Skeleton shape="text" width="60%" />
+<Skeleton shape="circle" width="48px" height="48px" />`}
     vue={`<template>
   <lt-skeleton></lt-skeleton>
   <lt-skeleton height="200px"></lt-skeleton>
-  <lt-skeleton variant="text" width="60%"></lt-skeleton>
-  <lt-skeleton variant="circle" width="48px" height="48px"></lt-skeleton>
+  <lt-skeleton shape="text" width="60%"></lt-skeleton>
+  <lt-skeleton shape="circle" width="48px" height="48px"></lt-skeleton>
 </template>`}
   />
 

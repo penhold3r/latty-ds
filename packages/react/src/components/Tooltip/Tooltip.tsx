@@ -3,7 +3,7 @@ import type { Tooltip as TooltipEl } from '@latty/web';
 
 export type TooltipProps = {
   content?: string;
-  position?: TooltipEl['position'];
+  placement?: TooltipEl['placement'];
   disabled?: boolean;
   backgroundColor?: string;
   color?: string;

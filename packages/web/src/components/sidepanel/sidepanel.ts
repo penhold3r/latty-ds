@@ -36,8 +36,8 @@ export class SidePanel extends LitElement {
   /** Title shown in the panel header. When empty, the header is hidden. */
   @property() label = '';
 
-  /** Hide the built-in close button. */
-  @property({ type: Boolean, attribute: 'hide-close-button' }) hideCloseButton = false;
+  /** Suppress the built-in close button. */
+  @property({ type: Boolean, attribute: 'no-close-button' }) noCloseButton = false;
 
   /** Apply a frosted-glass blur effect to the backdrop. */
   @property({ type: Boolean, reflect: true, attribute: 'backdrop-blur' }) backdropBlur = false;
@@ -112,11 +112,11 @@ export class SidePanel extends LitElement {
 
   private _renderHeader() {
     const hasLabel = this.label.trim().length > 0;
-    if (!hasLabel && this.hideCloseButton) return '';
+    if (!hasLabel && this.noCloseButton) return '';
     return html`
       <div part="header" class="header">
         ${hasLabel ? html`<lt-text variant="h6" class="panel-label">${this.label}</lt-text>` : ''}
-        ${!this.hideCloseButton
+        ${!this.noCloseButton
           ? html`
               <button
                 part="close-button"

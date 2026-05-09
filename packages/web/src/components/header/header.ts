@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { headerStyles } from './header.styles';
-import type { HeaderVariant } from './header.types';
+import type { HeaderBackground } from './header.types';
 
 /**
  * A layout component that organises content into a sticky app bar.
@@ -19,8 +19,8 @@ import type { HeaderVariant } from './header.types';
 export class Header extends LitElement {
   static styles = headerStyles;
 
-  /** Visual variant that controls background and text colours. */
-  @property({ reflect: true }) variant: HeaderVariant = 'primary';
+  /** Background surface that controls the header's background and text colours. */
+  @property({ reflect: true }) background: HeaderBackground = 'primary';
 
   render() {
     return html`

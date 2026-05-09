@@ -8,9 +8,8 @@ import ApiTable from '../../../components/ApiTable.astro';
 <BaseLayout title="Slider" description="A range input for selecting a numeric value within a bounded range">
   <h1>Slider</h1>
   <p>
-    A styled range input for selecting a numeric value between a minimum and maximum.
-    Supports size variants, labels, and exposes <code>lt-input</code> / <code>lt-change</code> events
-    with the current numeric value in the event detail.
+    A styled range input for selecting a numeric value between a minimum and maximum. Supports size variants, labels,
+    and exposes <code>lt-input</code> / <code>lt-change</code> events with the current numeric value in the event detail.
   </p>
 
   <h2>Playground</h2>
@@ -44,7 +43,7 @@ import ApiTable from '../../../components/ApiTable.astro';
         <input class="control-input" type="text" id="ctrl-label" value="Volume" />
       </div>
       <div class="control-row">
-        <label class="control-label">show-tooltip</label>
+        <label class="control-label">tooltip</label>
         <input class="control-toggle" type="checkbox" id="ctrl-show-tooltip" />
       </div>
       <div class="control-row">
@@ -65,7 +64,7 @@ import ApiTable from '../../../components/ApiTable.astro';
 <lt-slider size="lg" label="Large" value="50"></lt-slider>
 
 <!-- Show value tooltip -->
-<lt-slider label="Volume" value="40" show-tooltip></lt-slider>
+<lt-slider label="Volume" value="40" tooltip></lt-slider>
 
 <!-- Disabled -->
 <lt-slider label="Disabled" value="60" disabled></lt-slider>
@@ -131,8 +130,8 @@ const volume = ref(40)
     max: 100,
     step: 1,
     label: 'Volume',
-    showTooltip: false,
-    disabled: false,
+    tooltip: false,
+    disabled: false
   };
 
   function applyState() {
@@ -141,7 +140,7 @@ const volume = ref(40)
     slider.max = state.max;
     slider.step = state.step;
     slider.label = state.label;
-    slider.showTooltip = state.showTooltip;
+    slider.tooltip = state.tooltip;
     slider.disabled = state.disabled;
   }
 
@@ -152,7 +151,7 @@ const volume = ref(40)
     if (state.min !== 0) attrs.push(`min="${state.min}"`);
     if (state.max !== 100) attrs.push(`max="${state.max}"`);
     if (state.step !== 1) attrs.push(`step="${state.step}"`);
-    if (state.showTooltip) attrs.push('show-tooltip');
+    if (state.tooltip) attrs.push('tooltip');
     if (state.disabled) attrs.push('disabled');
     const attrsStr = attrs.length ? '\n  ' + attrs.join('\n  ') + '\n' : '';
     codeEl.textContent = `<lt-slider${attrsStr}></lt-slider>`;
@@ -189,7 +188,7 @@ const volume = ref(40)
   });
 
   document.getElementById('ctrl-show-tooltip')?.addEventListener('change', (e) => {
-    state.showTooltip = (e.target as HTMLInputElement).checked;
+    state.tooltip = (e.target as HTMLInputElement).checked;
     applyState();
     updateCode();
   });

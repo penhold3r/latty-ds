@@ -27,20 +27,20 @@ describe('<lt-slider>', () => {
     expect(el.step).toBe(1);
     expect(el.value).toBe(0);
     expect(el.disabled).toBe(false);
-    expect(el.showTooltip).toBe(false);
+    expect(el.tooltip).toBe(false);
     expect(el.size).toBe('md');
   });
 
-  it('show-tooltip is false by default and reflects the attribute', async () => {
-    expect(el.hasAttribute('show-tooltip')).toBe(false);
-    el.showTooltip = true;
+  it('tooltip is false by default and reflects the attribute', async () => {
+    expect(el.hasAttribute('tooltip')).toBe(false);
+    el.tooltip = true;
     await el.updateComplete;
-    expect(el.hasAttribute('show-tooltip')).toBe(true);
+    expect(el.hasAttribute('tooltip')).toBe(true);
   });
 
-  it('passes current value as tooltip content when show-tooltip is true', async () => {
+  it('passes current value as tooltip content when tooltip is true', async () => {
     el.value = 42;
-    el.showTooltip = true;
+    el.tooltip = true;
     await el.updateComplete;
     const tooltip = el.shadowRoot!.querySelector('lt-tooltip');
     expect(tooltip?.getAttribute('content')).toBe('42');

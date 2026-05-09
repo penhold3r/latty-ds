@@ -4,7 +4,7 @@ import type { Tab as TabEl, LattyIconName } from '@latty/web';
 export type TabProps = {
   label?: string;
   value?: string;
-  icon?: LattyIconName;
+  iconStart?: LattyIconName;
   active?: boolean;
   disabled?: boolean;
   size?: TabEl['size'];

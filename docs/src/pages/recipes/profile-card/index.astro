@@ -13,7 +13,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 
   <h2>Preview</h2>
   <RecipePreview>
-    <lt-surface variant="outlined" elevation="0" style="max-width: 280px; width: 100%;">
+    <lt-surface appearance="outlined" elevation="0" style="max-width: 280px; width: 100%;">
       <div
         style="padding: var(--lt-spacing-6); display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--lt-spacing-3);"
       >
@@ -30,7 +30,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
         <lt-divider style="width: 100%;"></lt-divider>
         <div style="display: flex; gap: var(--lt-spacing-2);">
           <lt-button variant="primary" size="sm">Follow</lt-button>
-          <lt-button variant="neutral" appearance="outlined" size="sm" icon="mail">Message</lt-button>
+          <lt-button variant="neutral" appearance="outlined" size="sm" icon-start="mail">Message</lt-button>
         </div>
       </div>
     </lt-surface>
@@ -38,7 +38,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 
   <h2>Code</h2>
   <FrameworkTabs
-    html={`<lt-surface variant="outlined" elevation="0" style="max-width: 280px; width: 100%;">
+    html={`<lt-surface appearance="outlined" elevation="0" style="max-width: 280px; width: 100%;">
   <div style="padding: var(--lt-spacing-6); display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--lt-spacing-3);">
     <lt-avatar src="https://picsum.photos/seed/profile-card/200/200" size="xl"></lt-avatar>
     <div>
@@ -53,7 +53,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
     <lt-divider style="width: 100%;"></lt-divider>
     <div style="display: flex; gap: var(--lt-spacing-2);">
       <lt-button variant="primary" size="sm">Follow</lt-button>
-      <lt-button variant="neutral" appearance="outlined" size="sm" icon="mail">Message</lt-button>
+      <lt-button variant="neutral" appearance="outlined" size="sm" icon-start="mail">Message</lt-button>
     </div>
   </div>
 </lt-surface>`}
@@ -61,7 +61,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 
 export default function ProfileCard() {
   return (
-    <Surface variant="outlined" elevation="0" style={{ maxWidth: 280, width: '100%' }}>
+    <Surface appearance="outlined" elevation="0" style={{ maxWidth: 280, width: '100%' }}>
       <div style={{ padding: 'var(--lt-spacing-6)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 'var(--lt-spacing-3)' }}>
         <Avatar src="https://picsum.photos/seed/profile-card/200/200" size="xl" />
         <div>
@@ -76,14 +76,14 @@ export default function ProfileCard() {
         <Divider style={{ width: '100%' }} />
         <div style={{ display: 'flex', gap: 'var(--lt-spacing-2)' }}>
           <Button variant="primary" size="sm">Follow</Button>
-          <Button variant="neutral" appearance="outlined" size="sm" icon="mail">Message</Button>
+          <Button variant="neutral" appearance="outlined" size="sm" iconStart="mail">Message</Button>
         </div>
       </div>
     </Surface>
   );
 }`}
     vue={`<template>
-  <lt-surface variant="outlined" elevation="0" style="max-width: 280px; width: 100%;">
+  <lt-surface appearance="outlined" elevation="0" style="max-width: 280px; width: 100%;">
     <div style="padding: var(--lt-spacing-6); display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--lt-spacing-3);">
       <lt-avatar src="https://picsum.photos/seed/profile-card/200/200" size="xl"></lt-avatar>
       <div>
@@ -98,7 +98,7 @@ export default function ProfileCard() {
       <lt-divider style="width: 100%;"></lt-divider>
       <div style="display: flex; gap: var(--lt-spacing-2);">
         <lt-button variant="primary" size="sm">Follow</lt-button>
-        <lt-button variant="neutral" appearance="outlined" size="sm" icon="mail">Message</lt-button>
+        <lt-button variant="neutral" appearance="outlined" size="sm" icon-start="mail">Message</lt-button>
       </div>
     </div>
   </lt-surface>

@@ -13,12 +13,12 @@ export const skeletonStyles = css`
     width: 100%;
   }
 
-  :host([variant='text']) [part='base'] {
+  :host([shape='text']) [part='base'] {
     border-radius: 4px;
     height: 1em;
   }
 
-  :host([variant='circle']) [part='base'] {
+  :host([shape='circle']) [part='base'] {
     border-radius: 50%;
     height: 2.5rem;
     width: 2.5rem;

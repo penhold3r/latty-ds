@@ -61,7 +61,7 @@ describe('<lt-tab>', () => {
   });
 
   it('renders icon when provided', async () => {
-    el.icon = 'home';
+    el.iconStart = 'home';
     await el.updateComplete;
     const icon = el.shadowRoot!.querySelector('lt-icon');
     expect(icon).toBeTruthy();

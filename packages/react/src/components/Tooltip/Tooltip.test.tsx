@@ -13,9 +13,9 @@ describe('Tooltip', () => {
     expect(container.querySelector('lt-tooltip')?.getAttribute('content')).toBe('Helpful hint');
   });
 
-  it('passes position as attribute', () => {
-    const { container } = render(<Tooltip position="top"><span>Hover</span></Tooltip>);
-    expect(container.querySelector('lt-tooltip')?.getAttribute('position')).toBe('top');
+  it('passes placement as attribute', () => {
+    const { container } = render(<Tooltip placement="top"><span>Hover</span></Tooltip>);
+    expect(container.querySelector('lt-tooltip')?.getAttribute('placement')).toBe('top');
   });
 
   it('passes disabled as attribute', () => {

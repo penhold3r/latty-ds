@@ -26,13 +26,13 @@ import '@latty/icons';
  * @example
  * ```html
  * <!-- Simple link -->
- * <lt-nav-item href="/dashboard" label="Dashboard" icon="home"></lt-nav-item>
+ * <lt-nav-item href="/dashboard" label="Dashboard" icon-start="home"></lt-nav-item>
  * ```
  *
  * @example
  * ```html
  * <!-- Collapsible group -->
- * <lt-nav-item label="Settings" icon="settings">
+ * <lt-nav-item label="Settings" icon-start="settings">
  *   <lt-nav-item href="/settings/profile" label="Profile"></lt-nav-item>
  *   <lt-nav-item href="/settings/security" label="Security"></lt-nav-item>
  * </lt-nav-item>
@@ -52,7 +52,7 @@ export class NavItem extends LitElement {
    * Icon name (from the built-in Latty icon set) shown before the label.
    * @default ''
    */
-  @property() icon = '';
+  @property({ attribute: 'icon-start' }) iconStart = '';
 
   /**
    * Whether this item is currently the active/selected page.
@@ -144,7 +144,7 @@ export class NavItem extends LitElement {
     const showChevron = this._hasChildren;
 
     const inner = html`
-      ${this.icon ? html`<lt-icon class="icon-start" name=${this.icon} size="sm"></lt-icon>` : nothing}
+      ${this.iconStart ? html`<lt-icon class="icon-start" name=${this.iconStart} size="sm"></lt-icon>` : nothing}
       <span class="label">${this.label}</span>
       ${showChevron ? html`<lt-icon class="chevron" name="caret-down" size="sm"></lt-icon>` : nothing}
     `;

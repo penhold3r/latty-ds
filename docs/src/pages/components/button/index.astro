@@ -16,15 +16,15 @@ import ApiTable from '../../../components/ApiTable.astro';
   <FrameworkTabs
     html={`
 <lt-button variant="primary">Save changes</lt-button>
-<lt-button variant="primary" appearance="outlined" icon="download">Download</lt-button>
-<lt-button variant="error" icon="trash" loading>Deleting…</lt-button>
+<lt-button variant="primary" appearance="outlined" icon-start="download">Download</lt-button>
+<lt-button variant="error" icon-start="trash" loading>Deleting…</lt-button>
     `}
     react={`
 import { Button } from '@latty/react';
 
 <Button variant="primary">Save changes</Button>
-<Button variant="primary" appearance="outlined" icon="download">Download</Button>
-<Button variant="error" icon="trash" loading>Deleting…</Button>
+<Button variant="primary" appearance="outlined" iconStart="download">Download</Button>
+<Button variant="error" iconStart="trash" loading>Deleting…</Button>
     `}
     vue={`
 <script setup lang="ts">
@@ -33,8 +33,8 @@ function save() { /* ... */ }
 
 <template>
   <lt-button variant="primary" @click="save">Save changes</lt-button>
-  <lt-button variant="primary" appearance="outlined" icon="download">Download</lt-button>
-  <lt-button variant="error" icon="trash" loading>Deleting…</lt-button>
+  <lt-button variant="primary" appearance="outlined" icon-start="download">Download</lt-button>
+  <lt-button variant="error" icon-start="trash" loading>Deleting…</lt-button>
 </template>
     `}
   />
@@ -43,4 +43,6 @@ function save() { /* ... */ }
   <ApiTable tag="lt-button" />
 </BaseLayout>
 
-<script>import '@latty/web';</script>
+<script>
+  import '@latty/web';
+</script>

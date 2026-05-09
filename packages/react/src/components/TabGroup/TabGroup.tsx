@@ -3,7 +3,7 @@ import type { TabGroup as TabGroupEl } from '@latty/web';
 
 export type TabGroupProps = {
   value?: string;
-  variant?: TabGroupEl['variant'];
+  appearance?: TabGroupEl['appearance'];
   size?: TabGroupEl['size'];
   onChange?: (event: CustomEvent) => void;
   children?: ReactNode;

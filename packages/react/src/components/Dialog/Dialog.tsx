@@ -5,10 +5,12 @@ export type DialogProps = {
   size?: DialogEl['size'];
   open?: boolean;
   title?: string;
-  hideCloseButton?: boolean;
+  noCloseButton?: boolean;
   closeOnBackdropClick?: boolean;
   closeOnEscape?: boolean;
   uppercase?: boolean;
+  backdropBlur?: boolean;
+  overlayOpacity?: number;
   onLtDialogOpen?: (event: CustomEvent) => void;
   onLtDialogClose?: (event: CustomEvent) => void;
   children?: ReactNode;

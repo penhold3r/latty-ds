@@ -6,4 +6,4 @@
  */
 
 export { TabGroup } from './tab-group';
-export type { TabGroupVariant, TabGroupSize } from './tab-group.types';
+export type { TabGroupAppearance, TabGroupSize } from './tab-group.types';

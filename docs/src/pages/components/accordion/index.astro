@@ -7,10 +7,18 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <BaseLayout title="Accordion" description="Collapsible content sections">
   <h1>Accordion</h1>
-  <p>A collapsible section built on the native <code>&lt;details&gt;/&lt;summary&gt;</code> elements. Content placed in the default slot is shown when open.</p>
+  <p>
+    A collapsible section built on the native <code>&lt;details&gt;/&lt;summary&gt;</code> elements. Content placed in the
+    default slot is shown when open.
+  </p>
 
   <h2>Playground</h2>
-  <ComponentPlayground tag="lt-accordion" content="This is the collapsible content inside the accordion." previewHeight="80px" defaults={{ label: "Section Title" }} />
+  <ComponentPlayground
+    tag="lt-accordion"
+    content="This is the collapsible content inside the accordion."
+    previewHeight="80px"
+    defaults={{ label: 'Section Title' }}
+  />
 
   <h2>Usage</h2>
   <FrameworkTabs
@@ -19,7 +27,7 @@ import ApiTable from '../../../components/ApiTable.astro';
   Latty is a framework-agnostic design system built on design tokens and Web Components.
 </lt-accordion>
 
-<lt-accordion label="Installation" icon="download" open>
+<lt-accordion label="Installation" icon-start="download" open>
   Install with: pnpm add @latty/tokens @latty/web
 </lt-accordion>
     `}
@@ -30,7 +38,7 @@ import { Accordion } from '@latty/react';
   Latty is a framework-agnostic design system built on design tokens and Web Components.
 </Accordion>
 
-<Accordion label="Installation" icon="download" open>
+<Accordion label="Installation" iconStart="download" open>
   Install with: pnpm add @latty/tokens @latty/web
 </Accordion>
     `}
@@ -40,7 +48,7 @@ import { Accordion } from '@latty/react';
     Latty is a framework-agnostic design system built on design tokens and Web Components.
   </lt-accordion>
 
-  <lt-accordion label="Installation" icon="download" open>
+  <lt-accordion label="Installation" icon-start="download" open>
     Install with: pnpm add @latty/tokens @latty/web
   </lt-accordion>
 </template>
@@ -51,4 +59,6 @@ import { Accordion } from '@latty/react';
   <ApiTable tag="lt-accordion" />
 </BaseLayout>
 
-<script>import '@latty/web';</script>
+<script>
+  import '@latty/web';
+</script>

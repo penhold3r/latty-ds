@@ -19,7 +19,7 @@ import './nav-item';
  * ```html
  * <!-- Vertical (default) -->
  * <lt-nav>
- *   <lt-nav-item href="/" label="Home" icon="home"></lt-nav-item>
+ *   <lt-nav-item href="/" label="Home" icon-start="home"></lt-nav-item>
  *   <lt-nav-item href="/about" label="About"></lt-nav-item>
  * </lt-nav>
  * ```

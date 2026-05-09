@@ -20,7 +20,7 @@ import '@latty/icons';
  *
  * @example
  * ```html
- * <lt-tab value="settings" icon="settings">Settings</lt-tab>
+ * <lt-tab value="settings" icon-start="settings">Settings</lt-tab>
  * ```
  */
 @customElement('lt-tab')
@@ -40,10 +40,10 @@ export class Tab extends LitElement {
   @property() value = '';
 
   /**
-   * Icon name to display in the tab.
+   * Icon name to display at the start of the tab.
    * @default ''
    */
-  @property() icon = '';
+  @property({ attribute: 'icon-start' }) iconStart = '';
 
   /**
    * Whether this tab is currently active.
@@ -88,7 +88,7 @@ export class Tab extends LitElement {
         ?disabled=${this.disabled}
         @click=${this.handleClick}
       >
-        ${this.icon ? html`<lt-icon class="icon" name="${this.icon}"></lt-icon>` : ''}
+        ${this.iconStart ? html`<lt-icon class="icon" name="${this.iconStart}"></lt-icon>` : ''}
         <span class="label"><slot>${this.label}</slot></span>
       </button>
     `;

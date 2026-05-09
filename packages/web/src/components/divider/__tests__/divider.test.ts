@@ -22,9 +22,9 @@ describe('<lt-divider>', () => {
     expect(el.getAttribute('orientation')).toBe('horizontal');
   });
 
-  it('defaults to solid variant', () => {
-    expect(el.variant).toBe('solid');
-    expect(el.getAttribute('variant')).toBe('solid');
+  it('defaults to solid appearance', () => {
+    expect(el.appearance).toBe('solid');
+    expect(el.getAttribute('appearance')).toBe('solid');
   });
 
   it('renders label when provided', async () => {
@@ -48,12 +48,9 @@ describe('<lt-divider>', () => {
     }
   });
 
-  it('supports all variants', async () => {
-    const variants = ['solid', 'dashed', 'dotted'] as const;
-    for (const v of variants) {
-      el.variant = v;
-      await el.updateComplete;
-      expect(el.getAttribute('variant')).toBe(v);
-    }
+  it.each(['solid', 'dashed', 'dotted'] as const)('reflects %s appearance to attribute', async (appearance) => {
+    el.appearance = appearance;
+    await el.updateComplete;
+    expect(el.getAttribute('appearance')).toBe(appearance);
   });
 });

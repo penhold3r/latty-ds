@@ -1,2 +1,2 @@
 export type DividerOrientation = 'horizontal' | 'vertical';
-export type DividerVariant = 'solid' | 'dashed' | 'dotted';
+export type DividerAppearance = 'solid' | 'dashed' | 'dotted';

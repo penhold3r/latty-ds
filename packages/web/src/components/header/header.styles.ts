@@ -9,12 +9,12 @@ export const headerStyles = css`
     box-shadow: var(--lt-elevation-1);
   }
 
-  :host([variant='primary']) {
+  :host([background='primary']) {
     background: var(--lt-bg-primary);
     color: var(--lt-text-inverse);
   }
 
-  :host([variant='surface']) {
+  :host([background='surface']) {
     background: var(--lt-bg-default);
     color: var(--lt-text-default);
   }

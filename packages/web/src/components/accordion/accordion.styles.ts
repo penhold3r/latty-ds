@@ -86,37 +86,37 @@ export const accordionStyles = css`
   }
 
   /* Variant: default */
-  :host([variant='default']) details {
+  :host([appearance='default']) details {
     background: var(--lt-bg-subtle);
     border: 1px solid var(--lt-border-default);
   }
 
-  :host([variant='default']) details:hover {
+  :host([appearance='default']) details:hover {
     border-color: var(--lt-color-neutral-300);
   }
 
   /* Variant: filled */
-  :host([variant='filled']) details {
+  :host([appearance='filled']) details {
     background: var(--lt-bg-surface);
     border: none;
   }
 
-  :host([variant='filled']) details:hover {
+  :host([appearance='filled']) details:hover {
     background: var(--lt-bg-overlay);
   }
 
   /* Variant: outlined */
-  :host([variant='outlined']) details {
+  :host([appearance='outlined']) details {
     background: transparent;
     border: 1px solid var(--lt-color-neutral-300);
   }
 
-  :host([variant='outlined']) details:hover {
+  :host([appearance='outlined']) details:hover {
     border-color: var(--lt-border-strong);
   }
 
   /* Variant: clean */
-  :host([variant='clean']) details {
+  :host([appearance='clean']) details {
     background: transparent;
     border: none;
   }

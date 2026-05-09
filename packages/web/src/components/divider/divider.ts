@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { dividerStyles } from './divider.styles';
-import type { DividerOrientation, DividerVariant } from './divider.types';
+import type { DividerOrientation, DividerAppearance } from './divider.types';
 
 /**
  * A visual separator between content sections.
@@ -14,7 +14,7 @@ import type { DividerOrientation, DividerVariant } from './divider.types';
  * ```html
  * <lt-divider></lt-divider>
  * <lt-divider label="or"></lt-divider>
- * <lt-divider variant="dashed"></lt-divider>
+ * <lt-divider appearance="dashed"></lt-divider>
  * <lt-divider orientation="vertical"></lt-divider>
  * ```
  */
@@ -29,10 +29,10 @@ export class Divider extends LitElement {
   @property({ reflect: true }) orientation: DividerOrientation = 'horizontal';
 
   /**
-   * Line style of the divider.
+   * Line appearance of the divider.
    * @default 'solid'
    */
-  @property({ reflect: true }) variant: DividerVariant = 'solid';
+  @property({ reflect: true }) appearance: DividerAppearance = 'solid';
 
   /**
    * Optional label text centered within the divider line.

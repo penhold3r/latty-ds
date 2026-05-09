@@ -17,8 +17,8 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
     <div slot="preview" style="display:flex;flex-direction:column;gap:1.5rem;padding:1.5rem;">
       <lt-divider></lt-divider>
       <lt-divider label="or"></lt-divider>
-      <lt-divider variant="dashed"></lt-divider>
-      <lt-divider variant="dotted"></lt-divider>
+      <lt-divider appearance="dashed"></lt-divider>
+      <lt-divider appearance="dotted"></lt-divider>
       <div style="display:flex;height:60px;align-items:stretch;gap:1rem;">
         <lt-text variant="body">Left</lt-text>
         <lt-divider orientation="vertical"></lt-divider>
@@ -37,8 +37,8 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
 <lt-divider label="or"></lt-divider>
 
 <!-- Line styles -->
-<lt-divider variant="dashed"></lt-divider>
-<lt-divider variant="dotted"></lt-divider>
+<lt-divider appearance="dashed"></lt-divider>
+<lt-divider appearance="dotted"></lt-divider>
 
 <!-- Vertical -->
 <div style="display:flex;height:48px;align-items:stretch;">
@@ -50,12 +50,12 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
 
 <Divider />
 <Divider label="or" />
-<Divider variant="dashed" />
+<Divider appearance="dashed" />
 <Divider orientation="vertical" />`}
     vue={`<template>
   <lt-divider></lt-divider>
   <lt-divider label="or"></lt-divider>
-  <lt-divider variant="dashed"></lt-divider>
+  <lt-divider appearance="dashed"></lt-divider>
   <lt-divider orientation="vertical"></lt-divider>
 </template>`}
   />

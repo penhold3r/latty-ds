@@ -79,7 +79,7 @@ export class Button extends LitElement {
    * Icon name to display at the start of the button.
    * @default ''
    */
-  @property() icon = '';
+  @property({ attribute: 'icon-start' }) iconStart = '';
 
   /**
    * Icon name to display at the end of the button.
@@ -121,7 +121,7 @@ export class Button extends LitElement {
     const inner = this.loading
       ? html`<lt-spinner></lt-spinner>`
       : html`
-          ${this.icon ? html`<lt-icon class="icon-start" name=${this.icon}></lt-icon>` : ''}
+          ${this.iconStart ? html`<lt-icon class="icon-start" name=${this.iconStart}></lt-icon>` : ''}
           <slot></slot>
           ${this.iconEnd ? html`<lt-icon class="icon-end" name=${this.iconEnd}></lt-icon>` : ''}
         `;

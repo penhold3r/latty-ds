@@ -5,15 +5,12 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
 
-<BaseLayout
-  title="Snackbar"
-  description="Brief notification that appears temporarily at the bottom of the viewport"
->
+<BaseLayout title="Snackbar" description="Brief notification that appears temporarily at the bottom of the viewport">
   <h1>Snackbar</h1>
   <p>
-    A brief, non-blocking notification anchored to the bottom of the viewport. Snackbars
-    auto-dismiss after a configurable delay and can optionally include an action button.
-    Use them for short feedback messages — confirmations, undo prompts, or transient alerts.
+    A brief, non-blocking notification anchored to the bottom of the viewport. Snackbars auto-dismiss after a
+    configurable delay and can optionally include an action button. Use them for short feedback messages —
+    confirmations, undo prompts, or transient alerts.
   </p>
 
   <h2>Playground</h2>
@@ -45,8 +42,8 @@ import ApiTable from '../../../components/ApiTable.astro';
         <input class="control-toggle" type="checkbox" id="ctrl-closable" checked />
       </div>
       <div class="control-row">
-        <label class="control-label">with-icon</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-with-icon" />
+        <label class="control-label">icon</label>
+        <input class="control-input" type="text" id="ctrl-icon" placeholder="e.g. check or none" />
       </div>
     </div>
   </PlaygroundShell>
@@ -115,7 +112,7 @@ const snackbar = ref(null)
     'action-label': '',
     duration: 4000,
     closable: true,
-    'with-icon': false,
+    icon: ''
   };
 
   function applyState() {
@@ -127,7 +124,7 @@ const snackbar = ref(null)
     } else {
       snackbar.removeAttribute('action-label');
     }
-    snackbar.withIcon = state['with-icon'] as boolean;
+    snackbar.icon = state.icon as string;
   }
 
   function updateCode() {
@@ -136,7 +133,7 @@ const snackbar = ref(null)
     if (state['action-label']) attrs.push(`action-label="${state['action-label']}"`);
     if (state.duration !== 4000) attrs.push(`duration="${state.duration}"`);
     if (!state.closable) attrs.push(`closable="false"`);
-    if (state['with-icon']) attrs.push(`with-icon`);
+    if (state.icon) attrs.push(`icon="${state.icon}"`);
     const attrsStr = attrs.length ? '\n  ' + attrs.join('\n  ') + '\n' : '';
     codeEl.textContent = `<lt-snackbar${attrsStr}>Changes saved successfully</lt-snackbar>`;
   }
@@ -166,8 +163,8 @@ const snackbar = ref(null)
     updateCode();
   });
 
-  document.getElementById('ctrl-with-icon')?.addEventListener('change', (e) => {
-    state['with-icon'] = (e.target as HTMLInputElement).checked;
+  document.getElementById('ctrl-icon')?.addEventListener('input', (e) => {
+    state.icon = (e.target as HTMLInputElement).value;
     updateCode();
   });
 

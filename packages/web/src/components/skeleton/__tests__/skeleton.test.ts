@@ -17,9 +17,9 @@ describe('<lt-skeleton>', () => {
     expect(el.shadowRoot).toBeTruthy();
   });
 
-  it('defaults to rect variant', () => {
-    expect(el.variant).toBe('rect');
-    expect(el.getAttribute('variant')).toBe('rect');
+  it('defaults to rect shape', () => {
+    expect(el.shape).toBe('rect');
+    expect(el.getAttribute('shape')).toBe('rect');
   });
 
   it('defaults to animated', () => {
@@ -27,10 +27,10 @@ describe('<lt-skeleton>', () => {
     expect(el.hasAttribute('animated')).toBe(true);
   });
 
-  it.each(['text', 'circle', 'rect'] as const)('reflects %s variant to attribute', async (variant) => {
-    el.variant = variant;
+  it.each(['text', 'circle', 'rect'] as const)('reflects %s shape to attribute', async (shape) => {
+    el.shape = shape;
     await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe(variant);
+    expect(el.getAttribute('shape')).toBe(shape);
   });
 
   it('applies custom width via inline style', async () => {

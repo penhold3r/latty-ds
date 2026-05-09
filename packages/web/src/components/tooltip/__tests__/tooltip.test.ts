@@ -29,18 +29,15 @@ describe('<lt-tooltip>', () => {
     expect(el.getAttribute('content')).toBe('Updated');
   });
 
-  it('has default position of top', () => {
-    expect(el.position).toBe('top');
-    expect(el.getAttribute('position')).toBe('top');
+  it('has default placement of top', () => {
+    expect(el.placement).toBe('top');
+    expect(el.getAttribute('placement')).toBe('top');
   });
 
-  it('supports all positions', async () => {
-    const positions = ['top', 'bottom', 'left', 'right'] as const;
-    for (const p of positions) {
-      el.position = p;
-      await el.updateComplete;
-      expect(el.getAttribute('position')).toBe(p);
-    }
+  it.each(['top', 'bottom', 'left', 'right'] as const)('reflects %s placement to attribute', async (placement) => {
+    el.placement = placement;
+    await el.updateComplete;
+    expect(el.getAttribute('placement')).toBe(placement);
   });
 
   it('disabled is false by default', () => {

@@ -7,10 +7,17 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <BaseLayout title="Surface" description="Container with elevation and surface styling">
   <h1>Surface</h1>
-  <p>A container that applies elevation shadows and surface background variants. Use it to build cards, panels, and layered layouts.</p>
+  <p>
+    A container that applies elevation shadows and surface background variants. Use it to build cards, panels, and
+    layered layouts.
+  </p>
 
   <h2>Playground</h2>
-  <ComponentPlayground tag="lt-surface" content="<p style='padding:1.5rem;'>Surface content goes here</p>" previewHeight="120px" />
+  <ComponentPlayground
+    tag="lt-surface"
+    content="<p style='padding:1.5rem;'>Surface content goes here</p>"
+    previewHeight="120px"
+  />
 
   <h2>Usage</h2>
   <FrameworkTabs
@@ -19,7 +26,7 @@ import ApiTable from '../../../components/ApiTable.astro';
   <p>Card content</p>
 </lt-surface>
 
-<lt-surface elevation="3" variant="outlined">
+<lt-surface elevation="3" appearance="outlined">
   <p>Outlined panel</p>
 </lt-surface>
     `}
@@ -30,7 +37,7 @@ import { Surface } from '@latty/react';
   <p>Card content</p>
 </Surface>
 
-<Surface elevation="3" variant="outlined">
+<Surface elevation="3" appearance="outlined">
   <p>Outlined panel</p>
 </Surface>
     `}
@@ -40,7 +47,7 @@ import { Surface } from '@latty/react';
     <p>Card content</p>
   </lt-surface>
 
-  <lt-surface elevation="3" variant="outlined">
+  <lt-surface elevation="3" appearance="outlined">
     <p>Outlined panel</p>
   </lt-surface>
 </template>
@@ -51,4 +58,6 @@ import { Surface } from '@latty/react';
   <ApiTable tag="lt-surface" />
 </BaseLayout>
 
-<script>import '@latty/web';</script>
+<script>
+  import '@latty/web';
+</script>

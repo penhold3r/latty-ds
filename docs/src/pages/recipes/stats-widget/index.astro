@@ -16,7 +16,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 
   <h2>Preview</h2>
   <RecipePreview>
-    <lt-surface variant="outlined" elevation="0" style="max-width: 460px; width: 100%;">
+    <lt-surface appearance="outlined" elevation="0" style="max-width: 460px; width: 100%;">
       <div style="padding: var(--lt-spacing-6);">
         <lt-text variant="h5" style="color: var(--lt-color-neutral-900); margin-bottom: var(--lt-spacing-5);"
           >Overview</lt-text
@@ -61,7 +61,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 
   <h2>Code</h2>
   <FrameworkTabs
-    html={`<lt-surface variant="outlined" elevation="0" style="max-width: 460px; width: 100%;">
+    html={`<lt-surface appearance="outlined" elevation="0" style="max-width: 460px; width: 100%;">
   <div style="padding: var(--lt-spacing-6);">
     <lt-text variant="h5" style="color: var(--lt-color-neutral-900); margin-bottom: var(--lt-spacing-5);">Overview</lt-text>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--lt-spacing-5);">
@@ -116,7 +116,7 @@ const stats = [
 
 export default function StatsWidget() {
   return (
-    <Surface variant="outlined" elevation="0" style={{ maxWidth: 460, width: '100%' }}>
+    <Surface appearance="outlined" elevation="0" style={{ maxWidth: 460, width: '100%' }}>
       <div style={{ padding: 'var(--lt-spacing-6)' }}>
         <Text variant="h5" style={{ color: 'var(--lt-color-neutral-900)', marginBottom: 'var(--lt-spacing-5)' }}>
           Overview
@@ -147,7 +147,7 @@ const stats = [
 </script>
 
 <template>
-  <lt-surface variant="outlined" elevation="0" style="max-width: 460px; width: 100%;">
+  <lt-surface appearance="outlined" elevation="0" style="max-width: 460px; width: 100%;">
     <div style="padding: var(--lt-spacing-6);">
       <lt-text variant="h5" style="color: var(--lt-color-neutral-900); margin-bottom: var(--lt-spacing-5);">Overview</lt-text>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--lt-spacing-5);">

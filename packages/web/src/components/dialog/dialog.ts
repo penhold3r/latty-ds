@@ -45,7 +45,7 @@ import '../text/text';
  *
  * @example
  * ```html
- * <lt-dialog size="lg" open title="Settings" hide-close-button>
+ * <lt-dialog size="lg" open title="Settings" no-close-button>
  *   <p>Dialog content here...</p>
  * </lt-dialog>
  * ```
@@ -73,10 +73,10 @@ export class Dialog extends LitElement {
   @property() title = '';
 
   /**
-   * Whether to show the close button in the header.
+   * Suppress the built-in close button in the header.
    * @default false
    */
-  @property({ type: Boolean, attribute: 'hide-close-button' }) hideCloseButton = false;
+  @property({ type: Boolean, attribute: 'no-close-button' }) noCloseButton = false;
 
   /**
    * Whether clicking the backdrop closes the dialog.
@@ -235,7 +235,7 @@ export class Dialog extends LitElement {
                 ${this.title ? html`<lt-text variant="h4" as="h2" id="dialog-title" class="title">${this.title}</lt-text>` : ''}
               </slot>
             </div>
-            ${!this.hideCloseButton
+            ${!this.noCloseButton
               ? html`
                   <button
                     class="close-button"

@@ -19,7 +19,7 @@ export class Slider extends LitElement {
   @property({ reflect: true }) size: SliderSize = 'md';
   @property({ type: Boolean, reflect: true }) disabled = false;
   /** Show the current value in a tooltip above the thumb. */
-  @property({ attribute: 'show-tooltip', type: Boolean, reflect: true }) showTooltip = false;
+  @property({ type: Boolean, reflect: true }) tooltip = false;
 
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 100;
@@ -101,7 +101,7 @@ export class Slider extends LitElement {
     return html`
       ${this.label ? html`<label class="label" for="input">${this.label}</label>` : ''}
       <div class="track-wrap">
-        <lt-tooltip content=${String(this.value)} ?disabled=${!this.showTooltip} position="top">
+        <lt-tooltip content=${String(this.value)} ?disabled=${!this.tooltip} placement="top">
           ${input}
         </lt-tooltip>
       </div>

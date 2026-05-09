@@ -30,9 +30,9 @@ describe('<lt-tab-group>', () => {
     expect(tabList).toBeTruthy();
   });
 
-  it('has default variant of default', () => {
-    expect(el.variant).toBe('default');
-    expect(el.getAttribute('variant')).toBe('default');
+  it('has default appearance of default', () => {
+    expect(el.appearance).toBe('default');
+    expect(el.getAttribute('appearance')).toBe('default');
   });
 
   it('has default size of md', () => {
@@ -40,14 +40,10 @@ describe('<lt-tab-group>', () => {
     expect(el.getAttribute('size')).toBe('md');
   });
 
-  it('supports all variants', async () => {
-    const variants = ['default', 'pills'] as const;
-
-    for (const variant of variants) {
-      el.variant = variant;
-      await el.updateComplete;
-      expect(el.getAttribute('variant')).toBe(variant);
-    }
+  it.each(['default', 'pills'] as const)('reflects %s appearance to attribute', async (appearance) => {
+    el.appearance = appearance;
+    await el.updateComplete;
+    expect(el.getAttribute('appearance')).toBe(appearance);
   });
 
   it('supports all sizes', async () => {

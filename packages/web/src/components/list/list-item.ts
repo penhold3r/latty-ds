@@ -29,9 +29,9 @@ import '@latty/icons';
  * With icons:
  * ```html
  * <lt-list>
- *   <lt-list-item icon="check">Done</lt-list-item>
- *   <lt-list-item icon="clock">Pending</lt-list-item>
- *   <lt-list-item icon="info" icon-end="arrow-right">Details</lt-list-item>
+ *   <lt-list-item icon-start="check">Done</lt-list-item>
+ *   <lt-list-item icon-start="clock">Pending</lt-list-item>
+ *   <lt-list-item icon-start="info" icon-end="arrow-right">Details</lt-list-item>
  * </lt-list>
  * ```
  */
@@ -40,7 +40,7 @@ export class ListItem extends LitElement {
   static styles = listItemStyles;
 
   /** Icon name to display before the item content. */
-  @property() icon = '';
+  @property({ attribute: 'icon-start' }) iconStart = '';
 
   /** Icon name to display after the item content. */
   @property({ attribute: 'icon-end' }) iconEnd = '';
@@ -48,7 +48,7 @@ export class ListItem extends LitElement {
   render() {
     return html`
       <div class="inner">
-        ${this.icon ? html`<lt-icon class="icon-start" name=${this.icon}></lt-icon>` : nothing}
+        ${this.iconStart ? html`<lt-icon class="icon-start" name=${this.iconStart}></lt-icon>` : nothing}
         <slot></slot>
         ${this.iconEnd ? html`<lt-icon class="icon-end" name=${this.iconEnd}></lt-icon>` : nothing}
       </div>
