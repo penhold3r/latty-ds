@@ -65,15 +65,15 @@ export const dialogStyles = css`
     max-height: calc(100vh - var(--lt-spacing-8));
     opacity: 0;
     position: relative;
-    transform: scale(0.95);
+    transform: translateY(16px);
     transition:
-      opacity 200ms ease,
-      transform 200ms ease;
+      opacity 220ms ease,
+      transform 220ms cubic-bezier(0.34, 1.2, 0.64, 1);
   }
 
   :host([open]) lt-surface::part(surface) {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
 
   :host([size='fullscreen']) lt-surface::part(surface) {

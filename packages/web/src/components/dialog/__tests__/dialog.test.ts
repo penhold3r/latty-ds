@@ -19,20 +19,15 @@ describe('<lt-dialog>', () => {
     document.body.style.overflow = '';
   });
 
-  it('renders when open', async () => {
-    expect(el.shadowRoot!.querySelector('lt-surface')).toBeFalsy();
+  it('is always in the DOM, inert when closed', async () => {
+    const backdrop = el.shadowRoot!.querySelector('.backdrop') as HTMLElement;
+    expect(backdrop).toBeTruthy();
+    expect(backdrop.hasAttribute('inert')).toBe(true);
 
     el.open = true;
     await el.updateComplete;
 
-    const dialog = el.shadowRoot!.querySelector('lt-surface');
-    expect(dialog).toBeTruthy();
-  });
-
-  it('does not render when closed', () => {
-    el.open = false;
-    const dialog = el.shadowRoot!.querySelector('.dialog');
-    expect(dialog).toBeFalsy();
+    expect(backdrop.hasAttribute('inert')).toBe(false);
   });
 
   it('has default size of md', () => {

@@ -209,12 +209,8 @@ export class Dialog extends LitElement {
   }
 
   render() {
-    if (!this.open) {
-      return html``;
-    }
-
     return html`
-      <div class="backdrop" @click=${this.handleBackdropClick} part="backdrop">
+      <div class="backdrop" ?inert=${!this.open} @click=${this.handleBackdropClick} part="backdrop">
         <lt-surface
           elevation="4"
           role="dialog"
