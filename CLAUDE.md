@@ -255,6 +255,8 @@ Two playground patterns exist:
 
 The docs page must `import '@latty/web'` inside a `<script>` tag to register the custom elements in the browser.
 
+**The docs site is a showcase of the design system.** Every docs page must use Latty components wherever possible — headings, body copy, buttons, badges, tables, alerts, links. Reach for `lt-text`, `lt-button`, `lt-badge`, `lt-alert`, `lt-link`, etc. before writing plain HTML or inline styles. Native HTML elements are only acceptable when no Latty component covers the use case. This rule applies to layout pages, overview pages, recipe pages, and getting-started guides — not just component demo pages.
+
 ## Naming Conventions
 
 Per `ARCHITECTURE.md`:
