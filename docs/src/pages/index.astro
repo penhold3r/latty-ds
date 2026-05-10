@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CodeSnippet from '../components/CodeSnippet.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
@@ -52,12 +53,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <div class="quick-start">
     <lt-text variant="h2" as="h2" class="quick-start-heading">Quick start</lt-text>
-    <pre><code>pnpm add @latty/tokens @latty/web</code></pre>
-    <pre><code class="language-js">import '@latty/tokens/dist/tokens.css';
-import '@latty/web';</code></pre>
-    <pre><code class="language-html">&lt;lt-button variant="primary" icon-start="save"&gt;Save changes&lt;/lt-button&gt;
-
-&lt;lt-textfield label="Email" type="email" required&gt;&lt;/lt-textfield&gt;</code></pre>
+    <CodeSnippet lang="bash" code="pnpm add @latty/tokens @latty/web" />
+    <CodeSnippet lang="js" code={`import '@latty/tokens/dist/tokens.css';\nimport '@latty/web';`} />
+    <CodeSnippet
+      lang="html"
+      code={`<lt-button variant="primary" icon-start="save">Save changes</lt-button>\n\n<lt-textfield label="Email" type="email" required></lt-textfield>`}
+    />
     <lt-link href={`${base}/getting-started/installation`}>Full installation guide →</lt-link>
   </div>
 </BaseLayout>

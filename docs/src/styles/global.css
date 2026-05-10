@@ -169,5 +169,17 @@ main.content {
 }
 
 pre.astro-code {
-  margin-bottom: 0.75rem;
+  background: #0d1117 !important;
+  border: 1px solid var(--lt-color-neutral-700);
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  margin-bottom: var(--lt-spacing-4);
+  overflow-x: auto;
+  padding: var(--lt-spacing-4) !important;
+}
+
+pre.astro-code code {
+  background: none;
+  padding: 0;
 }

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import CodeSnippet from '../../components/CodeSnippet.astro';
 import tokens from '@latty/tokens/tokens.json';
 
 type TokenEntry = [string, string];
@@ -43,11 +44,12 @@ const groupMeta: Record<string, { label: string; description: string }> = {
     >, so theming only requires redefining this layer — not touching component code.
   </lt-text>
   <lt-text variant="body">Import in your stylesheet:</lt-text>
-  <pre><code>@import '@latty/tokens/semantic.css';</code></pre>
+  <CodeSnippet lang="css" code="@import '@latty/tokens/semantic.css';" />
   <lt-text variant="body">Or generate them at runtime with your own color palette:</lt-text>
-  <pre><code>import {'{ configure }'} from '@latty/tokens/configure';
-
-configure({'{'} colors: {'{ primary: \'#6366f1\' }'} {'}'});</code></pre>
+  <CodeSnippet
+    lang="js"
+    code={`import { configure } from '@latty/tokens/configure';\n\nconfigure({ colors: { primary: '#6366f1' } });`}
+  />
 
   {
     Object.entries(groups).map(([groupKey, entries]) => {
