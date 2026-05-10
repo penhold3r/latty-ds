@@ -169,8 +169,8 @@ main.content {
 }
 
 pre.astro-code {
-  background: #0d1117 !important;
-  border: 1px solid var(--lt-color-neutral-700);
+  background: var(--lt-color-secondary-800) !important;
+  border: 1px solid var(--lt-color-secondary-700);
   border-radius: 8px;
   font-size: 0.8125rem;
   line-height: 1.6;
