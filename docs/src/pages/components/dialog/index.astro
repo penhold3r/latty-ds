@@ -19,7 +19,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
     <div slot="controls">
       <div class="control-row">
-        <label class="control-label">size</label>
+        <label class="control-label" for="ctrl-size">size</label>
         <select class="control-select" id="ctrl-size">
           <option value="sm">sm</option>
           <option value="md" selected>md</option>
@@ -28,27 +28,27 @@ import ApiTable from '../../../components/ApiTable.astro';
         </select>
       </div>
       <div class="control-row">
-        <label class="control-label">no-close-button</label>
+        <label class="control-label" for="ctrl-hide-close">no-close-button</label>
         <input class="control-toggle" type="checkbox" id="ctrl-hide-close" />
       </div>
       <div class="control-row">
-        <label class="control-label">close-on-backdrop-click</label>
+        <label class="control-label" for="ctrl-backdrop">close-on-backdrop-click</label>
         <input class="control-toggle" type="checkbox" id="ctrl-backdrop" checked />
       </div>
       <div class="control-row">
-        <label class="control-label">close-on-escape</label>
+        <label class="control-label" for="ctrl-escape">close-on-escape</label>
         <input class="control-toggle" type="checkbox" id="ctrl-escape" checked />
       </div>
       <div class="control-row">
-        <label class="control-label">uppercase</label>
+        <label class="control-label" for="ctrl-uppercase">uppercase</label>
         <input class="control-toggle" type="checkbox" id="ctrl-uppercase" />
       </div>
       <div class="control-row">
-        <label class="control-label">backdrop-blur</label>
+        <label class="control-label" for="ctrl-blur">backdrop-blur</label>
         <input class="control-toggle" type="checkbox" id="ctrl-blur" />
       </div>
       <div class="control-row">
-        <label class="control-label">overlay-opacity</label>
+        <label class="control-label" for="ctrl-overlay-opacity">overlay-opacity</label>
         <input class="control-input" type="range" min="0" max="1" step="0.05" value="0.5" id="ctrl-overlay-opacity" />
       </div>
     </div>

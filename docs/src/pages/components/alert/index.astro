@@ -63,8 +63,8 @@ import { Alert } from '@latty/react';
 
   <lt-text variant="h2">Alert vs. Snackbar</lt-text>
   <lt-text variant="body">Both communicate feedback to the user, but they serve different moments:</lt-text>
-  <table class="compare-table">
-    <thead><tr><th></th><th>Alert</th><th>Snackbar</th></tr></thead>
+  <table class="compare-table" aria-label="Alert vs. Snackbar comparison">
+    <thead><tr><th scope="col" aria-label="Property"></th><th>Alert</th><th>Snackbar</th></tr></thead>
     <tbody>
       <tr
         ><td><strong>Position</strong></td><td>Inline, within page flow</td><td>Fixed overlay, bottom of viewport</td

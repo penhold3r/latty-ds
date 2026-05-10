@@ -20,7 +20,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
     <div slot="controls">
       <div class="control-row">
-        <label class="control-label">variant</label>
+        <label class="control-label" for="ctrl-variant">variant</label>
         <select class="control-select" id="ctrl-variant">
           <option value="default" selected>default</option>
           <option value="success">success</option>
@@ -30,19 +30,19 @@ import ApiTable from '../../../components/ApiTable.astro';
         </select>
       </div>
       <div class="control-row">
-        <label class="control-label">action-label</label>
+        <label class="control-label" for="ctrl-action">action-label</label>
         <input class="control-input" type="text" id="ctrl-action" placeholder="e.g. Undo" />
       </div>
       <div class="control-row">
-        <label class="control-label">duration (ms)</label>
+        <label class="control-label" for="ctrl-duration">duration (ms)</label>
         <input class="control-input" type="number" id="ctrl-duration" value="4000" min="0" step="500" />
       </div>
       <div class="control-row">
-        <label class="control-label">closable</label>
+        <label class="control-label" for="ctrl-closable">closable</label>
         <input class="control-toggle" type="checkbox" id="ctrl-closable" checked />
       </div>
       <div class="control-row">
-        <label class="control-label">icon</label>
+        <label class="control-label" for="ctrl-icon">icon</label>
         <input class="control-input" type="text" id="ctrl-icon" placeholder="e.g. check or none" />
       </div>
     </div>
@@ -99,8 +99,8 @@ const snackbar = ref(null)
 
   <lt-text variant="h2">Snackbar vs. Alert</lt-text>
   <lt-text variant="body">Both communicate feedback to the user, but they serve different moments:</lt-text>
-  <table class="compare-table">
-    <thead><tr><th></th><th>Snackbar</th><th>Alert</th></tr></thead>
+  <table class="compare-table" aria-label="Snackbar vs. Alert comparison">
+    <thead><tr><th scope="col" aria-label="Property"></th><th>Snackbar</th><th>Alert</th></tr></thead>
     <tbody>
       <tr
         ><td><strong>Position</strong></td><td>Fixed overlay, bottom of viewport</td><td>Inline, within page flow</td

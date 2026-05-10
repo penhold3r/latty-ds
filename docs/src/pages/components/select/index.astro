@@ -19,7 +19,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
     <div slot="controls">
       <div class="control-row">
-        <label class="control-label">variant</label>
+        <label class="control-label" for="ctrl-variant">variant</label>
         <select class="control-select" id="ctrl-variant">
           <option value="default" selected>default</option>
           <option value="success">success</option>
@@ -28,7 +28,7 @@ import ApiTable from '../../../components/ApiTable.astro';
         </select>
       </div>
       <div class="control-row">
-        <label class="control-label">size</label>
+        <label class="control-label" for="ctrl-size">size</label>
         <select class="control-select" id="ctrl-size">
           <option value="sm">sm</option>
           <option value="md" selected>md</option>
@@ -36,11 +36,11 @@ import ApiTable from '../../../components/ApiTable.astro';
         </select>
       </div>
       <div class="control-row">
-        <label class="control-label">disabled</label>
+        <label class="control-label" for="ctrl-disabled">disabled</label>
         <input class="control-toggle" type="checkbox" id="ctrl-disabled" />
       </div>
       <div class="control-row">
-        <label class="control-label">required</label>
+        <label class="control-label" for="ctrl-required">required</label>
         <input class="control-toggle" type="checkbox" id="ctrl-required" />
       </div>
     </div>
@@ -101,8 +101,8 @@ const options = [
   <lt-text variant="body"
     >Both let the user choose from a list of options, but they are built for different purposes:</lt-text
   >
-  <table class="compare-table">
-    <thead><tr><th></th><th>Select</th><th>Dropdown</th></tr></thead>
+  <table class="compare-table" aria-label="Select vs. Dropdown comparison">
+    <thead><tr><th scope="col" aria-label="Property"></th><th>Select</th><th>Dropdown</th></tr></thead>
     <tbody>
       <tr
         ><td><strong>Trigger</strong></td><td>A styled form field with a label and helper text</td><td

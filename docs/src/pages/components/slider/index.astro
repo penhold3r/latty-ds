@@ -19,7 +19,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
     <div slot="controls">
       <div class="control-row">
-        <label class="control-label">size</label>
+        <label class="control-label" for="ctrl-size">size</label>
         <select class="control-select" id="ctrl-size">
           <option value="sm">sm</option>
           <option value="md" selected>md</option>
@@ -27,27 +27,27 @@ import ApiTable from '../../../components/ApiTable.astro';
         </select>
       </div>
       <div class="control-row">
-        <label class="control-label">min</label>
+        <label class="control-label" for="ctrl-min">min</label>
         <input class="control-input" type="number" id="ctrl-min" value="0" />
       </div>
       <div class="control-row">
-        <label class="control-label">max</label>
+        <label class="control-label" for="ctrl-max">max</label>
         <input class="control-input" type="number" id="ctrl-max" value="100" />
       </div>
       <div class="control-row">
-        <label class="control-label">step</label>
+        <label class="control-label" for="ctrl-step">step</label>
         <input class="control-input" type="number" id="ctrl-step" value="1" min="1" />
       </div>
       <div class="control-row">
-        <label class="control-label">label</label>
+        <label class="control-label" for="ctrl-label">label</label>
         <input class="control-input" type="text" id="ctrl-label" value="Volume" />
       </div>
       <div class="control-row">
-        <label class="control-label">tooltip</label>
+        <label class="control-label" for="ctrl-show-tooltip">tooltip</label>
         <input class="control-toggle" type="checkbox" id="ctrl-show-tooltip" />
       </div>
       <div class="control-row">
-        <label class="control-label">disabled</label>
+        <label class="control-label" for="ctrl-disabled">disabled</label>
         <input class="control-toggle" type="checkbox" id="ctrl-disabled" />
       </div>
     </div>

@@ -22,7 +22,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
     <div slot="controls">
       <div class="control-row">
-        <label class="control-label">anchor</label>
+        <label class="control-label" for="ctrl-anchor">anchor</label>
         <select class="control-select" id="ctrl-anchor">
           <option value="left" selected>left</option>
           <option value="right">right</option>
@@ -31,23 +31,23 @@ import ApiTable from '../../../components/ApiTable.astro';
         </select>
       </div>
       <div class="control-row">
-        <label class="control-label">size</label>
+        <label class="control-label" for="ctrl-size">size</label>
         <input class="control-input" type="text" id="ctrl-size" value="320px" />
       </div>
       <div class="control-row">
-        <label class="control-label">label</label>
+        <label class="control-label" for="ctrl-label">label</label>
         <input class="control-input" type="text" id="ctrl-label" value="Panel title" />
       </div>
       <div class="control-row">
-        <label class="control-label">no-close-button</label>
+        <label class="control-label" for="ctrl-hide-close">no-close-button</label>
         <input class="control-toggle" type="checkbox" id="ctrl-hide-close" />
       </div>
       <div class="control-row">
-        <label class="control-label">backdrop-blur</label>
+        <label class="control-label" for="ctrl-blur">backdrop-blur</label>
         <input class="control-toggle" type="checkbox" id="ctrl-blur" />
       </div>
       <div class="control-row">
-        <label class="control-label">overlay-opacity</label>
+        <label class="control-label" for="ctrl-overlay-opacity">overlay-opacity</label>
         <input class="control-input" type="range" min="0" max="1" step="0.05" value="0.45" id="ctrl-overlay-opacity" />
       </div>
     </div>

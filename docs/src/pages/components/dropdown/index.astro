@@ -29,7 +29,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
     <div slot="controls">
       <div class="control-row">
-        <label class="control-label">placement</label>
+        <label class="control-label" for="ctrl-placement">placement</label>
         <select class="control-select" id="ctrl-placement">
           <option value="bottom-start" selected>bottom-start</option>
           <option value="bottom-end">bottom-end</option>
@@ -40,7 +40,7 @@ import ApiTable from '../../../components/ApiTable.astro';
         </select>
       </div>
       <div class="control-row">
-        <label class="control-label">disabled item</label>
+        <label class="control-label" for="ctrl-disabled-item">disabled item</label>
         <input class="control-toggle" type="checkbox" id="ctrl-disabled-item" />
       </div>
     </div>
@@ -125,8 +125,8 @@ function onSelect(e) {
     Both let the user choose from a list of options, but they are built for different purposes and should not be used
     interchangeably:
   </lt-text>
-  <table class="compare-table">
-    <thead><tr><th></th><th>Dropdown</th><th>Select</th></tr></thead>
+  <table class="compare-table" aria-label="Dropdown vs. Select comparison">
+    <thead><tr><th scope="col" aria-label="Property"></th><th>Dropdown</th><th>Select</th></tr></thead>
     <tbody>
       <tr
         ><td><strong>Trigger</strong></td><td>Any slotted element — button, icon, avatar</td><td
