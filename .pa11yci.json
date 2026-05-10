@@ -1,0 +1,19 @@
+{
+  "defaults": {
+    "chromeLaunchConfig": {
+      "args": ["--no-sandbox", "--disable-setuid-sandbox"]
+    },
+    "standard": "WCAG2AA"
+  },
+  "urls": [
+    "http://localhost:4321/",
+    "http://localhost:4321/getting-started/installation/",
+    "http://localhost:4321/getting-started/usage/",
+    "http://localhost:4321/tokens/overview/",
+    "http://localhost:4321/icons/",
+    "http://localhost:4321/components/button/",
+    "http://localhost:4321/components/alert/",
+    "http://localhost:4321/components/textfield/",
+    "http://localhost:4321/examples/coffee-shop/"
+  ]
+}

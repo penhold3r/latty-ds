@@ -135,7 +135,7 @@ export class Snackbar extends LitElement {
   render() {
     const iconName = this._resolvedIcon;
     return html`
-      <lt-surface elevation="5" background-color=${Snackbar._bgMap[this.variant]}>
+      <lt-surface elevation="5" background=${Snackbar._bgMap[this.variant]}>
         <div class="inner" role="status" aria-live="polite" part="base">
           ${iconName ? html`<lt-icon class="variant-icon" name=${iconName} part="icon"></lt-icon>` : ''}
           <span class="message" part="message">

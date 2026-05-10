@@ -1,0 +1,22 @@
+{
+  "extends": ["markuplint:recommended"],
+  "parser": {
+    "\\.astro$": "@markuplint/astro-parser"
+  },
+  "rules": {
+    "permitted-contents": false
+  },
+  "overrides": {
+    "docs/src/components/ColorPalette.astro": {
+      "rules": {
+        "heading-levels": false
+      }
+    },
+    "docs/src/pages/examples/coffee-shop/index.astro": {
+      "rules": {
+        "heading-levels": false
+      }
+    }
+  },
+  "excludeFiles": ["**/dist/**", "**/node_modules/**"]
+}
