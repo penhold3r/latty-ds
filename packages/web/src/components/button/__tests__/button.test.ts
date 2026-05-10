@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { axe } from 'vitest-axe';
 import type { Button } from '../button';
 import '../button';
 
@@ -100,6 +101,10 @@ describe('<lt-button>', () => {
     el.appearance = appearance;
     await el.updateComplete;
     expect(el.getAttribute('appearance')).toBe(appearance);
+  });
+
+  it('has no axe violations', async () => {
+    expect(await axe(el)).toHaveNoViolations();
   });
 
   describe('href / link rendering', () => {

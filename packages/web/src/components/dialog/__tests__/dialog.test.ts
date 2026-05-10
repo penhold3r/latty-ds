@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 import type { Dialog } from '../dialog';
 import '../dialog';
 
@@ -87,6 +88,12 @@ describe('<lt-dialog>', () => {
 
     const slot = el.shadowRoot!.querySelector('.body slot:not([name])');
     expect(slot).toBeTruthy();
+  });
+
+  it('has no axe violations when open', async () => {
+    el.open = true;
+    await el.updateComplete;
+    expect(await axe(el)).toHaveNoViolations();
   });
 
   it('has proper accessibility attributes', async () => {

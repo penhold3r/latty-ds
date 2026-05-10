@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 import type { Textfield } from '../textfield';
 import '../textfield';
 
@@ -13,6 +14,12 @@ describe('<lt-textfield>', () => {
 
   afterEach(() => {
     el.remove();
+  });
+
+  it('has no axe violations', async () => {
+    el.label = 'Test field';
+    await el.updateComplete;
+    expect(await axe(el)).toHaveNoViolations();
   });
 
   it('renders an input element in shadow DOM', () => {

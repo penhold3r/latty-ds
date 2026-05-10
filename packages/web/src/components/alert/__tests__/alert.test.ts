@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { axe } from 'vitest-axe';
 import type { Alert } from '../alert';
 import '../alert';
 
@@ -128,6 +129,11 @@ describe('<lt-alert>', () => {
     (el.shadowRoot!.querySelector('.close') as HTMLElement).click();
     vi.advanceTimersByTime(200);
     expect(document.body.contains(el)).toBe(true);
+  });
+
+  it('has no axe violations', async () => {
+    vi.useRealTimers();
+    expect(await axe(el)).toHaveNoViolations();
   });
 
   it('sets [dismissed] attribute during exit animation', async () => {

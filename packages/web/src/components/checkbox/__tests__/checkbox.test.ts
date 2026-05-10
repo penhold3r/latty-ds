@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { axe } from 'vitest-axe';
 import type { Checkbox } from '../checkbox';
 import '../checkbox';
 
@@ -14,6 +15,10 @@ describe('<lt-checkbox>', () => {
 
   afterEach(() => {
     el.remove();
+  });
+
+  it('has no axe violations', async () => {
+    expect(await axe(el)).toHaveNoViolations();
   });
 
   it('renders a checkbox input in shadow DOM', () => {
