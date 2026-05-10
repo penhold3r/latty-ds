@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Recipes" description="Copy-paste patterns composed from Latty primitives">
+  <h1>Recipes</h1>
+  <p>
+    Recipes are complete UI patterns built entirely from Latty primitives — no custom CSS required. They are starting
+    points, not constraints. Copy the snippet, adapt the structure, and make it your own.
+  </p>
+
+  <div class="recipe-grid">
+    <a class="recipe-card" href="/recipes/login-form">
+      <span class="recipe-name">Login Form</span>
+      <span class="recipe-desc">Sign-in form with email, password, remember me, and forgot password link</span>
+    </a>
+    <a class="recipe-card" href="/recipes/profile-card">
+      <span class="recipe-name">Profile Card</span>
+      <span class="recipe-desc">User profile widget with avatar, name, role, skill tags, and action buttons</span>
+    </a>
+    <a class="recipe-card" href="/recipes/content-card">
+      <span class="recipe-name">Content Card</span>
+      <span class="recipe-desc">Media card with image, category badge, title, excerpt, and a call-to-action</span>
+    </a>
+    <a class="recipe-card" href="/recipes/hero-banner">
+      <span class="recipe-name">Hero Banner</span>
+      <span class="recipe-desc">Full-width banner with background overlay, headline, subtext, and CTA buttons</span>
+    </a>
+    <a class="recipe-card" href="/recipes/stats-widget">
+      <span class="recipe-name">Stats Widget</span>
+      <span class="recipe-desc">Dashboard metrics panel with icon, value, label, and progress bar per stat</span>
+    </a>
+    <a class="recipe-card" href="/recipes/empty-state">
+      <span class="recipe-name">Empty State</span>
+      <span class="recipe-desc">Zero-data placeholder with icon circle, message, and a call to action</span>
+    </a>
+  </div>
+</BaseLayout>
+
+<style>
+  .recipe-grid {
+    display: grid;
+    gap: var(--lt-spacing-4);
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    margin-top: var(--lt-spacing-6);
+  }
+
+  .recipe-card {
+    border-radius: var(--lt-border-radius-lg);
+    border: 1px solid var(--lt-border-default);
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: var(--lt-spacing-2);
+    padding: var(--lt-spacing-5);
+    text-decoration: none;
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  .recipe-card:hover {
+    border-color: var(--lt-interactive-primary-bg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .recipe-name {
+    color: var(--lt-text-default);
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .recipe-desc {
+    color: var(--lt-text-subtle);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+</style>
