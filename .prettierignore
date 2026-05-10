@@ -1,0 +1,8 @@
+dist
+dist-scripts
+node_modules
+pnpm-lock.yaml
+custom-elements.json
+bundle-report.json
+# HTML comments inside JSX are not supported by prettier-plugin-astro
+docs/src/pages/tokens/colors.astro

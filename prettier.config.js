@@ -3,12 +3,12 @@ module.exports = {
   printWidth: 120,
   singleQuote: true,
   tabWidth: 2,
-  trailingComma: "none",
+  trailingComma: 'none',
   plugins: ['prettier-plugin-astro'],
   overrides: [
     {
       files: '*.astro',
-      options: { parser: 'astro' },
-    },
-  ],
+      options: { parser: 'astro' }
+    }
+  ]
 };
