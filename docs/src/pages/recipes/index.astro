@@ -4,35 +4,49 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 <BaseLayout title="Recipes" description="Copy-paste patterns composed from Latty primitives">
   <h1>Recipes</h1>
-  <p>
+  <lt-text variant="body">
     Recipes are complete UI patterns built entirely from Latty primitives — no custom CSS required. They are starting
     points, not constraints. Copy the snippet, adapt the structure, and make it your own.
-  </p>
+  </lt-text>
 
   <div class="recipe-grid">
     <a class="recipe-card" href="/recipes/login-form">
-      <span class="recipe-name">Login Form</span>
-      <span class="recipe-desc">Sign-in form with email, password, remember me, and forgot password link</span>
+      <lt-surface elevation="1">
+        <lt-text variant="label">Login Form</lt-text>
+        <lt-text variant="caption">Sign-in form with email, password, remember me, and forgot password link</lt-text>
+      </lt-surface>
     </a>
     <a class="recipe-card" href="/recipes/profile-card">
-      <span class="recipe-name">Profile Card</span>
-      <span class="recipe-desc">User profile widget with avatar, name, role, skill tags, and action buttons</span>
+      <lt-surface elevation="1">
+        <lt-text variant="label">Profile Card</lt-text>
+        <lt-text variant="caption">User profile widget with avatar, name, role, skill tags, and action buttons</lt-text>
+      </lt-surface>
     </a>
     <a class="recipe-card" href="/recipes/content-card">
-      <span class="recipe-name">Content Card</span>
-      <span class="recipe-desc">Media card with image, category badge, title, excerpt, and a call-to-action</span>
+      <lt-surface elevation="1">
+        <lt-text variant="label">Content Card</lt-text>
+        <lt-text variant="caption">Media card with image, category badge, title, excerpt, and a call-to-action</lt-text>
+      </lt-surface>
     </a>
     <a class="recipe-card" href="/recipes/hero-banner">
-      <span class="recipe-name">Hero Banner</span>
-      <span class="recipe-desc">Full-width banner with background overlay, headline, subtext, and CTA buttons</span>
+      <lt-surface elevation="1">
+        <lt-text variant="label">Hero Banner</lt-text>
+        <lt-text variant="caption"
+          >Full-width banner with background overlay, headline, subtext, and CTA buttons</lt-text
+        >
+      </lt-surface>
     </a>
     <a class="recipe-card" href="/recipes/stats-widget">
-      <span class="recipe-name">Stats Widget</span>
-      <span class="recipe-desc">Dashboard metrics panel with icon, value, label, and progress bar per stat</span>
+      <lt-surface elevation="1">
+        <lt-text variant="label">Stats Widget</lt-text>
+        <lt-text variant="caption">Dashboard metrics panel with icon, value, label, and progress bar per stat</lt-text>
+      </lt-surface>
     </a>
     <a class="recipe-card" href="/recipes/empty-state">
-      <span class="recipe-name">Empty State</span>
-      <span class="recipe-desc">Zero-data placeholder with icon circle, message, and a call to action</span>
+      <lt-surface elevation="1">
+        <lt-text variant="label">Empty State</lt-text>
+        <lt-text variant="caption">Zero-data placeholder with icon circle, message, and a call to action</lt-text>
+      </lt-surface>
     </a>
   </div>
 </BaseLayout>
@@ -46,33 +60,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   }
 
   .recipe-card {
-    border-radius: var(--lt-border-radius-lg);
-    border: 1px solid var(--lt-border-default);
     color: inherit;
+    text-decoration: none;
+  }
+
+  .recipe-card lt-surface::part(surface) {
     display: flex;
     flex-direction: column;
     gap: var(--lt-spacing-2);
+    height: 100%;
     padding: var(--lt-spacing-5);
-    text-decoration: none;
-    transition:
-      border-color 150ms ease,
-      box-shadow 150ms ease;
+    transition: box-shadow 150ms ease;
   }
 
-  .recipe-card:hover {
-    border-color: var(--lt-interactive-primary-bg);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  }
-
-  .recipe-name {
-    color: var(--lt-text-default);
-    font-size: 0.9375rem;
-    font-weight: 600;
-  }
-
-  .recipe-desc {
-    color: var(--lt-text-subtle);
-    font-size: 0.8125rem;
-    line-height: 1.5;
+  .recipe-card:hover lt-surface::part(surface) {
+    box-shadow: var(--lt-elevation-3);
   }
 </style>
+
+<script>
+  import '@latty/web';
+</script>
