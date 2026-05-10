@@ -8,13 +8,13 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
   title="Hero Banner"
   description="A full-width banner with a background image overlay, headline, subtext, and CTA buttons."
 >
-  <h1>Hero Banner</h1>
-  <p>
+  <lt-text variant="h1">Hero Banner</lt-text>
+  <lt-text variant="body">
     A full-width call-to-action section with a photographic background, headline, supporting copy, and two action
     buttons — ideal for landing pages and feature announcements.
-  </p>
+  </lt-text>
 
-  <h2>Preview</h2>
+  <lt-text variant="h2">Preview</lt-text>
   <RecipePreview>
     <div class="hero-wrap">
       <div class="hero">
@@ -31,7 +31,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
     </div>
   </RecipePreview>
 
-  <h2>Code</h2>
+  <lt-text variant="h2">Code</lt-text>
   <FrameworkTabs
     html={`<div class="hero">
   <lt-badge content="Now available" class="hero-badge"></lt-badge>
@@ -133,8 +133,8 @@ export default function HeroBanner() {
 </style>`}
   />
 
-  <h2>Components</h2>
-  <p><code>lt-badge</code>, <code>lt-text</code>, <code>lt-button</code></p>
+  <lt-text variant="h2">Components</lt-text>
+  <lt-text variant="body"><code>lt-badge</code>, <code>lt-text</code>, <code>lt-button</code></lt-text>
 </BaseLayout>
 
 <script>

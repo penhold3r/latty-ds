@@ -6,18 +6,18 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Alert" description="Inline notification for persistent contextual feedback">
-  <h1>Alert</h1>
-  <p>
+  <lt-text variant="h1">Alert</lt-text>
+  <lt-text variant="body">
     An inline notification that stays visible until the user dismisses it or the condition resolves. Use alerts for
     persistent feedback — validation errors, warnings, or status messages that need to remain on screen. For transient
     confirmations, use
     <lt-link href="/components/snackbar">Snackbar</lt-link> instead.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-alert" content="Your changes have been saved to the server." />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-alert variant="success">Changes saved successfully</lt-alert>
@@ -61,8 +61,8 @@ import { Alert } from '@latty/react';
     `}
   />
 
-  <h2>Alert vs. Snackbar</h2>
-  <p>Both communicate feedback to the user, but they serve different moments:</p>
+  <lt-text variant="h2">Alert vs. Snackbar</lt-text>
+  <lt-text variant="body">Both communicate feedback to the user, but they serve different moments:</lt-text>
   <table class="compare-table">
     <thead><tr><th></th><th>Alert</th><th>Snackbar</th></tr></thead>
     <tbody>
@@ -88,7 +88,7 @@ import { Alert } from '@latty/react';
     </tbody>
   </table>
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-alert" />
 </BaseLayout>
 

@@ -6,16 +6,16 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Radio" description="Radio button and radio group components">
-  <h1>Radio</h1>
-  <p>
+  <lt-text variant="h1">Radio</lt-text>
+  <lt-text variant="body">
     Radio buttons for single-selection within a group. Use <code>lt-radio-group</code> to manage a named group with a shared
     label, value, and validation state.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-radio" />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-radio-group label="Preferred contact" name="contact" value="email">
@@ -44,10 +44,10 @@ import { RadioGroup, Radio } from '@latty/react';
     `}
   />
 
-  <h2>API — lt-radio</h2>
+  <lt-text variant="h2">API — lt-radio</lt-text>
   <ApiTable tag="lt-radio" />
 
-  <h2>API — lt-radio-group</h2>
+  <lt-text variant="h2">API — lt-radio-group</lt-text>
   <ApiTable tag="lt-radio-group" />
 </BaseLayout>
 

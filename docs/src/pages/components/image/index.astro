@@ -8,14 +8,14 @@ const DEMO_SRC = 'https://picsum.photos/seed/lt-image/800/500';
 ---
 
 <BaseLayout title="Image" description="A lightweight image wrapper with rounded corners and responsive fill support.">
-  <h1>Image</h1>
-  <p>
+  <lt-text variant="h1">Image</lt-text>
+  <lt-text variant="body">
     A lightweight wrapper around <code>&lt;img&gt;</code> that adds rounded corners and responsive fill behaviour. Use <code
       >rounded</code
     > for border-radius and <code>responsive</code> to make the image cover its container.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="image-playground" previewHeight="auto">
     <div
       slot="preview"
@@ -46,7 +46,7 @@ const DEMO_SRC = 'https://picsum.photos/seed/lt-image/800/500';
     </div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`<!-- Default -->
 <lt-image src="photo.jpg" alt="A scenic view"></lt-image>
@@ -90,7 +90,7 @@ const DEMO_SRC = 'https://picsum.photos/seed/lt-image/800/500';
 </template>`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-image" />
 </BaseLayout>
 

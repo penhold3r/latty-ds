@@ -6,16 +6,16 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Progress" description="A horizontal bar that shows how far along a process is.">
-  <h1>Progress</h1>
-  <p>
+  <lt-text variant="h1">Progress</lt-text>
+  <lt-text variant="body">
     A progress bar for showing completion of a task or process. Supports determinate values (0–100), color variants,
     three sizes, and an indeterminate animation for unknown durations.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-progress" previewHeight="80px" defaults={{ value: 50 }} stretch />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`<!-- Determinate -->
 <lt-progress value="40"></lt-progress>
@@ -42,7 +42,7 @@ import ApiTable from '../../../components/ApiTable.astro';
 </template>`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-progress" />
 </BaseLayout>
 

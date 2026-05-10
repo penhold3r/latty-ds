@@ -15,19 +15,19 @@ const rows = steps.map((step) => ({
 ---
 
 <BaseLayout title="Spacing" description="Spacing tokens in the Latty Design System">
-  <h1>Spacing</h1>
-  <p>
+  <lt-text variant="h1">Spacing</lt-text>
+  <lt-text variant="body">
     A 4px grid system with 25 steps (0–24), providing 0px to 96px in 4px increments. Each step is available in both <code
       >rem</code
     > (canonical) and <code>px</code> units.
-  </p>
+  </lt-text>
 
   <lt-table id="spacing-table" data={JSON.stringify(rows)} density="compact" hoverable></lt-table>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <div class="usage-grid">
     <div class="usage-card">
-      <h3>CSS</h3>
+      <lt-text variant="h3">CSS</lt-text>
       <pre><code>{`.element {
   padding: var(--lt-spacing-4);    /* 1rem / 16px */
   margin-bottom: var(--lt-spacing-6); /* 1.5rem / 24px */
@@ -35,7 +35,7 @@ const rows = steps.map((step) => ({
 }`}</code></pre>
     </div>
     <div class="usage-card">
-      <h3>Pixel variant</h3>
+      <lt-text variant="h3">Pixel variant</lt-text>
       <pre><code>{`.element {
   /* use -px- variant for pixel-precise values */
   border-width: var(--lt-spacing-px-1); /* 4px */

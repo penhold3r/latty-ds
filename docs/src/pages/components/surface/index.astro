@@ -6,20 +6,20 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Surface" description="Container with elevation and surface styling">
-  <h1>Surface</h1>
-  <p>
+  <lt-text variant="h1">Surface</lt-text>
+  <lt-text variant="body">
     A container that applies elevation shadows and surface background variants. Use it to build cards, panels, and
     layered layouts.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground
     tag="lt-surface"
-    content="<p style='padding:1.5rem;'>Surface content goes here</p>"
+    content={`<lt-text variant="body">Surface content goes here</lt-text>`}
     previewHeight="120px"
   />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-surface elevation="2">
@@ -54,7 +54,7 @@ import { Surface } from '@latty/react';
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-surface" />
 </BaseLayout>
 

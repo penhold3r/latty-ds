@@ -6,13 +6,13 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Table" description="Data table with sorting and responsive design">
-  <h1>Table</h1>
-  <p>
+  <lt-text variant="h1">Table</lt-text>
+  <lt-text variant="body">
     A data table with sortable columns, density options, and striped rows. Columns and data are set via JavaScript
     properties.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="table-playground" previewHeight="auto">
     <div slot="preview" style="width:100%;overflow-x:auto;">
       <lt-table id="playground-table" hoverable></lt-table>
@@ -45,7 +45,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-table id="my-table" hoverable striped></lt-table>
@@ -102,7 +102,7 @@ const data = [
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-table" />
 </BaseLayout>
 

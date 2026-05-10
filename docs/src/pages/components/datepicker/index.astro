@@ -6,16 +6,16 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Datepicker" description="Date, time, and datetime-local input with design-system styling">
-  <h1>Datepicker</h1>
-  <p>
+  <lt-text variant="h1">Datepicker</lt-text>
+  <lt-text variant="body">
     A styled wrapper around the browser's native date and time input. Inherits full platform picker support (keyboard
     navigation, screen-reader announcements, locale formatting) without a custom implementation.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-datepicker" attrs={{ label: 'Start date', type: 'date' }} />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <!-- Date picker -->
@@ -78,7 +78,7 @@ import { Datepicker } from '@latty/react';
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-datepicker" />
 </BaseLayout>
 

@@ -36,15 +36,15 @@ const groupMeta: Record<string, { label: string; description: string }> = {
 ---
 
 <BaseLayout title="Semantic Tokens" description="Intent-based tokens that reference the primitive palette">
-  <h1>Semantic Tokens</h1>
-  <p>
+  <lt-text variant="h1">Semantic Tokens</lt-text>
+  <lt-text variant="body">
     Semantic tokens express <strong>intent</strong> rather than raw values. They reference primitive tokens via <code
       >var()</code
     >, so theming only requires redefining this layer — not touching component code.
-  </p>
-  <p>Import in your stylesheet:</p>
+  </lt-text>
+  <lt-text variant="body">Import in your stylesheet:</lt-text>
   <pre><code>@import '@latty/tokens/semantic.css';</code></pre>
-  <p>Or generate them at runtime with your own color palette:</p>
+  <lt-text variant="body">Or generate them at runtime with your own color palette:</lt-text>
   <pre><code>import {'{ configure }'} from '@latty/tokens/configure';
 
 configure({'{'} colors: {'{ primary: \'#6366f1\' }'} {'}'});</code></pre>
@@ -55,8 +55,8 @@ configure({'{'} colors: {'{ primary: \'#6366f1\' }'} {'}'});</code></pre>
       const rows = entries.map(([tok, ref]) => ({ tok, ref }));
       return (
         <section style="margin-top: 2.5rem;">
-          <h2>{meta.label}</h2>
-          <p>{meta.description}</p>
+          <lt-text variant="h2">{meta.label}</lt-text>
+          <lt-text variant="body">{meta.description}</lt-text>
           <lt-table class="token-table" data={JSON.stringify(rows)} density="compact" />
         </section>
       );

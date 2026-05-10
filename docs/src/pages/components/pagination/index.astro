@@ -6,13 +6,13 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Pagination" description="Page navigation for paged data sets">
-  <h1>Pagination</h1>
-  <p>
+  <lt-text variant="h1">Pagination</lt-text>
+  <lt-text variant="body">
     Page navigation control for paged data sets. Renders first, previous, numbered pages, next, and last buttons. Large
     page counts collapse to an ellipsis window around the current page.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="pagination-playground">
     <div slot="preview">
       <lt-pagination id="playground-pg" page="5" total-pages="20"></lt-pagination>
@@ -41,7 +41,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-pagination page="1" total-pages="10"></lt-pagination>
@@ -76,7 +76,7 @@ import { Pagination } from '@latty/react';
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-pagination" />
 </BaseLayout>
 

@@ -6,14 +6,14 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Dropdown" description="A floating menu anchored to a trigger element">
-  <h1>Dropdown</h1>
-  <p>
+  <lt-text variant="h1">Dropdown</lt-text>
+  <lt-text variant="body">
     A floating menu that opens from a trigger element. Supports keyboard navigation (Arrow keys, Escape, Home/End),
     outside-click to dismiss, and optional link items via the
     <code>href</code> attribute on <code>lt-dropdown-item</code>.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="dropdown-playground" previewHeight="auto">
     <div
       slot="preview"
@@ -46,7 +46,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-dropdown>
@@ -120,11 +120,11 @@ function onSelect(e) {
     `}
   />
 
-  <h2>Dropdown vs. Select</h2>
-  <p>
+  <lt-text variant="h2">Dropdown vs. Select</lt-text>
+  <lt-text variant="body">
     Both let the user choose from a list of options, but they are built for different purposes and should not be used
     interchangeably:
-  </p>
+  </lt-text>
   <table class="compare-table">
     <thead><tr><th></th><th>Dropdown</th><th>Select</th></tr></thead>
     <tbody>
@@ -151,7 +151,7 @@ function onSelect(e) {
     </tbody>
   </table>
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-dropdown" />
   <ApiTable tag="lt-dropdown-item" />
 </BaseLayout>

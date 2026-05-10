@@ -6,16 +6,16 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Link" description="A styled anchor element with primary color and optional external-link behaviour.">
-  <h1>Link</h1>
-  <p>
+  <lt-text variant="h1">Link</lt-text>
+  <lt-text variant="body">
     A styled anchor element. Uses the primary color by default with an underline on hover. Set <code>external</code> to open
     in a new tab and display a trailing external-link icon.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-link" content="Visit site" attrs={{ href: 'https://example.com' }} />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`<lt-link href="https://example.com">Visit site</lt-link>
 <lt-link href="https://example.com" external>Open in new tab</lt-link>`}
@@ -33,7 +33,7 @@ import { Link } from '@latty/react';
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-link" />
 </BaseLayout>
 

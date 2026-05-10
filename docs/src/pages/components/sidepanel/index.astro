@@ -9,13 +9,13 @@ import ApiTable from '../../../components/ApiTable.astro';
   title="SidePanel"
   description="A slide-in panel anchored to any edge of the viewport, with a backdrop overlay."
 >
-  <h1>SidePanel</h1>
-  <p>
+  <lt-text variant="h1">SidePanel</lt-text>
+  <lt-text variant="body">
     A slide-in panel that overlays the page from any edge. Use it for navigation drawers, filter panels, detail views,
     or any contextual content that shouldn't interrupt the main flow.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="sidepanel-playground" previewHeight="auto">
     <div slot="preview">
       <lt-button variant="primary" id="open-panel">Open panel</lt-button>
@@ -61,7 +61,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </lt-sidepanel>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`<lt-button onclick="document.getElementById('panel').open = true">Open</lt-button>
 
@@ -125,7 +125,7 @@ const open = ref(false)
 </template>`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-sidepanel" />
 </BaseLayout>
 

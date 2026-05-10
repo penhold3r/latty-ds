@@ -6,13 +6,13 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
 ---
 
 <BaseLayout title="Skeleton" description="A loading placeholder that mimics the shape of content.">
-  <h1>Skeleton</h1>
-  <p>
+  <lt-text variant="h1">Skeleton</lt-text>
+  <lt-text variant="body">
     A shimmering placeholder used while content is loading. Matches the shape of the real content to reduce layout shift
     and signal progress to the user.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="skeleton-playground" previewHeight="auto">
     <div slot="preview" style="display:flex;flex-direction:column;gap:1rem;padding:1.5rem;max-width:320px;">
       <div style="display:flex;align-items:center;gap:0.75rem;">
@@ -29,7 +29,7 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
     <div slot="controls"></div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`<!-- Default rect -->
 <lt-skeleton></lt-skeleton>
@@ -57,7 +57,7 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
 </template>`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-skeleton" />
 </BaseLayout>
 

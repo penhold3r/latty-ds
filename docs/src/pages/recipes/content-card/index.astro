@@ -8,13 +8,13 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
   title="Content Card"
   description="A media card with image, category badge, title, excerpt, and a call-to-action button."
 >
-  <h1>Content Card</h1>
-  <p>
+  <lt-text variant="h1">Content Card</lt-text>
+  <lt-text variant="body">
     A versatile media card for articles, products, or resources — combines a cover image with category tagging and a
     clear call to action.
-  </p>
+  </lt-text>
 
-  <h2>Preview</h2>
+  <lt-text variant="h2">Preview</lt-text>
   <RecipePreview>
     <lt-surface class="content-card" appearance="outlined" elevation="1" style="max-width: 300px; display: block;">
       <img
@@ -33,7 +33,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
     </lt-surface>
   </RecipePreview>
 
-  <h2>Code</h2>
+  <lt-text variant="h2">Code</lt-text>
   <FrameworkTabs
     html={`<lt-surface class="content-card" appearance="outlined" elevation="1" style="max-width: 300px; display: block;">
   <img
@@ -126,8 +126,10 @@ export default function ContentCard() {
 </style>`}
   />
 
-  <h2>Components</h2>
-  <p><code>lt-surface</code>, <code>lt-badge</code>, <code>lt-text</code>, <code>lt-button</code></p>
+  <lt-text variant="h2">Components</lt-text>
+  <lt-text variant="body"
+    ><code>lt-surface</code>, <code>lt-badge</code>, <code>lt-text</code>, <code>lt-button</code></lt-text
+  >
 </BaseLayout>
 
 <script>

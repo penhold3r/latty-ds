@@ -6,13 +6,13 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Combobox" description="Searchable single-select dropdown">
-  <h1>Combobox</h1>
-  <p>
+  <lt-text variant="h1">Combobox</lt-text>
+  <lt-text variant="body">
     A searchable single-select field. The user types to filter options; selecting one sets the value. Keyboard
     navigation (Arrow, Enter, Escape) is fully supported. Use <code>lt-select</code> when no filtering is needed.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="combobox-playground">
     <div slot="preview">
       <lt-combobox id="playground-cb" label="Country" placeholder="Search countries…"></lt-combobox>
@@ -42,7 +42,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-combobox
@@ -95,7 +95,7 @@ const countries = [
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-combobox" />
 </BaseLayout>
 

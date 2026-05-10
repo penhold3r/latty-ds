@@ -6,13 +6,15 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Spinner" description="Loading indicator component">
-  <h1>Spinner</h1>
-  <p>A simple animated loading indicator. Use it to signal that content or an action is in progress.</p>
+  <lt-text variant="h1">Spinner</lt-text>
+  <lt-text variant="body"
+    >A simple animated loading indicator. Use it to signal that content or an action is in progress.</lt-text
+  >
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-spinner" />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-spinner size="md" variant="primary"></lt-spinner>
@@ -37,7 +39,7 @@ import { Spinner } from '@latty/react';
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-spinner" />
 </BaseLayout>
 

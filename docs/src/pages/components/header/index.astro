@@ -9,14 +9,14 @@ import ApiTable from '../../../components/ApiTable.astro';
   title="Header"
   description="A layout component that organises content into a sticky app bar with before, logo, content, and after slots."
 >
-  <h1>Header</h1>
-  <p>
+  <lt-text variant="h1">Header</lt-text>
+  <lt-text variant="body">
     A presentational layout component that arranges content into a horizontal strip. It provides four named slots — <code
       >before</code
     >, <code>logo</code>, <code>content</code>, and <code>after</code> — and sits sticky at the top of the page by default.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
 
   <PlaygroundShell id="header-playground" previewHeight="auto">
     <div slot="preview" style="width:100%;padding:0">
@@ -46,7 +46,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
 
   <FrameworkTabs
     html={`<lt-header>
@@ -94,7 +94,7 @@ import ApiTable from '../../../components/ApiTable.astro';
 </template>`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-header" />
 </BaseLayout>
 

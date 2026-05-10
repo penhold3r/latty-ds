@@ -6,13 +6,13 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Slider" description="A range input for selecting a numeric value within a bounded range">
-  <h1>Slider</h1>
-  <p>
+  <lt-text variant="h1">Slider</lt-text>
+  <lt-text variant="body">
     A styled range input for selecting a numeric value between a minimum and maximum. Supports size variants, labels,
     and exposes <code>lt-input</code> / <code>lt-change</code> events with the current numeric value in the event detail.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="slider-playground" previewHeight="auto">
     <div slot="preview" style="padding: 1.5rem; min-width: 300px;">
       <lt-slider id="playground-slider" label="Volume" value="40" min="0" max="100" step="1"></lt-slider>
@@ -53,7 +53,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-slider label="Volume" value="40" min="0" max="100" step="1"></lt-slider>
@@ -114,7 +114,7 @@ const volume = ref(40)
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-slider" />
 </BaseLayout>
 

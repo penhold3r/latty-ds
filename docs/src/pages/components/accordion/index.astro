@@ -6,13 +6,13 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Accordion" description="Collapsible content sections">
-  <h1>Accordion</h1>
-  <p>
+  <lt-text variant="h1">Accordion</lt-text>
+  <lt-text variant="body">
     A collapsible section built on the native <code>&lt;details&gt;/&lt;summary&gt;</code> elements. Content placed in the
     default slot is shown when open.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground
     tag="lt-accordion"
     content="This is the collapsible content inside the accordion."
@@ -20,7 +20,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     defaults={{ label: 'Section Title' }}
   />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-accordion label="What is Latty?">
@@ -55,7 +55,7 @@ import { Accordion } from '@latty/react';
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-accordion" />
 </BaseLayout>
 

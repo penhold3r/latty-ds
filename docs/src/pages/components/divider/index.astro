@@ -6,13 +6,13 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
 ---
 
 <BaseLayout title="Divider" description="A visual separator between content sections.">
-  <h1>Divider</h1>
-  <p>
+  <lt-text variant="h1">Divider</lt-text>
+  <lt-text variant="body">
     A thin line that separates content. Supports horizontal and vertical orientations, dashed and dotted styles, and an
     optional centered label.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="divider-playground" previewHeight="auto">
     <div slot="preview" style="display:flex;flex-direction:column;gap:1.5rem;padding:1.5rem;">
       <lt-divider></lt-divider>
@@ -28,7 +28,7 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
     <div slot="controls"></div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`<!-- Horizontal (default) -->
 <lt-divider></lt-divider>
@@ -60,7 +60,7 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
 </template>`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-divider" />
 </BaseLayout>
 

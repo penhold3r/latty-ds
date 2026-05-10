@@ -6,13 +6,13 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Dialog" description="Modal dialog component">
-  <h1>Dialog</h1>
-  <p>
+  <lt-text variant="h1">Dialog</lt-text>
+  <lt-text variant="body">
     A modal dialog with backdrop, keyboard trap, and focus management. Supports a <code>footer</code> slot for actions. Emits
     <code>lt-open</code> and <code>lt-close</code> events.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="dialog-playground">
     <div slot="preview">
       <lt-button variant="primary" id="open-dialog">Open dialog</lt-button>
@@ -64,7 +64,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </lt-dialog>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-button variant="primary" id="open-btn">Open dialog</lt-button>
@@ -133,7 +133,7 @@ const open = ref(false)
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-dialog" />
 </BaseLayout>
 

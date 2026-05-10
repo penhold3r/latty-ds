@@ -6,20 +6,20 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="List" description="Ordered and unordered list components">
-  <h1>List</h1>
-  <p>
+  <lt-text variant="h1">List</lt-text>
+  <lt-text variant="body">
     Styled list component supporting ordered and unordered types, optional icons on each item, and an optional divider
     between items. Use <code>lt-list-item</code> for items that need icons or proper nesting behavior.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground
     tag="lt-list"
     content={'<lt-list-item icon-start="check">First item</lt-list-item><lt-list-item icon-start="clock">Second item</lt-list-item><lt-list-item icon-start="info">Third item</lt-list-item>'}
     previewHeight="140px"
   />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <!-- Basic unordered list -->
@@ -135,10 +135,10 @@ import { List, ListItem } from '@latty/react';
     `}
   />
 
-  <h2>API — lt-list</h2>
+  <lt-text variant="h2">API — lt-list</lt-text>
   <ApiTable tag="lt-list" />
 
-  <h2>API — lt-list-item</h2>
+  <lt-text variant="h2">API — lt-list-item</lt-text>
   <ApiTable tag="lt-list-item" />
 </BaseLayout>
 

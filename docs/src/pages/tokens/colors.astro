@@ -13,18 +13,18 @@ function textColor(shade: string) {
 ---
 
 <BaseLayout title="Colors" description="Color tokens in the Latty Design System">
-  <h1>Colors</h1>
-  <p>
+  <lt-text variant="h1">Colors</lt-text>
+  <lt-text variant="body">
     Each semantic color is auto-generated from a single base hex value using the OKLCH color space,
     producing 10 perceptually uniform shades (50–900) plus a muted variant.
-  </p>
+  </lt-text>
 
   {semanticPalettes.map((palette) => (
     <section class="palette-section">
-      <h2 class="palette-name">{palette}</h2>
+      <lt-text variant="h4" class="palette-name">{palette}</lt-text>
 
       <!-- Main palette -->
-      <p class="sub-label">Default</p>
+      <lt-text variant="body">Default</lt-text>
       <div class="palette-row">
         {shades.map((shade) => {
           const hex = color[palette]?.[shade];
@@ -42,7 +42,7 @@ function textColor(shade: string) {
       <!-- Muted palette -->
       {color[`${palette}-muted`] && (
         <>
-          <p class="sub-label">Muted</p>
+          <lt-text variant="body">Muted</lt-text>
           <div class="palette-row">
             {shades.map((shade) => {
               const hex = color[`${palette}-muted`]?.[shade];
@@ -68,9 +68,7 @@ function textColor(shade: string) {
   }
 
   .palette-name {
-    font-size: 1rem;
-    font-weight: 600;
-    text-transform: capitalize;
+    display: block;
     margin-bottom: var(--lt-spacing-3);
     padding-bottom: var(--lt-spacing-2);
     border-bottom: 1px solid var(--lt-color-neutral-200);

@@ -8,13 +8,13 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
   title="Stats Widget"
   description="A dashboard metrics panel with icon, value, label, and progress bar for each stat."
 >
-  <h1>Stats Widget</h1>
-  <p>
+  <lt-text variant="h1">Stats Widget</lt-text>
+  <lt-text variant="body">
     A dashboard metrics panel showing key numbers at a glance — each tile pairs an icon, a value, a label, and a
     progress bar to convey both quantity and relative scale.
-  </p>
+  </lt-text>
 
-  <h2>Preview</h2>
+  <lt-text variant="h2">Preview</lt-text>
   <RecipePreview>
     <lt-surface appearance="outlined" elevation="0" style="max-width: 460px; width: 100%;">
       <div style="padding: var(--lt-spacing-6);">
@@ -59,7 +59,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
     </lt-surface>
   </RecipePreview>
 
-  <h2>Code</h2>
+  <lt-text variant="h2">Code</lt-text>
   <FrameworkTabs
     html={`<lt-surface appearance="outlined" elevation="0" style="max-width: 460px; width: 100%;">
   <div style="padding: var(--lt-spacing-6);">
@@ -165,8 +165,10 @@ const stats = [
 </template>`}
   />
 
-  <h2>Components</h2>
-  <p><code>lt-surface</code>, <code>lt-icon</code>, <code>lt-text</code>, <code>lt-progress</code></p>
+  <lt-text variant="h2">Components</lt-text>
+  <lt-text variant="body"
+    ><code>lt-surface</code>, <code>lt-icon</code>, <code>lt-text</code>, <code>lt-progress</code></lt-text
+  >
 </BaseLayout>
 
 <script>

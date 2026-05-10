@@ -9,16 +9,16 @@ import ApiTable from '../../../components/ApiTable.astro';
   title="Text"
   description="Renders text with a predefined typographic style. Covers display sizes, headings, body copy, captions, and overlines."
 >
-  <h1>Text</h1>
-  <p>
+  <lt-text variant="h1">Text</lt-text>
+  <lt-text variant="body">
     Renders text with a predefined typographic style. The rendered HTML tag matches the variant by default and can be
     overridden with the <code>as</code> attribute when the visual style should not affect the document outline.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-text" content="The quick brown fox jumps over the lazy dog" />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`<!-- Display -->
 <lt-text variant="display-2xl">Display 2XL</lt-text>
@@ -61,10 +61,10 @@ import { Text } from '@latty/react';
     `}
   />
 
-  <h2>Type scale</h2>
+  <lt-text variant="h2">Type scale</lt-text>
   <div id="type-scale" class="type-scale"></div>
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-text" />
 </BaseLayout>
 

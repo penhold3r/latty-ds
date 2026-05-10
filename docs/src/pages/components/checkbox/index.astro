@@ -6,13 +6,15 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Checkbox" description="Checkbox input component">
-  <h1>Checkbox</h1>
-  <p>A checkbox input with support for checked, indeterminate, and disabled states across multiple variants.</p>
+  <lt-text variant="h1">Checkbox</lt-text>
+  <lt-text variant="body"
+    >A checkbox input with support for checked, indeterminate, and disabled states across multiple variants.</lt-text
+  >
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-checkbox" />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-checkbox label="Accept terms and conditions"></lt-checkbox>
@@ -35,7 +37,7 @@ import { Checkbox } from '@latty/react';
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-checkbox" />
 </BaseLayout>
 

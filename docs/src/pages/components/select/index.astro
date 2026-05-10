@@ -6,13 +6,13 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Select" description="Dropdown select component">
-  <h1>Select</h1>
-  <p>
+  <lt-text variant="h1">Select</lt-text>
+  <lt-text variant="body">
     A custom dropdown with labels, placeholder, helper text, and validation states. The <code>options</code> property is set
     via JavaScript as an array of <code>&#123; value, label &#125;</code> objects.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="select-playground">
     <div slot="preview">
       <lt-select id="playground-select" label="Country" placeholder="Select a country" style="width:260px;"></lt-select>
@@ -46,7 +46,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-select id="my-select" label="Country" placeholder="Select a country"></lt-select>
@@ -97,8 +97,10 @@ const options = [
     `}
   />
 
-  <h2>Select vs. Dropdown</h2>
-  <p>Both let the user choose from a list of options, but they are built for different purposes:</p>
+  <lt-text variant="h2">Select vs. Dropdown</lt-text>
+  <lt-text variant="body"
+    >Both let the user choose from a list of options, but they are built for different purposes:</lt-text
+  >
   <table class="compare-table">
     <thead><tr><th></th><th>Select</th><th>Dropdown</th></tr></thead>
     <tbody>
@@ -125,7 +127,7 @@ const options = [
     </tbody>
   </table>
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-select" />
 </BaseLayout>
 

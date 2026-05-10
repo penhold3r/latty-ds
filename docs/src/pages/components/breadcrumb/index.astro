@@ -6,14 +6,14 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
 ---
 
 <BaseLayout title="Breadcrumb" description="A navigation trail that shows the user's location in the app hierarchy.">
-  <h1>Breadcrumb</h1>
-  <p>
+  <lt-text variant="h1">Breadcrumb</lt-text>
+  <lt-text variant="body">
     A secondary navigation that shows the path from the root to the current page. The last item is marked as <code
       >current</code
     > and rendered as non-linked text.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="breadcrumb-playground" previewHeight="auto">
     <div slot="preview" style="padding:1.5rem;">
       <lt-breadcrumb>
@@ -25,7 +25,7 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
     <div slot="controls"></div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`<lt-breadcrumb>
   <lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
@@ -48,7 +48,7 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
 </template>`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-breadcrumb" />
   <ApiTable tag="lt-breadcrumb-item" />
 </BaseLayout>

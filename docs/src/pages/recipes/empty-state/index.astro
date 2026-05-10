@@ -5,13 +5,13 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 ---
 
 <BaseLayout title="Empty State" description="A zero-data placeholder with icon, message, and a call to action.">
-  <h1>Empty State</h1>
-  <p>
+  <lt-text variant="h1">Empty State</lt-text>
+  <lt-text variant="body">
     The zero-data placeholder every app needs — communicates context, reduces confusion, and gives users a clear next
     step.
-  </p>
+  </lt-text>
 
-  <h2>Preview</h2>
+  <lt-text variant="h2">Preview</lt-text>
   <RecipePreview>
     <div
       style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: var(--lt-spacing-10) var(--lt-spacing-8); max-width: 380px;"
@@ -32,7 +32,7 @@ import FrameworkTabs from '../../../components/FrameworkTabs.astro';
     </div>
   </RecipePreview>
 
-  <h2>Code</h2>
+  <lt-text variant="h2">Code</lt-text>
   <FrameworkTabs
     html={`<div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: var(--lt-spacing-10) var(--lt-spacing-8); max-width: 380px;">
   <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--lt-color-primary-50); display: flex; align-items: center; justify-content: center; margin-bottom: var(--lt-spacing-5);">
@@ -79,8 +79,10 @@ export default function EmptyState() {
 </template>`}
   />
 
-  <h2>Components</h2>
-  <p><code>lt-icon</code>, <code>lt-text</code>, <code>lt-button</code>, <code>lt-link</code></p>
+  <lt-text variant="h2">Components</lt-text>
+  <lt-text variant="body"
+    ><code>lt-icon</code>, <code>lt-text</code>, <code>lt-button</code>, <code>lt-link</code></lt-text
+  >
 </BaseLayout>
 
 <script>

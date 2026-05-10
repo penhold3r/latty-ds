@@ -6,14 +6,14 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Navigation" description="Horizontal and vertical nav with nested collapsible items">
-  <h1>Navigation</h1>
-  <p>
+  <lt-text variant="h1">Navigation</lt-text>
+  <lt-text variant="body">
     The <code>&lt;lt-nav&gt;</code> component renders a list of links either horizontally or vertically. Nest
     <code>&lt;lt-nav-item&gt;</code> elements to create collapsible groups — in vertical mode they expand inline; in horizontal
     mode they drop down as a panel.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="nav-playground" previewHeight="auto">
     <div slot="preview">
       <div class="preview-row">
@@ -53,7 +53,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`import '@latty/web';
 
@@ -99,10 +99,10 @@ import ApiTable from '../../../components/ApiTable.astro';
 </Nav>`}
   />
 
-  <h2>API — lt-nav</h2>
+  <lt-text variant="h2">API — lt-nav</lt-text>
   <ApiTable tag="lt-nav" />
 
-  <h2>API — lt-nav-item</h2>
+  <lt-text variant="h2">API — lt-nav-item</lt-text>
   <ApiTable tag="lt-nav-item" />
 </BaseLayout>
 

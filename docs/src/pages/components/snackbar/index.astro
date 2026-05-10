@@ -6,14 +6,14 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Snackbar" description="Brief notification that appears temporarily at the bottom of the viewport">
-  <h1>Snackbar</h1>
-  <p>
+  <lt-text variant="h1">Snackbar</lt-text>
+  <lt-text variant="body">
     A brief, non-blocking notification anchored to the bottom of the viewport. Snackbars auto-dismiss after a
     configurable delay and can optionally include an action button. Use them for short feedback messages —
     confirmations, undo prompts, or transient alerts.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="snackbar-playground" previewHeight="auto">
     <div slot="preview">
       <lt-button variant="primary" id="show-snackbar">Show snackbar</lt-button>
@@ -50,7 +50,7 @@ import ApiTable from '../../../components/ApiTable.astro';
 
   <lt-snackbar id="playground-snackbar" variant="default" duration="4000">Changes saved successfully</lt-snackbar>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-snackbar id="sb">Changes saved</lt-snackbar>
@@ -97,8 +97,8 @@ const snackbar = ref(null)
     `}
   />
 
-  <h2>Snackbar vs. Alert</h2>
-  <p>Both communicate feedback to the user, but they serve different moments:</p>
+  <lt-text variant="h2">Snackbar vs. Alert</lt-text>
+  <lt-text variant="body">Both communicate feedback to the user, but they serve different moments:</lt-text>
   <table class="compare-table">
     <thead><tr><th></th><th>Snackbar</th><th>Alert</th></tr></thead>
     <tbody>
@@ -124,7 +124,7 @@ const snackbar = ref(null)
     </tbody>
   </table>
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-snackbar" />
 </BaseLayout>
 

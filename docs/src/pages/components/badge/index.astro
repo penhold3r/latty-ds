@@ -6,16 +6,16 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Badge" description="Compact status labels for categories, counts, and states">
-  <h1>Badge</h1>
-  <p>
+  <lt-text variant="h1">Badge</lt-text>
+  <lt-text variant="body">
     Compact pill-shaped labels for statuses, categories, and counts. Unlike chips, badges are non-interactive — use them
     for display only. When no content is provided the badge collapses to a circle indicator.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-badge" content="" />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-badge variant="success" content="Active" />
@@ -53,7 +53,7 @@ import { Badge } from '@latty/react';
 		`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-badge" />
 </BaseLayout>
 

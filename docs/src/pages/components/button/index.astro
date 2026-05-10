@@ -6,13 +6,15 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Button" description="Interactive button component with multiple variants and states">
-  <h1>Button</h1>
-  <p>An interactive button with multiple color variants, appearances, sizes, optional icons, and a loading state.</p>
+  <lt-text variant="h1">Button</lt-text>
+  <lt-text variant="body"
+    >An interactive button with multiple color variants, appearances, sizes, optional icons, and a loading state.</lt-text
+  >
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-button" content="Click me" />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-button variant="primary">Save changes</lt-button>
@@ -39,7 +41,7 @@ function save() { /* ... */ }
     `}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-button" />
 </BaseLayout>
 

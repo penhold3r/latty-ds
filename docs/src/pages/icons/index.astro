@@ -124,18 +124,20 @@ const sizes = [
 ---
 
 <BaseLayout title="Icons" description="Scalable icon component with a built-in curated icon set">
-  <h1>Icons</h1>
-  <p>
+  <lt-text variant="h1">Icons</lt-text>
+  <lt-text variant="body">
     The <code>&lt;lt-icon&gt;</code> component renders SVG icons from the Latty icon registry. The built-in set includes <strong
       >{totalIcons} icons</strong
     > across {iconGroups.length} categories — all custom-drawn SVGs that inherit color via <code>currentColor</code>.
     Click any icon below to copy its usage snippet.
-  </p>
+  </lt-text>
 
-  <h2>Installation</h2>
-  <p>Icons are included in <code>@latty/web</code> — no extra package needed for basic usage:</p>
+  <lt-text variant="h2">Installation</lt-text>
+  <lt-text variant="body"
+    >Icons are included in <code>@latty/web</code> — no extra package needed for basic usage:</lt-text
+  >
   <CodeSnippet code={`import '@latty/web'; // registers <lt-icon> along with all other components`} />
-  <p>If you only need icons (no other components), install the icons package directly:</p>
+  <lt-text variant="body">If you only need icons (no other components), install the icons package directly:</lt-text>
   <CodeSnippet
     code={`# pnpm
 pnpm add @latty/icons
@@ -148,7 +150,7 @@ yarn add @latty/icons`}
   />
   <CodeSnippet code={`import '@latty/icons'; // registers <lt-icon> with the built-in icon set`} />
 
-  <h2>Available Icons</h2>
+  <lt-text variant="h2">Available Icons</lt-text>
 
   <div class="size-filter">
     <span class="size-filter-label">Size</span>
@@ -164,7 +166,7 @@ yarn add @latty/icons`}
   {
     iconGroups.map((group) => (
       <div class="icon-group">
-        <h3 class="group-label">{group.label}</h3>
+        <lt-text variant="overline">{group.label}</lt-text>
         <div class="icon-grid">
           {group.icons.map((name) => (
             <button
@@ -186,7 +188,7 @@ yarn add @latty/icons`}
 
   <div class="copy-toast" aria-live="polite" aria-atomic="true"></div>
 
-  <h2>Sizes</h2>
+  <lt-text variant="h2">Sizes</lt-text>
   <div class="sizes-row">
     {
       sizes.map((s) => (
@@ -199,7 +201,7 @@ yarn add @latty/icons`}
     }
   </div>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`import '@latty/icons';
 
@@ -223,7 +225,7 @@ yarn add @latty/icons`}
 <Icon name="check-circle" style={{ color: 'var(--lt-color-success-500)' }} />`}
   />
 
-  <h3>Custom icons</h3>
+  <lt-text variant="h3">Custom icons</lt-text>
   <CodeSnippet
     code={`import { iconRegistry } from '@latty/icons';
 
@@ -237,7 +239,7 @@ iconRegistry.registerIcons({
 });`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <lt-table id="icon-api-table" hoverable></lt-table>
 </BaseLayout>
 
@@ -367,13 +369,9 @@ iconRegistry.registerIcons({
     margin-bottom: var(--lt-spacing-6);
   }
 
-  .group-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--lt-color-neutral-500);
+  lt-text[variant='overline'] {
     margin: 0 0 var(--lt-spacing-3);
+    display: block;
   }
 
   .icon-grid {

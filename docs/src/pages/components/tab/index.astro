@@ -6,13 +6,13 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Tab" description="Tab and tab group components">
-  <h1>Tab</h1>
-  <p>
+  <lt-text variant="h1">Tab</lt-text>
+  <lt-text variant="body">
     Tabbed navigation built from <code>lt-tab-group</code> (container) and <code>lt-tab</code> (individual tab). The active
     tab is controlled by <code>value</code> on the group.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <PlaygroundShell id="tab-playground">
     <div slot="preview">
       <lt-tab-group id="playground-tabs" value="overview">
@@ -41,7 +41,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
   </PlaygroundShell>
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-tab-group value="tab1">
@@ -77,10 +77,10 @@ import { TabGroup, Tab } from '@latty/react';
     `}
   />
 
-  <h2>API — lt-tab-group</h2>
+  <lt-text variant="h2">API — lt-tab-group</lt-text>
   <ApiTable tag="lt-tab-group" />
 
-  <h2>API — lt-tab</h2>
+  <lt-text variant="h2">API — lt-tab</lt-text>
   <ApiTable tag="lt-tab" />
 </BaseLayout>
 

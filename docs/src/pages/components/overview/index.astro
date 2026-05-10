@@ -6,15 +6,17 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
   title="Components overview"
   description="Philosophy, prop naming conventions, and a directory of every component"
 >
-  <h1>Components</h1>
-  <p>
+  <lt-text variant="h1">Components</lt-text>
+  <lt-text variant="body">
     Latty components are Lit-based Web Components that consume <code>--lt-*</code> design tokens. They work natively in HTML,
     Vue, and Svelte, and ship with thin React wrappers in <code>@latty/react</code>. Every component follows the same
     prop naming rules so you never have to guess — if you know one component you know them all.
-  </p>
+  </lt-text>
 
-  <h2>Prop naming conventions</h2>
-  <p>Each prop name has exactly one meaning across the entire system. The table below is the canonical reference.</p>
+  <lt-text variant="h2">Prop naming conventions</lt-text>
+  <lt-text variant="body"
+    >Each prop name has exactly one meaning across the entire system. The table below is the canonical reference.</lt-text
+  >
 
   <table class="conv-table">
     <thead>
@@ -107,11 +109,11 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
     </tbody>
   </table>
 
-  <h2>Boolean prop conventions</h2>
-  <p>
+  <lt-text variant="h2">Boolean prop conventions</lt-text>
+  <lt-text variant="body">
     A boolean attribute is <code>true</code> when present and <code>false</code> when absent — consistent with how HTML boolean
     attributes work (<code>disabled</code>, <code>required</code>, etc.).
-  </p>
+  </lt-text>
   <ul>
     <li>
       <strong>Positive adjective or noun</strong> — use when the feature is off by default and the attribute enables it: <code
@@ -129,7 +131,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
     </li>
   </ul>
 
-  <h2>All components</h2>
+  <lt-text variant="h2">All components</lt-text>
 
   <div class="component-grid">
     <a class="component-card" href="/components/accordion">

@@ -6,17 +6,17 @@ import ApiTable from '../../../components/ApiTable.astro';
 ---
 
 <BaseLayout title="Tooltip" description="Floating label that appears on hover or focus of a trigger element">
-  <h1>Tooltip</h1>
-  <p>
+  <lt-text variant="h1">Tooltip</lt-text>
+  <lt-text variant="body">
     A non-interactive floating label anchored to a trigger element. Tooltips appear on hover and keyboard focus, and
     disappear when the user moves away. Use them to describe controls whose purpose isn't fully obvious from their
     visible label.
-  </p>
+  </lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-tooltip" content="Hover me" defaults={{ content: 'This is a tooltip' }} />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`
 <lt-tooltip content="Above" placement="top"><button>Top</button></lt-tooltip>
@@ -58,7 +58,7 @@ import { Tooltip } from '@latty/react';
 		`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-tooltip" />
 </BaseLayout>
 
