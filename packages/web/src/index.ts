@@ -90,7 +90,6 @@ export * from './components/progress';
 export * from './components/skeleton';
 export * from './components/sidepanel';
 export * from './components/image';
-export * from './components/empty-state';
 export * from './components/pagination';
 export * from './components/datepicker';
 export * from './components/combobox';
