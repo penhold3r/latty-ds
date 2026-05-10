@@ -4,12 +4,16 @@ import { diamondSvg } from './diamond';
 import { doubleCircleSvg } from './double-circle';
 import { heartSvg } from './heart';
 import { hexagonSvg } from './hexagon';
+import { infinitySvg } from './infinity';
+import { leafSvg } from './leaf';
 import { lightningSvg } from './lightning';
 import { moonSvg } from './moon';
+import { spiralSvg } from './spiral';
 import { squareSvg } from './square';
 import { starSvg } from './star';
 import { sunSvg } from './sun';
 import { triangleSvg } from './triangle';
+import { waveSvg } from './wave';
 
 export const shapeIcons = {
   heart: heartSvg,
@@ -23,5 +27,9 @@ export const shapeIcons = {
   cloud: cloudSvg,
   lightning: lightningSvg,
   moon: moonSvg,
-  sun: sunSvg
+  sun: sunSvg,
+  infinity: infinitySvg,
+  leaf: leafSvg,
+  wave: waveSvg,
+  spiral: spiralSvg
 } as const;

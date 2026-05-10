@@ -4,8 +4,14 @@ import { dragSvg } from './drag';
 import { expandSvg } from './expand';
 import { eyeCloseSvg } from './eye-close';
 import { eyeOpenSvg } from './eye-open';
+import { flipSvg } from './flip';
+import { fullscreenSvg } from './fullscreen';
+import { handSvg } from './hand';
+import { minimizeSvg } from './minimize';
+import { moveSvg } from './move';
 import { redoSvg } from './redo';
 import { rotateCwSvg } from './rotate-cw';
+import { selectSvg } from './select';
 import { switchSvg } from './switch';
 import { undoSvg } from './undo';
 import { zoomInSvg } from './zoom-in';
@@ -23,5 +29,11 @@ export const interactionIcons = {
   switch: switchSvg,
   'rotate-cw': rotateCwSvg,
   undo: undoSvg,
-  redo: redoSvg
+  redo: redoSvg,
+  move: moveSvg,
+  hand: handSvg,
+  select: selectSvg,
+  flip: flipSvg,
+  fullscreen: fullscreenSvg,
+  minimize: minimizeSvg
 } as const;

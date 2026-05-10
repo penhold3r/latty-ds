@@ -5,6 +5,8 @@ import { feedbackIcons } from './feedback';
 import { interactionIcons } from './interaction';
 import { shapeIcons } from './shapes';
 import { socialIcons } from './social';
+import { mediaIcons } from './media';
+import { techIcons } from './tech';
 
 export const lattyIcons = {
   ...navigationIcons,
@@ -13,7 +15,9 @@ export const lattyIcons = {
   ...feedbackIcons,
   ...interactionIcons,
   ...shapeIcons,
-  ...socialIcons
+  ...socialIcons,
+  ...mediaIcons,
+  ...techIcons
 } as const;
 
 export type LattyIconName = keyof typeof lattyIcons;

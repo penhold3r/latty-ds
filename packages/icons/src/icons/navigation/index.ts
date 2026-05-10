@@ -8,8 +8,14 @@ import { caretRightSvg } from './caret-right';
 import { caretUpSvg } from './caret-up';
 import { compassSvg } from './compass';
 import { externalSvg } from './external';
+import { globeSvg } from './globe';
 import { locationSvg } from './location';
+import { mapSvg } from './map';
+import { moreHorizontalSvg } from './more-horizontal';
+import { moreVerticalSvg } from './more-vertical';
 import { returnSvg } from './return';
+import { routeSvg } from './route';
+import { sendSvg } from './send';
 
 export const navigationIcons = {
   'arrow-down': arrowDownSvg,
@@ -23,5 +29,11 @@ export const navigationIcons = {
   external: externalSvg,
   location: locationSvg,
   return: returnSvg,
-  compass: compassSvg
+  compass: compassSvg,
+  map: mapSvg,
+  globe: globeSvg,
+  send: sendSvg,
+  'more-horizontal': moreHorizontalSvg,
+  'more-vertical': moreVerticalSvg,
+  route: routeSvg
 } as const;
