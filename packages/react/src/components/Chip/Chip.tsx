@@ -7,29 +7,28 @@ export type ChipProps = {
   size?: ChipEl['size'];
   disabled?: boolean;
   deletable?: boolean;
+  background?: string;
   onLtDelete?: (event: CustomEvent) => void;
   children?: ReactNode;
 };
 
-export const Chip = forwardRef<ChipEl, ChipProps>(
-  function Chip({ onLtDelete, children, ...props }, forwardedRef) {
-    const innerRef = useRef<ChipEl>(null);
+export const Chip = forwardRef<ChipEl, ChipProps>(function Chip({ onLtDelete, children, ...props }, forwardedRef) {
+  const innerRef = useRef<ChipEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onLtDelete) return;
-      const h = (ev: Event) => onLtDelete!(ev as CustomEvent);
-      el.addEventListener('lt-delete', h);
-      return () => el.removeEventListener('lt-delete', h);
-    }, [onLtDelete]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onLtDelete) return;
+    const h = (ev: Event) => onLtDelete!(ev as CustomEvent);
+    el.addEventListener('lt-delete', h);
+    return () => el.removeEventListener('lt-delete', h);
+  }, [onLtDelete]);
 
-    return (
-      <lt-chip ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-chip>
-    );
-  }
-);
+  return (
+    <lt-chip ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-chip>
+  );
+});
 Chip.displayName = 'Chip';

@@ -16,32 +16,33 @@ export type SliderProps = {
   children?: ReactNode;
 };
 
-export const Slider = forwardRef<SliderEl, SliderProps>(
-  function Slider({ onLtInput, onLtChange, children, ...props }, forwardedRef) {
-    const innerRef = useRef<SliderEl>(null);
+export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
+  { onLtInput, onLtChange, children, ...props },
+  forwardedRef
+) {
+  const innerRef = useRef<SliderEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onLtInput) return;
-      const h = (ev: Event) => onLtInput!(ev as CustomEvent);
-      el.addEventListener('lt-input', h);
-      return () => el.removeEventListener('lt-input', h);
-    }, [onLtInput]);
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onLtChange) return;
-      const h = (ev: Event) => onLtChange!(ev as CustomEvent);
-      el.addEventListener('lt-change', h);
-      return () => el.removeEventListener('lt-change', h);
-    }, [onLtChange]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onLtInput) return;
+    const h = (ev: Event) => onLtInput!(ev as CustomEvent);
+    el.addEventListener('lt-input', h);
+    return () => el.removeEventListener('lt-input', h);
+  }, [onLtInput]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onLtChange) return;
+    const h = (ev: Event) => onLtChange!(ev as CustomEvent);
+    el.addEventListener('lt-change', h);
+    return () => el.removeEventListener('lt-change', h);
+  }, [onLtChange]);
 
-    return (
-      <lt-slider ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-slider>
-    );
-  }
-);
+  return (
+    <lt-slider ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-slider>
+  );
+});
 Slider.displayName = 'Slider';

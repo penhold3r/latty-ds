@@ -10,12 +10,7 @@ import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
   {
-    ignores: [
-      '**/dist/**',
-      '**/dist-scripts/**',
-      '**/*.d.ts',
-      'packages/utils/src/*.js',
-    ],
+    ignores: ['**/dist/**', '**/dist-scripts/**', '**/*.d.ts', 'packages/utils/src/*.js']
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
@@ -77,8 +72,8 @@ export default defineConfig([
     extends: ['css/recommended'],
     rules: {
       // --lt-* custom properties are resolved at runtime by @latty/tokens
-      'css/no-invalid-properties': ['error', { allowUnknownVariables: true }],
-    },
+      'css/no-invalid-properties': ['error', { allowUnknownVariables: true }]
+    }
   },
   ...astro.configs['flat/recommended'],
   {
@@ -86,8 +81,8 @@ export default defineConfig([
     // to custom element types or untyped JSON — keep any as a warning, not an error.
     files: ['**/*.astro', '**/*.astro/*.ts'],
     rules: {
-      '@typescript-eslint/no-explicit-any': 'warn',
-    },
+      '@typescript-eslint/no-explicit-any': 'warn'
+    }
   },
   {
     // Test files routinely need any for ref generics and mock shapes that don't
@@ -96,8 +91,8 @@ export default defineConfig([
     plugins: { vitest },
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
-      'vitest/prefer-each': 'error',
-    },
+      'vitest/prefer-each': 'error'
+    }
   },
   {
     rules: {

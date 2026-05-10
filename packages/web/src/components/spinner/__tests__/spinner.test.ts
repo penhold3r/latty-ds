@@ -41,9 +41,12 @@ describe('<lt-spinner>', () => {
     expect(el.getAttribute('size')).toBe(size);
   });
 
-  it.each(['primary', 'secondary', 'neutral', 'current'] as const)('reflects %s variant to attribute', async (variant) => {
-    el.variant = variant;
-    await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe(variant);
-  });
+  it.each(['primary', 'secondary', 'neutral', 'current'] as const)(
+    'reflects %s variant to attribute',
+    async (variant) => {
+      el.variant = variant;
+      await el.updateComplete;
+      expect(el.getAttribute('variant')).toBe(variant);
+    }
+  );
 });

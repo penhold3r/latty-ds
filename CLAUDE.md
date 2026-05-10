@@ -9,12 +9,14 @@ Latty is a framework-agnostic design system built on design tokens and Web Compo
 ## Commands
 
 ### Development
+
 ```bash
 pnpm dev                    # Run Astro documentation site
 pnpm docs:dev               # Same as dev
 ```
 
 ### Documentation
+
 ```bash
 pnpm docs:dev               # Start Astro dev server (http://localhost:4321)
 pnpm docs:build             # Build documentation site (builds tokens + web first)
@@ -22,6 +24,7 @@ pnpm docs:preview           # Preview built documentation
 ```
 
 ### Building
+
 ```bash
 pnpm build                  # Build all packages recursively
 pnpm --filter @latty/tokens build   # Build tokens package only
@@ -30,6 +33,7 @@ pnpm --filter @latty/docs build     # Build documentation site
 ```
 
 ### Testing
+
 ```bash
 pnpm test                   # Run all tests with Vitest
 pnpm test:watch             # Run tests in watch mode
@@ -37,6 +41,7 @@ pnpm test:ui                # Open Vitest UI
 ```
 
 ### Linting
+
 ```bash
 pnpm lint                   # Run ESLint
 pnpm typecheck              # Type-check all packages (tsc --noEmit)
@@ -44,6 +49,7 @@ pnpm check:boundaries       # Detect cross-package relative imports
 ```
 
 ### Cleaning
+
 ```bash
 pnpm clean                  # Remove all dist directories
 ```
@@ -57,6 +63,7 @@ pnpm codegen:wrappers       # Regenerate React wrappers from custom-elements.jso
 Run this after adding or modifying web components so `@latty/react` stays in sync.
 
 ### Bundle size
+
 ```bash
 pnpm bundle-size            # Print per-component gzip sizes + diff vs baseline
 pnpm bundle-size:update     # Same, and write new baseline to bundle-report.json
@@ -108,6 +115,7 @@ pnpm release          # Bump versions via conventional commits, commit, and tag
 ```
 
 This runs `lerna version --conventional-commits`, which:
+
 1. Inspects commits since the last tag to determine the version bump
 2. Updates `version` in each package's `package.json` and `lerna.json`
 3. Creates a `chore(release): publish vX.Y.Z` commit and a `vX.Y.Z` git tag
@@ -200,6 +208,7 @@ docs/
 ```
 
 Documentation pages can:
+
 - Use MDX for rich content
 - Import and render live Web Components
 - Include interactive examples with `<script>` tags
@@ -230,11 +239,13 @@ Vitest resolves imports at test time via `vite-tsconfig-paths` (no aliases neede
 Two playground patterns exist:
 
 1. **`ComponentPlayground`** — declarative, zero JS, reads attributes automatically:
+
 ```astro
 <ComponentPlayground tag="lt-button" content="Click me" />
 ```
 
 2. **`PlaygroundShell`** — for components that need JS to set properties (e.g. `lt-table` which takes `.columns`/`.data`):
+
 ```astro
 <PlaygroundShell id="my-playground" previewHeight="auto">
   <div slot="preview">...</div>
@@ -247,6 +258,7 @@ The docs page must `import '@latty/web'` inside a `<script>` tag to register the
 ## Naming Conventions
 
 Per `ARCHITECTURE.md`:
+
 - **npm scope**: `@latty/*`
 - **Custom element prefix**: `lt-`
 - **CSS variable prefix**: `--lt-*`

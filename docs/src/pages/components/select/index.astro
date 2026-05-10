@@ -97,6 +97,34 @@ const options = [
     `}
   />
 
+  <h2>Select vs. Dropdown</h2>
+  <p>Both let the user choose from a list of options, but they are built for different purposes:</p>
+  <table class="compare-table">
+    <thead><tr><th></th><th>Select</th><th>Dropdown</th></tr></thead>
+    <tbody>
+      <tr
+        ><td><strong>Trigger</strong></td><td>A styled form field with a label and helper text</td><td
+          >Any slotted element — button, icon, avatar</td
+        ></tr
+      >
+      <tr
+        ><td><strong>Options</strong></td><td
+          ><code>options</code> prop — array of <code>&#123; value, label &#125;</code></td
+        ><td>Fully custom slot content (<code>lt-dropdown-item</code>)</td></tr
+      >
+      <tr
+        ><td><strong>Use when</strong></td><td
+          >Form fields — the user is selecting a value that will be submitted or stored</td
+        ><td>Action menus, context menus, overflow menus — the user is choosing an action, not setting a value</td></tr
+      >
+      <tr
+        ><td><strong>Avoid when</strong></td><td
+          >You need custom item layouts, icons per item, or the trigger isn't a form field</td
+        ><td>You need the selected value to persist or participate in form submission — use Select instead</td></tr
+      >
+    </tbody>
+  </table>
+
   <h2>API</h2>
   <ApiTable tag="lt-select" />
 </BaseLayout>

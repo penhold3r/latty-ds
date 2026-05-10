@@ -96,12 +96,14 @@ export class List extends LitElement {
 
   render() {
     const isOrdered = this.type === 'ordered';
-    const styles = this.markerColor
-      ? { '--list-marker-color': this.markerColor }
-      : {};
+    const styles = this.markerColor ? { '--list-marker-color': this.markerColor } : {};
 
     return isOrdered
-      ? html`<ol part="list" style=${styleMap(styles)}><slot></slot></ol>`
-      : html`<ul part="list" style=${styleMap(styles)}><slot></slot></ul>`;
+      ? html`<ol part="list" style=${styleMap(styles)}>
+          <slot></slot>
+        </ol>`
+      : html`<ul part="list" style=${styleMap(styles)}>
+          <slot></slot>
+        </ul>`;
   }
 }

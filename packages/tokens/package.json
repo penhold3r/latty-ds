@@ -9,10 +9,25 @@
     "directory": "packages/tokens"
   },
   "homepage": "https://penhold3r.github.io/latty-ds",
-  "keywords": ["design-system", "design-tokens", "css-variables", "css-custom-properties", "tokens", "latty"],
-  "publishConfig": { "access": "public" },
-  "files": ["dist", "README.md", "LICENSE"],
-  "sideEffects": ["**/*.css"],
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "css-variables",
+    "css-custom-properties",
+    "tokens",
+    "latty"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/public-types.d.ts",

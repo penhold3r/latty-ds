@@ -20,17 +20,33 @@ export const progressStyles = css`
 
   /* ── Sizes ──────────────────────────────────────────────────────────────── */
 
-  :host([size='sm']) [part='track'] { height: 4px; }
-  :host([size='md']) [part='track'] { height: 8px; }
-  :host([size='lg']) [part='track'] { height: 12px; }
+  :host([size='sm']) [part='track'] {
+    height: 4px;
+  }
+  :host([size='md']) [part='track'] {
+    height: 8px;
+  }
+  :host([size='lg']) [part='track'] {
+    height: 12px;
+  }
 
   /* ── Variants ───────────────────────────────────────────────────────────── */
 
-  :host([variant='primary']) [part='fill'] { background: var(--lt-interactive-primary-bg); }
-  :host([variant='success']) [part='fill'] { background: var(--lt-interactive-success-bg); }
-  :host([variant='warning']) [part='fill'] { background: var(--lt-interactive-warning-bg); }
-  :host([variant='error']) [part='fill'] { background: var(--lt-interactive-error-bg); }
-  :host([variant='neutral']) [part='fill'] { background: var(--lt-color-neutral-600); }
+  :host([variant='primary']) [part='fill'] {
+    background: var(--lt-interactive-primary-bg);
+  }
+  :host([variant='success']) [part='fill'] {
+    background: var(--lt-interactive-success-bg);
+  }
+  :host([variant='warning']) [part='fill'] {
+    background: var(--lt-interactive-warning-bg);
+  }
+  :host([variant='error']) [part='fill'] {
+    background: var(--lt-interactive-error-bg);
+  }
+  :host([variant='neutral']) [part='fill'] {
+    background: var(--lt-color-neutral-600);
+  }
 
   /* ── Indeterminate ──────────────────────────────────────────────────────── */
 
@@ -40,12 +56,18 @@ export const progressStyles = css`
   }
 
   @keyframes indeterminate {
-    0% { transform: translateX(-250%); }
-    100% { transform: translateX(350%); }
+    0% {
+      transform: translateX(-250%);
+    }
+    100% {
+      transform: translateX(350%);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    [part='fill'] { transition: none; }
+    [part='fill'] {
+      transition: none;
+    }
     :host([indeterminate]) [part='fill'] {
       animation: none;
       width: 100%;

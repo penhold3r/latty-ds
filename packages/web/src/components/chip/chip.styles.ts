@@ -15,7 +15,9 @@ export const chipStyles = css`
     display: inline-flex;
     font-weight: 400;
     line-height: 1;
-    transition: background-color 120ms ease, border-color 120ms ease;
+    transition:
+      background-color 120ms ease,
+      border-color 120ms ease;
     user-select: none;
     white-space: nowrap;
   }
@@ -36,7 +38,9 @@ export const chipStyles = css`
     justify-content: center;
     opacity: 0.6;
     padding: 0;
-    transition: opacity 120ms ease, background-color 120ms ease;
+    transition:
+      opacity 120ms ease,
+      background-color 120ms ease;
   }
 
   .delete:hover:not(:disabled) {

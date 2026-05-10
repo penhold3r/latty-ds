@@ -13,7 +13,7 @@ export const lattyIcons = {
   ...feedbackIcons,
   ...interactionIcons,
   ...shapeIcons,
-  ...socialIcons,
+  ...socialIcons
 } as const;
 
 export type LattyIconName = keyof typeof lattyIcons;

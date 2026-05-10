@@ -11,7 +11,9 @@ describe('<lt-breadcrumb>', () => {
     await el.updateComplete;
   });
 
-  afterEach(() => { el.remove(); });
+  afterEach(() => {
+    el.remove();
+  });
 
   it('renders in shadow DOM', () => {
     expect(el.shadowRoot).toBeTruthy();
@@ -38,7 +40,9 @@ describe('<lt-breadcrumb-item>', () => {
     await el.updateComplete;
   });
 
-  afterEach(() => { el.remove(); });
+  afterEach(() => {
+    el.remove();
+  });
 
   it('renders in shadow DOM', () => {
     expect(el.shadowRoot).toBeTruthy();

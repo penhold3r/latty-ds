@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 import { chipStyles } from './chip.styles';
 import '@latty/icons';
@@ -38,6 +39,13 @@ export class Chip extends LitElement {
   /** Shows a delete/dismiss button that fires `lt-delete` when clicked. */
   @property({ type: Boolean, reflect: true }) deletable = false;
 
+  /** Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600). */
+  @property({ reflect: true }) background = '';
+
+  private _resolve(value: string): string {
+    return value.startsWith('--') ? `var(${value})` : value;
+  }
+
   private get _deleteIconSize() {
     return this.size === 'lg' ? 'sm' : 'xs';
   }
@@ -47,8 +55,9 @@ export class Chip extends LitElement {
   }
 
   render() {
+    const bgStyle = styleMap(this.background ? { background: this._resolve(this.background) } : {});
     return html`
-      <span part="base">
+      <span part="base" style=${bgStyle}>
         <slot name="icon"></slot>
         <slot></slot>
         ${this.deletable

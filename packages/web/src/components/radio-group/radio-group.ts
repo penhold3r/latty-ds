@@ -178,7 +178,9 @@ export class RadioGroup extends LitElement {
         <div class="radios-container">
           <slot @slotchange=${this.handleSlotChange}></slot>
         </div>
-        ${this.helperText ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>` : ''}
+        ${this.helperText
+          ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>`
+          : ''}
       </div>
     `;
   }

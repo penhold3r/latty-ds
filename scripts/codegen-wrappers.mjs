@@ -37,13 +37,10 @@ for (const mod of cem.modules) {
     if (decl.kind !== 'class' || !decl.customElement || !decl.tagName) continue;
 
     const fields = (decl.members ?? [])
-      .filter(m =>
-        m.kind === 'field' &&
-        m.privacy !== 'private' &&
-        !m.name.startsWith('_') &&
-        !SKIP_FIELDS.has(m.name)
+      .filter(
+        (m) => m.kind === 'field' && m.privacy !== 'private' && !m.name.startsWith('_') && !SKIP_FIELDS.has(m.name)
       )
-      .map(f => {
+      .map((f) => {
         let displayType;
         if (ICON_FIELDS.has(f.name)) {
           displayType = 'LattyIconName';
@@ -54,11 +51,10 @@ for (const mod of cem.modules) {
         return { name: f.name, displayType };
       });
 
-    const events = (decl.events ?? []).map(e => {
+    const events = (decl.events ?? []).map((e) => {
       // Convert event name like "lt-close" to "onLtClose"
-      const handlerName = 'on' + e.name
-        .replace(/[-:](.)/g, (_, c) => c.toUpperCase())
-        .replace(/^(.)/, c => c.toUpperCase());
+      const handlerName =
+        'on' + e.name.replace(/[-:](.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, (c) => c.toUpperCase());
       return { name: e.name, handlerName };
     });
 
@@ -71,30 +67,34 @@ mkdirSync(REACT_COMPONENTS_DIR, { recursive: true });
 
 for (const { name, tagName, fields, events } of components) {
   // Props block
-  const hasIconFields = fields.some(f => f.displayType === 'LattyIconName');
-  const fieldProps = fields.map(f => `  ${f.name}?: ${f.displayType};`);
+  const hasIconFields = fields.some((f) => f.displayType === 'LattyIconName');
+  const fieldProps = fields.map((f) => `  ${f.name}?: ${f.displayType};`);
 
-  const eventProps = events.map(e => `  ${e.handlerName}?: (event: CustomEvent) => void;`);
+  const eventProps = events.map((e) => `  ${e.handlerName}?: (event: CustomEvent) => void;`);
 
   // Destructured event handler names
-  const handlerNames = events.map(e => e.handlerName);
-  const destructure = handlerNames.length > 0
-    ? `{ ${handlerNames.join(', ')}, children, ...props }`
-    : '{ children, ...props }';
+  const handlerNames = events.map((e) => e.handlerName);
+  const destructure =
+    handlerNames.length > 0 ? `{ ${handlerNames.join(', ')}, children, ...props }` : '{ children, ...props }';
 
   // useEffect blocks for each event
-  const effectBlocks = events.map(e => `
+  const effectBlocks = events
+    .map(
+      (e) => `
     useEffect(() => {
       const el = innerRef.current;
       if (!el || !${e.handlerName}) return;
       const h = (ev: Event) => ${e.handlerName}!(ev as CustomEvent);
       el.addEventListener('${e.name}', h);
       return () => el.removeEventListener('${e.name}', h);
-    }, [${e.handlerName}]);`).join('');
+    }, [${e.handlerName}]);`
+    )
+    .join('');
 
-  const hooks = events.length > 0
-    ? `\n    useImperativeHandle(forwardedRef, () => innerRef.current!);\n${effectBlocks}\n`
-    : '\n    useImperativeHandle(forwardedRef, () => innerRef.current!);\n';
+  const hooks =
+    events.length > 0
+      ? `\n    useImperativeHandle(forwardedRef, () => innerRef.current!);\n${effectBlocks}\n`
+      : '\n    useImperativeHandle(forwardedRef, () => innerRef.current!);\n';
 
   const reactImports = ['useRef', 'useImperativeHandle', 'forwardRef', 'type ReactNode'];
   if (events.length > 0) reactImports.splice(1, 0, 'useEffect');
@@ -133,16 +133,12 @@ ${name}.displayName = '${name}';
     process.stdout.write(`  ✓ ${name}/\n`);
   }
 
-  writeFileSync(
-    join(compDir, 'index.ts'),
-    `export { ${name}, type ${name}Props } from './${name}';\n`,
-    'utf8'
-  );
+  writeFileSync(join(compDir, 'index.ts'), `export { ${name}, type ${name}Props } from './${name}';\n`, 'utf8');
 }
 
 // ── Regenerate root index ─────────────────────────────────────────────────────
 const indexLines = components
-  .map(c => `export { ${c.name}, type ${c.name}Props } from './components/${c.name}';`)
+  .map((c) => `export { ${c.name}, type ${c.name}Props } from './components/${c.name}';`)
   .join('\n');
 
 writeFileSync(REACT_INDEX, indexLines + '\n', 'utf8');

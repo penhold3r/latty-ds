@@ -11,7 +11,9 @@ describe('<lt-progress>', () => {
     await el.updateComplete;
   });
 
-  afterEach(() => { el.remove(); });
+  afterEach(() => {
+    el.remove();
+  });
 
   it('renders in shadow DOM', () => {
     expect(el.shadowRoot).toBeTruthy();
@@ -61,11 +63,14 @@ describe('<lt-progress>', () => {
     expect(track.getAttribute('aria-valuenow')).toBe('0');
   });
 
-  it.each(['primary', 'success', 'warning', 'error', 'neutral'] as const)('reflects %s variant to attribute', async (variant) => {
-    el.variant = variant;
-    await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe(variant);
-  });
+  it.each(['primary', 'success', 'warning', 'error', 'neutral'] as const)(
+    'reflects %s variant to attribute',
+    async (variant) => {
+      el.variant = variant;
+      await el.updateComplete;
+      expect(el.getAttribute('variant')).toBe(variant);
+    }
+  );
 
   it.each(['sm', 'md', 'lg'] as const)('reflects %s size to attribute', async (size) => {
     el.size = size;

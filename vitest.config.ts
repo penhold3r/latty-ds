@@ -5,12 +5,12 @@ export default defineConfig({
   plugins: [tsconfigPaths({ projects: ['./tsconfig.base.json'] })],
   esbuild: {
     jsx: 'automatic',
-    jsxImportSource: 'react',
+    jsxImportSource: 'react'
   },
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
-    include: ['packages/**/src/**/*.test.{ts,tsx}'],
-  },
+    include: ['packages/**/src/**/*.test.{ts,tsx}']
+  }
 });

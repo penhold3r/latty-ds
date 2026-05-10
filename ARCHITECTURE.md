@@ -43,6 +43,7 @@ tsc -p tsconfig.types.json        # Generates dist/public-types.d.ts
 ```
 
 The build script reads `tokens.config.json`, generates color palettes using the OKLCH color space, creates spacing scales, and outputs:
+
 - `tokens.css` - CSS custom properties with `--lt-*` prefix
 - `tokens.json` - Complete token object for tooling/documentation
 - `tokens.js` - JavaScript/TypeScript module export
@@ -56,6 +57,7 @@ Uses **OKLCH color space** (via culori) for perceptually uniform color generatio
 - **Output**: Main and optional muted variants for each semantic color
 
 **Key features**:
+
 - Perceptually uniform color steps
 - Consistent lightness across hues (L values: 50=0.93 → 900=0.27)
 - Chroma curves prevent "muddy" darks and "neon" brights
@@ -76,6 +78,7 @@ Dual-unit spacing scale:
 - **PX units** (disambiguation): `--lt-spacing-px-{n}` (keeps "px" in variable name)
 
 Example:
+
 ```typescript
 spacing.rem["4"]  → --lt-spacing-4: 1rem;   // 16px
 spacing.px["4"]   → --lt-spacing-px-4: 16px;
@@ -101,6 +104,7 @@ IconRegistry
 ```
 
 **Default Provider**: Iconoir with 30+ pre-bundled common icons including:
+
 - Navigation: arrows, nav arrows
 - Actions: check, xmark, plus, minus, edit, trash, save, download, upload
 - UI: search, menu, settings, home, user, bell
@@ -112,21 +116,28 @@ IconRegistry
 Three levels of customization:
 
 1. **Register Individual Icons**:
+
 ```typescript
 iconRegistry.registerIcon('my-icon', '<svg>...</svg>');
 ```
 
 2. **Override Default Icons** (custom icons take priority):
+
 ```typescript
 iconRegistry.registerIcon('check', '<svg><!-- Custom check --></svg>');
 ```
 
 3. **Create Custom Providers**:
+
 ```typescript
 class MyProvider implements IconProvider {
   name = 'my-provider';
-  getIcon(name: string) { /* ... */ }
-  getAllIcons() { /* ... */ }
+  getIcon(name: string) {
+    /* ... */
+  }
+  getAllIcons() {
+    /* ... */
+  }
 }
 iconRegistry.registerProvider(new MyProvider(), true);
 ```
@@ -172,12 +183,13 @@ components/
 Icons integrate naturally with existing components:
 
 **Button**:
+
 ```html
-<lt-button icon="save">Save</lt-button>
-<lt-button icon-end="arrow-right">Next</lt-button>
+<lt-button icon="save">Save</lt-button> <lt-button icon-end="arrow-right">Next</lt-button>
 ```
 
 **Textfield**:
+
 ```html
 <lt-textfield icon-start="search" placeholder="Search..."></lt-textfield>
 <lt-textfield icon-end="eye" type="password"></lt-textfield>
@@ -196,6 +208,7 @@ Monorepo managed by **pnpm workspaces**:
 #### TypeScript Path Aliases
 
 Defined in `tsconfig.base.json`:
+
 ```json
 {
   "@web/*": ["packages/web/src/*"],
@@ -205,6 +218,7 @@ Defined in `tsconfig.base.json`:
 ```
 
 Resolved by:
+
 - **Development/Testing**: `vite-tsconfig-paths` plugin
 - **Build**: `tsc-alias` post-processing
 
@@ -234,6 +248,7 @@ Each package has its own build strategy:
 Critical: `@latty/web` depends on `@latty/tokens` being built first.
 
 The `prestorybook` script enforces this:
+
 ```bash
 pnpm --filter @latty/tokens build && pnpm --filter @latty/web build
 ```
@@ -269,6 +284,7 @@ Custom font: **Asap** (normal and italic variants)
 Optional CSS reset/normalization: `packages/web/src/css/latty.css`
 
 Provides sensible defaults:
+
 - Universal box-sizing: border-box
 - Optimized text rendering
 - Media element defaults (block display, responsive sizing)
@@ -277,6 +293,7 @@ Provides sensible defaults:
 - Link styles with color inheritance
 
 Users can opt-in by importing:
+
 ```typescript
 import '@latty/web/css/latty.css';
 ```
@@ -286,6 +303,7 @@ import '@latty/web/css/latty.css';
 Potential additions to the system:
 
 #### Icons
+
 1. Build script to generate icon bundles from Iconoir full library
 2. Icon search/browse tool in Storybook
 3. Icon sprite sheet generation
@@ -293,6 +311,7 @@ Potential additions to the system:
 5. Icon animation utilities
 
 #### General
+
 1. Additional component variants and sizes
 2. Dark mode theme support
 3. Advanced theming API

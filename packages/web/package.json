@@ -9,9 +9,23 @@
     "directory": "packages/web"
   },
   "homepage": "https://penhold3r.github.io/latty-ds",
-  "keywords": ["design-system", "web-components", "custom-elements", "lit", "ui", "latty"],
-  "publishConfig": { "access": "public" },
-  "files": ["dist", "README.md", "LICENSE", "custom-elements.json"],
+  "keywords": [
+    "design-system",
+    "web-components",
+    "custom-elements",
+    "lit",
+    "ui",
+    "latty"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "custom-elements.json"
+  ],
   "sideEffects": true,
   "type": "module",
   "main": "./dist/index.js",

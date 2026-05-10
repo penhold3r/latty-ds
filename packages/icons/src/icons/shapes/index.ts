@@ -12,16 +12,16 @@ import { sunSvg } from './sun';
 import { triangleSvg } from './triangle';
 
 export const shapeIcons = {
-  'heart': heartSvg,
-  'star': starSvg,
-  'diamond': diamondSvg,
-  'hexagon': hexagonSvg,
+  heart: heartSvg,
+  star: starSvg,
+  diamond: diamondSvg,
+  hexagon: hexagonSvg,
   'double-circle': doubleCircleSvg,
-  'circle': circleSvg,
-  'square': squareSvg,
-  'triangle': triangleSvg,
-  'cloud': cloudSvg,
-  'lightning': lightningSvg,
-  'moon': moonSvg,
-  'sun': sunSvg,
+  circle: circleSvg,
+  square: squareSvg,
+  triangle: triangleSvg,
+  cloud: cloudSvg,
+  lightning: lightningSvg,
+  moon: moonSvg,
+  sun: sunSvg
 } as const;

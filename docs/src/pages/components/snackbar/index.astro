@@ -97,6 +97,33 @@ const snackbar = ref(null)
     `}
   />
 
+  <h2>Snackbar vs. Alert</h2>
+  <p>Both communicate feedback to the user, but they serve different moments:</p>
+  <table class="compare-table">
+    <thead><tr><th></th><th>Snackbar</th><th>Alert</th></tr></thead>
+    <tbody>
+      <tr
+        ><td><strong>Position</strong></td><td>Fixed overlay, bottom of viewport</td><td>Inline, within page flow</td
+        ></tr
+      >
+      <tr
+        ><td><strong>Lifetime</strong></td><td>Transient — auto-dismisses after a configurable delay</td><td
+          >Persistent — stays until dismissed or condition resolves</td
+        ></tr
+      >
+      <tr
+        ><td><strong>Use when</strong></td><td
+          >Confirming the result of an action the user just took (saved, deleted, copied)</td
+        ><td>The message is tied to a specific location on the page (a form, a section, a card)</td></tr
+      >
+      <tr
+        ><td><strong>Avoid when</strong></td><td>The user needs to read and act on the message before continuing</td><td
+          >The message is a response to a one-off action and doesn't need to persist</td
+        ></tr
+      >
+    </tbody>
+  </table>
+
   <h2>API</h2>
   <ApiTable tag="lt-snackbar" />
 </BaseLayout>

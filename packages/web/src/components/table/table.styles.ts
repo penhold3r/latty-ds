@@ -35,8 +35,12 @@ export const tableStyles = css`
     white-space: nowrap;
   }
 
-  th[data-align='center'] { text-align: center; }
-  th[data-align='right']  { text-align: right; }
+  th[data-align='center'] {
+    text-align: center;
+  }
+  th[data-align='right'] {
+    text-align: right;
+  }
 
   /* Sortable headers */
   th.sortable {
@@ -55,8 +59,12 @@ export const tableStyles = css`
     gap: var(--lt-spacing-2);
   }
 
-  th[data-align='center'] .header-content { justify-content: center; }
-  th[data-align='right']  .header-content { justify-content: flex-end; }
+  th[data-align='center'] .header-content {
+    justify-content: center;
+  }
+  th[data-align='right'] .header-content {
+    justify-content: flex-end;
+  }
 
   .sort-icon {
     color: var(--lt-text-muted);
@@ -102,8 +110,12 @@ export const tableStyles = css`
     color: var(--lt-color-neutral-700);
   }
 
-  td[data-align='center'] { text-align: center; }
-  td[data-align='right']  { text-align: right; }
+  td[data-align='center'] {
+    text-align: center;
+  }
+  td[data-align='right'] {
+    text-align: right;
+  }
 
   /* Density variants */
   :host([density='compact']) th,

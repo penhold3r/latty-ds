@@ -25,7 +25,7 @@ let _tooltipIdCounter = 0;
  * @example
  * ```html
  * <lt-tooltip content="Opens in a new tab" placement="bottom"
- *   background-color="--lt-color-primary-600" color="#fff">
+ *   background="--lt-color-primary-600" color="#fff">
  *   <a href="#">Learn more</a>
  * </lt-tooltip>
  * ```
@@ -47,10 +47,10 @@ export class Tooltip extends LitElement {
   /** Prevent the tooltip from showing. */
   @property({ type: Boolean, reflect: true }) disabled = false;
 
-  /** Tooltip background color. Accepts a hex value (#1a1a2e) or a token name (--lt-color-primary-600). */
-  @property({ attribute: 'background-color', reflect: true }) backgroundColor = '';
+  /** Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600). */
+  @property({ reflect: true }) background = '';
 
-  /** Tooltip text color. Accepts a hex value (#ffffff) or a token name (--lt-color-neutral-50). */
+  /** Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50). */
   @property({ reflect: true }) color = '';
 
   private _resolve(value: string): string {
@@ -66,20 +66,13 @@ export class Tooltip extends LitElement {
 
   render() {
     const tooltipStyle = styleMap({
-      ...(this.backgroundColor ? { '--_tooltip-bg': this._resolve(this.backgroundColor) } : {}),
-      ...(this.color ? { '--_tooltip-color': this._resolve(this.color) } : {}),
+      ...(this.background ? { '--_tooltip-bg': this._resolve(this.background) } : {}),
+      ...(this.color ? { '--_tooltip-color': this._resolve(this.color) } : {})
     });
 
     return html`
       <slot></slot>
-      <div
-        class="tooltip"
-        id=${this._tooltipId}
-        role="tooltip"
-        part="tooltip"
-        aria-hidden="true"
-        style=${tooltipStyle}
-      >
+      <div class="tooltip" id=${this._tooltipId} role="tooltip" part="tooltip" aria-hidden="true" style=${tooltipStyle}>
         <lt-text variant="caption" as="span">${this.content}</lt-text>
         <span class="arrow" part="arrow"></span>
       </div>

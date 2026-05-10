@@ -16,12 +16,24 @@ export const surfaceStyles = css`
   }
 
   /* Elevation variants */
-  :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); }
-  :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); }
-  :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); }
-  :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); }
-  :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); }
-  :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); }
+  :host([elevation='0']) .surface {
+    box-shadow: var(--lt-elevation-0);
+  }
+  :host([elevation='1']) .surface {
+    box-shadow: var(--lt-elevation-1);
+  }
+  :host([elevation='2']) .surface {
+    box-shadow: var(--lt-elevation-2);
+  }
+  :host([elevation='3']) .surface {
+    box-shadow: var(--lt-elevation-3);
+  }
+  :host([elevation='4']) .surface {
+    box-shadow: var(--lt-elevation-4);
+  }
+  :host([elevation='5']) .surface {
+    box-shadow: var(--lt-elevation-5);
+  }
 
   /* Visual appearances */
   :host([appearance='filled']) .surface {

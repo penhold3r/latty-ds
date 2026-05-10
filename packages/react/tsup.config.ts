@@ -7,5 +7,5 @@ export default defineConfig({
   external: ['react', 'react/jsx-runtime', '@latty/web'],
   outExtension({ format }) {
     return { js: format === 'cjs' ? '.cjs' : '.js' };
-  },
+  }
 });

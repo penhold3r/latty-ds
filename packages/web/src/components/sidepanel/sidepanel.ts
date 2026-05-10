@@ -97,17 +97,19 @@ export class SidePanel extends LitElement {
 
   private get _offScreenTransform(): string {
     switch (this.anchor) {
-      case 'right': return 'translateX(100%)';
-      case 'top': return 'translateY(-100%)';
-      case 'bottom': return 'translateY(100%)';
-      default: return 'translateX(-100%)';
+      case 'right':
+        return 'translateX(100%)';
+      case 'top':
+        return 'translateY(-100%)';
+      case 'bottom':
+        return 'translateY(100%)';
+      default:
+        return 'translateX(-100%)';
     }
   }
 
   private get _panelStyle(): string {
-    return this.anchor === 'left' || this.anchor === 'right'
-      ? `width: ${this.size}`
-      : `height: ${this.size}`;
+    return this.anchor === 'left' || this.anchor === 'right' ? `width: ${this.size}` : `height: ${this.size}`;
   }
 
   private _renderHeader() {
@@ -118,12 +120,7 @@ export class SidePanel extends LitElement {
         ${hasLabel ? html`<lt-text variant="h6" class="panel-label">${this.label}</lt-text>` : ''}
         ${!this.noCloseButton
           ? html`
-              <button
-                part="close-button"
-                class="close-button"
-                @click=${this.hide}
-                aria-label="Close panel"
-              >
+              <button part="close-button" class="close-button" @click=${this.hide} aria-label="Close panel">
                 <lt-icon name="xmark"></lt-icon>
               </button>
             `

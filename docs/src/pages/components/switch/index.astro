@@ -7,7 +7,9 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <BaseLayout title="Switch" description="Toggle switch component">
   <h1>Switch</h1>
-  <p>A toggle switch for binary on/off settings. Emits a <code>change</code> event with <code>detail.checked</code> when toggled.</p>
+  <p>
+    A toggle switch for binary on/off settings. Emits a <code>change</code> event with <code>detail.checked</code> when toggled.
+  </p>
 
   <h2>Playground</h2>
   <ComponentPlayground tag="lt-switch" />
@@ -39,4 +41,6 @@ import { Switch } from '@latty/react';
   <ApiTable tag="lt-switch" />
 </BaseLayout>
 
-<script>import '@latty/web';</script>
+<script>
+  import '@latty/web';
+</script>

@@ -70,11 +70,14 @@ describe('<lt-accordion>', () => {
     expect(slot).toBeTruthy();
   });
 
-  it.each(['default', 'filled', 'outlined', 'clean'] as const)('reflects %s appearance to attribute', async (appearance) => {
-    el.appearance = appearance;
-    await el.updateComplete;
-    expect(el.getAttribute('appearance')).toBe(appearance);
-  });
+  it.each(['default', 'filled', 'outlined', 'clean'] as const)(
+    'reflects %s appearance to attribute',
+    async (appearance) => {
+      el.appearance = appearance;
+      await el.updateComplete;
+      expect(el.getAttribute('appearance')).toBe(appearance);
+    }
+  );
 
   it('dispatches toggle event when opened', async () => {
     let eventFired = false;

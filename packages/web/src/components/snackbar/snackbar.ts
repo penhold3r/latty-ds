@@ -114,7 +114,7 @@ export class Snackbar extends LitElement {
     success: 'check-circle',
     warning: 'warning-triangle',
     error: 'xmark-circle',
-    info: 'info-circle',
+    info: 'info-circle'
   };
 
   private static readonly _bgMap: Record<SnackbarVariant, string> = {
@@ -122,7 +122,7 @@ export class Snackbar extends LitElement {
     success: '--lt-interactive-success-bg',
     warning: '--lt-interactive-warning-bg',
     error: '--lt-interactive-error-bg',
-    info: '--lt-interactive-info-bg',
+    info: '--lt-interactive-info-bg'
   };
 
   private get _resolvedIcon(): string {
@@ -137,24 +137,15 @@ export class Snackbar extends LitElement {
     return html`
       <lt-surface elevation="5" background-color=${Snackbar._bgMap[this.variant]}>
         <div class="inner" role="status" aria-live="polite" part="base">
-          ${iconName
-            ? html`<lt-icon class="variant-icon" name=${iconName} part="icon"></lt-icon>`
-            : ''}
+          ${iconName ? html`<lt-icon class="variant-icon" name=${iconName} part="icon"></lt-icon>` : ''}
           <span class="message" part="message">
             <slot></slot>
           </span>
           ${this.actionLabel
-            ? html`<button class="action" @click=${this._handleAction} part="action">
-                ${this.actionLabel}
-              </button>`
+            ? html`<button class="action" @click=${this._handleAction} part="action">${this.actionLabel}</button>`
             : ''}
           ${this.closable
-            ? html`<button
-                class="close"
-                @click=${this._handleClose}
-                aria-label="Dismiss"
-                part="close"
-              >
+            ? html`<button class="close" @click=${this._handleClose} aria-label="Dismiss" part="close">
                 <lt-icon name="xmark"></lt-icon>
               </button>`
             : ''}

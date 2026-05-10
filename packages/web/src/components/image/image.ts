@@ -39,12 +39,7 @@ export class Image extends LitElement {
   render() {
     const radius = this._borderRadius;
     return html`
-      <img
-        part="image"
-        src=${this.src}
-        alt=${this.alt}
-        style=${radius ? `border-radius: ${radius}` : ''}
-      />
+      <img part="image" src=${this.src} alt=${this.alt} style=${radius ? `border-radius: ${radius}` : ''} />
     `;
   }
 }

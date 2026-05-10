@@ -12,16 +12,16 @@ import { zoomInSvg } from './zoom-in';
 import { zoomOutSvg } from './zoom-out';
 
 export const interactionIcons = {
-  'eye': eyeOpenSvg,
+  eye: eyeOpenSvg,
   'eye-off': eyeCloseSvg,
   'zoom-in': zoomInSvg,
   'zoom-out': zoomOutSvg,
-  'expand': expandSvg,
-  'collapse': collapseSvg,
-  'drag': dragSvg,
-  'cursor': cursorSvg,
-  'switch': switchSvg,
+  expand: expandSvg,
+  collapse: collapseSvg,
+  drag: dragSvg,
+  cursor: cursorSvg,
+  switch: switchSvg,
   'rotate-cw': rotateCwSvg,
-  'undo': undoSvg,
-  'redo': redoSvg,
+  undo: undoSvg,
+  redo: redoSvg
 } as const;

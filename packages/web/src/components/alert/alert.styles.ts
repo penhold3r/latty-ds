@@ -6,7 +6,9 @@ export const alertStyles = css`
     font-family: 'Hanken Grotesk', sans-serif;
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 200ms ease, transform 200ms ease;
+    transition:
+      opacity 200ms ease,
+      transform 200ms ease;
 
     /* Default variant tokens */
     --_bg-subtle: var(--lt-bg-neutral-subtle);

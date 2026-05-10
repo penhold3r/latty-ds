@@ -7,17 +7,15 @@ export type SpinnerProps = {
   children?: ReactNode;
 };
 
-export const Spinner = forwardRef<SpinnerEl, SpinnerProps>(
-  function Spinner({ children, ...props }, forwardedRef) {
-    const innerRef = useRef<SpinnerEl>(null);
+export const Spinner = forwardRef<SpinnerEl, SpinnerProps>(function Spinner({ children, ...props }, forwardedRef) {
+  const innerRef = useRef<SpinnerEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-spinner ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-spinner>
-    );
-  }
-);
+  return (
+    <lt-spinner ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-spinner>
+  );
+});
 Spinner.displayName = 'Spinner';

@@ -61,7 +61,7 @@ export class Slider extends LitElement {
       new CustomEvent<{ value: number }>('lt-input', {
         detail: { value: this.value },
         bubbles: true,
-        composed: true,
+        composed: true
       })
     );
   }
@@ -73,7 +73,7 @@ export class Slider extends LitElement {
       new CustomEvent<{ value: number }>('lt-change', {
         detail: { value: this.value },
         bubbles: true,
-        composed: true,
+        composed: true
       })
     );
   }
@@ -101,9 +101,7 @@ export class Slider extends LitElement {
     return html`
       ${this.label ? html`<label class="label" for="input">${this.label}</label>` : ''}
       <div class="track-wrap">
-        <lt-tooltip content=${String(this.value)} ?disabled=${!this.tooltip} placement="top">
-          ${input}
-        </lt-tooltip>
+        <lt-tooltip content=${String(this.value)} ?disabled=${!this.tooltip} placement="top"> ${input} </lt-tooltip>
       </div>
     `;
   }

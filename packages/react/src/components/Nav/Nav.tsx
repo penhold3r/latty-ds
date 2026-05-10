@@ -6,17 +6,15 @@ export type NavProps = {
   children?: ReactNode;
 };
 
-export const Nav = forwardRef<NavEl, NavProps>(
-  function Nav({ children, ...props }, forwardedRef) {
-    const innerRef = useRef<NavEl>(null);
+export const Nav = forwardRef<NavEl, NavProps>(function Nav({ children, ...props }, forwardedRef) {
+  const innerRef = useRef<NavEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-nav ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-nav>
-    );
-  }
-);
+  return (
+    <lt-nav ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-nav>
+  );
+});
 Nav.displayName = 'Nav';

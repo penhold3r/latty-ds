@@ -38,10 +38,7 @@ export class Badge extends LitElement {
 
   render() {
     return html`
-      <span part="base">
-        ${this.dot ? html`<span class="dot" part="dot"></span>` : ''}
-        ${this.content}
-      </span>
+      <span part="base"> ${this.dot ? html`<span class="dot" part="dot"></span>` : ''} ${this.content} </span>
     `;
   }
 }

@@ -7,7 +7,7 @@ export type ButtonProps = {
   size?: ButtonEl['size'];
   disabled?: boolean;
   loading?: boolean;
-  icon?: LattyIconName;
+  iconStart?: LattyIconName;
   iconEnd?: LattyIconName;
   fullWidth?: boolean;
   uppercase?: boolean;
@@ -17,17 +17,15 @@ export type ButtonProps = {
   children?: ReactNode;
 };
 
-export const Button = forwardRef<ButtonEl, ButtonProps>(
-  function Button({ children, ...props }, forwardedRef) {
-    const innerRef = useRef<ButtonEl>(null);
+export const Button = forwardRef<ButtonEl, ButtonProps>(function Button({ children, ...props }, forwardedRef) {
+  const innerRef = useRef<ButtonEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-button ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-button>
-    );
-  }
-);
+  return (
+    <lt-button ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-button>
+  );
+});
 Button.displayName = 'Button';

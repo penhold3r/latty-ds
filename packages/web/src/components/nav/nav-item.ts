@@ -153,7 +153,9 @@ export class NavItem extends LitElement {
       return html`<a class="item-trigger" href=${this.href} @click=${this._handleTriggerClick}>${inner}</a>`;
     }
 
-    return html`<button class="item-trigger" @click=${this._handleTriggerClick} ?disabled=${this.disabled}>${inner}</button>`;
+    return html`<button class="item-trigger" @click=${this._handleTriggerClick} ?disabled=${this.disabled}>
+      ${inner}
+    </button>`;
   }
 
   render() {

@@ -21,9 +21,7 @@ export class DropdownItem extends LitElement {
 
   private _onActivate() {
     if (this.disabled) return;
-    this.dispatchEvent(
-      new CustomEvent('lt-select', { bubbles: true, composed: true, detail: { item: this } })
-    );
+    this.dispatchEvent(new CustomEvent('lt-select', { bubbles: true, composed: true, detail: { item: this } }));
   }
 
   render() {

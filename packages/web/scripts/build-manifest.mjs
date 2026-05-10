@@ -26,7 +26,7 @@ function resolveUnion(typeName, componentDir) {
   const src = readFileSync(typesFile, 'utf8');
   const match = src.match(new RegExp(`export type ${typeName}\\s*=\\s*([^;]+);`));
   if (!match) return null;
-  return [...match[1].matchAll(/'([^']+)'/g)].map(m => m[1]);
+  return [...match[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
 }
 
 /** Convert camelCase property name to kebab-case attribute name (Lit convention). */
@@ -80,7 +80,10 @@ function toMember(field, componentDir) {
   }
 
   // Strip `| ''` / `'' |` suffixes that just represent an "unset" sentinel
-  const resolvedType = typeText.replace(/\s*\|\s*''/g, '').replace(/^''\s*\|\s*/g, '').trim();
+  const resolvedType = typeText
+    .replace(/\s*\|\s*''/g, '')
+    .replace(/^''\s*\|\s*/g, '')
+    .trim();
 
   // Union / named type — try to resolve from *.types.ts
   const options = resolveUnion(resolvedType, componentDir);

@@ -6,5 +6,5 @@ export type {
   SortDirection,
   CellAlign,
   SortState,
-  SortChangeDetail,
+  SortChangeDetail
 } from './table.types';

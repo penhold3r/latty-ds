@@ -81,11 +81,14 @@ describe('<lt-button>', () => {
     expect(slot).toBeFalsy();
   });
 
-  it.each(['primary', 'secondary', 'neutral', 'success', 'warning', 'error', 'info'] as const)('reflects %s variant to attribute', async (variant) => {
-    el.variant = variant;
-    await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe(variant);
-  });
+  it.each(['primary', 'secondary', 'neutral', 'success', 'warning', 'error', 'info'] as const)(
+    'reflects %s variant to attribute',
+    async (variant) => {
+      el.variant = variant;
+      await el.updateComplete;
+      expect(el.getAttribute('variant')).toBe(variant);
+    }
+  );
 
   it.each(['sm', 'md', 'lg'] as const)('reflects %s size to attribute', async (size) => {
     el.size = size;

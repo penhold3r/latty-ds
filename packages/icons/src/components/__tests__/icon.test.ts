@@ -60,9 +60,7 @@ describe('<lt-icon>', () => {
     el.name = 'non-existent-icon';
     await el.updateComplete;
 
-    expect(consoleWarn).toHaveBeenCalledWith(
-      'Icon "non-existent-icon" not found in registry'
-    );
+    expect(consoleWarn).toHaveBeenCalledWith('Icon "non-existent-icon" not found in registry');
     consoleWarn.mockRestore();
   });
 
@@ -82,10 +80,7 @@ describe('<lt-icon>', () => {
   });
 
   it('removes width and height attributes from SVG', async () => {
-    iconRegistry.registerIcon(
-      'sized-icon',
-      '<svg width="24" height="24"><circle /></svg>'
-    );
+    iconRegistry.registerIcon('sized-icon', '<svg width="24" height="24"><circle /></svg>');
     el.name = 'sized-icon';
     await el.updateComplete;
 

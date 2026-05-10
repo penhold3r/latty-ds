@@ -12,7 +12,7 @@ export default defineConfig([
     noExternal: ['@latty/utils'],
     splitting: false,
     sourcemap: false,
-    clean: true,
+    clean: true
   },
   {
     // Browser runtime — configure() and createStyleSheet() for consumer apps
@@ -23,6 +23,6 @@ export default defineConfig([
     bundle: true,
     splitting: false,
     sourcemap: false,
-    dts: true,
-  },
+    dts: true
+  }
 ]);

@@ -9,5 +9,5 @@ export default defineConfig({
   splitting: false,
   sourcemap: false,
   dts: true,
-  clean: true,
+  clean: true
 });

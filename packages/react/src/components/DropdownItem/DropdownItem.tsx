@@ -9,25 +9,26 @@ export type DropdownItemProps = {
   children?: ReactNode;
 };
 
-export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(
-  function DropdownItem({ onLtSelect, children, ...props }, forwardedRef) {
-    const innerRef = useRef<DropdownItemEl>(null);
+export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(function DropdownItem(
+  { onLtSelect, children, ...props },
+  forwardedRef
+) {
+  const innerRef = useRef<DropdownItemEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onLtSelect) return;
-      const h = (ev: Event) => onLtSelect!(ev as CustomEvent);
-      el.addEventListener('lt-select', h);
-      return () => el.removeEventListener('lt-select', h);
-    }, [onLtSelect]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onLtSelect) return;
+    const h = (ev: Event) => onLtSelect!(ev as CustomEvent);
+    el.addEventListener('lt-select', h);
+    return () => el.removeEventListener('lt-select', h);
+  }, [onLtSelect]);
 
-    return (
-      <lt-dropdown-item ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-dropdown-item>
-    );
-  }
-);
+  return (
+    <lt-dropdown-item ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-dropdown-item>
+  );
+});
 DropdownItem.displayName = 'DropdownItem';

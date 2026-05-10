@@ -19,10 +19,10 @@ Colorized console logger with timestamps and log-level icons. Use this instead o
 ```ts
 import { logger } from '@latty/utils';
 
-logger.info('Processing tokens...');    // ℹ  [12:34:56] Processing tokens...
-logger.success('Build complete');       // ✔  [12:34:57] Build complete
-logger.warn('Deprecated option used');  // ⚠  [12:34:57] Deprecated option used
-logger.error('File not found');         // ✖  [12:34:57] File not found
+logger.info('Processing tokens...'); // ℹ  [12:34:56] Processing tokens...
+logger.success('Build complete'); // ✔  [12:34:57] Build complete
+logger.warn('Deprecated option used'); // ⚠  [12:34:57] Deprecated option used
+logger.error('File not found'); // ✖  [12:34:57] File not found
 ```
 
 ### `toTitleCase`
@@ -33,8 +33,8 @@ Converts hyphen-separated, camelCase, or snake_case strings to Title Case.
 import { toTitleCase } from '@latty/utils';
 
 toTitleCase('hello-world'); // "Hello World"
-toTitleCase('camelCase');   // "Camel Case"
-toTitleCase('snake_case');  // "Snake Case"
+toTitleCase('camelCase'); // "Camel Case"
+toTitleCase('snake_case'); // "Snake Case"
 ```
 
 ## License

@@ -136,14 +136,13 @@ export class Button extends LitElement {
           rel=${ifDefined(rel)}
           aria-disabled=${isDisabled ? 'true' : nothing}
           tabindex=${isDisabled ? '-1' : nothing}
-        >${inner}</a>
+          >${inner}</a
+        >
       `;
     }
 
     return html`
-      <button part="base" ?disabled=${isDisabled} aria-busy=${this.loading ? 'true' : 'false'}>
-        ${inner}
-      </button>
+      <button part="base" ?disabled=${isDisabled} aria-busy=${this.loading ? 'true' : 'false'}>${inner}</button>
     `;
   }
 }

@@ -7,17 +7,15 @@ export type LinkProps = {
   children?: ReactNode;
 };
 
-export const Link = forwardRef<LinkEl, LinkProps>(
-  function Link({ children, ...props }, forwardedRef) {
-    const innerRef = useRef<LinkEl>(null);
+export const Link = forwardRef<LinkEl, LinkProps>(function Link({ children, ...props }, forwardedRef) {
+  const innerRef = useRef<LinkEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-link ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-link>
-    );
-  }
-);
+  return (
+    <lt-link ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-link>
+  );
+});
 Link.displayName = 'Link';

@@ -12,12 +12,12 @@ const SEMANTIC_CSS = semanticTokensToCss(buildSemanticTokens());
 
 const DEFAULTS: Required<LattyConfig> = {
   colors: tokensConfig.color,
-  font:   { family: DEFAULT_FONT_FAMILY },
-  border: { radius: DEFAULT_BORDER_RADIUS },
+  font: { family: DEFAULT_FONT_FAMILY },
+  border: { radius: DEFAULT_BORDER_RADIUS }
 };
 
 const toInternalConfig = (userConfig: LattyConfig): Config => ({
-  color: { ...DEFAULTS.colors, ...userConfig.colors },
+  color: { ...DEFAULTS.colors, ...userConfig.colors }
 });
 
 /**

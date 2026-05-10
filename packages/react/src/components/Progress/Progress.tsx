@@ -9,17 +9,15 @@ export type ProgressProps = {
   children?: ReactNode;
 };
 
-export const Progress = forwardRef<ProgressEl, ProgressProps>(
-  function Progress({ children, ...props }, forwardedRef) {
-    const innerRef = useRef<ProgressEl>(null);
+export const Progress = forwardRef<ProgressEl, ProgressProps>(function Progress({ children, ...props }, forwardedRef) {
+  const innerRef = useRef<ProgressEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-progress ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-progress>
-    );
-  }
-);
+  return (
+    <lt-progress ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-progress>
+  );
+});
 Progress.displayName = 'Progress';

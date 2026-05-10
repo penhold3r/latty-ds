@@ -35,10 +35,10 @@ const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(ma
 const rampFromBase = (
   base: Oklch,
   opts?: {
-    chromaScale?: number;   // overall saturation multiplier
-    lPivot?: number;        // lightness to anchor at step 500 (defaults to L_BY_STEP[500])
-    midBoost?: number;      // extra saturation around 400–700 (0.0 = none)
-    darkClamp?: number;     // max chroma for 800–900
+    chromaScale?: number; // overall saturation multiplier
+    lPivot?: number; // lightness to anchor at step 500 (defaults to L_BY_STEP[500])
+    midBoost?: number; // extra saturation around 400–700 (0.0 = none)
+    darkClamp?: number; // max chroma for 800–900
     minChromaFactor?: number; // cMin = cMax * this
   }
 ): Palette => {
@@ -54,7 +54,7 @@ const rampFromBase = (
   const cMax = clamp(base.c * chromaScale, 0, 0.5);
 
   const c500 = L_BY_STEP[500];
-  const c50  = L_BY_STEP[50];
+  const c50 = L_BY_STEP[50];
   const c900 = L_BY_STEP[900];
 
   for (const step of STEPS) {

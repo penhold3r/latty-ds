@@ -39,11 +39,14 @@ describe('<lt-alert>', () => {
     expect(el.getAttribute('appearance')).toBe(appearance);
   });
 
-  it.each(['default', 'success', 'warning', 'error', 'info'] as const)('reflects %s variant to attribute', async (variant) => {
-    el.variant = variant;
-    await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe(variant);
-  });
+  it.each(['default', 'success', 'warning', 'error', 'info'] as const)(
+    'reflects %s variant to attribute',
+    async (variant) => {
+      el.variant = variant;
+      await el.updateComplete;
+      expect(el.getAttribute('variant')).toBe(variant);
+    }
+  );
 
   it('renders slot for body content', () => {
     expect(el.shadowRoot!.querySelector('slot')).toBeTruthy();

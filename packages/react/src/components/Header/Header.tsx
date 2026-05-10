@@ -14,19 +14,20 @@ export type HeaderProps = {
   children?: ReactNode;
 };
 
-export const Header = forwardRef<HeaderEl, HeaderProps>(
-  function Header({ background, before, logo, after, children }, forwardedRef) {
-    const innerRef = useRef<HeaderEl>(null);
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+export const Header = forwardRef<HeaderEl, HeaderProps>(function Header(
+  { background, before, logo, after, children },
+  forwardedRef
+) {
+  const innerRef = useRef<HeaderEl>(null);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-header ref={innerRef} background={background}>
-        {before && <span slot="before">{before}</span>}
-        {logo && <span slot="logo">{logo}</span>}
-        {children && <span slot="content">{children}</span>}
-        {after && <span slot="after">{after}</span>}
-      </lt-header>
-    );
-  }
-);
+  return (
+    <lt-header ref={innerRef} background={background}>
+      {before && <span slot="before">{before}</span>}
+      {logo && <span slot="logo">{logo}</span>}
+      {children && <span slot="content">{children}</span>}
+      {after && <span slot="after">{after}</span>}
+    </lt-header>
+  );
+});
 Header.displayName = 'Header';

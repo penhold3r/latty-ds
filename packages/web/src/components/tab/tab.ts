@@ -81,13 +81,7 @@ export class Tab extends LitElement {
 
   render() {
     return html`
-      <button
-        class="tab"
-        role="tab"
-        aria-selected=${this.active}
-        ?disabled=${this.disabled}
-        @click=${this.handleClick}
-      >
+      <button class="tab" role="tab" aria-selected=${this.active} ?disabled=${this.disabled} @click=${this.handleClick}>
         ${this.iconStart ? html`<lt-icon class="icon" name="${this.iconStart}"></lt-icon>` : ''}
         <span class="label"><slot>${this.label}</slot></span>
       </button>

@@ -112,7 +112,14 @@ export class Dropdown extends LitElement {
       <div class="trigger-wrap" @click=${this.toggle}>
         <slot name="trigger"></slot>
       </div>
-      <lt-surface class="menu" appearance="outlined" elevation="2" background-color="--lt-bg-default" role="menu" aria-hidden=${this.open ? 'false' : 'true'}>
+      <lt-surface
+        class="menu"
+        appearance="outlined"
+        elevation="2"
+        background-color="--lt-bg-default"
+        role="menu"
+        aria-hidden=${this.open ? 'false' : 'true'}
+      >
         <slot></slot>
       </lt-surface>
     `;

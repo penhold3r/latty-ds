@@ -32,7 +32,7 @@ Edit `docs/src/components/VersionSwitcher.astro` to add the new version:
 ```typescript
 const versions = [
   { label: 'v1.1 (latest)', value: 'v1.1', path: '/' },
-  { label: 'v1.0', value: 'v1.0', path: '/v1.0/' },
+  { label: 'v1.0', value: 'v1.0', path: '/v1.0/' }
   // ...
 ];
 ```
@@ -58,6 +58,7 @@ For a more automated approach, you can:
 ## Future Enhancement
 
 Consider using a tool like **Docusaurus** if you need:
+
 - Automatic version management
 - Built-in version dropdown
 - Separate versioned sidebars

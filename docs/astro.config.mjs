@@ -16,7 +16,7 @@ export default defineConfig({
   site: process.env.SITE_URL ?? 'https://penhold3r.github.io',
   base: basePath,
   markdown: {
-    rehypePlugins: [[rehypePrefixLinks, basePath]],
+    rehypePlugins: [[rehypePrefixLinks, basePath]]
   },
   vite: {
     server: {

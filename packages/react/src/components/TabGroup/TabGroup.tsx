@@ -9,25 +9,26 @@ export type TabGroupProps = {
   children?: ReactNode;
 };
 
-export const TabGroup = forwardRef<TabGroupEl, TabGroupProps>(
-  function TabGroup({ onChange, children, ...props }, forwardedRef) {
-    const innerRef = useRef<TabGroupEl>(null);
+export const TabGroup = forwardRef<TabGroupEl, TabGroupProps>(function TabGroup(
+  { onChange, children, ...props },
+  forwardedRef
+) {
+  const innerRef = useRef<TabGroupEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onChange) return;
-      const h = (ev: Event) => onChange!(ev as CustomEvent);
-      el.addEventListener('change', h);
-      return () => el.removeEventListener('change', h);
-    }, [onChange]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onChange) return;
+    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    el.addEventListener('change', h);
+    return () => el.removeEventListener('change', h);
+  }, [onChange]);
 
-    return (
-      <lt-tab-group ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-tab-group>
-    );
-  }
-);
+  return (
+    <lt-tab-group ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-tab-group>
+  );
+});
 TabGroup.displayName = 'TabGroup';

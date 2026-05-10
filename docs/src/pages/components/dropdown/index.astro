@@ -120,6 +120,37 @@ function onSelect(e) {
     `}
   />
 
+  <h2>Dropdown vs. Select</h2>
+  <p>
+    Both let the user choose from a list of options, but they are built for different purposes and should not be used
+    interchangeably:
+  </p>
+  <table class="compare-table">
+    <thead><tr><th></th><th>Dropdown</th><th>Select</th></tr></thead>
+    <tbody>
+      <tr
+        ><td><strong>Trigger</strong></td><td>Any slotted element — button, icon, avatar</td><td
+          >A styled form field with a label and helper text</td
+        ></tr
+      >
+      <tr
+        ><td><strong>Options</strong></td><td>Fully custom slot content (<code>lt-dropdown-item</code>)</td><td
+          ><code>options</code> prop — array of <code>&#123; value, label &#125;</code></td
+        ></tr
+      >
+      <tr
+        ><td><strong>Use when</strong></td><td
+          >Action menus, context menus, overflow menus — the user is choosing an action, not setting a value</td
+        ><td>Form fields — the user is selecting a value that will be submitted or stored</td></tr
+      >
+      <tr
+        ><td><strong>Avoid when</strong></td><td
+          >You need the selected value to persist or participate in form submission — use Select instead</td
+        ><td>You need custom item layouts, icons per item, or the "trigger" isn't a form field</td></tr
+      >
+    </tbody>
+  </table>
+
   <h2>API</h2>
   <ApiTable tag="lt-dropdown" />
   <ApiTable tag="lt-dropdown-item" />

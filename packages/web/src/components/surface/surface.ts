@@ -51,17 +51,15 @@ export class Surface extends LitElement {
    */
   @property({ reflect: true }) appearance: SurfaceAppearance = 'filled';
 
-  /** Background color. Accepts a hex value (#1a1a2e) or a token name (--lt-color-primary-600). */
-  @property({ attribute: 'background-color', reflect: true }) backgroundColor = '';
+  /** Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600). */
+  @property({ reflect: true }) background = '';
 
   private _resolve(value: string): string {
     return value.startsWith('--') ? `var(${value})` : value;
   }
 
   render() {
-    const style = this.backgroundColor
-      ? { '--_surface-bg': this._resolve(this.backgroundColor) }
-      : {};
+    const style = this.background ? { '--_surface-bg': this._resolve(this.background) } : {};
 
     return html`
       <div class="surface" part="surface" style=${styleMap(style)}>

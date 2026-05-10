@@ -11,17 +11,15 @@ export type AvatarProps = {
   children?: ReactNode;
 };
 
-export const Avatar = forwardRef<AvatarEl, AvatarProps>(
-  function Avatar({ children, ...props }, forwardedRef) {
-    const innerRef = useRef<AvatarEl>(null);
+export const Avatar = forwardRef<AvatarEl, AvatarProps>(function Avatar({ children, ...props }, forwardedRef) {
+  const innerRef = useRef<AvatarEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-avatar ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-avatar>
-    );
-  }
-);
+  return (
+    <lt-avatar ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-avatar>
+  );
+});
 Avatar.displayName = 'Avatar';

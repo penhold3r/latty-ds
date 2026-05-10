@@ -7,7 +7,10 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <BaseLayout title="Avatar" description="User avatar with image, initials, and icon fallbacks">
   <h1>Avatar</h1>
-  <p>Displays a user avatar. Falls back to initials derived from <code>name</code>, then to a generic person icon if neither is available.</p>
+  <p>
+    Displays a user avatar. Falls back to initials derived from <code>name</code>, then to a generic person icon if
+    neither is available.
+  </p>
 
   <h2>Playground</h2>
   <ComponentPlayground tag="lt-avatar" defaults={{ name: 'Jane Doe' }} />
@@ -42,4 +45,6 @@ import { Avatar } from '@latty/react';
   <ApiTable tag="lt-avatar" />
 </BaseLayout>
 
-<script>import '@latty/web';</script>
+<script>
+  import '@latty/web';
+</script>

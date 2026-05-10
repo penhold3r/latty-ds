@@ -61,6 +61,33 @@ import { Alert } from '@latty/react';
     `}
   />
 
+  <h2>Alert vs. Snackbar</h2>
+  <p>Both communicate feedback to the user, but they serve different moments:</p>
+  <table class="compare-table">
+    <thead><tr><th></th><th>Alert</th><th>Snackbar</th></tr></thead>
+    <tbody>
+      <tr
+        ><td><strong>Position</strong></td><td>Inline, within page flow</td><td>Fixed overlay, bottom of viewport</td
+        ></tr
+      >
+      <tr
+        ><td><strong>Lifetime</strong></td><td>Persistent — stays until dismissed or condition resolves</td><td
+          >Transient — auto-dismisses after a configurable delay</td
+        ></tr
+      >
+      <tr
+        ><td><strong>Use when</strong></td><td
+          >The message is tied to a specific location on the page (a form field, a section, a card)</td
+        ><td>Confirming the result of an action the user just took (saved, deleted, copied)</td></tr
+      >
+      <tr
+        ><td><strong>Avoid when</strong></td><td
+          >The message is a response to a one-off action and doesn't need to persist</td
+        ><td>The user needs to read and act on the message before continuing</td></tr
+      >
+    </tbody>
+  </table>
+
   <h2>API</h2>
   <ApiTable tag="lt-alert" />
 </BaseLayout>

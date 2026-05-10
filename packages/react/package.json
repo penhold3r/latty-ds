@@ -9,9 +9,21 @@
     "directory": "packages/react"
   },
   "homepage": "https://penhold3r.github.io/latty-ds",
-  "keywords": ["design-system", "react", "web-components", "ui", "latty"],
-  "publishConfig": { "access": "public" },
-  "files": ["dist", "README.md", "LICENSE"],
+  "keywords": [
+    "design-system",
+    "react",
+    "web-components",
+    "ui",
+    "latty"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "sideEffects": false,
   "type": "module",
   "main": "./dist/index.cjs",

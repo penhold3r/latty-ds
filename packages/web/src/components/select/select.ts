@@ -290,7 +290,9 @@ export class Select extends LitElement {
             </div>
           </lt-surface>
         </div>
-        ${this.helperText ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>` : ''}
+        ${this.helperText
+          ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>`
+          : ''}
       </div>
     `;
   }

@@ -56,6 +56,15 @@ h6 {
   overflow-wrap: break-word;
 }
 
+lt-text[variant='h1'],
+lt-text[variant='h2'],
+lt-text[variant='h3'],
+lt-text[variant='h4'],
+lt-text[variant='h5'],
+lt-text[variant='h6'] {
+  color: var(--lt-color-secondary-600);
+}
+
 code {
   font-family: 'Courier New', Courier, monospace;
   background: var(--lt-color-neutral-100);
@@ -99,21 +108,18 @@ main.content {
 .prose h1 {
   font-size: 2.5rem;
   margin-bottom: var(--lt-spacing-4);
-  color: var(--lt-color-neutral-900);
 }
 
 .prose h2 {
   font-size: 2rem;
   margin-top: var(--lt-spacing-8);
   margin-bottom: var(--lt-spacing-4);
-  color: var(--lt-color-neutral-900);
 }
 
 .prose h3 {
   font-size: 1.5rem;
   margin-top: var(--lt-spacing-6);
   margin-bottom: var(--lt-spacing-3);
-  color: var(--lt-color-neutral-900);
 }
 
 .prose p {
@@ -159,4 +165,8 @@ main.content {
 
 .prose tbody tr:hover {
   background: var(--lt-color-neutral-50);
+}
+
+pre.astro-code {
+  margin-bottom: 0.75rem;
 }

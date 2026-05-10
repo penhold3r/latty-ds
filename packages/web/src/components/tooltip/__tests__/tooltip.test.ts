@@ -12,7 +12,9 @@ describe('<lt-tooltip>', () => {
     await el.updateComplete;
   });
 
-  afterEach(() => { el.remove(); });
+  afterEach(() => {
+    el.remove();
+  });
 
   it('renders in shadow DOM', () => {
     expect(el.shadowRoot).toBeTruthy();

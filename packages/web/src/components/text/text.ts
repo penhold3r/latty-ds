@@ -7,20 +7,20 @@ import type { TextVariant, TextTag } from './text.types';
 
 const VARIANT_TAG: Record<TextVariant, TextTag> = {
   'display-2xl': 'p',
-  'display-xl':  'p',
-  'display-lg':  'p',
-  h1:            'h1',
-  h2:            'h2',
-  h3:            'h3',
-  h4:            'h4',
-  h5:            'h5',
-  h6:            'h6',
-  lead:          'p',
-  body:          'p',
-  'body-sm':     'p',
-  caption:       'span',
-  overline:      'span',
-  label:         'span',
+  'display-xl': 'p',
+  'display-lg': 'p',
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  h5: 'h5',
+  h6: 'h6',
+  lead: 'p',
+  body: 'p',
+  'body-sm': 'p',
+  caption: 'span',
+  overline: 'span',
+  label: 'span'
 };
 
 /**

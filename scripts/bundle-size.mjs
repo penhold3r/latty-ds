@@ -23,28 +23,28 @@ const ROOT = resolve(__dirname, '..');
 const COMPONENTS_DIR = join(ROOT, 'packages/web/src/components');
 const REPORT_PATH = join(ROOT, 'bundle-report.json');
 
-const THRESHOLD_PCT = 10;  // flag regressions larger than this %
+const THRESHOLD_PCT = 10; // flag regressions larger than this %
 const EXTERNAL = ['lit', 'lit/*', 'lit/decorators.js', '@lit/*', '@latty/icons'];
 
 const UPDATE = process.argv.includes('--update');
 const FAIL_ON_REGRESSION = process.argv.includes('--fail-on-regression');
 
 // ── Load previous report ───────────────────────────────────────────────────────
-const prev = existsSync(REPORT_PATH)
-  ? JSON.parse(readFileSync(REPORT_PATH, 'utf8'))
-  : { components: {} };
+const prev = existsSync(REPORT_PATH) ? JSON.parse(readFileSync(REPORT_PATH, 'utf8')) : { components: {} };
 
 // ── Measure each component ─────────────────────────────────────────────────────
 const entries = readdirSync(COMPONENTS_DIR, { withFileTypes: true })
-  .filter(e => e.isDirectory())
-  .map(e => ({ name: e.name, entry: join(COMPONENTS_DIR, e.name, 'index.ts') }))
+  .filter((e) => e.isDirectory())
+  .map((e) => ({ name: e.name, entry: join(COMPONENTS_DIR, e.name, 'index.ts') }))
   .filter(({ entry }) => existsSync(entry));
 
 const results = {};
 let regressions = 0;
 
-process.stdout.write('\n  Component               raw (B)   gzip (B)   Δ gzip\n' +
-                     '  ─────────────────────────────────────────────────────\n');
+process.stdout.write(
+  '\n  Component               raw (B)   gzip (B)   Δ gzip\n' +
+    '  ─────────────────────────────────────────────────────\n'
+);
 
 for (const { name, entry } of entries) {
   const built = await esbuild.build({
@@ -58,9 +58,9 @@ for (const { name, entry } of entries) {
       compilerOptions: {
         experimentalDecorators: true,
         useDefineForClassFields: false,
-        target: 'ES2020',
-      },
-    },
+        target: 'ES2020'
+      }
+    }
   });
 
   const bytes = built.outputFiles[0].contents;
@@ -96,9 +96,8 @@ const totalGzip = Object.values(results).reduce((s, r) => s + r.gzip, 0);
 const prevTotalGzip = Object.values(prev.components ?? {}).reduce((s, r) => s + (r.gzip ?? 0), 0);
 const totalDiff = prevTotalGzip > 0 ? totalGzip - prevTotalGzip : null;
 
-const totalLine = totalDiff != null
-  ? `${totalGzip} B  (${totalDiff >= 0 ? '+' : ''}${totalDiff} B vs last run)`
-  : `${totalGzip} B`;
+const totalLine =
+  totalDiff != null ? `${totalGzip} B  (${totalDiff >= 0 ? '+' : ''}${totalDiff} B vs last run)` : `${totalGzip} B`;
 process.stdout.write('  ─────────────────────────────────────────────────────\n');
 process.stdout.write(`  Total gzip: ${totalLine}\n\n`);
 
@@ -111,7 +110,7 @@ if (UPDATE) {
   const report = {
     generated: new Date().toISOString(),
     totalGzip,
-    components: results,
+    components: results
   };
   writeFileSync(REPORT_PATH, JSON.stringify(report, null, 2) + '\n', 'utf8');
   logger.success('bundle-report.json updated.');

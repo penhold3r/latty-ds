@@ -11,7 +11,9 @@ describe('<lt-chip>', () => {
     await el.updateComplete;
   });
 
-  afterEach(() => { el.remove(); });
+  afterEach(() => {
+    el.remove();
+  });
 
   it('renders in shadow DOM', () => {
     expect(el.shadowRoot).toBeTruthy();
@@ -38,11 +40,14 @@ describe('<lt-chip>', () => {
     expect(el.getAttribute('variant')).toBe('primary');
   });
 
-  it.each(['primary', 'secondary', 'neutral', 'success', 'warning', 'error', 'info'] as const)('reflects %s variant to attribute', async (variant) => {
-    el.variant = variant;
-    await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe(variant);
-  });
+  it.each(['primary', 'secondary', 'neutral', 'success', 'warning', 'error', 'info'] as const)(
+    'reflects %s variant to attribute',
+    async (variant) => {
+      el.variant = variant;
+      await el.updateComplete;
+      expect(el.getAttribute('variant')).toBe(variant);
+    }
+  );
 
   it('has default size of md', () => {
     expect(el.size).toBe('md');
@@ -80,14 +85,18 @@ describe('<lt-chip>', () => {
     el.deletable = true;
     await el.updateComplete;
     let fired = false;
-    el.addEventListener('lt-delete', () => { fired = true; });
+    el.addEventListener('lt-delete', () => {
+      fired = true;
+    });
     el.shadowRoot!.querySelector<HTMLButtonElement>('.delete')!.click();
     expect(fired).toBe(true);
   });
 
   it('dispatches lt-delete event via internal handler', () => {
     let fired = false;
-    el.addEventListener('lt-delete', () => { fired = true; });
+    el.addEventListener('lt-delete', () => {
+      fired = true;
+    });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (el as any)._handleDelete();
     expect(fired).toBe(true);

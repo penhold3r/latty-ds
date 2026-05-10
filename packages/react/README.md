@@ -59,11 +59,38 @@ All components from `@latty/web` are available as named exports:
 
 ```ts
 import {
-  Accordion, Alert, Avatar, Badge, Breadcrumb, BreadcrumbItem,
-  Button, Checkbox, Chip, Dialog, Divider, Dropdown,
-  Header, Link, List, Nav, Progress, Radio, RadioGroup,
-  Select, Skeleton, Slider, Snackbar, Spinner, Surface,
-  Switch, Tab, TabGroup, Table, Text, Textfield, Tooltip
+  Accordion,
+  Alert,
+  Avatar,
+  Badge,
+  Breadcrumb,
+  BreadcrumbItem,
+  Button,
+  Checkbox,
+  Chip,
+  Dialog,
+  Divider,
+  Dropdown,
+  Header,
+  Link,
+  List,
+  Nav,
+  Progress,
+  Radio,
+  RadioGroup,
+  Select,
+  Skeleton,
+  Slider,
+  Snackbar,
+  Spinner,
+  Surface,
+  Switch,
+  Tab,
+  TabGroup,
+  Table,
+  Text,
+  Textfield,
+  Tooltip
 } from '@latty/react';
 ```
 

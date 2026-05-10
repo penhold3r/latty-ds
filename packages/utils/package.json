@@ -9,9 +9,21 @@
     "directory": "packages/utils"
   },
   "homepage": "https://penhold3r.github.io/latty-ds",
-  "keywords": ["design-system", "utils", "utilities", "logger", "latty"],
-  "publishConfig": { "access": "public" },
-  "files": ["dist", "README.md", "LICENSE"],
+  "keywords": [
+    "design-system",
+    "utils",
+    "utilities",
+    "logger",
+    "latty"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "sideEffects": false,
   "type": "module",
   "main": "./dist/index.js",

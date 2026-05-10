@@ -11,7 +11,9 @@ describe('<lt-badge>', () => {
     await el.updateComplete;
   });
 
-  afterEach(() => { el.remove(); });
+  afterEach(() => {
+    el.remove();
+  });
 
   it('renders in shadow DOM', () => {
     expect(el.shadowRoot).toBeTruthy();
@@ -34,11 +36,14 @@ describe('<lt-badge>', () => {
     expect(el.getAttribute('variant')).toBe('primary');
   });
 
-  it.each(['primary', 'secondary', 'success', 'warning', 'error', 'neutral'] as const)('reflects %s variant to attribute', async (variant) => {
-    el.variant = variant;
-    await el.updateComplete;
-    expect(el.getAttribute('variant')).toBe(variant);
-  });
+  it.each(['primary', 'secondary', 'success', 'warning', 'error', 'neutral'] as const)(
+    'reflects %s variant to attribute',
+    async (variant) => {
+      el.variant = variant;
+      await el.updateComplete;
+      expect(el.getAttribute('variant')).toBe(variant);
+    }
+  );
 
   it('has default size of md', () => {
     expect(el.size).toBe('md');

@@ -6,13 +6,13 @@ Framework-agnostic design system built on design tokens and Web Components. One 
 
 ## Packages
 
-| Package | Description |
-| --- | --- |
+| Package         | Description                                         |
+| --------------- | --------------------------------------------------- |
 | `@latty/tokens` | Design tokens → CSS variables, JSON, and JS exports |
-| `@latty/web` | Web Components (`lt-` prefix, built with Lit) |
-| `@latty/icons` | Icon components with pluggable provider system |
-| `@latty/react` | React wrappers for web components |
-| `@latty/utils` | Shared utilities |
+| `@latty/web`    | Web Components (`lt-` prefix, built with Lit)       |
+| `@latty/icons`  | Icon components with pluggable provider system      |
+| `@latty/react`  | React wrappers for web components                   |
+| `@latty/utils`  | Shared utilities                                    |
 
 ## Quick start
 
@@ -26,8 +26,7 @@ import '@latty/web';
 ```
 
 ```html
-<lt-button variant="primary">Save changes</lt-button>
-<lt-textfield label="Email" type="email" required></lt-textfield>
+<lt-button variant="primary">Save changes</lt-button> <lt-textfield label="Email" type="email" required></lt-textfield>
 ```
 
 ## Development

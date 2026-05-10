@@ -12,16 +12,16 @@ import { xSvg } from './x';
 import { youtubeSvg } from './youtube';
 
 export const socialIcons = {
-  'x': xSvg,
-  'instagram': instagramSvg,
-  'github': githubSvg,
-  'youtube': youtubeSvg,
-  'linkedin': linkedinSvg,
-  'whatsapp': whatsappSvg,
-  'facebook': facebookSvg,
-  'tiktok': tiktokSvg,
-  'discord': discordSvg,
-  'telegram': telegramSvg,
-  'slack': slackSvg,
-  'dribbble': dribbbleSvg,
+  x: xSvg,
+  instagram: instagramSvg,
+  github: githubSvg,
+  youtube: youtubeSvg,
+  linkedin: linkedinSvg,
+  whatsapp: whatsappSvg,
+  facebook: facebookSvg,
+  tiktok: tiktokSvg,
+  discord: discordSvg,
+  telegram: telegramSvg,
+  slack: slackSvg,
+  dribbble: dribbbleSvg
 } as const;

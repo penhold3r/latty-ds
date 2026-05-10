@@ -15,25 +15,23 @@ export type RadioProps = {
   children?: ReactNode;
 };
 
-export const Radio = forwardRef<RadioEl, RadioProps>(
-  function Radio({ onChange, children, ...props }, forwardedRef) {
-    const innerRef = useRef<RadioEl>(null);
+export const Radio = forwardRef<RadioEl, RadioProps>(function Radio({ onChange, children, ...props }, forwardedRef) {
+  const innerRef = useRef<RadioEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onChange) return;
-      const h = (ev: Event) => onChange!(ev as CustomEvent);
-      el.addEventListener('change', h);
-      return () => el.removeEventListener('change', h);
-    }, [onChange]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onChange) return;
+    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    el.addEventListener('change', h);
+    return () => el.removeEventListener('change', h);
+  }, [onChange]);
 
-    return (
-      <lt-radio ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-radio>
-    );
-  }
-);
+  return (
+    <lt-radio ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-radio>
+  );
+});
 Radio.displayName = 'Radio';

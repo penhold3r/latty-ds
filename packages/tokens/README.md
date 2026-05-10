@@ -36,12 +36,12 @@ Edit `tokens.config.json` to set the base hex for each semantic color. The build
 ```json
 {
   "color": {
-    "primary":   "#05b8e1",
+    "primary": "#05b8e1",
     "secondary": "#e26d05",
-    "success":   "#22c55e",
-    "warning":   "#eeb308",
-    "error":     "#ef4444",
-    "info":      "#0ea5e9"
+    "success": "#22c55e",
+    "warning": "#eeb308",
+    "error": "#ef4444",
+    "info": "#0ea5e9"
   }
 }
 ```
@@ -77,11 +77,11 @@ import { configure } from '@latty/tokens/configure';
 
 configure({
   colors: {
-    primary:   '#6366f1',
-    secondary: '#f59e0b',
+    primary: '#6366f1',
+    secondary: '#f59e0b'
   },
-  font:   { family: 'Inter, sans-serif' },
-  border: { radius: '0.375rem' },
+  font: { family: 'Inter, sans-serif' },
+  border: { radius: '0.375rem' }
 });
 ```
 
@@ -106,8 +106,8 @@ Import the static token object for programmatic access (e.g. in a Tailwind confi
 import { tokens } from '@latty/tokens';
 
 console.log(tokens.color.primary['500']); // "#0097be"
-console.log(tokens.spacing.rem['4']);     // "1rem"
-console.log(tokens.elevation['2']);       // "0 4px 6px -1px rgb(…)"
+console.log(tokens.spacing.rem['4']); // "1rem"
+console.log(tokens.elevation['2']); // "0 4px 6px -1px rgb(…)"
 ```
 
 ---
@@ -116,17 +116,17 @@ console.log(tokens.elevation['2']);       // "0 4px 6px -1px rgb(…)"
 
 ### Primitive tokens (`tokens.css`)
 
-| Prefix | Example | Description |
-|---|---|---|
-| `--lt-color-[name]-[step]` | `--lt-color-primary-500` | Color palette steps 50–900 |
-| `--lt-color-[name]-muted-[step]` | `--lt-color-primary-muted-300` | Desaturated variant of each color |
-| `--lt-color-neutral-[step]` | `--lt-color-neutral-100` | Greyscale scale |
-| `--lt-color-white` / `--lt-color-black` | | System colors |
-| `--lt-spacing-[n]` | `--lt-spacing-4` → `1rem` | Spacing scale (rem), n = 0–24 |
-| `--lt-spacing-px-[n]` | `--lt-spacing-px-4` → `16px` | Spacing scale (px) |
-| `--lt-border-radius` | `0.5rem` | Global border radius |
-| `--lt-elevation-[n]` | `--lt-elevation-2` | Box shadows, n = 0–5 |
-| `--lt-typography-fontFamily` | `"Asap", sans-serif` | Base font family |
+| Prefix                                  | Example                        | Description                       |
+| --------------------------------------- | ------------------------------ | --------------------------------- |
+| `--lt-color-[name]-[step]`              | `--lt-color-primary-500`       | Color palette steps 50–900        |
+| `--lt-color-[name]-muted-[step]`        | `--lt-color-primary-muted-300` | Desaturated variant of each color |
+| `--lt-color-neutral-[step]`             | `--lt-color-neutral-100`       | Greyscale scale                   |
+| `--lt-color-white` / `--lt-color-black` |                                | System colors                     |
+| `--lt-spacing-[n]`                      | `--lt-spacing-4` → `1rem`      | Spacing scale (rem), n = 0–24     |
+| `--lt-spacing-px-[n]`                   | `--lt-spacing-px-4` → `16px`   | Spacing scale (px)                |
+| `--lt-border-radius`                    | `0.5rem`                       | Global border radius              |
+| `--lt-elevation-[n]`                    | `--lt-elevation-2`             | Box shadows, n = 0–5              |
+| `--lt-typography-fontFamily`            | `"Asap", sans-serif`           | Base font family                  |
 
 Color names: `primary`, `secondary`, `success`, `warning`, `error`, `info` (each with a `-muted` variant).
 
@@ -134,11 +134,11 @@ Color names: `primary`, `secondary`, `success`, `warning`, `error`, `info` (each
 
 Semantic tokens encode intent, not raw values. They reference primitives via `var()` so theming only requires overriding this layer.
 
-| Group | Example | Intent |
-|---|---|---|
-| `--lt-text-*` | `--lt-text-default` | Foreground / text colors |
-| `--lt-bg-*` | `--lt-bg-surface` | Background fills |
-| `--lt-border-*` | `--lt-border-focus` | Stroke colors |
+| Group                | Example                             | Intent                         |
+| -------------------- | ----------------------------------- | ------------------------------ |
+| `--lt-text-*`        | `--lt-text-default`                 | Foreground / text colors       |
+| `--lt-bg-*`          | `--lt-bg-surface`                   | Background fills               |
+| `--lt-border-*`      | `--lt-border-focus`                 | Stroke colors                  |
 | `--lt-interactive-*` | `--lt-interactive-primary-bg-hover` | Stateful component backgrounds |
 
 Key semantic tokens:
@@ -176,13 +176,13 @@ Key semantic tokens:
 
 ## Package exports
 
-| Export | File | Use |
-|---|---|---|
-| `@latty/tokens` | `dist/index.js` | JS token object |
-| `@latty/tokens/configure` | `dist/configure.js` | Runtime `configure()` / `createStyleSheet()` |
-| `@latty/tokens/tokens.css` | `dist/tokens.css` | Primitive CSS custom properties |
-| `@latty/tokens/semantic.css` | `dist/semantic.css` | Semantic CSS custom properties |
-| `@latty/tokens/tokens.json` | `dist/tokens.json` | Full token object as JSON |
+| Export                       | File                | Use                                          |
+| ---------------------------- | ------------------- | -------------------------------------------- |
+| `@latty/tokens`              | `dist/index.js`     | JS token object                              |
+| `@latty/tokens/configure`    | `dist/configure.js` | Runtime `configure()` / `createStyleSheet()` |
+| `@latty/tokens/tokens.css`   | `dist/tokens.css`   | Primitive CSS custom properties              |
+| `@latty/tokens/semantic.css` | `dist/semantic.css` | Semantic CSS custom properties               |
+| `@latty/tokens/tokens.json`  | `dist/tokens.json`  | Full token object as JSON                    |
 
 ---
 

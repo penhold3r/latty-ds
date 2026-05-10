@@ -19,13 +19,13 @@ describe('<lt-table>', () => {
     columns = [
       { key: 'id', label: 'ID', sortable: true },
       { key: 'name', label: 'Name', sortable: true },
-      { key: 'age', label: 'Age', sortable: true, align: 'right' },
+      { key: 'age', label: 'Age', sortable: true, align: 'right' }
     ];
 
     data = [
       { id: 1, name: 'Alice', age: 30 },
       { id: 2, name: 'Bob', age: 25 },
-      { id: 3, name: 'Charlie', age: 35 },
+      { id: 3, name: 'Charlie', age: 35 }
     ];
 
     el = document.createElement('lt-table') as Table<TestData>;
@@ -160,8 +160,8 @@ describe('<lt-table>', () => {
     await el.updateComplete;
     await el.updateComplete; // Need second update for sorted data
 
-    const ages = Array.from(el.shadowRoot!.querySelectorAll('tbody tr')).map(
-      (row) => row.querySelectorAll('td')[2].textContent?.trim()
+    const ages = Array.from(el.shadowRoot!.querySelectorAll('tbody tr')).map((row) =>
+      row.querySelectorAll('td')[2].textContent?.trim()
     );
     expect(ages).toEqual(['25', '30', '35']);
   });
@@ -239,7 +239,7 @@ describe('<lt-table>', () => {
   it('applies sticky class to sticky columns', async () => {
     el.columns = [
       { key: 'id', label: 'ID', sticky: true },
-      { key: 'name', label: 'Name' },
+      { key: 'name', label: 'Name' }
     ];
     await el.updateComplete;
 
@@ -250,7 +250,7 @@ describe('<lt-table>', () => {
   it('applies hide-on-mobile class to mobile-hidden columns', async () => {
     el.columns = [
       { key: 'id', label: 'ID' },
-      { key: 'name', label: 'Name', hideOnMobile: true },
+      { key: 'name', label: 'Name', hideOnMobile: true }
     ];
     await el.updateComplete;
 
@@ -261,7 +261,7 @@ describe('<lt-table>', () => {
   it('applies column width styles', async () => {
     el.columns = [
       { key: 'id', label: 'ID', width: '100px' },
-      { key: 'name', label: 'Name' },
+      { key: 'name', label: 'Name' }
     ];
     await el.updateComplete;
 
@@ -272,7 +272,7 @@ describe('<lt-table>', () => {
   it('applies column minWidth styles', async () => {
     el.columns = [
       { key: 'id', label: 'ID', minWidth: '150px' },
-      { key: 'name', label: 'Name' },
+      { key: 'name', label: 'Name' }
     ];
     await el.updateComplete;
 
@@ -286,8 +286,8 @@ describe('<lt-table>', () => {
       {
         key: 'name',
         label: 'Name',
-        render: (value) => html`<strong>${value}</strong>`,
-      },
+        render: (value) => html`<strong>${value}</strong>`
+      }
     ];
     await el.updateComplete;
 
@@ -305,8 +305,8 @@ describe('<lt-table>', () => {
           // Custom sort: reverse alphabetical
           const comparison = b.name.localeCompare(a.name);
           return direction === 'asc' ? comparison : -comparison;
-        },
-      },
+        }
+      }
     ];
     await el.updateComplete;
     await el.updateComplete; // Need second update for columns change
@@ -324,7 +324,7 @@ describe('<lt-table>', () => {
     el.data = [
       { id: 1, name: 'Alice', age: 30 },
       { id: 2, name: null as unknown as string, age: 25 },
-      { id: 3, name: 'Charlie', age: 35 },
+      { id: 3, name: 'Charlie', age: 35 }
     ];
     await el.updateComplete;
 

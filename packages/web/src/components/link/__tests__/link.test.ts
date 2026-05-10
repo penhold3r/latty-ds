@@ -11,7 +11,9 @@ describe('<lt-link>', () => {
     await el.updateComplete;
   });
 
-  afterEach(() => { el.remove(); });
+  afterEach(() => {
+    el.remove();
+  });
 
   it('renders a shadow root', () => {
     expect(el.shadowRoot).toBeTruthy();

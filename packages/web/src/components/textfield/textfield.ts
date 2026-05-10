@@ -248,7 +248,8 @@ export class Textfield extends LitElement {
                   @change=${this.handleChange}
                   aria-label=${this.label || this.placeholder}
                   aria-invalid=${this.variant === 'error' ? 'true' : 'false'}
-                  class=${hasStartIcon ? 'has-start-icon' : ''} ${hasEndIcon ? 'has-end-icon' : ''}
+                  class=${hasStartIcon ? 'has-start-icon' : ''}
+                  ${hasEndIcon ? 'has-end-icon' : ''}
                 ></textarea>
               `
             : html`
@@ -263,7 +264,8 @@ export class Textfield extends LitElement {
                   @change=${this.handleChange}
                   aria-label=${this.label || this.placeholder}
                   aria-invalid=${this.variant === 'error' ? 'true' : 'false'}
-                  class=${hasStartIcon ? 'has-start-icon' : ''} ${hasEndIcon ? 'has-end-icon' : ''}
+                  class=${hasStartIcon ? 'has-start-icon' : ''}
+                  ${hasEndIcon ? 'has-end-icon' : ''}
                 />
               `}
           ${hasEndIcon
@@ -276,7 +278,9 @@ export class Textfield extends LitElement {
               `
             : ''}
         </div>
-        ${this.helperText ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>` : ''}
+        ${this.helperText
+          ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>`
+          : ''}
       </div>
     `;
   }

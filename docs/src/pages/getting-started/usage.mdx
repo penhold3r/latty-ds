@@ -13,16 +13,16 @@ The fastest way to get started — no build tool required:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <link rel="stylesheet" href="node_modules/@latty/tokens/dist/tokens.css">
-</head>
-<body>
-  <lt-button variant="primary" icon-start="save">Save changes</lt-button>
+  <head>
+    <link rel="stylesheet" href="node_modules/@latty/tokens/dist/tokens.css" />
+  </head>
+  <body>
+    <lt-button variant="primary" icon-start="save">Save changes</lt-button>
 
-  <script type="module">
-    import '@latty/web';
-  </script>
-</body>
+    <script type="module">
+      import '@latty/web';
+    </script>
+  </body>
 </html>
 ```
 
@@ -37,12 +37,7 @@ import '@latty/web';
 ```html
 <lt-button variant="primary">Click me</lt-button>
 
-<lt-textfield
-  label="Email address"
-  type="email"
-  required
-  helper-text="We'll never share your email"
-></lt-textfield>
+<lt-textfield label="Email address" type="email" required helper-text="We'll never share your email"></lt-textfield>
 ```
 
 ## React
@@ -67,23 +62,25 @@ Vue 3 supports Web Components natively. Add one-time configuration in your app e
 
 ```ts
 // main.ts
-import { createApp } from 'vue'
-import '@latty/tokens/dist/tokens.css'
-import '@latty/web'
-import App from './App.vue'
+import { createApp } from 'vue';
+import '@latty/tokens/dist/tokens.css';
+import '@latty/web';
+import App from './App.vue';
 
-const app = createApp(App)
-app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('lt-')
-app.mount('#app')
+const app = createApp(App);
+app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('lt-');
+app.mount('#app');
 ```
 
 Then use `lt-*` elements directly in any component template. Use Vue's `@event` syntax for listeners and `:prop` for reactive bindings:
 
 ```vue
 <script setup lang="ts">
-function save() { /* ... */ }
+function save() {
+  /* ... */
+}
 function onEmail(e: Event) {
-  console.log((e as CustomEvent).detail.value)
+  console.log((e as CustomEvent).detail.value);
 }
 </script>
 
@@ -122,11 +119,9 @@ Attributes handle strings and booleans. For richer data (e.g. table columns), us
 const table = document.querySelector('lt-table');
 table.columns = [
   { key: 'name', label: 'Name' },
-  { key: 'email', label: 'Email' },
+  { key: 'email', label: 'Email' }
 ];
-table.data = [
-  { name: 'Alice', email: 'alice@example.com' },
-];
+table.data = [{ name: 'Alice', email: 'alice@example.com' }];
 ```
 
 ## What's next?

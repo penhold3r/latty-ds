@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import '../styles/global.css';
 import Sidebar from '../components/Sidebar.astro';
 import lernaJson from '../../../lerna.json';
+import lattyLogo from '../assets/latty-logo.png';
 
 interface Props {
   title: string;
@@ -38,19 +40,20 @@ const year = new Date().getFullYear();
         <lt-icon name="menu" size="md" aria-hidden="true"></lt-icon>
       </button>
       <a slot="logo" href={`${base}/`} class="wordmark">
-        <span class="wordmark-accent">Latty</span>
+        <Image src={lattyLogo} alt="Latty" height={28} class="wordmark-logo" />
+      </a>
+      <div slot="after" class="header-end">
         <span class="version-badge">{version}</span>
-      </a>
-      <a
-        slot="after"
-        href="https://github.com/yourusername/latty-ds"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="github-link"
-        aria-label="GitHub"
-      >
-        <lt-icon name="github" size="md" aria-hidden="true"></lt-icon>
-      </a>
+        <a
+          href="https://github.com/yourusername/latty-ds"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="github-link"
+          aria-label="GitHub"
+        >
+          <lt-icon name="github" size="md" aria-hidden="true"></lt-icon>
+        </a>
+      </div>
     </lt-header>
 
     <lt-sidepanel id="nav-panel" anchor="left" size="240px" no-close-button>
@@ -103,16 +106,16 @@ const year = new Date().getFullYear();
   }
 
   .wordmark {
-    font-size: 1.25rem;
-    font-weight: 700;
     text-decoration: none;
     display: flex;
-    align-items: baseline;
-    gap: 0.4rem;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .wordmark-accent {
-    color: var(--lt-color-primary-50);
+  .wordmark-logo {
+    height: 28px;
+    width: auto;
+    display: block;
   }
 
   .version-badge {
@@ -126,6 +129,12 @@ const year = new Date().getFullYear();
     letter-spacing: 0.03em;
     align-self: center;
     line-height: 1.6;
+  }
+
+  .header-end {
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-3);
   }
 
   .github-link {

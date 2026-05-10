@@ -15,7 +15,9 @@ export const tooltipStyles = css`
     padding: var(--lt-spacing-1) var(--lt-spacing-2);
     pointer-events: none;
     position: absolute;
-    transition: opacity 150ms ease, visibility 150ms ease;
+    transition:
+      opacity 150ms ease,
+      visibility 150ms ease;
     visibility: hidden;
     white-space: nowrap;
     z-index: 1000;

@@ -9,17 +9,15 @@ export type SkeletonProps = {
   children?: ReactNode;
 };
 
-export const Skeleton = forwardRef<SkeletonEl, SkeletonProps>(
-  function Skeleton({ children, ...props }, forwardedRef) {
-    const innerRef = useRef<SkeletonEl>(null);
+export const Skeleton = forwardRef<SkeletonEl, SkeletonProps>(function Skeleton({ children, ...props }, forwardedRef) {
+  const innerRef = useRef<SkeletonEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-skeleton ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-skeleton>
-    );
-  }
-);
+  return (
+    <lt-skeleton ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-skeleton>
+  );
+});
 Skeleton.displayName = 'Skeleton';

@@ -46,5 +46,4 @@ export const dropdownItemStyles = css`
     color: var(--lt-text-disabled);
     cursor: not-allowed;
   }
-
 `;

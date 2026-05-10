@@ -18,7 +18,7 @@ describe('createStyleSheet', () => {
 
   it('applies custom primary color', () => {
     const defaultCss = createStyleSheet();
-    const customCss  = createStyleSheet({ colors: { primary: '#6366f1' } });
+    const customCss = createStyleSheet({ colors: { primary: '#6366f1' } });
     // Color palettes will differ
     expect(customCss).not.toEqual(defaultCss);
     expect(customCss).toContain('--lt-color-primary-500');

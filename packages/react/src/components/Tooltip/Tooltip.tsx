@@ -5,22 +5,20 @@ export type TooltipProps = {
   content?: string;
   placement?: TooltipEl['placement'];
   disabled?: boolean;
-  backgroundColor?: string;
+  background?: string;
   color?: string;
   children?: ReactNode;
 };
 
-export const Tooltip = forwardRef<TooltipEl, TooltipProps>(
-  function Tooltip({ children, ...props }, forwardedRef) {
-    const innerRef = useRef<TooltipEl>(null);
+export const Tooltip = forwardRef<TooltipEl, TooltipProps>(function Tooltip({ children, ...props }, forwardedRef) {
+  const innerRef = useRef<TooltipEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-tooltip ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-tooltip>
-    );
-  }
-);
+  return (
+    <lt-tooltip ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-tooltip>
+  );
+});
 Tooltip.displayName = 'Tooltip';

@@ -9,7 +9,10 @@ export const snackbarStyles = css`
     opacity: 0;
     position: fixed;
     transform: translateX(-50%) translateY(8px);
-    transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+    transition:
+      opacity 200ms ease,
+      transform 200ms ease,
+      visibility 200ms ease;
     visibility: hidden;
     width: max-content;
     z-index: 9000;
@@ -36,10 +39,18 @@ export const snackbarStyles = css`
 
   /* ── Variant text colors ─────────────────────────────────── */
 
-  :host([variant='success']) .inner { color: var(--lt-text-on-success); }
-  :host([variant='warning']) .inner { color: var(--lt-text-on-warning); }
-  :host([variant='error']) .inner { color: var(--lt-text-on-error); }
-  :host([variant='info']) .inner { color: var(--lt-text-on-info); }
+  :host([variant='success']) .inner {
+    color: var(--lt-text-on-success);
+  }
+  :host([variant='warning']) .inner {
+    color: var(--lt-text-on-warning);
+  }
+  :host([variant='error']) .inner {
+    color: var(--lt-text-on-error);
+  }
+  :host([variant='info']) .inner {
+    color: var(--lt-text-on-info);
+  }
 
   /* ── Variant icon ────────────────────────────────────────── */
 

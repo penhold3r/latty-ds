@@ -7,17 +7,18 @@ export type BreadcrumbItemProps = {
   children?: ReactNode;
 };
 
-export const BreadcrumbItem = forwardRef<BreadcrumbItemEl, BreadcrumbItemProps>(
-  function BreadcrumbItem({ children, ...props }, forwardedRef) {
-    const innerRef = useRef<BreadcrumbItemEl>(null);
+export const BreadcrumbItem = forwardRef<BreadcrumbItemEl, BreadcrumbItemProps>(function BreadcrumbItem(
+  { children, ...props },
+  forwardedRef
+) {
+  const innerRef = useRef<BreadcrumbItemEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-breadcrumb-item ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-breadcrumb-item>
-    );
-  }
-);
+  return (
+    <lt-breadcrumb-item ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-breadcrumb-item>
+  );
+});
 BreadcrumbItem.displayName = 'BreadcrumbItem';

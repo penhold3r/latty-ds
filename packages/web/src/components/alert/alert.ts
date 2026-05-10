@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 import { alertStyles } from './alert.styles';
 import type { AlertVariant, AlertAppearance } from './alert.types';
@@ -52,20 +53,27 @@ export class Alert extends LitElement {
   /** Show a dismiss button. Clicking it fires lt-close and removes the element. */
   @property({ type: Boolean, reflect: true }) closable = false;
 
+  /** Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600). */
+  @property({ reflect: true }) background = '';
+
   /** Renders the title in small caps with wider letter spacing. */
   @property({ type: Boolean, reflect: true }) uppercase = false;
+
+  private _resolve(value: string): string {
+    return value.startsWith('--') ? `var(${value})` : value;
+  }
 
   private static readonly _iconMap: Record<AlertVariant, string> = {
     default: 'info-circle',
     success: 'check-circle',
     warning: 'warning-triangle',
     error: 'xmark-circle',
-    info: 'info-circle',
+    info: 'info-circle'
   };
 
   private _handleClose() {
     const cancelled = !this.dispatchEvent(
-      new CustomEvent('lt-close', { bubbles: true, composed: true, cancelable: true }),
+      new CustomEvent('lt-close', { bubbles: true, composed: true, cancelable: true })
     );
     if (cancelled) return;
     this.setAttribute('dismissed', '');
@@ -81,26 +89,16 @@ export class Alert extends LitElement {
 
   render() {
     const iconName = this._resolvedIcon;
+    const bgStyle = styleMap(this.background ? { background: this._resolve(this.background) } : {});
     return html`
-      <div class="inner" part="base" role="alert">
-        ${iconName
-          ? html`<lt-icon
-              class="icon"
-              name=${iconName}
-              part="icon"
-            ></lt-icon>`
-          : ''}
+      <div class="inner" part="base" role="alert" style=${bgStyle}>
+        ${iconName ? html`<lt-icon class="icon" name=${iconName} part="icon"></lt-icon>` : ''}
         <div class="body">
           ${this.title ? html`<lt-text variant="h6" as="p" class="title" part="title">${this.title}</lt-text>` : ''}
           <div class="content" part="content"><slot></slot></div>
         </div>
         ${this.closable
-          ? html`<button
-              class="close"
-              @click=${this._handleClose}
-              aria-label="Dismiss"
-              part="close"
-            >
+          ? html`<button class="close" @click=${this._handleClose} aria-label="Dismiss" part="close">
               <lt-icon name="xmark"></lt-icon>
             </button>`
           : ''}

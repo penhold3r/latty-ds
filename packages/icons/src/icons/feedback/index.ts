@@ -17,11 +17,11 @@ export const feedbackIcons = {
   'xmark-circle': xmarkCircleSvg,
   'warning-triangle': warningTriangleSvg,
   'question-circle': questionCircleSvg,
-  'shield': shieldSvg,
-  'flag': flagSvg,
-  'bookmark': bookmarkSvg,
+  shield: shieldSvg,
+  flag: flagSvg,
+  bookmark: bookmarkSvg,
   'thumb-up': thumbUpSvg,
   'thumb-down': thumbDownSvg,
-  'fire': fireSvg,
-  'lock': lockSvg,
+  fire: fireSvg,
+  lock: lockSvg
 } as const;

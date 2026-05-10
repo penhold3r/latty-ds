@@ -48,21 +48,26 @@ Icons inherit `currentColor`, so you can style them with CSS:
 The following icons are available by default:
 
 **Navigation:**
+
 - `arrow-left`, `arrow-right`, `arrow-up`, `arrow-down`
 - `nav-arrow-left`, `nav-arrow-right`
 
 **Actions:**
+
 - `check`, `xmark`, `plus`, `minus`
 - `edit`, `trash`, `save`
 - `download`, `upload`
 
 **UI Elements:**
+
 - `search`, `menu`, `settings`, `home`, `user`, `bell`
 
 **Status:**
+
 - `info-circle`, `warning-triangle`, `check-circle`, `xmark-circle`
 
 **Media:**
+
 - `eye`, `eye-off`, `heart`, `star`
 
 ## Custom Icons
@@ -82,7 +87,7 @@ import { iconRegistry } from '@latty/icons';
 
 iconRegistry.registerIcons({
   'custom-1': '<svg>...</svg>',
-  'custom-2': '<svg>...</svg>',
+  'custom-2': '<svg>...</svg>'
 });
 ```
 

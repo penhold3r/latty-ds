@@ -9,9 +9,22 @@
     "directory": "packages/icons"
   },
   "homepage": "https://penhold3r.github.io/latty-ds",
-  "keywords": ["design-system", "icons", "iconoir", "web-components", "icon-registry", "latty"],
-  "publishConfig": { "access": "public" },
-  "files": ["dist", "README.md", "LICENSE"],
+  "keywords": [
+    "design-system",
+    "icons",
+    "iconoir",
+    "web-components",
+    "icon-registry",
+    "latty"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "sideEffects": true,
   "type": "module",
   "main": "./dist/index.js",

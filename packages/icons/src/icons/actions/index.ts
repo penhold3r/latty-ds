@@ -12,16 +12,16 @@ import { uploadSvg } from './upload';
 import { xmarkSvg } from './xmark';
 
 export const actionIcons = {
-  'check': checkSvg,
-  'xmark': xmarkSvg,
-  'plus': plusSvg,
-  'minus': minusSvg,
-  'edit': editSvg,
-  'trash': trashSvg,
-  'save': saveSvg,
-  'download': downloadSvg,
-  'upload': uploadSvg,
-  'copy': copySvg,
-  'share': shareSvg,
-  'link': linkSvg,
+  check: checkSvg,
+  xmark: xmarkSvg,
+  plus: plusSvg,
+  minus: minusSvg,
+  edit: editSvg,
+  trash: trashSvg,
+  save: saveSvg,
+  download: downloadSvg,
+  upload: uploadSvg,
+  copy: copySvg,
+  share: shareSvg,
+  link: linkSvg
 } as const;

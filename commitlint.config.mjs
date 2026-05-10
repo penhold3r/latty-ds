@@ -5,23 +5,11 @@ export default {
     'scope-enum': [
       2,
       'always',
-      [
-        'tokens',
-        'web',
-        'icons',
-        'react',
-        'utils',
-        'docs',
-        'scripts',
-        'deps',
-        'config',
-        'ci',
-        'release',
-      ],
+      ['tokens', 'web', 'icons', 'react', 'utils', 'docs', 'scripts', 'deps', 'config', 'ci', 'release']
     ],
     // Allow longer subjects for descriptive commit messages
     'subject-max-length': [2, 'always', 100],
     // Body/footer line length for long change descriptions
-    'body-max-line-length': [1, 'always', 120],
-  },
+    'body-max-line-length': [1, 'always', 120]
+  }
 };

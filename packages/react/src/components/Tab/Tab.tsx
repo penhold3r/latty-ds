@@ -12,25 +12,23 @@ export type TabProps = {
   children?: ReactNode;
 };
 
-export const Tab = forwardRef<TabEl, TabProps>(
-  function Tab({ onTabClick, children, ...props }, forwardedRef) {
-    const innerRef = useRef<TabEl>(null);
+export const Tab = forwardRef<TabEl, TabProps>(function Tab({ onTabClick, children, ...props }, forwardedRef) {
+  const innerRef = useRef<TabEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onTabClick) return;
-      const h = (ev: Event) => onTabClick!(ev as CustomEvent);
-      el.addEventListener('tab-click', h);
-      return () => el.removeEventListener('tab-click', h);
-    }, [onTabClick]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onTabClick) return;
+    const h = (ev: Event) => onTabClick!(ev as CustomEvent);
+    el.addEventListener('tab-click', h);
+    return () => el.removeEventListener('tab-click', h);
+  }, [onTabClick]);
 
-    return (
-      <lt-tab ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-tab>
-    );
-  }
-);
+  return (
+    <lt-tab ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-tab>
+  );
+});
 Tab.displayName = 'Tab';

@@ -16,25 +16,26 @@ export type CheckboxProps = {
   children?: ReactNode;
 };
 
-export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(
-  function Checkbox({ onChange, children, ...props }, forwardedRef) {
-    const innerRef = useRef<CheckboxEl>(null);
+export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
+  { onChange, children, ...props },
+  forwardedRef
+) {
+  const innerRef = useRef<CheckboxEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onChange) return;
-      const h = (ev: Event) => onChange!(ev as CustomEvent);
-      el.addEventListener('change', h);
-      return () => el.removeEventListener('change', h);
-    }, [onChange]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onChange) return;
+    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    el.addEventListener('change', h);
+    return () => el.removeEventListener('change', h);
+  }, [onChange]);
 
-    return (
-      <lt-checkbox ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-checkbox>
-    );
-  }
-);
+  return (
+    <lt-checkbox ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-checkbox>
+  );
+});
 Checkbox.displayName = 'Checkbox';

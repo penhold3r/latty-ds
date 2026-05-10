@@ -4,9 +4,9 @@ title: Installation
 description: Add Latty to your project
 ---
 
-# Installation
+<lt-text variant="h1">Installation</lt-text>
 
-## Install packages
+<lt-text variant="h3" as="h2">Install packages</lt-text>
 
 ```bash
 # pnpm
@@ -21,7 +21,7 @@ yarn add @latty/tokens @latty/web
 
 `@latty/icons` is bundled inside `@latty/web` — you don't need to install it separately unless you want to use the icon registry API directly.
 
-## Import tokens
+<lt-text variant="h3" as="h2">Import tokens</lt-text>
 
 The tokens CSS file must be loaded before any components render. Import it once at your app's entry point:
 
@@ -38,7 +38,7 @@ With a CSS `@import` (e.g. in a global stylesheet):
 In a plain HTML file:
 
 ```html
-<link rel="stylesheet" href="node_modules/@latty/tokens/dist/tokens.css">
+<link rel="stylesheet" href="node_modules/@latty/tokens/dist/tokens.css" />
 ```
 
 ## Import components

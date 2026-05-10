@@ -20,8 +20,8 @@ export const navigationIcons = {
   'caret-left': caretLeftSvg,
   'caret-right': caretRightSvg,
   'caret-up': caretUpSvg,
-  'external': externalSvg,
-  'location': locationSvg,
-  'return': returnSvg,
-  'compass': compassSvg,
+  external: externalSvg,
+  location: locationSvg,
+  return: returnSvg,
+  compass: compassSvg
 } as const;

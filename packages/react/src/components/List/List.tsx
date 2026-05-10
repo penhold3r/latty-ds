@@ -10,17 +10,15 @@ export type ListProps = {
   children?: ReactNode;
 };
 
-export const List = forwardRef<ListEl, ListProps>(
-  function List({ children, ...props }, forwardedRef) {
-    const innerRef = useRef<ListEl>(null);
+export const List = forwardRef<ListEl, ListProps>(function List({ children, ...props }, forwardedRef) {
+  const innerRef = useRef<ListEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    return (
-      <lt-list ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-list>
-    );
-  }
-);
+  return (
+    <lt-list ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-list>
+  );
+});
 List.displayName = 'List';

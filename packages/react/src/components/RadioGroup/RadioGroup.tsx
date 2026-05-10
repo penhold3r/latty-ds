@@ -13,25 +13,26 @@ export type RadioGroupProps = {
   children?: ReactNode;
 };
 
-export const RadioGroup = forwardRef<RadioGroupEl, RadioGroupProps>(
-  function RadioGroup({ onChange, children, ...props }, forwardedRef) {
-    const innerRef = useRef<RadioGroupEl>(null);
+export const RadioGroup = forwardRef<RadioGroupEl, RadioGroupProps>(function RadioGroup(
+  { onChange, children, ...props },
+  forwardedRef
+) {
+  const innerRef = useRef<RadioGroupEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onChange) return;
-      const h = (ev: Event) => onChange!(ev as CustomEvent);
-      el.addEventListener('change', h);
-      return () => el.removeEventListener('change', h);
-    }, [onChange]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onChange) return;
+    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    el.addEventListener('change', h);
+    return () => el.removeEventListener('change', h);
+  }, [onChange]);
 
-    return (
-      <lt-radio-group ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-radio-group>
-    );
-  }
-);
+  return (
+    <lt-radio-group ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-radio-group>
+  );
+});
 RadioGroup.displayName = 'RadioGroup';

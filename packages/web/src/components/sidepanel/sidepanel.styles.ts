@@ -101,7 +101,9 @@ export const sidepanelStyles = css`
     border-radius: var(--lt-border-radius);
     color: var(--lt-color-neutral-500);
     cursor: pointer;
-    transition: background 120ms ease, color 120ms ease;
+    transition:
+      background 120ms ease,
+      color 120ms ease;
     flex-shrink: 0;
   }
 

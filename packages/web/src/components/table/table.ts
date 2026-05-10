@@ -5,13 +5,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit/directives/repeat.js';
 
 import { tableStyles } from './table.styles';
-import {
-  TableColumn,
-  TableDensity,
-  TableResponsiveMode,
-  SortState,
-  SortChangeDetail,
-} from './table.types';
+import { TableColumn, TableDensity, TableResponsiveMode, SortState, SortChangeDetail } from './table.types';
 
 const jsonArrayConverter = {
   fromAttribute(value: string | null): unknown[] {
@@ -108,8 +102,7 @@ export class Table<T = Record<string, unknown>> extends LitElement {
    * Responsive behavior on small screens.
    * @default 'scroll'
    */
-  @property({ reflect: true, attribute: 'responsive-mode' }) responsiveMode: TableResponsiveMode =
-    'scroll';
+  @property({ reflect: true, attribute: 'responsive-mode' }) responsiveMode: TableResponsiveMode = 'scroll';
 
   /**
    * Whether rows have a hover effect.
@@ -244,7 +237,7 @@ export class Table<T = Record<string, unknown>> extends LitElement {
 
     const newSort: SortState = {
       key: column.key,
-      direction: newDirection,
+      direction: newDirection
     };
 
     // Update internal state if not controlled
@@ -260,8 +253,8 @@ export class Table<T = Record<string, unknown>> extends LitElement {
         detail: {
           key: column.key,
           direction: newDirection,
-          previousSort,
-        },
+          previousSort
+        }
       })
     );
   }
@@ -270,7 +263,9 @@ export class Table<T = Record<string, unknown>> extends LitElement {
    * Gets a cell value from a row using a key (supports nested keys).
    */
   private getCellValue(row: unknown, key: string): unknown {
-    return key.split('.').reduce((obj: Record<string, unknown>, k) => obj?.[k] as Record<string, unknown>, row as Record<string, unknown>);
+    return key
+      .split('.')
+      .reduce((obj: Record<string, unknown>, k) => obj?.[k] as Record<string, unknown>, row as Record<string, unknown>);
   }
 
   /**
@@ -296,9 +291,7 @@ export class Table<T = Record<string, unknown>> extends LitElement {
     const direction = isCurrentSort ? this.currentSort!.direction : 'asc';
     const iconName = direction === 'asc' ? 'arrow-up' : 'arrow-down';
 
-    return html`
-      <lt-icon class="sort-icon" name=${iconName}></lt-icon>
-    `;
+    return html` <lt-icon class="sort-icon" name=${iconName}></lt-icon> `;
   }
 
   /**
@@ -315,7 +308,7 @@ export class Table<T = Record<string, unknown>> extends LitElement {
                   sortable: !!column.sortable,
                   sorted: this.currentSort?.key === column.key,
                   sticky: !!column.sticky,
-                  'hide-on-mobile': !!column.hideOnMobile,
+                  'hide-on-mobile': !!column.hideOnMobile
                 })}
                 data-align=${column.align || 'left'}
                 @click=${() => this.handleHeaderClick(column)}
@@ -335,7 +328,7 @@ export class Table<T = Record<string, unknown>> extends LitElement {
                   : nothing}
                 style=${styleMap({
                   ...(column.width ? { width: column.width } : {}),
-                  ...(column.minWidth ? { minWidth: column.minWidth } : {}),
+                  ...(column.minWidth ? { minWidth: column.minWidth } : {})
                 })}
               >
                 ${column.sortable
@@ -363,9 +356,7 @@ export class Table<T = Record<string, unknown>> extends LitElement {
       return html`
         <tbody>
           <tr>
-            <td colspan=${columns.length} class="empty-state">
-              ${this.emptyMessage}
-            </td>
+            <td colspan=${columns.length} class="empty-state">${this.emptyMessage}</td>
           </tr>
         </tbody>
       `;
@@ -375,9 +366,7 @@ export class Table<T = Record<string, unknown>> extends LitElement {
       <tbody>
         ${repeat(
           this.sortedData,
-          (row) => this.rowKey
-            ? (row as Record<string, unknown>)[this.rowKey]
-            : JSON.stringify(row),
+          (row) => (this.rowKey ? (row as Record<string, unknown>)[this.rowKey] : JSON.stringify(row)),
           (row, index) => html`
             <tr>
               ${columns.map(
@@ -385,13 +374,13 @@ export class Table<T = Record<string, unknown>> extends LitElement {
                   <td
                     class=${classMap({
                       sticky: !!column.sticky,
-                      'hide-on-mobile': !!column.hideOnMobile,
+                      'hide-on-mobile': !!column.hideOnMobile
                     })}
                     data-align=${column.align || 'left'}
                     data-label=${column.label}
                     style=${styleMap({
                       ...(column.width ? { width: column.width } : {}),
-                      ...(column.minWidth ? { minWidth: column.minWidth } : {}),
+                      ...(column.minWidth ? { minWidth: column.minWidth } : {})
                     })}
                   >
                     ${this.renderCell(column, row, index)}
@@ -409,8 +398,7 @@ export class Table<T = Record<string, unknown>> extends LitElement {
     return html`
       <div class="table-container">
         <table>
-          ${this.renderHeader()}
-          ${this.renderBody()}
+          ${this.renderHeader()} ${this.renderBody()}
         </table>
         ${this.loading
           ? html`

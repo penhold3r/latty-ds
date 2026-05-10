@@ -17,25 +17,26 @@ export type TableProps = {
   children?: ReactNode;
 };
 
-export const Table = forwardRef<TableEl, TableProps>(
-  function Table({ onLtSortChange, children, ...props }, forwardedRef) {
-    const innerRef = useRef<TableEl>(null);
+export const Table = forwardRef<TableEl, TableProps>(function Table(
+  { onLtSortChange, children, ...props },
+  forwardedRef
+) {
+  const innerRef = useRef<TableEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onLtSortChange) return;
-      const h = (ev: Event) => onLtSortChange!(ev as CustomEvent);
-      el.addEventListener('lt-sort-change', h);
-      return () => el.removeEventListener('lt-sort-change', h);
-    }, [onLtSortChange]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onLtSortChange) return;
+    const h = (ev: Event) => onLtSortChange!(ev as CustomEvent);
+    el.addEventListener('lt-sort-change', h);
+    return () => el.removeEventListener('lt-sort-change', h);
+  }, [onLtSortChange]);
 
-    return (
-      <lt-table ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-table>
-    );
-  }
-);
+  return (
+    <lt-table ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-table>
+  );
+});
 Table.displayName = 'Table';
