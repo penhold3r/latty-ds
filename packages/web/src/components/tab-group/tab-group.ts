@@ -6,6 +6,7 @@ import { TabGroupSize, TabGroupAppearance } from './tab-group.types';
 import type { Tab } from '../tab/tab';
 
 import '../tab/tab';
+import '../tab/tab-panel';
 
 /**
  * A container component that manages a group of tabs.
@@ -119,7 +120,7 @@ export class TabGroup extends LitElement {
     if (!this.panels) return;
 
     this.panels.forEach((panel) => {
-      const panelValue = panel.getAttribute('data-value');
+      const panelValue = panel.getAttribute('value') ?? panel.getAttribute('data-value');
       if (panelValue === this.value) {
         panel.setAttribute('active', '');
       } else {

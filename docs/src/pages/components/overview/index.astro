@@ -1,0 +1,393 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Components overview"
+  description="Philosophy, prop naming conventions, and a directory of every component"
+>
+  <h1>Components</h1>
+  <p>
+    Latty components are Lit-based Web Components that consume <code>--lt-*</code> design tokens. They work natively in HTML,
+    Vue, and Svelte, and ship with thin React wrappers in <code>@latty/react</code>. Every component follows the same
+    prop naming rules so you never have to guess — if you know one component you know them all.
+  </p>
+
+  <h2>Prop naming conventions</h2>
+  <p>Each prop name has exactly one meaning across the entire system. The table below is the canonical reference.</p>
+
+  <table class="conv-table">
+    <thead>
+      <tr>
+        <th>Prop</th>
+        <th>Controls</th>
+        <th>Allowed values</th>
+        <th>Used on</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>variant</code></td>
+        <td>Semantic color palette</td>
+        <td
+          ><code>primary</code> · <code>secondary</code> · <code>success</code> · <code>warning</code> · <code
+            >error</code
+          > · <code>info</code> · <code>neutral</code> · <code>default</code></td
+        >
+        <td>Button, Badge, Alert, Chip, Snackbar, Progress, Spinner…</td>
+      </tr>
+      <tr>
+        <td><code>appearance</code></td>
+        <td>Visual fill style</td>
+        <td
+          ><code>filled</code> · <code>outlined</code> · <code>ghost</code> · <code>solid</code> · <code>clean</code> · <code
+            >dashed</code
+          > · <code>dotted</code></td
+        >
+        <td>Button, Badge, Alert, Chip, Surface, Divider, Accordion, Tab group…</td>
+      </tr>
+      <tr>
+        <td><code>shape</code></td>
+        <td>Geometric / structural form</td>
+        <td><code>circle</code> · <code>square</code> · <code>rect</code> · <code>text</code></td>
+        <td>Skeleton</td>
+      </tr>
+      <tr>
+        <td><code>background</code></td>
+        <td>Surface color the element sits on (predefined set)</td>
+        <td><code>primary</code> · <code>surface</code></td>
+        <td>Header</td>
+      </tr>
+      <tr>
+        <td><code>background</code> <em>(color override)</em></td>
+        <td>Custom background color; overrides the variant/appearance-derived background</td>
+        <td>Hex value (<code>#1a1a2e</code>) or CSS token name (<code>--lt-color-primary-600</code>)</td>
+        <td>Surface, Tooltip, Alert, Chip</td>
+      </tr>
+      <tr>
+        <td><code>size</code></td>
+        <td>Component scale</td>
+        <td><code>sm</code> · <code>md</code> · <code>lg</code></td>
+        <td>Button, Badge, Chip, Textfield, Slider, Tab group…</td>
+      </tr>
+      <tr>
+        <td><code>placement</code></td>
+        <td>Position of floating / overlay elements</td>
+        <td
+          ><code>top</code> · <code>bottom</code> · <code>left</code> · <code>right</code> (+ <code>-start</code> / <code
+            >-end</code
+          > variants)</td
+        >
+        <td>Tooltip, Dropdown</td>
+      </tr>
+      <tr>
+        <td><code>anchor</code></td>
+        <td>Edge the drawer is attached to</td>
+        <td><code>left</code> · <code>right</code></td>
+        <td>SidePanel</td>
+      </tr>
+      <tr>
+        <td><code>icon-start</code></td>
+        <td>Leading icon (before label)</td>
+        <td>Any icon name, e.g. <code>home</code>, <code>settings</code></td>
+        <td>Button, Textfield, Tab, Accordion, List item, Nav item…</td>
+      </tr>
+      <tr>
+        <td><code>icon-end</code></td>
+        <td>Trailing icon (after label)</td>
+        <td>Any icon name</td>
+        <td>Button, List item</td>
+      </tr>
+      <tr>
+        <td><code>icon</code></td>
+        <td>Standalone status / decorative icon</td>
+        <td><code>""</code> (auto for status variants) · <code>"none"</code> (suppress) · any icon name (override)</td>
+        <td>Alert, Snackbar</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Boolean prop conventions</h2>
+  <p>
+    A boolean attribute is <code>true</code> when present and <code>false</code> when absent — consistent with how HTML boolean
+    attributes work (<code>disabled</code>, <code>required</code>, etc.).
+  </p>
+  <ul>
+    <li>
+      <strong>Positive adjective or noun</strong> — use when the feature is off by default and the attribute enables it: <code
+        >disabled</code
+      >, <code>loading</code>, <code>closable</code>, <code>striped</code>,
+      <code>bordered</code>, <code>tooltip</code>.
+    </li>
+    <li>
+      <strong><code>no-</code> prefix</strong> — use when the feature is <em>on</em> by default and the attribute suppresses
+      it: <code>no-close-button</code>, <code>no-marker</code>.
+    </li>
+    <li>
+      <strong>Never verb phrases</strong> — <code>hideCloseButton</code>, <code>showTooltip</code>,
+      <code>withIcon</code> are banned. They force the reader to reason about polarity instead of just checking presence.
+    </li>
+  </ul>
+
+  <h2>All components</h2>
+
+  <div class="component-grid">
+    <a class="component-card" href="/components/accordion">
+      <span class="component-name">Accordion</span>
+      <code class="component-tag">lt-accordion</code>
+      <span class="component-desc">Collapsible content panels with optional icons and fill styles</span>
+    </a>
+    <a class="component-card" href="/components/alert">
+      <span class="component-name">Alert</span>
+      <code class="component-tag">lt-alert</code>
+      <span class="component-desc">Inline status message with optional icon and dismiss button</span>
+    </a>
+    <a class="component-card" href="/components/avatar">
+      <span class="component-name">Avatar</span>
+      <code class="component-tag">lt-avatar</code>
+      <span class="component-desc">User or entity image with fallback initials</span>
+    </a>
+    <a class="component-card" href="/components/badge">
+      <span class="component-name">Badge</span>
+      <code class="component-tag">lt-badge</code>
+      <span class="component-desc">Small label for status, counts, or categories</span>
+    </a>
+    <a class="component-card" href="/components/breadcrumb">
+      <span class="component-name">Breadcrumb</span>
+      <code class="component-tag">lt-breadcrumb</code>
+      <span class="component-desc">Hierarchical navigation trail</span>
+    </a>
+    <a class="component-card" href="/components/button">
+      <span class="component-name">Button</span>
+      <code class="component-tag">lt-button</code>
+      <span class="component-desc">Interactive control with variant, appearance, and icon slots</span>
+    </a>
+    <a class="component-card" href="/components/checkbox">
+      <span class="component-name">Checkbox</span>
+      <code class="component-tag">lt-checkbox</code>
+      <span class="component-desc">Boolean form input with indeterminate state</span>
+    </a>
+    <a class="component-card" href="/components/chip">
+      <span class="component-name">Chip</span>
+      <code class="component-tag">lt-chip</code>
+      <span class="component-desc">Compact tag for filters, selections, or metadata</span>
+    </a>
+    <a class="component-card" href="/components/combobox">
+      <span class="component-name">Combobox</span>
+      <code class="component-tag">lt-combobox</code>
+      <span class="component-desc">Searchable single-select dropdown with keyboard filtering</span>
+    </a>
+    <a class="component-card" href="/components/datepicker">
+      <span class="component-name">Datepicker</span>
+      <code class="component-tag">lt-datepicker</code>
+      <span class="component-desc">Styled wrapper around the native date, time, and datetime-local inputs</span>
+    </a>
+    <a class="component-card" href="/components/dialog">
+      <span class="component-name">Dialog</span>
+      <code class="component-tag">lt-dialog</code>
+      <span class="component-desc">Modal overlay for confirmations and focused interactions</span>
+    </a>
+    <a class="component-card" href="/components/divider">
+      <span class="component-name">Divider</span>
+      <code class="component-tag">lt-divider</code>
+      <span class="component-desc">Horizontal or vertical rule with solid / dashed / dotted appearances</span>
+    </a>
+    <a class="component-card" href="/components/dropdown">
+      <span class="component-name">Dropdown</span>
+      <code class="component-tag">lt-dropdown</code>
+      <span class="component-desc">Anchored popover menu triggered by a slotted element</span>
+    </a>
+    <a class="component-card" href="/components/empty-state">
+      <span class="component-name">Empty State</span>
+      <code class="component-tag">lt-empty-state</code>
+      <span class="component-desc">Placeholder for zero-data views with icon, title, description, and actions</span>
+    </a>
+    <a class="component-card" href="/components/header">
+      <span class="component-name">Header</span>
+      <code class="component-tag">lt-header</code>
+      <span class="component-desc">Top app bar with title, navigation, and action slots</span>
+    </a>
+    <a class="component-card" href="/components/image">
+      <span class="component-name">Image</span>
+      <code class="component-tag">lt-image</code>
+      <span class="component-desc">Responsive image with lazy loading and aspect-ratio control</span>
+    </a>
+    <a class="component-card" href="/components/link">
+      <span class="component-name">Link</span>
+      <code class="component-tag">lt-link</code>
+      <span class="component-desc">Inline anchor styled with the design system</span>
+    </a>
+    <a class="component-card" href="/components/list">
+      <span class="component-name">List</span>
+      <code class="component-tag">lt-list · lt-list-item</code>
+      <span class="component-desc">Vertical list container with icon, divider, and marker options</span>
+    </a>
+    <a class="component-card" href="/components/navigation">
+      <span class="component-name">Navigation</span>
+      <code class="component-tag">lt-nav · lt-nav-item</code>
+      <span class="component-desc">Sidebar navigation with grouped items and active state</span>
+    </a>
+    <a class="component-card" href="/components/pagination">
+      <span class="component-name">Pagination</span>
+      <code class="component-tag">lt-pagination</code>
+      <span class="component-desc">Page navigation for paged data sets with ellipsis windowing</span>
+    </a>
+    <a class="component-card" href="/components/progress">
+      <span class="component-name">Progress</span>
+      <code class="component-tag">lt-progress</code>
+      <span class="component-desc">Linear progress bar with determinate and indeterminate modes</span>
+    </a>
+    <a class="component-card" href="/components/radio">
+      <span class="component-name">Radio</span>
+      <code class="component-tag">lt-radio</code>
+      <span class="component-desc">Single-select form input, typically used in a group</span>
+    </a>
+    <a class="component-card" href="/components/select">
+      <span class="component-name">Select</span>
+      <code class="component-tag">lt-select</code>
+      <span class="component-desc">Native-backed dropdown for choosing one option from a list</span>
+    </a>
+    <a class="component-card" href="/components/sidepanel">
+      <span class="component-name">SidePanel</span>
+      <code class="component-tag">lt-sidepanel</code>
+      <span class="component-desc">Sliding drawer anchored to the left or right edge</span>
+    </a>
+    <a class="component-card" href="/components/skeleton">
+      <span class="component-name">Skeleton</span>
+      <code class="component-tag">lt-skeleton</code>
+      <span class="component-desc">Loading placeholder in text, rect, or circle shapes</span>
+    </a>
+    <a class="component-card" href="/components/slider">
+      <span class="component-name">Slider</span>
+      <code class="component-tag">lt-slider</code>
+      <span class="component-desc">Range input for selecting a value within a bounded range</span>
+    </a>
+    <a class="component-card" href="/components/snackbar">
+      <span class="component-name">Snackbar</span>
+      <code class="component-tag">lt-snackbar</code>
+      <span class="component-desc">Transient notification anchored to the bottom of the viewport</span>
+    </a>
+    <a class="component-card" href="/components/spinner">
+      <span class="component-name">Spinner</span>
+      <code class="component-tag">lt-spinner</code>
+      <span class="component-desc">Circular indeterminate loading indicator</span>
+    </a>
+    <a class="component-card" href="/components/surface">
+      <span class="component-name">Surface</span>
+      <code class="component-tag">lt-surface</code>
+      <span class="component-desc">Elevated container for cards, panels, and layered layouts</span>
+    </a>
+    <a class="component-card" href="/components/switch">
+      <span class="component-name">Switch</span>
+      <code class="component-tag">lt-switch</code>
+      <span class="component-desc">Toggle control for binary on/off settings</span>
+    </a>
+    <a class="component-card" href="/components/tab">
+      <span class="component-name">Tab</span>
+      <code class="component-tag">lt-tab-group · lt-tab</code>
+      <span class="component-desc">Tabbed navigation with default and pills appearances</span>
+    </a>
+    <a class="component-card" href="/components/table">
+      <span class="component-name">Table</span>
+      <code class="component-tag">lt-table</code>
+      <span class="component-desc">Data grid with sortable columns, striped rows, and hoverable state</span>
+    </a>
+    <a class="component-card" href="/components/text">
+      <span class="component-name">Text</span>
+      <code class="component-tag">lt-text</code>
+      <span class="component-desc">Typography component for headings, body, and label styles</span>
+    </a>
+    <a class="component-card" href="/components/textfield">
+      <span class="component-name">Textfield</span>
+      <code class="component-tag">lt-textfield</code>
+      <span class="component-desc">Text input with label, helper text, icon, and validation states</span>
+    </a>
+    <a class="component-card" href="/components/tooltip">
+      <span class="component-name">Tooltip</span>
+      <code class="component-tag">lt-tooltip</code>
+      <span class="component-desc">Non-interactive floating label on hover or focus</span>
+    </a>
+  </div>
+</BaseLayout>
+
+<style>
+  .conv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin: var(--lt-spacing-6) 0;
+    border: 1px solid var(--lt-color-neutral-200);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .conv-table th,
+  .conv-table td {
+    padding: var(--lt-spacing-3) var(--lt-spacing-4);
+    text-align: left;
+    border-bottom: 1px solid var(--lt-color-neutral-200);
+    vertical-align: top;
+  }
+
+  .conv-table thead th {
+    background: var(--lt-color-neutral-50);
+    font-weight: 600;
+    color: var(--lt-color-neutral-700);
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .conv-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .conv-table tbody tr:hover td {
+    background: var(--lt-color-neutral-50);
+  }
+
+  .component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--lt-spacing-4);
+    margin-top: var(--lt-spacing-6);
+  }
+
+  .component-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lt-spacing-1);
+    padding: var(--lt-spacing-4);
+    border: 1px solid var(--lt-color-neutral-200);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+
+  .component-card:hover {
+    border-color: var(--lt-color-primary-400);
+    box-shadow: 0 0 0 3px var(--lt-color-primary-100);
+  }
+
+  .component-name {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--lt-color-neutral-900);
+  }
+
+  .component-tag {
+    font-size: 0.75rem;
+    color: var(--lt-color-neutral-500);
+    font-family: monospace;
+  }
+
+  .component-desc {
+    font-size: 0.8125rem;
+    color: var(--lt-color-neutral-600);
+    line-height: 1.5;
+    margin-top: var(--lt-spacing-1);
+  }
+</style>

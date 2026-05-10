@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Pagination" description="Page navigation for paged data sets">
+  <h1>Pagination</h1>
+  <p>
+    Page navigation control for paged data sets. Renders first, previous, numbered pages, next, and last buttons. Large
+    page counts collapse to an ellipsis window around the current page.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="pagination-playground">
+    <div slot="preview">
+      <lt-pagination id="playground-pg" page="5" total-pages="20"></lt-pagination>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">size</label>
+        <select class="control-select" id="ctrl-size">
+          <option value="sm">sm</option>
+          <option value="md" selected>md</option>
+          <option value="lg">lg</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">total-pages</label>
+        <input class="control-input" id="ctrl-total" type="number" value="20" min="1" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">page</label>
+        <input class="control-input" id="ctrl-page" type="number" value="5" min="1" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">disabled</label>
+        <input type="checkbox" id="ctrl-disabled" />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`
+<lt-pagination page="1" total-pages="10"></lt-pagination>
+
+<!-- Small size -->
+<lt-pagination size="sm" page="3" total-pages="20"></lt-pagination>
+
+<!-- Disabled -->
+<lt-pagination page="5" total-pages="10" disabled></lt-pagination>
+
+<script type="module">
+  document.querySelector('lt-pagination').addEventListener('lt-change', (e) => {
+    console.log('navigated to page', e.detail.page);
+  });
+<\/script>
+    `}
+    react={`
+import { Pagination } from '@latty/react';
+
+<Pagination page={1} totalPages={10} onChange={(page) => console.log('page', page)} />
+
+<Pagination size="sm" page={3} totalPages={20} onChange={(page) => setPage(page)} />
+    `}
+    vue={`
+<template>
+  <lt-pagination
+    :page="currentPage"
+    :total-pages="totalPages"
+    @lt-change="(e) => currentPage = e.detail.page"
+  />
+</template>
+    `}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-pagination" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const pg = document.getElementById('playground-pg') as any;
+  const ctrlSize = document.getElementById('ctrl-size') as HTMLSelectElement;
+  const ctrlTotal = document.getElementById('ctrl-total') as HTMLInputElement;
+  const ctrlPage = document.getElementById('ctrl-page') as HTMLInputElement;
+  const ctrlDisabled = document.getElementById('ctrl-disabled') as HTMLInputElement;
+
+  ctrlSize?.addEventListener('change', () => {
+    pg.size = ctrlSize.value;
+  });
+  ctrlTotal?.addEventListener('input', () => {
+    pg.totalPages = Number(ctrlTotal.value);
+  });
+  ctrlPage?.addEventListener('input', () => {
+    pg.page = Number(ctrlPage.value);
+  });
+  ctrlDisabled?.addEventListener('change', () => {
+    pg.disabled = ctrlDisabled.checked;
+  });
+
+  pg?.addEventListener('lt-change', (e: CustomEvent) => {
+    pg.page = e.detail.page;
+    ctrlPage.value = String(e.detail.page);
+  });
+</script>

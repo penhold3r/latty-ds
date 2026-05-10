@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Datepicker" description="Date, time, and datetime-local input with design-system styling">
+  <h1>Datepicker</h1>
+  <p>
+    A styled wrapper around the browser's native date and time input. Inherits full platform picker support (keyboard
+    navigation, screen-reader announcements, locale formatting) without a custom implementation.
+  </p>
+
+  <h2>Playground</h2>
+  <ComponentPlayground tag="lt-datepicker" attrs={{ label: 'Start date', type: 'date' }} />
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`
+<!-- Date picker -->
+<lt-datepicker label="Start date" type="date"></lt-datepicker>
+
+<!-- Time picker -->
+<lt-datepicker label="Meeting time" type="time"></lt-datepicker>
+
+<!-- Date and time -->
+<lt-datepicker label="Appointment" type="datetime-local" required></lt-datepicker>
+
+<!-- With min/max constraints -->
+<lt-datepicker
+  label="Delivery date"
+  type="date"
+  min="2025-01-01"
+  max="2025-12-31"
+></lt-datepicker>
+
+<!-- Error state -->
+<lt-datepicker
+  label="Event date"
+  type="date"
+  variant="error"
+  helper-text="Please select a valid date"
+></lt-datepicker>
+
+<script type="module">
+  document.querySelector('lt-datepicker').addEventListener('lt-change', (e) => {
+    console.log('selected:', e.detail.value);
+  });
+<\/script>
+    `}
+    react={`
+import { Datepicker } from '@latty/react';
+
+<Datepicker label="Start date" type="date" onChange={(v) => console.log(v)} />
+
+<Datepicker
+  label="Appointment"
+  type="datetime-local"
+  required
+  onChange={(v) => setDateTime(v)}
+/>
+
+<Datepicker
+  label="Event date"
+  variant="error"
+  helperText="Please select a valid date"
+/>
+    `}
+    vue={`
+<template>
+  <lt-datepicker
+    label="Start date"
+    type="date"
+    @lt-change="(e) => date = e.detail.value"
+  />
+</template>
+    `}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-datepicker" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

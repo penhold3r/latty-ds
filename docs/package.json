@@ -17,6 +17,7 @@
     "@latty/icons": "workspace:*",
     "@latty/tokens": "workspace:*",
     "@latty/web": "workspace:*",
-    "astro": "^6.1.4"
+    "astro": "^6.1.4",
+    "sharp": "^0.34.5"
   }
 }

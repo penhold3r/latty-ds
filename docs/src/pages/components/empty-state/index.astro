@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Empty State" description="Placeholder for zero-data views">
+  <h1>Empty State</h1>
+  <p>
+    A placeholder for zero-data situations — empty tables, no search results, onboarding prompts. Pairs an optional icon
+    circle, a title, a description, and an action slot.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="empty-state-playground">
+    <div slot="preview">
+      <lt-empty-state
+        id="playground-es"
+        icon="folder-open"
+        title="No projects yet"
+        description="Create your first project to get started."
+      >
+        <lt-button variant="primary">New project</lt-button>
+      </lt-empty-state>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">size</label>
+        <select class="control-select" id="ctrl-size">
+          <option value="sm">sm</option>
+          <option value="md" selected>md</option>
+          <option value="lg">lg</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">icon</label>
+        <input class="control-input" id="ctrl-icon" value="folder-open" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">title</label>
+        <input class="control-input" id="ctrl-title" value="No projects yet" />
+      </div>
+      <div class="control-row">
+        <label class="control-label">description</label>
+        <input class="control-input" id="ctrl-desc" value="Create your first project to get started." />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`
+<lt-empty-state
+  icon="folder-open"
+  title="No projects yet"
+  description="Create your first project to get started."
+>
+  <lt-button variant="primary">New project</lt-button>
+</lt-empty-state>
+
+<!-- Without actions -->
+<lt-empty-state
+  icon="search"
+  title="No results"
+  description="Try adjusting your search or filters."
+></lt-empty-state>
+
+<!-- Small size -->
+<lt-empty-state
+  size="sm"
+  icon="inbox"
+  title="All caught up"
+  description="Nothing to review right now."
+></lt-empty-state>
+    `}
+    react={`
+import { EmptyState, Button } from '@latty/react';
+
+<EmptyState
+  icon="folder-open"
+  title="No projects yet"
+  description="Create your first project to get started."
+>
+  <Button variant="primary">New project</Button>
+</EmptyState>
+
+<EmptyState
+  icon="search"
+  title="No results"
+  description="Try adjusting your search or filters."
+/>
+    `}
+    vue={`
+<template>
+  <lt-empty-state
+    icon="folder-open"
+    title="No projects yet"
+    description="Create your first project to get started."
+  >
+    <lt-button variant="primary">New project</lt-button>
+  </lt-empty-state>
+</template>
+    `}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-empty-state" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const es = document.getElementById('playground-es') as any;
+  const ctrlSize = document.getElementById('ctrl-size') as HTMLSelectElement;
+  const ctrlIcon = document.getElementById('ctrl-icon') as HTMLInputElement;
+  const ctrlTitle = document.getElementById('ctrl-title') as HTMLInputElement;
+  const ctrlDesc = document.getElementById('ctrl-desc') as HTMLInputElement;
+
+  ctrlSize?.addEventListener('change', () => {
+    es.size = ctrlSize.value;
+  });
+  ctrlIcon?.addEventListener('input', () => {
+    es.icon = ctrlIcon.value;
+  });
+  ctrlTitle?.addEventListener('input', () => {
+    es.title = ctrlTitle.value;
+  });
+  ctrlDesc?.addEventListener('input', () => {
+    es.description = ctrlDesc.value;
+  });
+</script>

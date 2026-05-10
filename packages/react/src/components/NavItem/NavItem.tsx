@@ -14,32 +14,33 @@ export type NavItemProps = {
   children?: ReactNode;
 };
 
-export const NavItem = forwardRef<NavItemEl, NavItemProps>(
-  function NavItem({ onLtNavItemClick, onLtNavCollapse, children, ...props }, forwardedRef) {
-    const innerRef = useRef<NavItemEl>(null);
+export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
+  { onLtNavItemClick, onLtNavCollapse, iconStart, children, ...props },
+  forwardedRef
+) {
+  const innerRef = useRef<NavItemEl>(null);
 
-    useImperativeHandle(forwardedRef, () => innerRef.current!);
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
 
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onLtNavItemClick) return;
-      const h = (ev: Event) => onLtNavItemClick!(ev as CustomEvent);
-      el.addEventListener('lt-nav-item-click', h);
-      return () => el.removeEventListener('lt-nav-item-click', h);
-    }, [onLtNavItemClick]);
-    useEffect(() => {
-      const el = innerRef.current;
-      if (!el || !onLtNavCollapse) return;
-      const h = (ev: Event) => onLtNavCollapse!(ev as CustomEvent);
-      el.addEventListener('lt-nav-collapse', h);
-      return () => el.removeEventListener('lt-nav-collapse', h);
-    }, [onLtNavCollapse]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onLtNavItemClick) return;
+    const h = (ev: Event) => onLtNavItemClick!(ev as CustomEvent);
+    el.addEventListener('lt-nav-item-click', h);
+    return () => el.removeEventListener('lt-nav-item-click', h);
+  }, [onLtNavItemClick]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onLtNavCollapse) return;
+    const h = (ev: Event) => onLtNavCollapse!(ev as CustomEvent);
+    el.addEventListener('lt-nav-collapse', h);
+    return () => el.removeEventListener('lt-nav-collapse', h);
+  }, [onLtNavCollapse]);
 
-    return (
-      <lt-nav-item ref={innerRef} {...(props as Record<string, unknown>)}>
-        {children}
-      </lt-nav-item>
-    );
-  }
-);
+  return (
+    <lt-nav-item ref={innerRef} icon-start={iconStart} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-nav-item>
+  );
+});
 NavItem.displayName = 'NavItem';

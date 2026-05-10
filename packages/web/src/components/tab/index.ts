@@ -7,3 +7,4 @@
 
 export { Tab } from './tab';
 export type { TabSize } from './tab.types';
+export { TabPanel } from './tab-panel';

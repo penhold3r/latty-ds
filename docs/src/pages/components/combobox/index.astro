@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs.astro';
+import ApiTable from '../../../components/ApiTable.astro';
+---
+
+<BaseLayout title="Combobox" description="Searchable single-select dropdown">
+  <h1>Combobox</h1>
+  <p>
+    A searchable single-select field. The user types to filter options; selecting one sets the value. Keyboard
+    navigation (Arrow, Enter, Escape) is fully supported. Use <code>lt-select</code> when no filtering is needed.
+  </p>
+
+  <h2>Playground</h2>
+  <PlaygroundShell id="combobox-playground">
+    <div slot="preview">
+      <lt-combobox id="playground-cb" label="Country" placeholder="Search countries…"></lt-combobox>
+    </div>
+    <div slot="controls">
+      <div class="control-row">
+        <label class="control-label">size</label>
+        <select class="control-select" id="ctrl-size">
+          <option value="sm">sm</option>
+          <option value="md" selected>md</option>
+          <option value="lg">lg</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">variant</label>
+        <select class="control-select" id="ctrl-variant">
+          <option value="default" selected>default</option>
+          <option value="success">success</option>
+          <option value="warning">warning</option>
+          <option value="error">error</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label class="control-label">disabled</label>
+        <input type="checkbox" id="ctrl-disabled" />
+      </div>
+    </div>
+  </PlaygroundShell>
+
+  <h2>Usage</h2>
+  <FrameworkTabs
+    html={`
+<lt-combobox
+  id="country-picker"
+  label="Country"
+  placeholder="Search countries…"
+  required
+></lt-combobox>
+
+<script type="module">
+  const cb = document.getElementById('country-picker');
+  cb.options = [
+    { value: 'us', label: 'United States' },
+    { value: 'ca', label: 'Canada' },
+    { value: 'gb', label: 'United Kingdom' },
+    { value: 'de', label: 'Germany' },
+    { value: 'fr', label: 'France' }
+  ];
+  cb.addEventListener('lt-change', (e) => {
+    console.log('selected', e.detail.value, e.detail.label);
+  });
+<\/script>
+    `}
+    react={`
+import { Combobox } from '@latty/react';
+
+const countries = [
+  { value: 'us', label: 'United States' },
+  { value: 'ca', label: 'Canada' },
+  { value: 'gb', label: 'United Kingdom' }
+];
+
+<Combobox
+  label="Country"
+  placeholder="Search countries…"
+  options={countries}
+  onChange={(value, label) => console.log(value, label)}
+  required
+/>
+    `}
+    vue={`
+<template>
+  <lt-combobox
+    label="Country"
+    placeholder="Search countries…"
+    :options="countries"
+    @lt-change="(e) => selected = e.detail.value"
+  />
+</template>
+    `}
+  />
+
+  <h2>API</h2>
+  <ApiTable tag="lt-combobox" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+
+  const cb = document.getElementById('playground-cb') as any;
+  const ctrlSize = document.getElementById('ctrl-size') as HTMLSelectElement;
+  const ctrlVariant = document.getElementById('ctrl-variant') as HTMLSelectElement;
+  const ctrlDisabled = document.getElementById('ctrl-disabled') as HTMLInputElement;
+
+  cb.options = [
+    { value: 'us', label: 'United States' },
+    { value: 'ca', label: 'Canada' },
+    { value: 'gb', label: 'United Kingdom' },
+    { value: 'de', label: 'Germany' },
+    { value: 'fr', label: 'France' },
+    { value: 'jp', label: 'Japan' },
+    { value: 'br', label: 'Brazil' }
+  ];
+
+  ctrlSize?.addEventListener('change', () => {
+    cb.size = ctrlSize.value;
+  });
+  ctrlVariant?.addEventListener('change', () => {
+    cb.variant = ctrlVariant.value;
+  });
+  ctrlDisabled?.addEventListener('change', () => {
+    cb.disabled = ctrlDisabled.checked;
+  });
+</script>
