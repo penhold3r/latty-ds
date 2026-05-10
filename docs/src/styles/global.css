@@ -105,26 +105,27 @@ main.content {
   justify-content: center;
 }
 
-.prose h1 {
-  font-size: 2.5rem;
+.prose lt-text[variant='h1'] {
   margin-bottom: var(--lt-spacing-4);
 }
 
-.prose h2 {
-  font-size: 2rem;
+.prose lt-text[variant='h2'] {
   margin-top: var(--lt-spacing-8);
   margin-bottom: var(--lt-spacing-4);
 }
 
-.prose h3 {
-  font-size: 1.5rem;
+.prose lt-text[variant='h3'] {
   margin-top: var(--lt-spacing-6);
   margin-bottom: var(--lt-spacing-3);
 }
 
-.prose p {
+.prose lt-text[variant='h4'] {
+  margin-top: var(--lt-spacing-5);
+  margin-bottom: var(--lt-spacing-2);
+}
+
+.prose lt-text[variant='body'] {
   margin-bottom: var(--lt-spacing-4);
-  line-height: 1.7;
 }
 
 .prose ul,

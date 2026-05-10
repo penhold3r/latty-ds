@@ -4,6 +4,7 @@ import mdx from '@astrojs/mdx';
 import { fileURLToPath } from 'url';
 import { resolve, dirname } from 'path';
 import { rehypePrefixLinks } from './src/plugins/rehype-prefix-links.mjs';
+import { rehypeLtText } from './src/plugins/rehype-lt-text.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
@@ -16,7 +17,7 @@ export default defineConfig({
   site: process.env.SITE_URL ?? 'https://penhold3r.github.io',
   base: basePath,
   markdown: {
-    rehypePlugins: [[rehypePrefixLinks, basePath]]
+    rehypePlugins: [[rehypePrefixLinks, basePath], rehypeLtText]
   },
   vite: {
     server: {
