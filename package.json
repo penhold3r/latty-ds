@@ -14,6 +14,7 @@
     "docs:preview": "pnpm --filter @latty/docs preview",
     "clean": "pnpm -r clean",
     "lint": "eslint packages",
+    "lint:markup": "markuplint 'docs/src/**/*.astro'",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:boundaries": "node scripts/check-boundaries.mjs",
@@ -24,6 +25,7 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:ui": "vitest --ui",
+    "a11y": "pa11y-ci",
     "release": "lerna version --conventional-commits",
     "prepare": "husky"
   },
@@ -38,6 +40,7 @@
     "@eslint/json": "^0.14.0",
     "@eslint/markdown": "^7.5.1",
     "@latty/utils": "workspace:^",
+    "@markuplint/astro-parser": "^4.18.3",
     "@open-wc/testing": "^4.0.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.3",
@@ -57,6 +60,8 @@
     "lerna": "^9.0.7",
     "lint-staged": "^16.4.0",
     "lit": "^3.2.0",
+    "markuplint": "^4.18.3",
+    "pa11y-ci": "^4.1.0",
     "prettier": "^3.8.0",
     "prettier-plugin-astro": "^0.14.1",
     "react": "^18",
@@ -69,6 +74,7 @@
     "typescript-eslint": "^8.53.1",
     "vite": "^6",
     "vite-tsconfig-paths": "^6.0.5",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "vitest-axe": "^0.1.0"
   }
 }

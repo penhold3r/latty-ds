@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
 import { fileURLToPath } from 'url';
 import { resolve, dirname } from 'path';
 import { rehypePrefixLinks } from './src/plugins/rehype-prefix-links.mjs';
@@ -13,7 +14,7 @@ const basePath = process.env.BASE_PATH ?? '';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [mdx()],
+  integrations: [mdx(), sitemap()],
   site: process.env.SITE_URL ?? 'https://penhold3r.github.io',
   base: basePath,
   markdown: {
