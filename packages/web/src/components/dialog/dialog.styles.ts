@@ -8,7 +8,7 @@ export const dialogStyles = css`
   /* Backdrop */
   .backdrop {
     align-items: center;
-    background: rgba(0, 0, 0, var(--_overlay-opacity, 0.5));
+    background: rgba(0, 0, 0, var(--lt-dialog-overlay-opacity, 0.5));
     display: flex;
     height: 100vh;
     justify-content: center;
@@ -35,10 +35,18 @@ export const dialogStyles = css`
     width: 100%;
   }
 
-  :host([size='sm']) lt-surface { max-width: 400px; }
-  :host([size='md']) lt-surface { max-width: 600px; }
-  :host([size='lg']) lt-surface { max-width: 800px; }
-  :host([size='xl']) lt-surface { max-width: 1000px; }
+  :host([size='sm']) lt-surface {
+    max-width: 400px;
+  }
+  :host([size='md']) lt-surface {
+    max-width: 600px;
+  }
+  :host([size='lg']) lt-surface {
+    max-width: 800px;
+  }
+  :host([size='xl']) lt-surface {
+    max-width: 1000px;
+  }
 
   :host([size='fullscreen']) .backdrop {
     padding: 0;
