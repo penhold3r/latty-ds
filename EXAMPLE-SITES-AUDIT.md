@@ -35,10 +35,10 @@ Setting colour via `selector::part(base) { color: ... }` changes the rendered ap
 
 ### Component / Token gaps
 
-**No `configure()` fallback before script execution (FOUC risk)**
-The `configure()` call is a module script — it runs asynchronously after HTML is parsed. Any element that reads a generated `--lt-color-primary-*` token before `configure()` fires gets an empty variable and potentially renders with fallback/transparent colours. The header workaround (inline hex fallbacks on the element's style attribute) is the only reliable guard.
+**`configure()` FOUC risk — resolved via SSR injection**
+`configure()` is a module script — it runs asynchronously after HTML is parsed. Any element that reads a generated `--lt-color-primary-*` token before `configure()` fires gets an empty variable.
 
-**Suggested fix:** Provide an optional synchronous `configure()` path (or a small inline `<script>` snippet) that writes the critical tokens before the first paint, or expose a `tokens` export that pre-populates `<style id="lt-tokens">` server-side via SSR.
+**Fix applied:** `createStyleSheet()` (also exported from `@latty/tokens/configure`) is Node.js-safe. In Astro, calling it in the frontmatter and embedding the result as `<style id="lt-tokens" set:html={css}></style>` in `<head>` makes tokens available before any element is painted. The `configure()` call in the script block is no longer needed for example pages.
 
 ---
 
@@ -66,7 +66,7 @@ _To be filled in after building the site._
 | #   | Component       | Issue                                                                                                                             | Severity | Fix type                                   |
 | --- | --------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------ |
 | 1   | `lt-link`       | No colour prop — unusable on dark backgrounds without native `<a>` fallback                                                       | High     | New prop or documented CSS custom property |
-| 2   | `lt-button`     | Not form-associated — keyboard form submission broken                                                                             | High     | `ElementInternals` + `formAssociated`      |
+| 2   | `lt-button`     | Not form-associated — keyboard form submission broken                                                                             | Fixed    | —                                          |
 | 3   | `lt-snackbar`   | Wrong `background-color` attribute on `lt-surface`                                                                                | Fixed    | —                                          |
-| 4   | `@latty/tokens` | No synchronous token injection path — FOUC risk on first paint                                                                    | Medium   | SSR helper or sync script option           |
+| 4   | `@latty/tokens` | No synchronous token injection path — FOUC risk on first paint                                                                    | Fixed    | —                                          |
 | 5   | All components  | axe cannot see `::part()` colour overrides — design system shadow DOM colours must also be surfaced on `:host` for automated a11y | Medium   | Architecture decision                      |

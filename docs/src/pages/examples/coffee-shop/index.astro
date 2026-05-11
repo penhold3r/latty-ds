@@ -1,5 +1,10 @@
 ---
-
+import { createStyleSheet } from '@latty/tokens/configure';
+const tokenCss = createStyleSheet({
+  colors: { primary: '#b45309' },
+  font: { family: "'Playfair Display', Georgia, serif" },
+  border: { radius: '0.75rem' }
+});
 ---
 
 <!doctype html>
@@ -8,6 +13,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ember — Specialty Coffee</title>
+    <style id="lt-tokens" set:html={tokenCss}></style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -193,8 +199,9 @@
             class="email-field"
             style="--lt-color-neutral-700:var(--lt-color-primary-100);--lt-color-neutral-500:var(--lt-color-primary-300);"
           ></lt-textfield>
-          <lt-button variant="primary" size="lg" class="subscribe-btn" style="color:white;">Subscribe</lt-button>
-          <button type="submit" class="sr-only">Subscribe</button>
+          <lt-button type="submit" variant="primary" size="lg" class="subscribe-btn" style="color:white;"
+            >Subscribe</lt-button
+          >
         </form>
       </section>
     </main>
@@ -236,22 +243,11 @@
 </html>
 
 <script>
-  import { configure } from '@latty/tokens/configure';
   import '@latty/web';
-
-  configure({
-    colors: { primary: '#b45309' },
-    font: { family: "'Playfair Display', Georgia, serif" },
-    border: { radius: '0.75rem' }
-  });
 
   const form = document.getElementById('newsletter-form');
   const emailField = document.querySelector('.email-field');
   const snackbar = document.getElementById('subscribe-snackbar');
-
-  document.querySelector('.subscribe-btn').addEventListener('click', () => {
-    form.requestSubmit();
-  });
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -455,19 +451,6 @@
   .footer-link:hover {
     color: var(--lt-color-primary-100);
     text-decoration: underline;
-  }
-
-  /* ── Accessibility helpers ── */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
   }
 
   /* ── Footer Instagram row ── */
