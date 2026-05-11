@@ -2,6 +2,7 @@ import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
 import type { Button as ButtonEl, LattyIconName } from '@latty/web';
 
 export type ButtonProps = {
+  formAssociated?: boolean;
   variant?: ButtonEl['variant'];
   appearance?: ButtonEl['appearance'];
   size?: ButtonEl['size'];
@@ -14,6 +15,7 @@ export type ButtonProps = {
   href?: string;
   target?: string;
   rel?: string;
+  type?: ButtonEl['type'];
   children?: ReactNode;
 };
 

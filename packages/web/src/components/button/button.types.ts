@@ -30,3 +30,12 @@ export type ButtonAppearance = 'filled' | 'outlined';
  * - `lg`: 48px height, 1.0625rem font size
  */
 export type ButtonSize = 'sm' | 'md' | 'lg';
+
+/**
+ * Form behaviour of the button component.
+ *
+ * - `button`: No form interaction (default)
+ * - `submit`: Submits the associated form (runs constraint validation)
+ * - `reset`: Resets all controls in the associated form to their initial values
+ */
+export type ButtonType = 'button' | 'submit' | 'reset';

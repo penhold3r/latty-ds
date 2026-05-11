@@ -41,6 +41,54 @@ function save() { /* ... */ }
     `}
   />
 
+  <lt-text variant="h3">Form submission</lt-text>
+  <lt-text variant="body"
+    ><code>lt-button</code> is form-associated. Set <code>type="submit"</code> to submit the containing form (with constraint
+    validation) or <code>type="reset"</code> to reset it.</lt-text
+  >
+  <FrameworkTabs
+    html={`
+<form id="demo-form" style="display:flex;gap:0.75rem;align-items:flex-end;">
+  <lt-textfield label="Email" type="email" required placeholder="you@example.com"></lt-textfield>
+  <lt-button type="submit" variant="primary">Subscribe</lt-button>
+  <lt-button type="reset" variant="neutral" appearance="outlined">Clear</lt-button>
+</form>
+<script type="module">
+  import '@latty/web';
+  document.getElementById('demo-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Submitted!');
+  });
+</script>
+    `}
+    react={`
+import { Button, Textfield } from '@latty/react';
+
+function NewsletterForm() {
+  function handleSubmit(e) {
+    e.preventDefault();
+    alert('Submitted!');
+  }
+  return (
+    <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-end' }}>
+      <Textfield label="Email" type="email" required placeholder="you@example.com" />
+      <Button type="submit" variant="primary">Subscribe</Button>
+      <Button type="reset" variant="neutral" appearance="outlined">Clear</Button>
+    </form>
+  );
+}
+    `}
+    vue={`
+<template>
+  <form @submit.prevent="handleSubmit" style="display:flex;gap:0.75rem;align-items:flex-end;">
+    <lt-textfield label="Email" type="email" required placeholder="you@example.com"></lt-textfield>
+    <lt-button type="submit" variant="primary">Subscribe</lt-button>
+    <lt-button type="reset" variant="neutral" appearance="outlined">Clear</lt-button>
+  </form>
+</template>
+    `}
+  />
+
   <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-button" />
 </BaseLayout>

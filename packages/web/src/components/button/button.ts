@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
 import { buttonStyles } from './button.styles';
-import { ButtonAppearance, ButtonSize, ButtonVariant } from './button.types';
+import { ButtonAppearance, ButtonSize, ButtonType, ButtonVariant } from './button.types';
 
 import '../spinner/';
 import '@latty/icons';
@@ -22,6 +22,7 @@ import '@latty/icons';
  * - Disabled state
  * - Accessible with aria-busy for loading state
  * - Renders as `<a>` when `href` is provided (link button)
+ * - Form-associated: `type="submit"` submits the containing form, `type="reset"` resets it
  *
  * @slot - Button label/content
  *
@@ -43,6 +44,14 @@ import '@latty/icons';
 @customElement('lt-button')
 export class Button extends LitElement {
   static styles = buttonStyles;
+  static formAssociated = true;
+
+  private _internals: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   /**
    * Visual variant that determines the button's color scheme.
@@ -116,6 +125,21 @@ export class Button extends LitElement {
    */
   @property() rel = '';
 
+  /**
+   * Form behaviour when the button is inside a `<form>`.
+   * `submit` triggers form validation and submission; `reset` restores initial values.
+   * @default 'button'
+   */
+  @property({ reflect: true }) type: ButtonType = 'button';
+
+  private _handleClick() {
+    if (this.disabled || this.loading) return;
+    const form = this.closest('form') as HTMLFormElement | null;
+    if (!form) return;
+    if (this.type === 'submit') form.requestSubmit();
+    else if (this.type === 'reset') form.reset();
+  }
+
   render() {
     const isDisabled = this.disabled || this.loading;
     const inner = this.loading
@@ -142,7 +166,15 @@ export class Button extends LitElement {
     }
 
     return html`
-      <button part="base" ?disabled=${isDisabled} aria-busy=${this.loading ? 'true' : 'false'}>${inner}</button>
+      <button
+        part="base"
+        type="button"
+        @click=${this._handleClick}
+        ?disabled=${isDisabled}
+        aria-busy=${this.loading ? 'true' : 'false'}
+      >
+        ${inner}
+      </button>
     `;
   }
 }

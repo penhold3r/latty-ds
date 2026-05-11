@@ -8,6 +8,7 @@ export type SidePanelProps = {
   label?: string;
   noCloseButton?: boolean;
   backdropBlur?: boolean;
+  overlayOpacity?: number;
   onLtClose?: (event: CustomEvent) => void;
   children?: ReactNode;
 };

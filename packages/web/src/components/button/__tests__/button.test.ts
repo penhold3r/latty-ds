@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 import type { Button } from '../button';
 import '../button';
@@ -105,6 +105,85 @@ describe('<lt-button>', () => {
 
   it('has no axe violations', async () => {
     expect(await axe(el)).toHaveNoViolations();
+  });
+
+  describe('type / form association', () => {
+    it('defaults to type="button" and reflects', () => {
+      expect(el.type).toBe('button');
+      expect(el.getAttribute('type')).toBe('button');
+    });
+
+    it.each(['button', 'submit', 'reset'] as const)('reflects %s type to attribute', async (type) => {
+      el.type = type;
+      await el.updateComplete;
+      expect(el.getAttribute('type')).toBe(type);
+    });
+
+    it('calls form.requestSubmit() when type="submit" and clicked', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+
+      const requestSubmit = vi.fn();
+      vi.spyOn(form, 'requestSubmit').mockImplementation(requestSubmit);
+
+      el.type = 'submit';
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(requestSubmit).toHaveBeenCalledOnce();
+      form.remove();
+    });
+
+    it('calls form.reset() when type="reset" and clicked', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+
+      const reset = vi.fn();
+      vi.spyOn(form, 'reset').mockImplementation(reset);
+
+      el.type = 'reset';
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(reset).toHaveBeenCalledOnce();
+      form.remove();
+    });
+
+    it('does not submit when disabled', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+
+      const requestSubmit = vi.fn();
+      vi.spyOn(form, 'requestSubmit').mockImplementation(requestSubmit);
+
+      el.type = 'submit';
+      el.disabled = true;
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(requestSubmit).not.toHaveBeenCalled();
+      form.remove();
+    });
+
+    it('does not submit when loading', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+
+      const requestSubmit = vi.fn();
+      vi.spyOn(form, 'requestSubmit').mockImplementation(requestSubmit);
+
+      el.type = 'submit';
+      el.loading = true;
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(requestSubmit).not.toHaveBeenCalled();
+      form.remove();
+    });
   });
 
   describe('href / link rendering', () => {

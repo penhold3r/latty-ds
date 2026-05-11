@@ -6,4 +6,4 @@
  */
 
 export { Button } from './button';
-export type { ButtonAppearance, ButtonSize, ButtonVariant } from './button.types';
+export type { ButtonAppearance, ButtonSize, ButtonType, ButtonVariant } from './button.types';
