@@ -22,8 +22,22 @@ html {
     'Segoe UI',
     Roboto,
     sans-serif;
-  color: var(--lt-color-neutral-900);
-  background: var(--lt-color-neutral-50);
+  color: var(--lt-text-default);
+  background: var(--lt-bg-default);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+}
+[data-theme='light'] {
+  color-scheme: light;
 }
 
 body {
@@ -62,19 +76,19 @@ lt-text[variant='h3'],
 lt-text[variant='h4'],
 lt-text[variant='h5'],
 lt-text[variant='h6'] {
-  color: var(--lt-color-secondary-600);
+  color: var(--lt-text-secondary);
 }
 
 code {
   font-family: 'Courier New', Courier, monospace;
-  background: var(--lt-color-neutral-100);
+  background: var(--lt-bg-surface);
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.9em;
 }
 
 pre {
-  background: var(--lt-color-neutral-100);
+  background: var(--lt-bg-surface);
   padding: var(--lt-spacing-4);
   border-radius: var(--lt-border-radius);
   overflow-x: auto;
@@ -86,7 +100,7 @@ pre code {
 }
 
 a {
-  color: var(--lt-color-primary-500);
+  color: var(--lt-text-primary);
   text-decoration: none;
 }
 
@@ -100,7 +114,7 @@ a:hover {
 }
 
 main.content {
-  border-right: 2px solid var(--lt-color-neutral-200);
+  border-right: 2px solid var(--lt-border-default);
   display: flex;
   justify-content: center;
 }
@@ -148,15 +162,15 @@ main.content {
 .prose th {
   text-align: left;
   padding: var(--lt-spacing-2) var(--lt-spacing-4);
-  background: var(--lt-color-neutral-100);
-  border-bottom: 2px solid var(--lt-color-neutral-200);
+  background: var(--lt-bg-surface);
+  border-bottom: 2px solid var(--lt-border-default);
   font-weight: 600;
-  color: var(--lt-color-neutral-900);
+  color: var(--lt-text-default);
 }
 
 .prose td {
   padding: var(--lt-spacing-2) var(--lt-spacing-4);
-  border-bottom: 1px solid var(--lt-color-neutral-200);
+  border-bottom: 1px solid var(--lt-border-subtle);
   vertical-align: top;
 }
 
@@ -165,7 +179,7 @@ main.content {
 }
 
 .prose tbody tr:hover {
-  background: var(--lt-color-neutral-50);
+  background: var(--lt-bg-subtle);
 }
 
 pre.astro-code {

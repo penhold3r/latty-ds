@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { radioStyles } from './radio.styles';
@@ -41,7 +42,7 @@ import { RadioSize, RadioVariant, RadioLabelPosition } from './radio.types';
  * ```
  */
 @customElement('lt-radio')
-export class Radio extends LitElement {
+export class Radio extends ThemeableElement {
   static styles = radioStyles;
 
   /**

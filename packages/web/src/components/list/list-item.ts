@@ -1,4 +1,5 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, nothing } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { listItemStyles } from './list-item.styles';
@@ -36,7 +37,7 @@ import '@latty/icons';
  * ```
  */
 @customElement('lt-list-item')
-export class ListItem extends LitElement {
+export class ListItem extends ThemeableElement {
   static styles = listItemStyles;
 
   /** Icon name to display before the item content. */

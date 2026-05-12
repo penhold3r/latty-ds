@@ -1,4 +1,5 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, nothing } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import '@latty/icons';
@@ -18,7 +19,7 @@ import { linkStyles } from './link.styles';
  * ```
  */
 @customElement('lt-link')
-export class Link extends LitElement {
+export class Link extends ThemeableElement {
   static styles = linkStyles;
 
   /** Destination URL forwarded to the underlying `<a>` element. */

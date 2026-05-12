@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Examples" description="Full-page sites built entirely with Latty">
+  <lt-text variant="h1">Examples</lt-text>
+  <lt-text variant="body">
+    Full-page sites built entirely with Latty — no custom component library, no design-system workarounds. Each one uses
+    a custom token palette injected at build time via <code>createStyleSheet()</code> for zero flash of unstyled content.
+  </lt-text>
+
+  <div class="example-grid">
+    <a class="example-card" href="/examples/coffee-shop">
+      <lt-surface elevation="1">
+        <div class="card-swatch" style="background:linear-gradient(135deg,#92400e,#b45309);"></div>
+        <div class="card-body">
+          <div class="card-title-row">
+            <lt-text variant="label">Ember Coffee &amp; Co.</lt-text>
+            <lt-badge content="Site 1" variant="neutral" size="sm"></lt-badge>
+          </div>
+          <lt-text variant="caption"
+            >Warm artisan café landing page with hero, menu cards, story section, and newsletter signup.</lt-text
+          >
+          <div class="card-meta">
+            <lt-text variant="caption" tag="span" style="color:var(--lt-color-neutral-500);"
+              >Amber palette · Playfair Display</lt-text
+            >
+          </div>
+        </div>
+      </lt-surface>
+    </a>
+
+    <a class="example-card" href="/examples/pulse-analytics">
+      <lt-surface elevation="1">
+        <div class="card-swatch" style="background:linear-gradient(135deg,#3730a3,#4f46e5);"></div>
+        <div class="card-body">
+          <div class="card-title-row">
+            <lt-text variant="label">Meridian Analytics</lt-text>
+            <lt-badge content="Site 2" variant="neutral" size="sm"></lt-badge>
+          </div>
+          <lt-text variant="caption"
+            >SaaS dashboard shell with KPI cards, sortable data table, filters, and sidebar navigation.</lt-text
+          >
+          <div class="card-meta">
+            <lt-text variant="caption" tag="span" style="color:var(--lt-color-neutral-500);"
+              >Indigo palette · Inter</lt-text
+            >
+          </div>
+        </div>
+      </lt-surface>
+    </a>
+  </div>
+</BaseLayout>
+
+<style>
+  .example-grid {
+    display: grid;
+    gap: var(--lt-spacing-4);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    margin-top: var(--lt-spacing-6);
+  }
+
+  .example-card {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .example-card lt-surface::part(surface) {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: box-shadow 150ms ease;
+  }
+
+  .example-card:hover lt-surface::part(surface) {
+    box-shadow: var(--lt-elevation-3);
+  }
+
+  .card-swatch {
+    height: 100px;
+    flex-shrink: 0;
+  }
+
+  .card-body {
+    padding: var(--lt-spacing-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--lt-spacing-2);
+    flex: 1;
+  }
+
+  .card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--lt-spacing-2);
+  }
+
+  .card-meta {
+    margin-top: auto;
+    padding-top: var(--lt-spacing-2);
+  }
+</style>
+
+<script>
+  import '@latty/web';
+</script>

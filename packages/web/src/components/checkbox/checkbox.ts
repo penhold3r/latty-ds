@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { checkboxStyles } from './checkbox.styles';
@@ -37,7 +38,7 @@ import '@latty/icons';
  * ```
  */
 @customElement('lt-checkbox')
-export class Checkbox extends LitElement {
+export class Checkbox extends ThemeableElement {
   static styles = checkboxStyles;
 
   /**

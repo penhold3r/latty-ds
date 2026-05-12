@@ -8,9 +8,13 @@ import tokensConfig from '../../tokens.config.json';
 
 export type { LattyConfig };
 
-const SEMANTIC_CSS = semanticTokensToCss(buildSemanticTokens());
+const LIGHT_SEMANTIC_CSS = semanticTokensToCss(buildSemanticTokens('light'));
+const DARK_SEMANTIC_CSS = semanticTokensToCss(buildSemanticTokens('dark'), '@media (prefers-color-scheme: dark)');
+const DARK_ATTR_CSS = semanticTokensToCss(buildSemanticTokens('dark'), '[data-theme="dark"]');
+const LIGHT_ATTR_CSS = semanticTokensToCss(buildSemanticTokens('light'), '[data-theme="light"]');
+const AUTO_SEMANTIC_CSS = LIGHT_SEMANTIC_CSS + '\n' + DARK_SEMANTIC_CSS + '\n' + DARK_ATTR_CSS + '\n' + LIGHT_ATTR_CSS;
 
-const DEFAULTS: Required<LattyConfig> = {
+const DEFAULTS: Required<Omit<LattyConfig, 'theme'>> = {
   colors: tokensConfig.color,
   font: { family: DEFAULT_FONT_FAMILY },
   border: { radius: DEFAULT_BORDER_RADIUS }
@@ -36,7 +40,12 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
     tokens = { ...tokens, border: { ...tokens.border, radius: userConfig.border.radius } };
   }
 
-  return tokensToCss(tokens) + '\n' + SEMANTIC_CSS;
+  const primitives = tokensToCss(tokens);
+  const theme = userConfig.theme ?? 'auto';
+
+  if (theme === 'dark') return primitives + '\n' + semanticTokensToCss(buildSemanticTokens('dark'));
+  if (theme === 'light') return primitives + '\n' + LIGHT_SEMANTIC_CSS;
+  return primitives + '\n' + AUTO_SEMANTIC_CSS;
 };
 
 /**

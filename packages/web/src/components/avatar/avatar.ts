@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { avatarStyles } from './avatar.styles';
@@ -11,7 +12,7 @@ import '@latty/icons';
  * @element lt-avatar
  */
 @customElement('lt-avatar')
-export class Avatar extends LitElement {
+export class Avatar extends ThemeableElement {
   static styles = avatarStyles;
 
   /** URL of the avatar image. */

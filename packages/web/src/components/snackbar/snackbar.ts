@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { snackbarStyles } from './snackbar.styles';
@@ -34,7 +35,7 @@ import '../surface/surface';
  * ```
  */
 @customElement('lt-snackbar')
-export class Snackbar extends LitElement {
+export class Snackbar extends ThemeableElement {
   static styles = snackbarStyles;
 
   /** Visual style. */

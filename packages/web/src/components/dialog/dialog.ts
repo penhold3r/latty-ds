@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { dialogStyles } from './dialog.styles';
@@ -51,7 +52,7 @@ import '../text/text';
  * ```
  */
 @customElement('lt-dialog')
-export class Dialog extends LitElement {
+export class Dialog extends ThemeableElement {
   static styles = [dialogStyles, backdropFeatureStyles];
 
   /**

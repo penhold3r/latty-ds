@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
@@ -32,7 +33,7 @@ import '../text/text';
  * ```
  */
 @customElement('lt-alert')
-export class Alert extends LitElement {
+export class Alert extends ThemeableElement {
   static styles = alertStyles;
 
   /** Visual style. */

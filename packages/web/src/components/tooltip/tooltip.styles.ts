@@ -8,9 +8,9 @@ export const tooltipStyles = css`
   }
 
   .tooltip {
-    background: var(--_tooltip-bg, var(--lt-color-neutral-900));
+    background: var(--_tooltip-bg, var(--lt-bg-inverse));
     border-radius: 4px;
-    color: var(--_tooltip-color, #fff);
+    color: var(--_tooltip-color, var(--lt-text-inverse));
     opacity: 0;
     padding: var(--lt-spacing-1) var(--lt-spacing-2);
     pointer-events: none;

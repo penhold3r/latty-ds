@@ -1,4 +1,5 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, nothing, type PropertyValues } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -74,7 +75,7 @@ import '@latty/icons';
  * ```
  */
 @customElement('lt-table')
-export class Table<T = Record<string, unknown>> extends LitElement {
+export class Table<T = Record<string, unknown>> extends ThemeableElement {
   static styles = tableStyles;
 
   /**
@@ -164,13 +165,10 @@ export class Table<T = Record<string, unknown>> extends LitElement {
     return this.sort ?? this.internalSort;
   }
 
-  willUpdate(changedProperties: Map<string, unknown>) {
-    if (
-      changedProperties.has('data') ||
-      changedProperties.has('sort') ||
-      changedProperties.has('columns') ||
-      changedProperties.has('internalSort')
-    ) {
+  override willUpdate(changedProperties: PropertyValues<this>) {
+    super.willUpdate(changedProperties);
+    const changed = changedProperties as ReadonlyMap<PropertyKey, unknown>;
+    if (changed.has('data') || changed.has('sort') || changed.has('columns') || changed.has('internalSort')) {
       this.updateSortedData();
     }
   }

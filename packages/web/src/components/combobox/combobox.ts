@@ -1,4 +1,5 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, nothing } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { comboboxStyles } from './combobox.styles';
@@ -22,7 +23,7 @@ import '@latty/icons';
  * ```
  */
 @customElement('lt-combobox')
-export class Combobox extends LitElement {
+export class Combobox extends ThemeableElement {
   static styles = comboboxStyles;
 
   /** Array of selectable options. Set as a JS property (`.options`). */

@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { dropdownStyles } from './dropdown.styles';
@@ -16,7 +17,7 @@ import '../surface/surface';
  * @fires {CustomEvent} lt-close - Fired when the menu closes
  */
 @customElement('lt-dropdown')
-export class Dropdown extends LitElement {
+export class Dropdown extends ThemeableElement {
   static styles = dropdownStyles;
 
   @property({ type: Boolean, reflect: true }) open = false;

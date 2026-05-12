@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { switchStyles } from './switch.styles';
@@ -36,7 +37,7 @@ import { SwitchSize, SwitchVariant, SwitchLabelPosition } from './switch.types';
  * ```
  */
 @customElement('lt-switch')
-export class Switch extends LitElement {
+export class Switch extends ThemeableElement {
   static styles = switchStyles;
 
   /**

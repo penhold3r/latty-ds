@@ -1,0 +1,388 @@
+---
+import { createStyleSheet } from '@latty/tokens/configure';
+const tokenCss = createStyleSheet({
+  colors: { primary: '#4f46e5', secondary: '#7c3aed' },
+  font: { family: "'Inter', system-ui, sans-serif" },
+  border: { radius: '0.5rem' }
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meridian — Analytics Dashboard</title>
+    <style id="lt-tokens" set:html={tokenCss}></style>
+  </head>
+  <body>
+    <lt-header background="primary">
+      <a slot="logo" href="#" class="brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="12" width="4" height="9" rx="1" fill="currentColor"></rect>
+          <rect x="10" y="7" width="4" height="14" rx="1" fill="currentColor"></rect>
+          <rect x="17" y="3" width="4" height="18" rx="1" fill="currentColor"></rect>
+        </svg>
+        <span>Meridian</span>
+      </a>
+      <div slot="after" class="header-user">
+        <lt-avatar name="Sara Chen" size="sm" color="secondary"></lt-avatar>
+        <lt-text variant="label" tag="span" style="color:white;opacity:0.9;">Sara Chen</lt-text>
+      </div>
+    </lt-header>
+
+    <div class="shell-body">
+      <aside class="sidebar" aria-label="Application navigation">
+        <lt-nav orientation="vertical">
+          <lt-nav-item label="Dashboard" icon-start="grid" active></lt-nav-item>
+          <lt-nav-item label="Analytics" icon-start="chart"></lt-nav-item>
+          <lt-nav-item label="Reports" icon-start="folder"></lt-nav-item>
+          <lt-nav-item label="Settings" icon-start="settings"></lt-nav-item>
+        </lt-nav>
+      </aside>
+
+      <main class="main-content" id="main-content">
+        <div class="page-header">
+          <div>
+            <lt-text variant="h1" tag="h1" style="display:block;">Dashboard</lt-text>
+            <lt-text
+              variant="body"
+              tag="p"
+              style="display:block;color:var(--lt-color-neutral-600);margin-top:var(--lt-spacing-1);"
+            >
+              Welcome back, Sara. Here's what's happening this month.
+            </lt-text>
+          </div>
+        </div>
+
+        <div class="kpi-grid" aria-label="Key performance metrics">
+          <lt-surface elevation="1" class="kpi-card">
+            <lt-text
+              variant="overline"
+              tag="p"
+              style="display:block;color:var(--lt-color-neutral-600);margin-bottom:var(--lt-spacing-2);"
+              >Total Revenue</lt-text
+            >
+            <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
+              >$124,800</lt-text
+            >
+            <lt-badge variant="success" content="↑ 12.4%" size="sm"></lt-badge>
+          </lt-surface>
+
+          <lt-surface elevation="1" class="kpi-card">
+            <lt-text
+              variant="overline"
+              tag="p"
+              style="display:block;color:var(--lt-color-neutral-600);margin-bottom:var(--lt-spacing-2);"
+              >Active Users</lt-text
+            >
+            <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
+              >8,420</lt-text
+            >
+            <lt-badge variant="success" content="↑ 6.1%" size="sm"></lt-badge>
+          </lt-surface>
+
+          <lt-surface elevation="1" class="kpi-card">
+            <lt-text
+              variant="overline"
+              tag="p"
+              style="display:block;color:var(--lt-color-neutral-600);margin-bottom:var(--lt-spacing-2);"
+              >Conversion Rate</lt-text
+            >
+            <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
+              >3.6%</lt-text
+            >
+            <lt-badge variant="error" content="↓ 0.3%" size="sm"></lt-badge>
+          </lt-surface>
+
+          <lt-surface elevation="1" class="kpi-card">
+            <lt-text
+              variant="overline"
+              tag="p"
+              style="display:block;color:var(--lt-color-neutral-600);margin-bottom:var(--lt-spacing-2);"
+              >Avg. Session</lt-text
+            >
+            <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
+              >4m 12s</lt-text
+            >
+            <lt-badge variant="success" content="↑ 0.8%" size="sm"></lt-badge>
+          </lt-surface>
+        </div>
+
+        <lt-surface elevation="1" class="table-card">
+          <div class="table-header">
+            <div>
+              <lt-text variant="h2" tag="h2" style="display:block;">Customer Activity</lt-text>
+              <lt-text
+                variant="body-sm"
+                tag="p"
+                style="display:block;color:var(--lt-color-neutral-600);margin-top:var(--lt-spacing-1);"
+              >
+                Showing data for <span id="range-label">Last 30 days</span>
+              </lt-text>
+            </div>
+            <lt-button variant="secondary" appearance="outlined" size="sm" icon-start="download">Export CSV</lt-button>
+          </div>
+          <div class="filters-row">
+            <lt-select id="time-range" size="sm"></lt-select>
+            <lt-chip deletable size="sm" variant="secondary" appearance="outlined">All regions</lt-chip>
+            <lt-chip deletable size="sm" variant="secondary" appearance="outlined">Web traffic</lt-chip>
+          </div>
+          <lt-table id="activity-table" striped hoverable density="compact"></lt-table>
+        </lt-surface>
+
+        <lt-alert variant="info" title="Scheduled maintenance" closable>
+          Analytics data may be delayed on Sunday 18 May between 02:00–04:00 UTC.
+        </lt-alert>
+      </main>
+    </div>
+  </body>
+</html>
+
+<script>
+  import '@latty/web';
+
+  const table = document.getElementById('activity-table');
+
+  table.columns = [
+    { key: 'customer', label: 'Customer', sortable: true },
+    { key: 'region', label: 'Region' },
+    { key: 'revenue', label: 'Revenue', sortable: true, align: 'right' },
+    {
+      key: 'growth',
+      label: 'Growth',
+      width: '160px',
+      render: (value) => {
+        const el = document.createElement('lt-progress');
+        el.setAttribute('value', String(value));
+        el.setAttribute('variant', value >= 50 ? 'success' : value >= 25 ? 'primary' : 'warning');
+        el.setAttribute('size', 'sm');
+        return el;
+      }
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (value) => {
+        const variantMap = { Active: 'success', Paused: 'warning', Churned: 'error' };
+        const el = document.createElement('lt-badge');
+        el.setAttribute('variant', variantMap[value] ?? 'neutral');
+        el.setAttribute('content', value);
+        return el;
+      }
+    },
+    { key: 'sessions', label: 'Sessions', sortable: true, align: 'right' }
+  ];
+
+  table.data = [
+    {
+      customer: 'Apex Solutions',
+      region: 'North America',
+      revenue: '$18,400',
+      growth: 72,
+      status: 'Active',
+      sessions: 1840
+    },
+    { customer: 'Orion Labs', region: 'Europe', revenue: '$14,200', growth: 55, status: 'Active', sessions: 1230 },
+    { customer: 'Tide Media', region: 'Asia-Pacific', revenue: '$9,800', growth: 38, status: 'Active', sessions: 980 },
+    {
+      customer: 'Crestwood Inc.',
+      region: 'North America',
+      revenue: '$7,600',
+      growth: 29,
+      status: 'Paused',
+      sessions: 760
+    },
+    { customer: 'Nova Collective', region: 'Europe', revenue: '$6,900', growth: 22, status: 'Active', sessions: 690 },
+    {
+      customer: 'Skyline Partners',
+      region: 'Latin America',
+      revenue: '$5,400',
+      growth: 15,
+      status: 'Paused',
+      sessions: 540
+    },
+    {
+      customer: 'Meridian Group',
+      region: 'Middle East',
+      revenue: '$3,200',
+      growth: 8,
+      status: 'Churned',
+      sessions: 320
+    },
+    {
+      customer: 'Vanguard Tech',
+      region: 'Asia-Pacific',
+      revenue: '$2,100',
+      growth: 5,
+      status: 'Churned',
+      sessions: 210
+    }
+  ];
+
+  const rangeSelect = document.getElementById('time-range');
+  rangeSelect.options = [
+    { value: 'last-7', label: 'Last 7 days' },
+    { value: 'last-30', label: 'Last 30 days' },
+    { value: 'last-90', label: 'Last 90 days' },
+    { value: 'this-year', label: 'This year' }
+  ];
+  rangeSelect.value = 'last-30';
+
+  rangeSelect.addEventListener('change', (e) => {
+    const opt = rangeSelect.options.find((o) => o.value === e.detail.value);
+    document.getElementById('range-label').textContent = opt?.label ?? e.detail.value;
+  });
+
+  document.querySelectorAll('lt-chip[deletable]').forEach((chip) => {
+    chip.addEventListener('lt-delete', () => chip.remove());
+  });
+</script>
+
+<style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: var(--lt-font-family, 'Inter', system-ui, sans-serif);
+    background: var(--lt-color-neutral-100);
+    color: var(--lt-color-neutral-900);
+  }
+
+  /* ── Header ── */
+  lt-header {
+    flex-shrink: 0;
+  }
+
+  lt-header::part(inner) {
+    padding: 0 var(--lt-spacing-6, 1.5rem);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-2, 0.5rem);
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.125rem;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .header-user {
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-2, 0.5rem);
+  }
+
+  /* ── App shell ── */
+  .shell-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--lt-color-neutral-50);
+    border-right: 1px solid var(--lt-color-neutral-200);
+    overflow-y: auto;
+    padding: var(--lt-spacing-4, 1rem) 0;
+
+    --lt-nav-item-font-size: 0.875rem;
+    --lt-nav-item-padding: var(--lt-spacing-2) var(--lt-spacing-5);
+    --lt-nav-item-active-bg: var(--lt-color-primary-50);
+    --lt-nav-item-active-color: var(--lt-color-primary-700);
+  }
+
+  .main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--lt-spacing-8, 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: var(--lt-spacing-6, 1.5rem);
+  }
+
+  /* ── KPI row ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--lt-spacing-4, 1rem);
+  }
+
+  .kpi-card::part(surface) {
+    padding: var(--lt-spacing-5, 1.25rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+  }
+
+  /* ── Table card ── */
+  .table-card::part(surface) {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .table-header {
+    padding: var(--lt-spacing-5, 1.25rem) var(--lt-spacing-5, 1.25rem) 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--lt-spacing-4, 1rem);
+  }
+
+  .filters-row {
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-3, 0.75rem);
+    padding: var(--lt-spacing-4, 1rem) var(--lt-spacing-5, 1.25rem);
+    flex-wrap: wrap;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .kpi-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .shell-body {
+      flex-direction: column;
+      overflow: visible;
+    }
+
+    .sidebar {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--lt-color-neutral-200);
+      padding: var(--lt-spacing-2, 0.5rem) 0;
+    }
+
+    .main-content {
+      padding: var(--lt-spacing-4, 1rem);
+    }
+
+    .kpi-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

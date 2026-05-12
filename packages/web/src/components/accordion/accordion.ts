@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { accordionStyles } from './accordion.styles';
@@ -37,7 +38,7 @@ import '../text/text';
  * ```
  */
 @customElement('lt-accordion')
-export class Accordion extends LitElement {
+export class Accordion extends ThemeableElement {
   static styles = accordionStyles;
 
   /**

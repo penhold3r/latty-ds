@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { spinnerStyles } from './spineer.styles';
@@ -36,7 +37,7 @@ import type { SpinnerSize, SpinnerVariant } from './spinner.types';
  * ```
  */
 @customElement('lt-spinner')
-export class Spinner extends LitElement {
+export class Spinner extends ThemeableElement {
   static styles = spinnerStyles;
 
   /**

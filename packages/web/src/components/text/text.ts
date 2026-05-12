@@ -1,4 +1,4 @@
-import { LitElement } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 import { html, unsafeStatic } from 'lit/static-html.js';
 
@@ -46,7 +46,7 @@ const VARIANT_TAG: Record<TextVariant, TextTag> = {
  * ```
  */
 @customElement('lt-text')
-export class Text extends LitElement {
+export class Text extends ThemeableElement {
   static styles = textStyles;
 
   /** Typographic style to apply. */

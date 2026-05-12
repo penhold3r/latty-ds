@@ -1,4 +1,5 @@
-import { LitElement, html, type PropertyValues } from 'lit';
+import { html, type PropertyValues } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { sidepanelStyles } from './sidepanel.styles';
@@ -21,7 +22,7 @@ import '../text/text';
  * @part body - The scrollable content area wrapping the default slot
  */
 @customElement('lt-sidepanel')
-export class SidePanel extends LitElement {
+export class SidePanel extends ThemeableElement {
   static styles = [sidepanelStyles, backdropFeatureStyles];
 
   /** Whether the panel is visible. */

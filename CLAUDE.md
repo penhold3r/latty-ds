@@ -283,6 +283,14 @@ Tests use Vitest with jsdom environment. Test files are located at `packages/**/
 
 **Prettier**: `printWidth: 120`, `singleQuote: true`, `trailingComma: "none"`. Includes `prettier-plugin-astro` for `.astro` file formatting.
 
+## Agent Documents
+
+Planning documents, design decisions, audits, and research produced during a session belong in `_agent-docs/` at the repo root. This directory is tracked in git and is the canonical place for reference docs that span sessions.
+
+- Name files in SCREAMING-KEBAB: `DARK-THEME-PLAN.md`, `EXAMPLE-SITES-AUDIT.md`, etc.
+- Always write a file here when creating a multi-step plan, capturing a design decision, or producing research that future sessions will need.
+- Do not rely on the ephemeral `~/.claude/plans/` file alone — write to `_agent-docs/` so the user can review and the content survives context resets.
+
 ## CI/CD
 
 The docs site deploys automatically to GitHub Pages on every push to `main` via `.github/workflows/deploy-docs.yml`. The workflow installs with `--frozen-lockfile` and runs `pnpm docs:build`. No manual deploy step is needed.

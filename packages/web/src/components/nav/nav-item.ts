@@ -1,4 +1,5 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, nothing } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { navItemStyles } from './nav.styles';
@@ -39,7 +40,7 @@ import '@latty/icons';
  * ```
  */
 @customElement('lt-nav-item')
-export class NavItem extends LitElement {
+export class NavItem extends ThemeableElement {
   static styles = navItemStyles;
 
   /** Destination URL. If omitted, the item acts as a group header. */

@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { imageStyles } from './image.styles';
@@ -10,7 +11,7 @@ import { imageStyles } from './image.styles';
  * @part image - The underlying `<img>` element
  */
 @customElement('lt-image')
-export class Image extends LitElement {
+export class Image extends ThemeableElement {
   static styles = imageStyles;
 
   /** Image source URL. */

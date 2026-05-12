@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
@@ -59,7 +60,7 @@ import './list-item';
  * ```
  */
 @customElement('lt-list')
-export class List extends LitElement {
+export class List extends ThemeableElement {
   static styles = listStyles;
 
   /**

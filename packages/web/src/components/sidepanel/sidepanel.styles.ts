@@ -21,7 +21,7 @@ export const sidepanelStyles = css`
 
   [part='panel'] {
     position: fixed;
-    background: #fff;
+    background: var(--lt-bg-default);
     display: flex;
     flex-direction: column;
     z-index: 401;

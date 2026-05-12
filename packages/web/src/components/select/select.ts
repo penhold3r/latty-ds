@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { selectStyles } from './select.styles';
@@ -39,7 +40,7 @@ import '../text/text';
  * ```
  */
 @customElement('lt-select')
-export class Select extends LitElement {
+export class Select extends ThemeableElement {
   static styles = selectStyles;
 
   /**

@@ -1,4 +1,5 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, nothing } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { datepickerStyles } from './datepicker.styles';
@@ -23,7 +24,7 @@ import type { DatepickerType, DatepickerSize, DatepickerVariant } from './datepi
  * ```
  */
 @customElement('lt-datepicker')
-export class Datepicker extends LitElement {
+export class Datepicker extends ThemeableElement {
   static styles = datepickerStyles;
 
   /** Native input type. */

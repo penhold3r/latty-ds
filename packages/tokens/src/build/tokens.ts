@@ -24,16 +24,24 @@ logger.info('Building tokens...');
 
 const tokens = buildTokens(config);
 const css = tokensToCss(tokens);
-const semanticMap = buildSemanticTokens();
-const semanticCss = semanticTokensToCss(semanticMap);
+const lightSemanticMap = buildSemanticTokens('light');
+const darkSemanticMap = buildSemanticTokens('dark');
+const lightSemanticCss = semanticTokensToCss(lightSemanticMap);
+const darkSemanticCss = semanticTokensToCss(darkSemanticMap, '@media (prefers-color-scheme: dark)');
+const darkAttrCss = semanticTokensToCss(darkSemanticMap, '[data-theme="dark"]');
+const lightAttrCss = semanticTokensToCss(lightSemanticMap, '[data-theme="light"]');
 
 fs.mkdirSync(outDir, { recursive: true });
 
-const jsonOutput = { ...tokens, semantic: semanticMap };
+const jsonOutput = { ...tokens, semantic: lightSemanticMap, semanticDark: darkSemanticMap };
 
 fs.writeFileSync(path.join(outDir, 'tokens.json'), JSON.stringify(jsonOutput, null, 2) + '\n', 'utf8');
 fs.writeFileSync(path.join(outDir, 'tokens.css'), css, 'utf8');
-fs.writeFileSync(path.join(outDir, 'semantic.css'), semanticCss, 'utf8');
+fs.writeFileSync(
+  path.join(outDir, 'semantic.css'),
+  lightSemanticCss + '\n' + darkSemanticCss + '\n' + darkAttrCss + '\n' + lightAttrCss,
+  'utf8'
+);
 fs.writeFileSync(path.join(outDir, 'tokens.js'), `export const tokens = ${JSON.stringify(jsonOutput)};\n`, 'utf8');
 fs.writeFileSync(path.join(outDir, 'index.js'), `export * from "./tokens.js";\n`, 'utf8');
 

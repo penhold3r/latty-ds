@@ -35,7 +35,7 @@ export const accordionStyles = css`
   }
 
   .start-icon {
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-subtle);
     flex-shrink: 0;
     font-size: 1.25rem;
   }
@@ -79,7 +79,7 @@ export const accordionStyles = css`
   }
 
   .content-inner {
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-subtle);
     font-size: 0.9375rem;
     line-height: 1.6;
     padding: var(--lt-accordion-content-padding, 0 var(--lt-spacing-4) var(--lt-spacing-4));
@@ -92,7 +92,7 @@ export const accordionStyles = css`
   }
 
   :host([appearance='default']) details:hover {
-    border-color: var(--lt-color-neutral-300);
+    border-color: var(--lt-border-strong);
   }
 
   /* Variant: filled */
@@ -108,7 +108,7 @@ export const accordionStyles = css`
   /* Variant: outlined */
   :host([appearance='outlined']) details {
     background: transparent;
-    border: 1px solid var(--lt-color-neutral-300);
+    border: 1px solid var(--lt-border-default);
   }
 
   :host([appearance='outlined']) details:hover {

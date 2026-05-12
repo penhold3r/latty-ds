@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { dividerStyles } from './divider.styles';
@@ -19,7 +20,7 @@ import type { DividerOrientation, DividerAppearance } from './divider.types';
  * ```
  */
 @customElement('lt-divider')
-export class Divider extends LitElement {
+export class Divider extends ThemeableElement {
   static styles = dividerStyles;
 
   /**

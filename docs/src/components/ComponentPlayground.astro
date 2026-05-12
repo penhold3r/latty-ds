@@ -19,7 +19,11 @@ const {
 } = Astro.props;
 
 const component = (manifest as any)[tag];
-const members = (component?.members ?? []) as any[];
+const rawMembers = (component?.members ?? []) as any[];
+const hasThemeProp = rawMembers.some((m: any) => m.name === 'theme');
+const members = hasThemeProp
+  ? rawMembers
+  : [...rawMembers, { name: 'theme', type: 'select', options: ['', 'light', 'dark'], default: '' }];
 
 const id = `playground-${Math.random().toString(36).slice(2, 8)}`;
 
@@ -78,7 +82,7 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
                 <select class="control-select" id={`${id}-${member.name}`} data-prop={member.name} data-type="select">
                   {member.options?.map((opt: string) => (
                     <option value={opt} selected={opt === val}>
-                      {opt}
+                      {opt === '' ? '— default —' : opt}
                     </option>
                   ))}
                 </select>
@@ -124,6 +128,7 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
     await customElements.whenDefined(tag);
 
     const stage = document.getElementById(`${id}-stage`)!;
+    const preview = stage.parentElement!;
     const codeEl = document.getElementById(`${id}-code`)!;
     const copyBtn = document.getElementById(`${id}-copy`)!;
 
@@ -175,6 +180,13 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
           el.removeAttribute(member.name);
         }
       });
+
+      const themeValue = state['theme'];
+      if (themeValue === 'dark' || themeValue === 'light') {
+        preview.setAttribute('data-preview-theme', themeValue);
+      } else {
+        preview.removeAttribute('data-preview-theme');
+      }
     }
 
     function generateCode(): string {
@@ -221,8 +233,19 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
     align-items: center;
     justify-content: center;
     padding: var(--lt-spacing-10) var(--lt-spacing-8);
+    background: var(--lt-bg-subtle);
+    border-bottom: 1px solid var(--lt-border-default);
+    transition: background 200ms ease;
+  }
+
+  .preview[data-preview-theme='dark'] {
+    background: var(--lt-color-neutral-900);
+    border-bottom-color: var(--lt-color-neutral-700);
+  }
+
+  .preview[data-preview-theme='light'] {
     background: var(--lt-color-neutral-50);
-    border-bottom: 1px solid var(--lt-color-neutral-200);
+    border-bottom-color: var(--lt-color-neutral-200);
   }
 
   .preview-stage {

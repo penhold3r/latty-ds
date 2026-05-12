@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
@@ -19,7 +20,7 @@ import type { SkeletonShape } from './skeleton.types';
  * ```
  */
 @customElement('lt-skeleton')
-export class Skeleton extends LitElement {
+export class Skeleton extends ThemeableElement {
   static styles = skeletonStyles;
 
   /**

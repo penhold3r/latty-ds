@@ -15,8 +15,8 @@ html {
 
 body {
   margin: 0;
-  color: var(--lt-color-neutral-900, #111);
-  background: var(--lt-color-neutral-50, #fff);
+  color: var(--lt-text-default);
+  background: var(--lt-bg-default);
   font-family: sans-serif;
 }
 
@@ -52,6 +52,6 @@ a:hover {
 
 /* Focus ring */
 :focus-visible {
-  outline: 2px solid var(--lt-color-info-600, #0078b4);
+  outline: 2px solid var(--lt-border-focus);
   outline-offset: 2px;
 }

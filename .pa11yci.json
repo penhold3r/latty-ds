@@ -7,13 +7,13 @@
   },
   "urls": [
     "http://localhost:4321/",
-    "http://localhost:4321/getting-started/installation/",
-    "http://localhost:4321/getting-started/usage/",
-    "http://localhost:4321/tokens/overview/",
-    "http://localhost:4321/icons/",
-    "http://localhost:4321/components/button/",
-    "http://localhost:4321/components/alert/",
-    "http://localhost:4321/components/textfield/",
-    "http://localhost:4321/examples/coffee-shop/"
+    "http://localhost:4321/recipes/login-form/",
+    "http://localhost:4321/recipes/profile-card/",
+    "http://localhost:4321/recipes/content-card/",
+    "http://localhost:4321/recipes/hero-banner/",
+    "http://localhost:4321/recipes/stats-widgets/",
+    "http://localhost:4321/recipes/empty-state/",
+    "http://localhost:4321/examples/coffee-shop/",
+    "http://localhost:4321/examples/pulse-analytics/"
   ]
 }

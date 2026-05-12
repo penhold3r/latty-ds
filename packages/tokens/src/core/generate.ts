@@ -43,9 +43,19 @@ export const tokensToCss = (tokens: Tokens): string => {
   return `:root{\n${lines.join('\n')}\n}\n`;
 };
 
-export const semanticTokensToCss = (map: SemanticTokenMap): string => {
+export const semanticTokensToCss = (map: SemanticTokenMap, wrapper?: string): string => {
   const lines = Object.entries(map)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([key, ref]) => `  --lt-${key}: var(--lt-${ref});`);
-  return `/* Semantic tokens */\n:root {\n${lines.join('\n')}\n}\n`;
+
+  if (!wrapper) {
+    return `/* Semantic tokens */\n:root {\n${lines.join('\n')}\n}\n`;
+  }
+  if (wrapper.startsWith('@')) {
+    // At-rule (media query) — nest :root inside
+    const indented = lines.map((l) => '  ' + l);
+    return `${wrapper} {\n  :root {\n${indented.join('\n')}\n  }\n}\n`;
+  }
+  // CSS selector — apply directly (higher specificity overrides :root + @media)
+  return `${wrapper} {\n${lines.join('\n')}\n}\n`;
 };

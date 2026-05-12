@@ -1,4 +1,5 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, nothing } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { paginationStyles } from './pagination.styles';
@@ -23,7 +24,7 @@ import '@latty/icons';
  * ```
  */
 @customElement('lt-pagination')
-export class Pagination extends LitElement {
+export class Pagination extends ThemeableElement {
   static styles = paginationStyles;
 
   /** Currently active page (1-indexed). */

@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { headerStyles } from './header.styles';
@@ -16,7 +17,7 @@ import type { HeaderBackground } from './header.types';
  * @slot after - Far-right area, typically user actions or icons
  */
 @customElement('lt-header')
-export class Header extends LitElement {
+export class Header extends ThemeableElement {
   static styles = headerStyles;
 
   /** Background surface that controls the header's background and text colours. */

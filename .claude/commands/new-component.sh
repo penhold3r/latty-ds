@@ -145,8 +145,9 @@ fi
 
 # ── component.ts ──────────────────────────────────────────────────────────────
 {
-  echo "import { LitElement, html } from 'lit';"
+  echo "import { html } from 'lit';"
   echo "import { customElement, property } from 'lit/decorators.js';"
+  echo "import { ThemeableElement } from '../../base';"
   echo ""
   echo "import { ${NAME_LOWER}Styles } from './${NAME_LOWER}.styles';"
 
@@ -166,7 +167,7 @@ fi
   for ev in ${EVENT_LIST[@]+"${EVENT_LIST[@]}"}; do echo " * @fires lt-${ev}"; done
   echo " */"
   echo "@customElement('${TAG}')"
-  echo "export class ${NAME_PASCAL} extends LitElement {"
+  echo "export class ${NAME_PASCAL} extends ThemeableElement {"
   echo "  static styles = ${NAME_LOWER}Styles;"
 
   if [[ ${#VARIANT_LIST[@]} -gt 0 ]]; then

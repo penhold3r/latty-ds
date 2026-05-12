@@ -60,4 +60,11 @@ export interface LattyConfig {
   border?: {
     radius?: string;
   };
+  /**
+   * Controls which semantic token layer is emitted.
+   * - `'auto'` (default) — light at `:root`, dark inside `@media (prefers-color-scheme: dark)`
+   * - `'light'` — light tokens only at `:root`
+   * - `'dark'`  — dark tokens only at `:root` (use for sites that are intentionally always dark)
+   */
+  theme?: 'auto' | 'light' | 'dark';
 }

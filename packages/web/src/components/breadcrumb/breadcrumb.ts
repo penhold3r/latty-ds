@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { breadcrumbStyles, breadcrumbItemStyles } from './breadcrumb.styles';
@@ -19,7 +20,7 @@ import { breadcrumbStyles, breadcrumbItemStyles } from './breadcrumb.styles';
  * ```
  */
 @customElement('lt-breadcrumb')
-export class Breadcrumb extends LitElement {
+export class Breadcrumb extends ThemeableElement {
   static styles = breadcrumbStyles;
 
   render() {
@@ -40,7 +41,7 @@ export class Breadcrumb extends LitElement {
  * @element lt-breadcrumb-item
  */
 @customElement('lt-breadcrumb-item')
-export class BreadcrumbItem extends LitElement {
+export class BreadcrumbItem extends ThemeableElement {
   static styles = breadcrumbItemStyles;
 
   /**

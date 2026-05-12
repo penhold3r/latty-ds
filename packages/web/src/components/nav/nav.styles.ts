@@ -119,7 +119,7 @@ export const navItemStyles = css`
     top: 100%;
     left: 0;
     min-width: 160px;
-    background: var(--lt-color-neutral-0, #fff);
+    background: var(--lt-bg-default);
     color: var(--lt-color-neutral-700);
     border: 1px solid var(--lt-color-neutral-200);
     border-radius: 8px;

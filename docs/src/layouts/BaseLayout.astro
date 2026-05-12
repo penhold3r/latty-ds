@@ -26,6 +26,11 @@ const year = new Date().getFullYear();
     <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <meta name="generator" content={Astro.generator} />
     <title>{title} | Latty</title>
+    <!-- Inline: read saved theme before first paint to avoid flash -->
+    <script is:inline>
+      const saved = localStorage.getItem('lt-theme');
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+    </script>
   </head>
   <body>
     <lt-header background="primary" class="topbar">
@@ -44,6 +49,26 @@ const year = new Date().getFullYear();
       </a>
       <div slot="after" class="header-end">
         <span class="version-badge">{version}</span>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <!-- Moon: shown in light mode — click to go dark -->
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" width="18" height="18" aria-hidden="true">
+            <path
+              d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+          <!-- Sun: shown in dark mode — click to go light -->
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" width="18" height="18" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"></circle>
+            <path
+              d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"></path>
+          </svg>
+        </button>
         <a
           href="https://github.com/yourusername/latty-ds"
           target="_blank"
@@ -137,6 +162,42 @@ const year = new Date().getFullYear();
     gap: var(--lt-spacing-3);
   }
 
+  .theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--lt-color-neutral-100);
+    padding: var(--lt-spacing-1);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  .theme-toggle:hover {
+    background: color-mix(in srgb, white 15%, transparent);
+  }
+
+  /* show moon in light, sun in dark */
+  .icon-sun {
+    display: none;
+  }
+
+  :global([data-theme='dark']) .icon-sun {
+    display: block;
+  }
+  :global([data-theme='dark']) .icon-moon {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .icon-sun {
+      display: block;
+    }
+    :global(:root:not([data-theme='light'])) .icon-moon {
+      display: none;
+    }
+  }
+
   .github-link {
     color: var(--lt-color-neutral-50);
     display: flex;
@@ -171,8 +232,8 @@ const year = new Date().getFullYear();
   }
 
   .footer {
-    background: var(--lt-color-primary-100);
-    border-top: 1px solid var(--lt-color-primary-200);
+    background: var(--lt-bg-primary-subtle);
+    border-top: 1px solid var(--lt-border-primary);
     padding: var(--lt-spacing-8) var(--lt-spacing-10);
     text-align: center;
   }
@@ -180,7 +241,7 @@ const year = new Date().getFullYear();
   .footer-copy {
     margin: 0;
     font-size: 0.875rem;
-    color: var(--lt-color-primary-800);
+    color: var(--lt-text-primary);
   }
 
   .content {
@@ -216,6 +277,19 @@ const year = new Date().getFullYear();
 
   import type { SidePanel } from '@latty/web';
 
+  // ── Theme toggle ──────────────────────────────────────────────────────────
+  const themeBtn = document.getElementById('theme-toggle') as HTMLButtonElement | null;
+
+  themeBtn?.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const osPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const effective = current ?? (osPrefersDark ? 'dark' : 'light');
+    const next = effective === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('lt-theme', next);
+  });
+
+  // ── Mobile nav ────────────────────────────────────────────────────────────
   const toggle = document.getElementById('menu-toggle') as HTMLButtonElement | null;
   const navPanel = document.getElementById('nav-panel') as (HTMLElement & SidePanel) | null;
 

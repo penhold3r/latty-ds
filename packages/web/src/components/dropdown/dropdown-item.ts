@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { dropdownItemStyles } from './dropdown-item.styles';
@@ -11,9 +12,9 @@ import { dropdownItemStyles } from './dropdown-item.styles';
  * @fires {CustomEvent} lt-select - Fired when the item is activated (click or Enter/Space)
  */
 @customElement('lt-dropdown-item')
-export class DropdownItem extends LitElement {
+export class DropdownItem extends ThemeableElement {
   static styles = dropdownItemStyles;
-  static shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
+  static shadowRootOptions = { ...ThemeableElement.shadowRootOptions, delegatesFocus: true };
 
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) selected = false;

@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { tabPanelStyles } from './tab-panel.styles';
@@ -23,7 +24,7 @@ import { tabPanelStyles } from './tab-panel.styles';
  * ```
  */
 @customElement('lt-tab-panel')
-export class TabPanel extends LitElement {
+export class TabPanel extends ThemeableElement {
   static styles = tabPanelStyles;
 
   /** Value that matches the corresponding `lt-tab`. */

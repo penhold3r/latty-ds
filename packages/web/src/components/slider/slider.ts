@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { sliderStyles } from './slider.styles';
@@ -13,7 +14,7 @@ import '../tooltip/tooltip';
  * @fires {CustomEvent<{value: number}>} lt-change - Dispatched when the user commits a value (mouseup/keyup)
  */
 @customElement('lt-slider')
-export class Slider extends LitElement {
+export class Slider extends ThemeableElement {
   static styles = sliderStyles;
 
   @property({ reflect: true }) size: SliderSize = 'md';

@@ -187,7 +187,7 @@ export const badgeStyles = css`
   :host([appearance='solid'][variant='neutral']) span[part='base'] {
     background: var(--lt-color-neutral-500);
     border-color: transparent;
-    color: #fff;
+    color: var(--lt-color-white);
   }
 
   /* ── Dot color inherits text color ───────────────────────────────── */

@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
@@ -31,7 +32,7 @@ let _tooltipIdCounter = 0;
  * ```
  */
 @customElement('lt-tooltip')
-export class Tooltip extends LitElement {
+export class Tooltip extends ThemeableElement {
   static styles = tooltipStyles;
 
   private _tooltipId = `lt-tooltip-${++_tooltipIdCounter}`;

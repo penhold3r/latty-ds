@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { textfieldStyles } from './textfield.styles';
@@ -46,7 +47,7 @@ import '../text/text';
  * ```
  */
 @customElement('lt-textfield')
-export class Textfield extends LitElement {
+export class Textfield extends ThemeableElement {
   static styles = textfieldStyles;
 
   /**

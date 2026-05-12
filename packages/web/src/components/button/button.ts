@@ -1,4 +1,5 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, nothing } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
@@ -42,7 +43,7 @@ import '@latty/icons';
  * ```
  */
 @customElement('lt-button')
-export class Button extends LitElement {
+export class Button extends ThemeableElement {
   static styles = buttonStyles;
   static formAssociated = true;
 

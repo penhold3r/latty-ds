@@ -1,4 +1,5 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, nothing } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { progressStyles } from './progress.styles';
@@ -18,7 +19,7 @@ import type { ProgressSize, ProgressVariant } from './progress.types';
  * ```
  */
 @customElement('lt-progress')
-export class Progress extends LitElement {
+export class Progress extends ThemeableElement {
   static styles = progressStyles;
 
   /**

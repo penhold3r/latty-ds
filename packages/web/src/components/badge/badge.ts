@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { badgeStyles } from './badge.styles';
@@ -18,7 +19,7 @@ import type { BadgeVariant, BadgeSize, BadgeAppearance } from './badge.types';
  * ```
  */
 @customElement('lt-badge')
-export class Badge extends LitElement {
+export class Badge extends ThemeableElement {
   static styles = badgeStyles;
 
   /** Visual style: tinted fill, outline only, or full-color solid. */

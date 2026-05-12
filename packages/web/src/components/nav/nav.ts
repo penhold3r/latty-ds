@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { navStyles } from './nav.styles';
@@ -37,7 +38,7 @@ import './nav-item';
  * ```
  */
 @customElement('lt-nav')
-export class Nav extends LitElement {
+export class Nav extends ThemeableElement {
   static styles = navStyles;
 
   /**

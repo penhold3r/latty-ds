@@ -1,4 +1,5 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
+import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { tabStyles } from './tab.styles';
@@ -24,7 +25,7 @@ import '@latty/icons';
  * ```
  */
 @customElement('lt-tab')
-export class Tab extends LitElement {
+export class Tab extends ThemeableElement {
   static styles = tabStyles;
 
   /**
