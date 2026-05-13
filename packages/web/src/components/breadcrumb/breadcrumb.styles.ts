@@ -46,6 +46,10 @@ export const breadcrumbItemStyles = css`
     user-select: none;
   }
 
+  [part='separator']::after {
+    content: var(--lt-breadcrumb-separator, '/');
+  }
+
   :host(:last-child) [part='separator'] {
     display: none;
   }

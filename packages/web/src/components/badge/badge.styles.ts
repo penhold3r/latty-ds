@@ -81,37 +81,37 @@ export const badgeStyles = css`
   :host([appearance='filled'][variant='primary']) span[part='base'] {
     background: var(--lt-bg-primary-subtle);
     border-color: var(--lt-border-primary);
-    color: var(--lt-color-primary-800);
+    color: var(--lt-text-primary);
   }
 
   :host([appearance='filled'][variant='secondary']) span[part='base'] {
     background: var(--lt-bg-secondary-subtle);
     border-color: var(--lt-border-secondary);
-    color: var(--lt-color-secondary-800);
+    color: var(--lt-text-secondary);
   }
 
   :host([appearance='filled'][variant='success']) span[part='base'] {
     background: var(--lt-bg-success-subtle);
     border-color: var(--lt-border-success);
-    color: var(--lt-color-success-800);
+    color: var(--lt-text-success);
   }
 
   :host([appearance='filled'][variant='warning']) span[part='base'] {
     background: var(--lt-bg-warning-subtle);
     border-color: var(--lt-border-warning);
-    color: var(--lt-color-warning-800);
+    color: var(--lt-text-warning);
   }
 
   :host([appearance='filled'][variant='error']) span[part='base'] {
     background: var(--lt-bg-error-subtle);
     border-color: var(--lt-border-error);
-    color: var(--lt-color-error-800);
+    color: var(--lt-text-error);
   }
 
   :host([appearance='filled'][variant='neutral']) span[part='base'] {
     background: var(--lt-bg-surface);
     border-color: var(--lt-border-default);
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-neutral);
   }
 
   /* ── Outlined (transparent bg, colored border and text) ──────────── */
@@ -119,37 +119,37 @@ export const badgeStyles = css`
   :host([appearance='outlined'][variant='primary']) span[part='base'] {
     background: transparent;
     border-color: var(--lt-border-primary-strong);
-    color: var(--lt-color-primary-600);
+    color: var(--lt-text-primary);
   }
 
   :host([appearance='outlined'][variant='secondary']) span[part='base'] {
     background: transparent;
     border-color: var(--lt-border-secondary-strong);
-    color: var(--lt-color-secondary-600);
+    color: var(--lt-text-secondary);
   }
 
   :host([appearance='outlined'][variant='success']) span[part='base'] {
     background: transparent;
     border-color: var(--lt-border-success-strong);
-    color: var(--lt-color-success-600);
+    color: var(--lt-text-success);
   }
 
   :host([appearance='outlined'][variant='warning']) span[part='base'] {
     background: transparent;
     border-color: var(--lt-border-warning-strong);
-    color: var(--lt-color-warning-700);
+    color: var(--lt-text-warning);
   }
 
   :host([appearance='outlined'][variant='error']) span[part='base'] {
     background: transparent;
     border-color: var(--lt-border-error-strong);
-    color: var(--lt-color-error-600);
+    color: var(--lt-text-error);
   }
 
   :host([appearance='outlined'][variant='neutral']) span[part='base'] {
     background: transparent;
     border-color: var(--lt-border-strong);
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-neutral);
   }
 
   /* ── Solid (full-color bg, white text) ───────────────────────────── */

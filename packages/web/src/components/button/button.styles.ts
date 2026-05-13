@@ -159,113 +159,120 @@ export const buttonStyles = css`
   :host([appearance='outlined'][variant='primary']) [part='base'] {
     background: transparent;
     border-color: var(--lt-border-primary-strong);
-    color: var(--lt-color-primary-500);
+    color: var(--lt-text-primary);
   }
   :host([appearance='outlined'][variant='primary']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) {
-    background: var(--lt-color-primary-50);
-    border-color: var(--lt-color-primary-700);
+    background: var(--lt-bg-primary-subtle);
+    border-color: var(--lt-border-primary-strong);
     color: var(--lt-text-primary);
   }
   :host([appearance='outlined'][variant='primary']) [part='base']:active:not([disabled]):not([aria-disabled='true']) {
     background: var(--lt-bg-primary-subtle);
-    border-color: var(--lt-color-primary-800);
-    color: var(--lt-color-primary-800);
+    border-color: var(--lt-border-primary-strong);
+    color: var(--lt-text-primary);
+    opacity: 0.8;
   }
 
   :host([appearance='outlined'][variant='secondary']) [part='base'] {
     background: transparent;
     border-color: var(--lt-border-secondary-strong);
-    color: var(--lt-color-secondary-500);
+    color: var(--lt-text-secondary);
   }
   :host([appearance='outlined'][variant='secondary']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) {
-    background: var(--lt-color-secondary-50);
-    border-color: var(--lt-color-secondary-700);
+    background: var(--lt-bg-secondary-subtle);
+    border-color: var(--lt-border-secondary-strong);
     color: var(--lt-text-secondary);
   }
   :host([appearance='outlined'][variant='secondary']) [part='base']:active:not([disabled]):not([aria-disabled='true']) {
     background: var(--lt-bg-secondary-subtle);
-    border-color: var(--lt-color-secondary-800);
-    color: var(--lt-color-secondary-800);
+    border-color: var(--lt-border-secondary-strong);
+    color: var(--lt-text-secondary);
+    opacity: 0.8;
   }
 
   :host([appearance='outlined'][variant='neutral']) [part='base'] {
     background: transparent;
-    border-color: var(--lt-color-neutral-500);
-    color: var(--lt-color-neutral-700);
+    border-color: var(--lt-border-strong);
+    color: var(--lt-text-neutral);
   }
   :host([appearance='outlined'][variant='neutral']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) {
     background: var(--lt-bg-subtle);
-    border-color: var(--lt-color-neutral-700);
+    border-color: var(--lt-border-strong);
     color: var(--lt-text-default);
   }
   :host([appearance='outlined'][variant='neutral']) [part='base']:active:not([disabled]):not([aria-disabled='true']) {
     background: var(--lt-bg-surface);
-    border-color: var(--lt-color-neutral-800);
+    border-color: var(--lt-border-strong);
     color: var(--lt-text-default);
+    opacity: 0.8;
   }
 
   :host([appearance='outlined'][variant='success']) [part='base'] {
     background: transparent;
     border-color: var(--lt-border-success-strong);
-    color: var(--lt-color-success-500);
+    color: var(--lt-text-success);
   }
   :host([appearance='outlined'][variant='success']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) {
-    background: var(--lt-color-success-50);
-    border-color: var(--lt-color-success-700);
+    background: var(--lt-bg-success-subtle);
+    border-color: var(--lt-border-success-strong);
     color: var(--lt-text-success);
   }
   :host([appearance='outlined'][variant='success']) [part='base']:active:not([disabled]):not([aria-disabled='true']) {
     background: var(--lt-bg-success-subtle);
-    border-color: var(--lt-color-success-800);
-    color: var(--lt-color-success-800);
+    border-color: var(--lt-border-success-strong);
+    color: var(--lt-text-success);
+    opacity: 0.8;
   }
 
   :host([appearance='outlined'][variant='warning']) [part='base'] {
     background: transparent;
     border-color: var(--lt-border-warning-strong);
-    color: var(--lt-color-warning-700);
+    color: var(--lt-text-warning);
   }
   :host([appearance='outlined'][variant='warning']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) {
-    background: var(--lt-color-warning-50);
-    border-color: var(--lt-color-warning-700);
-    color: var(--lt-color-warning-800);
+    background: var(--lt-bg-warning-subtle);
+    border-color: var(--lt-border-warning-strong);
+    color: var(--lt-text-warning);
   }
   :host([appearance='outlined'][variant='warning']) [part='base']:active:not([disabled]):not([aria-disabled='true']) {
     background: var(--lt-bg-warning-subtle);
-    border-color: var(--lt-color-warning-800);
-    color: var(--lt-color-warning-900);
+    border-color: var(--lt-border-warning-strong);
+    color: var(--lt-text-warning);
+    opacity: 0.8;
   }
 
   :host([appearance='outlined'][variant='error']) [part='base'] {
     background: transparent;
     border-color: var(--lt-border-error-strong);
-    color: var(--lt-color-error-500);
+    color: var(--lt-text-error);
   }
   :host([appearance='outlined'][variant='error']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) {
-    background: var(--lt-color-error-50);
-    border-color: var(--lt-color-error-700);
+    background: var(--lt-bg-error-subtle);
+    border-color: var(--lt-border-error-strong);
     color: var(--lt-text-error);
   }
   :host([appearance='outlined'][variant='error']) [part='base']:active:not([disabled]):not([aria-disabled='true']) {
     background: var(--lt-bg-error-subtle);
-    border-color: var(--lt-color-error-800);
-    color: var(--lt-color-error-800);
+    border-color: var(--lt-border-error-strong);
+    color: var(--lt-text-error);
+    opacity: 0.8;
   }
 
   :host([appearance='outlined'][variant='info']) [part='base'] {
     background: transparent;
     border-color: var(--lt-border-info-strong);
-    color: var(--lt-color-info-500);
+    color: var(--lt-text-info);
   }
   :host([appearance='outlined'][variant='info']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) {
-    background: var(--lt-color-info-50);
-    border-color: var(--lt-color-info-700);
+    background: var(--lt-bg-info-subtle);
+    border-color: var(--lt-border-info-strong);
     color: var(--lt-text-info);
   }
   :host([appearance='outlined'][variant='info']) [part='base']:active:not([disabled]):not([aria-disabled='true']) {
     background: var(--lt-bg-info-subtle);
-    border-color: var(--lt-color-info-800);
-    color: var(--lt-color-info-800);
+    border-color: var(--lt-border-info-strong);
+    color: var(--lt-text-info);
+    opacity: 0.8;
   }
 
   /* loading */

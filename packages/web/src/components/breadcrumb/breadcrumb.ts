@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
@@ -12,7 +12,7 @@ import { breadcrumbStyles, breadcrumbItemStyles } from './breadcrumb.styles';
  *
  * @example
  * ```html
- * <lt-breadcrumb>
+ * <lt-breadcrumb separator=">">
  *   <lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
  *   <lt-breadcrumb-item href="/components">Components</lt-breadcrumb-item>
  *   <lt-breadcrumb-item current>Button</lt-breadcrumb-item>
@@ -22,6 +22,25 @@ import { breadcrumbStyles, breadcrumbItemStyles } from './breadcrumb.styles';
 @customElement('lt-breadcrumb')
 export class Breadcrumb extends ThemeableElement {
   static styles = breadcrumbStyles;
+
+  /**
+   * The character or element to use as a separator between breadcrumb items.
+   * This is passed down to all children items via CSS variables.
+   * @default '/'
+   */
+  @property() separator = '/';
+
+  override updated(changed: PropertyValues<this>) {
+    super.updated(changed);
+    if (changed.has('separator')) {
+      // Guard against null/undefined being coerced to strings
+      if (this.separator !== null && this.separator !== undefined) {
+        this.style.setProperty('--lt-breadcrumb-separator', `"${this.separator}"`);
+      } else {
+        this.style.removeProperty('--lt-breadcrumb-separator');
+      }
+    }
+  }
 
   render() {
     return html`
@@ -56,13 +75,26 @@ export class BreadcrumbItem extends ThemeableElement {
    */
   @property({ type: Boolean, reflect: true }) current = false;
 
+  /**
+   * Custom separator for this specific item. Overrides the parent's separator.
+   * @default ''
+   */
+  @property() separator = '';
+
   render() {
+    // Only apply local override if separator is explicitly provided and not nullish/empty
+    const hasSeparatorOverride = this.separator !== null && this.separator !== undefined && this.separator !== '';
+
     return html`
       <li part="item">
         ${this.current || !this.href
           ? html`<span part="text" aria-current=${this.current ? 'page' : 'false'}><slot></slot></span>`
           : html`<a part="link" href=${this.href}><slot></slot></a>`}
-        <span part="separator" aria-hidden="true">/</span>
+        <span
+          part="separator"
+          aria-hidden="true"
+          style=${hasSeparatorOverride ? `--lt-breadcrumb-separator: "${this.separator}"` : ''}
+        ></span>
       </li>
     `;
   }

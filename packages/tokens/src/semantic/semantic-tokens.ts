@@ -11,9 +11,10 @@ const buildLightSemanticTokens = (): SemanticTokenMap => {
   map['text-muted'] = 'color-neutral-400';
   map['text-disabled'] = 'color-neutral-400';
   map['text-inverse'] = 'color-white';
+  map['text-neutral'] = 'color-neutral-700';
 
   for (const v of VARIANTS) {
-    map[`text-${v}`] = `color-${v}-700`;
+    map[`text-${v}`] = `color-${v}-800`;
     map[`text-on-${v}`] = 'color-white';
   }
 
@@ -60,6 +61,7 @@ const buildDarkSemanticTokens = (): SemanticTokenMap => {
   map['text-muted'] = 'color-neutral-500';
   map['text-disabled'] = 'color-neutral-600';
   map['text-inverse'] = 'color-neutral-900';
+  map['text-neutral'] = 'color-neutral-200';
 
   for (const v of VARIANTS) {
     map[`text-${v}`] = `color-${v}-300`;

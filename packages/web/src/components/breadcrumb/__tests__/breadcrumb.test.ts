@@ -29,6 +29,30 @@ describe('<lt-breadcrumb>', () => {
     const list = el.shadowRoot!.querySelector('[part="list"]');
     expect(list?.tagName).toBe('OL');
   });
+
+  it('sets --lt-breadcrumb-separator when separator property changes', async () => {
+    el.separator = '>';
+    await el.updateComplete;
+    expect(el.style.getPropertyValue('--lt-breadcrumb-separator')).toBe('">"');
+  });
+
+  it('removes --lt-breadcrumb-separator when separator is null', async () => {
+    el.separator = '>';
+    await el.updateComplete;
+    // @ts-expect-error - testing null handling
+    el.separator = null;
+    await el.updateComplete;
+    expect(el.style.getPropertyValue('--lt-breadcrumb-separator')).toBe('');
+  });
+
+  it('removes --lt-breadcrumb-separator when separator is undefined', async () => {
+    el.separator = '>';
+    await el.updateComplete;
+    // @ts-expect-error - testing undefined handling
+    el.separator = undefined;
+    await el.updateComplete;
+    expect(el.style.getPropertyValue('--lt-breadcrumb-separator')).toBe('');
+  });
 });
 
 describe('<lt-breadcrumb-item>', () => {
@@ -66,9 +90,32 @@ describe('<lt-breadcrumb-item>', () => {
     expect(el.shadowRoot!.querySelector('[part="link"]')).toBeNull();
   });
 
-  it('renders separator', async () => {
+  it('renders default separator', async () => {
     const sep = el.shadowRoot!.querySelector('[part="separator"]');
     expect(sep).toBeTruthy();
-    expect(sep?.textContent).toBe('/');
+    // Default value in render is '/'
+    expect(sep?.textContent).toBe(''); // Text content is empty because it uses ::after
+  });
+
+  it('applies local separator override style', async () => {
+    el.separator = '>>';
+    await el.updateComplete;
+    const sep = el.shadowRoot!.querySelector('[part="separator"]') as HTMLElement;
+    expect(sep.style.getPropertyValue('--lt-breadcrumb-separator')).toBe('">>"');
+  });
+
+  it('does not apply local override style when separator is empty string', async () => {
+    el.separator = '';
+    await el.updateComplete;
+    const sep = el.shadowRoot!.querySelector('[part="separator"]') as HTMLElement;
+    expect(sep.style.getPropertyValue('--lt-breadcrumb-separator')).toBe('');
+  });
+
+  it('does not apply local override style when separator is null', async () => {
+    // @ts-expect-error - testing null handling
+    el.separator = null;
+    await el.updateComplete;
+    const sep = el.shadowRoot!.querySelector('[part="separator"]') as HTMLElement;
+    expect(sep.style.getPropertyValue('--lt-breadcrumb-separator')).toBe('');
   });
 });

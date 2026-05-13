@@ -61,7 +61,6 @@ export const dividerStyles = css`
   :host([orientation='vertical']) [part='label'] {
     padding-block: var(--lt-spacing-3);
     padding-inline: 0;
-    writing-mode: vertical-rl;
   }
 
   /* ── Appearances ────────────────────────────────────────────────────────── */

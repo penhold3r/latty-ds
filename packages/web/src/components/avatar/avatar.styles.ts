@@ -35,37 +35,37 @@ export const avatarStyles = css`
   /* ── Colors (fallback bg + text) ────────────────────────────────────── */
   :host([color='neutral']) span[part='base'] {
     background: var(--lt-bg-overlay);
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-neutral);
   }
 
   :host([color='primary']) span[part='base'] {
     background: var(--lt-bg-primary-subtle);
-    color: var(--lt-color-primary-800);
+    color: var(--lt-text-primary);
   }
 
   :host([color='secondary']) span[part='base'] {
     background: var(--lt-bg-secondary-subtle);
-    color: var(--lt-color-secondary-800);
+    color: var(--lt-text-secondary);
   }
 
   :host([color='success']) span[part='base'] {
     background: var(--lt-bg-success-subtle);
-    color: var(--lt-color-success-800);
+    color: var(--lt-text-success);
   }
 
   :host([color='warning']) span[part='base'] {
     background: var(--lt-bg-warning-subtle);
-    color: var(--lt-color-warning-800);
+    color: var(--lt-text-warning);
   }
 
   :host([color='error']) span[part='base'] {
     background: var(--lt-bg-error-subtle);
-    color: var(--lt-color-error-800);
+    color: var(--lt-text-error);
   }
 
   :host([color='info']) span[part='base'] {
     background: var(--lt-bg-info-subtle);
-    color: var(--lt-color-info-800);
+    color: var(--lt-text-info);
   }
 
   /* ── Shape ───────────────────────────────────────────────────────────── */
