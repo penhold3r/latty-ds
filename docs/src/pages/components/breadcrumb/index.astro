@@ -2,7 +2,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
 ---
 
 <BaseLayout title="Breadcrumb" description="A navigation trail that shows the user's location in the app hierarchy.">
@@ -14,16 +14,12 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <PlaygroundShell id="breadcrumb-playground" previewHeight="auto">
-    <div slot="preview" style="padding:1.5rem;">
-      <lt-breadcrumb>
-        <lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
-        <lt-breadcrumb-item href="/components">Components</lt-breadcrumb-item>
-        <lt-breadcrumb-item current>Breadcrumb</lt-breadcrumb-item>
-      </lt-breadcrumb>
-    </div>
-    <div slot="controls"></div>
-  </PlaygroundShell>
+  <ComponentPlayground
+    tag="lt-breadcrumb"
+    content={`<lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
+<lt-breadcrumb-item href="/components">Components</lt-breadcrumb-item>
+<lt-breadcrumb-item current>Breadcrumb</lt-breadcrumb-item>`}
+  />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs

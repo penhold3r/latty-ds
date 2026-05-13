@@ -19,6 +19,14 @@ import ApiTable from '../../../components/ApiTable.astro';
     </div>
     <div slot="controls">
       <div class="control-row">
+        <label class="control-label" for="ctrl-size">size</label>
+        <select class="control-select" id="ctrl-size">
+          <option value="sm">sm</option>
+          <option value="md" selected>md</option>
+          <option value="lg">lg</option>
+        </select>
+      </div>
+      <div class="control-row">
         <label class="control-label" for="ctrl-variant">variant</label>
         <select class="control-select" id="ctrl-variant">
           <option value="default" selected>default</option>
@@ -28,20 +36,32 @@ import ApiTable from '../../../components/ApiTable.astro';
         </select>
       </div>
       <div class="control-row">
-        <label class="control-label" for="ctrl-size">size</label>
-        <select class="control-select" id="ctrl-size">
-          <option value="sm">sm</option>
-          <option value="md" selected>md</option>
-          <option value="lg">lg</option>
-        </select>
-      </div>
-      <div class="control-row">
         <label class="control-label" for="ctrl-disabled">disabled</label>
         <input class="control-toggle" type="checkbox" id="ctrl-disabled" />
       </div>
       <div class="control-row">
         <label class="control-label" for="ctrl-required">required</label>
         <input class="control-toggle" type="checkbox" id="ctrl-required" />
+      </div>
+      <div class="control-row">
+        <label class="control-label" for="ctrl-label">label</label>
+        <input class="control-text" type="text" id="ctrl-label" value="Country" />
+      </div>
+      <div class="control-row">
+        <label class="control-label" for="ctrl-placeholder">placeholder</label>
+        <input class="control-text" type="text" id="ctrl-placeholder" value="Select a country" />
+      </div>
+      <div class="control-row">
+        <label class="control-label" for="ctrl-helper">helper-text</label>
+        <input class="control-text" type="text" id="ctrl-helper" value="" />
+      </div>
+      <div class="control-row">
+        <label class="control-label" for="ctrl-theme">theme</label>
+        <select class="control-select" id="ctrl-theme">
+          <option value="" selected>default</option>
+          <option value="light">light</option>
+          <option value="dark">dark</option>
+        </select>
       </div>
     </div>
   </PlaygroundShell>
@@ -135,6 +155,8 @@ const options = [
   import '@latty/web';
 
   const select = document.getElementById('playground-select') as any;
+  const playground = document.getElementById('select-playground')!;
+  const preview = playground.querySelector('.preview')!;
   const codeEl = document.getElementById('select-playground-code')!;
 
   select.options = [
@@ -145,34 +167,78 @@ const options = [
     { value: 'fr', label: 'France' }
   ];
 
-  const state: Record<string, any> = { variant: 'default', size: 'md', disabled: false, required: false };
+  const state: Record<string, any> = {
+    size: 'md',
+    variant: 'default',
+    disabled: false,
+    required: false,
+    label: 'Country',
+    placeholder: 'Select a country',
+    'helper-text': '',
+    theme: ''
+  };
 
   function updateCode() {
     const attrs = Object.entries(state)
-      .filter(([k, v]) => v !== false && !(k === 'variant' && v === 'default') && !(k === 'size' && v === 'md'))
+      .filter(([k, v]) => {
+        if (v === false || v === '') return false;
+        if (k === 'size' && v === 'md') return false;
+        if (k === 'variant' && v === 'default') return false;
+        return true;
+      })
       .map(([k, v]) => (v === true ? k : `${k}="${v}"`))
       .join('\n  ');
+
     codeEl.textContent = attrs
-      ? `<lt-select\n  ${attrs}\n  label="Country"\n  placeholder="Select a country"\n></lt-select>`
+      ? `<lt-select\n  ${attrs}\n></lt-select>`
       : `<lt-select label="Country" placeholder="Select a country"></lt-select>`;
   }
 
-  document.getElementById('ctrl-variant')?.addEventListener('change', (e) => {
-    state.variant = (e.target as HTMLSelectElement).value;
-    select.setAttribute('variant', state.variant);
-    updateCode();
+  // size & variant & theme
+  ['size', 'variant', 'theme'].forEach((id) => {
+    document.getElementById(`ctrl-${id}`)?.addEventListener('change', (e) => {
+      const val = (e.target as HTMLSelectElement).value;
+      state[id] = val;
+      if (val) {
+        select.setAttribute(id, val);
+      } else {
+        select.removeAttribute(id);
+      }
+
+      if (id === 'theme') {
+        if (val === 'dark' || val === 'light') {
+          preview.setAttribute('data-preview-theme', val);
+        } else {
+          preview.removeAttribute('data-preview-theme');
+        }
+      }
+
+      updateCode();
+    });
   });
-  document.getElementById('ctrl-size')?.addEventListener('change', (e) => {
-    state.size = (e.target as HTMLSelectElement).value;
-    select.setAttribute('size', state.size);
-    updateCode();
-  });
-  ['disabled', 'required'].forEach((attr) => {
-    document.getElementById(`ctrl-${attr}`)?.addEventListener('change', (e) => {
+
+  // disabled & required
+  ['disabled', 'required'].forEach((id) => {
+    document.getElementById(`ctrl-${id}`)?.addEventListener('change', (e) => {
       const checked = (e.target as HTMLInputElement).checked;
-      state[attr] = checked;
+      state[id] = checked;
       if (checked) {
-        select.setAttribute(attr, '');
+        select.setAttribute(id, '');
+      } else {
+        select.removeAttribute(id);
+      }
+      updateCode();
+    });
+  });
+
+  // label & placeholder & helper
+  ['label', 'placeholder', 'helper'].forEach((id) => {
+    document.getElementById(`ctrl-${id}`)?.addEventListener('input', (e) => {
+      const val = (e.target as HTMLInputElement).value;
+      const attr = id === 'helper' ? 'helper-text' : id;
+      state[attr] = val;
+      if (val) {
+        select.setAttribute(attr, val);
       } else {
         select.removeAttribute(attr);
       }

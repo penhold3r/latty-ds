@@ -42,6 +42,14 @@ import ApiTable from '../../../components/ApiTable.astro';
         <label class="control-label" for="ctrl-loading">loading</label>
         <input class="control-toggle" type="checkbox" id="ctrl-loading" />
       </div>
+      <div class="control-row">
+        <label class="control-label" for="ctrl-theme">theme</label>
+        <select class="control-select" id="ctrl-theme">
+          <option value="" selected>default</option>
+          <option value="light">light</option>
+          <option value="dark">dark</option>
+        </select>
+      </div>
     </div>
   </PlaygroundShell>
 
@@ -110,6 +118,8 @@ const data = [
   import '@latty/web';
 
   const table = document.getElementById('playground-table') as any;
+  const playground = document.getElementById('table-playground')!;
+  const preview = playground.querySelector('.preview')!;
   const codeEl = document.getElementById('table-playground-code')!;
 
   table.columns = [
@@ -130,12 +140,13 @@ const data = [
     hoverable: true,
     striped: false,
     bordered: false,
-    loading: false
+    loading: false,
+    theme: ''
   };
 
   function updateCode() {
     const attrs = Object.entries(state)
-      .filter(([k, v]) => v !== false && !(k === 'density' && v === 'normal'))
+      .filter(([k, v]) => v !== false && v !== '' && !(k === 'density' && v === 'normal'))
       .map(([k, v]) => (v === true ? k : `${k}="${v}"`))
       .join(' ');
     codeEl.textContent = `<lt-table${attrs ? ' ' + attrs : ''}></lt-table>`;
@@ -148,6 +159,18 @@ const data = [
   document.getElementById('ctrl-density')?.addEventListener('change', (e) => {
     state.density = (e.target as HTMLSelectElement).value;
     table.setAttribute('density', state.density);
+    updateCode();
+  });
+
+  document.getElementById('ctrl-theme')?.addEventListener('change', (e) => {
+    state.theme = (e.target as HTMLSelectElement).value;
+    if (state.theme) {
+      table.setAttribute('theme', state.theme);
+      preview.setAttribute('data-preview-theme', state.theme);
+    } else {
+      table.removeAttribute('theme');
+      preview.removeAttribute('data-preview-theme');
+    }
     updateCode();
   });
 

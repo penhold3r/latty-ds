@@ -51,6 +51,14 @@ import ApiTable from '../../../components/ApiTable.astro';
         <label class="control-label" for="ctrl-overlay-opacity">overlay-opacity</label>
         <input class="control-input" type="range" min="0" max="1" step="0.05" value="0.5" id="ctrl-overlay-opacity" />
       </div>
+      <div class="control-row">
+        <label class="control-label" for="ctrl-theme">theme</label>
+        <select class="control-select" id="ctrl-theme">
+          <option value="" selected>default</option>
+          <option value="light">light</option>
+          <option value="dark">dark</option>
+        </select>
+      </div>
     </div>
   </PlaygroundShell>
 
@@ -70,7 +78,7 @@ import ApiTable from '../../../components/ApiTable.astro';
 <lt-button variant="primary" id="open-btn">Open dialog</lt-button>
 
 <lt-dialog id="my-dialog" title="Confirm action" size="sm">
-  <p>Are you sure you want to proceed?</p>
+  <lt-text>Are you sure you want to proceed?</lt-text>
   <div slot="footer">
     <lt-button variant="neutral" appearance="outlined" id="cancel-btn">Cancel</lt-button>
     <lt-button variant="primary">Confirm</lt-button>
@@ -85,7 +93,7 @@ import ApiTable from '../../../components/ApiTable.astro';
     `}
     react={`
 import { useState } from 'react';
-import { Dialog, Button } from '@latty/react';
+import { Dialog, Button, Text } from '@latty/react';
 
 function Example() {
   const [open, setOpen] = useState(false);
@@ -100,7 +108,7 @@ function Example() {
         size="sm"
         onLtDialogClose={() => setOpen(false)}
       >
-        <p>Are you sure you want to proceed?</p>
+        <Text>Are you sure you want to proceed?</Text>
         <div slot="footer">
           <Button variant="neutral" appearance="outlined"
             onClick={() => setOpen(false)}>Cancel</Button>
@@ -122,7 +130,7 @@ const open = ref(false)
 
   <lt-dialog :open="open" title="Confirm action" size="sm"
     @lt-dialog-close="open = false">
-    <p>Are you sure you want to proceed?</p>
+    <lt-text>Are you sure you want to proceed?</lt-text>
     <div slot="footer">
       <lt-button variant="neutral" appearance="outlined"
         @click="open = false">Cancel</lt-button>
@@ -150,12 +158,15 @@ const open = ref(false)
     'close-on-escape': true,
     uppercase: false,
     'backdrop-blur': false,
-    'overlay-opacity': 0.5 as number
+    'overlay-opacity': 0.5 as number,
+    theme: ''
   };
 
   function updateCode() {
     const attrs = Object.entries(state)
-      .filter(([k, v]) => v !== false && !(k === 'size' && v === 'md') && !(k === 'overlay-opacity' && v === 0.5))
+      .filter(
+        ([k, v]) => v !== false && v !== '' && !(k === 'size' && v === 'md') && !(k === 'overlay-opacity' && v === 0.5)
+      )
       .map(([k, v]) => (v === true ? k : `${k}="${v}"`))
       .join('\n  ');
     codeEl.textContent = attrs
@@ -169,6 +180,16 @@ const open = ref(false)
   document.getElementById('ctrl-size')?.addEventListener('change', (e) => {
     state.size = (e.target as HTMLSelectElement).value;
     dialog.setAttribute('size', state.size);
+    updateCode();
+  });
+
+  document.getElementById('ctrl-theme')?.addEventListener('change', (e) => {
+    state.theme = (e.target as HTMLSelectElement).value;
+    if (state.theme) {
+      dialog.setAttribute('theme', state.theme);
+    } else {
+      dialog.removeAttribute('theme');
+    }
     updateCode();
   });
 

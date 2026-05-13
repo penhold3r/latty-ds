@@ -80,6 +80,7 @@ function toMember(field, componentDir) {
   }
 
   // Strip `| ''` / `'' |` suffixes that just represent an "unset" sentinel
+  const hasEmptySentinel = /\|\s*''|''\s*\|/.test(typeText);
   const resolvedType = typeText
     .replace(/\s*\|\s*''/g, '')
     .replace(/^''\s*\|\s*/g, '')
@@ -89,7 +90,9 @@ function toMember(field, componentDir) {
   const options = resolveUnion(resolvedType, componentDir);
   if (options?.length) {
     const def = parseDefault(rawDefault) ?? options[0];
-    return { name, type: 'select', options, default: def };
+    // Prepend '' option so the playground can show "— default —"
+    const finalOptions = hasEmptySentinel ? ['', ...options] : options;
+    return { name, type: 'select', options: finalOptions, default: def };
   }
 
   // Fallback: treat as free-text

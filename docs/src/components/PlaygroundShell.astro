@@ -77,8 +77,19 @@ const { id, previewHeight = '140px' } = Astro.props;
     align-items: center;
     justify-content: center;
     padding: var(--lt-spacing-10) var(--lt-spacing-8);
+    background: var(--lt-bg-subtle);
+    border-bottom: 1px solid var(--lt-border-default);
+    transition: background 200ms ease;
+  }
+
+  .preview[data-preview-theme='dark'] {
+    background: var(--lt-color-neutral-900);
+    border-bottom-color: var(--lt-color-neutral-700);
+  }
+
+  .preview[data-preview-theme='light'] {
     background: var(--lt-color-neutral-50);
-    border-bottom: 1px solid var(--lt-color-neutral-200);
+    border-bottom-color: var(--lt-color-neutral-200);
   }
 
   .preview-stage {
