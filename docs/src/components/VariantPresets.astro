@@ -1,0 +1,71 @@
+---
+import manifest from '@latty/web/manifest.json';
+
+interface Props {
+  tag: string;
+  /** Inner HTML / text for each component instance (e.g. 'Button'). */
+  slotContent?: string;
+  /**
+   * Which prop to vary. Defaults to 'variant', falling back to 'appearance',
+   * then the first select prop in the manifest.
+   */
+  prop?: string;
+}
+
+const { tag, slotContent = '', prop } = Astro.props;
+
+const allManifest = manifest as any;
+const component = allManifest[tag];
+const members = (component?.members ?? []) as any[];
+
+const variantMember =
+  members.find((m: any) => m.name === (prop ?? 'variant')) ??
+  members.find((m: any) => m.name === 'appearance') ??
+  members.find((m: any) => m.type === 'select' && (m.options?.length ?? 0) > 1);
+
+const options: string[] = (variantMember?.options ?? []).filter((o: string) => o !== '');
+---
+
+{
+  options.length > 0 && (
+    <div class="variant-presets">
+      <div class="variant-presets-row">
+        {options.map((option: string) => (
+          <div class="variant-preset-item">
+            <div
+              class="variant-preset-preview"
+              set:html={`<${tag} ${variantMember.name}="${option}">${slotContent}</${tag}>`}
+            />
+            <span class="variant-preset-label">{option}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .variant-presets {
+    margin: var(--lt-spacing-4) 0;
+  }
+
+  .variant-presets-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--lt-spacing-6);
+    align-items: flex-end;
+    padding: var(--lt-spacing-6) 0 var(--lt-spacing-2);
+  }
+
+  .variant-preset-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--lt-spacing-2);
+  }
+
+  .variant-preset-label {
+    font-size: 0.75rem;
+    color: var(--lt-text-neutral);
+  }
+</style>

@@ -10,7 +10,7 @@
  *   ]}}
  */
 
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -27,6 +27,21 @@ function resolveUnion(typeName, componentDir) {
   const match = src.match(new RegExp(`export type ${typeName}\\s*=\\s*([^;]+);`));
   if (!match) return null;
   return [...match[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
+}
+
+/** Enumerate all icon names from the @latty/icons source directory. */
+function getIconNames() {
+  const iconsRoot = resolve(__dirname, '../../icons/src/icons');
+  if (!existsSync(iconsRoot)) return [];
+  return readdirSync(iconsRoot, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .flatMap((d) => {
+      const catDir = join(iconsRoot, d.name);
+      return readdirSync(catDir)
+        .filter((f) => f.endsWith('.ts') && f !== 'index.ts')
+        .map((f) => f.replace(/\.ts$/, ''));
+    })
+    .sort();
 }
 
 /** Convert camelCase property name to kebab-case attribute name (Lit convention). */
@@ -62,6 +77,12 @@ function toMember(field, componentDir) {
   }
 
   if (typeText === 'string') {
+    if (['icon', 'icon-start', 'icon-end'].includes(name)) {
+      return { name, type: 'icon', default: '' };
+    }
+    if (['color', 'background'].includes(name)) {
+      return { name, type: 'color', default: '' };
+    }
     return { name, type: 'text', default: parseDefault(rawDefault) ?? '' };
   }
 
@@ -118,6 +139,7 @@ for (const mod of cem.modules) {
   }
 }
 
-writeFileSync(join(root, 'dist/manifest.json'), JSON.stringify(manifest, null, 2));
+const iconNames = getIconNames();
+writeFileSync(join(root, 'dist/manifest.json'), JSON.stringify({ _meta: { iconNames }, ...manifest }, null, 2));
 // eslint-disable-next-line no-console
-console.log(`manifest.json → ${Object.keys(manifest).length} components`);
+console.log(`manifest.json → ${Object.keys(manifest).length} components, ${iconNames.length} icons`);

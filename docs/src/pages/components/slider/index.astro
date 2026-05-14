@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
 import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
@@ -13,45 +13,7 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <PlaygroundShell id="slider-playground" previewHeight="auto">
-    <div slot="preview" style="padding: 1.5rem; min-width: 300px;">
-      <lt-slider id="playground-slider" label="Volume" value="40" min="0" max="100" step="1"></lt-slider>
-    </div>
-    <div slot="controls">
-      <div class="control-row">
-        <label class="control-label" for="ctrl-size">size</label>
-        <select class="control-select" id="ctrl-size">
-          <option value="sm">sm</option>
-          <option value="md" selected>md</option>
-          <option value="lg">lg</option>
-        </select>
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-min">min</label>
-        <input class="control-input" type="number" id="ctrl-min" value="0" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-max">max</label>
-        <input class="control-input" type="number" id="ctrl-max" value="100" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-step">step</label>
-        <input class="control-input" type="number" id="ctrl-step" value="1" min="1" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-label">label</label>
-        <input class="control-input" type="text" id="ctrl-label" value="Volume" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-show-tooltip">tooltip</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-show-tooltip" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-disabled">disabled</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-disabled" />
-      </div>
-    </div>
-  </PlaygroundShell>
+  <ComponentPlayground tag="lt-slider" stretch={true} previewHeight="auto" defaults={{ label: 'Volume', value: 40 }} />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
@@ -120,84 +82,4 @@ const volume = ref(40)
 
 <script>
   import '@latty/web';
-
-  const slider = document.getElementById('playground-slider') as any;
-  const codeEl = document.getElementById('slider-playground-code')!;
-
-  const state: Record<string, string | boolean | number> = {
-    size: 'md',
-    min: 0,
-    max: 100,
-    step: 1,
-    label: 'Volume',
-    tooltip: false,
-    disabled: false
-  };
-
-  function applyState() {
-    slider.size = state.size;
-    slider.min = state.min;
-    slider.max = state.max;
-    slider.step = state.step;
-    slider.label = state.label;
-    slider.tooltip = state.tooltip;
-    slider.disabled = state.disabled;
-  }
-
-  function updateCode() {
-    const attrs: string[] = [];
-    if (state.label) attrs.push(`label="${state.label}"`);
-    if (state.size !== 'md') attrs.push(`size="${state.size}"`);
-    if (state.min !== 0) attrs.push(`min="${state.min}"`);
-    if (state.max !== 100) attrs.push(`max="${state.max}"`);
-    if (state.step !== 1) attrs.push(`step="${state.step}"`);
-    if (state.tooltip) attrs.push('tooltip');
-    if (state.disabled) attrs.push('disabled');
-    const attrsStr = attrs.length ? '\n  ' + attrs.join('\n  ') + '\n' : '';
-    codeEl.textContent = `<lt-slider${attrsStr}></lt-slider>`;
-  }
-
-  document.getElementById('ctrl-size')?.addEventListener('change', (e) => {
-    state.size = (e.target as HTMLSelectElement).value;
-    applyState();
-    updateCode();
-  });
-
-  document.getElementById('ctrl-min')?.addEventListener('input', (e) => {
-    state.min = Number((e.target as HTMLInputElement).value);
-    applyState();
-    updateCode();
-  });
-
-  document.getElementById('ctrl-max')?.addEventListener('input', (e) => {
-    state.max = Number((e.target as HTMLInputElement).value);
-    applyState();
-    updateCode();
-  });
-
-  document.getElementById('ctrl-step')?.addEventListener('input', (e) => {
-    state.step = Number((e.target as HTMLInputElement).value);
-    applyState();
-    updateCode();
-  });
-
-  document.getElementById('ctrl-label')?.addEventListener('input', (e) => {
-    state.label = (e.target as HTMLInputElement).value;
-    applyState();
-    updateCode();
-  });
-
-  document.getElementById('ctrl-show-tooltip')?.addEventListener('change', (e) => {
-    state.tooltip = (e.target as HTMLInputElement).checked;
-    applyState();
-    updateCode();
-  });
-
-  document.getElementById('ctrl-disabled')?.addEventListener('change', (e) => {
-    state.disabled = (e.target as HTMLInputElement).checked;
-    applyState();
-    updateCode();
-  });
-
-  updateCode();
 </script>

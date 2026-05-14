@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground.astro';
 import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
 ---
@@ -13,33 +13,7 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <PlaygroundShell id="pagination-playground">
-    <div slot="preview">
-      <lt-pagination id="playground-pg" page="5" total-pages="20"></lt-pagination>
-    </div>
-    <div slot="controls">
-      <div class="control-row">
-        <label class="control-label" for="ctrl-size">size</label>
-        <select class="control-select" id="ctrl-size">
-          <option value="sm">sm</option>
-          <option value="md" selected>md</option>
-          <option value="lg">lg</option>
-        </select>
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-total">total-pages</label>
-        <input class="control-input" id="ctrl-total" type="number" value="20" min="1" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-page">page</label>
-        <input class="control-input" id="ctrl-page" type="number" value="5" min="1" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-disabled">disabled</label>
-        <input type="checkbox" id="ctrl-disabled" />
-      </div>
-    </div>
-  </PlaygroundShell>
+  <ComponentPlayground tag="lt-pagination" defaults={{ page: 5, 'total-pages': 20 }} />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
@@ -82,28 +56,4 @@ import { Pagination } from '@latty/react';
 
 <script>
   import '@latty/web';
-
-  const pg = document.getElementById('playground-pg') as any;
-  const ctrlSize = document.getElementById('ctrl-size') as HTMLSelectElement;
-  const ctrlTotal = document.getElementById('ctrl-total') as HTMLInputElement;
-  const ctrlPage = document.getElementById('ctrl-page') as HTMLInputElement;
-  const ctrlDisabled = document.getElementById('ctrl-disabled') as HTMLInputElement;
-
-  ctrlSize?.addEventListener('change', () => {
-    pg.size = ctrlSize.value;
-  });
-  ctrlTotal?.addEventListener('input', () => {
-    pg.totalPages = Number(ctrlTotal.value);
-  });
-  ctrlPage?.addEventListener('input', () => {
-    pg.page = Number(ctrlPage.value);
-  });
-  ctrlDisabled?.addEventListener('change', () => {
-    pg.disabled = ctrlDisabled.checked;
-  });
-
-  pg?.addEventListener('lt-change', (e: CustomEvent) => {
-    pg.page = e.detail.page;
-    ctrlPage.value = String(e.detail.page);
-  });
 </script>

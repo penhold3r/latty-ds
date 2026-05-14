@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
 import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
+import VariantPresets from '../../../components/VariantPresets.astro';
 ---
 
 <BaseLayout title="Alert" description="Inline notification for persistent contextual feedback">
@@ -15,6 +16,7 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
+  <VariantPresets tag="lt-alert" slotContent="Your changes have been saved." />
   <ComponentPlayground tag="lt-alert" content="Your changes have been saved to the server." />
 
   <lt-text variant="h2">Usage</lt-text>

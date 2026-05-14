@@ -16,6 +16,8 @@ import ComponentPlayground from '../../../components/ComponentPlayground.astro';
   <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground
     tag="lt-breadcrumb"
+    subTags={['lt-breadcrumb-item']}
+    subTagsFilter={{ 'lt-breadcrumb-item': ['separator'] }}
     content={`<lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
 <lt-breadcrumb-item href="/components">Components</lt-breadcrumb-item>
 <lt-breadcrumb-item current>Breadcrumb</lt-breadcrumb-item>`}

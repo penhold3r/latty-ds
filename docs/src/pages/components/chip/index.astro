@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ComponentPlayground from '../../../components/ComponentPlayground.astro';
 import FrameworkTabs from '../../../components/FrameworkTabs.astro';
 import ApiTable from '../../../components/ApiTable.astro';
+import VariantPresets from '../../../components/VariantPresets.astro';
 ---
 
 <BaseLayout title="Chip" description="Compact label for tags, filters, and attributes">
@@ -10,6 +11,7 @@ import ApiTable from '../../../components/ApiTable.astro';
   <lt-text variant="body">Compact pill-shaped labels for tags, filters, status indicators, and attributes.</lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
+  <VariantPresets tag="lt-chip" slotContent="Design System" />
   <ComponentPlayground tag="lt-chip" content="Design System" />
 
   <lt-text variant="h2">Usage</lt-text>

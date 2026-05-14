@@ -6,8 +6,16 @@ interface Props {
   content?: string;
   previewHeight?: string;
   defaults?: Record<string, any>;
-  /** Makes the component fill the full preview stage width — use for inherently full-width components like lt-progress. */
+  /** Makes the component fill the full preview stage width. */
   stretch?: boolean;
+  /** Tag names of sub-elements to expose controls for (e.g. ['lt-breadcrumb-item']). */
+  subTags?: string[];
+  /**
+   * Allowlist of props to show per sub-tag. If omitted, all manifest props are shown.
+   * Use this to prevent per-item props (like href, current) from being applied globally.
+   * Example: { 'lt-breadcrumb-item': ['separator'] }
+   */
+  subTagsFilter?: Record<string, string[]>;
 }
 
 const {
@@ -15,10 +23,14 @@ const {
   content: slotContent = '',
   previewHeight = '140px',
   defaults: defaultOverrides = {},
-  stretch = false
+  stretch = false,
+  subTags: subTagsProp = [],
+  subTagsFilter: subTagsFilterProp = {}
 } = Astro.props;
 
-const component = (manifest as any)[tag];
+const allManifest = manifest as any;
+const iconNames: string[] = allManifest._meta?.iconNames ?? [];
+const component = allManifest[tag];
 const rawMembers = (component?.members ?? []) as any[];
 const hasThemeProp = rawMembers.some((m: any) => m.name === 'theme');
 const members = hasThemeProp
@@ -27,15 +39,36 @@ const members = hasThemeProp
 
 const id = `playground-${Math.random().toString(36).slice(2, 8)}`;
 
-function defaultValue(member: any): any {
-  if (member.name in defaultOverrides) return defaultOverrides[member.name];
+function defaultValue(member: any, overrides: Record<string, any> = defaultOverrides): any {
+  if (member.name in overrides) return overrides[member.name];
   if (member.default !== undefined && member.default !== '') return member.default;
   if (member.type === 'boolean') return false;
   if (member.type === 'select' && member.options?.length) return member.options[0];
   return '';
 }
 
-const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]));
+const defaults = Object.fromEntries(members.map((m: any) => [m.name, defaultValue(m)]));
+
+// Build sub-tag data (filtered members + defaults)
+const subTagsData = subTagsProp.map((st: string) => {
+  const stComp = allManifest[st];
+  const allStMembers = (stComp?.members ?? []) as any[];
+  const filteredMembers = subTagsFilterProp[st]
+    ? allStMembers.filter((m: any) => subTagsFilterProp[st].includes(m.name))
+    : allStMembers;
+  const stDefaults = Object.fromEntries(filteredMembers.map((m: any) => [m.name, defaultValue(m, {})]));
+  return { tag: st, members: filteredMembers, defaults: stDefaults };
+});
+
+// All control groups: parent first, then children
+const allCtrlGroups = [{ tag, members, defaults }, ...subTagsData];
+
+function toLabel(name: string): string {
+  return name
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
 ---
 
 <div
@@ -45,71 +78,187 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
   data-content={slotContent}
   data-members={JSON.stringify(members)}
   data-defaults={JSON.stringify(defaults)}
+  data-icons={JSON.stringify(iconNames)}
   data-stretch={stretch ? 'true' : undefined}
+  data-subtags-data={JSON.stringify(subTagsData)}
 >
   <!-- Preview -->
   <div class="preview" style={`min-height: ${previewHeight}`}>
+    <div class="preview-toolbar">
+      <button class="bp-btn" data-width="375">Mobile</button>
+      <button class="bp-btn" data-width="768">Tablet</button>
+      <button class="bp-btn is-active" data-width="">Desktop</button>
+    </div>
     <div class="preview-stage" id={`${id}-stage`}></div>
   </div>
 
   <!-- Controls + Code -->
   <div class="bottom">
     <div class="controls">
-      <div class="section-label">Controls</div>
+      <!-- Sub-tag tabs (only when subTags provided) -->
       {
-        members.map((member) => {
-          const val = defaults[member.name];
-          const label = member.name
-            .split('-')
-            .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
-            .join(' ');
+        subTagsProp.length > 0 ? (
+          <div class="ctrl-tabs-bar">
+            {allCtrlGroups.map(({ tag: ctrlTag }, i) => (
+              <button class={`ctrl-tab-btn${i === 0 ? ' is-active' : ''}`} data-ctrl-tag={ctrlTag}>
+                {ctrlTag.replace('lt-', '')}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div class="section-label">Controls</div>
+        )
+      }
 
-          return (
-            <div class="control-row">
-              <label class="control-label" for={`${id}-${member.name}`}>
-                {label}
-              </label>
-              {member.type === 'boolean' ? (
-                <input
-                  class="control-toggle"
-                  type="checkbox"
-                  id={`${id}-${member.name}`}
-                  data-prop={member.name}
-                  data-type="boolean"
-                  checked={val === true}
-                />
-              ) : member.type === 'select' ? (
-                <select class="control-select" id={`${id}-${member.name}`} data-prop={member.name} data-type="select">
-                  {member.options?.map((opt: string) => (
-                    <option value={opt} selected={opt === val}>
-                      {opt === '' ? '— default —' : opt}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  class="control-text"
+      <!-- One ctrl-group per tag (parent + each subTag) -->
+      {
+        allCtrlGroups.map(({ tag: ctrlTag, members: ctrlMembers, defaults: ctrlDefaults }, groupIdx) =>
+          ctrlMembers.map((member: any) => {
+            const val = ctrlDefaults[member.name];
+            const label = toLabel(member.name);
+            const ctrlId = `${id}-${ctrlTag.replace('lt-', '')}-${member.name}`;
+            const hidden = groupIdx > 0;
+
+            if (member.type === 'boolean') {
+              return (
+                <div class="control-row" style={hidden ? 'display:none' : ''} data-ctrl-group={ctrlTag}>
+                  <label class="control-label" for={ctrlId}>
+                    {label}
+                  </label>
+                  <lt-switch
+                    id={ctrlId}
+                    size="sm"
+                    data-prop={member.name}
+                    data-type="boolean"
+                    data-ctrl-tag={ctrlTag}
+                    checked={val === true ? '' : undefined}
+                  />
+                </div>
+              );
+            }
+
+            if (member.type === 'select') {
+              return (
+                <div class="control-row" style={hidden ? 'display:none' : ''} data-ctrl-group={ctrlTag}>
+                  <label class="control-label" for={ctrlId}>
+                    {label}
+                  </label>
+                  <lt-select
+                    id={ctrlId}
+                    size="sm"
+                    data-prop={member.name}
+                    data-type="select"
+                    data-ctrl-tag={ctrlTag}
+                    data-options={JSON.stringify(member.options ?? [])}
+                    data-value={String(val)}
+                  />
+                </div>
+              );
+            }
+
+            if (member.type === 'icon') {
+              return (
+                <div
+                  class="control-row control-row--stacked"
+                  style={hidden ? 'display:none' : ''}
+                  data-ctrl-group={ctrlTag}
+                >
+                  <label class="control-label" for={ctrlId}>
+                    {label}
+                  </label>
+                  <lt-combobox
+                    id={ctrlId}
+                    size="sm"
+                    placeholder="Search icon…"
+                    data-prop={member.name}
+                    data-type="icon"
+                    data-ctrl-tag={ctrlTag}
+                  />
+                </div>
+              );
+            }
+
+            if (member.type === 'color') {
+              return (
+                <div class="control-row" style={hidden ? 'display:none' : ''} data-ctrl-group={ctrlTag}>
+                  <label class="control-label" for={ctrlId}>
+                    {label}
+                  </label>
+                  <input
+                    id={ctrlId}
+                    class="control-color"
+                    type="color"
+                    data-prop={member.name}
+                    data-type="color"
+                    data-ctrl-tag={ctrlTag}
+                    value={val || '#ffffff'}
+                  />
+                </div>
+              );
+            }
+
+            return (
+              <div class="control-row" style={hidden ? 'display:none' : ''} data-ctrl-group={ctrlTag}>
+                <label class="control-label" for={ctrlId}>
+                  {label}
+                </label>
+                <lt-textfield
+                  id={ctrlId}
+                  size="sm"
                   type={member.type === 'number' ? 'number' : 'text'}
-                  id={`${id}-${member.name}`}
+                  value={String(val)}
                   data-prop={member.name}
                   data-type={member.type}
-                  value={String(val)}
+                  data-ctrl-tag={ctrlTag}
                 />
-              )}
-            </div>
-          );
-        })
+              </div>
+            );
+          })
+        )
       }
     </div>
 
     <div class="code-panel">
       <div class="code-header">
-        <span class="section-label" style="color: var(--lt-color-neutral-500)">HTML</span>
-        <lt-button size="sm" variant="neutral" appearance="outlined" id={`${id}-copy`} aria-label="Copy code"
-          >Copy</lt-button
-        >
+        <div class="code-tabs" id={`${id}-tabs`}>
+          <button class="code-tab is-active" data-lang="html">HTML</button>
+          <button class="code-tab" data-lang="react">React</button>
+        </div>
+        <div class="code-header-actions">
+          <lt-button size="sm" variant="neutral" appearance="outlined" id={`${id}-share`} aria-label="Share"
+            >Share</lt-button
+          >
+          <lt-button size="sm" variant="neutral" appearance="outlined" id={`${id}-copy`} aria-label="Copy code"
+            >Copy</lt-button
+          >
+        </div>
       </div>
-      <pre class="code-pre"><code class="code-output" id={`${id}-code`} /></pre>
+      <pre class="code-pre" id={`${id}-html-panel`}><code class="code-output" id={`${id}-html-code`} /></pre>
+      <pre
+        class="code-pre"
+        id={`${id}-react-panel`}
+        style="display:none"><code class="code-output" id={`${id}-react-code`} /></pre>
+    </div>
+  </div>
+
+  <!-- Event log -->
+  <div class="event-log" id={`${id}-event-log`}>
+    <button class="event-log-header" id={`${id}-event-log-toggle`}>
+      <span id={`${id}-event-log-label`}>Events</span>
+      <svg
+        class="event-log-chevron"
+        width="10"
+        height="10"
+        viewBox="0 0 10 10"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
+        <polyline points="2,3 5,7 8,3"></polyline>
+      </svg>
+    </button>
+    <div class="event-log-body" id={`${id}-event-log-body`} hidden>
+      <div class="event-log-rows" id={`${id}-event-log-rows`}></div>
     </div>
   </div>
 </div>
@@ -118,46 +267,175 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
   import '@latty/web';
 
   async function initPlayground(playground: Element) {
+    const ds = (playground as HTMLElement).dataset;
     const id = playground.id;
-    const tag = (playground as HTMLElement).dataset.tag!;
-    const slotContent = (playground as HTMLElement).dataset.content ?? '';
-    const members: any[] = JSON.parse((playground as HTMLElement).dataset.members ?? '[]');
-    const defaults: Record<string, any> = JSON.parse((playground as HTMLElement).dataset.defaults ?? '{}');
+    const tag = ds.tag!;
+    const slotContent = ds.content ?? '';
+    const members: any[] = JSON.parse(ds.members ?? '[]');
+    const defaults: Record<string, any> = JSON.parse(ds.defaults ?? '{}');
+    const iconNames: string[] = JSON.parse(ds.icons ?? '[]');
+    const subTagsData: Array<{ tag: string; members: any[]; defaults: Record<string, any> }> = JSON.parse(
+      ds.subtagsData ?? '[]'
+    );
 
-    // Wait for the custom element to be registered before creating it
-    await customElements.whenDefined(tag);
+    await Promise.all([
+      customElements.whenDefined(tag),
+      ...subTagsData.map((d) => customElements.whenDefined(d.tag)),
+      customElements.whenDefined('lt-select'),
+      customElements.whenDefined('lt-switch'),
+      customElements.whenDefined('lt-textfield'),
+      customElements.whenDefined('lt-combobox')
+    ]);
 
     const stage = document.getElementById(`${id}-stage`)!;
     const preview = stage.parentElement!;
-    const codeEl = document.getElementById(`${id}-code`)!;
+    const htmlCode = document.getElementById(`${id}-html-code`)!;
+    const reactCode = document.getElementById(`${id}-react-code`)!;
     const copyBtn = document.getElementById(`${id}-copy`)!;
+    const shareBtn = document.getElementById(`${id}-share`)!;
 
-    const state: Record<string, any> = { ...defaults };
+    // Build state map: { tagName: { propName: value } }
+    const stateMap: Record<string, Record<string, any>> = {
+      [tag]: { ...defaults },
+      ...Object.fromEntries(subTagsData.map((d) => [d.tag, { ...d.defaults }]))
+    };
 
-    // Build component element
+    // Load state from URL before controls are initialized so they reflect shared state
+    const urlParams = new URLSearchParams(window.location.search);
+    const stateParam = urlParams.get('s');
+    if (stateParam) {
+      try {
+        const decoded = JSON.parse(decodeURIComponent(escape(atob(stateParam))));
+        for (const [k, v] of Object.entries(decoded)) {
+          if (stateMap[k] && typeof v === 'object' && v !== null) {
+            Object.assign(stateMap[k], v as Record<string, any>);
+          }
+        }
+      } catch {
+        // ignore malformed URL state
+      }
+    }
+
+    // Debounced URL sync
+    let syncUrlTimer: ReturnType<typeof setTimeout> | null = null;
+    function syncUrl() {
+      if (syncUrlTimer) clearTimeout(syncUrlTimer);
+      syncUrlTimer = setTimeout(() => {
+        const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(stateMap))));
+        const url = new URL(window.location.href);
+        url.searchParams.set('s', encoded);
+        history.replaceState(null, '', url.toString());
+      }, 400);
+    }
+
+    // Create the main element and populate it
     const el = document.createElement(tag);
     if (slotContent) el.innerHTML = slotContent;
-    if ((playground as HTMLElement).dataset.stretch === 'true') el.style.width = '100%';
+    if (ds.stretch === 'true') el.style.width = '100%';
     stage.appendChild(el);
+
+    // Snapshot child elements' template attributes (before any state is applied)
+    // Used to preserve per-item attrs like href, current when generating code
+    type ChildItem = { el: Element; tag: string; templateAttrs: Record<string, string> };
+    const childItems: ChildItem[] = [];
+    for (const stData of subTagsData) {
+      el.querySelectorAll(stData.tag).forEach((childEl) => {
+        const templateAttrs: Record<string, string> = {};
+        for (const attr of childEl.attributes) {
+          templateAttrs[attr.name] = attr.value;
+        }
+        childItems.push({ el: childEl, tag: stData.tag, templateAttrs });
+      });
+    }
+
+    // Init lt-select controls (options must be set via JS property)
+    playground.querySelectorAll('lt-select[data-prop]').forEach((ctrl: any) => {
+      const rawOptions: string[] = JSON.parse(ctrl.dataset.options ?? '[]');
+      ctrl.options = rawOptions.map((v: string) => ({ value: v, label: v === '' ? '— default —' : v }));
+      ctrl.value = String(stateMap[ctrl.dataset.ctrlTag ?? tag]?.[ctrl.dataset.prop] ?? '');
+    });
+
+    // Init lt-combobox icon controls
+    playground.querySelectorAll('lt-combobox[data-type="icon"]').forEach((ctrl: any) => {
+      ctrl.options = iconNames.map((n: string) => ({ value: n, label: n }));
+      const initVal = stateMap[ctrl.dataset.ctrlTag ?? tag]?.[ctrl.dataset.prop] ?? '';
+      if (initVal) ctrl.value = String(initVal);
+    });
+
+    // Init lt-switch checked state
+    playground.querySelectorAll('lt-switch[data-prop]').forEach((ctrl: any) => {
+      ctrl.checked = stateMap[ctrl.dataset.ctrlTag ?? tag]?.[ctrl.dataset.prop] === true;
+    });
+
+    // Init lt-textfield values
+    playground.querySelectorAll('lt-textfield[data-prop]').forEach((ctrl: any) => {
+      ctrl.value = String(stateMap[ctrl.dataset.ctrlTag ?? tag]?.[ctrl.dataset.prop] ?? '');
+    });
 
     applyState();
     updateCode();
 
     // Wire controls
     playground.querySelectorAll('[data-prop]').forEach((control) => {
-      const input = control as HTMLInputElement | HTMLSelectElement;
-      const propName = input.dataset.prop!;
-      const type = input.dataset.type!;
+      const ctrl = control as HTMLElement & any;
+      const propName = ctrl.dataset.prop!;
+      const type = ctrl.dataset.type!;
+      const ctrlTag = ctrl.dataset.ctrlTag ?? tag;
 
-      input.addEventListener(type === 'boolean' ? 'change' : 'input', () => {
-        state[propName] = type === 'boolean' ? (input as HTMLInputElement).checked : input.value;
+      function onChange(value: any) {
+        stateMap[ctrlTag][propName] = value;
         applyState();
         updateCode();
+        syncUrl();
+      }
+
+      if (type === 'boolean') {
+        ctrl.addEventListener('change', (e: any) => onChange(e.detail.checked));
+      } else if (type === 'select') {
+        ctrl.addEventListener('change', (e: any) => onChange(e.detail.value));
+      } else if (type === 'text' || type === 'number') {
+        ctrl.addEventListener('input', (e: any) => onChange(e.detail.value));
+      } else if (type === 'icon') {
+        ctrl.addEventListener('lt-change', (e: any) => onChange(e.detail.value));
+      } else if (type === 'color') {
+        ctrl.addEventListener('input', (e: Event) => onChange((e.target as HTMLInputElement).value));
+      }
+    });
+
+    // Sub-tag control tabs
+    const ctrlTabBtns = playground.querySelectorAll('.ctrl-tab-btn');
+    if (ctrlTabBtns.length) {
+      ctrlTabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const ctrlTag = (btn as HTMLElement).dataset.ctrlTag!;
+          ctrlTabBtns.forEach((b) => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          playground.querySelectorAll('[data-ctrl-group]').forEach((row: any) => {
+            row.style.display = row.dataset.ctrlGroup === ctrlTag ? '' : 'none';
+          });
+        });
+      });
+    }
+
+    // Code language tabs
+    let activeLang = 'html';
+    const tabsEl = document.getElementById(`${id}-tabs`);
+    const htmlPanel = document.getElementById(`${id}-html-panel`);
+    const reactPanel = document.getElementById(`${id}-react-panel`);
+
+    tabsEl?.querySelectorAll('.code-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        activeLang = (tab as HTMLElement).dataset.lang!;
+        tabsEl.querySelectorAll('.code-tab').forEach((t) => t.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        htmlPanel!.style.display = activeLang === 'html' ? '' : 'none';
+        reactPanel!.style.display = activeLang === 'react' ? '' : 'none';
       });
     });
 
     // Copy button
     copyBtn.addEventListener('click', async () => {
+      const codeEl = activeLang === 'html' ? htmlCode : reactCode;
       await navigator.clipboard.writeText(codeEl.textContent ?? '');
       copyBtn.textContent = 'Copied!';
       setTimeout(() => {
@@ -165,15 +443,96 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
       }, 1500);
     });
 
-    function applyState() {
-      members.forEach((member) => {
-        const value = state[member.name];
-        if (member.type === 'boolean') {
-          if (value) {
-            el.setAttribute(member.name, '');
-          } else {
-            el.removeAttribute(member.name);
+    // Share button — encodes current state to URL and copies it to clipboard
+    shareBtn?.addEventListener('click', async () => {
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(stateMap))));
+      const url = new URL(window.location.href);
+      url.searchParams.set('s', encoded);
+      history.replaceState(null, '', url.toString());
+      await navigator.clipboard.writeText(url.toString());
+      (shareBtn as any).textContent = 'Copied!';
+      setTimeout(() => {
+        (shareBtn as any).textContent = 'Share';
+      }, 1500);
+    });
+
+    // Responsive breakpoint buttons
+    const bpBtns = preview.querySelectorAll<HTMLElement>('.bp-btn');
+    bpBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        bpBtns.forEach((b) => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        const width = btn.dataset.width;
+        stage.style.maxWidth = width ? `${width}px` : '';
+      });
+    });
+
+    // Event log
+    const eventLogEl = document.getElementById(`${id}-event-log`)!;
+    const eventLogBody = document.getElementById(`${id}-event-log-body`)!;
+    const eventLogRows = document.getElementById(`${id}-event-log-rows`)!;
+    const eventLogLabel = document.getElementById(`${id}-event-log-label`)!;
+    const eventLogToggle = document.getElementById(`${id}-event-log-toggle`)!;
+
+    let eventCount = 0;
+    let logOpen = false;
+    const LOG_EVENTS = ['lt-change', 'lt-input', 'lt-close', 'change', 'input', 'close', 'open', 'toggle'];
+
+    function formatTime(d: Date): string {
+      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}.${String(d.getMilliseconds()).padStart(3, '0')}`;
+    }
+
+    LOG_EVENTS.forEach((evtName) => {
+      el.addEventListener(
+        evtName,
+        (e: any) => {
+          eventCount++;
+          if (!logOpen) {
+            logOpen = true;
+            eventLogBody.removeAttribute('hidden');
+            eventLogEl.classList.add('is-open');
           }
+          eventLogLabel.textContent = `Events (${eventCount})`;
+          const row = document.createElement('div');
+          row.className = 'event-log-row';
+          const detail = e.detail;
+          const detailStr =
+            detail !== undefined && detail !== null
+              ? JSON.stringify(detail).replace(/</g, '&lt;').replace(/>/g, '&gt;')
+              : '';
+          row.innerHTML = `<span class="event-log-time">${formatTime(new Date())}</span><span class="event-log-name">${evtName}</span><span class="event-log-detail">${detailStr}</span>`;
+          eventLogRows.prepend(row);
+          while (eventLogRows.children.length > 20) {
+            eventLogRows.removeChild(eventLogRows.lastChild!);
+          }
+        },
+        true
+      );
+    });
+
+    eventLogToggle.addEventListener('click', () => {
+      logOpen = !logOpen;
+      if (logOpen) {
+        eventLogBody.removeAttribute('hidden');
+        eventLogEl.classList.add('is-open');
+      } else {
+        eventLogBody.setAttribute('hidden', '');
+        eventLogEl.classList.remove('is-open');
+      }
+    });
+
+    // ── State application ────────────────────────────────────────────────────
+
+    function applyState() {
+      const parentState = stateMap[tag];
+
+      // Apply parent attributes
+      members.forEach((member) => {
+        if (member.name === 'theme') return;
+        const value = parentState[member.name];
+        if (member.type === 'boolean') {
+          if (value) el.setAttribute(member.name, '');
+          else el.removeAttribute(member.name);
         } else if (value !== '' && value !== undefined) {
           el.setAttribute(member.name, String(value));
         } else {
@@ -181,36 +540,173 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
         }
       });
 
-      const themeValue = state['theme'];
+      // Theme drives both the host attribute and the preview background
+      const themeValue = parentState['theme'];
       if (themeValue === 'dark' || themeValue === 'light') {
+        el.setAttribute('theme', themeValue);
         preview.setAttribute('data-preview-theme', themeValue);
       } else {
+        el.removeAttribute('theme');
         preview.removeAttribute('data-preview-theme');
+      }
+
+      // Apply child state — only changed values so template attrs are preserved
+      for (const stData of subTagsData) {
+        const childState = stateMap[stData.tag];
+        el.querySelectorAll(stData.tag).forEach((childEl) => {
+          stData.members.forEach((member: any) => {
+            const value = childState[member.name];
+            const manifestDefault = stData.defaults[member.name];
+            if (value === manifestDefault) return; // preserve template value
+            if (member.type === 'boolean') {
+              if (value) childEl.setAttribute(member.name, '');
+              else childEl.removeAttribute(member.name);
+            } else if (value !== '' && value !== undefined) {
+              childEl.setAttribute(member.name, String(value));
+            } else {
+              childEl.removeAttribute(member.name);
+            }
+          });
+        });
       }
     }
 
-    function generateCode(): string {
-      const attrParts: string[] = [];
+    // ── Code generation ──────────────────────────────────────────────────────
+
+    function toPascalCase(tagName: string): string {
+      return tagName
+        .replace(/^lt-/, '')
+        .split('-')
+        .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+        .join('');
+    }
+
+    function toReactProp(attrName: string): string {
+      return attrName.replace(/-([a-z])/g, (_: string, c: string) => c.toUpperCase());
+    }
+
+    function buildParentAttrParts(forReact = false): string[] {
+      const parentState = stateMap[tag];
+      const parts: string[] = [];
       members.forEach((member) => {
-        const value = state[member.name];
+        if (member.name === 'theme') return;
+        const value = parentState[member.name];
         const def = defaults[member.name];
         if (member.type === 'boolean') {
-          if (value === true) attrParts.push(member.name);
+          if (value === true) parts.push(forReact ? toReactProp(member.name) : member.name);
         } else if (value !== '' && value !== undefined && value !== def) {
-          attrParts.push(`${member.name}="${value}"`);
+          const name = forReact ? toReactProp(member.name) : member.name;
+          parts.push(`${name}="${value}"`);
         }
       });
+      const themeVal = parentState['theme'];
+      if (themeVal === 'dark' || themeVal === 'light') parts.push(`theme="${themeVal}"`);
+      return parts;
+    }
 
-      if (!attrParts.length) {
-        return slotContent ? `<${tag}>\n  ${slotContent}\n</${tag}>` : `<${tag}></${tag}>`;
+    function generateHTML(): string {
+      const attrParts = buildParentAttrParts(false);
+
+      if (!subTagsData.length) {
+        // Simple (no sub-tags)
+        if (!attrParts.length) {
+          return slotContent ? `<${tag}>\n  ${slotContent}\n</${tag}>` : `<${tag}></${tag}>`;
+        }
+        const attrs = '\n  ' + attrParts.join('\n  ') + '\n';
+        return slotContent ? `<${tag}${attrs}>\n  ${slotContent}\n</${tag}>` : `<${tag}${attrs}></${tag}>`;
       }
 
-      const attrs = '\n  ' + attrParts.join('\n  ') + '\n';
-      return slotContent ? `<${tag}${attrs}>\n  ${slotContent}\n</${tag}>` : `<${tag}${attrs}></${tag}>`;
+      // Composite (sub-tags): build children from snapshot + applied state
+      const childLines = childItems.map((item) => {
+        const finalAttrs = { ...item.templateAttrs };
+        const stData = subTagsData.find((d) => d.tag === item.tag);
+        if (stData) {
+          const childState = stateMap[item.tag];
+          stData.members.forEach((member: any) => {
+            const value = childState[member.name];
+            const def = stData.defaults[member.name];
+            if (value !== def) {
+              if (member.type === 'boolean') {
+                if (value) finalAttrs[member.name] = '';
+                else delete finalAttrs[member.name];
+              } else if (value !== '' && value !== undefined) {
+                finalAttrs[member.name] = String(value);
+              } else {
+                delete finalAttrs[member.name];
+              }
+            }
+          });
+        }
+        const attrsStr = Object.entries(finalAttrs)
+          .map(([k, v]) => (v === '' ? k : `${k}="${v}"`))
+          .join(' ');
+        const text = item.el.textContent?.trim() ?? '';
+        return `  <${item.tag}${attrsStr ? ' ' + attrsStr : ''}>${text}</${item.tag}>`;
+      });
+
+      const parentAttrs = attrParts.length ? '\n  ' + attrParts.join('\n  ') + '\n' : '';
+      return `<${tag}${parentAttrs}>\n${childLines.join('\n')}\n</${tag}>`;
+    }
+
+    function generateReact(): string {
+      const parentName = toPascalCase(tag);
+      const attrParts = buildParentAttrParts(true);
+
+      if (!subTagsData.length) {
+        // Simple (no sub-tags)
+        const importLine = `import { ${parentName} } from '@latty/react';`;
+        const propsStr = attrParts.length ? '\n  ' + attrParts.join('\n  ') + '\n' : '';
+        const children = slotContent ? `\n  ${slotContent}\n` : '';
+        if (children) return `${importLine}\n\n<${parentName}${propsStr}>${children}</${parentName}>`;
+        return `${importLine}\n\n<${parentName}${propsStr || ' '}/>`;
+      }
+
+      // Composite (sub-tags)
+      const childTagNames = [...new Set(childItems.map((item) => item.tag))];
+      const childNames = childTagNames.map(toPascalCase);
+      const importLine = `import { ${[parentName, ...childNames].join(', ')} } from '@latty/react';`;
+
+      const childLines = childItems.map((item) => {
+        const componentName = toPascalCase(item.tag);
+        const finalAttrs: Record<string, string> = {};
+        // Convert template attrs to camelCase React props
+        for (const [k, v] of Object.entries(item.templateAttrs)) {
+          finalAttrs[toReactProp(k)] = v;
+        }
+        // Apply user changes
+        const stData = subTagsData.find((d) => d.tag === item.tag);
+        if (stData) {
+          const childState = stateMap[item.tag];
+          stData.members.forEach((member: any) => {
+            const value = childState[member.name];
+            const def = stData.defaults[member.name];
+            const reactProp = toReactProp(member.name);
+            if (value !== def) {
+              if (member.type === 'boolean') {
+                if (value) finalAttrs[reactProp] = '';
+                else delete finalAttrs[reactProp];
+              } else if (value !== '' && value !== undefined) {
+                finalAttrs[reactProp] = String(value);
+              } else {
+                delete finalAttrs[reactProp];
+              }
+            }
+          });
+        }
+        const reactAttrsStr = Object.entries(finalAttrs)
+          .map(([k, v]) => (v === '' ? k : `${k}="${v}"`))
+          .join(' ');
+        const text = item.el.textContent?.trim() ?? '';
+        return `  <${componentName}${reactAttrsStr ? ' ' + reactAttrsStr : ''}>${text}</${componentName}>`;
+      });
+
+      const propsStr = attrParts.length ? '\n  ' + attrParts.join('\n  ') + '\n' : '';
+      return `${importLine}\n\n<${parentName}${propsStr}>\n${childLines.join('\n')}\n</${parentName}>`;
     }
 
     function updateCode() {
-      codeEl.textContent = generateCode();
+      htmlCode.textContent = generateHTML();
+      reactCode.textContent = generateReact();
     }
   }
 
@@ -221,20 +717,22 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
 
 <style>
   .playground {
-    border: 1px solid var(--lt-color-neutral-200);
+    border: 1px solid var(--lt-border-default);
     border-radius: 10px;
-    overflow: hidden;
     margin: var(--lt-spacing-6) 0;
     font-size: 0.875rem;
+    /* No overflow:hidden — allows lt-combobox/lt-select dropdowns to escape */
   }
 
   .preview {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: var(--lt-spacing-10) var(--lt-spacing-8);
     background: var(--lt-bg-subtle);
     border-bottom: 1px solid var(--lt-border-default);
+    border-radius: 10px 10px 0 0;
     transition: background 200ms ease;
   }
 
@@ -248,6 +746,40 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
     border-bottom-color: var(--lt-color-neutral-200);
   }
 
+  .preview-toolbar {
+    position: absolute;
+    top: var(--lt-spacing-2);
+    right: var(--lt-spacing-3);
+    display: flex;
+    gap: var(--lt-spacing-1);
+  }
+
+  .bp-btn {
+    padding: 2px 8px;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    background: var(--lt-bg-default);
+    border: 1px solid var(--lt-border-default);
+    border-radius: 4px;
+    color: var(--lt-text-neutral);
+    cursor: pointer;
+    transition:
+      color 150ms ease,
+      background 150ms ease,
+      border-color 150ms ease;
+  }
+
+  .bp-btn:hover {
+    background: var(--lt-bg-subtle);
+    color: var(--lt-text-default);
+  }
+
+  .bp-btn.is-active {
+    background: var(--lt-color-primary-50);
+    border-color: var(--lt-color-primary-300);
+    color: var(--lt-color-primary-700);
+  }
+
   .preview-stage {
     display: flex;
     align-items: center;
@@ -255,6 +787,7 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
     gap: var(--lt-spacing-4);
     flex-wrap: wrap;
     width: 100%;
+    transition: max-width 200ms ease;
   }
 
   .bottom {
@@ -263,10 +796,11 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
   }
 
   .controls {
-    border-right: 1px solid var(--lt-color-neutral-200);
-    background: var(--lt-color-neutral-50);
+    border-right: 1px solid var(--lt-border-default);
+    background: var(--lt-bg-subtle);
   }
 
+  /* Flat "Controls" label (no sub-tags) */
   .section-label {
     display: block;
     padding: var(--lt-spacing-2) var(--lt-spacing-4);
@@ -274,18 +808,63 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--lt-color-neutral-500);
-    border-bottom: 1px solid var(--lt-color-neutral-200);
-    background: var(--lt-color-neutral-100);
+    color: var(--lt-text-neutral);
+    border-bottom: 1px solid var(--lt-border-default);
+    background: var(--lt-bg-default);
   }
 
+  /* Sub-tag tab bar */
+  .ctrl-tabs-bar {
+    display: flex;
+    border-bottom: 1px solid var(--lt-border-default);
+    background: var(--lt-bg-default);
+  }
+
+  .ctrl-tab-btn {
+    padding: var(--lt-spacing-2) var(--lt-spacing-3);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--lt-text-neutral);
+    background: none;
+    border: none;
+    border-right: 1px solid var(--lt-border-subtle);
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      color 150ms ease,
+      background 150ms ease;
+  }
+
+  .ctrl-tab-btn:last-child {
+    border-right: none;
+  }
+
+  .ctrl-tab-btn:hover {
+    background: var(--lt-bg-subtle);
+    color: var(--lt-text-default);
+  }
+
+  .ctrl-tab-btn.is-active {
+    color: var(--lt-color-primary-600);
+    box-shadow: inset 0 -2px 0 var(--lt-color-primary-500);
+  }
+
+  /* Control rows */
   .control-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: var(--lt-spacing-2) var(--lt-spacing-4);
     gap: var(--lt-spacing-3);
-    border-bottom: 1px solid var(--lt-color-neutral-100);
+    border-bottom: 1px solid var(--lt-border-subtle);
+  }
+
+  .control-row--stacked {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--lt-spacing-1);
   }
 
   .control-row:last-child {
@@ -293,39 +872,44 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
   }
 
   .control-label {
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-default);
     font-size: 0.8125rem;
     font-weight: 500;
     white-space: nowrap;
+    flex-shrink: 0;
   }
 
-  .control-select,
-  .control-text {
-    font-size: 0.8125rem;
-    padding: 3px 6px;
-    border: 1px solid var(--lt-color-neutral-300);
-    border-radius: 4px;
-    background: white;
-    color: var(--lt-color-neutral-900);
-    max-width: 120px;
+  .control-row lt-select,
+  .control-row lt-textfield {
+    max-width: 130px;
     width: 100%;
   }
 
-  .control-select:focus,
-  .control-text:focus {
-    outline: 2px solid var(--lt-color-primary-400);
-    outline-offset: 1px;
-    border-color: var(--lt-color-primary-400);
+  .control-row lt-switch {
+    flex-shrink: 0;
   }
 
-  .control-toggle {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--lt-color-primary-500);
+  .control-row--stacked lt-combobox {
+    width: 100%;
+  }
+
+  .control-color {
+    width: 40px;
+    height: 28px;
+    border: 1px solid var(--lt-border-default);
+    border-radius: 4px;
+    background: none;
+    padding: 2px;
     cursor: pointer;
     flex-shrink: 0;
   }
 
+  .control-color:focus {
+    outline: 2px solid var(--lt-color-primary-400);
+    outline-offset: 1px;
+  }
+
+  /* Code panel */
   .code-panel {
     display: flex;
     flex-direction: column;
@@ -337,8 +921,45 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 var(--lt-spacing-4);
+    padding: 0 var(--lt-spacing-3) 0 0;
     border-bottom: 1px solid var(--lt-color-neutral-700);
+  }
+
+  .code-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-2);
+  }
+
+  .code-tabs {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .code-tab {
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    background: none;
+    border: none;
+    border-right: 1px solid var(--lt-color-neutral-700);
+    color: var(--lt-color-neutral-500);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      color 150ms ease,
+      background 150ms ease;
+  }
+
+  .code-tab:hover {
+    background: var(--lt-color-neutral-800);
+    color: var(--lt-color-neutral-300);
+  }
+
+  .code-tab.is-active {
+    color: var(--lt-color-neutral-100);
+    background: var(--lt-color-neutral-800);
   }
 
   .code-pre {
@@ -358,13 +979,106 @@ const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m)]
     white-space: pre;
   }
 
+  /* Event log */
+  .event-log {
+    border-top: 1px solid var(--lt-border-default);
+    border-radius: 0 0 10px 10px;
+    background: var(--lt-bg-default);
+    overflow: hidden;
+  }
+
+  .event-log-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--lt-spacing-2) var(--lt-spacing-4);
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--lt-text-neutral);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition:
+      color 150ms ease,
+      background 150ms ease;
+  }
+
+  .event-log-header:hover {
+    background: var(--lt-bg-subtle);
+    color: var(--lt-text-default);
+  }
+
+  .event-log-chevron {
+    transition: transform 200ms ease;
+    flex-shrink: 0;
+  }
+
+  .event-log.is-open .event-log-chevron {
+    transform: rotate(180deg);
+  }
+
+  .event-log-body {
+    border-top: 1px solid var(--lt-border-subtle);
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .event-log-row {
+    display: grid;
+    grid-template-columns: 90px 140px 1fr;
+    gap: var(--lt-spacing-2);
+    padding: var(--lt-spacing-1) var(--lt-spacing-4);
+    border-bottom: 1px solid var(--lt-border-subtle);
+    align-items: baseline;
+  }
+
+  .event-log-row:last-child {
+    border-bottom: none;
+  }
+
+  .event-log-time {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.6875rem;
+    color: var(--lt-text-neutral);
+  }
+
+  .event-log-name {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.75rem;
+    color: var(--lt-color-primary-600);
+    font-weight: 600;
+  }
+
+  .event-log-detail {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.75rem;
+    color: var(--lt-text-default);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   @media (max-width: 640px) {
     .bottom {
       grid-template-columns: 1fr;
     }
+
     .controls {
       border-right: none;
-      border-bottom: 1px solid var(--lt-color-neutral-200);
+      border-bottom: 1px solid var(--lt-border-default);
+    }
+
+    .preview-toolbar {
+      top: var(--lt-spacing-1);
+      right: var(--lt-spacing-2);
+    }
+
+    .bp-btn {
+      font-size: 0.625rem;
+      padding: 1px 6px;
     }
   }
 </style>
