@@ -6,4 +6,4 @@
  */
 
 export { Textfield } from './textfield';
-export type { TextfieldSize, TextfieldType, TextfieldVariant } from './textfield.types';
+export type { HelperText, TextfieldSize, TextfieldType, TextfieldVariant } from './textfield.types';

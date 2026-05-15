@@ -11,9 +11,21 @@ Latty is a framework-agnostic design system built on design tokens and Web Compo
 ### Development
 
 ```bash
-pnpm dev                    # Run Astro documentation site
-pnpm docs:dev               # Same as dev
+pnpm dev                    # Rebuild tokens + manifest, then start Astro dev server
+pnpm docs:dev               # Start Astro dev server only (skips pre-builds)
 ```
+
+**What updates live vs. what needs a restart:**
+
+| What changed                                                    | What to do                                                     |
+| --------------------------------------------------------------- | -------------------------------------------------------------- |
+| Component logic / styles (`*.ts`, `*.styles.ts`)                | Nothing — Vite picks it up via source alias                    |
+| Docs page (`.astro`)                                            | Nothing — Astro watches `docs/src/**` automatically            |
+| Component prop added / renamed (affects playground + API table) | Restart `pnpm dev` — it rebuilds `manifest.json` on start      |
+| Token values (`tokens.config.json`)                             | Restart `pnpm dev` — it rebuilds `@latty/tokens` on start      |
+| Stale browser after restart                                     | Hard-refresh (`Cmd+Shift+R`) or run `pnpm docs:dev -- --force` |
+
+The `manifest.json` (`packages/web/dist/manifest.json`) is the only genuinely dist-based artifact the dev server reads at SSR time. `ComponentPlayground` and `ApiTable` both use it to render controls and prop tables — it must be rebuilt whenever a component's public API changes.
 
 ### Documentation
 

@@ -68,6 +68,222 @@ import { Textfield } from '@latty/react';
     `}
   />
 
+  <lt-text variant="h2">Validation</lt-text>
+  <lt-text variant="body">
+    Validation runs automatically on blur — after the user leaves the field for the first time. Once touched, the field
+    re-validates on every keystroke so errors clear as soon as the value becomes valid. No extra wiring required; just
+    set the right <code>type</code>.
+  </lt-text>
+
+  <lt-text variant="h3">Format validation</lt-text>
+  <lt-text variant="body">
+    Fields with <code>type="email"</code>, <code>type="url"</code>, or <code>type="tel"</code> check the value against their
+    respective format rules. An invalid value triggers the error state (red border + xmark icon) automatically.
+  </lt-text>
+  <FrameworkTabs
+    html={`
+<lt-textfield
+  type="email"
+  label="Email"
+  placeholder="you@example.com"
+  helper-text="Enter a valid email address"
+></lt-textfield>
+
+<lt-textfield
+  type="url"
+  label="Website"
+  placeholder="https://example.com"
+  helper-text="Must start with http:// or https://"
+></lt-textfield>
+
+<lt-textfield
+  type="tel"
+  label="Phone"
+  placeholder="+1 (555) 000-1234"
+  helper-text="Include country code for international numbers"
+></lt-textfield>
+    `}
+    react={`
+import { Textfield } from '@latty/react';
+
+<Textfield
+  type="email"
+  label="Email"
+  placeholder="you@example.com"
+  helperText="Enter a valid email address"
+/>
+
+<Textfield
+  type="url"
+  label="Website"
+  placeholder="https://example.com"
+  helperText="Must start with http:// or https://"
+/>
+
+<Textfield
+  type="tel"
+  label="Phone"
+  placeholder="+1 (555) 000-1234"
+  helperText="Include country code for international numbers"
+/>
+    `}
+    vue={`
+<template>
+  <lt-textfield
+    type="email"
+    label="Email"
+    placeholder="you@example.com"
+    helper-text="Enter a valid email address"
+  ></lt-textfield>
+
+  <lt-textfield
+    type="url"
+    label="Website"
+    placeholder="https://example.com"
+    helper-text="Must start with http:// or https://"
+  ></lt-textfield>
+
+  <lt-textfield
+    type="tel"
+    label="Phone"
+    placeholder="+1 (555) 000-1234"
+    helper-text="Include country code for international numbers"
+  ></lt-textfield>
+</template>
+    `}
+  />
+
+  <lt-text variant="h3">Length and range bounds</lt-text>
+  <lt-text variant="body">
+    The <code>min</code> and <code>max</code> props set bounds that are also checked on blur. For
+    <code>type="number"</code> they constrain the numeric value; for all other types they constrain the character length.
+    Both are passed through as native <code>min</code>/<code>max</code> or
+    <code>minlength</code>/<code>maxlength</code> attributes so the browser's built-in tooltip also works.
+  </lt-text>
+  <FrameworkTabs
+    html={`
+<!-- Character length: must be 8–64 chars -->
+<lt-textfield
+  type="text"
+  label="Username"
+  min="8"
+  max="64"
+  helper-text="8–64 characters"
+></lt-textfield>
+
+<!-- Numeric range: 0–120 -->
+<lt-textfield
+  type="number"
+  label="Age"
+  min="0"
+  max="120"
+  helper-text="Enter your age"
+></lt-textfield>
+    `}
+    react={`
+import { Textfield } from '@latty/react';
+
+{/* Character length: must be 8–64 chars */}
+<Textfield
+  type="text"
+  label="Username"
+  min={8}
+  max={64}
+  helperText="8–64 characters"
+/>
+
+{/* Numeric range: 0–120 */}
+<Textfield
+  type="number"
+  label="Age"
+  min={0}
+  max={120}
+  helperText="Enter your age"
+/>
+    `}
+    vue={`
+<template>
+  <!-- Character length: must be 8–64 chars -->
+  <lt-textfield
+    type="text"
+    label="Username"
+    :min="8"
+    :max="64"
+    helper-text="8–64 characters"
+  ></lt-textfield>
+
+  <!-- Numeric range: 0–120 -->
+  <lt-textfield
+    type="number"
+    label="Age"
+    :min="0"
+    :max="120"
+    helper-text="Enter your age"
+  ></lt-textfield>
+</template>
+    `}
+  />
+
+  <lt-text variant="h3">Dynamic helper text</lt-text>
+  <lt-text variant="body">
+    Pass a function to <code>helper-text</code> to show a different message depending on whether the field is in an error
+    state. The function receives a single boolean — <code>true</code> when the field is invalid — and must return a string.
+    This is set as a JavaScript property, not an HTML attribute.
+  </lt-text>
+  <FrameworkTabs
+    html={`
+<lt-textfield type="email" label="Email" id="email-field"></lt-textfield>
+<script type="module">
+  import '@latty/web';
+  document.querySelector('#email-field').helperText =
+    (error) => error ? 'Enter a valid email address' : "We'll never share your email";
+</script>
+
+<!-- Password with length hint that turns into an error message -->
+<lt-textfield type="text" label="Password" id="pw-field"></lt-textfield>
+<script type="module">
+  import '@latty/web';
+  document.querySelector('#pw-field').helperText =
+    (error) => error ? 'Password is too short' : 'Minimum 8 characters';
+  document.querySelector('#pw-field').min = 8;
+</script>
+    `}
+    react={`
+import { Textfield } from '@latty/react';
+
+<Textfield
+  type="email"
+  label="Email"
+  helperText={(error) => error ? 'Enter a valid email address' : "We'll never share your email"}
+/>
+
+{/* Password with length hint that turns into an error message */}
+<Textfield
+  type="text"
+  label="Password"
+  min={8}
+  helperText={(error) => error ? 'Password is too short' : 'Minimum 8 characters'}
+/>
+    `}
+    vue={`
+<template>
+  <lt-textfield
+    type="email"
+    label="Email"
+    :helper-text="(error) => error ? 'Enter a valid email address' : 'We\\'ll never share your email'"
+  ></lt-textfield>
+
+  <!-- Password with length hint that turns into an error message -->
+  <lt-textfield
+    type="text"
+    label="Password"
+    :min="8"
+    :helper-text="(error) => error ? 'Password is too short' : 'Minimum 8 characters'"
+  ></lt-textfield>
+</template>
+    `}
+  />
+
   <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-textfield" />
 </BaseLayout>

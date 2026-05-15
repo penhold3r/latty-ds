@@ -64,7 +64,8 @@ export const textfieldStyles = css`
     color: var(--lt-interactive-warning-bg);
   }
 
-  :host([variant='error']) .variant-icon {
+  :host([variant='error']) .variant-icon,
+  :host([data-invalid]) .variant-icon {
     color: var(--lt-interactive-error-bg);
   }
 
@@ -195,12 +196,16 @@ export const textfieldStyles = css`
   }
 
   :host([variant='error']) input,
-  :host([variant='error']) textarea {
+  :host([variant='error']) textarea,
+  :host([data-invalid]) input,
+  :host([data-invalid]) textarea {
     border-color: var(--lt-border-error-strong);
   }
 
   :host([variant='error']) input:focus,
-  :host([variant='error']) textarea:focus {
+  :host([variant='error']) textarea:focus,
+  :host([data-invalid]) input:focus,
+  :host([data-invalid]) textarea:focus {
     border-color: var(--lt-interactive-error-bg-hover);
     box-shadow: 0 0 0 3px var(--lt-bg-error-subtle);
   }
@@ -221,7 +226,8 @@ export const textfieldStyles = css`
     color: var(--lt-text-warning);
   }
 
-  :host([variant='error']) .helper-text {
+  :host([variant='error']) .helper-text,
+  :host([data-invalid]) .helper-text {
     color: var(--lt-text-error);
   }
 

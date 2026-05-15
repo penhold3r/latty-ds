@@ -86,6 +86,35 @@ describe('<lt-textfield>', () => {
     expect(helperText).toBeFalsy();
   });
 
+  it('renders helper text from function with error=false when valid', async () => {
+    el.helperText = (error) => (error ? 'Invalid email' : 'Enter your email');
+    await el.updateComplete;
+    const helperText = el.shadowRoot!.querySelector('.helper-text');
+    expect(helperText?.textContent).toBe('Enter your email');
+  });
+
+  it('renders helper text from function with error=true when variant is error', async () => {
+    el.helperText = (error) => (error ? 'Invalid email' : 'Enter your email');
+    el.variant = 'error';
+    await el.updateComplete;
+    const helperText = el.shadowRoot!.querySelector('.helper-text');
+    expect(helperText?.textContent).toBe('Invalid email');
+  });
+
+  it('renders helper text from function with error=true on auto-error', async () => {
+    el.type = 'email';
+    el.helperText = (error) => (error ? 'Invalid email' : 'Enter your email');
+    await el.updateComplete;
+    const native = el.shadowRoot!.querySelector('input')!;
+    native.value = 'notanemail';
+    native.dispatchEvent(new Event('input', { bubbles: true }));
+    await el.updateComplete;
+    native.dispatchEvent(new Event('blur'));
+    await el.updateComplete;
+    const helperText = el.shadowRoot!.querySelector('.helper-text');
+    expect(helperText?.textContent).toBe('Invalid email');
+  });
+
   it('shows required indicator when required', async () => {
     el.label = 'Username';
     el.required = true;
@@ -332,6 +361,176 @@ describe('<lt-textfield>', () => {
       await el.updateComplete;
       const input = el.shadowRoot!.querySelector('input');
       expect(input?.classList.contains('has-start-icon')).toBe(true);
+    });
+  });
+
+  describe('validation', () => {
+    const typeAndLeave = async (value: string) => {
+      const native = el.shadowRoot!.querySelector('input, textarea') as HTMLInputElement;
+      native.value = value;
+      native.dispatchEvent(new Event('input', { bubbles: true }));
+      await el.updateComplete;
+      native.dispatchEvent(new Event('blur'));
+      await el.updateComplete;
+    };
+
+    const typeOnly = async (value: string) => {
+      const native = el.shadowRoot!.querySelector('input, textarea') as HTMLInputElement;
+      native.value = value;
+      native.dispatchEvent(new Event('input', { bubbles: true }));
+      await el.updateComplete;
+    };
+
+    it('has no auto-error before blur', async () => {
+      el.type = 'email';
+      await el.updateComplete;
+      await typeOnly('not-an-email');
+      expect(el.hasAttribute('data-invalid')).toBeFalsy();
+    });
+
+    it('shows auto-error on blur with invalid value', async () => {
+      el.type = 'email';
+      await el.updateComplete;
+      await typeAndLeave('not-an-email');
+      expect(el.hasAttribute('data-invalid')).toBeTruthy();
+    });
+
+    it('sets aria-invalid on auto-error', async () => {
+      el.type = 'email';
+      await el.updateComplete;
+      await typeAndLeave('bad');
+      const input = el.shadowRoot!.querySelector('input');
+      expect(input?.getAttribute('aria-invalid')).toBe('true');
+    });
+
+    it('clears auto-error when value becomes valid after blur', async () => {
+      el.type = 'email';
+      await el.updateComplete;
+      await typeAndLeave('bad');
+      expect(el.hasAttribute('data-invalid')).toBeTruthy();
+
+      const input = el.shadowRoot!.querySelector('input')!;
+      input.value = 'good@example.com';
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      await el.updateComplete;
+      expect(el.hasAttribute('data-invalid')).toBeFalsy();
+    });
+
+    it('empty value is always valid', async () => {
+      el.type = 'email';
+      await el.updateComplete;
+      await typeAndLeave('');
+      expect(el.hasAttribute('data-invalid')).toBeFalsy();
+    });
+
+    it.each([
+      ['good@example.com', false],
+      ['bad-email', true],
+      ['@no-local.com', true],
+      ['no-at-sign', true]
+    ] as const)('email "%s" → auto-error=%s', async (value, expectError) => {
+      el.type = 'email';
+      await el.updateComplete;
+      await typeAndLeave(value);
+      expect(Boolean(el.hasAttribute('data-invalid'))).toBe(expectError);
+    });
+
+    it.each([
+      ['https://example.com', false],
+      ['http://foo.bar/path?q=1', false],
+      ['example.com', true],
+      ['not a url', true]
+    ] as const)('url "%s" → auto-error=%s', async (value, expectError) => {
+      el.type = 'url';
+      await el.updateComplete;
+      await typeAndLeave(value);
+      expect(Boolean(el.hasAttribute('data-invalid'))).toBe(expectError);
+    });
+
+    it.each([
+      ['+1 (555) 000-1234', false],
+      ['555-0100', false],
+      ['abc', true],
+      ['12', true]
+    ] as const)('tel "%s" → auto-error=%s', async (value, expectError) => {
+      el.type = 'tel';
+      await el.updateComplete;
+      await typeAndLeave(value);
+      expect(Boolean(el.hasAttribute('data-invalid'))).toBe(expectError);
+    });
+
+    describe('min/max on number type', () => {
+      it('shows error when value is below min', async () => {
+        el.type = 'number';
+        el.min = 10;
+        await el.updateComplete;
+        await typeAndLeave('5');
+        expect(el.hasAttribute('data-invalid')).toBeTruthy();
+      });
+
+      it('shows error when value is above max', async () => {
+        el.type = 'number';
+        el.max = 100;
+        await el.updateComplete;
+        await typeAndLeave('150');
+        expect(el.hasAttribute('data-invalid')).toBeTruthy();
+      });
+
+      it('no error when value is within min/max', async () => {
+        el.type = 'number';
+        el.min = 10;
+        el.max = 100;
+        await el.updateComplete;
+        await typeAndLeave('50');
+        expect(el.hasAttribute('data-invalid')).toBeFalsy();
+      });
+
+      it('passes min/max as native attributes', async () => {
+        el.type = 'number';
+        el.min = 1;
+        el.max = 99;
+        await el.updateComplete;
+        const input = el.shadowRoot!.querySelector('input');
+        expect(input?.getAttribute('min')).toBe('1');
+        expect(input?.getAttribute('max')).toBe('99');
+      });
+    });
+
+    describe('min/max as length on text types', () => {
+      it('shows error when value is shorter than min', async () => {
+        el.type = 'text';
+        el.min = 5;
+        await el.updateComplete;
+        await typeAndLeave('hi');
+        expect(el.hasAttribute('data-invalid')).toBeTruthy();
+      });
+
+      it('shows error when value is longer than max', async () => {
+        el.type = 'text';
+        el.max = 5;
+        await el.updateComplete;
+        await typeAndLeave('toolongvalue');
+        expect(el.hasAttribute('data-invalid')).toBeTruthy();
+      });
+
+      it('no error when length is within min/max', async () => {
+        el.type = 'text';
+        el.min = 2;
+        el.max = 10;
+        await el.updateComplete;
+        await typeAndLeave('hello');
+        expect(el.hasAttribute('data-invalid')).toBeFalsy();
+      });
+
+      it('passes minlength/maxlength as native attributes', async () => {
+        el.type = 'text';
+        el.min = 2;
+        el.max = 50;
+        await el.updateComplete;
+        const input = el.shadowRoot!.querySelector('input');
+        expect(input?.getAttribute('minlength')).toBe('2');
+        expect(input?.getAttribute('maxlength')).toBe('50');
+      });
     });
   });
 

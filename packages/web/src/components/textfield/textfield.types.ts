@@ -27,3 +27,17 @@ export type TextfieldSize = 'sm' | 'md' | 'lg';
  * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#input_types
  */
 export type TextfieldType = 'text' | 'email' | 'password' | 'tel' | 'url' | 'number' | 'multiline';
+
+/**
+ * Helper text value — either a static string or a function that receives the
+ * current error state and returns the string to display.
+ *
+ * @example
+ * // Static
+ * helperText="Minimum 8 characters"
+ *
+ * @example
+ * // Dynamic — different message when invalid
+ * helperText={(error) => error ? 'Enter a valid email' : 'We\'ll never share your email'}
+ */
+export type HelperText = string | ((error: boolean) => string);

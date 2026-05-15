@@ -1,9 +1,10 @@
-import { html } from 'lit';
+import { html, PropertyValues } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { textfieldStyles } from './textfield.styles';
-import { TextfieldSize, TextfieldType, TextfieldVariant } from './textfield.types';
+import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant } from './textfield.types';
 import '@latty/icons';
 import '../text/text';
 
@@ -87,10 +88,12 @@ export class Textfield extends ThemeableElement {
   @property() label = '';
 
   /**
-   * Helper text displayed below the input. Color changes based on variant.
+   * Helper text displayed below the input. Can be a static string or a function
+   * that receives the current error state and returns the string to display.
+   * Color changes based on variant or auto-error state.
    * @default ''
    */
-  @property({ attribute: 'helper-text' }) helperText = '';
+  @property({ attribute: 'helper-text' }) helperText: HelperText = '';
 
   /**
    * Whether the input is disabled.
@@ -124,16 +127,35 @@ export class Textfield extends ThemeableElement {
   @property({ type: Number }) rows = 3;
 
   /**
+   * For type="number": minimum allowed value.
+   * For all other types: minimum character length.
+   * @default null
+   */
+  @property({ type: Number }) min: number | null = null;
+
+  /**
+   * For type="number": maximum allowed value.
+   * For all other types: maximum character length.
+   * @default null
+   */
+  @property({ type: Number }) max: number | null = null;
+
+  /**
    * Renders the label in small caps with wider letter spacing.
    * @default false
    */
   @property({ type: Boolean, reflect: true }) uppercase = false;
 
-  /**
-   * Internal state tracking password visibility for password-type inputs.
-   * @private
-   */
   @state() private isPasswordVisible = false;
+  @state() private _touched = false;
+  @state() private _autoError = false;
+
+  private _onBlur = (e: Event) => {
+    const native = e.target as HTMLInputElement | HTMLTextAreaElement;
+    this.value = native.value;
+    this._touched = true;
+    this._autoError = !this._validate();
+  };
 
   /**
    * Handles input events from the native input or textarea element.
@@ -142,9 +164,34 @@ export class Textfield extends ThemeableElement {
    * @param e - The native input event
    * @private
    */
+  private _validate(): boolean {
+    const v = this.value;
+    if (!v) return true;
+    if (this.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return false;
+    if (this.type === 'url') {
+      try {
+        new URL(v);
+      } catch {
+        return false;
+      }
+    }
+    if (this.type === 'tel' && !/^[+\d][\d\s()\-.]{2,}$/.test(v)) return false;
+    if (this.type === 'number') {
+      const n = Number(v);
+      if (isNaN(n)) return false;
+      if (this.min !== null && n < this.min) return false;
+      if (this.max !== null && n > this.max) return false;
+    } else {
+      if (this.min !== null && v.length < this.min) return false;
+      if (this.max !== null && v.length > this.max) return false;
+    }
+    return true;
+  }
+
   private handleInput(e: Event) {
     const input = e.target as HTMLInputElement | HTMLTextAreaElement;
     this.value = input.value;
+    if (this._touched) this._autoError = !this._validate();
     this.dispatchEvent(
       new CustomEvent('input', {
         detail: { value: this.value },
@@ -194,15 +241,9 @@ export class Textfield extends ThemeableElement {
    * @private
    */
   private getEndIconName(): string {
-    const isPasswordField = this.type === 'password';
-
-    // Password fields get eye toggle icon
-    if (isPasswordField) {
-      return this.isPasswordVisible ? 'eye-off' : 'eye';
-    }
-
-    // Variants get their respective icons
-    switch (this.variant) {
+    if (this.type === 'password') return this.isPasswordVisible ? 'eye-off' : 'eye';
+    const effectiveVariant = this._autoError ? 'error' : this.variant;
+    switch (effectiveVariant) {
       case 'success':
         return 'check-circle';
       case 'warning':
@@ -214,15 +255,21 @@ export class Textfield extends ThemeableElement {
     }
   }
 
+  override updated(changed: PropertyValues) {
+    super.updated(changed);
+    this.toggleAttribute('data-invalid', this._autoError);
+  }
+
   render() {
     const hasStartIcon = Boolean(this.iconStart);
     const isPasswordField = this.type === 'password';
     const isMultiline = this.type === 'multiline';
+    const isNumber = this.type === 'number';
     const endIconName = this.getEndIconName();
     const hasEndIcon = Boolean(endIconName);
-
-    // For password fields, determine the actual input type based on visibility
     const actualInputType = isPasswordField && this.isPasswordVisible ? 'text' : this.type;
+    const isInvalid = this._autoError || this.variant === 'error';
+    const resolvedHelperText = typeof this.helperText === 'function' ? this.helperText(isInvalid) : this.helperText;
 
     return html`
       <div class="wrapper">
@@ -242,13 +289,16 @@ export class Textfield extends ThemeableElement {
                   .value=${this.value}
                   placeholder=${this.placeholder}
                   rows=${this.rows}
+                  minlength=${ifDefined(this.min !== null ? this.min : undefined)}
+                  maxlength=${ifDefined(this.max !== null ? this.max : undefined)}
                   ?disabled=${this.disabled}
                   ?required=${this.required}
                   ?readonly=${this.readonly}
                   @input=${this.handleInput}
                   @change=${this.handleChange}
+                  @blur=${this._onBlur}
                   aria-label=${this.label || this.placeholder}
-                  aria-invalid=${this.variant === 'error' ? 'true' : 'false'}
+                  aria-invalid=${isInvalid ? 'true' : 'false'}
                   class=${hasStartIcon ? 'has-start-icon' : ''}
                   ${hasEndIcon ? 'has-end-icon' : ''}
                 ></textarea>
@@ -258,13 +308,18 @@ export class Textfield extends ThemeableElement {
                   type=${actualInputType}
                   .value=${this.value}
                   placeholder=${this.placeholder}
+                  min=${ifDefined(isNumber && this.min !== null ? this.min : undefined)}
+                  max=${ifDefined(isNumber && this.max !== null ? this.max : undefined)}
+                  minlength=${ifDefined(!isNumber && this.min !== null ? this.min : undefined)}
+                  maxlength=${ifDefined(!isNumber && this.max !== null ? this.max : undefined)}
                   ?disabled=${this.disabled}
                   ?required=${this.required}
                   ?readonly=${this.readonly}
                   @input=${this.handleInput}
                   @change=${this.handleChange}
+                  @blur=${this._onBlur}
                   aria-label=${this.label || this.placeholder}
-                  aria-invalid=${this.variant === 'error' ? 'true' : 'false'}
+                  aria-invalid=${isInvalid ? 'true' : 'false'}
                   class=${hasStartIcon ? 'has-start-icon' : ''}
                   ${hasEndIcon ? 'has-end-icon' : ''}
                 />
@@ -279,8 +334,8 @@ export class Textfield extends ThemeableElement {
               `
             : ''}
         </div>
-        ${this.helperText
-          ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>`
+        ${resolvedHelperText
+          ? html`<lt-text variant="caption" as="span" class="helper-text">${resolvedHelperText}</lt-text>`
           : ''}
       </div>
     `;

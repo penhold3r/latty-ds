@@ -15,7 +15,7 @@ export type NavItemProps = {
 };
 
 export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
-  { onLtNavItemClick, onLtNavCollapse, iconStart, children, ...props },
+  { onLtNavItemClick, onLtNavCollapse, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<NavItemEl>(null);
@@ -38,7 +38,7 @@ export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
   }, [onLtNavCollapse]);
 
   return (
-    <lt-nav-item ref={innerRef} icon-start={iconStart} {...(props as Record<string, unknown>)}>
+    <lt-nav-item ref={innerRef} {...(props as Record<string, unknown>)}>
       {children}
     </lt-nav-item>
   );

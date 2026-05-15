@@ -2,6 +2,7 @@ import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
 import type { Breadcrumb as BreadcrumbEl } from '@latty/web';
 
 export type BreadcrumbProps = {
+  separator?: string;
   children?: ReactNode;
 };
 

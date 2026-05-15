@@ -4,6 +4,7 @@ import type { BreadcrumbItem as BreadcrumbItemEl } from '@latty/web';
 export type BreadcrumbItemProps = {
   href?: string;
   current?: boolean;
+  separator?: string;
   children?: ReactNode;
 };
 

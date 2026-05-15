@@ -14,7 +14,7 @@ export type SidePanelProps = {
 };
 
 export const SidePanel = forwardRef<SidePanelEl, SidePanelProps>(function SidePanel(
-  { onLtClose, noCloseButton, children, ...props },
+  { onLtClose, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SidePanelEl>(null);
@@ -30,7 +30,7 @@ export const SidePanel = forwardRef<SidePanelEl, SidePanelProps>(function SidePa
   }, [onLtClose]);
 
   return (
-    <lt-sidepanel ref={innerRef} no-close-button={noCloseButton || undefined} {...(props as Record<string, unknown>)}>
+    <lt-sidepanel ref={innerRef} {...(props as Record<string, unknown>)}>
       {children}
     </lt-sidepanel>
   );
