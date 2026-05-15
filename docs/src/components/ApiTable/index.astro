@@ -1,0 +1,42 @@
+---
+import manifest from '@latty/web/manifest.json';
+
+interface Props {
+  tag: string;
+}
+
+const { tag } = Astro.props;
+const component = (manifest as any)[tag];
+const members = component?.members ?? [];
+
+const formatType = (member: any): string => {
+  if (member.type === 'select' && member.options) {
+    return member.options.map((o: string) => `'${o}'`).join(' | ');
+  }
+  return member.type;
+};
+
+const formatDefault = (member: any): string => {
+  const d = member.default;
+  if (d === undefined || d === '') return '—';
+  if (typeof d === 'boolean') return String(d);
+  return `'${d}'`;
+};
+
+const rows = members.map((m: any) => ({
+  name: m.name,
+  type: formatType(m),
+  default: formatDefault(m),
+  description: m.description ?? ''
+}));
+---
+
+<lt-table class="api-table" data={JSON.stringify(rows)} hoverable></lt-table>
+
+<style>
+  @import './ApiTable.styles.css';
+</style>
+
+<script>
+  import './ApiTable.script.ts';
+</script>

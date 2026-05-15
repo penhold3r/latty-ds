@@ -75,11 +75,22 @@ export default defineConfig([
       'css/no-invalid-properties': ['error', { allowUnknownVariables: true }]
     }
   },
+  {
+    // Docs CSS uses Lightning CSS (via Astro/Vite) which supports CSS nesting,
+    // color-mix(), and other modern features that the baseline linter flags.
+    // !important is needed to override Shiki's inline styles on <pre> elements.
+    files: ['docs/**/*.css'],
+    rules: {
+      'css/use-baseline': 'off',
+      'css/no-important': 'off'
+    }
+  },
   ...astro.configs['flat/recommended'],
   {
-    // Astro frontmatter and <script> blocks (virtual *.astro/*.ts) frequently cast
-    // to custom element types or untyped JSON — keep any as a warning, not an error.
-    files: ['**/*.astro', '**/*.astro/*.ts'],
+    // Astro frontmatter, <script> blocks, and extracted docs client scripts all
+    // cast to custom element types or untyped web component APIs — keep any as
+    // a warning rather than an error in the docs layer.
+    files: ['**/*.astro', '**/*.astro/*.ts', 'docs/src/**/*.script.ts', 'docs/src/pages/**/_*.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn'
     }

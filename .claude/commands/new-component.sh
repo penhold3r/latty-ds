@@ -50,7 +50,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 WEB_DIR="${REPO_ROOT}/packages/web/src/components/${NAME_LOWER}"
 DOCS_DIR="${REPO_ROOT}/docs/src/pages/components/${NAME_LOWER}"
 INDEX_JS="${REPO_ROOT}/packages/web/src/index.ts"
-SIDEBAR="${REPO_ROOT}/docs/src/components/Sidebar.astro"
+SIDEBAR="${REPO_ROOT}/docs/src/components/Sidebar/index.astro"
 
 if [[ -d "$WEB_DIR" ]]; then
   echo "❌  '${NAME_LOWER}' already exists at ${WEB_DIR}"
@@ -337,10 +337,10 @@ fi
 mkdir -p "$DOCS_DIR"
 cat > "${DOCS_DIR}/index.astro" << EOF
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import ComponentPlayground from '../../../components/ComponentPlayground.astro';
-import FrameworkTabs from '../../../components/FrameworkTabs.astro';
-import ApiTable from '../../../components/ApiTable.astro';
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
 <BaseLayout title="${NAME_PASCAL}" description="TODO: describe the ${NAME_PASCAL} component">

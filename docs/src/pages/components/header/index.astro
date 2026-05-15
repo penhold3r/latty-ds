@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import FrameworkTabs from '../../../components/FrameworkTabs.astro';
-import ApiTable from '../../../components/ApiTable.astro';
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
 <BaseLayout
@@ -17,37 +17,24 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-
-  <PlaygroundShell id="header-playground" previewHeight="auto">
-    <div slot="preview" style="width:100%;padding:0">
-      <lt-header id="demo-header">
-        <lt-icon slot="before" name="menu"></lt-icon>
-        <span slot="logo" style="font-weight:600;font-size:1.125rem;letter-spacing:-0.01em">Latty</span>
-        <lt-nav slot="content" orientation="horizontal">
-          <lt-nav-item href="#" label="Home"></lt-nav-item>
-          <lt-nav-item href="#" label="About"></lt-nav-item>
-          <lt-nav-item label="More">
-            <lt-nav-item href="#" label="Blog"></lt-nav-item>
-            <lt-nav-item href="#" label="Changelog"></lt-nav-item>
-          </lt-nav-item>
-        </lt-nav>
-        <lt-icon slot="after" name="user"></lt-icon>
-      </lt-header>
-    </div>
-
-    <div slot="controls">
-      <div class="control-row">
-        <label class="control-label" for="ctrl-variant">background</label>
-        <select class="control-select" id="ctrl-variant">
-          <option value="primary" selected>primary</option>
-          <option value="surface">surface</option>
-        </select>
-      </div>
-    </div>
-  </PlaygroundShell>
+  <ComponentPlayground
+    tag="lt-header"
+    stretch={true}
+    previewHeight="auto"
+    content={`<lt-icon slot="before" name="menu"></lt-icon>
+<span slot="logo" style="font-weight:600;font-size:1.125rem;letter-spacing:-0.01em">Latty</span>
+<lt-nav slot="content" orientation="horizontal">
+  <lt-nav-item href="#" label="Home"></lt-nav-item>
+  <lt-nav-item href="#" label="About"></lt-nav-item>
+  <lt-nav-item label="More">
+    <lt-nav-item href="#" label="Blog"></lt-nav-item>
+    <lt-nav-item href="#" label="Changelog"></lt-nav-item>
+  </lt-nav-item>
+</lt-nav>
+<lt-icon slot="after" name="user"></lt-icon>`}
+  />
 
   <lt-text variant="h2">Usage</lt-text>
-
   <FrameworkTabs
     html={`<lt-header>
   <lt-icon slot="before" name="menu"></lt-icon>
@@ -100,37 +87,4 @@ import ApiTable from '../../../components/ApiTable.astro';
 
 <script>
   import '@latty/web';
-</script>
-
-<script>
-  const header = document.getElementById('demo-header') as HTMLElement & { background: string };
-  const variantCtrl = document.getElementById('ctrl-variant') as HTMLSelectElement;
-  const codeEl = document.getElementById('header-playground-code');
-
-  function updateCode() {
-    const background = header.getAttribute('background') ?? 'primary';
-    const variantAttr = background === 'primary' ? '' : ` background="${background}"`;
-    if (codeEl) {
-      codeEl.textContent = `<lt-header${variantAttr}>
-  <lt-icon slot="before" name="menu"></lt-icon>
-  <span slot="logo">Brand</span>
-  <lt-nav slot="content" orientation="horizontal">
-    <lt-nav-item href="/" label="Home"></lt-nav-item>
-    <lt-nav-item href="/about" label="About"></lt-nav-item>
-    <lt-nav-item label="More">
-      <lt-nav-item href="/blog" label="Blog"></lt-nav-item>
-      <lt-nav-item href="/changelog" label="Changelog"></lt-nav-item>
-    </lt-nav-item>
-  </lt-nav>
-  <lt-icon slot="after" name="user"></lt-icon>
-</lt-header>`;
-    }
-  }
-
-  variantCtrl?.addEventListener('change', () => {
-    header.setAttribute('background', variantCtrl.value);
-    updateCode();
-  });
-
-  updateCode();
 </script>

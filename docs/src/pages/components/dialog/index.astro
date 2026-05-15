@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import FrameworkTabs from '../../../components/FrameworkTabs.astro';
-import ApiTable from '../../../components/ApiTable.astro';
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
 <BaseLayout title="Dialog" description="Modal dialog component">
@@ -13,64 +13,16 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <PlaygroundShell id="dialog-playground">
-    <div slot="preview">
-      <lt-button variant="primary" id="open-dialog">Open dialog</lt-button>
-    </div>
-    <div slot="controls">
-      <div class="control-row">
-        <label class="control-label" for="ctrl-size">size</label>
-        <select class="control-select" id="ctrl-size">
-          <option value="sm">sm</option>
-          <option value="md" selected>md</option>
-          <option value="lg">lg</option>
-          <option value="xl">xl</option>
-        </select>
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-hide-close">no-close-button</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-hide-close" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-backdrop">close-on-backdrop-click</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-backdrop" checked />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-escape">close-on-escape</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-escape" checked />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-uppercase">uppercase</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-uppercase" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-blur">backdrop-blur</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-blur" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-overlay-opacity">overlay-opacity</label>
-        <input class="control-input" type="range" min="0" max="1" step="0.05" value="0.5" id="ctrl-overlay-opacity" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-theme">theme</label>
-        <select class="control-select" id="ctrl-theme">
-          <option value="" selected>default</option>
-          <option value="light">light</option>
-          <option value="dark">dark</option>
-        </select>
-      </div>
-    </div>
-  </PlaygroundShell>
-
-  <lt-dialog id="playground-dialog" title="Example dialog" size="md">
-    <lt-text variant="body"
-      >This is the dialog content. Try changing the controls to see how the dialog behaves.</lt-text
-    >
-    <div slot="footer">
-      <lt-button variant="neutral" appearance="outlined" id="cancel-dialog">Cancel</lt-button>
-      <lt-button variant="primary">Confirm</lt-button>
-    </div>
-  </lt-dialog>
+  <ComponentPlayground
+    tag="lt-dialog"
+    previewTrigger="Open dialog"
+    defaults={{ title: 'Example dialog', 'close-on-backdrop-click': true, 'close-on-escape': true }}
+    content={`<lt-text variant="body">This is the dialog content. Try changing the controls to see how the dialog behaves.</lt-text>
+<div slot="footer">
+  <lt-button variant="neutral" appearance="outlined" data-action="close">Cancel</lt-button>
+  <lt-button variant="primary" data-action="close">Confirm</lt-button>
+</div>`}
+  />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
@@ -147,76 +99,4 @@ const open = ref(false)
 
 <script>
   import '@latty/web';
-
-  const dialog = document.getElementById('playground-dialog') as any;
-  const codeEl = document.getElementById('dialog-playground-code')!;
-
-  const state = {
-    size: 'md',
-    'no-close-button': false,
-    'close-on-backdrop-click': true,
-    'close-on-escape': true,
-    uppercase: false,
-    'backdrop-blur': false,
-    'overlay-opacity': 0.5 as number,
-    theme: ''
-  };
-
-  function updateCode() {
-    const attrs = Object.entries(state)
-      .filter(
-        ([k, v]) => v !== false && v !== '' && !(k === 'size' && v === 'md') && !(k === 'overlay-opacity' && v === 0.5)
-      )
-      .map(([k, v]) => (v === true ? k : `${k}="${v}"`))
-      .join('\n  ');
-    codeEl.textContent = attrs
-      ? `<lt-dialog\n  ${attrs}\n  title="Example dialog"\n></lt-dialog>`
-      : `<lt-dialog title="Example dialog"></lt-dialog>`;
-  }
-
-  document.getElementById('open-dialog')?.addEventListener('click', () => (dialog.open = true));
-  document.getElementById('cancel-dialog')?.addEventListener('click', () => (dialog.open = false));
-
-  document.getElementById('ctrl-size')?.addEventListener('change', (e) => {
-    state.size = (e.target as HTMLSelectElement).value;
-    dialog.setAttribute('size', state.size);
-    updateCode();
-  });
-
-  document.getElementById('ctrl-theme')?.addEventListener('change', (e) => {
-    state.theme = (e.target as HTMLSelectElement).value;
-    if (state.theme) {
-      dialog.setAttribute('theme', state.theme);
-    } else {
-      dialog.removeAttribute('theme');
-    }
-    updateCode();
-  });
-
-  [
-    ['ctrl-hide-close', 'no-close-button'],
-    ['ctrl-backdrop', 'close-on-backdrop-click'],
-    ['ctrl-escape', 'close-on-escape'],
-    ['ctrl-uppercase', 'uppercase'],
-    ['ctrl-blur', 'backdrop-blur']
-  ].forEach(([ctrlId, attr]) => {
-    document.getElementById(ctrlId)?.addEventListener('change', (e) => {
-      const checked = (e.target as HTMLInputElement).checked;
-      (state as any)[attr] = checked;
-      if (checked) {
-        dialog.setAttribute(attr, '');
-      } else {
-        dialog.removeAttribute(attr);
-      }
-      updateCode();
-    });
-  });
-
-  document.getElementById('ctrl-overlay-opacity')?.addEventListener('input', (e) => {
-    state['overlay-opacity'] = parseFloat((e.target as HTMLInputElement).value);
-    dialog.overlayOpacity = state['overlay-opacity'];
-    updateCode();
-  });
-
-  updateCode();
 </script>

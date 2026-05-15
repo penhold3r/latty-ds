@@ -1,5 +1,5 @@
 ---
-import CodeSnippet from './CodeSnippet.astro';
+import CodeSnippet from '../CodeSnippet/index.astro';
 
 interface Props {
   html: string;
@@ -29,15 +29,9 @@ const { html, react, vue } = Astro.props;
 </div>
 
 <style>
-  .framework-tabs {
-    margin: var(--lt-spacing-4) 0;
-  }
-
-  .framework-tabs :global([slot='panel'] .snippet) {
-    margin: 0;
-  }
+  @import './FrameworkTabs.styles.css';
 </style>
 
 <script>
-  import '@latty/web';
+  import './FrameworkTabs.script.ts';
 </script>

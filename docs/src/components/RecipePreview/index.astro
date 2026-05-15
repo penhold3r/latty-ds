@@ -1,0 +1,15 @@
+---
+interface Props {
+  previewHeight?: string;
+}
+
+const { previewHeight = 'auto' } = Astro.props;
+---
+
+<div class="recipe-preview" style={previewHeight !== 'auto' ? `min-height: ${previewHeight}` : undefined}>
+  <slot />
+</div>
+
+<style>
+  @import './RecipePreview.styles.css';
+</style>

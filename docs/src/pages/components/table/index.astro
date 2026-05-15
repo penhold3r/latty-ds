@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import FrameworkTabs from '../../../components/FrameworkTabs.astro';
-import ApiTable from '../../../components/ApiTable.astro';
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
 <BaseLayout title="Table" description="Data table with sorting and responsive design">
@@ -13,45 +13,26 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <PlaygroundShell id="table-playground" previewHeight="auto">
-    <div slot="preview" style="width:100%;overflow-x:auto;">
-      <lt-table id="playground-table" hoverable></lt-table>
-    </div>
-    <div slot="controls">
-      <div class="control-row">
-        <label class="control-label" for="ctrl-density">density</label>
-        <select class="control-select" id="ctrl-density">
-          <option value="compact">compact</option>
-          <option value="normal" selected>normal</option>
-          <option value="comfortable">comfortable</option>
-        </select>
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-hoverable">hoverable</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-hoverable" checked />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-striped">striped</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-striped" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-bordered">bordered</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-bordered" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-loading">loading</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-loading" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-theme">theme</label>
-        <select class="control-select" id="ctrl-theme">
-          <option value="" selected>default</option>
-          <option value="light">light</option>
-          <option value="dark">dark</option>
-        </select>
-      </div>
-    </div>
-  </PlaygroundShell>
+  <ComponentPlayground
+    tag="lt-table"
+    previewHeight="auto"
+    stretch={true}
+    defaults={{ hoverable: true }}
+    seedData={{
+      columns: [
+        { key: 'name', label: 'Name', sortable: true },
+        { key: 'email', label: 'Email' },
+        { key: 'role', label: 'Role', sortable: true },
+        { key: 'status', label: 'Status' }
+      ],
+      data: [
+        { name: 'Alice Martin', email: 'alice@example.com', role: 'Engineer', status: 'Active' },
+        { name: 'Bob Chen', email: 'bob@example.com', role: 'Designer', status: 'Active' },
+        { name: 'Carol Williams', email: 'carol@example.com', role: 'Manager', status: 'Away' },
+        { name: 'David Kim', email: 'david@example.com', role: 'Engineer', status: 'Active' }
+      ]
+    }}
+  />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
@@ -116,74 +97,4 @@ const data = [
 
 <script>
   import '@latty/web';
-
-  const table = document.getElementById('playground-table') as any;
-  const playground = document.getElementById('table-playground')!;
-  const preview = playground.querySelector('.preview')!;
-  const codeEl = document.getElementById('table-playground-code')!;
-
-  table.columns = [
-    { key: 'name', label: 'Name', sortable: true },
-    { key: 'email', label: 'Email' },
-    { key: 'role', label: 'Role', sortable: true },
-    { key: 'status', label: 'Status' }
-  ];
-  table.data = [
-    { name: 'Alice Martin', email: 'alice@example.com', role: 'Engineer', status: 'Active' },
-    { name: 'Bob Chen', email: 'bob@example.com', role: 'Designer', status: 'Active' },
-    { name: 'Carol Williams', email: 'carol@example.com', role: 'Manager', status: 'Away' },
-    { name: 'David Kim', email: 'david@example.com', role: 'Engineer', status: 'Active' }
-  ];
-
-  const state: Record<string, any> = {
-    density: 'normal',
-    hoverable: true,
-    striped: false,
-    bordered: false,
-    loading: false,
-    theme: ''
-  };
-
-  function updateCode() {
-    const attrs = Object.entries(state)
-      .filter(([k, v]) => v !== false && v !== '' && !(k === 'density' && v === 'normal'))
-      .map(([k, v]) => (v === true ? k : `${k}="${v}"`))
-      .join(' ');
-    codeEl.textContent = `<lt-table${attrs ? ' ' + attrs : ''}></lt-table>`;
-  }
-
-  // init
-  table.setAttribute('hoverable', '');
-  updateCode();
-
-  document.getElementById('ctrl-density')?.addEventListener('change', (e) => {
-    state.density = (e.target as HTMLSelectElement).value;
-    table.setAttribute('density', state.density);
-    updateCode();
-  });
-
-  document.getElementById('ctrl-theme')?.addEventListener('change', (e) => {
-    state.theme = (e.target as HTMLSelectElement).value;
-    if (state.theme) {
-      table.setAttribute('theme', state.theme);
-      preview.setAttribute('data-preview-theme', state.theme);
-    } else {
-      table.removeAttribute('theme');
-      preview.removeAttribute('data-preview-theme');
-    }
-    updateCode();
-  });
-
-  ['hoverable', 'striped', 'bordered', 'loading'].forEach((attr) => {
-    const ctrl = document.getElementById(`ctrl-${attr}`) as HTMLInputElement;
-    ctrl?.addEventListener('change', () => {
-      state[attr] = ctrl.checked;
-      if (ctrl.checked) {
-        table.setAttribute(attr, '');
-      } else {
-        table.removeAttribute(attr);
-      }
-      updateCode();
-    });
-  });
 </script>

@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import FrameworkTabs from '../../../components/FrameworkTabs.astro';
-import ApiTable from '../../../components/ApiTable.astro';
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
 <BaseLayout title="Tab" description="Tab and tab group components">
@@ -13,33 +13,16 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <PlaygroundShell id="tab-playground">
-    <div slot="preview">
-      <lt-tab-group id="playground-tabs" value="overview">
-        <lt-tab label="Overview" value="overview" icon-start="home"></lt-tab>
-        <lt-tab label="Components" value="components" icon-start="cube"></lt-tab>
-        <lt-tab label="Settings" value="settings" icon-start="settings"></lt-tab>
-        <lt-tab label="Disabled" value="disabled" disabled></lt-tab>
-      </lt-tab-group>
-    </div>
-    <div slot="controls">
-      <div class="control-row">
-        <label class="control-label" for="ctrl-variant">appearance</label>
-        <select class="control-select" id="ctrl-variant">
-          <option value="default" selected>default</option>
-          <option value="pills">pills</option>
-        </select>
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-size">size</label>
-        <select class="control-select" id="ctrl-size">
-          <option value="sm">sm</option>
-          <option value="md" selected>md</option>
-          <option value="lg">lg</option>
-        </select>
-      </div>
-    </div>
-  </PlaygroundShell>
+  <ComponentPlayground
+    tag="lt-tab-group"
+    defaults={{ value: 'overview' }}
+    content={`<lt-tab label="Overview" value="overview" icon-start="home"></lt-tab>
+<lt-tab label="Components" value="components" icon-start="cube"></lt-tab>
+<lt-tab label="Settings" value="settings" icon-start="settings"></lt-tab>
+<lt-tab label="Disabled" value="disabled" disabled></lt-tab>`}
+    subTags={['lt-tab']}
+    subTagsFilter={{ 'lt-tab': ['disabled'] }}
+  />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
@@ -86,32 +69,4 @@ import { TabGroup, Tab } from '@latty/react';
 
 <script>
   import '@latty/web';
-
-  const tabs = document.getElementById('playground-tabs') as any;
-  const codeEl = document.getElementById('tab-playground-code')!;
-
-  const state: Record<string, any> = { appearance: 'default', size: 'md' };
-
-  function updateCode() {
-    const attrs = Object.entries(state)
-      .filter(([k, v]) => !(k === 'appearance' && v === 'default') && !(k === 'size' && v === 'md'))
-      .map(([k, v]) => `${k}="${v}"`)
-      .join('\n  ');
-    codeEl.textContent = attrs
-      ? `<lt-tab-group ${attrs} value="overview">\n  <lt-tab label="Overview" value="overview" icon-start="home"></lt-tab>\n  <lt-tab label="Settings" value="settings" icon-start="settings"></lt-tab>\n</lt-tab-group>`
-      : `<lt-tab-group value="overview">\n  <lt-tab label="Overview" value="overview" icon-start="home"></lt-tab>\n  <lt-tab label="Settings" value="settings" icon-start="settings"></lt-tab>\n</lt-tab-group>`;
-  }
-
-  document.getElementById('ctrl-variant')?.addEventListener('change', (e) => {
-    state.appearance = (e.target as HTMLSelectElement).value;
-    tabs.setAttribute('appearance', state.appearance);
-    updateCode();
-  });
-  document.getElementById('ctrl-size')?.addEventListener('change', (e) => {
-    state.size = (e.target as HTMLSelectElement).value;
-    tabs.setAttribute('size', state.size);
-    updateCode();
-  });
-
-  updateCode();
 </script>

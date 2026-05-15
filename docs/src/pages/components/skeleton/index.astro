@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import FrameworkTabs from '../../../components/FrameworkTabs.astro';
-import ApiTable from '../../../components/ApiTable.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
 <BaseLayout title="Skeleton" description="A loading placeholder that mimics the shape of content.">
@@ -13,21 +13,7 @@ import PlaygroundShell from '../../../components/PlaygroundShell.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <PlaygroundShell id="skeleton-playground" previewHeight="auto">
-    <div slot="preview" style="display:flex;flex-direction:column;gap:1rem;padding:1.5rem;max-width:320px;">
-      <div style="display:flex;align-items:center;gap:0.75rem;">
-        <lt-skeleton shape="circle" width="40px" height="40px"></lt-skeleton>
-        <div style="flex:1;display:flex;flex-direction:column;gap:0.5rem;">
-          <lt-skeleton shape="text" width="60%"></lt-skeleton>
-          <lt-skeleton shape="text" width="40%"></lt-skeleton>
-        </div>
-      </div>
-      <lt-skeleton height="120px"></lt-skeleton>
-      <lt-skeleton shape="text"></lt-skeleton>
-      <lt-skeleton shape="text" width="80%"></lt-skeleton>
-    </div>
-    <div slot="controls"></div>
-  </PlaygroundShell>
+  <ComponentPlayground tag="lt-skeleton" defaults={{ shape: 'rect', width: '100%', height: '80px' }} />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs

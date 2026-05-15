@@ -43,10 +43,16 @@ pnpm test:ui                # Open Vitest UI
 ### Linting
 
 ```bash
-pnpm lint                   # Run ESLint
+pnpm lint                   # Run ESLint on packages/ only
+pnpm eslint docs/src        # Run ESLint on docs (pnpm lint does NOT cover docs)
+pnpm format:check           # Prettier check (full repo — fix with: pnpm prettier --write .)
 pnpm typecheck              # Type-check all packages (tsc --noEmit)
 pnpm check:boundaries       # Detect cross-package relative imports
+pnpm lint:markup            # markuplint HTML/a11y checks on docs pages
+pnpm a11y                   # pa11y-ci WCAG2AA checks (requires live server on port 4321)
 ```
+
+**Important**: `pnpm typecheck` and `pnpm check:boundaries` read built `dist/` directories — always run `pnpm build` first after a `pnpm clean`. The correct full-monorepo check order is: build → test → lint (packages + docs) → format:check → typecheck → check:boundaries → lint:markup → a11y.
 
 ### Cleaning
 
@@ -196,16 +202,39 @@ docs/
       components/       # Component documentation
       frameworks/       # Framework-specific guides
     layouts/            # Astro layouts
-      BaseLayout.astro  # Main page layout
-    components/         # Astro components
-      Sidebar.astro       # Collapsible nav — add new component entries here (script does it automatically)
-      ApiTable.astro      # Reads component metadata and renders prop/attr table
-      ComponentPlayground.astro  # Attribute playground for simple components
-      PlaygroundShell.astro      # Shell for custom JS-driven playgrounds
-      CodeSnippet.astro   # Syntax-highlighted code block
+      BaseLayout/       # Main page layout
+        index.astro
+        BaseLayout.script.ts
+        BaseLayout.styles.css
+    components/         # Astro components — each in its own directory
+      Sidebar/          # Collapsible nav (script updates this automatically)
+        index.astro
+        Sidebar.styles.css
+      ApiTable/         # Reads component metadata and renders prop/attr table
+        index.astro
+        ApiTable.script.ts
+        ApiTable.styles.css
+      ComponentPlayground/  # Interactive attribute playground
+        index.astro
+        ComponentPlayground.script.ts
+        ComponentPlayground.styles.css
+        ComponentPlayground.types.ts
+        ComponentPlayground.ssr.ts
+      CodeSnippet/      # Syntax-highlighted code block
+        index.astro
+        CodeSnippet.script.ts
+        CodeSnippet.styles.css
     styles/             # Global styles
       global.css        # Base styles + token imports
 ```
+
+**Docs file naming convention**: every component and layout lives in its own directory (`Name/`). Co-located files follow `Name.script.ts`, `Name.styles.css`, `Name.types.ts`, `Name.ssr.ts` — never generic `script.ts` or `style.css`. Pages that need client `.ts` or data `.ts` files prefix them with `_` (e.g. `_icons.script.ts`, `_icons.data.ts`) because any `.ts` file in `src/pages/` without a `_` prefix is treated as an API route by Astro.
+
+**CSS nesting**: Astro/Vite uses Lightning CSS which supports `& .child` and `&:hover` nesting, but **BEM modifier nesting (`&--modifier`) is invalid native CSS** — esbuild warns during minification. Write BEM modifiers as standalone rules: `.block--modifier {}` instead of `&--modifier {}` inside `.block {}`.
+
+**`is:global` scoping**: dynamically created DOM elements (e.g. elements appended by `ComponentPlayground.script.ts`) are not targeted by Astro's scoped CSS. Use `<style is:global>@import './Name.styles.css';</style>` for components that create DOM dynamically.
+
+**pa11y and shadow DOM**: pa11y-ci cannot introspect shadow DOM. `lt-button`, `lt-chip`, `lt-link`, and similar custom elements always report ~1.06:1 contrast ratio as false positives (the tool sees background vs. itself). These are not real WCAG failures. Use axe-core via `vitest-axe` (already in the test suite) for shadow DOM a11y checks.
 
 Documentation pages can:
 
@@ -236,21 +265,29 @@ Vitest resolves imports at test time via `vite-tsconfig-paths` (no aliases neede
 
 **Always use the scaffold script** — it generates the docs page automatically. For manual edits, component pages live at `docs/src/pages/components/<name>/index.astro` and use `.astro` (not `.mdx`) so they can include `<script>` blocks for live demos.
 
-Two playground patterns exist:
-
-1. **`ComponentPlayground`** — declarative, zero JS, reads attributes automatically:
+Use **`ComponentPlayground`** for all component pages. It reads attributes automatically and supports JS-only properties and trigger buttons:
 
 ```astro
+{/* Simple component */}
 <ComponentPlayground tag="lt-button" content="Click me" />
-```
 
-2. **`PlaygroundShell`** — for components that need JS to set properties (e.g. `lt-table` which takes `.columns`/`.data`):
+{/* JS-only properties (options, columns, data) — set after element creation */}
+<ComponentPlayground
+  tag="lt-select"
+  seedData={{
+    options: [
+      { value: 'us', label: 'United States' },
+      { value: 'ca', label: 'Canada' }
+    ]
+  }}
+/>
 
-```astro
-<PlaygroundShell id="my-playground" previewHeight="auto">
-  <div slot="preview">...</div>
-  <div slot="controls">...</div>
-</PlaygroundShell>
+{/* Components that start hidden and need a trigger (dialog, drawer) */}
+<ComponentPlayground
+  tag="lt-dialog"
+  previewTrigger="Open Dialog"
+  defaults={{ title: 'Dialog title', 'close-on-escape': true }}
+/>
 ```
 
 The docs page must `import '@latty/web'` inside a `<script>` tag to register the custom elements in the browser.

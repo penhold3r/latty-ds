@@ -1,0 +1,24 @@
+---
+interface ColDef {
+  key: string;
+  label: string;
+  code?: boolean;
+}
+
+interface Props {
+  columns: ColDef[];
+  rows: Record<string, string>[];
+}
+
+const { columns, rows } = Astro.props;
+---
+
+<lt-table class="static-table" data={JSON.stringify(rows)} data-cols={JSON.stringify(columns)} hoverable></lt-table>
+
+<style>
+  @import './StaticTable.styles.css';
+</style>
+
+<script>
+  import './StaticTable.script.ts';
+</script>

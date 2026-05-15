@@ -38,7 +38,7 @@ jobs:
       - run: pnpm docs:build
         env:
           SITE_URL: http://localhost:4321
-          BASE_PATH: ""
+          BASE_PATH: ''
       - run: pnpm docs:preview &
       - run: npx wait-on http://localhost:4321 --timeout 30000
       - run: pnpm a11y

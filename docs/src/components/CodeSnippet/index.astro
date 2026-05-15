@@ -1,0 +1,31 @@
+---
+import { Code } from 'astro:components';
+
+interface Props {
+  code: string;
+  lang?: string;
+  title?: string;
+}
+
+const { code, lang = 'html', title } = Astro.props;
+const snippetId = `snippet-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="snippet">
+  <div class="snippet-header">
+    <span class="snippet-lang">{title ?? lang}</span>
+    <lt-icon class="copy-icon" name="copy" data-snippet-id={snippetId} role="button" aria-label="Copy code" tabindex="0"
+    ></lt-icon>
+  </div>
+  <div id={snippetId} class="snippet-body">
+    <Code code={code.trim()} lang={lang} theme="github-dark" />
+  </div>
+</div>
+
+<style>
+  @import './CodeSnippet.styles.css';
+</style>
+
+<script>
+  import './CodeSnippet.script.ts';
+</script>

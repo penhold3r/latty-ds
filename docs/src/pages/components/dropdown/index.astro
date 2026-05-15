@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import FrameworkTabs from '../../../components/FrameworkTabs.astro';
-import ApiTable from '../../../components/ApiTable.astro';
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
 <BaseLayout title="Dropdown" description="A floating menu anchored to a trigger element">
@@ -14,37 +14,16 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <PlaygroundShell id="dropdown-playground" previewHeight="auto">
-    <div
-      slot="preview"
-      style="padding: 2rem; display: flex; justify-content: center; min-height: 220px; align-items: flex-start;"
-    >
-      <lt-dropdown id="playground-dropdown" placement="bottom-start">
-        <lt-button slot="trigger" appearance="outlined">Options</lt-button>
-        <lt-dropdown-item>Profile</lt-dropdown-item>
-        <lt-dropdown-item>Settings</lt-dropdown-item>
-        <lt-dropdown-item id="playground-item-disabled">Admin Panel</lt-dropdown-item>
-        <lt-dropdown-item>Sign out</lt-dropdown-item>
-      </lt-dropdown>
-    </div>
-    <div slot="controls">
-      <div class="control-row">
-        <label class="control-label" for="ctrl-placement">placement</label>
-        <select class="control-select" id="ctrl-placement">
-          <option value="bottom-start" selected>bottom-start</option>
-          <option value="bottom-end">bottom-end</option>
-          <option value="bottom">bottom</option>
-          <option value="top-start">top-start</option>
-          <option value="top-end">top-end</option>
-          <option value="top">top</option>
-        </select>
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-disabled-item">disabled item</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-disabled-item" />
-      </div>
-    </div>
-  </PlaygroundShell>
+  <ComponentPlayground
+    tag="lt-dropdown"
+    content={`<lt-button slot="trigger" appearance="outlined">Options</lt-button>
+<lt-dropdown-item>Profile</lt-dropdown-item>
+<lt-dropdown-item>Settings</lt-dropdown-item>
+<lt-dropdown-item>Admin Panel</lt-dropdown-item>
+<lt-dropdown-item>Sign out</lt-dropdown-item>`}
+    subTags={['lt-dropdown-item']}
+    subTagsFilter={{ 'lt-dropdown-item': ['disabled'] }}
+  />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
@@ -158,44 +137,4 @@ function onSelect(e) {
 
 <script>
   import '@latty/web';
-
-  const dropdown = document.getElementById('playground-dropdown') as any;
-  const disabledItem = document.getElementById('playground-item-disabled') as any;
-  const codeEl = document.getElementById('dropdown-playground-code')!;
-
-  const state = {
-    placement: 'bottom-start',
-    disabledItem: false
-  };
-
-  function applyState() {
-    dropdown.placement = state.placement;
-    disabledItem.disabled = state.disabledItem;
-  }
-
-  function updateCode() {
-    const placementAttr = state.placement !== 'bottom-start' ? ` placement="${state.placement}"` : '';
-    const disabledAttr = state.disabledItem ? ' disabled' : '';
-    codeEl.textContent = `<lt-dropdown${placementAttr}>
-  <lt-button slot="trigger" appearance="outlined">Options</lt-button>
-  <lt-dropdown-item>Profile</lt-dropdown-item>
-  <lt-dropdown-item>Settings</lt-dropdown-item>
-  <lt-dropdown-item${disabledAttr}>Admin Panel</lt-dropdown-item>
-  <lt-dropdown-item>Sign out</lt-dropdown-item>
-</lt-dropdown>`;
-  }
-
-  document.getElementById('ctrl-placement')?.addEventListener('change', (e) => {
-    state.placement = (e.target as HTMLSelectElement).value;
-    applyState();
-    updateCode();
-  });
-
-  document.getElementById('ctrl-disabled-item')?.addEventListener('change', (e) => {
-    state.disabledItem = (e.target as HTMLInputElement).checked;
-    applyState();
-    updateCode();
-  });
-
-  updateCode();
 </script>

@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import FrameworkTabs from '../../../components/FrameworkTabs.astro';
-import ApiTable from '../../../components/ApiTable.astro';
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
 <BaseLayout title="Snackbar" description="Brief notification that appears temporarily at the bottom of the viewport">
@@ -14,41 +14,12 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <PlaygroundShell id="snackbar-playground" previewHeight="auto">
-    <div slot="preview">
-      <lt-button variant="primary" id="show-snackbar">Show snackbar</lt-button>
-    </div>
-    <div slot="controls">
-      <div class="control-row">
-        <label class="control-label" for="ctrl-variant">variant</label>
-        <select class="control-select" id="ctrl-variant">
-          <option value="default" selected>default</option>
-          <option value="success">success</option>
-          <option value="warning">warning</option>
-          <option value="error">error</option>
-          <option value="info">info</option>
-        </select>
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-action">action-label</label>
-        <input class="control-input" type="text" id="ctrl-action" placeholder="e.g. Undo" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-duration">duration (ms)</label>
-        <input class="control-input" type="number" id="ctrl-duration" value="4000" min="0" step="500" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-closable">closable</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-closable" checked />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-icon">icon</label>
-        <input class="control-input" type="text" id="ctrl-icon" placeholder="e.g. check or none" />
-      </div>
-    </div>
-  </PlaygroundShell>
-
-  <lt-snackbar id="playground-snackbar" variant="default" duration="4000">Changes saved successfully</lt-snackbar>
+  <ComponentPlayground
+    tag="lt-snackbar"
+    previewTrigger="Show snackbar"
+    defaults={{ variant: 'default', duration: 4000, closable: true }}
+    content="Changes saved successfully"
+  />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
@@ -130,70 +101,4 @@ const snackbar = ref(null)
 
 <script>
   import '@latty/web';
-
-  const snackbar = document.getElementById('playground-snackbar') as any;
-  const codeEl = document.getElementById('snackbar-playground-code')!;
-
-  const state: Record<string, string | boolean | number> = {
-    variant: 'default',
-    'action-label': '',
-    duration: 4000,
-    closable: true,
-    icon: ''
-  };
-
-  function applyState() {
-    snackbar.variant = state.variant as string;
-    snackbar.duration = state.duration as number;
-    snackbar.closable = state.closable as boolean;
-    if (state['action-label']) {
-      snackbar.setAttribute('action-label', state['action-label'] as string);
-    } else {
-      snackbar.removeAttribute('action-label');
-    }
-    snackbar.icon = state.icon as string;
-  }
-
-  function updateCode() {
-    const attrs: string[] = [];
-    if (state.variant !== 'default') attrs.push(`variant="${state.variant}"`);
-    if (state['action-label']) attrs.push(`action-label="${state['action-label']}"`);
-    if (state.duration !== 4000) attrs.push(`duration="${state.duration}"`);
-    if (!state.closable) attrs.push(`closable="false"`);
-    if (state.icon) attrs.push(`icon="${state.icon}"`);
-    const attrsStr = attrs.length ? '\n  ' + attrs.join('\n  ') + '\n' : '';
-    codeEl.textContent = `<lt-snackbar${attrsStr}>Changes saved successfully</lt-snackbar>`;
-  }
-
-  document.getElementById('show-snackbar')?.addEventListener('click', () => {
-    applyState();
-    snackbar.show();
-  });
-
-  document.getElementById('ctrl-variant')?.addEventListener('change', (e) => {
-    state.variant = (e.target as HTMLSelectElement).value;
-    updateCode();
-  });
-
-  document.getElementById('ctrl-action')?.addEventListener('input', (e) => {
-    state['action-label'] = (e.target as HTMLInputElement).value;
-    updateCode();
-  });
-
-  document.getElementById('ctrl-duration')?.addEventListener('input', (e) => {
-    state.duration = Number((e.target as HTMLInputElement).value);
-    updateCode();
-  });
-
-  document.getElementById('ctrl-closable')?.addEventListener('change', (e) => {
-    state.closable = (e.target as HTMLInputElement).checked;
-    updateCode();
-  });
-
-  document.getElementById('ctrl-icon')?.addEventListener('input', (e) => {
-    state.icon = (e.target as HTMLInputElement).value;
-    updateCode();
-  });
-
-  updateCode();
 </script>

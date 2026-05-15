@@ -1,0 +1,7 @@
+.framework-tabs {
+  margin: var(--lt-spacing-4) 0;
+
+  & :global([slot='panel'] .snippet) {
+    margin: 0;
+  }
+}

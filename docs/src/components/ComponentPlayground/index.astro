@@ -1,0 +1,266 @@
+---
+import manifest from '@latty/web/manifest.json';
+import { defaultValue, toLabel, buildSubTagsData } from './ComponentPlayground.ssr.ts';
+import type { PlaygroundMember, PlaygroundGroup } from './ComponentPlayground.types.ts';
+
+interface Props {
+  tag: string;
+  content?: string;
+  previewHeight?: string;
+  defaults?: Record<string, unknown>;
+  /** Makes the component fill the full preview stage width. */
+  stretch?: boolean;
+  /** Tag names of sub-elements to expose controls for (e.g. ['lt-breadcrumb-item']). */
+  subTags?: string[];
+  /**
+   * Allowlist of props to show per sub-tag. If omitted, all manifest props are shown.
+   * Example: { 'lt-breadcrumb-item': ['separator'] }
+   */
+  subTagsFilter?: Record<string, string[]>;
+  /**
+   * JS properties to set directly on the element after creation.
+   * Use for props that can't be expressed as HTML attributes (e.g. options, columns, data arrays).
+   */
+  seedData?: Record<string, unknown>;
+  /**
+   * If set, renders a button in the preview stage with this label.
+   * Clicking it calls el.show() if available, otherwise sets el.open = true.
+   */
+  previewTrigger?: string;
+}
+
+const {
+  tag,
+  content: slotContent = '',
+  previewHeight = '140px',
+  defaults: defaultOverrides = {},
+  stretch = false,
+  subTags: subTagsProp = [],
+  subTagsFilter: subTagsFilterProp = {},
+  seedData = {},
+  previewTrigger
+} = Astro.props;
+
+const allManifest = manifest as any;
+const iconNames: string[] = allManifest._meta?.iconNames ?? [];
+const rawMembers: PlaygroundMember[] = allManifest[tag]?.members ?? [];
+const hasThemeProp = rawMembers.some((m) => m.name === 'theme');
+const members: PlaygroundMember[] = hasThemeProp
+  ? rawMembers
+  : [...rawMembers, { name: 'theme', type: 'select', options: ['', 'light', 'dark'], default: '' }];
+
+const id = `playground-${Math.random().toString(36).slice(2, 8)}`;
+const defaults = Object.fromEntries(members.map((m) => [m.name, defaultValue(m, defaultOverrides)]));
+const subTagsData: PlaygroundGroup[] = buildSubTagsData(subTagsProp, subTagsFilterProp, allManifest);
+const allCtrlGroups: PlaygroundGroup[] = [{ tag, members, defaults }, ...subTagsData];
+---
+
+<div
+  class="playground"
+  id={id}
+  data-tag={tag}
+  data-content={slotContent}
+  data-members={JSON.stringify(members)}
+  data-defaults={JSON.stringify(defaults)}
+  data-icons={JSON.stringify(iconNames)}
+  data-stretch={stretch ? 'true' : undefined}
+  data-subtags-data={JSON.stringify(subTagsData)}
+  data-seed-data={JSON.stringify(seedData)}
+  data-preview-trigger={previewTrigger}
+>
+  <div class="preview" style={`min-height: ${previewHeight}`}>
+    <div class="preview-toolbar">
+      <button class="bp-btn" data-width="375">Mobile</button>
+      <button class="bp-btn" data-width="768">Tablet</button>
+      <button class="bp-btn is-active" data-width="">Desktop</button>
+    </div>
+    <div class="preview-stage" id={`${id}-stage`}>
+      {
+        previewTrigger && (
+          <lt-button variant="primary" id={`${id}-trigger`}>
+            {previewTrigger}
+          </lt-button>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="controls">
+      {
+        subTagsProp.length > 0 ? (
+          <div class="ctrl-tabs-bar">
+            {allCtrlGroups.map(({ tag: ctrlTag }, i) => (
+              <button class={`ctrl-tab-btn${i === 0 ? ' is-active' : ''}`} data-ctrl-tag={ctrlTag}>
+                {ctrlTag.replace('lt-', '')}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div class="section-label">Controls</div>
+        )
+      }
+
+      {
+        allCtrlGroups.map(({ tag: ctrlTag, members: ctrlMembers, defaults: ctrlDefaults }, groupIdx) =>
+          ctrlMembers.map((member: PlaygroundMember) => {
+            const val = ctrlDefaults[member.name];
+            const label = toLabel(member.name);
+            const ctrlId = `${id}-${ctrlTag.replace('lt-', '')}-${member.name}`;
+            const hidden = groupIdx > 0;
+            const rowStyle = hidden ? 'display:none' : '';
+
+            if (member.type === 'boolean')
+              return (
+                <div class="control-row" style={rowStyle} data-ctrl-group={ctrlTag}>
+                  <label class="control-label" for={ctrlId}>
+                    {label}
+                  </label>
+                  <lt-switch
+                    id={ctrlId}
+                    size="sm"
+                    data-prop={member.name}
+                    data-type="boolean"
+                    data-ctrl-tag={ctrlTag}
+                    checked={val === true ? '' : undefined}
+                  />
+                </div>
+              );
+
+            if (member.type === 'select')
+              return (
+                <div class="control-row" style={rowStyle} data-ctrl-group={ctrlTag}>
+                  <label class="control-label" for={ctrlId}>
+                    {label}
+                  </label>
+                  <lt-select
+                    id={ctrlId}
+                    size="sm"
+                    data-prop={member.name}
+                    data-type="select"
+                    data-ctrl-tag={ctrlTag}
+                    data-options={JSON.stringify(member.options ?? [])}
+                    data-value={String(val)}
+                  />
+                </div>
+              );
+
+            if (member.type === 'icon')
+              return (
+                <div class="control-row control-row--stacked" style={rowStyle} data-ctrl-group={ctrlTag}>
+                  <label class="control-label" for={ctrlId}>
+                    {label}
+                  </label>
+                  <lt-combobox
+                    id={ctrlId}
+                    size="sm"
+                    placeholder="Search icon…"
+                    data-prop={member.name}
+                    data-type="icon"
+                    data-ctrl-tag={ctrlTag}
+                  />
+                </div>
+              );
+
+            if (member.type === 'color')
+              return (
+                <div class="control-row" style={rowStyle} data-ctrl-group={ctrlTag}>
+                  <label class="control-label" for={ctrlId}>
+                    {label}
+                  </label>
+                  <input
+                    id={ctrlId}
+                    class="control-color"
+                    type="color"
+                    data-prop={member.name}
+                    data-type="color"
+                    data-ctrl-tag={ctrlTag}
+                    value={String(val) || '#ffffff'}
+                  />
+                </div>
+              );
+
+            return (
+              <div class="control-row" style={rowStyle} data-ctrl-group={ctrlTag}>
+                <label class="control-label" for={ctrlId}>
+                  {label}
+                </label>
+                <lt-textfield
+                  id={ctrlId}
+                  size="sm"
+                  type={member.type === 'number' ? 'number' : 'text'}
+                  value={String(val)}
+                  data-prop={member.name}
+                  data-type={member.type}
+                  data-ctrl-tag={ctrlTag}
+                />
+              </div>
+            );
+          })
+        )
+      }
+    </div>
+
+    <div class="code-panel">
+      <div class="code-header">
+        <lt-tab-group value="html" class="code-tabs" id={`${id}-tabs`} theme="dark">
+          <lt-tab label="HTML" value="html">HTML</lt-tab>
+          <lt-tab label="React" value="react">React</lt-tab>
+        </lt-tab-group>
+        <div class="code-header-actions">
+          <lt-button
+            size="sm"
+            variant="neutral"
+            appearance="outlined"
+            id={`${id}-share`}
+            icon-end="share"
+            aria-label="Share"
+            theme="dark">Share</lt-button
+          >
+          <lt-button
+            size="sm"
+            variant="neutral"
+            appearance="outlined"
+            id={`${id}-copy`}
+            icon-end="copy"
+            aria-label="Copy code"
+            theme="dark">Copy</lt-button
+          >
+        </div>
+      </div>
+      <pre class="code-pre" id={`${id}-html-panel`}><code class="code-output" id={`${id}-html-code`} /></pre>
+      <pre
+        class="code-pre"
+        id={`${id}-react-panel`}
+        style="display:none"><code class="code-output" id={`${id}-react-code`} /></pre>
+    </div>
+  </div>
+
+  <div class="event-log" id={`${id}-event-log`}>
+    <button class="event-log-header" id={`${id}-event-log-toggle`}>
+      <span id={`${id}-event-log-label`}>Events</span>
+      <svg
+        class="event-log-chevron"
+        width="10"
+        height="10"
+        viewBox="0 0 10 10"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
+        <polyline points="2,3 5,7 8,3"></polyline>
+      </svg>
+    </button>
+    <div class="event-log-body" id={`${id}-event-log-body`} hidden>
+      <div class="event-log-rows" id={`${id}-event-log-rows`}></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import './ComponentPlayground.script.ts';
+</script>
+
+<style is:global>
+  @import './ComponentPlayground.styles.css';
+</style>

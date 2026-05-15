@@ -92,14 +92,12 @@ const nav = [
   }
 ];
 
-function isActive(href: string) {
+const isActive = (href: string) => {
   const full = base + href;
   return currentPath === full || currentPath === full + '/';
-}
+};
 
-function isSectionActive(items: { href: string }[]) {
-  return items.some((item) => isActive(item.href));
-}
+const isSectionActive = (items: { href: string }[]) => items.some((item) => isActive(item.href));
 ---
 
 <nav
@@ -123,39 +121,5 @@ function isSectionActive(items: { href: string }[]) {
 </nav>
 
 <style>
-  .sidebar {
-    width: var(--sidebar-width, 240px);
-    flex-shrink: 0;
-    position: sticky;
-    top: var(--topbar-height, 56px);
-    height: calc(100vh - var(--topbar-height, 56px));
-    overflow-y: auto;
-    border-right: 1px solid var(--lt-border-default);
-    background: var(--lt-bg-subtle);
-    padding: var(--lt-spacing-4) 0;
-
-    --lt-accordion-summary-padding: var(--lt-spacing-2) var(--lt-spacing-4);
-    --lt-accordion-content-padding: 0;
-    --lt-accordion-header-color: var(--lt-text-default);
-    --lt-accordion-header-font-size: 0.875rem;
-    --lt-accordion-header-font-weight: 700;
-
-    --lt-nav-item-font-size: 0.875rem;
-    --lt-nav-item-padding: var(--lt-spacing-1) var(--lt-spacing-4) var(--lt-spacing-1) var(--lt-spacing-6);
-    --lt-nav-item-active-bg: var(--lt-bg-primary-subtle);
-    --lt-nav-item-active-color: var(--lt-text-primary);
-  }
-
-  .sidebar-inner {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .sidebar--in-panel {
-    width: 100%;
-    position: static;
-    height: 100%;
-    border-right: none;
-    flex: 1;
-  }
+  @import './Sidebar.styles.css';
 </style>

@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import PlaygroundShell from '../../../components/PlaygroundShell.astro';
-import FrameworkTabs from '../../../components/FrameworkTabs.astro';
-import ApiTable from '../../../components/ApiTable.astro';
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
 <BaseLayout title="Select" description="Dropdown select component">
@@ -13,58 +13,19 @@ import ApiTable from '../../../components/ApiTable.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <PlaygroundShell id="select-playground">
-    <div slot="preview">
-      <lt-select id="playground-select" label="Country" placeholder="Select a country" style="width:260px;"></lt-select>
-    </div>
-    <div slot="controls">
-      <div class="control-row">
-        <label class="control-label" for="ctrl-size">size</label>
-        <select class="control-select" id="ctrl-size">
-          <option value="sm">sm</option>
-          <option value="md" selected>md</option>
-          <option value="lg">lg</option>
-        </select>
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-variant">variant</label>
-        <select class="control-select" id="ctrl-variant">
-          <option value="default" selected>default</option>
-          <option value="success">success</option>
-          <option value="warning">warning</option>
-          <option value="error">error</option>
-        </select>
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-disabled">disabled</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-disabled" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-required">required</label>
-        <input class="control-toggle" type="checkbox" id="ctrl-required" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-label">label</label>
-        <input class="control-text" type="text" id="ctrl-label" value="Country" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-placeholder">placeholder</label>
-        <input class="control-text" type="text" id="ctrl-placeholder" value="Select a country" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-helper">helper-text</label>
-        <input class="control-text" type="text" id="ctrl-helper" value="" />
-      </div>
-      <div class="control-row">
-        <label class="control-label" for="ctrl-theme">theme</label>
-        <select class="control-select" id="ctrl-theme">
-          <option value="" selected>default</option>
-          <option value="light">light</option>
-          <option value="dark">dark</option>
-        </select>
-      </div>
-    </div>
-  </PlaygroundShell>
+  <ComponentPlayground
+    tag="lt-select"
+    defaults={{ label: 'Country', placeholder: 'Select a country' }}
+    seedData={{
+      options: [
+        { value: 'us', label: 'United States' },
+        { value: 'gb', label: 'United Kingdom' },
+        { value: 'ca', label: 'Canada' },
+        { value: 'de', label: 'Germany' },
+        { value: 'fr', label: 'France' }
+      ]
+    }}
+  />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
@@ -153,98 +114,4 @@ const options = [
 
 <script>
   import '@latty/web';
-
-  const select = document.getElementById('playground-select') as any;
-  const playground = document.getElementById('select-playground')!;
-  const preview = playground.querySelector('.preview')!;
-  const codeEl = document.getElementById('select-playground-code')!;
-
-  select.options = [
-    { value: 'us', label: 'United States' },
-    { value: 'gb', label: 'United Kingdom' },
-    { value: 'ca', label: 'Canada' },
-    { value: 'de', label: 'Germany' },
-    { value: 'fr', label: 'France' }
-  ];
-
-  const state: Record<string, any> = {
-    size: 'md',
-    variant: 'default',
-    disabled: false,
-    required: false,
-    label: 'Country',
-    placeholder: 'Select a country',
-    'helper-text': '',
-    theme: ''
-  };
-
-  function updateCode() {
-    const attrs = Object.entries(state)
-      .filter(([k, v]) => {
-        if (v === false || v === '') return false;
-        if (k === 'size' && v === 'md') return false;
-        if (k === 'variant' && v === 'default') return false;
-        return true;
-      })
-      .map(([k, v]) => (v === true ? k : `${k}="${v}"`))
-      .join('\n  ');
-
-    codeEl.textContent = attrs
-      ? `<lt-select\n  ${attrs}\n></lt-select>`
-      : `<lt-select label="Country" placeholder="Select a country"></lt-select>`;
-  }
-
-  // size & variant & theme
-  ['size', 'variant', 'theme'].forEach((id) => {
-    document.getElementById(`ctrl-${id}`)?.addEventListener('change', (e) => {
-      const val = (e.target as HTMLSelectElement).value;
-      state[id] = val;
-      if (val) {
-        select.setAttribute(id, val);
-      } else {
-        select.removeAttribute(id);
-      }
-
-      if (id === 'theme') {
-        if (val === 'dark' || val === 'light') {
-          preview.setAttribute('data-preview-theme', val);
-        } else {
-          preview.removeAttribute('data-preview-theme');
-        }
-      }
-
-      updateCode();
-    });
-  });
-
-  // disabled & required
-  ['disabled', 'required'].forEach((id) => {
-    document.getElementById(`ctrl-${id}`)?.addEventListener('change', (e) => {
-      const checked = (e.target as HTMLInputElement).checked;
-      state[id] = checked;
-      if (checked) {
-        select.setAttribute(id, '');
-      } else {
-        select.removeAttribute(id);
-      }
-      updateCode();
-    });
-  });
-
-  // label & placeholder & helper
-  ['label', 'placeholder', 'helper'].forEach((id) => {
-    document.getElementById(`ctrl-${id}`)?.addEventListener('input', (e) => {
-      const val = (e.target as HTMLInputElement).value;
-      const attr = id === 'helper' ? 'helper-text' : id;
-      state[attr] = val;
-      if (val) {
-        select.setAttribute(attr, val);
-      } else {
-        select.removeAttribute(attr);
-      }
-      updateCode();
-    });
-  });
-
-  updateCode();
 </script>
