@@ -15,7 +15,7 @@ export type NavItemProps = {
 };
 
 export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
-  { onLtNavItemClick, onLtNavCollapse, children, ...props },
+  { onLtNavItemClick, onLtNavCollapse, iconStart, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<NavItemEl>(null);
@@ -36,6 +36,13 @@ export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
     el.addEventListener('lt-nav-collapse', h);
     return () => el.removeEventListener('lt-nav-collapse', h);
   }, [onLtNavCollapse]);
+  // React 18 lowercases camelCase props on custom elements — set as attribute directly
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (iconStart) el.setAttribute('icon-start', iconStart);
+    else el.removeAttribute('icon-start');
+  }, [iconStart]);
 
   return (
     <lt-nav-item ref={innerRef} {...(props as Record<string, unknown>)}>
