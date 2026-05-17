@@ -46,4 +46,10 @@
     font-size: 0.8125rem;
     line-height: 1.6;
   }
+
+  /* github-dark comment color (#6A737D) fails on --lt-color-secondary-800 background (2.56:1).
+     neutral-400 (#ababab) achieves ~4.56:1 on that background. */
+  & :global(span[style*='#6A737D']) {
+    color: var(--lt-color-neutral-400) !important;
+  }
 }

@@ -62,7 +62,8 @@ pnpm format:check           # Prettier check (full repo — fix with: pnpm prett
 pnpm typecheck              # Type-check all packages (tsc --noEmit)
 pnpm check:boundaries       # Detect cross-package relative imports
 pnpm lint:markup            # markuplint HTML/a11y checks on docs pages
-pnpm a11y                   # pa11y-ci WCAG2AA checks (requires live server on port 4321)
+pnpm a11y                   # Playwright + axe-core WCAG2AA checks in light + dark mode (auto-starts dev server)
+pnpm a11y:report            # Open the HTML report from the last a11y run (playwright-a11y-report/, gitignored)
 ```
 
 **Important**: `pnpm typecheck` and `pnpm check:boundaries` read built `dist/` directories — always run `pnpm build` first after a `pnpm clean`. The correct full-monorepo check order is: build → test → lint (packages + docs) → format:check → typecheck → check:boundaries → lint:markup → a11y.
@@ -247,7 +248,7 @@ docs/
 
 **`is:global` scoping**: dynamically created DOM elements (e.g. elements appended by `ComponentPlayground.script.ts`) are not targeted by Astro's scoped CSS. Use `<style is:global>@import './Name.styles.css';</style>` for components that create DOM dynamically.
 
-**pa11y and shadow DOM**: pa11y-ci cannot introspect shadow DOM. `lt-button`, `lt-chip`, `lt-link`, and similar custom elements always report ~1.06:1 contrast ratio as false positives (the tool sees background vs. itself). These are not real WCAG failures. Use axe-core via `vitest-axe` (already in the test suite) for shadow DOM a11y checks.
+**a11y and shadow DOM**: `pnpm a11y` uses Playwright + `@axe-core/playwright`. axe-core pierces shadow DOM, so it can audit the internals of `lt-button`, `lt-chip`, `lt-link`, and all other custom elements — no false positives from shadow boundary. Tests live in `a11y/a11y.spec.ts` and run against `playwright.a11y.config.ts`.
 
 Documentation pages can:
 

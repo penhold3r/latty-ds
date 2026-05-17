@@ -28,7 +28,8 @@ const year = new Date().getFullYear();
     <title>{title} | Latty</title>
     <!-- Inline: read saved theme before first paint to avoid flash -->
     <script is:inline>
-      const saved = localStorage.getItem('lt-theme');
+      const urlTheme = new URLSearchParams(location.search).get('theme');
+      const saved = urlTheme || localStorage.getItem('lt-theme');
       if (saved) document.documentElement.setAttribute('data-theme', saved);
     </script>
   </head>

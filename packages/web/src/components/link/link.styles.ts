@@ -7,7 +7,7 @@ export const linkStyles = css`
 
   a[part='base'] {
     align-items: center;
-    color: var(--lt-interactive-primary-bg);
+    color: var(--lt-text-primary);
     cursor: pointer;
     display: inline-flex;
     font: inherit;
@@ -17,7 +17,7 @@ export const linkStyles = css`
   }
 
   a[part='base']:hover {
-    color: var(--lt-interactive-primary-bg-hover);
+    color: var(--lt-text-primary);
     text-decoration: underline;
   }
 

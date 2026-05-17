@@ -15,7 +15,7 @@ export const textfieldStyles = css`
   }
 
   label {
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-subtle);
   }
 
   .input-container {
@@ -28,7 +28,7 @@ export const textfieldStyles = css`
 
   .icon-start,
   .icon-end {
-    color: var(--lt-color-neutral-500);
+    color: var(--lt-text-muted);
     flex-shrink: 0;
     position: absolute;
     pointer-events: none;
@@ -49,7 +49,7 @@ export const textfieldStyles = css`
   }
 
   .password-toggle:hover {
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-default);
   }
 
   .variant-icon {
@@ -73,7 +73,7 @@ export const textfieldStyles = css`
   textarea {
     background: var(--lt-bg-subtle);
     border-radius: var(--lt-border-radius);
-    border: 1px solid var(--lt-color-neutral-300);
+    border: 1px solid var(--lt-border-default);
     box-sizing: border-box;
     color: var(--lt-text-default);
     font-family: inherit;
@@ -110,7 +110,7 @@ export const textfieldStyles = css`
   input:disabled,
   textarea:disabled {
     background: var(--lt-bg-surface);
-    color: var(--lt-color-neutral-500);
+    color: var(--lt-text-muted);
     cursor: not-allowed;
   }
 

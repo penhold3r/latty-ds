@@ -3,3 +3,6 @@ dist
 dist-types
 dist-scripts
 .DS_Store
+pa11y-ci-report
+playwright-a11y-report
+test-results

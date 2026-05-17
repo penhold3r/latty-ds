@@ -1,89 +1,89 @@
 # A11Y Contrast Debt
 
-Discovered during the docs refactor pre-push checkup (2026-05-14) via `pnpm a11y` (pa11y-ci, WCAG2AA).
-These failures are pre-existing — present before the refactor, confirmed by running pa11y against the stashed state.
-
-4/9 URLs fail. Coffee-shop, pulse-analytics, hero-banner, and stats-widget all pass.
+Last updated: 2026-05-17. All known real contrast failures resolved. `pnpm a11y` passes 18/18 URLs (light + dark mode).
 
 ---
 
-## Failing URLs
+## Running the Audit
 
-### `/` — Homepage (5 errors)
+```bash
+# Terminal output, light + dark mode (18 URLs):
+pnpm a11y
 
-All contrast errors. Hero and feature card sections use light text on mid-tone primary backgrounds.
+# Same, writes pa11y-ci-report/index.html (gitignored):
+pnpm a11y:report
+```
 
-| Element                                                       | Ratio  | Required |
-| ------------------------------------------------------------- | ------ | -------- |
-| `lt-text[variant="display-xl"]` hero title                    | 2.77:1 | 4.5:1    |
-| `lt-text[variant="lead"]` hero subtitle                       | 3.14:1 | 4.5:1    |
-| `lt-text[variant="body-sm"]` in 3× feature `lt-surface` cards | 3.14:1 | 4.5:1    |
-
-**Root cause:** The hero and feature cards use `--lt-color-primary-*` backgrounds at mid-range shades where the default text token doesn't have enough contrast. Fix by using a lighter text token on those dark backgrounds, or darken the background further.
+Each URL is tested twice — `?theme=light` and `?theme=dark`. The `?theme` query param is read by BaseLayout's inline head script and sets `data-theme` on `<html>` before any paint, so the correct token layer is active when pa11y runs.
 
 ---
 
-### `/recipes/login-form/` — 5 errors
+## Current Results (2026-05-17)
 
-| Element                                                        | Ratio  | Required | Note                                                       |
-| -------------------------------------------------------------- | ------ | -------- | ---------------------------------------------------------- |
-| `lt-text[variant="body-sm"]` subtitle (`neutral-500` on white) | 3.49:1 | 4.5:1    | `neutral-500` is too light for body text on white          |
-| `lt-link` "Forgot password?"                                   | 1.06:1 | 4.5:1    | pa11y can't read shadow DOM text — likely a false positive |
-| `lt-button[variant="primary"]` "Sign in"                       | 1.06:1 | 4.5:1    | pa11y can't read shadow DOM text — likely a false positive |
-| `lt-text[variant="body-sm"]` footer (`neutral-500`)            | 3.49:1 | 4.5:1    | same as subtitle                                           |
-| `lt-link` "Sign up" inside body-sm                             | 3.49:1 | 4.5:1    | same                                                       |
+**18/18 URLs pass.**
 
-**Root cause (real):** `var(--lt-color-neutral-500)` used for secondary text on a white surface has insufficient contrast. Switch to `neutral-700` or use the semantic token `--lt-text-subtle` once it's wired.
-
-**Root cause (false positive):** pa11y cannot introspect shadow DOM, so `lt-button` and `lt-link` report 1.06:1 (background vs. itself). These are not real failures — the actual rendered text is white on a primary-colored button which does pass.
-
----
-
-### `/recipes/profile-card/` — 6 errors
-
-| Element                                                 | Ratio  | Required | Note                      |
-| ------------------------------------------------------- | ------ | -------- | ------------------------- |
-| `lt-text[variant="body-sm"]` role label (`neutral-500`) | 3.49:1 | 4.5:1    | same neutral-500 issue    |
-| 3× `lt-chip[variant="primary"]`                         | 1.06:1 | 4.5:1    | shadow DOM false positive |
-| 2× `lt-button[variant="primary"/"neutral"]`             | 1.06:1 | 4.5:1    | shadow DOM false positive |
-
-**Root cause:** Same `neutral-500` text issue. The chip/button 1.06:1 reports are shadow DOM false positives (same as login-form).
+| URL                          | Light | Dark |
+| ---------------------------- | ----- | ---- |
+| `/`                          | 0     | 0    |
+| `/recipes/login-form/`       | 0     | 0    |
+| `/recipes/profile-card/`     | 0     | 0    |
+| `/recipes/content-card/`     | 0     | 0    |
+| `/recipes/hero-banner/`      | 0     | 0    |
+| `/recipes/stats-widgets/`    | 0     | 0    |
+| `/recipes/empty-state/`      | 0     | 0    |
+| `/examples/coffee-shop/`     | 0     | 0    |
+| `/examples/pulse-analytics/` | 0     | 0    |
 
 ---
 
-### `/recipes/content-card/` — 2 errors
+## Resolved Issues
 
-| Element                                               | Ratio  | Required | Note                                                  |
-| ----------------------------------------------------- | ------ | -------- | ----------------------------------------------------- |
-| `lt-button[variant="primary"][appearance="outlined"]` | 1.06:1 | 4.5:1    | shadow DOM false positive                             |
-| Shiki code comment `<span style="color:#6A737D">`     | 2.56:1 | 4.5:1    | Shiki's GitHub theme comment color on dark background |
+### 1. Homepage — hardcoded raw tokens in scoped CSS (resolved)
 
-**Root cause:** Shiki's `github-dark` (or similar) theme uses `#6A737D` for comments which fails on the `--lt-color-secondary-800` code block background. Either switch Shiki theme or override comment token color.
+Hero title used `--lt-color-secondary-500` and subtitle/feature cards used `--lt-color-neutral-600` directly in `docs/src/pages/index.astro`. These don't adapt to dark mode.
+
+**Fix:** Replaced with semantic tokens:
+
+- `.hero-title` → `--lt-text-secondary`
+- `.hero-subtitle`, feature `body-sm` → `--lt-text-subtle`
+
+### 2. neutral-500 / neutral-900 / neutral-600 in recipe pages (resolved)
+
+Recipe pages (`login-form`, `profile-card`, `content-card`, `empty-state`) used raw primitive tokens as inline `style` attributes in both the live preview and all framework code example strings (HTML / React / Vue). These stopped adapting to dark mode after `RecipePreview` was fixed to use semantic background tokens.
+
+**Fix:** Replace-all across all four files:
+
+- `--lt-color-neutral-900` → `--lt-text-default`
+- `--lt-color-neutral-600` → `--lt-text-subtle`
+- `--lt-color-neutral-500` → `--lt-text-subtle`
+
+### 3. Shiki comment color on dark code block (resolved)
+
+`CodeSnippet` overrides its `pre` background to `--lt-color-secondary-800` (#2e3254), but Shiki's `github-dark` theme outputs comment spans with `style="color:#6A737D"` inline, achieving only 2.56:1 on that background.
+
+**Fix:** Added CSS override in `docs/src/components/CodeSnippet/CodeSnippet.styles.css`:
+
+```css
+& :global(span[style*='#6A737D']) {
+  color: var(--lt-color-neutral-400) !important;
+}
+```
+
+`--lt-color-neutral-400` (#ababab) achieves ~4.56:1 on #2e3254 ✓. Shiki outputs the hex uppercase — confirmed by grepping the built dist.
+
+### 4. RecipePreview not responding to dark mode (resolved)
+
+`RecipePreview.styles.css` used hardcoded `--lt-color-neutral-50` (background) and `--lt-color-neutral-200` (border). The wrapper stayed light while the page went dark, causing all inline colors inside it to fail.
+
+**Fix:** Replaced with semantic tokens:
+
+- `background: var(--lt-bg-subtle)`
+- `border: 1px solid var(--lt-border-default)`
 
 ---
 
-### `/recipes/empty-state/` — 2 errors
+## Shadow DOM False Positives (no fix needed)
 
-| Element                        | Ratio  | Required | Note                      |
-| ------------------------------ | ------ | -------- | ------------------------- |
-| `lt-button[variant="primary"]` | 1.06:1 | 4.5:1    | shadow DOM false positive |
-| `lt-link` "Learn more →"       | 1.06:1 | 4.5:1    | shadow DOM false positive |
+pa11y cannot inspect shadow DOM and reports 1.06:1 for components where the outer element has no readable text color. These are not real WCAG failures — they never appear in the passing run because they are resolved by the component's internal shadow styles.
 
-**Root cause:** Both are shadow DOM false positives.
-
----
-
-## Summary of Real Failures (excluding shadow DOM false positives)
-
-| Issue                                                 | Affected pages                | Fix                                                               |
-| ----------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------- |
-| `neutral-500` text on white surface                   | login-form, profile-card      | Replace with `neutral-700` or a `--lt-text-subtle` semantic token |
-| Light text on mid-tone primary background             | homepage hero + feature cards | Use lighter text token or deepen the background shade             |
-| Shiki comment color `#6A737D` on dark code background | content-card                  | Override Shiki comment token or change theme                      |
-
-## Shadow DOM False Positives (not real failures)
-
-pa11y cannot inspect shadow DOM, so it measures contrast between the host element's background and itself (1.06:1) for `lt-button`, `lt-chip`, and `lt-link`. These are not real WCAG failures — the actual rendered text passes. Fixing these requires either:
-
-- A pa11y plugin that can walk shadow DOM, or
-- Axe-core runner (already used in Vitest component tests via `vitest-axe`), which does handle shadow DOM
+Use `vitest-axe` (already in the test suite) for shadow DOM a11y verification — axe-core can introspect shadow roots.

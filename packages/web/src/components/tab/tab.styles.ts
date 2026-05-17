@@ -32,14 +32,14 @@ export const tabStyles = css`
   }
 
   .tab:focus-visible {
-    color: var(--lt-color-primary-600);
+    color: var(--lt-text-primary);
     outline: 2px solid var(--lt-border-focus);
     outline-offset: 2px;
   }
 
   :host([active]) .tab {
     border-color: var(--lt-border-primary-strong);
-    color: var(--lt-color-primary-600);
+    color: var(--lt-text-primary);
   }
 
   .tab:disabled {
@@ -84,6 +84,6 @@ export const tabStyles = css`
   :host([data-variant='pills'][active]) .tab {
     background: var(--lt-bg-default);
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-    color: var(--lt-color-primary-600);
+    color: var(--lt-text-primary);
   }
 `;

@@ -8,12 +8,6 @@ import tokensConfig from '../../tokens.config.json';
 
 export type { LattyConfig };
 
-const LIGHT_SEMANTIC_CSS = semanticTokensToCss(buildSemanticTokens('light'));
-const DARK_SEMANTIC_CSS = semanticTokensToCss(buildSemanticTokens('dark'), '@media (prefers-color-scheme: dark)');
-const DARK_ATTR_CSS = semanticTokensToCss(buildSemanticTokens('dark'), '[data-theme="dark"]');
-const LIGHT_ATTR_CSS = semanticTokensToCss(buildSemanticTokens('light'), '[data-theme="light"]');
-const AUTO_SEMANTIC_CSS = LIGHT_SEMANTIC_CSS + '\n' + DARK_SEMANTIC_CSS + '\n' + DARK_ATTR_CSS + '\n' + LIGHT_ATTR_CSS;
-
 const DEFAULTS: Required<Omit<LattyConfig, 'theme'>> = {
   colors: tokensConfig.color,
   font: { family: DEFAULT_FONT_FAMILY },
@@ -42,10 +36,22 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
 
   const primitives = tokensToCss(tokens);
   const theme = userConfig.theme ?? 'auto';
+  const primary = tokens.color.primary as Record<string, string>;
+  const semanticOpts = { primary500: primary['500'], primary400: primary['400'] };
 
-  if (theme === 'dark') return primitives + '\n' + semanticTokensToCss(buildSemanticTokens('dark'));
-  if (theme === 'light') return primitives + '\n' + LIGHT_SEMANTIC_CSS;
-  return primitives + '\n' + AUTO_SEMANTIC_CSS;
+  if (theme === 'dark') return primitives + '\n' + semanticTokensToCss(buildSemanticTokens('dark', semanticOpts));
+  if (theme === 'light') return primitives + '\n' + semanticTokensToCss(buildSemanticTokens('light', semanticOpts));
+  return (
+    primitives +
+    '\n' +
+    semanticTokensToCss(buildSemanticTokens('light', semanticOpts)) +
+    '\n' +
+    semanticTokensToCss(buildSemanticTokens('dark', semanticOpts), '@media (prefers-color-scheme: dark)') +
+    '\n' +
+    semanticTokensToCss(buildSemanticTokens('dark', semanticOpts), '[data-theme="dark"]') +
+    '\n' +
+    semanticTokensToCss(buildSemanticTokens('light', semanticOpts), '[data-theme="light"]')
+  );
 };
 
 /**

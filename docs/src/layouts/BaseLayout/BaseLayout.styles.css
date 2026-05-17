@@ -43,9 +43,9 @@
 .version-badge {
   font-size: 0.7rem;
   font-weight: 600;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   padding: 2px 8px;
   border-radius: 999px;
   letter-spacing: 0.03em;

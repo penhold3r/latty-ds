@@ -582,6 +582,182 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/avatar/avatar.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "avatarStyles",
+          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-text-neutral); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-text-secondary); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-text-success); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-text-warning); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-text-error); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-text-info); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "avatarStyles",
+          "declaration": {
+            "name": "avatarStyles",
+            "module": "src/components/avatar/avatar.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/avatar/avatar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
+          "name": "Avatar",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "avatarStyles"
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "URL of the avatar image."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Full name used to derive initials when no image is available."
+            },
+            {
+              "kind": "field",
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Accessible label for the image (defaults to `name`)."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "AvatarSize"
+              },
+              "default": "'md'",
+              "description": "Size of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "shape",
+              "type": {
+                "text": "AvatarShape"
+              },
+              "default": "'circle'",
+              "description": "Shape of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "AvatarColor"
+              },
+              "default": "'neutral'",
+              "description": "Background color used for the initials and icon fallback states."
+            },
+            {
+              "kind": "field",
+              "name": "_imgError",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_initials",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleImgError",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-avatar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Avatar",
+          "declaration": {
+            "name": "Avatar",
+            "module": "src/components/avatar/avatar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/avatar/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Avatar",
+          "declaration": {
+            "name": "Avatar",
+            "module": "./avatar"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarSize",
+          "declaration": {
+            "name": "AvatarSize",
+            "module": "./avatar.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarShape",
+          "declaration": {
+            "name": "AvatarShape",
+            "module": "./avatar.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarColor",
+          "declaration": {
+            "name": "AvatarColor",
+            "module": "./avatar.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/breadcrumb/breadcrumb.styles.ts",
       "declarations": [
         {
@@ -1011,182 +1187,6 @@
           "declaration": {
             "name": "ButtonVariant",
             "module": "./button.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "avatarStyles",
-          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-text-neutral); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-text-secondary); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-text-success); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-text-warning); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-text-error); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-text-info); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "avatarStyles",
-          "declaration": {
-            "name": "avatarStyles",
-            "module": "src/components/avatar/avatar.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
-          "name": "Avatar",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "avatarStyles"
-            },
-            {
-              "kind": "field",
-              "name": "src",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "URL of the avatar image."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Full name used to derive initials when no image is available."
-            },
-            {
-              "kind": "field",
-              "name": "alt",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Accessible label for the image (defaults to `name`)."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "AvatarSize"
-              },
-              "default": "'md'",
-              "description": "Size of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "shape",
-              "type": {
-                "text": "AvatarShape"
-              },
-              "default": "'circle'",
-              "description": "Shape of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "AvatarColor"
-              },
-              "default": "'neutral'",
-              "description": "Background color used for the initials and icon fallback states."
-            },
-            {
-              "kind": "field",
-              "name": "_imgError",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_initials",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleImgError",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-avatar",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "src/components/avatar/avatar.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "./avatar"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarSize",
-          "declaration": {
-            "name": "AvatarSize",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarShape",
-          "declaration": {
-            "name": "AvatarShape",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarColor",
-          "declaration": {
-            "name": "AvatarColor",
-            "module": "./avatar.types"
           }
         }
       ]
@@ -3461,6 +3461,157 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/pagination/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Pagination",
+          "declaration": {
+            "name": "Pagination",
+            "module": "./pagination"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "PaginationSize",
+          "declaration": {
+            "name": "PaginationSize",
+            "module": "./pagination.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/pagination/pagination.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "paginationStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; } nav { align-items: center; display: flex; gap: var(--lt-spacing-1); } button { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-default); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 500; justify-content: center; line-height: 1; transition: background 120ms ease, border-color 120ms ease, color 120ms ease; user-select: none; } /* Sizes */ :host([size='sm']) button { font-size: 0.75rem; height: 28px; min-width: 28px; padding: 0 var(--lt-spacing-1); } :host([size='md']) button, :host(:not([size])) button { font-size: 0.8125rem; height: 36px; min-width: 36px; padding: 0 var(--lt-spacing-2); } :host([size='lg']) button { font-size: 0.9375rem; height: 44px; min-width: 44px; padding: 0 var(--lt-spacing-3); } button:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); } button[aria-current='page'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-color-primary-700); font-weight: 600; } button.ellipsis { cursor: default; pointer-events: none; } button:disabled { color: var(--lt-color-neutral-400); cursor: not-allowed; } :host([disabled]) button { color: var(--lt-color-neutral-400); cursor: not-allowed; pointer-events: none; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "paginationStyles",
+          "declaration": {
+            "name": "paginationStyles",
+            "module": "src/components/pagination/pagination.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/pagination/pagination.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Page navigation control for paged data sets.",
+          "name": "Pagination",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "paginationStyles"
+            },
+            {
+              "kind": "field",
+              "name": "page",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Currently active page (1-indexed)."
+            },
+            {
+              "kind": "field",
+              "name": "totalPages",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Total number of pages."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "PaginationSize"
+              },
+              "default": "'md'",
+              "description": "Visual size."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disable all controls."
+            },
+            {
+              "kind": "method",
+              "name": "_go",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "page",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_pages",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "(number | '…')[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "lt-change",
+              "type": {
+                "text": "CustomEvent<{page: number}>"
+              },
+              "description": "Fired when the user navigates to a different page."
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-pagination",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Pagination",
+          "declaration": {
+            "name": "Pagination",
+            "module": "src/components/pagination/pagination.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/nav/index.ts",
       "declarations": [],
       "exports": [
@@ -3788,151 +3939,127 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/pagination/index.ts",
+      "path": "src/components/progress/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Pagination",
+          "name": "Progress",
           "declaration": {
-            "name": "Pagination",
-            "module": "./pagination"
+            "name": "Progress",
+            "module": "./progress"
           }
         },
         {
           "kind": "js",
-          "name": "PaginationSize",
+          "name": "ProgressVariant",
           "declaration": {
-            "name": "PaginationSize",
-            "module": "./pagination.types"
+            "name": "ProgressVariant",
+            "module": "./progress.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ProgressSize",
+          "declaration": {
+            "name": "ProgressSize",
+            "module": "./progress.types"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/pagination/pagination.styles.ts",
+      "path": "src/components/progress/progress.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "paginationStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; } nav { align-items: center; display: flex; gap: var(--lt-spacing-1); } button { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-default); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 500; justify-content: center; line-height: 1; transition: background 120ms ease, border-color 120ms ease, color 120ms ease; user-select: none; } /* Sizes */ :host([size='sm']) button { font-size: 0.75rem; height: 28px; min-width: 28px; padding: 0 var(--lt-spacing-1); } :host([size='md']) button, :host(:not([size])) button { font-size: 0.8125rem; height: 36px; min-width: 36px; padding: 0 var(--lt-spacing-2); } :host([size='lg']) button { font-size: 0.9375rem; height: 44px; min-width: 44px; padding: 0 var(--lt-spacing-3); } button:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); } button[aria-current='page'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-color-primary-700); font-weight: 600; } button.ellipsis { cursor: default; pointer-events: none; } button:disabled { color: var(--lt-color-neutral-400); cursor: not-allowed; } :host([disabled]) button { color: var(--lt-color-neutral-400); cursor: not-allowed; pointer-events: none; } `"
+          "name": "progressStyles",
+          "default": "css` :host { display: block; } [part='track'] { background: var(--lt-color-neutral-200); border-radius: 999px; overflow: hidden; width: 100%; } [part='fill'] { border-radius: 999px; height: 100%; transition: width 300ms ease; } /* ── Sizes ──────────────────────────────────────────────────────────────── */ :host([size='sm']) [part='track'] { height: 4px; } :host([size='md']) [part='track'] { height: 8px; } :host([size='lg']) [part='track'] { height: 12px; } /* ── Variants ───────────────────────────────────────────────────────────── */ :host([variant='primary']) [part='fill'] { background: var(--lt-interactive-primary-bg); } :host([variant='success']) [part='fill'] { background: var(--lt-interactive-success-bg); } :host([variant='warning']) [part='fill'] { background: var(--lt-interactive-warning-bg); } :host([variant='error']) [part='fill'] { background: var(--lt-interactive-error-bg); } :host([variant='neutral']) [part='fill'] { background: var(--lt-color-neutral-600); } /* ── Indeterminate ──────────────────────────────────────────────────────── */ :host([indeterminate]) [part='fill'] { animation: indeterminate 1.5s ease-in-out infinite; width: 40%; } @keyframes indeterminate { 0% { transform: translateX(-250%); } 100% { transform: translateX(350%); } } @media (prefers-reduced-motion: reduce) { [part='fill'] { transition: none; } :host([indeterminate]) [part='fill'] { animation: none; width: 100%; } } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "paginationStyles",
+          "name": "progressStyles",
           "declaration": {
-            "name": "paginationStyles",
-            "module": "src/components/pagination/pagination.styles.ts"
+            "name": "progressStyles",
+            "module": "src/components/progress/progress.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/pagination/pagination.ts",
+      "path": "src/components/progress/progress.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Page navigation control for paged data sets.",
-          "name": "Pagination",
+          "description": "A horizontal bar that shows how far along a process is.\nSupports determinate (0–100 value) and indeterminate modes.",
+          "name": "Progress",
           "members": [
             {
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "paginationStyles"
+              "default": "progressStyles"
             },
             {
               "kind": "field",
-              "name": "page",
+              "name": "value",
               "type": {
                 "text": "number"
               },
-              "default": "1",
-              "description": "Currently active page (1-indexed)."
+              "default": "0",
+              "description": "Current progress value (0–100). Ignored when `indeterminate` is true."
             },
             {
               "kind": "field",
-              "name": "totalPages",
+              "name": "variant",
               "type": {
-                "text": "number"
+                "text": "ProgressVariant"
               },
-              "default": "1",
-              "description": "Total number of pages."
+              "default": "'primary'",
+              "description": "Color variant of the progress bar."
             },
             {
               "kind": "field",
               "name": "size",
               "type": {
-                "text": "PaginationSize"
+                "text": "ProgressSize"
               },
               "default": "'md'",
-              "description": "Visual size."
+              "description": "Height of the track."
             },
             {
               "kind": "field",
-              "name": "disabled",
+              "name": "indeterminate",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Disable all controls."
-            },
-            {
-              "kind": "method",
-              "name": "_go",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "page",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_pages",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "(number | '…')[]"
-                }
-              }
+              "description": "When true the bar animates continuously without a set value."
             },
             {
               "kind": "method",
               "name": "render"
             }
           ],
-          "events": [
-            {
-              "name": "lt-change",
-              "type": {
-                "text": "CustomEvent<{page: number}>"
-              },
-              "description": "Fired when the user navigates to a different page."
-            }
-          ],
           "superclass": {
             "name": "ThemeableElement",
             "module": "/src/base"
           },
-          "tagName": "lt-pagination",
+          "tagName": "lt-progress",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Pagination",
+          "name": "Progress",
           "declaration": {
-            "name": "Pagination",
-            "module": "src/components/pagination/pagination.ts"
+            "name": "Progress",
+            "module": "src/components/progress/progress.ts"
           }
         }
       ]
@@ -4137,133 +4264,6 @@
           "declaration": {
             "name": "Radio",
             "module": "src/components/radio/radio.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/progress/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Progress",
-          "declaration": {
-            "name": "Progress",
-            "module": "./progress"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ProgressVariant",
-          "declaration": {
-            "name": "ProgressVariant",
-            "module": "./progress.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ProgressSize",
-          "declaration": {
-            "name": "ProgressSize",
-            "module": "./progress.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/progress/progress.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "progressStyles",
-          "default": "css` :host { display: block; } [part='track'] { background: var(--lt-color-neutral-200); border-radius: 999px; overflow: hidden; width: 100%; } [part='fill'] { border-radius: 999px; height: 100%; transition: width 300ms ease; } /* ── Sizes ──────────────────────────────────────────────────────────────── */ :host([size='sm']) [part='track'] { height: 4px; } :host([size='md']) [part='track'] { height: 8px; } :host([size='lg']) [part='track'] { height: 12px; } /* ── Variants ───────────────────────────────────────────────────────────── */ :host([variant='primary']) [part='fill'] { background: var(--lt-interactive-primary-bg); } :host([variant='success']) [part='fill'] { background: var(--lt-interactive-success-bg); } :host([variant='warning']) [part='fill'] { background: var(--lt-interactive-warning-bg); } :host([variant='error']) [part='fill'] { background: var(--lt-interactive-error-bg); } :host([variant='neutral']) [part='fill'] { background: var(--lt-color-neutral-600); } /* ── Indeterminate ──────────────────────────────────────────────────────── */ :host([indeterminate]) [part='fill'] { animation: indeterminate 1.5s ease-in-out infinite; width: 40%; } @keyframes indeterminate { 0% { transform: translateX(-250%); } 100% { transform: translateX(350%); } } @media (prefers-reduced-motion: reduce) { [part='fill'] { transition: none; } :host([indeterminate]) [part='fill'] { animation: none; width: 100%; } } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "progressStyles",
-          "declaration": {
-            "name": "progressStyles",
-            "module": "src/components/progress/progress.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/progress/progress.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A horizontal bar that shows how far along a process is.\nSupports determinate (0–100 value) and indeterminate modes.",
-          "name": "Progress",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "progressStyles"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "Current progress value (0–100). Ignored when `indeterminate` is true."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ProgressVariant"
-              },
-              "default": "'primary'",
-              "description": "Color variant of the progress bar."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ProgressSize"
-              },
-              "default": "'md'",
-              "description": "Height of the track."
-            },
-            {
-              "kind": "field",
-              "name": "indeterminate",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When true the bar animates continuously without a set value."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-progress",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Progress",
-          "declaration": {
-            "name": "Progress",
-            "module": "src/components/progress/progress.ts"
           }
         }
       ]
@@ -5716,6 +5716,148 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/surface/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Surface",
+          "declaration": {
+            "name": "Surface",
+            "module": "./surface"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SurfaceElevation",
+          "declaration": {
+            "name": "SurfaceElevation",
+            "module": "./surface.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SurfaceAppearance",
+          "declaration": {
+            "name": "SurfaceAppearance",
+            "module": "./surface.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/surface/surface.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "surfaceStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .surface { background: var(--_surface-bg, var(--lt-bg-subtle)); border-radius: var(--lt-border-radius); box-sizing: border-box; transition: box-shadow 120ms ease, border-color 120ms ease; } /* Elevation variants */ :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); } :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); } :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); } :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); } :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); } :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); } /* Visual appearances */ :host([appearance='filled']) .surface { border: none; } :host([appearance='outlined']) .surface { background: var(--_surface-bg, transparent); border: 1px solid var(--lt-border-default); } :host([appearance='outlined']:hover) .surface { border-color: var(--lt-border-strong); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "surfaceStyles",
+          "declaration": {
+            "name": "surfaceStyles",
+            "module": "src/components/surface/surface.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/surface/surface.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A container component that provides elevation and surface styling.\nUsed for cards, dropdowns, modals, and other elevated UI elements.",
+          "name": "Surface",
+          "slots": [
+            {
+              "description": "Content to be displayed within the surface",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "surfaceStyles"
+            },
+            {
+              "kind": "field",
+              "name": "elevation",
+              "type": {
+                "text": "SurfaceElevation"
+              },
+              "default": "'1'",
+              "description": "Elevation level that determines shadow depth."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "SurfaceAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual appearance that determines border and background."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "method",
+              "name": "_resolve",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-surface",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Surface",
+          "declaration": {
+            "name": "Surface",
+            "module": "src/components/surface/surface.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/switch/index.ts",
       "declarations": [],
       "exports": [
@@ -6367,782 +6509,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/surface/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Surface",
-          "declaration": {
-            "name": "Surface",
-            "module": "./surface"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SurfaceElevation",
-          "declaration": {
-            "name": "SurfaceElevation",
-            "module": "./surface.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SurfaceAppearance",
-          "declaration": {
-            "name": "SurfaceAppearance",
-            "module": "./surface.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/surface/surface.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "surfaceStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .surface { background: var(--_surface-bg, var(--lt-bg-subtle)); border-radius: var(--lt-border-radius); box-sizing: border-box; transition: box-shadow 120ms ease, border-color 120ms ease; } /* Elevation variants */ :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); } :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); } :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); } :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); } :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); } :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); } /* Visual appearances */ :host([appearance='filled']) .surface { border: none; } :host([appearance='outlined']) .surface { background: var(--_surface-bg, transparent); border: 1px solid var(--lt-border-default); } :host([appearance='outlined']:hover) .surface { border-color: var(--lt-border-strong); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "surfaceStyles",
-          "declaration": {
-            "name": "surfaceStyles",
-            "module": "src/components/surface/surface.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/surface/surface.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A container component that provides elevation and surface styling.\nUsed for cards, dropdowns, modals, and other elevated UI elements.",
-          "name": "Surface",
-          "slots": [
-            {
-              "description": "Content to be displayed within the surface",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "surfaceStyles"
-            },
-            {
-              "kind": "field",
-              "name": "elevation",
-              "type": {
-                "text": "SurfaceElevation"
-              },
-              "default": "'1'",
-              "description": "Elevation level that determines shadow depth."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "SurfaceAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual appearance that determines border and background."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "method",
-              "name": "_resolve",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-surface",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Surface",
-          "declaration": {
-            "name": "Surface",
-            "module": "src/components/surface/surface.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/text/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Text",
-          "declaration": {
-            "name": "Text",
-            "module": "./text"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/text/text.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "textStyles",
-          "default": "css` :host { display: block; color: inherit; } /* Inline variants sit in text flow */ :host([variant='caption']), :host([variant='overline']), :host([variant='label']) { display: inline; } [part='base'] { margin: 0; color: inherit; font-family: var(--lt-typography-fontfamily); } /* ── Display ─────────────────────────────────────────────────────────── */ :host([variant='display-2xl']) [part='base'] { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-xl']) [part='base'] { font-size: clamp(2rem, 5vw, 3.75rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-lg']) [part='base'] { font-size: clamp(2rem, 4vw, 3rem); font-weight: var(--lt-text-weight, 200); line-height: 1.15; letter-spacing: -0.01em; } /* ── Headings ─────────────────────────────────────────────────────────── */ :host([variant='h1']) [part='base'] { font-size: clamp(1.75rem, 2.5vw + 0.75rem, 2.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: -0.02em; } :host([variant='h2']) [part='base'] { font-size: clamp(1.5rem, 2vw + 0.5rem, 2rem); font-weight: var(--lt-text-weight, 600); line-height: 1.25; letter-spacing: -0.01em; } :host([variant='h3']) [part='base'] { font-size: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.3; } :host([variant='h4']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 600); line-height: 1.35; } :host([variant='h5']) [part='base'] { font-size: 1.125rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } :host([variant='h6']) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } /* ── Body ─────────────────────────────────────────────────────────────── */ :host([variant='lead']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body']) [part='base'], :host(:not([variant])) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body-sm']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } /* ── Inline ───────────────────────────────────────────────────────────── */ :host([variant='caption']) [part='base'] { font-size: 0.75rem; font-weight: var(--lt-text-weight, 400); line-height: 1.5; } :host([variant='overline']) [part='base'] { font-size: 0.6875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: 0.08em; text-transform: uppercase; } :host([variant='label']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "textStyles",
-          "declaration": {
-            "name": "textStyles",
-            "module": "src/components/text/text.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/text/text.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Renders text with a predefined typographic style. Display and heading variants\n(display-2xl → h3) use fluid `clamp()` font sizes that scale between a mobile\nminimum and a desktop maximum. The rendered HTML tag matches the variant by\ndefault but can be overridden with the `as` attribute.\n\nOverride font-weight on any variant with `--lt-text-weight`:\n```css\nlt-text { --lt-text-weight: 700; }\n```",
-          "name": "Text",
-          "cssProperties": [
-            {
-              "description": "Overrides the default font-weight for the variant.",
-              "name": "--lt-text-weight"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "textStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "TextVariant"
-              },
-              "default": "'body'",
-              "description": "Typographic style to apply."
-            },
-            {
-              "kind": "field",
-              "name": "as",
-              "type": {
-                "text": "TextTag | ''"
-              },
-              "default": "''",
-              "description": "HTML tag to render. Defaults to the semantic tag for the chosen variant."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-text",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Text",
-          "declaration": {
-            "name": "Text",
-            "module": "src/components/text/text.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Tooltip",
-          "declaration": {
-            "name": "Tooltip",
-            "module": "./tooltip"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TooltipPlacement",
-          "declaration": {
-            "name": "TooltipPlacement",
-            "module": "./tooltip.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/tooltip.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "tooltipStyles",
-          "default": "css` :host { display: inline-block; position: relative; --_offset: 8px; } .tooltip { background: var(--_tooltip-bg, var(--lt-bg-inverse)); border-radius: 4px; color: var(--_tooltip-color, var(--lt-text-inverse)); opacity: 0; padding: var(--lt-spacing-1) var(--lt-spacing-2); pointer-events: none; position: absolute; transition: opacity 150ms ease, visibility 150ms ease; visibility: hidden; white-space: nowrap; z-index: 1000; } .arrow { border: 5px solid transparent; height: 0; position: absolute; width: 0; } :host(:hover) .tooltip, :host(:focus-within) .tooltip { opacity: 1; visibility: visible; } :host([disabled]) .tooltip, :host(:not([content])) .tooltip, :host([content='']) .tooltip { display: none; } /* ── Top (default) ──────────────────────────── */ :host(:not([placement])) .tooltip, :host([placement='top']) .tooltip { bottom: calc(100% + var(--_offset)); left: 50%; transform: translateX(-50%); } :host(:not([placement])) .arrow, :host([placement='top']) .arrow { border-top-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); left: 50%; top: 100%; transform: translateX(-50%); } /* ── Bottom ─────────────────────────────────── */ :host([placement='bottom']) .tooltip { left: 50%; top: calc(100% + var(--_offset)); transform: translateX(-50%); } :host([placement='bottom']) .arrow { border-bottom-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); bottom: 100%; left: 50%; transform: translateX(-50%); } /* ── Left ───────────────────────────────────── */ :host([placement='left']) .tooltip { right: calc(100% + var(--_offset)); top: 50%; transform: translateY(-50%); } :host([placement='left']) .arrow { border-left-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); left: 100%; top: 50%; transform: translateY(-50%); } /* ── Right ──────────────────────────────────── */ :host([placement='right']) .tooltip { left: calc(100% + var(--_offset)); top: 50%; transform: translateY(-50%); } :host([placement='right']) .arrow { border-right-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); right: 100%; top: 50%; transform: translateY(-50%); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "tooltipStyles",
-          "declaration": {
-            "name": "tooltipStyles",
-            "module": "src/components/tooltip/tooltip.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/tooltip.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Floating label that appears on hover or focus of its trigger element.",
-          "name": "Tooltip",
-          "slots": [
-            {
-              "description": "The trigger element the tooltip is anchored to.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "tooltipStyles"
-            },
-            {
-              "kind": "field",
-              "name": "_tooltipId",
-              "privacy": "private",
-              "default": "`lt-tooltip-${++_tooltipIdCounter}`"
-            },
-            {
-              "kind": "field",
-              "name": "_slot",
-              "type": {
-                "text": "HTMLSlotElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Tooltip label text."
-            },
-            {
-              "kind": "field",
-              "name": "placement",
-              "type": {
-                "text": "TooltipPlacement"
-              },
-              "default": "'top'",
-              "description": "Placement of the tooltip relative to the trigger: top, bottom, left, or right."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Prevent the tooltip from showing."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50)."
-            },
-            {
-              "kind": "method",
-              "name": "_resolve",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "firstUpdated",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-tooltip",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Tooltip",
-          "declaration": {
-            "name": "Tooltip",
-            "module": "src/components/tooltip/tooltip.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/textfield/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Textfield",
-          "declaration": {
-            "name": "Textfield",
-            "module": "./textfield"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "HelperText",
-          "declaration": {
-            "name": "HelperText",
-            "module": "./textfield.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TextfieldSize",
-          "declaration": {
-            "name": "TextfieldSize",
-            "module": "./textfield.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TextfieldType",
-          "declaration": {
-            "name": "TextfieldType",
-            "module": "./textfield.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TextfieldVariant",
-          "declaration": {
-            "name": "TextfieldVariant",
-            "module": "./textfield.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/textfield/textfield.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "textfieldStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); width: 100%; } label { color: var(--lt-color-neutral-700); } .input-container { position: relative; width: 100%; display: flex; align-items: center; gap: var(--lt-spacing-2); } .icon-start, .icon-end { color: var(--lt-color-neutral-500); flex-shrink: 0; position: absolute; pointer-events: none; } .icon-start { left: var(--lt-spacing-3); } .icon-end { right: var(--lt-spacing-3); } .password-toggle { pointer-events: auto; cursor: pointer; transition: color 120ms ease; } .password-toggle:hover { color: var(--lt-color-neutral-700); } .variant-icon { pointer-events: none; } :host([variant='success']) .variant-icon { color: var(--lt-interactive-success-bg); } :host([variant='warning']) .variant-icon { color: var(--lt-interactive-warning-bg); } :host([variant='error']) .variant-icon, :host([data-invalid]) .variant-icon { color: var(--lt-interactive-error-bg); } input, textarea { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-color-neutral-300); box-sizing: border-box; color: var(--lt-text-default); font-family: inherit; font-weight: 400; transition: border-color 120ms ease, box-shadow 120ms ease; width: 100%; } textarea { min-height: 80px; padding-block: var(--lt-spacing-3); resize: vertical; } input::placeholder, textarea::placeholder { color: var(--lt-text-muted); } input:hover:not(:disabled), textarea:hover:not(:disabled) { border-color: var(--lt-border-strong); } input:focus, textarea:focus { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); outline: none; } input:disabled, textarea:disabled { background: var(--lt-bg-surface); color: var(--lt-color-neutral-500); cursor: not-allowed; } /* sizes */ :host([size='sm']) input, :host([size='sm']) textarea { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='sm']) input.has-start-icon, :host([size='sm']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='sm']) input.has-end-icon, :host([size='sm']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='md']) input, :host([size='md']) textarea { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='md']) input.has-start-icon, :host([size='md']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='md']) input.has-end-icon, :host([size='md']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='lg']) input, :host([size='lg']) textarea { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } :host([size='lg']) input.has-start-icon, :host([size='lg']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) input.has-end-icon, :host([size='lg']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) .icon-start, :host([size='lg']) .icon-end { width: 24px; height: 24px; } /* variants */ :host([variant='success']) input, :host([variant='success']) textarea { border-color: var(--lt-border-success-strong); } :host([variant='success']) input:focus, :host([variant='success']) textarea:focus { border-color: var(--lt-interactive-success-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input, :host([variant='warning']) textarea { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) input:focus, :host([variant='warning']) textarea:focus { border-color: var(--lt-interactive-warning-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input, :host([variant='error']) textarea, :host([data-invalid]) input, :host([data-invalid]) textarea { border-color: var(--lt-border-error-strong); } :host([variant='error']) input:focus, :host([variant='error']) textarea:focus, :host([data-invalid]) input:focus, :host([data-invalid]) textarea:focus { border-color: var(--lt-interactive-error-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); } .helper-text::part(base) { font-weight: 200; } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .helper-text, :host([data-invalid]) .helper-text { color: var(--lt-text-error); } .required-indicator { color: var(--lt-color-error-500); } :host([uppercase]) label lt-text::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "textfieldStyles",
-          "declaration": {
-            "name": "textfieldStyles",
-            "module": "src/components/textfield/textfield.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/textfield/textfield.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A customizable text input component with support for multiple variants, sizes, and input types.\nSupports both single-line inputs and multi-line textareas.",
-          "name": "Textfield",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "textfieldStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "TextfieldVariant"
-              },
-              "default": "'default'",
-              "description": "Visual variant that determines styling and automatic end icon."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "TextfieldSize"
-              },
-              "default": "'md'",
-              "description": "Size of the textfield (affects height, font size, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "TextfieldType"
-              },
-              "default": "'text'",
-              "description": "HTML input type. Password type includes automatic visibility toggle."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Current value of the input."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Placeholder text shown when input is empty."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text displayed above the input."
-            },
-            {
-              "kind": "field",
-              "name": "helperText",
-              "type": {
-                "text": "HelperText"
-              },
-              "default": "''",
-              "description": "Helper text displayed below the input. Can be a static string or a function\nthat receives the current error state and returns the string to display.\nColor changes based on variant or auto-error state."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the input is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the input is required. Shows asterisk in label when true."
-            },
-            {
-              "kind": "field",
-              "name": "readonly",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the input is readonly."
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon name to display at the start of the input."
-            },
-            {
-              "kind": "field",
-              "name": "rows",
-              "type": {
-                "text": "number"
-              },
-              "default": "3",
-              "description": "Number of visible text lines for multiline type (textarea).\nOnly applies when type=\"multiline\"."
-            },
-            {
-              "kind": "field",
-              "name": "min",
-              "type": {
-                "text": "number | null"
-              },
-              "default": "null",
-              "description": "For type=\"number\": minimum allowed value.\nFor all other types: minimum character length."
-            },
-            {
-              "kind": "field",
-              "name": "max",
-              "type": {
-                "text": "number | null"
-              },
-              "default": "null",
-              "description": "For type=\"number\": maximum allowed value.\nFor all other types: maximum character length."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the label in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "isPasswordVisible",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_touched",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_autoError",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_onBlur",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_validate",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Handles input events from the native input or textarea element.\nUpdates the component's value property and dispatches a custom input event.",
-              "parameters": [
-                {
-                  "description": "The native input event",
-                  "name": "e"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleInput",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  },
-                  "description": "The native change event"
-                }
-              ],
-              "description": "Handles change events from the native input or textarea element.\nUpdates the component's value property and dispatches a custom change event."
-            },
-            {
-              "kind": "method",
-              "name": "togglePasswordVisibility",
-              "privacy": "private",
-              "description": "Toggles password visibility for password-type inputs.\nSwitches between showing plain text and masked password."
-            },
-            {
-              "kind": "method",
-              "name": "getEndIconName",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": ""
-                }
-              },
-              "description": "Determines the appropriate end icon based on input type and variant.\n\nPassword inputs show eye/eye-off toggle icon.\nNon-default variants show their respective state icons.\nDefault variant shows no end icon."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changed",
-                  "type": {
-                    "text": "PropertyValues"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "input",
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Dispatched when the input value changes"
-            },
-            {
-              "name": "change",
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Dispatched when the input loses focus after a value change"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-textfield",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Textfield",
-          "declaration": {
-            "name": "Textfield",
-            "module": "src/components/textfield/textfield.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/table/index.ts",
       "declarations": [],
       "exports": [
@@ -7519,6 +6885,640 @@
           "declaration": {
             "name": "Table",
             "module": "src/components/table/table.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Text",
+          "declaration": {
+            "name": "Text",
+            "module": "./text"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/text.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "textStyles",
+          "default": "css` :host { display: block; color: inherit; } /* Inline variants sit in text flow */ :host([variant='caption']), :host([variant='overline']), :host([variant='label']) { display: inline; } [part='base'] { margin: 0; color: inherit; font-family: var(--lt-typography-fontfamily); } /* ── Display ─────────────────────────────────────────────────────────── */ :host([variant='display-2xl']) [part='base'] { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-xl']) [part='base'] { font-size: clamp(2rem, 5vw, 3.75rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-lg']) [part='base'] { font-size: clamp(2rem, 4vw, 3rem); font-weight: var(--lt-text-weight, 200); line-height: 1.15; letter-spacing: -0.01em; } /* ── Headings ─────────────────────────────────────────────────────────── */ :host([variant='h1']) [part='base'] { font-size: clamp(1.75rem, 2.5vw + 0.75rem, 2.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: -0.02em; } :host([variant='h2']) [part='base'] { font-size: clamp(1.5rem, 2vw + 0.5rem, 2rem); font-weight: var(--lt-text-weight, 600); line-height: 1.25; letter-spacing: -0.01em; } :host([variant='h3']) [part='base'] { font-size: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.3; } :host([variant='h4']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 600); line-height: 1.35; } :host([variant='h5']) [part='base'] { font-size: 1.125rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } :host([variant='h6']) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } /* ── Body ─────────────────────────────────────────────────────────────── */ :host([variant='lead']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body']) [part='base'], :host(:not([variant])) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body-sm']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } /* ── Inline ───────────────────────────────────────────────────────────── */ :host([variant='caption']) [part='base'] { font-size: 0.75rem; font-weight: var(--lt-text-weight, 400); line-height: 1.5; } :host([variant='overline']) [part='base'] { font-size: 0.6875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: 0.08em; text-transform: uppercase; } :host([variant='label']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "textStyles",
+          "declaration": {
+            "name": "textStyles",
+            "module": "src/components/text/text.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/text.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Renders text with a predefined typographic style. Display and heading variants\n(display-2xl → h3) use fluid `clamp()` font sizes that scale between a mobile\nminimum and a desktop maximum. The rendered HTML tag matches the variant by\ndefault but can be overridden with the `as` attribute.\n\nOverride font-weight on any variant with `--lt-text-weight`:\n```css\nlt-text { --lt-text-weight: 700; }\n```",
+          "name": "Text",
+          "cssProperties": [
+            {
+              "description": "Overrides the default font-weight for the variant.",
+              "name": "--lt-text-weight"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "textStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "TextVariant"
+              },
+              "default": "'body'",
+              "description": "Typographic style to apply."
+            },
+            {
+              "kind": "field",
+              "name": "as",
+              "type": {
+                "text": "TextTag | ''"
+              },
+              "default": "''",
+              "description": "HTML tag to render. Defaults to the semantic tag for the chosen variant."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-text",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Text",
+          "declaration": {
+            "name": "Text",
+            "module": "src/components/text/text.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/textfield/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Textfield",
+          "declaration": {
+            "name": "Textfield",
+            "module": "./textfield"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "HelperText",
+          "declaration": {
+            "name": "HelperText",
+            "module": "./textfield.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TextfieldSize",
+          "declaration": {
+            "name": "TextfieldSize",
+            "module": "./textfield.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TextfieldType",
+          "declaration": {
+            "name": "TextfieldType",
+            "module": "./textfield.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TextfieldVariant",
+          "declaration": {
+            "name": "TextfieldVariant",
+            "module": "./textfield.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/textfield/textfield.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "textfieldStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); width: 100%; } label { color: var(--lt-color-neutral-700); } .input-container { position: relative; width: 100%; display: flex; align-items: center; gap: var(--lt-spacing-2); } .icon-start, .icon-end { color: var(--lt-color-neutral-500); flex-shrink: 0; position: absolute; pointer-events: none; } .icon-start { left: var(--lt-spacing-3); } .icon-end { right: var(--lt-spacing-3); } .password-toggle { pointer-events: auto; cursor: pointer; transition: color 120ms ease; } .password-toggle:hover { color: var(--lt-color-neutral-700); } .variant-icon { pointer-events: none; } :host([variant='success']) .variant-icon { color: var(--lt-interactive-success-bg); } :host([variant='warning']) .variant-icon { color: var(--lt-interactive-warning-bg); } :host([variant='error']) .variant-icon, :host([data-invalid]) .variant-icon { color: var(--lt-interactive-error-bg); } input, textarea { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-color-neutral-300); box-sizing: border-box; color: var(--lt-text-default); font-family: inherit; font-weight: 400; transition: border-color 120ms ease, box-shadow 120ms ease; width: 100%; } textarea { min-height: 80px; padding-block: var(--lt-spacing-3); resize: vertical; } input::placeholder, textarea::placeholder { color: var(--lt-text-muted); } input:hover:not(:disabled), textarea:hover:not(:disabled) { border-color: var(--lt-border-strong); } input:focus, textarea:focus { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); outline: none; } input:disabled, textarea:disabled { background: var(--lt-bg-surface); color: var(--lt-color-neutral-500); cursor: not-allowed; } /* sizes */ :host([size='sm']) input, :host([size='sm']) textarea { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='sm']) input.has-start-icon, :host([size='sm']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='sm']) input.has-end-icon, :host([size='sm']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='md']) input, :host([size='md']) textarea { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='md']) input.has-start-icon, :host([size='md']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='md']) input.has-end-icon, :host([size='md']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='lg']) input, :host([size='lg']) textarea { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } :host([size='lg']) input.has-start-icon, :host([size='lg']) textarea.has-start-icon { padding-left: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) input.has-end-icon, :host([size='lg']) textarea.has-end-icon { padding-right: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) .icon-start, :host([size='lg']) .icon-end { width: 24px; height: 24px; } /* variants */ :host([variant='success']) input, :host([variant='success']) textarea { border-color: var(--lt-border-success-strong); } :host([variant='success']) input:focus, :host([variant='success']) textarea:focus { border-color: var(--lt-interactive-success-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input, :host([variant='warning']) textarea { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) input:focus, :host([variant='warning']) textarea:focus { border-color: var(--lt-interactive-warning-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input, :host([variant='error']) textarea, :host([data-invalid]) input, :host([data-invalid]) textarea { border-color: var(--lt-border-error-strong); } :host([variant='error']) input:focus, :host([variant='error']) textarea:focus, :host([data-invalid]) input:focus, :host([data-invalid]) textarea:focus { border-color: var(--lt-interactive-error-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); } .helper-text::part(base) { font-weight: 200; } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .helper-text, :host([data-invalid]) .helper-text { color: var(--lt-text-error); } .required-indicator { color: var(--lt-color-error-500); } :host([uppercase]) label lt-text::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "textfieldStyles",
+          "declaration": {
+            "name": "textfieldStyles",
+            "module": "src/components/textfield/textfield.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/textfield/textfield.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A customizable text input component with support for multiple variants, sizes, and input types.\nSupports both single-line inputs and multi-line textareas.",
+          "name": "Textfield",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "textfieldStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "TextfieldVariant"
+              },
+              "default": "'default'",
+              "description": "Visual variant that determines styling and automatic end icon."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "TextfieldSize"
+              },
+              "default": "'md'",
+              "description": "Size of the textfield (affects height, font size, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "TextfieldType"
+              },
+              "default": "'text'",
+              "description": "HTML input type. Password type includes automatic visibility toggle."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Current value of the input."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Placeholder text shown when input is empty."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text displayed above the input."
+            },
+            {
+              "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "HelperText"
+              },
+              "default": "''",
+              "description": "Helper text displayed below the input. Can be a static string or a function\nthat receives the current error state and returns the string to display.\nColor changes based on variant or auto-error state."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is required. Shows asterisk in label when true."
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the input is readonly."
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name to display at the start of the input."
+            },
+            {
+              "kind": "field",
+              "name": "rows",
+              "type": {
+                "text": "number"
+              },
+              "default": "3",
+              "description": "Number of visible text lines for multiline type (textarea).\nOnly applies when type=\"multiline\"."
+            },
+            {
+              "kind": "field",
+              "name": "min",
+              "type": {
+                "text": "number | null"
+              },
+              "default": "null",
+              "description": "For type=\"number\": minimum allowed value.\nFor all other types: minimum character length."
+            },
+            {
+              "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "number | null"
+              },
+              "default": "null",
+              "description": "For type=\"number\": maximum allowed value.\nFor all other types: maximum character length."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the label in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "isPasswordVisible",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_touched",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_autoError",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_onBlur",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_validate",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Handles input events from the native input or textarea element.\nUpdates the component's value property and dispatches a custom input event.",
+              "parameters": [
+                {
+                  "description": "The native input event",
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleInput",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  },
+                  "description": "The native change event"
+                }
+              ],
+              "description": "Handles change events from the native input or textarea element.\nUpdates the component's value property and dispatches a custom change event."
+            },
+            {
+              "kind": "method",
+              "name": "togglePasswordVisibility",
+              "privacy": "private",
+              "description": "Toggles password visibility for password-type inputs.\nSwitches between showing plain text and masked password."
+            },
+            {
+              "kind": "method",
+              "name": "getEndIconName",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": ""
+                }
+              },
+              "description": "Determines the appropriate end icon based on input type and variant.\n\nPassword inputs show eye/eye-off toggle icon.\nNon-default variants show their respective state icons.\nDefault variant shows no end icon."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "input",
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Dispatched when the input value changes"
+            },
+            {
+              "name": "change",
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Dispatched when the input loses focus after a value change"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-textfield",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Textfield",
+          "declaration": {
+            "name": "Textfield",
+            "module": "src/components/textfield/textfield.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tooltip/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Tooltip",
+          "declaration": {
+            "name": "Tooltip",
+            "module": "./tooltip"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TooltipPlacement",
+          "declaration": {
+            "name": "TooltipPlacement",
+            "module": "./tooltip.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tooltip/tooltip.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "tooltipStyles",
+          "default": "css` :host { display: inline-block; position: relative; --_offset: 8px; } .tooltip { background: var(--_tooltip-bg, var(--lt-bg-inverse)); border-radius: 4px; color: var(--_tooltip-color, var(--lt-text-inverse)); opacity: 0; padding: var(--lt-spacing-1) var(--lt-spacing-2); pointer-events: none; position: absolute; transition: opacity 150ms ease, visibility 150ms ease; visibility: hidden; white-space: nowrap; z-index: 1000; } .arrow { border: 5px solid transparent; height: 0; position: absolute; width: 0; } :host(:hover) .tooltip, :host(:focus-within) .tooltip { opacity: 1; visibility: visible; } :host([disabled]) .tooltip, :host(:not([content])) .tooltip, :host([content='']) .tooltip { display: none; } /* ── Top (default) ──────────────────────────── */ :host(:not([placement])) .tooltip, :host([placement='top']) .tooltip { bottom: calc(100% + var(--_offset)); left: 50%; transform: translateX(-50%); } :host(:not([placement])) .arrow, :host([placement='top']) .arrow { border-top-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); left: 50%; top: 100%; transform: translateX(-50%); } /* ── Bottom ─────────────────────────────────── */ :host([placement='bottom']) .tooltip { left: 50%; top: calc(100% + var(--_offset)); transform: translateX(-50%); } :host([placement='bottom']) .arrow { border-bottom-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); bottom: 100%; left: 50%; transform: translateX(-50%); } /* ── Left ───────────────────────────────────── */ :host([placement='left']) .tooltip { right: calc(100% + var(--_offset)); top: 50%; transform: translateY(-50%); } :host([placement='left']) .arrow { border-left-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); left: 100%; top: 50%; transform: translateY(-50%); } /* ── Right ──────────────────────────────────── */ :host([placement='right']) .tooltip { left: calc(100% + var(--_offset)); top: 50%; transform: translateY(-50%); } :host([placement='right']) .arrow { border-right-color: var(--_tooltip-bg, var(--lt-color-neutral-900)); right: 100%; top: 50%; transform: translateY(-50%); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "tooltipStyles",
+          "declaration": {
+            "name": "tooltipStyles",
+            "module": "src/components/tooltip/tooltip.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tooltip/tooltip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Floating label that appears on hover or focus of its trigger element.",
+          "name": "Tooltip",
+          "slots": [
+            {
+              "description": "The trigger element the tooltip is anchored to.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "tooltipStyles"
+            },
+            {
+              "kind": "field",
+              "name": "_tooltipId",
+              "privacy": "private",
+              "default": "`lt-tooltip-${++_tooltipIdCounter}`"
+            },
+            {
+              "kind": "field",
+              "name": "_slot",
+              "type": {
+                "text": "HTMLSlotElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Tooltip label text."
+            },
+            {
+              "kind": "field",
+              "name": "placement",
+              "type": {
+                "text": "TooltipPlacement"
+              },
+              "default": "'top'",
+              "description": "Placement of the tooltip relative to the trigger: top, bottom, left, or right."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Prevent the tooltip from showing."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50)."
+            },
+            {
+              "kind": "method",
+              "name": "_resolve",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-tooltip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Tooltip",
+          "declaration": {
+            "name": "Tooltip",
+            "module": "src/components/tooltip/tooltip.ts"
           }
         }
       ]
