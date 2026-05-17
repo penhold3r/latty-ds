@@ -1,14 +1,8 @@
 # @latty/icons
 
-Icon system for the Latty Design System with Iconoir as the default icon library.
+Icon system for the Latty Design System. Ships a curated set of pre-registered icons from [Iconoir](https://iconoir.com) and a pluggable provider registry for adding your own.
 
-## Features
-
-- 🎨 **Customizable** - Register custom icons or override defaults
-- 📦 **Framework-agnostic** - Works with any framework via Web Components
-- 🎯 **Token-based** - Consistent with design system patterns
-- 🚀 **Lazy-loadable** - Only bundle what you use
-- 🎭 **Iconoir default** - 30+ common icons pre-registered
+See the [icon gallery](https://penhold3r.github.io/latty-ds/) in the docs for the full list of available icons.
 
 ## Installation
 
@@ -16,153 +10,94 @@ Icon system for the Latty Design System with Iconoir as the default icon library
 pnpm add @latty/icons
 ```
 
-## Basic Usage
-
-### Using the Icon Component
+## Basic usage
 
 ```html
-<lt-icon name="check" size="md"></lt-icon>
+<lt-icon name="check"></lt-icon>
 <lt-icon name="arrow-right" size="lg"></lt-icon>
 <lt-icon name="search" size="sm"></lt-icon>
 ```
 
-### Sizes
-
-- `xs` - 12px
-- `sm` - 16px
-- `md` - 20px (default)
-- `lg` - 24px
-- `xl` - 32px
-
-### Colors
-
-Icons inherit `currentColor`, so you can style them with CSS:
+Icons inherit `currentColor`, so color them with CSS:
 
 ```html
 <lt-icon name="check" style="color: var(--lt-color-success-500)"></lt-icon>
-<lt-icon name="warning-triangle" style="color: var(--lt-color-warning-500)"></lt-icon>
 ```
 
-## Pre-registered Icons
+### Sizes
 
-The following icons are available by default:
+`xs` (12px) · `sm` (16px) · `md` (20px, default) · `lg` (24px) · `xl` (32px)
 
-**Navigation:**
-
-- `arrow-left`, `arrow-right`, `arrow-up`, `arrow-down`
-- `nav-arrow-left`, `nav-arrow-right`
-
-**Actions:**
-
-- `check`, `xmark`, `plus`, `minus`
-- `edit`, `trash`, `save`
-- `download`, `upload`
-
-**UI Elements:**
-
-- `search`, `menu`, `settings`, `home`, `user`, `bell`
-
-**Status:**
-
-- `info-circle`, `warning-triangle`, `check-circle`, `xmark-circle`
-
-**Media:**
-
-- `eye`, `eye-off`, `heart`, `star`
-
-## Custom Icons
-
-### Register a Single Icon
+## Registering custom icons
 
 ```typescript
 import { iconRegistry } from '@latty/icons';
 
+// Single icon
 iconRegistry.registerIcon('my-icon', '<svg>...</svg>');
-```
 
-### Register Multiple Icons
-
-```typescript
-import { iconRegistry } from '@latty/icons';
-
+// Multiple at once
 iconRegistry.registerIcons({
-  'custom-1': '<svg>...</svg>',
-  'custom-2': '<svg>...</svg>'
+  'icon-a': '<svg>...</svg>',
+  'icon-b': '<svg>...</svg>'
 });
 ```
 
-### Override Default Icons
-
-Custom icons take precedence over provider icons:
+Custom icons take priority over provider icons, so you can override any default:
 
 ```typescript
-// Override the default 'check' icon
-iconRegistry.registerIcon('check', '<svg><!-- Your custom check --></svg>');
+iconRegistry.registerIcon('check', '<svg><!-- your custom check --></svg>');
 ```
 
-## Creating Custom Providers
-
-You can create your own icon provider:
+## Custom providers
 
 ```typescript
 import { iconRegistry } from '@latty/icons';
 import type { IconProvider } from '@latty/icons';
 
-class CustomProvider implements IconProvider {
-  name = 'custom';
-  private icons = new Map<string, string>();
+class MyProvider implements IconProvider {
+  name = 'my-provider';
+  private icons = new Map([['icon-1', '<svg>...</svg>']]);
 
-  constructor() {
-    // Load your icons
-    this.icons.set('icon-1', '<svg>...</svg>');
-  }
-
-  getIcon(name: string): string | undefined {
+  getIcon(name: string) {
     return this.icons.get(name);
   }
 
-  getAllIcons(): Map<string, string> {
+  getAllIcons() {
     return new Map(this.icons);
   }
 }
 
-const customProvider = new CustomProvider();
-iconRegistry.registerProvider(customProvider, true); // true = default
+iconRegistry.registerProvider(new MyProvider());
 ```
 
-## Using with Components
+## Using icons inside components
 
-Icons integrate seamlessly with button and textfield components:
+Components that accept icons use `icon` / `icon-end` / `icon-start` props:
 
 ```html
-<!-- Button with icon -->
-<lt-button icon="check">Save</lt-button>
+<lt-button icon="save">Save</lt-button>
 <lt-button icon-end="arrow-right">Next</lt-button>
-<lt-button icon="arrow-left" icon-end="arrow-right">Both</lt-button>
-
-<!-- Textfield with icons -->
-<lt-textfield icon-start="search" placeholder="Search..."></lt-textfield>
-<lt-textfield icon-start="user" placeholder="Email" type="email"></lt-textfield>
-<lt-textfield icon-end="eye" placeholder="Password" type="password"></lt-textfield>
+<lt-textfield icon-start="search" placeholder="Search…"></lt-textfield>
 ```
 
-## API Reference
+## API reference
 
-### iconRegistry
+### `iconRegistry`
 
-**Methods:**
+| Method                                   | Description                             |
+| ---------------------------------------- | --------------------------------------- |
+| `registerProvider(provider, isDefault?)` | Register an icon provider               |
+| `registerIcon(name, svg)`                | Register a single icon                  |
+| `registerIcons(icons)`                   | Register multiple icons                 |
+| `getIcon(name)`                          | Get an icon SVG string by name          |
+| `hasIcon(name)`                          | Check if an icon is registered          |
+| `getAvailableIcons()`                    | Get all registered icon names           |
+| `setDefaultProvider(name)`               | Change the active default provider      |
+| `clearCustomIcons()`                     | Remove all manually registered icons    |
+| `reset()`                                | Reset the registry to its initial state |
 
-- `registerProvider(provider, isDefault?)` - Register an icon provider
-- `registerIcon(name, svg)` - Register a single icon
-- `registerIcons(icons)` - Register multiple icons
-- `getIcon(name)` - Get an icon SVG by name
-- `hasIcon(name)` - Check if an icon exists
-- `getAvailableIcons()` - Get all available icon names
-- `setDefaultProvider(name)` - Change the default provider
-- `clearCustomIcons()` - Remove all custom icons
-- `reset()` - Reset the entire registry
-
-### IconProvider Interface
+### `IconProvider` interface
 
 ```typescript
 interface IconProvider {

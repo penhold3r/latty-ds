@@ -50,6 +50,7 @@ pnpm --filter @latty/docs build     # Build documentation site
 pnpm test                   # Run all tests with Vitest
 pnpm test:watch             # Run tests in watch mode
 pnpm test:ui                # Open Vitest UI
+pnpm vitest run <filepath>  # Run a single test file
 ```
 
 ### Linting
@@ -152,7 +153,7 @@ This is a pnpm workspace monorepo with the following packages:
 - **@latty/tokens** - Design tokens system that generates CSS variables, JSON, and JavaScript exports from `tokens.config.json`
 - **@latty/web** - Web Components built with Lit (uses `lt-` prefix for custom elements)
 - **@latty/icons** - Icon components using Iconoir library with pluggable provider system
-- **@latty/docs** - Astro-based documentation site with MDX support and live component demos
+- **@latty/docs** - Astro-based documentation site with MDX support and live component demos (lives at `docs/` in repo root, not `packages/`)
 - **@latty/react** - React wrappers for web components (auto-generated from `custom-elements.json`)
 - **@latty/utils** - Shared utilities
 
@@ -196,7 +197,7 @@ All custom elements use the `lt-` prefix (e.g., `lt-button`, `lt-spinner`). Comp
 
 **Custom Elements Manifest**: `pnpm build` in `@latty/web` runs `cem analyze` (via `cem.config.mjs`) to generate `custom-elements.json` at the package root. This manifest is what `pnpm codegen:wrappers` reads to produce React wrappers — always rebuild the web package before running codegen after changing component APIs.
 
-**Font assets**: `pnpm build` in `@latty/web` also copies Nobile font files to `dist/fonts/` and `src/css/` to `dist/css/`. The package exports `dist/css/font-face.css` and `dist/css/latty.css` for consumers who want to load fonts and base styles without a bundler.
+**Font assets**: `pnpm build` in `@latty/web` also copies Hanken Grotesk font files (`HankenGrotesk-Variable.woff2`, `HankenGrotesk-VariableItalic.woff2`) to `dist/fonts/` and `src/css/` to `dist/css/`. The package exports `dist/css/font-face.css` and `dist/css/latty.css` for consumers who want to load fonts and base styles without a bundler.
 
 **Reuse existing components**: before writing custom CSS for a new component, check whether an existing component can provide the same structure. For example, `lt-surface` provides background, elevation (shadow), and border-radius — new components that need a styled container should use it rather than hand-rolling those styles. Import the dependency with a side-effect import (e.g. `import '../surface/surface'`) and use `::part(surface)` to style layout internals from the consumer's shadow DOM.
 
@@ -307,8 +308,6 @@ The docs page must `import '@latty/web'` inside a `<script>` tag to register the
 **The docs site is a showcase of the design system.** Every docs page must use Latty components wherever possible — headings, body copy, buttons, badges, tables, alerts, links. Reach for `lt-text`, `lt-button`, `lt-badge`, `lt-alert`, `lt-link`, etc. before writing plain HTML or inline styles. Native HTML elements are only acceptable when no Latty component covers the use case. This rule applies to layout pages, overview pages, recipe pages, and getting-started guides — not just component demo pages.
 
 ## Naming Conventions
-
-Per `ARCHITECTURE.md`:
 
 - **npm scope**: `@latty/*`
 - **Custom element prefix**: `lt-`

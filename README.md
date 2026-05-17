@@ -6,13 +6,15 @@
 
 Framework-agnostic design system built on design tokens and Web Components. One token change cascades through every component in every framework — no re-theming, no duplication.
 
+**Docs:** https://penhold3r.github.io/latty-ds/
+
 ## Highlights
 
 - **Token-first** — a single `tokens.config.json` drives CSS variables, JSON, and JS exports; full OKLCH colour palettes generated automatically.
 - **Any framework** — components ship as standard Web Components (`lt-*`); React wrappers are auto-generated from the same manifest.
-- **Themeable at runtime or build time** — call `configure()` in the browser to swap palettes on the fly, or use `createStyleSheet()` in your build step to inject tokens with zero flash of unstyled content.
+- **Themeable at runtime or build time** — call `configure()` in the browser to swap palettes on the fly, or use `createStyleSheet()` at build time to inject tokens with zero flash of unstyled content.
 - **Accessible by default** — every component is tested with axe-core and validated with markuplint.
-- **Monorepo, batteries included** — tokens, web components, icons, React wrappers, utilities, and a live documentation site all live here.
+- **Monorepo, batteries included** — tokens, web components, icons, React wrappers, utilities, and a live documentation site all in one repo.
 
 ## Packages
 
@@ -85,13 +87,13 @@ configure({
 });
 ```
 
-For **zero flash of unstyled content** at build time (Astro, Next.js, etc.), use the Node.js-safe `createStyleSheet()` instead and inject the result into your `<head>` before any components render:
+For **zero flash of unstyled content** at build time (Astro, Next.js, etc.), use `createStyleSheet()` and inject the result into your `<head>` before any components render:
 
 ```ts
 import { createStyleSheet } from '@latty/tokens/configure';
 
 const css = createStyleSheet({ colors: { primary: '#7c3aed' } });
-// → inject as <style> in <head>
+// inject as <style> in <head>
 ```
 
 ## Development
@@ -100,11 +102,11 @@ const css = createStyleSheet({ colors: { primary: '#7c3aed' } });
 
 ```bash
 pnpm install          # install all workspace dependencies
-pnpm dev              # build tokens, then start the docs site at localhost:4321
+pnpm dev              # build tokens + manifest, then start docs at localhost:4321
 pnpm test             # run the full test suite (Vitest)
 pnpm build            # build all packages
 pnpm typecheck        # TypeScript type-check across the monorepo
-pnpm lint             # ESLint
+pnpm lint             # ESLint (packages only — run pnpm eslint docs/src for docs)
 ```
 
 Additional tools:
@@ -113,7 +115,7 @@ Additional tools:
 pnpm codegen:wrappers # regenerate React wrappers after changing web components
 pnpm bundle-size      # print per-component gzip sizes vs baseline
 pnpm lint:markup      # markuplint accessibility checks on the docs site
-pnpm a11y             # pa11y-ci full-page accessibility audit
+pnpm a11y             # pa11y-ci full-page accessibility audit (requires live server)
 ```
 
 ## Architecture

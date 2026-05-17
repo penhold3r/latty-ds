@@ -1,6 +1,6 @@
 # @latty/web
 
-Web Components for the Latty design system — 30+ framework-agnostic UI components built with Lit and driven by design tokens.
+Web Components for the Latty Design System — framework-agnostic UI components built with Lit and driven by design tokens.
 
 ## Installation
 
@@ -31,37 +31,7 @@ import '@latty/web/dist/components/textfield';
 
 ## Components
 
-| Component          | Tag                                    | Description                        |
-| ------------------ | -------------------------------------- | ---------------------------------- |
-| Accordion          | `lt-accordion`                         | Collapsible content sections       |
-| Alert              | `lt-alert`                             | Status messages with variants      |
-| Avatar             | `lt-avatar`                            | User avatar with image or initials |
-| Badge              | `lt-badge`                             | Small status indicator             |
-| Breadcrumb         | `lt-breadcrumb` / `lt-breadcrumb-item` | Navigation trail                   |
-| Button             | `lt-button`                            | Action button                      |
-| Checkbox           | `lt-checkbox`                          | Boolean input                      |
-| Chip               | `lt-chip`                              | Compact tag or filter              |
-| Dialog             | `lt-dialog`                            | Modal overlay                      |
-| Divider            | `lt-divider`                           | Visual separator                   |
-| Dropdown           | `lt-dropdown`                          | Floating action menu               |
-| Header             | `lt-header`                            | Page header bar                    |
-| Link               | `lt-link`                              | Styled anchor                      |
-| List               | `lt-list`                              | Vertical list layout               |
-| Nav                | `lt-nav`                               | Navigation container               |
-| Progress           | `lt-progress`                          | Progress bar                       |
-| Radio / RadioGroup | `lt-radio` / `lt-radio-group`          | Single-select inputs               |
-| Select             | `lt-select`                            | Dropdown select                    |
-| Skeleton           | `lt-skeleton`                          | Loading placeholder                |
-| Slider             | `lt-slider`                            | Range input                        |
-| Snackbar           | `lt-snackbar`                          | Toast notifications                |
-| Spinner            | `lt-spinner`                           | Loading indicator                  |
-| Surface            | `lt-surface`                           | Styled container                   |
-| Switch             | `lt-switch`                            | Toggle input                       |
-| Tab / TabGroup     | `lt-tab` / `lt-tab-group`              | Tabbed navigation                  |
-| Table              | `lt-table`                             | Data table                         |
-| Text               | `lt-text`                              | Typographic element                |
-| Textfield          | `lt-textfield`                         | Text input                         |
-| Tooltip            | `lt-tooltip`                           | Hover tooltip                      |
+Buttons, inputs, overlays, navigation, data display, and more — all prefixed `lt-*`. See the [full component reference](https://penhold3r.github.io/latty-ds/) for props, events, and live examples.
 
 ## Usage
 

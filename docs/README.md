@@ -1,43 +1,50 @@
-# Astro Starter Kit: Minimal
+# @latty/docs
 
-```sh
-pnpm create astro@latest -- --template minimal
+Astro-based documentation site for the Latty Design System. Provides a live component playground, full API reference, token explorer, and getting-started guides.
+
+**Live site:** https://penhold3r.github.io/latty-ds/
+
+## Development
+
+Run from the repo root (requires `pnpm install` first):
+
+```bash
+pnpm docs:dev      # Start the Astro dev server at localhost:4321
+pnpm docs:build    # Build for production
+pnpm docs:preview  # Preview the production build locally
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The dev server hot-reloads `.astro` pages and component logic automatically. If you add or rename a component prop, restart with `pnpm dev` (not `pnpm docs:dev`) to trigger manifest and token rebuilds first.
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Structure
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+  pages/
+    index.mdx                 # Homepage
+    getting-started/          # Installation and setup guides
+    tokens/                   # Design token reference
+    components/               # One directory per component
+    frameworks/               # Framework-specific guides
+  layouts/
+    BaseLayout/               # Page shell (sidebar + topbar)
+  components/
+    ComponentPlayground/      # Interactive prop editor with event log and URL sharing
+    ApiTable/                 # Component API reference table (reads manifest.json)
+    CodeSnippet/              # Syntax-highlighted code blocks
+    Sidebar/                  # Collapsible navigation
+  plugins/
+    rehype-prefix-links.mjs   # Prefixes local hrefs/srcs with BASE_PATH
+    rehype-lt-text.mjs        # Replaces <p> elements with <lt-text> in MDX
+  styles/
+    global.css                # Base styles and token imports
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Rehype plugins
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- **`rehype-prefix-links`** — rewrites relative `href` and `src` attributes with `BASE_PATH` so links resolve correctly when deployed to a GitHub Pages subpath (`/latty-ds`).
+- **`rehype-lt-text`** — swaps plain `<p>` tags for `<lt-text>` in MDX output so all body copy uses the design system typography component.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Deployment
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The site deploys automatically to GitHub Pages on every push to `main` via `.github/workflows/deploy-docs.yml`. The workflow sets `SITE_URL=https://penhold3r.github.io` and `BASE_PATH=/latty-ds`. No manual step needed.

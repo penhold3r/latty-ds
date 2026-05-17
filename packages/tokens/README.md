@@ -126,7 +126,7 @@ console.log(tokens.elevation['2']); // "0 4px 6px -1px rgb(…)"
 | `--lt-spacing-px-[n]`                   | `--lt-spacing-px-4` → `16px`   | Spacing scale (px)                |
 | `--lt-border-radius`                    | `0.5rem`                       | Global border radius              |
 | `--lt-elevation-[n]`                    | `--lt-elevation-2`             | Box shadows, n = 0–5              |
-| `--lt-typography-fontFamily`            | `"Asap", sans-serif`           | Base font family                  |
+| `--lt-typography-fontFamily`            | `"Hanken Grotesk", sans-serif` | Base font family                  |
 
 Color names: `primary`, `secondary`, `success`, `warning`, `error`, `info` (each with a `-muted` variant).
 
