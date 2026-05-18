@@ -57,6 +57,11 @@ lt-header::part(inner) {
   align-items: center;
   padding: 5rem var(--lt-spacing-8, 2rem);
 
+  /* light-on-dark overrides — gradient is always dark regardless of theme */
+  --lt-text-primary: var(--lt-color-primary-200);
+  --lt-border-primary-strong: var(--lt-color-primary-300);
+  --lt-bg-primary-subtle: rgba(255, 255, 255, 0.08);
+
   &::before {
     content: '';
     position: absolute;
