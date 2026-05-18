@@ -3,12 +3,30 @@ import AxeBuilder from '@axe-core/playwright';
 
 const routes = [
   '/',
+
+  '/getting-started/introduction/',
+  '/getting-started/installation/',
+  '/getting-started/usage/',
+  '/getting-started/theming/',
+
+  '/components/introduction/',
+
+  '/icons/introduction/',
+
+  '/tokens/introduction/',
+  '/tokens/colors/',
+  '/tokens/spacing/',
+  '/tokens/semantic-tokens/',
+
+  '/recipes/introduction/',
   '/recipes/login-form/',
   '/recipes/profile-card/',
   '/recipes/content-card/',
   '/recipes/hero-banner/',
   '/recipes/stats-widget/',
   '/recipes/empty-state/',
+
+  '/examples/introduction/',
   '/examples/coffee-shop/',
   '/examples/pulse-analytics/',
   '/examples/forma-studio/'

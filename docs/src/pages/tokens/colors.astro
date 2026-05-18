@@ -6,10 +6,6 @@ const color = (tokens as any).color;
 
 const semanticPalettes = ['primary', 'secondary', 'success', 'warning', 'error', 'info', 'neutral'];
 const shades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
-
-function textColor(shade: string) {
-  return Number(shade) >= 500 ? '#fff' : '#1b1b1b';
-}
 ---
 
 <BaseLayout title="Colors" description="Color tokens in the Latty Design System">
@@ -32,7 +28,7 @@ function textColor(shade: string) {
           return (
             <div class="swatch-wrap">
               <div class="swatch" style={`background: ${hex};`}></div>
-              <span class="swatch-shade" style={`color: ${textColor(shade) === '#fff' ? 'var(--lt-color-neutral-600)' : 'var(--lt-color-neutral-600)'}`}>{shade}</span>
+              <span class="swatch-shade">{shade}</span>
               <span class="swatch-hex">{hex}</span>
             </div>
           );
@@ -71,7 +67,7 @@ function textColor(shade: string) {
     display: block;
     margin-bottom: var(--lt-spacing-3);
     padding-bottom: var(--lt-spacing-2);
-    border-bottom: 1px solid var(--lt-color-neutral-200);
+    border-bottom: 1px solid var(--lt-border-default);
   }
 
   .sub-label {
@@ -79,7 +75,7 @@ function textColor(shade: string) {
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--lt-color-neutral-400);
+    color: var(--lt-text-subtle);
     margin-bottom: var(--lt-spacing-2);
   }
 
@@ -108,7 +104,7 @@ function textColor(shade: string) {
   .swatch-shade {
     font-size: 0.65rem;
     font-weight: 600;
-    color: var(--lt-color-neutral-500);
+    color: var(--lt-text-subtle);
     text-align: center;
     white-space: nowrap;
   }
@@ -116,7 +112,7 @@ function textColor(shade: string) {
   .swatch-hex {
     font-size: 0.6rem;
     font-family: monospace;
-    color: var(--lt-color-neutral-400);
+    color: var(--lt-text-subtle);
     text-align: center;
     white-space: nowrap;
     overflow: hidden;

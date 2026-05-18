@@ -108,6 +108,10 @@ a:hover {
   text-decoration: underline;
 }
 
+.prose a {
+  text-decoration: underline;
+}
+
 .page-layout {
   max-width: 1400px;
   margin: 0 auto;
@@ -191,6 +195,10 @@ pre.astro-code {
   margin-bottom: var(--lt-spacing-4);
   overflow-x: auto;
   padding: var(--lt-spacing-4) !important;
+}
+
+pre.astro-code span[style*='#6A737D'] {
+  color: #9ba7b5 !important;
 }
 
 pre.astro-code code {

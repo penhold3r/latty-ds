@@ -54,7 +54,7 @@ const rows = steps.map((step) => ({
 
 <style>
   #spacing-table {
-    border: 1px solid var(--lt-color-neutral-200);
+    border: 1px solid var(--lt-border-default);
     border-radius: 8px;
     font-size: 0.8125rem;
     margin: var(--lt-spacing-6) 0;
@@ -87,7 +87,7 @@ const rows = steps.map((step) => ({
         align: 'right',
         render(v: unknown) {
           const span = document.createElement('span');
-          span.style.cssText = 'font-weight: 600; color: var(--lt-color-neutral-500);';
+          span.style.cssText = 'font-weight: 600; color: var(--lt-text-subtle);';
           span.textContent = String(v);
           return span;
         }
@@ -98,7 +98,7 @@ const rows = steps.map((step) => ({
         width: '196px',
         render(v: unknown) {
           const code = document.createElement('code');
-          code.style.cssText = 'color: var(--lt-color-primary-700); font-size: 0.8rem; white-space: nowrap;';
+          code.style.cssText = 'color: var(--lt-text-primary); font-size: 0.8rem; white-space: nowrap;';
           code.textContent = String(v);
           return code;
         }
@@ -110,7 +110,7 @@ const rows = steps.map((step) => ({
         hideOnMobile: true,
         render(v: unknown) {
           const span = document.createElement('span');
-          span.style.cssText = 'font-family: monospace; color: var(--lt-color-neutral-700);';
+          span.style.cssText = 'font-family: monospace; color: var(--lt-text-neutral);';
           span.textContent = String(v);
           return span;
         }
@@ -122,7 +122,7 @@ const rows = steps.map((step) => ({
         hideOnMobile: true,
         render(v: unknown) {
           const span = document.createElement('span');
-          span.style.cssText = 'font-family: monospace; color: var(--lt-color-neutral-500);';
+          span.style.cssText = 'font-family: monospace; color: var(--lt-text-subtle);';
           span.textContent = String(v);
           return span;
         }
@@ -134,7 +134,7 @@ const rows = steps.map((step) => ({
           const wrap = document.createElement('div');
           wrap.style.cssText = 'display: flex; align-items: center;';
           const bar = document.createElement('div');
-          bar.style.cssText = `height: 8px; background: var(--lt-color-primary-400); border-radius: 2px; min-width: 2px; width: ${Math.max(Number(v), 2)}px;`;
+          bar.style.cssText = `height: 8px; background: var(--lt-bg-primary); border-radius: 2px; min-width: 2px; width: ${Math.max(Number(v), 2)}px;`;
           wrap.appendChild(bar);
           return wrap;
         }

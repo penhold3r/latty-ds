@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout/index.astro';
-import CodeSnippet from '../../components/CodeSnippet/index.astro';
-import FrameworkTabs from '../../components/FrameworkTabs/index.astro';
-import { iconGroups, sizes } from './_icons.data.ts';
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import CodeSnippet from '../../../components/CodeSnippet/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import { iconGroups, sizes } from '../_icons.data.ts';
 
 const totalIcons = iconGroups.reduce((sum, g) => sum + g.icons.length, 0);
 ---
@@ -128,9 +128,9 @@ iconRegistry.registerIcons({
 </BaseLayout>
 
 <script>
-  import './_icons.script.ts';
+  import '../_icons.script.ts';
 </script>
 
 <style>
-  @import './icons.styles.css';
+  @import '../icons.styles.css';
 </style>

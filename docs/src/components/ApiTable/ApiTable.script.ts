@@ -14,9 +14,9 @@ const codeEl =
 
 document.querySelectorAll<any>('lt-table.api-table').forEach((el) => {
   el.columns = [
-    { key: 'name', label: 'Property', render: codeEl('var(--lt-color-primary-700)', true) },
-    { key: 'type', label: 'Type', render: codeEl('var(--lt-color-secondary-700)') },
-    { key: 'default', label: 'Default', render: codeEl('var(--lt-color-neutral-600)', true) },
+    { key: 'name', label: 'Property', render: codeEl('var(--lt-text-primary)', true) },
+    { key: 'type', label: 'Type', render: codeEl('var(--lt-text-secondary)') },
+    { key: 'default', label: 'Default', render: codeEl('var(--lt-text-subtle)', true) },
     { key: 'description', label: 'Description' }
   ];
 });

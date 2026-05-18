@@ -16,9 +16,9 @@ const codeEl =
 const iconApiTable = document.getElementById('icon-api-table') as any;
 if (iconApiTable) {
   iconApiTable.columns = [
-    { key: 'name', label: 'Property', render: codeEl('var(--lt-color-primary-700)', true) },
-    { key: 'type', label: 'Type', render: codeEl('var(--lt-color-secondary-700)') },
-    { key: 'default', label: 'Default', render: codeEl('var(--lt-color-neutral-600)', true) },
+    { key: 'name', label: 'Property', render: codeEl('var(--lt-text-primary)', true) },
+    { key: 'type', label: 'Type', render: codeEl('var(--lt-text-secondary)') },
+    { key: 'default', label: 'Default', render: codeEl('var(--lt-text-subtle)', true) },
     { key: 'description', label: 'Description' }
   ];
   iconApiTable.data = [
