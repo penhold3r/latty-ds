@@ -59,8 +59,8 @@ export class Nav extends ThemeableElement {
     });
   }
 
-  protected updated() {
-    this._propagateOrientation();
+  protected updated(changedProperties: Map<string, unknown>) {
+    if (changedProperties.has('orientation')) this._propagateOrientation();
   }
 
   render() {

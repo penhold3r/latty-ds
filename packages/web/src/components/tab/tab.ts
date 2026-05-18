@@ -80,8 +80,12 @@ export class Tab extends ThemeableElement {
 
   protected updated(changedProperties: Map<string, unknown>) {
     super.updated(changedProperties);
-    this.setAttribute('aria-selected', String(this.active));
-    this.setAttribute('aria-disabled', String(this.disabled));
+    if (changedProperties.has('active')) {
+      this.setAttribute('aria-selected', String(this.active));
+    }
+    if (changedProperties.has('disabled')) {
+      this.setAttribute('aria-disabled', String(this.disabled));
+    }
   }
 
   private _handleHostClick = () => {

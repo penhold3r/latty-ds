@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 
@@ -167,7 +167,7 @@ export class RadioGroup extends ThemeableElement {
 
   render() {
     return html`
-      <div class="radio-group" role="radiogroup" aria-label=${this.label}>
+      <div class="radio-group" role="radiogroup" aria-label=${this.label || nothing}>
         ${this.label
           ? html`
               <div class="label">
