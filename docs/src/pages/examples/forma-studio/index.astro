@@ -1,0 +1,399 @@
+---
+import { createStyleSheet } from '@latty/tokens/configure';
+const tokenCss = createStyleSheet({
+  theme: 'system',
+  colors: { primary: '#0891b2', secondary: '#06b6d4' },
+  font: { family: "'Space Grotesk', system-ui, sans-serif" },
+  border: { radius: '0.25rem' }
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forma Studio — Digital Design Agency</title>
+    <style id="lt-tokens" set:html={tokenCss}></style>
+    <script is:inline>
+      const saved = new URLSearchParams(location.search).get('theme') || localStorage.getItem('lt-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <lt-header background="surface">
+      <a slot="logo" href="#" class="brand">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="4" width="18" height="3" rx="0.5" fill="currentColor"></rect>
+          <rect x="3" y="10.5" width="11" height="3" rx="0.5" fill="currentColor"></rect>
+          <rect x="3" y="17" width="6" height="3" rx="0.5" fill="currentColor"></rect>
+        </svg>
+        <span>Forma</span>
+      </a>
+      <lt-nav slot="content" orientation="horizontal" label="Main navigation">
+        <lt-nav-item href="#work" label="Work"></lt-nav-item>
+        <lt-nav-item href="#about" label="About"></lt-nav-item>
+        <lt-nav-item href="#contact" label="Contact"></lt-nav-item>
+      </lt-nav>
+      <div slot="after" class="header-actions">
+        <lt-switch id="theme-switch" label="Light mode" label-position="left" size="sm"></lt-switch>
+        <lt-button variant="primary" size="sm">Start a project</lt-button>
+      </div>
+    </lt-header>
+
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-inner">
+        <lt-text
+          variant="overline"
+          tag="p"
+          style="color:var(--lt-text-primary);letter-spacing:0.2em;display:block;margin-bottom:var(--lt-spacing-4);"
+          >Digital design studio</lt-text
+        >
+        <lt-text
+          variant="display-2xl"
+          tag="h1"
+          id="hero-heading"
+          style="display:block;line-height:1.05;margin-bottom:var(--lt-spacing-6);"
+          >We design<br /><em style="color:var(--lt-text-primary);font-style:italic;">digital products</em><br />that
+          move people.</lt-text
+        >
+        <lt-text
+          variant="lead"
+          tag="p"
+          style="display:block;color:var(--lt-text-subtle);max-width:520px;margin-bottom:var(--lt-spacing-8);"
+          >Brand identity, web design, and motion for ambitious companies that want to lead their category.</lt-text
+        >
+        <div class="hero-ctas">
+          <lt-button variant="primary" size="lg">View our work</lt-button>
+          <lt-button variant="neutral" appearance="outlined" size="lg">Get in touch</lt-button>
+        </div>
+      </div>
+      <div class="hero-decoration" aria-hidden="true">
+        <svg viewBox="0 0 480 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="240" cy="240" r="220" stroke="var(--lt-color-primary-800)" stroke-width="1"></circle>
+          <circle cx="240" cy="240" r="160" stroke="var(--lt-color-primary-700)" stroke-width="1"></circle>
+          <circle cx="240" cy="240" r="100" stroke="var(--lt-color-primary-600)" stroke-width="1.5"></circle>
+          <circle cx="240" cy="240" r="40" stroke="var(--lt-color-primary-500)" stroke-width="2"></circle>
+          <circle cx="240" cy="240" r="8" fill="var(--lt-color-primary-400)"></circle>
+          <line x1="20" y1="240" x2="460" y2="240" stroke="var(--lt-color-primary-800)" stroke-width="1"></line>
+          <line x1="240" y1="20" x2="240" y2="460" stroke="var(--lt-color-primary-800)" stroke-width="1"></line>
+          <line x1="84" y1="84" x2="396" y2="396" stroke="var(--lt-color-primary-800)" stroke-width="1"></line>
+          <line x1="396" y1="84" x2="84" y2="396" stroke="var(--lt-color-primary-800)" stroke-width="1"></line>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Work -->
+    <section class="work-section" id="work" aria-labelledby="work-heading">
+      <div class="section-header">
+        <lt-text
+          variant="overline"
+          tag="p"
+          style="color:var(--lt-text-primary);letter-spacing:0.2em;display:block;margin-bottom:var(--lt-spacing-3);"
+          >Selected work</lt-text
+        >
+        <lt-text variant="h2" tag="h2" id="work-heading" style="display:block;margin-bottom:var(--lt-spacing-2);"
+          >Projects that define us.</lt-text
+        >
+        <lt-text variant="body" tag="p" style="display:block;color:var(--lt-text-subtle);"
+          >A curated selection of recent client work across brand, product, and digital.</lt-text
+        >
+      </div>
+      <div class="work-grid">
+        <lt-surface appearance="outlined" elevation="0" class="project-card">
+          <div class="project-image project-image--cyan" aria-hidden="true">
+            <span class="project-number">01</span>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <lt-chip size="sm" appearance="outlined">Brand</lt-chip>
+              <lt-chip size="sm" appearance="outlined">Strategy</lt-chip>
+            </div>
+            <lt-text variant="h4" tag="h3" style="display:block;margin-bottom:var(--lt-spacing-2);"
+              >Zenith Brand Identity</lt-text
+            >
+            <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+              >Full rebrand for a B2B fintech company entering the enterprise market.</lt-text
+            >
+          </div>
+        </lt-surface>
+
+        <lt-surface appearance="outlined" elevation="0" class="project-card">
+          <div class="project-image project-image--indigo" aria-hidden="true">
+            <span class="project-number">02</span>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <lt-chip size="sm" appearance="outlined">Product</lt-chip>
+              <lt-chip size="sm" appearance="outlined">UX</lt-chip>
+            </div>
+            <lt-text variant="h4" tag="h3" style="display:block;margin-bottom:var(--lt-spacing-2);"
+              >Nova App Design</lt-text
+            >
+            <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+              >End-to-end product design for a scheduling app serving 120k daily users.</lt-text
+            >
+          </div>
+        </lt-surface>
+
+        <lt-surface appearance="outlined" elevation="0" class="project-card">
+          <div class="project-image project-image--teal" aria-hidden="true">
+            <span class="project-number">03</span>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <lt-chip size="sm" appearance="outlined">Web</lt-chip>
+              <lt-chip size="sm" appearance="outlined">Motion</lt-chip>
+            </div>
+            <lt-text variant="h4" tag="h3" style="display:block;margin-bottom:var(--lt-spacing-2);"
+              >Pulse Commerce</lt-text
+            >
+            <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+              >E-commerce redesign with animated transitions and zero-latency checkout.</lt-text
+            >
+          </div>
+        </lt-surface>
+
+        <lt-surface appearance="outlined" elevation="0" class="project-card">
+          <div class="project-image project-image--rose" aria-hidden="true">
+            <span class="project-number">04</span>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <lt-chip size="sm" appearance="outlined">Brand</lt-chip>
+              <lt-chip size="sm" appearance="outlined">Print</lt-chip>
+            </div>
+            <lt-text variant="h4" tag="h3" style="display:block;margin-bottom:var(--lt-spacing-2);"
+              >Drift Editorial</lt-text
+            >
+            <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+              >Visual identity and print system for an independent culture magazine.</lt-text
+            >
+          </div>
+        </lt-surface>
+
+        <lt-surface appearance="outlined" elevation="0" class="project-card">
+          <div class="project-image project-image--violet" aria-hidden="true">
+            <span class="project-number">05</span>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <lt-chip size="sm" appearance="outlined">Product</lt-chip>
+              <lt-chip size="sm" appearance="outlined">Dev</lt-chip>
+            </div>
+            <lt-text variant="h4" tag="h3" style="display:block;margin-bottom:var(--lt-spacing-2);"
+              >Arc SaaS Platform</lt-text
+            >
+            <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+              >Design system and front-end build for a workflow automation platform.</lt-text
+            >
+          </div>
+        </lt-surface>
+
+        <lt-surface appearance="outlined" elevation="0" class="project-card">
+          <div class="project-image project-image--amber" aria-hidden="true">
+            <span class="project-number">06</span>
+          </div>
+          <div class="project-body">
+            <div class="project-tags">
+              <lt-chip size="sm" appearance="outlined">Web</lt-chip>
+              <lt-chip size="sm" appearance="outlined">Brand</lt-chip>
+            </div>
+            <lt-text variant="h4" tag="h3" style="display:block;margin-bottom:var(--lt-spacing-2);"
+              >Lens Photography</lt-text
+            >
+            <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+              >Portfolio site and brand guidelines for an award-winning commercial photographer.</lt-text
+            >
+          </div>
+        </lt-surface>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="about-section" id="about" aria-labelledby="about-heading">
+      <lt-divider></lt-divider>
+      <div class="about-inner">
+        <div class="about-quote">
+          <lt-text
+            variant="overline"
+            tag="p"
+            style="color:var(--lt-text-primary);letter-spacing:0.2em;display:block;margin-bottom:var(--lt-spacing-4);"
+            >Our philosophy</lt-text
+          >
+          <blockquote>
+            <lt-text
+              variant="display-lg"
+              tag="p"
+              id="about-heading"
+              style="display:block;line-height:1.2;margin-bottom:var(--lt-spacing-6);"
+              >"Great design isn't decoration — it's the argument."</lt-text
+            >
+          </blockquote>
+          <lt-text
+            variant="body"
+            tag="p"
+            style="display:block;color:var(--lt-text-subtle);max-width:480px;line-height:1.75;margin-bottom:var(--lt-spacing-8);"
+          >
+            We believe design at its best is persuasion. Every colour, every curve, every second of interaction time is
+            either building trust or eroding it. We're obsessive about getting it right.
+          </lt-text>
+          <lt-button variant="primary" appearance="outlined">Read our story</lt-button>
+        </div>
+        <div class="about-team">
+          <lt-text
+            variant="label"
+            tag="p"
+            style="display:block;color:var(--lt-text-subtle);margin-bottom:var(--lt-spacing-6);letter-spacing:0.1em;text-transform:uppercase;"
+            >The team</lt-text
+          >
+          <div class="team-list">
+            <div class="team-member">
+              <lt-avatar name="Maya Osei" size="lg" color="primary"></lt-avatar>
+              <div>
+                <lt-text variant="label" tag="p" style="display:block;">Maya Osei</lt-text>
+                <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+                  >Creative Director</lt-text
+                >
+              </div>
+            </div>
+            <div class="team-member">
+              <lt-avatar name="Jonas Reiter" size="lg" color="secondary"></lt-avatar>
+              <div>
+                <lt-text variant="label" tag="p" style="display:block;">Jonas Reiter</lt-text>
+                <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+                  >Head of Product Design</lt-text
+                >
+              </div>
+            </div>
+            <div class="team-member">
+              <lt-avatar name="Priya Nair" size="lg" color="primary"></lt-avatar>
+              <div>
+                <lt-text variant="label" tag="p" style="display:block;">Priya Nair</lt-text>
+                <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+                  >Brand Strategist</lt-text
+                >
+              </div>
+            </div>
+            <div class="team-member">
+              <lt-avatar name="Luca Ferretti" size="lg" color="secondary"></lt-avatar>
+              <div>
+                <lt-text variant="label" tag="p" style="display:block;">Luca Ferretti</lt-text>
+                <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+                  >Motion Designer</lt-text
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <lt-divider></lt-divider>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact-section" id="contact" aria-labelledby="contact-heading">
+      <div class="contact-inner">
+        <div class="contact-copy">
+          <lt-text
+            variant="overline"
+            tag="p"
+            style="color:var(--lt-text-primary);letter-spacing:0.2em;display:block;margin-bottom:var(--lt-spacing-3);"
+            >Start a project</lt-text
+          >
+          <lt-text variant="h2" tag="h2" id="contact-heading" style="display:block;margin-bottom:var(--lt-spacing-4);"
+            >Let's make something great.</lt-text
+          >
+          <lt-text
+            variant="body"
+            tag="p"
+            style="display:block;color:var(--lt-text-subtle);line-height:1.75;margin-bottom:var(--lt-spacing-8);"
+          >
+            We take on a small number of projects each quarter. Tell us what you're working on and we'll get back to you
+            within two business days.
+          </lt-text>
+          <div class="contact-details">
+            <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+              >hello@forma.studio</lt-text
+            >
+            <lt-text variant="body-sm" tag="p" style="display:block;color:var(--lt-text-subtle);"
+              >+1 (415) 555 0182</lt-text
+            >
+          </div>
+        </div>
+        <lt-surface appearance="outlined" elevation="0">
+          <div class="contact-form-card">
+            <form class="contact-form" aria-label="Contact form">
+              <lt-textfield label="Your name" placeholder="Maya Osei" required></lt-textfield>
+              <lt-textfield label="Email address" type="email" placeholder="hello@example.com" required></lt-textfield>
+              <lt-textfield label="Company" placeholder="Acme Inc."></lt-textfield>
+              <lt-textfield
+                label="Tell us about your project"
+                placeholder="We're looking to rebrand our…"
+                helper-text="The more detail, the better."></lt-textfield>
+              <lt-button variant="primary" size="md" type="submit" style="align-self:flex-start;"
+                >Send message</lt-button
+              >
+            </form>
+          </div>
+        </lt-surface>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <lt-text variant="label" tag="span" style="color:var(--lt-text-default);font-weight:600;"
+            >Forma Studio</lt-text
+          >
+          <lt-text
+            variant="caption"
+            tag="p"
+            style="display:block;color:var(--lt-text-subtle);margin-top:var(--lt-spacing-1);"
+            >© 2026 Forma Studio. All rights reserved.</lt-text
+          >
+        </div>
+        <nav aria-label="Footer navigation" class="footer-nav">
+          <lt-link href="#work">Work</lt-link>
+          <lt-link href="#about">About</lt-link>
+          <lt-link href="#contact">Contact</lt-link>
+          <lt-link href="#">Privacy</lt-link>
+        </nav>
+        <div class="footer-social">
+          <lt-link href="#" external>Twitter</lt-link>
+          <lt-link href="#" external>Instagram</lt-link>
+          <lt-link href="#" external>LinkedIn</lt-link>
+          <lt-link href="#" external>Dribbble</lt-link>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<script>
+  import '@latty/web';
+
+  const toggle = document.getElementById('theme-switch') as HTMLElement & { checked: boolean };
+  const root = document.documentElement;
+
+  const currentTheme = root.getAttribute('data-theme') ?? 'dark';
+  toggle.checked = currentTheme === 'light';
+
+  toggle.addEventListener('change', (e) => {
+    const isLight = (e as CustomEvent<{ checked: boolean }>).detail.checked;
+    const next = isLight ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('lt-theme', next);
+  });
+</script>
+
+<style>
+  @import './forma-studio.styles.css';
+</style>

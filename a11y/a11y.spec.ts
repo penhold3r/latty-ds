@@ -10,7 +10,8 @@ const routes = [
   '/recipes/stats-widget/',
   '/recipes/empty-state/',
   '/examples/coffee-shop/',
-  '/examples/pulse-analytics/'
+  '/examples/pulse-analytics/',
+  '/examples/forma-studio/'
 ];
 
 for (const route of routes) {

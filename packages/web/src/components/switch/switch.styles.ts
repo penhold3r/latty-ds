@@ -29,7 +29,7 @@ export const switchStyles = css`
 
   input[type='checkbox'] {
     appearance: none;
-    background: var(--lt-color-neutral-300);
+    background: var(--lt-border-default);
     border-radius: 999px;
     cursor: pointer;
     flex-shrink: 0;
