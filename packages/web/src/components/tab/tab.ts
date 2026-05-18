@@ -64,13 +64,28 @@ export class Tab extends ThemeableElement {
    */
   @property({ reflect: true }) size: TabSize = 'md';
 
-  /**
-   * Handles tab click.
-   * @private
-   */
-  private handleClick() {
-    if (this.disabled) return;
+  connectedCallback() {
+    super.connectedCallback();
+    this.setAttribute('role', 'tab');
+    this.tabIndex = 0;
+    this.addEventListener('click', this._handleHostClick);
+    this.addEventListener('keydown', this._handleHostKeydown);
+  }
 
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('click', this._handleHostClick);
+    this.removeEventListener('keydown', this._handleHostKeydown);
+  }
+
+  protected updated(changedProperties: Map<string, unknown>) {
+    super.updated(changedProperties);
+    this.setAttribute('aria-selected', String(this.active));
+    this.setAttribute('aria-disabled', String(this.disabled));
+  }
+
+  private _handleHostClick = () => {
+    if (this.disabled) return;
     this.dispatchEvent(
       new CustomEvent('tab-click', {
         detail: { value: this.value },
@@ -78,14 +93,22 @@ export class Tab extends ThemeableElement {
         composed: true
       })
     );
-  }
+  };
+
+  private _handleHostKeydown = (e: KeyboardEvent) => {
+    if (this.disabled) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this._handleHostClick();
+    }
+  };
 
   render() {
     return html`
-      <button class="tab" role="tab" aria-selected=${this.active} ?disabled=${this.disabled} @click=${this.handleClick}>
+      <span class="tab">
         ${this.iconStart ? html`<lt-icon class="icon" name="${this.iconStart}"></lt-icon>` : ''}
         <span class="label"><slot>${this.label}</slot></span>
-      </button>
+      </span>
     `;
   }
 }

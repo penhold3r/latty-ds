@@ -7,7 +7,7 @@ const routes = [
   '/recipes/profile-card/',
   '/recipes/content-card/',
   '/recipes/hero-banner/',
-  '/recipes/stats-widgets/',
+  '/recipes/stats-widget/',
   '/recipes/empty-state/',
   '/examples/coffee-shop/',
   '/examples/pulse-analytics/'

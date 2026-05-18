@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
@@ -42,6 +42,12 @@ export class Nav extends ThemeableElement {
   static styles = navStyles;
 
   /**
+   * Accessible label for the navigation region. Required when multiple nav elements appear on one page.
+   * @default ''
+   */
+  @property() label = '';
+
+  /**
    * Layout direction of the navigation.
    * @default 'vertical'
    */
@@ -59,7 +65,7 @@ export class Nav extends ThemeableElement {
 
   render() {
     return html`
-      <nav role="navigation" aria-orientation=${this.orientation}>
+      <nav role="navigation" aria-label=${this.label || nothing}>
         <slot @slotchange=${this._propagateOrientation}></slot>
       </nav>
     `;

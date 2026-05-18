@@ -17,9 +17,10 @@ describe('<lt-tab>', () => {
     el.remove();
   });
 
-  it('renders a button in shadow DOM', () => {
-    const button = el.shadowRoot!.querySelector('button');
-    expect(button).toBeTruthy();
+  it('renders a span in shadow DOM (not a button — avoids nested-interactive)', () => {
+    const span = el.shadowRoot!.querySelector('span.tab');
+    expect(span).toBeTruthy();
+    expect(el.shadowRoot!.querySelector('button')).toBeNull();
   });
 
   it('has default size of md', () => {
@@ -40,18 +41,21 @@ describe('<lt-tab>', () => {
     expect(label?.textContent).toContain('Test tab');
   });
 
-  it('can be set to active', async () => {
-    el.active = true;
-    await el.updateComplete;
-    const button = el.shadowRoot!.querySelector('button');
-    expect(button?.getAttribute('aria-selected')).toBe('true');
+  it('has role="tab" on host element', () => {
+    expect(el.getAttribute('role')).toBe('tab');
   });
 
-  it('can be disabled', async () => {
+  it('sets aria-selected on host element', async () => {
+    expect(el.getAttribute('aria-selected')).toBe('false');
+    el.active = true;
+    await el.updateComplete;
+    expect(el.getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('reflects disabled attribute to host element', async () => {
     el.disabled = true;
     await el.updateComplete;
-    const button = el.shadowRoot!.querySelector('button');
-    expect(button?.hasAttribute('disabled')).toBe(true);
+    expect(el.hasAttribute('disabled')).toBe(true);
   });
 
   it.each(['sm', 'md', 'lg'] as const)('reflects %s size to attribute', async (size) => {
@@ -73,7 +77,7 @@ describe('<lt-tab>', () => {
     expect(icon).toBeFalsy();
   });
 
-  it('dispatches tab-click event when clicked', async () => {
+  it('dispatches tab-click event when host is clicked', async () => {
     let eventFired = false;
     let eventValue = '';
 
@@ -82,28 +86,23 @@ describe('<lt-tab>', () => {
       eventValue = e.detail.value;
     }) as EventListener);
 
-    const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
-    button.click();
-
+    el.click();
     await el.updateComplete;
 
     expect(eventFired).toBe(true);
     expect(eventValue).toBe('test');
   });
 
-  it('does not dispatch event when disabled', async () => {
+  it('does not dispatch event when disabled and clicked', async () => {
     el.disabled = true;
     await el.updateComplete;
 
     let eventFired = false;
-
     el.addEventListener('tab-click', () => {
       eventFired = true;
     });
 
-    const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
-    button.click();
-
+    el.click();
     await el.updateComplete;
 
     expect(eventFired).toBe(false);

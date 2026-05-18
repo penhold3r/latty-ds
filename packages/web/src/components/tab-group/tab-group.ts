@@ -191,8 +191,8 @@ export class TabGroup extends ThemeableElement {
 
   render() {
     return html`
-      <div class="tab-group" role="tablist">
-        <div class="tabs-container">
+      <div class="tab-group">
+        <div class="tabs-container" role="tablist">
           <slot @slotchange=${this.handleSlotChange}></slot>
         </div>
         <div class="panels-container" part="panels-container">

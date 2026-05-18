@@ -14,6 +14,11 @@ const tokenCss = createStyleSheet({
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Meridian — Analytics Dashboard</title>
     <style id="lt-tokens" set:html={tokenCss}></style>
+    <script is:inline>
+      const urlTheme = new URLSearchParams(location.search).get('theme');
+      const saved = urlTheme || localStorage.getItem('lt-theme');
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+    </script>
   </head>
   <body>
     <lt-header background="primary">
@@ -48,7 +53,7 @@ const tokenCss = createStyleSheet({
             <lt-text
               variant="body"
               tag="p"
-              style="display:block;color:var(--lt-color-neutral-600);margin-top:var(--lt-spacing-1);"
+              style="display:block;color:var(--lt-text-subtle);margin-top:var(--lt-spacing-1);"
             >
               Welcome back, Sara. Here's what's happening this month.
             </lt-text>
@@ -60,7 +65,7 @@ const tokenCss = createStyleSheet({
             <lt-text
               variant="overline"
               tag="p"
-              style="display:block;color:var(--lt-color-neutral-600);margin-bottom:var(--lt-spacing-2);"
+              style="display:block;color:var(--lt-text-subtle);margin-bottom:var(--lt-spacing-2);"
               >Total Revenue</lt-text
             >
             <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
@@ -73,8 +78,7 @@ const tokenCss = createStyleSheet({
             <lt-text
               variant="overline"
               tag="p"
-              style="display:block;color:var(--lt-color-neutral-600);margin-bottom:var(--lt-spacing-2);"
-              >Active Users</lt-text
+              style="display:block;color:var(--lt-text-subtle);margin-bottom:var(--lt-spacing-2);">Active Users</lt-text
             >
             <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
               >8,420</lt-text
@@ -86,7 +90,7 @@ const tokenCss = createStyleSheet({
             <lt-text
               variant="overline"
               tag="p"
-              style="display:block;color:var(--lt-color-neutral-600);margin-bottom:var(--lt-spacing-2);"
+              style="display:block;color:var(--lt-text-subtle);margin-bottom:var(--lt-spacing-2);"
               >Conversion Rate</lt-text
             >
             <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
@@ -99,8 +103,7 @@ const tokenCss = createStyleSheet({
             <lt-text
               variant="overline"
               tag="p"
-              style="display:block;color:var(--lt-color-neutral-600);margin-bottom:var(--lt-spacing-2);"
-              >Avg. Session</lt-text
+              style="display:block;color:var(--lt-text-subtle);margin-bottom:var(--lt-spacing-2);">Avg. Session</lt-text
             >
             <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
               >4m 12s</lt-text
@@ -116,7 +119,7 @@ const tokenCss = createStyleSheet({
               <lt-text
                 variant="body-sm"
                 tag="p"
-                style="display:block;color:var(--lt-color-neutral-600);margin-top:var(--lt-spacing-1);"
+                style="display:block;color:var(--lt-text-subtle);margin-top:var(--lt-spacing-1);"
               >
                 Showing data for <span id="range-label">Last 30 days</span>
               </lt-text>

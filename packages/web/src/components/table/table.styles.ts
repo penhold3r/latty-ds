@@ -25,7 +25,7 @@ export const tableStyles = css`
   /* Header */
   thead {
     background: var(--lt-bg-surface);
-    border-bottom: 2px solid var(--lt-color-neutral-300);
+    border-bottom: 2px solid var(--lt-border-default);
   }
 
   th {
@@ -107,7 +107,7 @@ export const tableStyles = css`
   }
 
   td {
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-default);
   }
 
   td[data-align='center'] {
@@ -179,7 +179,7 @@ export const tableStyles = css`
 
   /* Empty state */
   .empty-state {
-    color: var(--lt-color-neutral-500);
+    color: var(--lt-text-subtle);
     padding: var(--lt-spacing-8);
     text-align: center;
   }

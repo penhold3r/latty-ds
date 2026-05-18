@@ -13,6 +13,7 @@ table.columns = [
     render: (value: number) => {
       const el = document.createElement('lt-progress');
       el.setAttribute('value', String(value));
+      el.setAttribute('label', `Growth: ${value}%`);
       el.setAttribute('variant', value >= 50 ? 'success' : value >= 25 ? 'primary' : 'warning');
       el.setAttribute('size', 'sm');
       return el;

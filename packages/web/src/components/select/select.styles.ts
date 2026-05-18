@@ -15,7 +15,7 @@ export const selectStyles = css`
   }
 
   label {
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-default);
   }
 
   .required-indicator {
@@ -32,7 +32,7 @@ export const selectStyles = css`
     align-items: center;
     background: var(--lt-bg-subtle);
     border-radius: var(--lt-border-radius);
-    border: 1px solid var(--lt-color-neutral-300);
+    border: 1px solid var(--lt-border-default);
     box-sizing: border-box;
     cursor: pointer;
     display: flex;

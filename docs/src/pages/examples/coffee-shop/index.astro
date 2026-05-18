@@ -14,6 +14,11 @@ const tokenCss = createStyleSheet({
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ember — Specialty Coffee</title>
     <style id="lt-tokens" set:html={tokenCss}></style>
+    <script is:inline>
+      const urlTheme = new URLSearchParams(location.search).get('theme');
+      const saved = urlTheme || localStorage.getItem('lt-theme');
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -24,7 +29,7 @@ const tokenCss = createStyleSheet({
   <body>
     <lt-header
       background="primary"
-      style="--lt-bg-primary:var(--lt-color-primary-900);--lt-text-inverse:var(--lt-color-primary-100);"
+      style="--lt-bg-primary:var(--lt-color-neutral-900);--lt-text-inverse:var(--lt-color-primary-100);"
     >
       <a slot="logo" href="#" class="brand">
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
@@ -36,7 +41,7 @@ const tokenCss = createStyleSheet({
         </svg>
         <span>Ember</span>
       </a>
-      <lt-nav slot="content" orientation="horizontal">
+      <lt-nav slot="content" orientation="horizontal" label="Main navigation">
         <lt-nav-item href="#menu" label="Menu"></lt-nav-item>
         <lt-nav-item href="#story" label="Story"></lt-nav-item>
         <lt-nav-item href="#visit" label="Visit"></lt-nav-item>
@@ -81,16 +86,16 @@ const tokenCss = createStyleSheet({
           <lt-text
             variant="overline"
             tag="p"
-            style="color:var(--lt-color-primary-700);letter-spacing:0.15em;display:block;margin-bottom:0.75rem;"
+            style="color:var(--lt-text-primary);letter-spacing:0.15em;display:block;margin-bottom:0.75rem;"
             >What we serve</lt-text
           >
           <lt-text
             variant="h2"
             tag="h2"
             id="menu-heading"
-            style="color:var(--lt-color-primary-900);display:block;margin-bottom:1rem;">The menu</lt-text
+            style="color:var(--lt-text-default);display:block;margin-bottom:1rem;">The menu</lt-text
           >
-          <lt-text variant="lead" tag="p" style="color:var(--lt-color-neutral-700);display:block;"
+          <lt-text variant="lead" tag="p" style="color:var(--lt-text-default);display:block;"
             >Seasonal offerings crafted from single-origin beans.</lt-text
           >
         </div>
@@ -104,14 +109,13 @@ const tokenCss = createStyleSheet({
                 class="card-img"></lt-image>
               <div class="card-body">
                 <lt-badge content="Espresso"></lt-badge>
-                <lt-text variant="h5" tag="h3" style="color:var(--lt-color-primary-900);display:block;"
+                <lt-text variant="h5" tag="h3" style="color:var(--lt-text-default);display:block;"
                   >Signature Espresso</lt-text
                 >
-                <lt-text variant="body-sm" tag="p" style="color:var(--lt-color-neutral-700);display:block;flex:1;">
+                <lt-text variant="body-sm" tag="p" style="color:var(--lt-text-subtle);display:block;flex:1;">
                   A bright, syrupy shot with notes of dark cherry and bittersweet chocolate. Our most-ordered drink.
                 </lt-text>
-                <lt-text variant="label" tag="p" style="color:var(--lt-color-primary-700);display:block;">$4.50</lt-text
-                >
+                <lt-text variant="label" tag="p" style="color:var(--lt-text-primary);display:block;">$4.50</lt-text>
               </div>
             </lt-surface>
           </div>
@@ -124,14 +128,13 @@ const tokenCss = createStyleSheet({
                 class="card-img"></lt-image>
               <div class="card-body">
                 <lt-badge content="Cold Brew"></lt-badge>
-                <lt-text variant="h5" tag="h3" style="color:var(--lt-color-primary-900);display:block;"
+                <lt-text variant="h5" tag="h3" style="color:var(--lt-text-default);display:block;"
                   >Cold Brew Reserve</lt-text
                 >
-                <lt-text variant="body-sm" tag="p" style="color:var(--lt-color-neutral-700);display:block;flex:1;">
+                <lt-text variant="body-sm" tag="p" style="color:var(--lt-text-subtle);display:block;flex:1;">
                   Steeped for 20 hours. Smooth, low-acid, and intensely satisfying over ice.
                 </lt-text>
-                <lt-text variant="label" tag="p" style="color:var(--lt-color-primary-700);display:block;">$5.50</lt-text
-                >
+                <lt-text variant="label" tag="p" style="color:var(--lt-text-primary);display:block;">$5.50</lt-text>
               </div>
             </lt-surface>
           </div>
@@ -144,14 +147,13 @@ const tokenCss = createStyleSheet({
                 class="card-img"></lt-image>
               <div class="card-body">
                 <lt-badge content="Specialty"></lt-badge>
-                <lt-text variant="h5" tag="h3" style="color:var(--lt-color-primary-900);display:block;"
+                <lt-text variant="h5" tag="h3" style="color:var(--lt-text-default);display:block;"
                   >Cardamom Latte</lt-text
                 >
-                <lt-text variant="body-sm" tag="p" style="color:var(--lt-color-neutral-700);display:block;flex:1;">
+                <lt-text variant="body-sm" tag="p" style="color:var(--lt-text-subtle);display:block;flex:1;">
                   House-made cardamom syrup, steamed oat milk, and a ristretto. Warmly spiced.
                 </lt-text>
-                <lt-text variant="label" tag="p" style="color:var(--lt-color-primary-700);display:block;">$6.00</lt-text
-                >
+                <lt-text variant="label" tag="p" style="color:var(--lt-text-primary);display:block;">$6.00</lt-text>
               </div>
             </lt-surface>
           </div>
@@ -161,16 +163,14 @@ const tokenCss = createStyleSheet({
       <section class="story-section" id="story" aria-labelledby="story-heading">
         <div class="story-image"></div>
         <div class="story-content">
-          <lt-text
-            variant="overline"
-            tag="p"
-            style="color:var(--lt-color-primary-700);letter-spacing:0.15em;display:block;">Our story</lt-text
+          <lt-text variant="overline" tag="p" style="color:var(--lt-text-primary);letter-spacing:0.15em;display:block;"
+            >Our story</lt-text
           >
           <lt-divider></lt-divider>
-          <lt-text variant="h2" tag="h2" id="story-heading" style="color:var(--lt-color-primary-900);display:block;"
+          <lt-text variant="h2" tag="h2" id="story-heading" style="color:var(--lt-text-default);display:block;"
             >Born from a love of the perfect cup.</lt-text
           >
-          <lt-text variant="body" tag="p" style="color:var(--lt-color-neutral-700);display:block;line-height:1.75;">
+          <lt-text variant="body" tag="p" style="color:var(--lt-text-default);display:block;line-height:1.75;">
             Ember started in 2019 as a single roaster and a bag of green beans. What began as obsession became craft —
             and craft became community. We source directly from farms in Ethiopia, Colombia, and Guatemala, paying above
             fair-trade prices so farmers can grow better beans, not just more of them.
@@ -197,7 +197,7 @@ const tokenCss = createStyleSheet({
             type="email"
             size="lg"
             class="email-field"
-            style="--lt-color-neutral-700:var(--lt-color-primary-100);--lt-color-neutral-500:var(--lt-color-primary-300);"
+            style="--lt-text-subtle:var(--lt-color-primary-100);--lt-text-muted:var(--lt-color-primary-300);--lt-border-default:var(--lt-color-primary-600);--lt-bg-subtle:rgba(255,255,255,0.08);--lt-text-default:var(--lt-color-primary-50);"
           ></lt-textfield>
           <lt-button type="submit" variant="primary" size="lg" class="subscribe-btn" style="color:white;"
             >Subscribe</lt-button

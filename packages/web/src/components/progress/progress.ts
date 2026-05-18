@@ -41,6 +41,12 @@ export class Progress extends ThemeableElement {
   @property({ reflect: true }) size: ProgressSize = 'md';
 
   /**
+   * Accessible label for screen readers.
+   * @default ''
+   */
+  @property() label = '';
+
+  /**
    * When true the bar animates continuously without a set value.
    * @default false
    */
@@ -52,6 +58,7 @@ export class Progress extends ThemeableElement {
       <div
         part="track"
         role="progressbar"
+        aria-label=${this.label || nothing}
         aria-valuenow=${this.indeterminate ? nothing : pct}
         aria-valuemin="0"
         aria-valuemax="100"

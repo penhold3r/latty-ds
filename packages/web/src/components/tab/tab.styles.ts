@@ -27,11 +27,11 @@ export const tabStyles = css`
     white-space: nowrap;
   }
 
-  .tab:hover:not(:disabled) {
+  :host(:not([disabled])):hover .tab {
     color: var(--lt-text-default);
   }
 
-  .tab:focus-visible {
+  :host(:focus-visible) .tab {
     color: var(--lt-text-primary);
     outline: 2px solid var(--lt-border-focus);
     outline-offset: 2px;
@@ -42,7 +42,7 @@ export const tabStyles = css`
     color: var(--lt-text-primary);
   }
 
-  .tab:disabled {
+  :host([disabled]) .tab {
     color: var(--lt-color-neutral-300);
     cursor: not-allowed;
     opacity: 0.5;

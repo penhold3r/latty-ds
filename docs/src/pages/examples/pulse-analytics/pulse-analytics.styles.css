@@ -16,8 +16,8 @@ body {
   flex-direction: column;
   min-height: 100vh;
   font-family: var(--lt-font-family, 'Inter', system-ui, sans-serif);
-  background: var(--lt-color-neutral-100);
-  color: var(--lt-color-neutral-900);
+  background: var(--lt-bg-default);
+  color: var(--lt-text-default);
 }
 
 lt-header {
@@ -56,8 +56,8 @@ lt-header {
 .sidebar {
   width: 220px;
   flex-shrink: 0;
-  background: var(--lt-color-neutral-50);
-  border-right: 1px solid var(--lt-color-neutral-200);
+  background: var(--lt-bg-surface);
+  border-right: 1px solid var(--lt-border-default);
   overflow-y: auto;
   padding: var(--lt-spacing-4, 1rem) 0;
 
