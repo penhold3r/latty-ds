@@ -1,6 +1,7 @@
 ---
 import { createStyleSheet } from '@latty/tokens/configure';
 const tokenCss = createStyleSheet({
+  theme: 'light',
   colors: { primary: '#b45309' },
   font: { family: "'Playfair Display', Georgia, serif" },
   border: { radius: '0.75rem' }
@@ -14,11 +15,6 @@ const tokenCss = createStyleSheet({
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ember — Specialty Coffee</title>
     <style id="lt-tokens" set:html={tokenCss}></style>
-    <script is:inline>
-      const urlTheme = new URLSearchParams(location.search).get('theme');
-      const saved = urlTheme || localStorage.getItem('lt-theme');
-      if (saved) document.documentElement.setAttribute('data-theme', saved);
-    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

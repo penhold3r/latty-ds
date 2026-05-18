@@ -35,12 +35,13 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
   }
 
   const primitives = tokensToCss(tokens);
-  const theme = userConfig.theme ?? 'auto';
+  const theme = userConfig.theme ?? 'light';
   const primary = tokens.color.primary as Record<string, string>;
   const semanticOpts = { primary500: primary['500'], primary400: primary['400'] };
 
   if (theme === 'dark') return primitives + '\n' + semanticTokensToCss(buildSemanticTokens('dark', semanticOpts));
   if (theme === 'light') return primitives + '\n' + semanticTokensToCss(buildSemanticTokens('light', semanticOpts));
+  // 'system' (and deprecated 'auto'): light at :root + dark via media query + [data-theme] overrides
   return (
     primitives +
     '\n' +

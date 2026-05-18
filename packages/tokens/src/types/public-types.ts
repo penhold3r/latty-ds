@@ -62,9 +62,10 @@ export interface LattyConfig {
   };
   /**
    * Controls which semantic token layer is emitted.
-   * - `'auto'` (default) — light at `:root`, dark inside `@media (prefers-color-scheme: dark)`
-   * - `'light'` — light tokens only at `:root`
-   * - `'dark'`  — dark tokens only at `:root` (use for sites that are intentionally always dark)
+   * - `'light'` (default) — light tokens only; ignores OS preference
+   * - `'dark'`   — dark tokens only; ignores OS preference
+   * - `'system'` — light at `:root`, dark inside `@media (prefers-color-scheme: dark)` + `[data-theme]` overrides
+   * - `'auto'`   — alias for `'system'`, deprecated
    */
-  theme?: 'auto' | 'light' | 'dark';
+  theme?: 'light' | 'dark' | 'system' | 'auto';
 }
