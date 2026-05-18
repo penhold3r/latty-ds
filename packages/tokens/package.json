@@ -50,7 +50,7 @@
     "build:tokens": "node ./dist-scripts/tokens.js",
     "build:types": "tsc -p tsconfig.types.json",
     "typecheck": "tsc --noEmit",
-    "clean": "rimraf dist dist-scripts"
+    "clean": "rm -rf dist dist-scripts"
   },
   "devDependencies": {
     "@types/culori": "^4.0.1",
