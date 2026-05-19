@@ -7,6 +7,7 @@
  * - Accordion: Collapsible content using native details/summary
  * - Alert: TODO: describe the Alert component
  * - Button: Interactive button with multiple variants and loading states
+ * - Calendar: TODO: describe the Calendar component
  * - Checkbox: Checkbox input with support for indeterminate state
  * - Dialog: Modal dialog with backdrop and accessibility features
  * - Dropdown: TODO: describe the Dropdown component
@@ -94,3 +95,4 @@ export * from './components/image';
 export * from './components/pagination';
 export * from './components/datepicker';
 export * from './components/combobox';
+export * from './components/calendar';

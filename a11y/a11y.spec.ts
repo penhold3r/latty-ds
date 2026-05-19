@@ -10,6 +10,7 @@ const routes = [
   '/getting-started/theming/',
 
   '/components/introduction/',
+  '/components/calendar/',
 
   '/icons/introduction/',
 

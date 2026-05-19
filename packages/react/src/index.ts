@@ -1,4 +1,5 @@
 export { Accordion, type AccordionProps } from './components/Accordion';
+export { Calendar, type CalendarProps } from './components/Calendar';
 export { Alert, type AlertProps } from './components/Alert';
 export { Breadcrumb, type BreadcrumbProps } from './components/Breadcrumb';
 export { BreadcrumbItem, type BreadcrumbItemProps } from './components/BreadcrumbItem';

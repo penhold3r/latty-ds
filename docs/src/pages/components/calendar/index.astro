@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
+---
+
+<BaseLayout title="Calendar" description="Visual date-selection grid with keyboard navigation and locale support">
+  <lt-text variant="h1">Calendar</lt-text>
+  <lt-text variant="body">
+    An always-visible date-selection grid. Supports locale-aware day and month names, configurable week start, min/max
+    constraints, and full keyboard navigation.
+  </lt-text>
+
+  <lt-text variant="h2">Playground</lt-text>
+  <ComponentPlayground tag="lt-calendar" defaults={{ locale: 'en-US', 'week-start': '0', 'show-outside-days': true }} />
+
+  <lt-text variant="h2">Usage</lt-text>
+  <FrameworkTabs
+    html={`
+<!-- Basic -->
+<lt-calendar></lt-calendar>
+
+<!-- Pre-selected date -->
+<lt-calendar value="2026-06-15"></lt-calendar>
+
+<!-- With min/max range -->
+<lt-calendar min="2026-01-01" max="2026-12-31"></lt-calendar>
+
+<!-- Monday week start, French locale -->
+<lt-calendar week-start="1" locale="fr-FR"></lt-calendar>
+    `}
+    react={`
+import { Calendar } from '@latty/react';
+
+// Basic
+<Calendar />
+
+// Pre-selected date
+<Calendar value="2026-06-15" />
+
+// With min/max range
+<Calendar min="2026-01-01" max="2026-12-31" />
+
+// Monday week start, French locale
+<Calendar weekStart="1" locale="fr-FR" />
+    `}
+    vue={`
+<template>
+  <!-- Basic -->
+  <lt-calendar></lt-calendar>
+
+  <!-- Pre-selected date -->
+  <lt-calendar value="2026-06-15"></lt-calendar>
+
+  <!-- With min/max range -->
+  <lt-calendar min="2026-01-01" max="2026-12-31"></lt-calendar>
+
+  <!-- Monday week start, French locale -->
+  <lt-calendar week-start="1" locale="fr-FR"></lt-calendar>
+</template>
+    `}
+  />
+
+  <lt-text variant="h2">API</lt-text>
+  <ApiTable tag="lt-calendar" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

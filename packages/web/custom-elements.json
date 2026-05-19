@@ -438,123 +438,116 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/breadcrumb/breadcrumb.styles.ts",
+      "path": "src/components/avatar/avatar.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "breadcrumbStyles",
-          "default": "css` :host { display: block; } [part='list'] { align-items: center; display: flex; flex-wrap: wrap; gap: 0; list-style: none; margin: 0; padding: 0; } `"
-        },
-        {
-          "kind": "variable",
-          "name": "breadcrumbItemStyles",
-          "default": "css` :host { align-items: center; display: inline-flex; font-family: var(--lt-typography-fontfamily); font-size: 0.875rem; } [part='link'] { color: var(--lt-interactive-primary-bg); text-decoration: none; transition: color 120ms ease; } [part='link']:hover { color: var(--lt-interactive-primary-bg-hover); text-decoration: underline; } [part='text'] { color: var(--lt-text-default); font-weight: 600; } [part='separator'] { color: var(--lt-text-muted); margin-inline: var(--lt-spacing-2); user-select: none; } [part='separator']::after { content: var(--lt-breadcrumb-separator, '/'); } :host(:last-child) [part='separator'] { display: none; } `"
+          "name": "avatarStyles",
+          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-text-neutral); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-text-secondary); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-text-success); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-text-warning); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-text-error); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-text-info); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "breadcrumbStyles",
+          "name": "avatarStyles",
           "declaration": {
-            "name": "breadcrumbStyles",
-            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "breadcrumbItemStyles",
-          "declaration": {
-            "name": "breadcrumbItemStyles",
-            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
+            "name": "avatarStyles",
+            "module": "src/components/avatar/avatar.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/breadcrumb/breadcrumb.ts",
+      "path": "src/components/avatar/avatar.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Navigation breadcrumb trail container.\nPlace `lt-breadcrumb-item` elements inside as direct children.",
-          "name": "Breadcrumb",
+          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
+          "name": "Avatar",
           "members": [
             {
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "breadcrumbStyles"
+              "default": "avatarStyles"
             },
             {
               "kind": "field",
-              "name": "separator",
-              "type": {
-                "text": "string"
-              },
-              "default": "'/'",
-              "description": "The character or element to use as a separator between breadcrumb items.\nThis is passed down to all children items via CSS variables."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changed",
-                  "type": {
-                    "text": "PropertyValues<this>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-breadcrumb",
-          "customElement": true
-        },
-        {
-          "kind": "class",
-          "description": "A single step in a breadcrumb trail.\nRenders as a link when `href` is provided, or as plain text when `current`.",
-          "name": "BreadcrumbItem",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "breadcrumbItemStyles"
-            },
-            {
-              "kind": "field",
-              "name": "href",
+              "name": "src",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "URL this item links to. Omit for the current (last) item."
+              "description": "URL of the avatar image."
             },
             {
               "kind": "field",
-              "name": "current",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Full name used to derive initials when no image is available."
+            },
+            {
+              "kind": "field",
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Accessible label for the image (defaults to `name`)."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "AvatarSize"
+              },
+              "default": "'md'",
+              "description": "Size of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "shape",
+              "type": {
+                "text": "AvatarShape"
+              },
+              "default": "'circle'",
+              "description": "Shape of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "AvatarColor"
+              },
+              "default": "'neutral'",
+              "description": "Background color used for the initials and icon fallback states."
+            },
+            {
+              "kind": "field",
+              "name": "_imgError",
               "type": {
                 "text": "boolean"
               },
-              "default": "false",
-              "description": "Marks this item as the current page. Renders as non-linked text with `aria-current=\"page\"`."
+              "privacy": "private",
+              "default": "false"
             },
             {
               "kind": "field",
-              "name": "separator",
+              "name": "_initials",
               "type": {
                 "text": "string"
               },
-              "default": "''",
-              "description": "Custom separator for this specific item. Overrides the parent's separator."
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleImgError",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -565,56 +558,56 @@
             "name": "ThemeableElement",
             "module": "/src/base"
           },
-          "tagName": "lt-breadcrumb-item",
+          "tagName": "lt-avatar",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Breadcrumb",
+          "name": "Avatar",
           "declaration": {
-            "name": "Breadcrumb",
-            "module": "src/components/breadcrumb/breadcrumb.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BreadcrumbItem",
-          "declaration": {
-            "name": "BreadcrumbItem",
-            "module": "src/components/breadcrumb/breadcrumb.ts"
+            "name": "Avatar",
+            "module": "src/components/avatar/avatar.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/breadcrumb/index.ts",
+      "path": "src/components/avatar/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Breadcrumb",
+          "name": "Avatar",
           "declaration": {
-            "name": "Breadcrumb",
-            "module": "./breadcrumb"
+            "name": "Avatar",
+            "module": "./avatar"
           }
         },
         {
           "kind": "js",
-          "name": "BreadcrumbItem",
+          "name": "AvatarSize",
           "declaration": {
-            "name": "BreadcrumbItem",
-            "module": "./breadcrumb"
+            "name": "AvatarSize",
+            "module": "./avatar.types"
           }
         },
         {
           "kind": "js",
-          "name": "BreadcrumbSeparator",
+          "name": "AvatarShape",
           "declaration": {
-            "name": "BreadcrumbSeparator",
-            "module": "./breadcrumb.types"
+            "name": "AvatarShape",
+            "module": "./avatar.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarColor",
+          "declaration": {
+            "name": "AvatarColor",
+            "module": "./avatar.types"
           }
         }
       ]
@@ -873,182 +866,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "avatarStyles",
-          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-text-neutral); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-text-secondary); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-text-success); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-text-warning); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-text-error); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-text-info); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "avatarStyles",
-          "declaration": {
-            "name": "avatarStyles",
-            "module": "src/components/avatar/avatar.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
-          "name": "Avatar",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "avatarStyles"
-            },
-            {
-              "kind": "field",
-              "name": "src",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "URL of the avatar image."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Full name used to derive initials when no image is available."
-            },
-            {
-              "kind": "field",
-              "name": "alt",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Accessible label for the image (defaults to `name`)."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "AvatarSize"
-              },
-              "default": "'md'",
-              "description": "Size of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "shape",
-              "type": {
-                "text": "AvatarShape"
-              },
-              "default": "'circle'",
-              "description": "Shape of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "AvatarColor"
-              },
-              "default": "'neutral'",
-              "description": "Background color used for the initials and icon fallback states."
-            },
-            {
-              "kind": "field",
-              "name": "_imgError",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_initials",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleImgError",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-avatar",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "src/components/avatar/avatar.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "./avatar"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarSize",
-          "declaration": {
-            "name": "AvatarSize",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarShape",
-          "declaration": {
-            "name": "AvatarShape",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarColor",
-          "declaration": {
-            "name": "AvatarColor",
-            "module": "./avatar.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/badge/badge.styles.ts",
       "declarations": [
         {
@@ -1187,6 +1004,548 @@
           "declaration": {
             "name": "BadgeAppearance",
             "module": "./badge.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/breadcrumb.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "breadcrumbStyles",
+          "default": "css` :host { display: block; } [part='list'] { align-items: center; display: flex; flex-wrap: wrap; gap: 0; list-style: none; margin: 0; padding: 0; } `"
+        },
+        {
+          "kind": "variable",
+          "name": "breadcrumbItemStyles",
+          "default": "css` :host { align-items: center; display: inline-flex; font-family: var(--lt-typography-fontfamily); font-size: 0.875rem; } [part='link'] { color: var(--lt-interactive-primary-bg); text-decoration: none; transition: color 120ms ease; } [part='link']:hover { color: var(--lt-interactive-primary-bg-hover); text-decoration: underline; } [part='text'] { color: var(--lt-text-default); font-weight: 600; } [part='separator'] { color: var(--lt-text-muted); margin-inline: var(--lt-spacing-2); user-select: none; } [part='separator']::after { content: var(--lt-breadcrumb-separator, '/'); } :host(:last-child) [part='separator'] { display: none; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "breadcrumbStyles",
+          "declaration": {
+            "name": "breadcrumbStyles",
+            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "breadcrumbItemStyles",
+          "declaration": {
+            "name": "breadcrumbItemStyles",
+            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/breadcrumb.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Navigation breadcrumb trail container.\nPlace `lt-breadcrumb-item` elements inside as direct children.",
+          "name": "Breadcrumb",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "breadcrumbStyles"
+            },
+            {
+              "kind": "field",
+              "name": "separator",
+              "type": {
+                "text": "string"
+              },
+              "default": "'/'",
+              "description": "The character or element to use as a separator between breadcrumb items.\nThis is passed down to all children items via CSS variables."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-breadcrumb",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "A single step in a breadcrumb trail.\nRenders as a link when `href` is provided, or as plain text when `current`.",
+          "name": "BreadcrumbItem",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "breadcrumbItemStyles"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "URL this item links to. Omit for the current (last) item."
+            },
+            {
+              "kind": "field",
+              "name": "current",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Marks this item as the current page. Renders as non-linked text with `aria-current=\"page\"`."
+            },
+            {
+              "kind": "field",
+              "name": "separator",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Custom separator for this specific item. Overrides the parent's separator."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-breadcrumb-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Breadcrumb",
+          "declaration": {
+            "name": "Breadcrumb",
+            "module": "src/components/breadcrumb/breadcrumb.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbItem",
+          "declaration": {
+            "name": "BreadcrumbItem",
+            "module": "src/components/breadcrumb/breadcrumb.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Breadcrumb",
+          "declaration": {
+            "name": "Breadcrumb",
+            "module": "./breadcrumb"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbItem",
+          "declaration": {
+            "name": "BreadcrumbItem",
+            "module": "./breadcrumb"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbSeparator",
+          "declaration": {
+            "name": "BreadcrumbSeparator",
+            "module": "./breadcrumb.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/calendar/calendar.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "calendarStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .calendar { background: var(--lt-bg-default); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-3); } /* ── Header ── */ .header { align-items: center; display: flex; justify-content: space-between; } .month-label { color: var(--lt-text-default); font-size: 0.9375rem; font-weight: 600; letter-spacing: 0.01em; } .nav-btn { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-subtle); cursor: pointer; display: inline-flex; height: 2rem; justify-content: center; padding: 0; transition: background 120ms ease, border-color 120ms ease, color 120ms ease; width: 2rem; } .nav-btn:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); color: var(--lt-text-default); } .nav-btn:disabled { color: var(--lt-text-disabled); cursor: not-allowed; } /* ── Weekday headers ── */ .weekdays { column-gap: var(--lt-spacing-1); display: grid; grid-template-columns: repeat(7, 2.25rem); } .weekday { color: var(--lt-text-muted); font-size: 0.75rem; font-weight: 500; text-align: center; } /* ── Day grid ── */ .grid { column-gap: var(--lt-spacing-1); display: grid; grid-template-columns: repeat(7, 2.25rem); row-gap: var(--lt-spacing-1); } [role='row'] { display: contents; } .day { align-items: center; background: transparent; border-radius: 50%; border: 2px solid transparent; color: var(--lt-text-default); cursor: pointer; display: inline-flex; font-family: inherit; font-size: 0.8125rem; font-weight: 400; height: 2.25rem; justify-content: center; line-height: 1; padding: 0; transition: background 100ms ease, border-color 100ms ease, color 100ms ease; width: 2.25rem; } .day:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); } .day:focus-visible { outline: 2px solid var(--lt-border-focus); outline-offset: 1px; } .day--today { border-color: var(--lt-border-primary); font-weight: 600; } .day--selected { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); font-weight: 600; } .day--selected:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } .day--outside { color: var(--lt-text-muted); opacity: 0.5; } .day--empty { background: transparent; border: none; cursor: default; pointer-events: none; } .day:disabled { color: var(--lt-text-disabled); cursor: not-allowed; opacity: 0.4; } /* ── Footer ── */ .footer { display: flex; justify-content: flex-end; padding-top: var(--lt-spacing-1); border-top: 1px solid var(--lt-border-subtle); } .today-btn { background: transparent; border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); color: var(--lt-text-subtle); cursor: pointer; font-family: inherit; font-size: 0.75rem; font-weight: 500; padding: var(--lt-spacing-1) var(--lt-spacing-2); transition: background 120ms ease, border-color 120ms ease, color 120ms ease; } .today-btn:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-strong); color: var(--lt-text-default); } .today-btn:disabled { color: var(--lt-text-disabled); cursor: not-allowed; opacity: 0.5; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "calendarStyles",
+          "declaration": {
+            "name": "calendarStyles",
+            "module": "src/components/calendar/calendar.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/calendar/calendar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A visual calendar grid for single-date selection.",
+          "name": "Calendar",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "calendarStyles"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Selected date in ISO format (YYYY-MM-DD). Empty string means no selection."
+            },
+            {
+              "kind": "field",
+              "name": "min",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Minimum selectable date (ISO format). Dates before this are disabled."
+            },
+            {
+              "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Maximum selectable date (ISO format). Dates after this are disabled."
+            },
+            {
+              "kind": "field",
+              "name": "locale",
+              "type": {
+                "text": "string"
+              },
+              "default": "'en-US'",
+              "description": "BCP 47 locale used for day and month names."
+            },
+            {
+              "kind": "field",
+              "name": "weekStart",
+              "type": {
+                "text": "CalendarWeekStart"
+              },
+              "default": "'0'",
+              "description": "First day of the week. 0 = Sunday, 1 = Monday."
+            },
+            {
+              "kind": "field",
+              "name": "showOutsideDays",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether to render filler days from the previous and next month."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables all interaction."
+            },
+            {
+              "kind": "field",
+              "name": "disabledDates",
+              "type": {
+                "text": "Date[]"
+              },
+              "default": "[]",
+              "description": "Specific dates to disable, as an array of Date objects. Not reflected as an attribute."
+            },
+            {
+              "kind": "field",
+              "name": "_viewYear",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_viewMonth",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_focusedDate",
+              "type": {
+                "text": "Date | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "method",
+              "name": "willUpdate",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_parseDate",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Date | null"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "iso",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_toIso",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "date",
+                  "type": {
+                    "text": "Date"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_isSameDay",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "a",
+                  "type": {
+                    "text": "Date"
+                  }
+                },
+                {
+                  "name": "b",
+                  "type": {
+                    "text": "Date"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_isDisabled",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "date",
+                  "type": {
+                    "text": "Date"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_buildDays",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "CalendarDay[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_getWeekdayLabels",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_navigate",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "delta",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_selectDay",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "day",
+                  "type": {
+                    "text": "CalendarDay"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_goToToday",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_dayAriaLabel",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "date",
+                  "type": {
+                    "text": "Date"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_focusCell",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "iso",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "lt-month-change",
+              "type": {
+                "text": "CustomEvent<{year: number, month: number}>"
+              },
+              "description": "Fired when the viewed month changes."
+            },
+            {
+              "name": "lt-change",
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Fired when the user selects a date."
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-calendar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Calendar",
+          "declaration": {
+            "name": "Calendar",
+            "module": "src/components/calendar/calendar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/calendar/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Calendar",
+          "declaration": {
+            "name": "Calendar",
+            "module": "./calendar"
           }
         }
       ]
@@ -1428,207 +1787,6 @@
           "declaration": {
             "name": "CheckboxLabelPosition",
             "module": "./checkbox.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/chip.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "chipStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-text-info); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "chipStyles",
-          "declaration": {
-            "name": "chipStyles",
-            "module": "src/components/chip/chip.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/chip.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Compact label element for tags, filters, and attributes.",
-          "name": "Chip",
-          "slots": [
-            {
-              "description": "Label content",
-              "name": ""
-            },
-            {
-              "description": "Leading icon or avatar",
-              "name": "icon"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "chipStyles"
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "ChipAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual appearance (filled tinted background or outlined border only)."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ChipVariant"
-              },
-              "default": "'primary'",
-              "description": "Color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ChipSize"
-              },
-              "default": "'md'",
-              "description": "Size (affects height, font, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disables the chip and its delete button."
-            },
-            {
-              "kind": "field",
-              "name": "deletable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "method",
-              "name": "_resolve",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "_deleteIconSize",
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleDelete",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "lt-delete",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Fires when the delete button is clicked (only when `deletable`)"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-chip",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Chip",
-          "declaration": {
-            "name": "Chip",
-            "module": "src/components/chip/chip.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Chip",
-          "declaration": {
-            "name": "Chip",
-            "module": "./chip"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipVariant",
-          "declaration": {
-            "name": "ChipVariant",
-            "module": "./chip.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipSize",
-          "declaration": {
-            "name": "ChipSize",
-            "module": "./chip.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipAppearance",
-          "declaration": {
-            "name": "ChipAppearance",
-            "module": "./chip.types"
           }
         }
       ]
@@ -1931,6 +2089,207 @@
           "declaration": {
             "name": "ComboboxVariant",
             "module": "./combobox.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/chip.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "chipStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-text-info); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "chipStyles",
+          "declaration": {
+            "name": "chipStyles",
+            "module": "src/components/chip/chip.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/chip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Compact label element for tags, filters, and attributes.",
+          "name": "Chip",
+          "slots": [
+            {
+              "description": "Label content",
+              "name": ""
+            },
+            {
+              "description": "Leading icon or avatar",
+              "name": "icon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "chipStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "ChipAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual appearance (filled tinted background or outlined border only)."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ChipVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ChipSize"
+              },
+              "default": "'md'",
+              "description": "Size (affects height, font, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables the chip and its delete button."
+            },
+            {
+              "kind": "field",
+              "name": "deletable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "method",
+              "name": "_resolve",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_deleteIconSize",
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleDelete",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "lt-delete",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fires when the delete button is clicked (only when `deletable`)"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-chip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "src/components/chip/chip.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "./chip"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipVariant",
+          "declaration": {
+            "name": "ChipVariant",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipSize",
+          "declaration": {
+            "name": "ChipSize",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipAppearance",
+          "declaration": {
+            "name": "ChipAppearance",
+            "module": "./chip.types"
           }
         }
       ]

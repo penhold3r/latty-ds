@@ -190,6 +190,7 @@ const allCtrlGroups: PlaygroundGroup[] = [{ tag, members, defaults }, ...subTags
                   size="sm"
                   type={member.type === 'number' ? 'number' : 'text'}
                   value={String(val)}
+                  placeholder={label}
                   data-prop={member.name}
                   data-type={member.type}
                   data-ctrl-tag={ctrlTag}
