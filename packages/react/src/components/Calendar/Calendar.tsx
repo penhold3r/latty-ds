@@ -2,13 +2,17 @@ import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } fr
 import type { Calendar as CalendarEl } from '@latty/web';
 
 export type CalendarProps = {
+  mode?: CalendarEl['mode'];
   value?: string;
+  valueStart?: string;
+  valueEnd?: string;
   min?: string;
   max?: string;
   locale?: string;
   weekStart?: CalendarEl['weekStart'];
   showOutsideDays?: boolean;
   disabled?: boolean;
+  months?: number;
   disabledDates?: CalendarEl['disabledDates'];
   onLtChange?: (event: CustomEvent) => void;
   onLtMonthChange?: (event: CustomEvent) => void;
@@ -16,7 +20,7 @@ export type CalendarProps = {
 };
 
 export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
-  { onLtChange, onLtMonthChange, weekStart, showOutsideDays, children, ...props },
+  { onLtChange, onLtMonthChange, weekStart, showOutsideDays, valueStart, valueEnd, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<CalendarEl>(null);
@@ -53,6 +57,20 @@ export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
     if (showOutsideDays === false) el.setAttribute('show-outside-days', 'false');
     else el.removeAttribute('show-outside-days');
   }, [showOutsideDays]);
+
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (valueStart !== undefined) el.setAttribute('value-start', valueStart);
+    else el.removeAttribute('value-start');
+  }, [valueStart]);
+
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (valueEnd !== undefined) el.setAttribute('value-end', valueEnd);
+    else el.removeAttribute('value-end');
+  }, [valueEnd]);
 
   return (
     <lt-calendar ref={innerRef} {...(props as Record<string, unknown>)}>

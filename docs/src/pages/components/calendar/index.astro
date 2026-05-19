@@ -5,15 +5,21 @@ import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
 import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
-<BaseLayout title="Calendar" description="Visual date-selection grid with keyboard navigation and locale support">
+<BaseLayout
+  title="Calendar"
+  description="Visual date-selection grid with keyboard navigation, range selection, and locale support"
+>
   <lt-text variant="h1">Calendar</lt-text>
   <lt-text variant="body">
-    An always-visible date-selection grid. Supports locale-aware day and month names, configurable week start, min/max
-    constraints, and full keyboard navigation.
+    An always-visible date-selection grid. Supports single-date and date-range selection, locale-aware day and month
+    names, configurable week start, min/max constraints, and full keyboard navigation.
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <ComponentPlayground tag="lt-calendar" defaults={{ locale: 'en-US', 'week-start': '0', 'show-outside-days': true }} />
+  <ComponentPlayground
+    tag="lt-calendar"
+    defaults={{ locale: 'en-US', 'week-start': '0', 'show-outside-days': true, mode: 'single' }}
+  />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
@@ -23,6 +29,15 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 
 <!-- Pre-selected date -->
 <lt-calendar value="2026-06-15"></lt-calendar>
+
+<!-- Date range selection -->
+<lt-calendar mode="range" value-start="2026-06-01" value-end="2026-06-15"></lt-calendar>
+
+<!-- Two-month view -->
+<lt-calendar months="2"></lt-calendar>
+
+<!-- Two-month range picker -->
+<lt-calendar mode="range" months="2"></lt-calendar>
 
 <!-- With min/max range -->
 <lt-calendar min="2026-01-01" max="2026-12-31"></lt-calendar>
@@ -39,6 +54,15 @@ import { Calendar } from '@latty/react';
 // Pre-selected date
 <Calendar value="2026-06-15" />
 
+// Date range selection
+<Calendar mode="range" valueStart="2026-06-01" valueEnd="2026-06-15" />
+
+// Two-month view
+<Calendar months={2} />
+
+// Two-month range picker
+<Calendar mode="range" months={2} />
+
 // With min/max range
 <Calendar min="2026-01-01" max="2026-12-31" />
 
@@ -52,6 +76,15 @@ import { Calendar } from '@latty/react';
 
   <!-- Pre-selected date -->
   <lt-calendar value="2026-06-15"></lt-calendar>
+
+  <!-- Date range selection -->
+  <lt-calendar mode="range" value-start="2026-06-01" value-end="2026-06-15"></lt-calendar>
+
+  <!-- Two-month view -->
+  <lt-calendar :months="2"></lt-calendar>
+
+  <!-- Two-month range picker -->
+  <lt-calendar mode="range" :months="2"></lt-calendar>
 
   <!-- With min/max range -->
   <lt-calendar min="2026-01-01" max="2026-12-31"></lt-calendar>

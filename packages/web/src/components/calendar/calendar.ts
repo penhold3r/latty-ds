@@ -4,19 +4,25 @@ import { ThemeableElement } from '../../base';
 import '@latty/icons';
 
 import { calendarStyles } from './calendar.styles';
-import type { CalendarDay, CalendarWeekStart } from './calendar.types';
+import type { CalendarDay, CalendarMode, CalendarWeekStart } from './calendar.types';
 
 /**
- * A visual calendar grid for single-date selection.
+ * A visual calendar grid for single-date or date-range selection.
  *
  * @element lt-calendar
  *
- * @fires {CustomEvent<{value: string}>} lt-change - Fired when the user selects a date.
+ * @fires {CustomEvent<{value: string}>} lt-change - Fired when a single date is selected (mode="single").
+ * @fires {CustomEvent<{valueStart: string, valueEnd: string}>} lt-change - Fired when a full range is selected (mode="range").
  * @fires {CustomEvent<{year: number, month: number}>} lt-month-change - Fired when the viewed month changes.
  *
  * @example
  * ```html
  * <lt-calendar value="2026-05-19"></lt-calendar>
+ * ```
+ *
+ * @example
+ * ```html
+ * <lt-calendar mode="range" value-start="2026-05-10" value-end="2026-05-20"></lt-calendar>
  * ```
  *
  * @example
@@ -28,8 +34,17 @@ import type { CalendarDay, CalendarWeekStart } from './calendar.types';
 export class Calendar extends ThemeableElement {
   static styles = calendarStyles;
 
-  /** Selected date in ISO format (YYYY-MM-DD). Empty string means no selection. */
+  /** Selection mode. "single" selects one date; "range" selects a start and end date. */
+  @property({ reflect: true }) mode: CalendarMode = 'single';
+
+  /** Selected date in ISO format (YYYY-MM-DD). Used in mode="single". */
   @property({ reflect: true }) value = '';
+
+  /** Range start date in ISO format. Used in mode="range". */
+  @property({ reflect: true, attribute: 'value-start' }) valueStart = '';
+
+  /** Range end date in ISO format. Used in mode="range". */
+  @property({ reflect: true, attribute: 'value-end' }) valueEnd = '';
 
   /** Minimum selectable date (ISO format). Dates before this are disabled. */
   @property({ reflect: true }) min = '';
@@ -49,12 +64,18 @@ export class Calendar extends ThemeableElement {
   /** Disables all interaction. */
   @property({ type: Boolean, reflect: true }) disabled = false;
 
+  /** Number of month panels to display side-by-side. */
+  @property({ type: Number, reflect: true }) months = 1;
+
   /** Specific dates to disable, as an array of Date objects. Not reflected as an attribute. */
   disabledDates: Date[] = [];
 
   @state() private _viewYear = new Date().getFullYear();
   @state() private _viewMonth = new Date().getMonth();
   @state() private _focusedDate: Date | null = null;
+  @state() private _hoverDate: Date | null = null;
+  @state() private _pickingMonthYear = false;
+  @state() private _pickerYear = new Date().getFullYear();
 
   override willUpdate(changed: PropertyValues<this>) {
     super.willUpdate(changed);
@@ -65,6 +86,26 @@ export class Calendar extends ThemeableElement {
         this._viewMonth = d.getMonth();
       }
     }
+    if (changed.has('valueStart') && this.valueStart) {
+      const d = this._parseDate(this.valueStart);
+      if (d) {
+        this._viewYear = d.getFullYear();
+        this._viewMonth = d.getMonth();
+      }
+    }
+    if (changed.has('months') && this.months > 1 && this._pickingMonthYear) {
+      this._pickingMonthYear = false;
+    }
+  }
+
+  private _monthAtOffset(offset: number): { year: number; month: number } {
+    let m = this._viewMonth + offset;
+    let y = this._viewYear;
+    while (m > 11) {
+      m -= 12;
+      y++;
+    }
+    return { year: y, month: m };
   }
 
   private _parseDate(iso: string): Date | null {
@@ -98,13 +139,29 @@ export class Calendar extends ThemeableElement {
     return this.disabledDates.some((d) => this._isSameDay(d, date));
   }
 
-  private _buildDays(): CalendarDay[] {
+  private _buildDays(year = this._viewYear, month = this._viewMonth): CalendarDay[] {
     const today = new Date();
     const selected = this._parseDate(this.value);
     const weekStart = Number(this.weekStart);
 
-    const firstOfMonth = new Date(this._viewYear, this._viewMonth, 1);
-    const lastOfMonth = new Date(this._viewYear, this._viewMonth + 1, 0);
+    const rangeStart = this.mode === 'range' ? this._parseDate(this.valueStart) : null;
+    const rangeEnd = this.mode === 'range' ? this._parseDate(this.valueEnd) : null;
+
+    // Hover preview: normalize so visHoverStart <= visHoverEnd
+    let visHoverStart: Date | null = null;
+    let visHoverEnd: Date | null = null;
+    if (rangeStart && !rangeEnd && this._hoverDate) {
+      if (this._hoverDate >= rangeStart) {
+        visHoverStart = rangeStart;
+        visHoverEnd = this._hoverDate;
+      } else {
+        visHoverStart = this._hoverDate;
+        visHoverEnd = rangeStart;
+      }
+    }
+
+    const firstOfMonth = new Date(year, month, 1);
+    const lastOfMonth = new Date(year, month + 1, 0);
 
     const startOffset = (firstOfMonth.getDay() - weekStart + 7) % 7;
     const totalCurrent = startOffset + lastOfMonth.getDate();
@@ -112,37 +169,47 @@ export class Calendar extends ThemeableElement {
 
     const days: CalendarDay[] = [];
 
-    for (let i = startOffset; i > 0; i--) {
-      const date = new Date(this._viewYear, this._viewMonth, 1 - i);
-      days.push({
+    const buildDay = (date: Date, isCurrentMonth: boolean): CalendarDay => {
+      const isRangeStart = !!rangeStart && this._isSameDay(date, rangeStart);
+      const isRangeEnd = !!rangeEnd && this._isSameDay(date, rangeEnd);
+      const isInRange =
+        !!rangeStart &&
+        !!rangeEnd &&
+        date > rangeStart &&
+        date < rangeEnd &&
+        !this._isSameDay(date, rangeStart) &&
+        !this._isSameDay(date, rangeEnd);
+
+      const isRangeHoverStart = !!visHoverStart && this._isSameDay(date, visHoverStart);
+      const isRangeHoverEnd =
+        !!visHoverEnd && !this._isSameDay(visHoverStart!, visHoverEnd) && this._isSameDay(date, visHoverEnd);
+      const isInHoverRange = !!visHoverStart && !!visHoverEnd && date > visHoverStart && date < visHoverEnd;
+
+      return {
         date,
-        isCurrentMonth: false,
+        isCurrentMonth,
         isToday: this._isSameDay(date, today),
-        isSelected: selected ? this._isSameDay(date, selected) : false,
-        isDisabled: this._isDisabled(date)
-      });
+        isSelected: this.mode === 'single' && selected ? this._isSameDay(date, selected) : false,
+        isDisabled: this._isDisabled(date),
+        isRangeStart,
+        isRangeEnd,
+        isInRange,
+        isRangeHoverStart,
+        isRangeHoverEnd,
+        isInHoverRange
+      };
+    };
+
+    for (let i = startOffset; i > 0; i--) {
+      days.push(buildDay(new Date(year, month, 1 - i), false));
     }
 
     for (let d = 1; d <= lastOfMonth.getDate(); d++) {
-      const date = new Date(this._viewYear, this._viewMonth, d);
-      days.push({
-        date,
-        isCurrentMonth: true,
-        isToday: this._isSameDay(date, today),
-        isSelected: selected ? this._isSameDay(date, selected) : false,
-        isDisabled: this._isDisabled(date)
-      });
+      days.push(buildDay(new Date(year, month, d), true));
     }
 
     for (let d = 1; d <= endOffset; d++) {
-      const date = new Date(this._viewYear, this._viewMonth + 1, d);
-      days.push({
-        date,
-        isCurrentMonth: false,
-        isToday: this._isSameDay(date, today),
-        isSelected: selected ? this._isSameDay(date, selected) : false,
-        isDisabled: this._isDisabled(date)
-      });
+      days.push(buildDay(new Date(year, month + 1, d), false));
     }
 
     return days;
@@ -161,6 +228,10 @@ export class Calendar extends ThemeableElement {
   }
 
   private _navigate(delta: number) {
+    if (this._pickingMonthYear) {
+      this._pickerYear += delta;
+      return;
+    }
     let month = this._viewMonth + delta;
     let year = this._viewYear;
     while (month < 0) {
@@ -183,12 +254,74 @@ export class Calendar extends ThemeableElement {
     );
   }
 
+  private _openPicker() {
+    this._pickerYear = this._viewYear;
+    this._pickingMonthYear = true;
+  }
+
+  private _closePicker() {
+    this._pickingMonthYear = false;
+  }
+
+  private _selectPickerMonth(month: number) {
+    this._viewYear = this._pickerYear;
+    this._viewMonth = month;
+    this._pickingMonthYear = false;
+    this._focusedDate = null;
+    this.dispatchEvent(
+      new CustomEvent('lt-month-change', {
+        detail: { year: this._viewYear, month: this._viewMonth },
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
+
   private _selectDay(day: CalendarDay) {
     if (day.isDisabled || this.disabled) return;
+
     if (!day.isCurrentMonth) {
       this._viewMonth = day.date.getMonth();
       this._viewYear = day.date.getFullYear();
     }
+
+    if (this.mode === 'range') {
+      const iso = this._toIso(day.date);
+      const hasStart = !!this.valueStart;
+      const hasEnd = !!this.valueEnd;
+
+      if (!hasStart || hasEnd) {
+        // Begin a new range selection
+        this.valueStart = iso;
+        this.valueEnd = '';
+        this._hoverDate = null;
+      } else {
+        const startDate = this._parseDate(this.valueStart)!;
+        if (this._isSameDay(day.date, startDate)) {
+          // Clicked same day as start — clear
+          this.valueStart = '';
+        } else if (day.date < startDate) {
+          // Clicked before start — swap
+          this.valueEnd = this.valueStart;
+          this.valueStart = iso;
+        } else {
+          this.valueEnd = iso;
+        }
+
+        if (this.valueStart && this.valueEnd) {
+          this.dispatchEvent(
+            new CustomEvent('lt-change', {
+              detail: { valueStart: this.valueStart, valueEnd: this.valueEnd },
+              bubbles: true,
+              composed: true
+            })
+          );
+        }
+      }
+      this._focusedDate = day.date;
+      return;
+    }
+
     const iso = this._toIso(day.date);
     this.value = iso;
     this._focusedDate = day.date;
@@ -200,6 +333,7 @@ export class Calendar extends ThemeableElement {
     this._viewYear = today.getFullYear();
     this._viewMonth = today.getMonth();
     this._focusedDate = null;
+    this._pickingMonthYear = false;
   }
 
   private _dayAriaLabel(date: Date): string {
@@ -217,6 +351,28 @@ export class Calendar extends ThemeableElement {
       target?.focus();
     });
   }
+
+  private _handleCalendarKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && this._pickingMonthYear) {
+      e.stopPropagation();
+      this._closePicker();
+    }
+  };
+
+  private _handleGridMouseOver = (e: MouseEvent) => {
+    if (this.mode !== 'range' || this.valueEnd) return;
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-date]');
+    if (btn?.dataset.date) {
+      const d = this._parseDate(btn.dataset.date);
+      if (d && (!this._hoverDate || !this._isSameDay(d, this._hoverDate))) {
+        this._hoverDate = d;
+      }
+    }
+  };
+
+  private _handleGridMouseLeave = () => {
+    if (this.mode === 'range') this._hoverDate = null;
+  };
 
   private _handleKeyDown = (e: KeyboardEvent) => {
     const today = new Date();
@@ -281,93 +437,198 @@ export class Calendar extends ThemeableElement {
     this._focusCell(this._toIso(next));
   };
 
-  render() {
-    const days = this._buildDays();
-    const today = new Date();
-    const monthLabel = new Intl.DateTimeFormat(this.locale, { month: 'long', year: 'numeric' }).format(
-      new Date(this._viewYear, this._viewMonth)
-    );
-    const weekdayLabels = this._getWeekdayLabels();
+  private _renderDay(day: CalendarDay, rovingDate: Date) {
+    if (!day.isCurrentMonth && !this.showOutsideDays) {
+      return html`<div role="gridcell" aria-hidden="true" class="day day--empty"></div>`;
+    }
 
-    // Roving tabindex: focused date → selected date → today → first of month
+    const isRangeLeft = day.isRangeStart || day.isRangeHoverStart;
+    const isRangeRight = day.isRangeEnd || day.isRangeHoverEnd;
+    const isRangeConfirmed = day.isRangeStart || day.isRangeEnd;
+    const isRangeHoverPoint = !isRangeConfirmed && (day.isRangeHoverStart || day.isRangeHoverEnd);
+
+    const classes = [
+      'day',
+      !day.isCurrentMonth ? 'day--outside' : '',
+      day.isToday ? 'day--today' : '',
+      day.isSelected ? 'day--selected' : '',
+      isRangeLeft ? 'day--range-left' : '',
+      isRangeRight ? 'day--range-right' : '',
+      isRangeConfirmed ? 'day--range-confirmed' : '',
+      isRangeHoverPoint ? 'day--range-hover' : '',
+      day.isInRange ? 'day--in-range' : '',
+      day.isInHoverRange ? 'day--in-hover-range' : ''
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    const iso = this._toIso(day.date);
+    const isSelected = day.isSelected || day.isRangeStart || day.isRangeEnd;
+
+    return html`
+      <button
+        role="gridcell"
+        class=${classes}
+        data-date=${iso}
+        ?disabled=${day.isDisabled}
+        aria-selected=${isSelected ? 'true' : 'false'}
+        aria-label=${this._dayAriaLabel(day.date)}
+        tabindex=${this._isSameDay(day.date, rovingDate) ? 0 : -1}
+        @click=${() => this._selectDay(day)}
+        @keydown=${this._handleKeyDown}
+      >
+        <span class="day__inner">${day.date.getDate()}</span>
+      </button>
+    `;
+  }
+
+  private _renderMonthGrid(year: number, month: number, gridLabel: string, rovingDate: Date) {
+    const days = this._buildDays(year, month);
+    const weekdayLabels = this._getWeekdayLabels();
+    const weeks: CalendarDay[][] = [];
+    for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7));
+
+    return html`
+      <div class="weekdays" aria-hidden="true">
+        ${weekdayLabels.map((label) => html`<div class="weekday">${label}</div>`)}
+      </div>
+      <div
+        class="grid"
+        role="grid"
+        aria-label="${gridLabel}"
+        @mouseover=${this._handleGridMouseOver}
+        @mouseleave=${this._handleGridMouseLeave}
+      >
+        ${weeks.map((week) => html` <div role="row">${week.map((day) => this._renderDay(day, rovingDate))}</div> `)}
+      </div>
+    `;
+  }
+
+  render() {
+    const today = new Date();
+    const isMulti = this.months > 1;
+
+    // Roving tabindex anchor — shared across all panels
+    const rovingAnchor = this._parseDate(this.mode === 'range' ? this.valueStart : this.value);
     const rovingDate =
       this._focusedDate ??
-      this._parseDate(this.value) ??
+      rovingAnchor ??
       (today.getFullYear() === this._viewYear && today.getMonth() === this._viewMonth ? today : null) ??
       new Date(this._viewYear, this._viewMonth, 1);
 
-    // Group flat day array into week rows
-    const weeks: CalendarDay[][] = [];
-    for (let i = 0; i < days.length; i += 7) {
-      weeks.push(days.slice(i, i + 7));
+    const footer = html`
+      <div class="footer">
+        <button class="today-btn" ?disabled=${this.disabled} @click=${this._goToToday}>Today</button>
+      </div>
+    `;
+
+    // ── Multi-month layout ──────────────────────────────────────────────
+    if (isMulti) {
+      const panelLabels = Array.from({ length: this.months }, (_, i) => {
+        const { year, month } = this._monthAtOffset(i);
+        return new Intl.DateTimeFormat(this.locale, { month: 'long', year: 'numeric' }).format(new Date(year, month));
+      });
+
+      return html`
+        <div class="calendar calendar--multi" part="base" @keydown=${this._handleCalendarKeyDown}>
+          <div class="header">
+            <button
+              class="nav-btn"
+              aria-label="Previous month"
+              ?disabled=${this.disabled}
+              @click=${() => this._navigate(-1)}
+            >
+              <lt-icon name="arrow-left" size="sm"></lt-icon>
+            </button>
+            <div class="month-label-row">
+              ${panelLabels.map(
+                (label, i) =>
+                  html`<span class="month-label" aria-live=${i === 0 ? 'polite' : 'off'} aria-atomic="true"
+                    >${label}</span
+                  >`
+              )}
+            </div>
+            <button
+              class="nav-btn"
+              aria-label="Next month"
+              ?disabled=${this.disabled}
+              @click=${() => this._navigate(1)}
+            >
+              <lt-icon name="arrow-right" size="sm"></lt-icon>
+            </button>
+          </div>
+          <div class="month-panels">
+            ${Array.from(
+              { length: this.months },
+              (_, i) => html`
+                <div class="month-col">
+                  ${this._renderMonthGrid(
+                    this._monthAtOffset(i).year,
+                    this._monthAtOffset(i).month,
+                    panelLabels[i],
+                    rovingDate
+                  )}
+                </div>
+              `
+            )}
+          </div>
+          ${footer}
+        </div>
+      `;
     }
 
-    return html`
-      <div class="calendar" part="base">
-        <div class="header">
-          <button
-            class="nav-btn"
-            aria-label="Previous month"
-            ?disabled=${this.disabled}
-            @click=${() => this._navigate(-1)}
-          >
-            <lt-icon name="arrow-left" size="sm"></lt-icon>
-          </button>
-          <span class="month-label" aria-live="polite" aria-atomic="true">${monthLabel}</span>
-          <button class="nav-btn" aria-label="Next month" ?disabled=${this.disabled} @click=${() => this._navigate(1)}>
-            <lt-icon name="arrow-right" size="sm"></lt-icon>
-          </button>
-        </div>
+    // ── Single-month layout ─────────────────────────────────────────────
+    const monthLabel = new Intl.DateTimeFormat(this.locale, { month: 'long', year: 'numeric' }).format(
+      new Date(this._viewYear, this._viewMonth)
+    );
+    const prevLabel = this._pickingMonthYear ? 'Previous year' : 'Previous month';
+    const nextLabel = this._pickingMonthYear ? 'Next year' : 'Next month';
 
-        <div class="weekdays" aria-hidden="true">
-          ${weekdayLabels.map((label) => html`<div class="weekday">${label}</div>`)}
-        </div>
-
-        <div class="grid" role="grid" aria-label="${monthLabel}">
-          ${weeks.map(
-            (week) => html`
-              <div role="row">
-                ${week.map((day) => {
-                  if (!day.isCurrentMonth && !this.showOutsideDays) {
-                    return html`<div role="gridcell" aria-hidden="true" class="day day--empty"></div>`;
-                  }
-
-                  const classes = [
-                    'day',
-                    !day.isCurrentMonth ? 'day--outside' : '',
-                    day.isToday ? 'day--today' : '',
-                    day.isSelected ? 'day--selected' : ''
-                  ]
-                    .filter(Boolean)
-                    .join(' ');
-
-                  const iso = this._toIso(day.date);
-
-                  return html`
-                    <button
-                      role="gridcell"
-                      class=${classes}
-                      data-date=${iso}
-                      ?disabled=${day.isDisabled}
-                      aria-selected=${day.isSelected ? 'true' : 'false'}
-                      aria-label=${this._dayAriaLabel(day.date)}
-                      tabindex=${this._isSameDay(day.date, rovingDate) ? 0 : -1}
-                      @click=${() => this._selectDay(day)}
-                      @keydown=${this._handleKeyDown}
-                    >
-                      ${day.date.getDate()}
-                    </button>
-                  `;
-                })}
-              </div>
-            `
-          )}
-        </div>
-
-        <div class="footer">
-          <button class="today-btn" ?disabled=${this.disabled} @click=${this._goToToday}>Today</button>
-        </div>
+    const header = html`
+      <div class="header">
+        <button class="nav-btn" aria-label=${prevLabel} ?disabled=${this.disabled} @click=${() => this._navigate(-1)}>
+          <lt-icon name="arrow-left" size="sm"></lt-icon>
+        </button>
+        <button
+          class="month-label-btn ${this._pickingMonthYear ? 'month-label-btn--open' : ''}"
+          aria-expanded=${this._pickingMonthYear ? 'true' : 'false'}
+          aria-label="Choose month and year"
+          ?disabled=${this.disabled}
+          @click=${() => (this._pickingMonthYear ? this._closePicker() : this._openPicker())}
+        >
+          <span aria-live="polite" aria-atomic="true">${this._pickingMonthYear ? this._pickerYear : monthLabel}</span>
+          <lt-icon name="arrow-down" size="sm" class="picker-chevron"></lt-icon>
+        </button>
+        <button class="nav-btn" aria-label=${nextLabel} ?disabled=${this.disabled} @click=${() => this._navigate(1)}>
+          <lt-icon name="arrow-right" size="sm"></lt-icon>
+        </button>
       </div>
+    `;
+
+    const pickerBody = this._pickingMonthYear
+      ? html`
+          <div class="picker-months">
+            ${Array.from({ length: 12 }, (_, i) => {
+              const label = new Intl.DateTimeFormat(this.locale, { month: 'short' }).format(
+                new Date(this._pickerYear, i)
+              );
+              const isCurrent = i === this._viewMonth && this._pickerYear === this._viewYear;
+              return html`
+                <button
+                  class="picker-month-btn ${isCurrent ? 'picker-month-btn--current' : ''}"
+                  ?disabled=${this.disabled}
+                  @click=${() => this._selectPickerMonth(i)}
+                >
+                  ${label}
+                </button>
+              `;
+            })}
+          </div>
+        `
+      : this._renderMonthGrid(this._viewYear, this._viewMonth, monthLabel, rovingDate);
+
+    return html`
+      <div class="calendar" part="base" @keydown=${this._handleCalendarKeyDown}>${header} ${pickerBody} ${footer}</div>
     `;
   }
 }
