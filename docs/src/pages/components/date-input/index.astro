@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
+---
+
+<BaseLayout title="Date Input" description="A text field with a calendar popover for visual date selection">
+  <lt-text variant="h1">Date Input</lt-text>
+  <lt-text variant="body">
+    A date field that opens an always-visible calendar for selection. Built on top of
+    <lt-link href="/components/calendar">lt-calendar</lt-link>, it supports locale-aware display, min/max constraints,
+    validation variants, and keyboard navigation.
+  </lt-text>
+
+  <lt-alert variant="info">
+    <strong>Date Input vs Datepicker</strong> — Use <code>lt-date-input</code> when you need a consistent cross-browser UI,
+    locale-aware display formatting, or the visual calendar grid. Choose <lt-link href="/components/datepicker"
+      >lt-datepicker</lt-link
+    > instead when you need native <code>type="time"</code> or <code>type="datetime-local"</code> support, zero-JavaScript
+    form integration, or prefer to delegate the picker UI to the operating system.
+  </lt-alert>
+
+  <lt-text variant="h2">Playground</lt-text>
+  <ComponentPlayground
+    tag="lt-date-input"
+    defaults={{ locale: 'en-US', 'week-start': '0', format: 'medium', placeholder: 'Select a date' }}
+  />
+
+  <lt-text variant="h2">Usage</lt-text>
+  <FrameworkTabs
+    html={`
+<!-- Basic -->
+<lt-date-input></lt-date-input>
+
+<!-- With label -->
+<lt-date-input label="Start date"></lt-date-input>
+
+<!-- Pre-selected date -->
+<lt-date-input label="Appointment" value="2026-06-15"></lt-date-input>
+
+<!-- Min / max constraints -->
+<lt-date-input label="Date" min="2026-01-01" max="2026-12-31"></lt-date-input>
+
+<!-- Display format -->
+<lt-date-input label="Short" format="short" value="2026-06-15"></lt-date-input>
+<lt-date-input label="Medium (default)" format="medium" value="2026-06-15"></lt-date-input>
+<lt-date-input label="Long" format="long" value="2026-06-15"></lt-date-input>
+<lt-date-input label="Full" format="full" value="2026-06-15"></lt-date-input>
+
+<!-- Validation variant -->
+<lt-date-input label="Date" variant="error" helper-text="Date is required"></lt-date-input>
+
+<!-- Monday week start, French locale -->
+<lt-date-input locale="fr-FR" week-start="1"></lt-date-input>
+
+<!-- Sizes -->
+<lt-date-input size="sm" placeholder="Small"></lt-date-input>
+<lt-date-input size="md" placeholder="Medium (default)"></lt-date-input>
+<lt-date-input size="lg" placeholder="Large"></lt-date-input>
+
+<!-- Disabled -->
+<lt-date-input disabled value="2026-06-15"></lt-date-input>
+    `}
+    react={`
+import { DateInput } from '@latty/react';
+
+// Basic
+<DateInput />
+
+// With label
+<DateInput label="Start date" />
+
+// Pre-selected date
+<DateInput label="Appointment" value="2026-06-15" />
+
+// Min / max constraints
+<DateInput label="Date" min="2026-01-01" max="2026-12-31" />
+
+// Display format
+<DateInput label="Short" format="short" value="2026-06-15" />
+<DateInput label="Medium (default)" format="medium" value="2026-06-15" />
+<DateInput label="Long" format="long" value="2026-06-15" />
+<DateInput label="Full" format="full" value="2026-06-15" />
+
+// Validation variant
+<DateInput label="Date" variant="error" helperText="Date is required" />
+
+// Monday week start, French locale
+<DateInput locale="fr-FR" weekStart="1" />
+
+// Sizes
+<DateInput size="sm" placeholder="Small" />
+<DateInput size="md" placeholder="Medium (default)" />
+<DateInput size="lg" placeholder="Large" />
+
+// Disabled
+<DateInput disabled value="2026-06-15" />
+    `}
+    vue={`
+<template>
+  <!-- Basic -->
+  <lt-date-input></lt-date-input>
+
+  <!-- With label -->
+  <lt-date-input label="Start date"></lt-date-input>
+
+  <!-- Pre-selected date -->
+  <lt-date-input label="Appointment" value="2026-06-15"></lt-date-input>
+
+  <!-- Min / max constraints -->
+  <lt-date-input label="Date" min="2026-01-01" max="2026-12-31"></lt-date-input>
+
+  <!-- Display format -->
+  <lt-date-input label="Short" format="short" value="2026-06-15"></lt-date-input>
+  <lt-date-input label="Medium (default)" format="medium" value="2026-06-15"></lt-date-input>
+  <lt-date-input label="Long" format="long" value="2026-06-15"></lt-date-input>
+  <lt-date-input label="Full" format="full" value="2026-06-15"></lt-date-input>
+
+  <!-- Validation variant -->
+  <lt-date-input label="Date" variant="error" helper-text="Date is required"></lt-date-input>
+
+  <!-- Monday week start, French locale -->
+  <lt-date-input locale="fr-FR" week-start="1"></lt-date-input>
+
+  <!-- Sizes -->
+  <lt-date-input size="sm" placeholder="Small"></lt-date-input>
+  <lt-date-input size="md" placeholder="Medium (default)"></lt-date-input>
+  <lt-date-input size="lg" placeholder="Large"></lt-date-input>
+
+  <!-- Disabled -->
+  <lt-date-input disabled value="2026-06-15"></lt-date-input>
+</template>
+    `}
+  />
+
+  <lt-text variant="h2">API</lt-text>
+  <ApiTable tag="lt-date-input" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

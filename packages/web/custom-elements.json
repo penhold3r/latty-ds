@@ -438,434 +438,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "avatarStyles",
-          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-text-neutral); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-text-secondary); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-text-success); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-text-warning); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-text-error); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-text-info); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "avatarStyles",
-          "declaration": {
-            "name": "avatarStyles",
-            "module": "src/components/avatar/avatar.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
-          "name": "Avatar",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "avatarStyles"
-            },
-            {
-              "kind": "field",
-              "name": "src",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "URL of the avatar image."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Full name used to derive initials when no image is available."
-            },
-            {
-              "kind": "field",
-              "name": "alt",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Accessible label for the image (defaults to `name`)."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "AvatarSize"
-              },
-              "default": "'md'",
-              "description": "Size of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "shape",
-              "type": {
-                "text": "AvatarShape"
-              },
-              "default": "'circle'",
-              "description": "Shape of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "AvatarColor"
-              },
-              "default": "'neutral'",
-              "description": "Background color used for the initials and icon fallback states."
-            },
-            {
-              "kind": "field",
-              "name": "_imgError",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_initials",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleImgError",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-avatar",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "src/components/avatar/avatar.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "./avatar"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarSize",
-          "declaration": {
-            "name": "AvatarSize",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarShape",
-          "declaration": {
-            "name": "AvatarShape",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarColor",
-          "declaration": {
-            "name": "AvatarColor",
-            "module": "./avatar.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/button.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "buttonStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } :host([full-width]) { display: block; width: 100%; } :host([full-width]) [part='base'] { width: 100%; } [part='base'] { align-items: center; border-radius: var(--lt-border-radius); border: 1px solid transparent; box-sizing: border-box; cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } [part='base']:active { transform: translateY(1px); } [part='base']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } [part='base'][disabled], [part='base'][aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; pointer-events: none; transform: none; } /* anchor reset — browsers apply link color + underline by default */ a[part='base'] { text-decoration: none; color: inherit; } /* sizes */ :host([size='sm']) [part='base'] { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) [part='base'] { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) [part='base'] { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) [part='base'] { background: var(--lt-interactive-primary-bg); color: var(--lt-text-on-primary); } :host([variant='primary']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='primary']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) [part='base'] { background: var(--lt-interactive-secondary-bg); color: var(--lt-text-on-secondary); } :host([variant='secondary']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='secondary']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) [part='base'] { background: var(--lt-color-neutral-500); color: var(--lt-color-neutral-50); } :host([variant='neutral']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-color-neutral-700); } :host([variant='neutral']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-color-neutral-800); } :host([variant='success']) [part='base'] { background: var(--lt-interactive-success-bg); color: var(--lt-text-on-success); } :host([variant='success']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-success-bg-hover); } :host([variant='success']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-success-bg-active); } :host([variant='warning']) [part='base'] { background: var(--lt-interactive-warning-bg); color: var(--lt-text-on-warning); } :host([variant='warning']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-warning-bg-hover); } :host([variant='warning']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-warning-bg-active); } :host([variant='error']) [part='base'] { background: var(--lt-interactive-error-bg); color: var(--lt-text-on-error); } :host([variant='error']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-error-bg-hover); } :host([variant='error']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-error-bg-active); } :host([variant='info']) [part='base'] { background: var(--lt-interactive-info-bg); color: var(--lt-text-on-info); } :host([variant='info']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-info-bg-hover); } :host([variant='info']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-info-bg-active); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) [part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='primary']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='primary']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); opacity: 0.8; } :host([appearance='outlined'][variant='secondary']) [part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='secondary']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='secondary']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); opacity: 0.8; } :host([appearance='outlined'][variant='neutral']) [part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='neutral']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-subtle); border-color: var(--lt-border-strong); color: var(--lt-text-default); } :host([appearance='outlined'][variant='neutral']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-surface); border-color: var(--lt-border-strong); color: var(--lt-text-default); opacity: 0.8; } :host([appearance='outlined'][variant='success']) [part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='success']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='success']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success-strong); color: var(--lt-text-success); opacity: 0.8; } :host([appearance='outlined'][variant='warning']) [part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='warning']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='warning']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); opacity: 0.8; } :host([appearance='outlined'][variant='error']) [part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='error']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='error']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error-strong); color: var(--lt-text-error); opacity: 0.8; } :host([appearance='outlined'][variant='info']) [part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } :host([appearance='outlined'][variant='info']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } :host([appearance='outlined'][variant='info']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info-strong); color: var(--lt-text-info); opacity: 0.8; } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } :host([uppercase]) [part='base'] { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "buttonStyles",
-          "declaration": {
-            "name": "buttonStyles",
-            "module": "src/components/button/button.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Button component with multiple variants, sizes, appearances, and loading state support.",
-          "name": "Button",
-          "slots": [
-            {
-              "description": "Button label/content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "buttonStyles"
-            },
-            {
-              "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ButtonVariant"
-              },
-              "default": "'primary'",
-              "description": "Visual variant that determines the button's color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "ButtonAppearance"
-              },
-              "default": "'filled'",
-              "description": "Appearance style (filled or outlined)."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ButtonSize"
-              },
-              "default": "'md'",
-              "description": "Size of the button (affects height, font size, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "loading",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is in loading state.\nShows a spinner and disables interaction."
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon name to display at the start of the button."
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon name to display at the end of the button."
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button stretches to fill its container's width."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the button label in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "When set, renders an `<a>` tag instead of `<button>`.\nAll visual styles and states are preserved."
-            },
-            {
-              "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the anchor's `target` attribute when `href` is set."
-            },
-            {
-              "kind": "field",
-              "name": "rel",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the anchor's `rel` attribute when `href` is set.\nDefaults to `noopener noreferrer` when `target=\"_blank\"` and `rel` is not specified."
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "ButtonType"
-              },
-              "default": "'button'",
-              "description": "Form behaviour when the button is inside a `<form>`.\n`submit` triggers form validation and submission; `reset` restores initial values."
-            },
-            {
-              "kind": "method",
-              "name": "_handleClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-button",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Button",
-          "declaration": {
-            "name": "Button",
-            "module": "src/components/button/button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Button",
-          "declaration": {
-            "name": "Button",
-            "module": "./button"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonAppearance",
-          "declaration": {
-            "name": "ButtonAppearance",
-            "module": "./button.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonSize",
-          "declaration": {
-            "name": "ButtonSize",
-            "module": "./button.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonType",
-          "declaration": {
-            "name": "ButtonType",
-            "module": "./button.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonVariant",
-          "declaration": {
-            "name": "ButtonVariant",
-            "module": "./button.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/badge/badge.styles.ts",
       "declarations": [
         {
@@ -1193,12 +765,440 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/button/button.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "buttonStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } :host([full-width]) { display: block; width: 100%; } :host([full-width]) [part='base'] { width: 100%; } [part='base'] { align-items: center; border-radius: var(--lt-border-radius); border: 1px solid transparent; box-sizing: border-box; cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } [part='base']:active { transform: translateY(1px); } [part='base']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } [part='base'][disabled], [part='base'][aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; pointer-events: none; transform: none; } /* anchor reset — browsers apply link color + underline by default */ a[part='base'] { text-decoration: none; color: inherit; } /* sizes */ :host([size='sm']) [part='base'] { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) [part='base'] { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) [part='base'] { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) [part='base'] { background: var(--lt-interactive-primary-bg); color: var(--lt-text-on-primary); } :host([variant='primary']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='primary']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) [part='base'] { background: var(--lt-interactive-secondary-bg); color: var(--lt-text-on-secondary); } :host([variant='secondary']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='secondary']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) [part='base'] { background: var(--lt-color-neutral-500); color: var(--lt-color-neutral-50); } :host([variant='neutral']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-color-neutral-700); } :host([variant='neutral']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-color-neutral-800); } :host([variant='success']) [part='base'] { background: var(--lt-interactive-success-bg); color: var(--lt-text-on-success); } :host([variant='success']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-success-bg-hover); } :host([variant='success']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-success-bg-active); } :host([variant='warning']) [part='base'] { background: var(--lt-interactive-warning-bg); color: var(--lt-text-on-warning); } :host([variant='warning']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-warning-bg-hover); } :host([variant='warning']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-warning-bg-active); } :host([variant='error']) [part='base'] { background: var(--lt-interactive-error-bg); color: var(--lt-text-on-error); } :host([variant='error']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-error-bg-hover); } :host([variant='error']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-error-bg-active); } :host([variant='info']) [part='base'] { background: var(--lt-interactive-info-bg); color: var(--lt-text-on-info); } :host([variant='info']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-info-bg-hover); } :host([variant='info']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-interactive-info-bg-active); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) [part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='primary']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='primary']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); opacity: 0.8; } :host([appearance='outlined'][variant='secondary']) [part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='secondary']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='secondary']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); opacity: 0.8; } :host([appearance='outlined'][variant='neutral']) [part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='neutral']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-subtle); border-color: var(--lt-border-strong); color: var(--lt-text-default); } :host([appearance='outlined'][variant='neutral']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-surface); border-color: var(--lt-border-strong); color: var(--lt-text-default); opacity: 0.8; } :host([appearance='outlined'][variant='success']) [part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='success']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='success']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success-strong); color: var(--lt-text-success); opacity: 0.8; } :host([appearance='outlined'][variant='warning']) [part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='warning']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='warning']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); opacity: 0.8; } :host([appearance='outlined'][variant='error']) [part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='error']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='error']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error-strong); color: var(--lt-text-error); opacity: 0.8; } :host([appearance='outlined'][variant='info']) [part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } :host([appearance='outlined'][variant='info']) [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } :host([appearance='outlined'][variant='info']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info-strong); color: var(--lt-text-info); opacity: 0.8; } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } :host([uppercase]) [part='base'] { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "buttonStyles",
+          "declaration": {
+            "name": "buttonStyles",
+            "module": "src/components/button/button.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/button/button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Button component with multiple variants, sizes, appearances, and loading state support.",
+          "name": "Button",
+          "slots": [
+            {
+              "description": "Button label/content",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "buttonStyles"
+            },
+            {
+              "kind": "field",
+              "name": "formAssociated",
+              "type": {
+                "text": "boolean"
+              },
+              "static": true,
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "_internals",
+              "type": {
+                "text": "ElementInternals"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ButtonVariant"
+              },
+              "default": "'primary'",
+              "description": "Visual variant that determines the button's color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "ButtonAppearance"
+              },
+              "default": "'filled'",
+              "description": "Appearance style (filled or outlined)."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ButtonSize"
+              },
+              "default": "'md'",
+              "description": "Size of the button (affects height, font size, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is in loading state.\nShows a spinner and disables interaction."
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name to display at the start of the button."
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name to display at the end of the button."
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button stretches to fill its container's width."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the button label in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "When set, renders an `<a>` tag instead of `<button>`.\nAll visual styles and states are preserved."
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Forwarded to the anchor's `target` attribute when `href` is set."
+            },
+            {
+              "kind": "field",
+              "name": "rel",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Forwarded to the anchor's `rel` attribute when `href` is set.\nDefaults to `noopener noreferrer` when `target=\"_blank\"` and `rel` is not specified."
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "ButtonType"
+              },
+              "default": "'button'",
+              "description": "Form behaviour when the button is inside a `<form>`.\n`submit` triggers form validation and submission; `reset` restores initial values."
+            },
+            {
+              "kind": "method",
+              "name": "_handleClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Button",
+          "declaration": {
+            "name": "Button",
+            "module": "src/components/button/button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/button/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Button",
+          "declaration": {
+            "name": "Button",
+            "module": "./button"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonAppearance",
+          "declaration": {
+            "name": "ButtonAppearance",
+            "module": "./button.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonSize",
+          "declaration": {
+            "name": "ButtonSize",
+            "module": "./button.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonType",
+          "declaration": {
+            "name": "ButtonType",
+            "module": "./button.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonVariant",
+          "declaration": {
+            "name": "ButtonVariant",
+            "module": "./button.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/avatar/avatar.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "avatarStyles",
+          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-text-neutral); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-text-secondary); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-text-success); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-text-warning); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-text-error); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-text-info); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "avatarStyles",
+          "declaration": {
+            "name": "avatarStyles",
+            "module": "src/components/avatar/avatar.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/avatar/avatar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
+          "name": "Avatar",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "avatarStyles"
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "URL of the avatar image."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Full name used to derive initials when no image is available."
+            },
+            {
+              "kind": "field",
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Accessible label for the image (defaults to `name`)."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "AvatarSize"
+              },
+              "default": "'md'",
+              "description": "Size of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "shape",
+              "type": {
+                "text": "AvatarShape"
+              },
+              "default": "'circle'",
+              "description": "Shape of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "AvatarColor"
+              },
+              "default": "'neutral'",
+              "description": "Background color used for the initials and icon fallback states."
+            },
+            {
+              "kind": "field",
+              "name": "_imgError",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_initials",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleImgError",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-avatar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Avatar",
+          "declaration": {
+            "name": "Avatar",
+            "module": "src/components/avatar/avatar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/avatar/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Avatar",
+          "declaration": {
+            "name": "Avatar",
+            "module": "./avatar"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarSize",
+          "declaration": {
+            "name": "AvatarSize",
+            "module": "./avatar.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarShape",
+          "declaration": {
+            "name": "AvatarShape",
+            "module": "./avatar.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarColor",
+          "declaration": {
+            "name": "AvatarColor",
+            "module": "./avatar.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/calendar/calendar.styles.ts",
       "declarations": [
         {
           "kind": "variable",
           "name": "calendarStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .calendar { background: var(--lt-bg-default); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-3); } /* ── Header ── */ .header { align-items: center; display: flex; justify-content: space-between; } .month-label { color: var(--lt-text-default); font-size: 0.9375rem; font-weight: 600; letter-spacing: 0.01em; } .nav-btn { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-subtle); cursor: pointer; display: inline-flex; height: 2rem; justify-content: center; padding: 0; transition: background 120ms ease, border-color 120ms ease, color 120ms ease; width: 2rem; } .nav-btn:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); color: var(--lt-text-default); } .nav-btn:disabled { color: var(--lt-text-disabled); cursor: not-allowed; } /* ── Weekday headers ── */ .weekdays { column-gap: var(--lt-spacing-1); display: grid; grid-template-columns: repeat(7, 2.25rem); } .weekday { color: var(--lt-text-muted); font-size: 0.75rem; font-weight: 500; text-align: center; } /* ── Day grid ── */ .grid { column-gap: var(--lt-spacing-1); display: grid; grid-template-columns: repeat(7, 2.25rem); row-gap: var(--lt-spacing-1); } [role='row'] { display: contents; } .day { align-items: center; background: transparent; border-radius: 50%; border: 2px solid transparent; color: var(--lt-text-default); cursor: pointer; display: inline-flex; font-family: inherit; font-size: 0.8125rem; font-weight: 400; height: 2.25rem; justify-content: center; line-height: 1; padding: 0; transition: background 100ms ease, border-color 100ms ease, color 100ms ease; width: 2.25rem; } .day:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); } .day:focus-visible { outline: 2px solid var(--lt-border-focus); outline-offset: 1px; } .day--today { border-color: var(--lt-border-primary); font-weight: 600; } .day--selected { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); font-weight: 600; } .day--selected:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } .day--outside { color: var(--lt-text-muted); opacity: 0.5; } .day--empty { background: transparent; border: none; cursor: default; pointer-events: none; } .day:disabled { color: var(--lt-text-disabled); cursor: not-allowed; opacity: 0.4; } /* ── Footer ── */ .footer { display: flex; justify-content: flex-end; padding-top: var(--lt-spacing-1); border-top: 1px solid var(--lt-border-subtle); } .today-btn { background: transparent; border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); color: var(--lt-text-subtle); cursor: pointer; font-family: inherit; font-size: 0.75rem; font-weight: 500; padding: var(--lt-spacing-1) var(--lt-spacing-2); transition: background 120ms ease, border-color 120ms ease, color 120ms ease; } .today-btn:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-strong); color: var(--lt-text-default); } .today-btn:disabled { color: var(--lt-text-disabled); cursor: not-allowed; opacity: 0.5; } `"
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .calendar { background: var(--lt-bg-default); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-3); width: 17.25rem; } /* ── Header ── */ .header { align-items: center; display: flex; justify-content: space-between; } .month-label-btn { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-default); cursor: pointer; display: inline-flex; font-family: inherit; font-size: 0.9375rem; font-weight: 600; gap: var(--lt-spacing-1); letter-spacing: 0.01em; padding: var(--lt-spacing-1) var(--lt-spacing-2); transition: background 120ms ease, border-color 120ms ease; } .month-label-btn:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); } .month-label-btn--open { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); } .month-label-btn:disabled { cursor: not-allowed; opacity: 0.6; } .picker-chevron { color: var(--lt-text-subtle); transition: transform 150ms ease; } .month-label-btn--open .picker-chevron { transform: rotate(180deg); } .nav-btn { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-subtle); cursor: pointer; display: inline-flex; height: 2rem; justify-content: center; padding: 0; transition: background 120ms ease, border-color 120ms ease, color 120ms ease; width: 2rem; } .nav-btn:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); color: var(--lt-text-default); } .nav-btn:disabled { color: var(--lt-text-disabled); cursor: not-allowed; } /* ── Weekday headers ── */ .weekdays { column-gap: 0; display: grid; grid-template-columns: repeat(7, 1fr); } .weekday { color: var(--lt-text-muted); font-size: 0.75rem; font-weight: 500; text-align: center; } /* ── Day grid ── */ .grid { column-gap: 0; display: grid; grid-template-columns: repeat(7, 1fr); row-gap: var(--lt-spacing-1); } [role='row'] { display: contents; } /* Day button — strip layer in range mode */ .day { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: inline-flex; font-family: inherit; font-size: 0.8125rem; font-weight: 400; height: 2.25rem; justify-content: center; outline: none; padding: 0; transition: background 100ms ease; width: 100%; } .day:disabled { cursor: not-allowed; } /* Day inner — the visible circle */ .day__inner { align-items: center; background: transparent; border: 2px solid transparent; border-radius: 50%; color: inherit; display: inline-flex; font-size: inherit; font-weight: inherit; height: 2.25rem; justify-content: center; transition: background 100ms ease, border-color 100ms ease, color 100ms ease; width: 2.25rem; } .day:hover:not(:disabled) .day__inner { background: var(--lt-bg-neutral-subtle); } .day:focus-visible .day__inner { outline: 2px solid var(--lt-border-focus); outline-offset: 1px; } /* Today ring */ .day--today .day__inner { border-color: var(--lt-border-primary); font-weight: 600; } /* Single-mode selected */ .day--selected .day__inner { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); font-weight: 600; } .day--selected:hover:not(:disabled) .day__inner { background: var(--lt-interactive-primary-bg-hover); } /* Outside days */ .day--outside { color: var(--lt-text-muted); opacity: 0.5; } /* Empty filler cell */ .day--empty { background: transparent; border: none; cursor: default; pointer-events: none; } .day:disabled .day__inner { color: var(--lt-text-disabled); opacity: 0.4; } /* ── Range strips (on .day button = strip layer) ── */ /* Start: transparent on left, strip on right */ .day--range-left { background: linear-gradient(to right, transparent 50%, var(--lt-bg-primary-subtle) 50%); } /* End: strip on left, transparent on right */ .day--range-right { background: linear-gradient(to right, var(--lt-bg-primary-subtle) 50%, transparent 50%); } /* Same-day start+end — no strip needed */ .day--range-left.day--range-right { background: transparent; } /* Days between confirmed endpoints */ .day--in-range { background: var(--lt-bg-primary-subtle); } .day--in-range:hover:not(:disabled) .day__inner { background: var(--lt-bg-neutral-subtle); } /* Days between hover preview endpoints */ .day--in-hover-range { background: var(--lt-bg-primary-subtle); opacity: 0.45; } /* Confirmed range endpoint circle */ .day--range-confirmed .day__inner { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); font-weight: 600; } .day--range-confirmed:hover:not(:disabled) .day__inner { background: var(--lt-interactive-primary-bg-hover); } /* Hover preview endpoint circle (semi-transparent) */ .day--range-hover .day__inner { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); opacity: 0.5; } /* ── Multi-month layout ── */ .calendar--multi { width: auto; } .month-label-row { display: flex; flex: 1; justify-content: space-around; } .month-label { color: var(--lt-text-default); font-size: 0.9375rem; font-weight: 600; letter-spacing: 0.01em; text-align: center; } .month-panels { display: flex; gap: var(--lt-spacing-4); } .month-col { width: 17.25rem; } /* ── Month/year picker ── */ .picker-months { display: grid; gap: var(--lt-spacing-1); grid-template-columns: repeat(3, 1fr); } .picker-month-btn { background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-default); cursor: pointer; font-family: inherit; font-size: 0.8125rem; font-weight: 400; padding: var(--lt-spacing-2) 0; text-align: center; transition: background 100ms ease, border-color 100ms ease; } .picker-month-btn:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); } .picker-month-btn--current { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); font-weight: 600; } .picker-month-btn--current:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } .picker-month-btn:disabled { color: var(--lt-text-disabled); cursor: not-allowed; opacity: 0.5; } /* ── Footer ── */ .footer { border-top: 1px solid var(--lt-border-subtle); display: flex; justify-content: flex-end; padding-top: var(--lt-spacing-1); } .today-btn { background: transparent; border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); color: var(--lt-text-subtle); cursor: pointer; font-family: inherit; font-size: 0.75rem; font-weight: 500; padding: var(--lt-spacing-1) var(--lt-spacing-2); transition: background 120ms ease, border-color 120ms ease, color 120ms ease; } .today-btn:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-strong); color: var(--lt-text-default); } .today-btn:disabled { color: var(--lt-text-disabled); cursor: not-allowed; opacity: 0.5; } `"
         }
       ],
       "exports": [
@@ -1218,7 +1218,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A visual calendar grid for single-date selection.",
+          "description": "A visual calendar grid for single-date or date-range selection.",
           "name": "Calendar",
           "members": [
             {
@@ -1229,12 +1229,39 @@
             },
             {
               "kind": "field",
+              "name": "mode",
+              "type": {
+                "text": "CalendarMode"
+              },
+              "default": "'single'",
+              "description": "Selection mode. \"single\" selects one date; \"range\" selects a start and end date."
+            },
+            {
+              "kind": "field",
               "name": "value",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "Selected date in ISO format (YYYY-MM-DD). Empty string means no selection."
+              "description": "Selected date in ISO format (YYYY-MM-DD). Used in mode=\"single\"."
+            },
+            {
+              "kind": "field",
+              "name": "valueStart",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Range start date in ISO format. Used in mode=\"range\"."
+            },
+            {
+              "kind": "field",
+              "name": "valueEnd",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Range end date in ISO format. Used in mode=\"range\"."
             },
             {
               "kind": "field",
@@ -1292,6 +1319,15 @@
             },
             {
               "kind": "field",
+              "name": "months",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Number of month panels to display side-by-side."
+            },
+            {
+              "kind": "field",
               "name": "disabledDates",
               "type": {
                 "text": "Date[]"
@@ -1319,6 +1355,29 @@
               "default": "null"
             },
             {
+              "kind": "field",
+              "name": "_hoverDate",
+              "type": {
+                "text": "Date | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_pickingMonthYear",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_pickerYear",
+              "privacy": "private"
+            },
+            {
               "kind": "method",
               "name": "willUpdate",
               "parameters": [
@@ -1326,6 +1385,24 @@
                   "name": "changed",
                   "type": {
                     "text": "PropertyValues<this>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_monthAtOffset",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "{ year: number; month: number }"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "offset",
+                  "type": {
+                    "text": "number"
                   }
                 }
               ]
@@ -1416,7 +1493,17 @@
                 "type": {
                   "text": "CalendarDay[]"
                 }
-              }
+              },
+              "parameters": [
+                {
+                  "name": "year",
+                  "default": "this._viewYear"
+                },
+                {
+                  "name": "month",
+                  "default": "this._viewMonth"
+                }
+              ]
             },
             {
               "kind": "method",
@@ -1435,6 +1522,29 @@
               "parameters": [
                 {
                   "name": "delta",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_openPicker",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_closePicker",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_selectPickerMonth",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "month",
                   "type": {
                     "text": "number"
                   }
@@ -1492,8 +1602,73 @@
             },
             {
               "kind": "field",
+              "name": "_handleCalendarKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_handleGridMouseOver",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_handleGridMouseLeave",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
               "name": "_handleKeyDown",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_renderDay",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "day",
+                  "type": {
+                    "text": "CalendarDay"
+                  }
+                },
+                {
+                  "name": "rovingDate",
+                  "type": {
+                    "text": "Date"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_renderMonthGrid",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "year",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "month",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "gridLabel",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "rovingDate",
+                  "type": {
+                    "text": "Date"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -1511,9 +1686,9 @@
             {
               "name": "lt-change",
               "type": {
-                "text": "CustomEvent<{value: string}>"
+                "text": "CustomEvent<{valueStart: string, valueEnd: string}>"
               },
-              "description": "Fired when the user selects a date."
+              "description": "Fired when a full range is selected (mode=\"range\")."
             }
           ],
           "superclass": {
@@ -1787,6 +1962,207 @@
           "declaration": {
             "name": "CheckboxLabelPosition",
             "module": "./checkbox.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/chip.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "chipStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-text-info); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "chipStyles",
+          "declaration": {
+            "name": "chipStyles",
+            "module": "src/components/chip/chip.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/chip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Compact label element for tags, filters, and attributes.",
+          "name": "Chip",
+          "slots": [
+            {
+              "description": "Label content",
+              "name": ""
+            },
+            {
+              "description": "Leading icon or avatar",
+              "name": "icon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "chipStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "ChipAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual appearance (filled tinted background or outlined border only)."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ChipVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ChipSize"
+              },
+              "default": "'md'",
+              "description": "Size (affects height, font, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables the chip and its delete button."
+            },
+            {
+              "kind": "field",
+              "name": "deletable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "method",
+              "name": "_resolve",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_deleteIconSize",
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleDelete",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "lt-delete",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fires when the delete button is clicked (only when `deletable`)"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-chip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "src/components/chip/chip.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "./chip"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipVariant",
+          "declaration": {
+            "name": "ChipVariant",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipSize",
+          "declaration": {
+            "name": "ChipSize",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipAppearance",
+          "declaration": {
+            "name": "ChipAppearance",
+            "module": "./chip.types"
           }
         }
       ]
@@ -2095,76 +2471,138 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/chip/chip.styles.ts",
+      "path": "src/components/date-input/date-input.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "chipStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-text-info); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } `"
+          "name": "dateInputStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { cursor: default; display: flex; flex-direction: column; gap: var(--lt-spacing-1); } .label-text { color: var(--lt-text-default); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } /* ── Field ── */ .field { position: relative; } .field-btn { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; outline: none; text-align: left; transition: border-color 150ms ease, box-shadow 150ms ease; width: 100%; } .field-btn:focus-visible { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } .field-btn:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } .display-value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .display-value--placeholder { color: var(--lt-text-muted); } .calendar-icon { color: var(--lt-text-subtle); flex-shrink: 0; line-height: 0; margin-left: var(--lt-spacing-2); } /* ── Sizes ── */ :host([size='sm']) .field-btn { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) .field-btn, :host(:not([size])) .field-btn { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) .field-btn { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* ── Variants ── */ :host([variant='success']) .field-btn { border-color: var(--lt-color-success-500); } :host([variant='success']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) .field-btn { border-color: var(--lt-color-warning-500); } :host([variant='warning']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) .field-btn { border-color: var(--lt-color-error-500); } :host([variant='error']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } /* ── Dropdown ── */ .dropdown { filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08)); left: 0; position: absolute; top: calc(100% + 4px); z-index: 9999; } /* ── Helper text ── */ .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "chipStyles",
+          "name": "dateInputStyles",
           "declaration": {
-            "name": "chipStyles",
-            "module": "src/components/chip/chip.styles.ts"
+            "name": "dateInputStyles",
+            "module": "src/components/date-input/date-input.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/chip/chip.ts",
+      "path": "src/components/date-input/date-input.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Compact label element for tags, filters, and attributes.",
-          "name": "Chip",
-          "slots": [
-            {
-              "description": "Label content",
-              "name": ""
-            },
-            {
-              "description": "Leading icon or avatar",
-              "name": "icon"
-            }
-          ],
+          "description": "A text field that opens an `lt-calendar` popover for visual date selection.",
+          "name": "DateInput",
           "members": [
             {
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "chipStyles"
+              "default": "dateInputStyles"
             },
             {
               "kind": "field",
-              "name": "appearance",
+              "name": "value",
               "type": {
-                "text": "ChipAppearance"
+                "text": "string"
               },
-              "default": "'filled'",
-              "description": "Visual appearance (filled tinted background or outlined border only)."
+              "default": "''",
+              "description": "Selected date in ISO format (YYYY-MM-DD)."
+            },
+            {
+              "kind": "field",
+              "name": "min",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Minimum selectable date (ISO format). Dates before this are disabled."
+            },
+            {
+              "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Maximum selectable date (ISO format). Dates after this are disabled."
+            },
+            {
+              "kind": "field",
+              "name": "locale",
+              "type": {
+                "text": "string"
+              },
+              "default": "'en-US'",
+              "description": "BCP 47 locale used for formatting the display value and calendar labels."
+            },
+            {
+              "kind": "field",
+              "name": "format",
+              "type": {
+                "text": "DateInputFormat"
+              },
+              "default": "'medium'",
+              "description": "How to format the selected date in the trigger field. Maps to `Intl.DateTimeFormat` `dateStyle`."
+            },
+            {
+              "kind": "field",
+              "name": "weekStart",
+              "type": {
+                "text": "'0' | '1'"
+              },
+              "default": "'0'",
+              "description": "First day of the week in the calendar. 0 = Sunday, 1 = Monday."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Field label displayed above the trigger."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Select a date'",
+              "description": "Placeholder text shown when no date is selected."
+            },
+            {
+              "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Helper or error text displayed below the field."
             },
             {
               "kind": "field",
               "name": "variant",
               "type": {
-                "text": "ChipVariant"
+                "text": "DateInputVariant"
               },
-              "default": "'primary'",
-              "description": "Color scheme."
+              "default": "'default'",
+              "description": "Visual state variant."
             },
             {
               "kind": "field",
               "name": "size",
               "type": {
-                "text": "ChipSize"
+                "text": "DateInputSize"
               },
               "default": "'md'",
-              "description": "Size (affects height, font, and padding)."
+              "description": "Visual size."
             },
             {
               "kind": "field",
@@ -2173,54 +2611,97 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Disables the chip and its delete button."
+              "description": "Whether the field is disabled."
             },
             {
               "kind": "field",
-              "name": "deletable",
+              "name": "required",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
+              "description": "Whether the field is required."
             },
             {
               "kind": "field",
-              "name": "background",
+              "name": "name",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "method",
-              "name": "_resolve",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "value",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
+              "description": "Name used in form submission via a hidden input."
             },
             {
               "kind": "field",
-              "name": "_deleteIconSize",
+              "name": "disabledDates",
+              "type": {
+                "text": "Calendar['disabledDates']"
+              },
+              "default": "[]",
+              "description": "Individual dates to disable in the calendar, as Date objects."
+            },
+            {
+              "kind": "field",
+              "name": "_open",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_outsideClickHandler",
+              "type": {
+                "text": "((e: PointerEvent) => void) | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_displayValue",
+              "type": {
+                "text": "string"
+              },
               "privacy": "private",
               "readonly": true
             },
             {
               "kind": "method",
-              "name": "_handleDelete",
+              "name": "_openDropdown",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_closeDropdown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleCalendarChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "CustomEvent<{ value: string }>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleDropdownKeyDown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -2229,67 +2710,67 @@
           ],
           "events": [
             {
-              "name": "lt-delete",
+              "name": "lt-change",
               "type": {
-                "text": "CustomEvent"
+                "text": "CustomEvent<{value: string}>"
               },
-              "description": "Fires when the delete button is clicked (only when `deletable`)"
+              "description": "Fired when the user selects a date."
             }
           ],
           "superclass": {
             "name": "ThemeableElement",
             "module": "/src/base"
           },
-          "tagName": "lt-chip",
+          "tagName": "lt-date-input",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Chip",
+          "name": "DateInput",
           "declaration": {
-            "name": "Chip",
-            "module": "src/components/chip/chip.ts"
+            "name": "DateInput",
+            "module": "src/components/date-input/date-input.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/chip/index.ts",
+      "path": "src/components/date-input/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Chip",
+          "name": "DateInput",
           "declaration": {
-            "name": "Chip",
-            "module": "./chip"
+            "name": "DateInput",
+            "module": "./date-input"
           }
         },
         {
           "kind": "js",
-          "name": "ChipVariant",
+          "name": "DateInputSize",
           "declaration": {
-            "name": "ChipVariant",
-            "module": "./chip.types"
+            "name": "DateInputSize",
+            "module": "./date-input.types"
           }
         },
         {
           "kind": "js",
-          "name": "ChipSize",
+          "name": "DateInputVariant",
           "declaration": {
-            "name": "ChipSize",
-            "module": "./chip.types"
+            "name": "DateInputVariant",
+            "module": "./date-input.types"
           }
         },
         {
           "kind": "js",
-          "name": "ChipAppearance",
+          "name": "DateInputFormat",
           "declaration": {
-            "name": "ChipAppearance",
-            "module": "./chip.types"
+            "name": "DateInputFormat",
+            "module": "./date-input.types"
           }
         }
       ]

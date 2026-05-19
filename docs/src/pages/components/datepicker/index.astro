@@ -12,6 +12,14 @@ import ApiTable from '../../../components/ApiTable/index.astro';
     navigation, screen-reader announcements, locale formatting) without a custom implementation.
   </lt-text>
 
+  <lt-alert variant="info">
+    <strong>Datepicker vs Date Input</strong> — Use <code>lt-datepicker</code> when you need the browser's native date/time
+    UI: it supports <code>type="time"</code> and <code>type="datetime-local"</code>, integrates with native form
+    validation, and works without any JavaScript. Choose
+    <lt-link href="/components/date-input">lt-date-input</lt-link> instead when you need a consistent cross-browser look,
+    locale-aware formatting, or the visual calendar grid.
+  </lt-alert>
+
   <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-datepicker" defaults={{ label: 'Start date', type: 'date' }} />
 

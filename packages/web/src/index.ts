@@ -94,5 +94,6 @@ export * from './components/sidepanel';
 export * from './components/image';
 export * from './components/pagination';
 export * from './components/datepicker';
+export * from './components/date-input';
 export * from './components/combobox';
 export * from './components/calendar';

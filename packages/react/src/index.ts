@@ -10,6 +10,7 @@ export { Checkbox, type CheckboxProps } from './components/Checkbox';
 export { Chip, type ChipProps } from './components/Chip';
 export { Combobox, type ComboboxProps } from './components/Combobox';
 export { Datepicker, type DatepickerProps } from './components/Datepicker';
+export { DateInput, type DateInputProps } from './components/DateInput';
 export { Dialog, type DialogProps } from './components/Dialog';
 export { Divider, type DividerProps } from './components/Divider';
 export { DropdownItem, type DropdownItemProps } from './components/DropdownItem';

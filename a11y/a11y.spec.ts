@@ -11,6 +11,7 @@ const routes = [
 
   '/components/introduction/',
   '/components/calendar/',
+  '/components/date-input/',
 
   '/icons/introduction/',
 
