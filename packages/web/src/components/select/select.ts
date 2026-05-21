@@ -4,6 +4,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 import { selectStyles } from './select.styles';
 import { SelectOption, SelectSize, SelectVariant } from './select.types';
+import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty/icons';
 import '../surface/';
 import '../text/text';
@@ -103,6 +104,8 @@ export class Select extends ThemeableElement {
    */
   @state() private isOpen = false;
 
+  private _cleanupClickOutside: (() => void) | null = null;
+
   /**
    * Toggles the dropdown open/closed state.
    * @private
@@ -134,13 +137,7 @@ export class Select extends ThemeableElement {
     this.value = option.value;
     this.closeDropdown();
 
-    this.dispatchEvent(
-      new CustomEvent('change', {
-        detail: { value: this.value },
-        bubbles: true,
-        composed: true
-      })
-    );
+    dispatch(this, 'change', { value: this.value });
   }
 
   /**
@@ -187,31 +184,15 @@ export class Select extends ThemeableElement {
     }
   }
 
-  /**
-   * Handles clicks outside the component to close the dropdown.
-   * @private
-   */
-  private handleDocumentClick = (e: Event) => {
-    const path = e.composedPath();
-    if (!path.includes(this)) {
-      this.closeDropdown();
-    }
-  };
-
-  /**
-   * Lifecycle method - sets up document click listener.
-   */
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('click', this.handleDocumentClick);
+    this._cleanupClickOutside = createClickOutsideHandler(this, () => this.closeDropdown(), { event: 'click' });
   }
 
-  /**
-   * Lifecycle method - removes document click listener.
-   */
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener('click', this.handleDocumentClick);
+    this._cleanupClickOutside?.();
+    this._cleanupClickOutside = null;
   }
 
   /**

@@ -5,6 +5,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { sidepanelStyles } from './sidepanel.styles';
 import { backdropFeatureStyles } from '../shared/backdrop.styles';
 import type { SidePanelAnchor } from './sidepanel.types';
+import { dispatch } from '../../utils';
 
 import '@latty/icons';
 import '../text/text';
@@ -54,7 +55,7 @@ export class SidePanel extends ThemeableElement {
   /** Close the panel. */
   public hide() {
     this.open = false;
-    this.dispatchEvent(new CustomEvent('lt-close', { bubbles: true, composed: true }));
+    dispatch(this, 'lt-close');
   }
 
   /** Toggle the panel open/closed. */

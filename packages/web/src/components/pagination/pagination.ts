@@ -4,6 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { paginationStyles } from './pagination.styles';
 import type { PaginationSize } from './pagination.types';
+import { dispatch } from '../../utils';
 import '@latty/icons';
 
 /**
@@ -42,7 +43,7 @@ export class Pagination extends ThemeableElement {
   private _go(page: number) {
     if (this.disabled || page < 1 || page > this.totalPages || page === this.page) return;
     this.page = page;
-    this.dispatchEvent(new CustomEvent('lt-change', { detail: { page }, bubbles: true, composed: true }));
+    dispatch(this, 'lt-change', { page });
   }
 
   private _pages(): (number | '…')[] {

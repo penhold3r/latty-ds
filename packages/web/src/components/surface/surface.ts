@@ -5,6 +5,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 
 import { surfaceStyles } from './surface.styles';
 import { SurfaceElevation, SurfaceAppearance } from './surface.types';
+import { resolveColorValue } from '../../utils';
 
 /**
  * A container component that provides elevation and surface styling.
@@ -55,12 +56,8 @@ export class Surface extends ThemeableElement {
   /** Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600). */
   @property({ reflect: true }) background = '';
 
-  private _resolve(value: string): string {
-    return value.startsWith('--') ? `var(${value})` : value;
-  }
-
   render() {
-    const style = this.background ? { '--_surface-bg': this._resolve(this.background) } : {};
+    const style = this.background ? { '--_surface-bg': resolveColorValue(this.background) } : {};
 
     return html`
       <div class="surface" part="surface" style=${styleMap(style)}>

@@ -5,6 +5,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 
 import { tooltipStyles } from './tooltip.styles';
 import type { TooltipPlacement } from './tooltip.types';
+import { resolveColorValue } from '../../utils';
 import '../text/text';
 
 let _tooltipIdCounter = 0;
@@ -54,10 +55,6 @@ export class Tooltip extends ThemeableElement {
   /** Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50). */
   @property({ reflect: true }) color = '';
 
-  private _resolve(value: string): string {
-    return value.startsWith('--') ? `var(${value})` : value;
-  }
-
   protected firstUpdated() {
     const trigger = this._slot?.assignedElements()[0];
     if (trigger) {
@@ -67,8 +64,8 @@ export class Tooltip extends ThemeableElement {
 
   render() {
     const tooltipStyle = styleMap({
-      ...(this.background ? { '--_tooltip-bg': this._resolve(this.background) } : {}),
-      ...(this.color ? { '--_tooltip-color': this._resolve(this.color) } : {})
+      ...(this.background ? { '--_tooltip-bg': resolveColorValue(this.background) } : {}),
+      ...(this.color ? { '--_tooltip-color': resolveColorValue(this.color) } : {})
     });
 
     return html`

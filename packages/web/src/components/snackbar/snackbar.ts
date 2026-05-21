@@ -4,6 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { snackbarStyles } from './snackbar.styles';
 import type { SnackbarVariant } from './snackbar.types';
+import { dispatch } from '../../utils';
 
 import '@latty/icons';
 import '../surface/surface';
@@ -75,10 +76,10 @@ export class Snackbar extends ThemeableElement {
     if (changedProperties.has('open')) {
       if (this.open) {
         this._startTimer();
-        this.dispatchEvent(new CustomEvent('lt-show', { bubbles: true, composed: true }));
+        dispatch(this, 'lt-show');
       } else {
         this._clearTimer();
-        this.dispatchEvent(new CustomEvent('lt-hide', { bubbles: true, composed: true }));
+        dispatch(this, 'lt-hide');
       }
     }
   }
@@ -107,7 +108,7 @@ export class Snackbar extends ThemeableElement {
   }
 
   private _handleAction() {
-    this.dispatchEvent(new CustomEvent('lt-action', { bubbles: true, composed: true }));
+    dispatch(this, 'lt-action');
     this.hide();
   }
 

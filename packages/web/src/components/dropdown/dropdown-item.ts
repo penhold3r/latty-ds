@@ -3,6 +3,7 @@ import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { dropdownItemStyles } from './dropdown-item.styles';
+import { dispatch } from '../../utils';
 
 /**
  * A menu item for use inside lt-dropdown.
@@ -22,7 +23,7 @@ export class DropdownItem extends ThemeableElement {
 
   private _onActivate() {
     if (this.disabled) return;
-    this.dispatchEvent(new CustomEvent('lt-select', { bubbles: true, composed: true, detail: { item: this } }));
+    dispatch(this, 'lt-select', { item: this });
   }
 
   render() {

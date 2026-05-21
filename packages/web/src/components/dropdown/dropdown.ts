@@ -4,6 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { dropdownStyles } from './dropdown.styles';
 import type { DropdownPlacement } from './dropdown.types';
+import { dispatch, createClickOutsideHandler } from '../../utils';
 import './dropdown-item';
 import '../surface/surface';
 
@@ -23,11 +24,7 @@ export class Dropdown extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) open = false;
   @property({ reflect: true }) placement: DropdownPlacement = 'bottom-start';
 
-  private _boundDocClick = (e: MouseEvent) => {
-    if (!e.composedPath().includes(this)) {
-      this.hide();
-    }
-  };
+  private _cleanupClickOutside: (() => void) | null = null;
 
   connectedCallback() {
     super.connectedCallback();
@@ -39,19 +36,21 @@ export class Dropdown extends ThemeableElement {
     super.disconnectedCallback();
     this.removeEventListener('keydown', this._onKeydown);
     this.removeEventListener('lt-select', this.hide);
-    document.removeEventListener('click', this._boundDocClick, { capture: true });
+    this._cleanupClickOutside?.();
+    this._cleanupClickOutside = null;
   }
 
   updated(changed: Map<string, unknown>) {
     if (!changed.has('open')) return;
     if (this.open) {
-      document.addEventListener('click', this._boundDocClick, { capture: true });
+      this._cleanupClickOutside = createClickOutsideHandler(this, () => this.hide(), { event: 'click', capture: true });
       requestAnimationFrame(() => this._items()[0]?.focus());
-      this.dispatchEvent(new CustomEvent('lt-open', { bubbles: true, composed: true }));
+      dispatch(this, 'lt-open');
     } else {
-      document.removeEventListener('click', this._boundDocClick, { capture: true });
+      this._cleanupClickOutside?.();
+      this._cleanupClickOutside = null;
       this._triggerEl()?.focus();
-      this.dispatchEvent(new CustomEvent('lt-close', { bubbles: true, composed: true }));
+      dispatch(this, 'lt-close');
     }
   }
 

@@ -5,6 +5,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 
 import { alertStyles } from './alert.styles';
 import type { AlertVariant, AlertAppearance } from './alert.types';
+import { resolveColorValue, dispatch } from '../../utils';
 
 import '@latty/icons';
 import '../text/text';
@@ -60,10 +61,6 @@ export class Alert extends ThemeableElement {
   /** Renders the title in small caps with wider letter spacing. */
   @property({ type: Boolean, reflect: true }) uppercase = false;
 
-  private _resolve(value: string): string {
-    return value.startsWith('--') ? `var(${value})` : value;
-  }
-
   private static readonly _iconMap: Record<AlertVariant, string> = {
     default: 'info-circle',
     success: 'check-circle',
@@ -73,9 +70,7 @@ export class Alert extends ThemeableElement {
   };
 
   private _handleClose() {
-    const cancelled = !this.dispatchEvent(
-      new CustomEvent('lt-close', { bubbles: true, composed: true, cancelable: true })
-    );
+    const cancelled = !dispatch(this, 'lt-close', undefined, { cancelable: true });
     if (cancelled) return;
     this.setAttribute('dismissed', '');
     setTimeout(() => this.remove(), 200);
@@ -90,7 +85,7 @@ export class Alert extends ThemeableElement {
 
   render() {
     const iconName = this._resolvedIcon;
-    const bgStyle = styleMap(this.background ? { background: this._resolve(this.background) } : {});
+    const bgStyle = styleMap(this.background ? { background: resolveColorValue(this.background) } : {});
     return html`
       <div class="inner" part="base" role="alert" style=${bgStyle}>
         ${iconName ? html`<lt-icon class="icon" name=${iconName} part="icon"></lt-icon>` : ''}

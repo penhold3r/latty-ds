@@ -4,6 +4,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 import { datepickerStyles } from './datepicker.styles';
 import type { DatepickerType, DatepickerSize, DatepickerVariant } from './datepicker.types';
+import { dispatch } from '../../utils';
 
 /**
  * Date and time picker wrapping the native browser date/time input with design-system styling.
@@ -67,12 +68,12 @@ export class Datepicker extends ThemeableElement {
 
   private handleChange() {
     this.value = this.input.value;
-    this.dispatchEvent(new CustomEvent('lt-change', { detail: { value: this.value }, bubbles: true, composed: true }));
+    dispatch(this, 'lt-change', { value: this.value });
   }
 
   private handleInput() {
     this.value = this.input.value;
-    this.dispatchEvent(new CustomEvent('lt-input', { detail: { value: this.value }, bubbles: true, composed: true }));
+    dispatch(this, 'lt-input', { value: this.value });
   }
 
   render() {

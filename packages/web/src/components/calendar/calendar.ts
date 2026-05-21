@@ -5,6 +5,7 @@ import '@latty/icons';
 
 import { calendarStyles } from './calendar.styles';
 import type { CalendarDay, CalendarMode, CalendarWeekStart } from './calendar.types';
+import { dispatch } from '../../utils';
 
 /**
  * A visual calendar grid for single-date or date-range selection.
@@ -245,13 +246,7 @@ export class Calendar extends ThemeableElement {
     this._viewMonth = month;
     this._viewYear = year;
     this._focusedDate = null;
-    this.dispatchEvent(
-      new CustomEvent('lt-month-change', {
-        detail: { year: this._viewYear, month: this._viewMonth },
-        bubbles: true,
-        composed: true
-      })
-    );
+    dispatch(this, 'lt-month-change', { year: this._viewYear, month: this._viewMonth });
   }
 
   private _openPicker() {
@@ -268,13 +263,7 @@ export class Calendar extends ThemeableElement {
     this._viewMonth = month;
     this._pickingMonthYear = false;
     this._focusedDate = null;
-    this.dispatchEvent(
-      new CustomEvent('lt-month-change', {
-        detail: { year: this._viewYear, month: this._viewMonth },
-        bubbles: true,
-        composed: true
-      })
-    );
+    dispatch(this, 'lt-month-change', { year: this._viewYear, month: this._viewMonth });
   }
 
   private _selectDay(day: CalendarDay) {
@@ -309,13 +298,7 @@ export class Calendar extends ThemeableElement {
         }
 
         if (this.valueStart && this.valueEnd) {
-          this.dispatchEvent(
-            new CustomEvent('lt-change', {
-              detail: { valueStart: this.valueStart, valueEnd: this.valueEnd },
-              bubbles: true,
-              composed: true
-            })
-          );
+          dispatch(this, 'lt-change', { valueStart: this.valueStart, valueEnd: this.valueEnd });
         }
       }
       this._focusedDate = day.date;
@@ -325,7 +308,7 @@ export class Calendar extends ThemeableElement {
     const iso = this._toIso(day.date);
     this.value = iso;
     this._focusedDate = day.date;
-    this.dispatchEvent(new CustomEvent('lt-change', { detail: { value: iso }, bubbles: true, composed: true }));
+    dispatch(this, 'lt-change', { value: iso });
   }
 
   private _goToToday() {

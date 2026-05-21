@@ -6,6 +6,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { chipStyles } from './chip.styles';
 import '@latty/icons';
 import type { ChipVariant, ChipSize, ChipAppearance } from './chip.types';
+import { resolveColorValue, dispatch } from '../../utils';
 
 /**
  * Compact label element for tags, filters, and attributes.
@@ -43,20 +44,16 @@ export class Chip extends ThemeableElement {
   /** Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600). */
   @property({ reflect: true }) background = '';
 
-  private _resolve(value: string): string {
-    return value.startsWith('--') ? `var(${value})` : value;
-  }
-
   private get _deleteIconSize() {
     return this.size === 'lg' ? 'sm' : 'xs';
   }
 
   private _handleDelete() {
-    this.dispatchEvent(new CustomEvent('lt-delete', { bubbles: true, composed: true }));
+    dispatch(this, 'lt-delete');
   }
 
   render() {
-    const bgStyle = styleMap(this.background ? { background: this._resolve(this.background) } : {});
+    const bgStyle = styleMap(this.background ? { background: resolveColorValue(this.background) } : {});
     return html`
       <span part="base" style=${bgStyle}>
         <slot name="icon"></slot>

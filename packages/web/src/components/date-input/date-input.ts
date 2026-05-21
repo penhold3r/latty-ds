@@ -7,6 +7,7 @@ import '../calendar/calendar';
 import { dateInputStyles } from './date-input.styles';
 import type { DateInputSize, DateInputVariant, DateInputFormat } from './date-input.types';
 import type { Calendar } from '../calendar/calendar';
+import { dispatch, createClickOutsideHandler } from '../../utils';
 
 /**
  * A text field that opens an `lt-calendar` popover for visual date selection.
@@ -76,7 +77,7 @@ export class DateInput extends ThemeableElement {
 
   @state() private _open = false;
 
-  private _outsideClickHandler: ((e: PointerEvent) => void) | null = null;
+  private _cleanupClickOutside: (() => void) | null = null;
 
   private get _displayValue(): string {
     if (!this.value) return '';
@@ -88,33 +89,25 @@ export class DateInput extends ThemeableElement {
   private _openDropdown() {
     if (this.disabled || this._open) return;
     this._open = true;
-    const handler = (e: PointerEvent) => {
-      if (!e.composedPath().includes(this)) this._closeDropdown();
-    };
-    this._outsideClickHandler = handler;
-    document.addEventListener('pointerdown', handler);
+    this._cleanupClickOutside = createClickOutsideHandler(this, () => this._closeDropdown());
   }
 
   private _closeDropdown() {
     this._open = false;
-    if (this._outsideClickHandler) {
-      document.removeEventListener('pointerdown', this._outsideClickHandler);
-      this._outsideClickHandler = null;
-    }
+    this._cleanupClickOutside?.();
+    this._cleanupClickOutside = null;
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback();
-    if (this._outsideClickHandler) {
-      document.removeEventListener('pointerdown', this._outsideClickHandler);
-      this._outsideClickHandler = null;
-    }
+    this._cleanupClickOutside?.();
+    this._cleanupClickOutside = null;
   }
 
   private _handleCalendarChange(e: CustomEvent<{ value: string }>) {
     e.stopPropagation();
     this.value = e.detail.value;
-    this.dispatchEvent(new CustomEvent('lt-change', { detail: { value: this.value }, bubbles: true, composed: true }));
+    dispatch(this, 'lt-change', { value: this.value });
     this._closeDropdown();
     this.shadowRoot?.querySelector<HTMLElement>('.field-btn')?.focus();
   }

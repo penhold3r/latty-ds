@@ -4,6 +4,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 import { comboboxStyles } from './combobox.styles';
 import type { ComboboxOption, ComboboxSize, ComboboxVariant } from './combobox.types';
+import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty/icons';
 
 /**
@@ -60,6 +61,8 @@ export class Combobox extends ThemeableElement {
   @state() private open = false;
   @state() private activeIndex = -1;
 
+  private _cleanupClickOutside: (() => void) | null = null;
+
   private get selectedLabel(): string {
     return this.options.find((o) => o.value === this.value)?.label ?? '';
   }
@@ -86,9 +89,7 @@ export class Combobox extends ThemeableElement {
     if (opt.disabled) return;
     this.value = opt.value;
     this.closeDropdown();
-    this.dispatchEvent(
-      new CustomEvent('lt-change', { detail: { value: opt.value, label: opt.label }, bubbles: true, composed: true })
-    );
+    dispatch(this, 'lt-change', { value: opt.value, label: opt.label });
   }
 
   private handleInput(e: Event) {
@@ -119,18 +120,15 @@ export class Combobox extends ThemeableElement {
     }
   }
 
-  private handleDocumentClick = (e: Event) => {
-    if (!e.composedPath().includes(this)) this.closeDropdown();
-  };
-
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('click', this.handleDocumentClick);
+    this._cleanupClickOutside = createClickOutsideHandler(this, () => this.closeDropdown(), { event: 'click' });
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener('click', this.handleDocumentClick);
+    this._cleanupClickOutside?.();
+    this._cleanupClickOutside = null;
   }
 
   render() {
