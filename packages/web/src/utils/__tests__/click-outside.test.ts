@@ -3,12 +3,12 @@ import { createClickOutsideHandler } from '../click-outside';
 
 describe('createClickOutsideHandler', () => {
   let host: HTMLElement;
-  let onOutside: ReturnType<typeof vi.fn>;
+  let onOutside: ReturnType<typeof vi.fn<() => void>>;
 
   beforeEach(() => {
     host = document.createElement('div');
     document.body.appendChild(host);
-    onOutside = vi.fn();
+    onOutside = vi.fn<() => void>();
   });
 
   afterEach(() => {
