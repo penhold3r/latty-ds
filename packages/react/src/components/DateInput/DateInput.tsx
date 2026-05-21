@@ -22,7 +22,7 @@ export type DateInputProps = {
 };
 
 export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateInput(
-  { onLtChange, weekStart, helperText, disabledDates, children, ...props },
+  { onLtChange, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DateInputEl>(null);
@@ -36,27 +36,6 @@ export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateIn
     el.addEventListener('lt-change', h);
     return () => el.removeEventListener('lt-change', h);
   }, [onLtChange]);
-
-  // React 18 lowercases camelCase props on custom elements — set hyphenated attributes directly
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el) return;
-    if (weekStart !== undefined) el.setAttribute('week-start', weekStart);
-    else el.removeAttribute('week-start');
-  }, [weekStart]);
-
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el) return;
-    if (helperText !== undefined) el.setAttribute('helper-text', helperText);
-    else el.removeAttribute('helper-text');
-  }, [helperText]);
-
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el) return;
-    el.disabledDates = disabledDates ?? [];
-  }, [disabledDates]);
 
   return (
     <lt-date-input ref={innerRef} {...(props as Record<string, unknown>)}>

@@ -122,17 +122,9 @@ export const alertStyles = css`
   /* ── Close button ────────────────────────────────────────── */
 
   .close {
-    align-items: center;
-    background: transparent;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-    display: flex;
     flex-shrink: 0;
-    justify-content: center;
     margin-top: 1px;
-    opacity: 0.6;
-    padding: 0;
+    opacity: 0.7;
   }
 
   .close:hover {

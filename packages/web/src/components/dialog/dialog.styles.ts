@@ -100,32 +100,7 @@ export const dialogStyles = css`
   }
 
   .close-button {
-    align-items: center;
-    background: transparent;
-    border-radius: var(--lt-border-radius);
-    border: none;
-    color: var(--lt-color-neutral-500);
-    cursor: pointer;
-    display: flex;
-    height: 32px;
-    justify-content: center;
-    padding: 0;
-    transition: all 120ms ease;
-    width: 32px;
-  }
-
-  .close-button:hover {
-    background: var(--lt-bg-surface);
-    color: var(--lt-color-neutral-700);
-  }
-
-  .close-button:active {
-    background: var(--lt-bg-overlay);
-  }
-
-  .close-button:focus-visible {
-    outline: 2px solid var(--lt-interactive-primary-bg);
-    outline-offset: 2px;
+    flex-shrink: 0;
   }
 
   /* Body */

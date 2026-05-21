@@ -4,700 +4,6 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/components/alert/alert.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "alertStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens */ --_bg-subtle: var(--lt-bg-neutral-subtle); --_bg-solid: var(--lt-bg-inverse); --_border: var(--lt-border-strong); --_color: var(--lt-text-default); --_color-solid: var(--lt-text-inverse); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-bg-success-subtle); --_bg-solid: var(--lt-bg-success); --_border: var(--lt-border-success-strong); --_color: var(--lt-text-success); --_color-solid: var(--lt-text-on-success); } :host([variant='warning']) { --_bg-subtle: var(--lt-bg-warning-subtle); --_bg-solid: var(--lt-bg-warning); --_border: var(--lt-border-warning-strong); --_color: var(--lt-text-warning); --_color-solid: var(--lt-text-on-warning); } :host([variant='error']) { --_bg-subtle: var(--lt-bg-error-subtle); --_bg-solid: var(--lt-bg-error); --_border: var(--lt-border-error-strong); --_color: var(--lt-text-error); --_color-solid: var(--lt-text-on-error); } :host([variant='info']) { --_bg-subtle: var(--lt-bg-info-subtle); --_bg-solid: var(--lt-bg-info); --_border: var(--lt-border-info-strong); --_color: var(--lt-text-info); --_color-solid: var(--lt-text-on-info); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: 1px solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: 1px solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } .title + .content { opacity: 0.8; } /* ── Close button ────────────────────────────────────────── */ .close { align-items: center; background: transparent; border: none; color: inherit; cursor: pointer; display: flex; flex-shrink: 0; justify-content: center; margin-top: 1px; opacity: 0.6; padding: 0; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "alertStyles",
-          "declaration": {
-            "name": "alertStyles",
-            "module": "src/components/alert/alert.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/alert/alert.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Inline notification for persistent contextual feedback.",
-          "name": "Alert",
-          "slots": [
-            {
-              "description": "Alert body. Accepts any HTML — bold, links, lists, etc.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "alertStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "AlertVariant"
-              },
-              "default": "'default'",
-              "description": "Visual style."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "AlertAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual treatment. `filled` uses a tinted background with border, `outlined` uses a white background with border, `solid` uses a solid color background with no border."
-            },
-            {
-              "kind": "field",
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Optional bold heading above the body content."
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon to show before the body. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
-            },
-            {
-              "kind": "field",
-              "name": "closable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the title in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "_iconMap",
-              "type": {
-                "text": "Record<AlertVariant, string>"
-              },
-              "privacy": "private",
-              "static": true,
-              "readonly": true,
-              "default": "{ default: 'info-circle', success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
-            },
-            {
-              "kind": "method",
-              "name": "_handleClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_resolvedIcon",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
-              "name": "lt-close"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-alert",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Alert",
-          "declaration": {
-            "name": "Alert",
-            "module": "src/components/alert/alert.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/alert/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Alert",
-          "declaration": {
-            "name": "Alert",
-            "module": "./alert"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AlertVariant",
-          "declaration": {
-            "name": "AlertVariant",
-            "module": "./alert.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AlertAppearance",
-          "declaration": {
-            "name": "AlertAppearance",
-            "module": "./alert.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "avatarStyles",
-          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-text-neutral); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-text-secondary); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-text-success); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-text-warning); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-text-error); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-text-info); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "avatarStyles",
-          "declaration": {
-            "name": "avatarStyles",
-            "module": "src/components/avatar/avatar.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
-          "name": "Avatar",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "avatarStyles"
-            },
-            {
-              "kind": "field",
-              "name": "src",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "URL of the avatar image."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Full name used to derive initials when no image is available."
-            },
-            {
-              "kind": "field",
-              "name": "alt",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Accessible label for the image (defaults to `name`)."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "AvatarSize"
-              },
-              "default": "'md'",
-              "description": "Size of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "shape",
-              "type": {
-                "text": "AvatarShape"
-              },
-              "default": "'circle'",
-              "description": "Shape of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "AvatarColor"
-              },
-              "default": "'neutral'",
-              "description": "Background color used for the initials and icon fallback states."
-            },
-            {
-              "kind": "field",
-              "name": "_imgError",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_initials",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleImgError",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-avatar",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "src/components/avatar/avatar.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "./avatar"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarSize",
-          "declaration": {
-            "name": "AvatarSize",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarShape",
-          "declaration": {
-            "name": "AvatarShape",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarColor",
-          "declaration": {
-            "name": "AvatarColor",
-            "module": "./avatar.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/breadcrumb/breadcrumb.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "breadcrumbStyles",
-          "default": "css` :host { display: block; } [part='list'] { align-items: center; display: flex; flex-wrap: wrap; gap: 0; list-style: none; margin: 0; padding: 0; } `"
-        },
-        {
-          "kind": "variable",
-          "name": "breadcrumbItemStyles",
-          "default": "css` :host { align-items: center; display: inline-flex; font-family: var(--lt-typography-fontfamily); font-size: 0.875rem; } [part='link'] { color: var(--lt-interactive-primary-bg); text-decoration: none; transition: color 120ms ease; } [part='link']:hover { color: var(--lt-interactive-primary-bg-hover); text-decoration: underline; } [part='text'] { color: var(--lt-text-default); font-weight: 600; } [part='separator'] { color: var(--lt-text-muted); margin-inline: var(--lt-spacing-2); user-select: none; } [part='separator']::after { content: var(--lt-breadcrumb-separator, '/'); } :host(:last-child) [part='separator'] { display: none; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "breadcrumbStyles",
-          "declaration": {
-            "name": "breadcrumbStyles",
-            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "breadcrumbItemStyles",
-          "declaration": {
-            "name": "breadcrumbItemStyles",
-            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/breadcrumb/breadcrumb.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Navigation breadcrumb trail container.\nPlace `lt-breadcrumb-item` elements inside as direct children.",
-          "name": "Breadcrumb",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "breadcrumbStyles"
-            },
-            {
-              "kind": "field",
-              "name": "separator",
-              "type": {
-                "text": "string"
-              },
-              "default": "'/'",
-              "description": "The character or element to use as a separator between breadcrumb items.\nThis is passed down to all children items via CSS variables."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changed",
-                  "type": {
-                    "text": "PropertyValues<this>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-breadcrumb",
-          "customElement": true
-        },
-        {
-          "kind": "class",
-          "description": "A single step in a breadcrumb trail.\nRenders as a link when `href` is provided, or as plain text when `current`.",
-          "name": "BreadcrumbItem",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "breadcrumbItemStyles"
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "URL this item links to. Omit for the current (last) item."
-            },
-            {
-              "kind": "field",
-              "name": "current",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Marks this item as the current page. Renders as non-linked text with `aria-current=\"page\"`."
-            },
-            {
-              "kind": "field",
-              "name": "separator",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Custom separator for this specific item. Overrides the parent's separator."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-breadcrumb-item",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Breadcrumb",
-          "declaration": {
-            "name": "Breadcrumb",
-            "module": "src/components/breadcrumb/breadcrumb.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BreadcrumbItem",
-          "declaration": {
-            "name": "BreadcrumbItem",
-            "module": "src/components/breadcrumb/breadcrumb.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/breadcrumb/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Breadcrumb",
-          "declaration": {
-            "name": "Breadcrumb",
-            "module": "./breadcrumb"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BreadcrumbItem",
-          "declaration": {
-            "name": "BreadcrumbItem",
-            "module": "./breadcrumb"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BreadcrumbSeparator",
-          "declaration": {
-            "name": "BreadcrumbSeparator",
-            "module": "./breadcrumb.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/badge.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "badgeStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 600; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: var(--lt-color-white); } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "badgeStyles",
-          "declaration": {
-            "name": "badgeStyles",
-            "module": "src/components/badge/badge.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/badge.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A compact status label for categories, counts, and states.",
-          "name": "Badge",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "badgeStyles"
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "BadgeAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual style: tinted fill, outline only, or full-color solid."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "BadgeVariant"
-              },
-              "default": "'primary'",
-              "description": "Color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "BadgeSize"
-              },
-              "default": "'md'",
-              "description": "Size."
-            },
-            {
-              "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text. When empty the badge renders as a circle indicator."
-            },
-            {
-              "kind": "field",
-              "name": "dot",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show a leading status dot (only visible when content is set)."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-badge",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Badge",
-          "declaration": {
-            "name": "Badge",
-            "module": "src/components/badge/badge.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Badge",
-          "declaration": {
-            "name": "Badge",
-            "module": "./badge"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeVariant",
-          "declaration": {
-            "name": "BadgeVariant",
-            "module": "./badge.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeSize",
-          "declaration": {
-            "name": "BadgeSize",
-            "module": "./badge.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeAppearance",
-          "declaration": {
-            "name": "BadgeAppearance",
-            "module": "./badge.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/accordion/accordion.styles.ts",
       "declarations": [
         {
@@ -914,6 +220,700 @@
           "declaration": {
             "name": "AccordionAppearance",
             "module": "./accordion.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/avatar/avatar.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "avatarStyles",
+          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-text-neutral); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-text-secondary); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-text-success); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-text-warning); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-text-error); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-text-info); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "avatarStyles",
+          "declaration": {
+            "name": "avatarStyles",
+            "module": "src/components/avatar/avatar.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/avatar/avatar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
+          "name": "Avatar",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "avatarStyles"
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "URL of the avatar image."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Full name used to derive initials when no image is available."
+            },
+            {
+              "kind": "field",
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Accessible label for the image (defaults to `name`)."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "AvatarSize"
+              },
+              "default": "'md'",
+              "description": "Size of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "shape",
+              "type": {
+                "text": "AvatarShape"
+              },
+              "default": "'circle'",
+              "description": "Shape of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "AvatarColor"
+              },
+              "default": "'neutral'",
+              "description": "Background color used for the initials and icon fallback states."
+            },
+            {
+              "kind": "field",
+              "name": "_imgError",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_initials",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleImgError",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-avatar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Avatar",
+          "declaration": {
+            "name": "Avatar",
+            "module": "src/components/avatar/avatar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/avatar/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Avatar",
+          "declaration": {
+            "name": "Avatar",
+            "module": "./avatar"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarSize",
+          "declaration": {
+            "name": "AvatarSize",
+            "module": "./avatar.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarShape",
+          "declaration": {
+            "name": "AvatarShape",
+            "module": "./avatar.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarColor",
+          "declaration": {
+            "name": "AvatarColor",
+            "module": "./avatar.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/badge.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "badgeStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 600; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: var(--lt-color-white); } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "badgeStyles",
+          "declaration": {
+            "name": "badgeStyles",
+            "module": "src/components/badge/badge.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/badge.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A compact status label for categories, counts, and states.",
+          "name": "Badge",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "badgeStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "BadgeAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual style: tinted fill, outline only, or full-color solid."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "BadgeVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "BadgeSize"
+              },
+              "default": "'md'",
+              "description": "Size."
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text. When empty the badge renders as a circle indicator."
+            },
+            {
+              "kind": "field",
+              "name": "dot",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show a leading status dot (only visible when content is set)."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-badge",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "src/components/badge/badge.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "./badge"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeVariant",
+          "declaration": {
+            "name": "BadgeVariant",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeSize",
+          "declaration": {
+            "name": "BadgeSize",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeAppearance",
+          "declaration": {
+            "name": "BadgeAppearance",
+            "module": "./badge.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/breadcrumb.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "breadcrumbStyles",
+          "default": "css` :host { display: block; } [part='list'] { align-items: center; display: flex; flex-wrap: wrap; gap: 0; list-style: none; margin: 0; padding: 0; } `"
+        },
+        {
+          "kind": "variable",
+          "name": "breadcrumbItemStyles",
+          "default": "css` :host { align-items: center; display: inline-flex; font-family: var(--lt-typography-fontfamily); font-size: 0.875rem; } [part='link'] { color: var(--lt-interactive-primary-bg); text-decoration: none; transition: color 120ms ease; } [part='link']:hover { color: var(--lt-interactive-primary-bg-hover); text-decoration: underline; } [part='text'] { color: var(--lt-text-default); font-weight: 600; } [part='separator'] { color: var(--lt-text-muted); margin-inline: var(--lt-spacing-2); user-select: none; } [part='separator']::after { content: var(--lt-breadcrumb-separator, '/'); } :host(:last-child) [part='separator'] { display: none; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "breadcrumbStyles",
+          "declaration": {
+            "name": "breadcrumbStyles",
+            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "breadcrumbItemStyles",
+          "declaration": {
+            "name": "breadcrumbItemStyles",
+            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/breadcrumb.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Navigation breadcrumb trail container.\nPlace `lt-breadcrumb-item` elements inside as direct children.",
+          "name": "Breadcrumb",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "breadcrumbStyles"
+            },
+            {
+              "kind": "field",
+              "name": "separator",
+              "type": {
+                "text": "string"
+              },
+              "default": "'/'",
+              "description": "The character or element to use as a separator between breadcrumb items.\nThis is passed down to all children items via CSS variables."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-breadcrumb",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "A single step in a breadcrumb trail.\nRenders as a link when `href` is provided, or as plain text when `current`.",
+          "name": "BreadcrumbItem",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "breadcrumbItemStyles"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "URL this item links to. Omit for the current (last) item."
+            },
+            {
+              "kind": "field",
+              "name": "current",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Marks this item as the current page. Renders as non-linked text with `aria-current=\"page\"`."
+            },
+            {
+              "kind": "field",
+              "name": "separator",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Custom separator for this specific item. Overrides the parent's separator."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-breadcrumb-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Breadcrumb",
+          "declaration": {
+            "name": "Breadcrumb",
+            "module": "src/components/breadcrumb/breadcrumb.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbItem",
+          "declaration": {
+            "name": "BreadcrumbItem",
+            "module": "src/components/breadcrumb/breadcrumb.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Breadcrumb",
+          "declaration": {
+            "name": "Breadcrumb",
+            "module": "./breadcrumb"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbItem",
+          "declaration": {
+            "name": "BreadcrumbItem",
+            "module": "./breadcrumb"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbSeparator",
+          "declaration": {
+            "name": "BreadcrumbSeparator",
+            "module": "./breadcrumb.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/alert/alert.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "alertStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens */ --_bg-subtle: var(--lt-bg-neutral-subtle); --_bg-solid: var(--lt-bg-inverse); --_border: var(--lt-border-strong); --_color: var(--lt-text-default); --_color-solid: var(--lt-text-inverse); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-bg-success-subtle); --_bg-solid: var(--lt-bg-success); --_border: var(--lt-border-success-strong); --_color: var(--lt-text-success); --_color-solid: var(--lt-text-on-success); } :host([variant='warning']) { --_bg-subtle: var(--lt-bg-warning-subtle); --_bg-solid: var(--lt-bg-warning); --_border: var(--lt-border-warning-strong); --_color: var(--lt-text-warning); --_color-solid: var(--lt-text-on-warning); } :host([variant='error']) { --_bg-subtle: var(--lt-bg-error-subtle); --_bg-solid: var(--lt-bg-error); --_border: var(--lt-border-error-strong); --_color: var(--lt-text-error); --_color-solid: var(--lt-text-on-error); } :host([variant='info']) { --_bg-subtle: var(--lt-bg-info-subtle); --_bg-solid: var(--lt-bg-info); --_border: var(--lt-border-info-strong); --_color: var(--lt-text-info); --_color-solid: var(--lt-text-on-info); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: 1px solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: 1px solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } .title + .content { opacity: 0.8; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "alertStyles",
+          "declaration": {
+            "name": "alertStyles",
+            "module": "src/components/alert/alert.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/alert/alert.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Inline notification for persistent contextual feedback.",
+          "name": "Alert",
+          "slots": [
+            {
+              "description": "Alert body. Accepts any HTML — bold, links, lists, etc.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "alertStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "AlertVariant"
+              },
+              "default": "'default'",
+              "description": "Visual style."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "AlertAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual treatment. `filled` uses a tinted background with border, `outlined` uses a white background with border, `solid` uses a solid color background with no border."
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Optional bold heading above the body content."
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon to show before the body. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
+            },
+            {
+              "kind": "field",
+              "name": "closable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the title in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "_iconMap",
+              "type": {
+                "text": "Record<AlertVariant, string>"
+              },
+              "privacy": "private",
+              "static": true,
+              "readonly": true,
+              "default": "{ default: 'info-circle', success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
+            },
+            {
+              "kind": "method",
+              "name": "_handleClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_resolvedIcon",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
+              "name": "lt-close"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-alert",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Alert",
+          "declaration": {
+            "name": "Alert",
+            "module": "src/components/alert/alert.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/alert/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Alert",
+          "declaration": {
+            "name": "Alert",
+            "module": "./alert"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AlertVariant",
+          "declaration": {
+            "name": "AlertVariant",
+            "module": "./alert.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AlertAppearance",
+          "declaration": {
+            "name": "AlertAppearance",
+            "module": "./alert.types"
           }
         }
       ]
@@ -2127,312 +2127,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/combobox/combobox.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "comboboxStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } .label-text { color: var(--lt-text-default); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color 150ms ease, box-shadow 150ms ease; } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } :host([variant='error']) .input-wrap { border-color: var(--lt-color-error-500); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-color-success-500); } :host([variant='warning']) .input-wrap { border-color: var(--lt-color-warning-500); } :host([disabled]) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-color-neutral-400)); } :host([disabled]) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform 150ms ease; } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); box-shadow: var(--lt-shadow-md); left: 0; max-height: 240px; overflow-y: auto; position: absolute; right: 0; top: calc(100% + 4px); z-index: 100; } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: left; width: 100%; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-color-primary-700); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "comboboxStyles",
-          "declaration": {
-            "name": "comboboxStyles",
-            "module": "src/components/combobox/combobox.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/combobox/combobox.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Searchable single-select combobox. The user types to filter options; selecting an option sets the value.",
-          "name": "Combobox",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "comboboxStyles"
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "ComboboxOption[]"
-              },
-              "default": "[]",
-              "description": "Array of selectable options. Set as a JS property (`.options`)."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Currently selected value."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Field label displayed above the input."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Search…'",
-              "description": "Placeholder text shown when nothing is typed."
-            },
-            {
-              "kind": "field",
-              "name": "helperText",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Helper or error text displayed below the input."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ComboboxVariant"
-              },
-              "default": "'default'",
-              "description": "Visual state variant."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ComboboxSize"
-              },
-              "default": "'md'",
-              "description": "Visual size."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the field is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the field is required."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name used in form submission."
-            },
-            {
-              "kind": "field",
-              "name": "query",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "activeIndex",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "-1"
-            },
-            {
-              "kind": "field",
-              "name": "_cleanupClickOutside",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "selectedLabel",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "filtered",
-              "type": {
-                "text": "ComboboxOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "openDropdown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "closeDropdown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "selectOption",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "opt",
-                  "type": {
-                    "text": "ComboboxOption"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleInput",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleKeydown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent<{value: string, label: string}>"
-              },
-              "description": "Fired when the selected value changes.",
-              "name": "lt-change"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-combobox",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Combobox",
-          "declaration": {
-            "name": "Combobox",
-            "module": "src/components/combobox/combobox.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/combobox/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Combobox",
-          "declaration": {
-            "name": "Combobox",
-            "module": "./combobox"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ComboboxOption",
-          "declaration": {
-            "name": "ComboboxOption",
-            "module": "./combobox.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ComboboxSize",
-          "declaration": {
-            "name": "ComboboxSize",
-            "module": "./combobox.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ComboboxVariant",
-          "declaration": {
-            "name": "ComboboxVariant",
-            "module": "./combobox.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/date-input/date-input.styles.ts",
       "declarations": [
         {
@@ -2739,12 +2433,559 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/combobox/combobox.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "comboboxStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } .label-text { color: var(--lt-text-default); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color 150ms ease, box-shadow 150ms ease; } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } :host([variant='error']) .input-wrap { border-color: var(--lt-color-error-500); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-color-success-500); } :host([variant='warning']) .input-wrap { border-color: var(--lt-color-warning-500); } :host([disabled]) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-color-neutral-400)); } :host([disabled]) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform 150ms ease; } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); box-shadow: var(--lt-shadow-md); left: 0; max-height: 240px; overflow-y: auto; position: absolute; right: 0; top: calc(100% + 4px); z-index: 100; } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: left; width: 100%; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-color-primary-700); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "comboboxStyles",
+          "declaration": {
+            "name": "comboboxStyles",
+            "module": "src/components/combobox/combobox.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/combobox/combobox.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Searchable single-select combobox. The user types to filter options; selecting an option sets the value.",
+          "name": "Combobox",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "comboboxStyles"
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "ComboboxOption[]"
+              },
+              "default": "[]",
+              "description": "Array of selectable options. Set as a JS property (`.options`)."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Currently selected value."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Field label displayed above the input."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Search…'",
+              "description": "Placeholder text shown when nothing is typed."
+            },
+            {
+              "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Helper or error text displayed below the input."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ComboboxVariant"
+              },
+              "default": "'default'",
+              "description": "Visual state variant."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ComboboxSize"
+              },
+              "default": "'md'",
+              "description": "Visual size."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the field is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the field is required."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name used in form submission."
+            },
+            {
+              "kind": "field",
+              "name": "query",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "activeIndex",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "-1"
+            },
+            {
+              "kind": "field",
+              "name": "_cleanupClickOutside",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "selectedLabel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "filtered",
+              "type": {
+                "text": "ComboboxOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "openDropdown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "closeDropdown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "selectOption",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "opt",
+                  "type": {
+                    "text": "ComboboxOption"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleInput",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleKeydown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{value: string, label: string}>"
+              },
+              "description": "Fired when the selected value changes.",
+              "name": "lt-change"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-combobox",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Combobox",
+          "declaration": {
+            "name": "Combobox",
+            "module": "src/components/combobox/combobox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/combobox/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Combobox",
+          "declaration": {
+            "name": "Combobox",
+            "module": "./combobox"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ComboboxOption",
+          "declaration": {
+            "name": "ComboboxOption",
+            "module": "./combobox.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ComboboxSize",
+          "declaration": {
+            "name": "ComboboxSize",
+            "module": "./combobox.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ComboboxVariant",
+          "declaration": {
+            "name": "ComboboxVariant",
+            "module": "./combobox.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/datepicker/datepicker.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "datepickerStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } .label-text { color: var(--lt-text-default); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } input { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); color: var(--lt-text-default); font-family: inherit; font-size: 0.9375rem; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; width: 100%; box-sizing: border-box; } input:focus { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } input:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) input { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) input { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* Variants */ :host([variant='success']) input { border-color: var(--lt-color-success-500); } :host([variant='success']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input { border-color: var(--lt-color-warning-500); } :host([variant='warning']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input { border-color: var(--lt-color-error-500); } :host([variant='error']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "datepickerStyles",
+          "declaration": {
+            "name": "datepickerStyles",
+            "module": "src/components/datepicker/datepicker.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/datepicker/datepicker.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Date and time picker wrapping the native browser date/time input with design-system styling.",
+          "name": "Datepicker",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "datepickerStyles"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "DatepickerType"
+              },
+              "default": "'date'",
+              "description": "Native input type."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Current value in the format required by the native input (`YYYY-MM-DD`, `HH:MM`, or `YYYY-MM-DDTHH:MM`)."
+            },
+            {
+              "kind": "field",
+              "name": "min",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Minimum allowed value."
+            },
+            {
+              "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Maximum allowed value."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Field label displayed above the input."
+            },
+            {
+              "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Helper or error text displayed below the input."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "DatepickerVariant"
+              },
+              "default": "'default'",
+              "description": "Visual state variant."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "DatepickerSize"
+              },
+              "default": "'md'",
+              "description": "Visual size."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the field is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the field is required."
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the field is read-only."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name used in form submission."
+            },
+            {
+              "kind": "field",
+              "name": "input",
+              "type": {
+                "text": "HTMLInputElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Fired when the value changes (on blur).",
+              "name": "lt-change"
+            },
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Fired on every keystroke / picker selection.",
+              "name": "lt-input"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-datepicker",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Datepicker",
+          "declaration": {
+            "name": "Datepicker",
+            "module": "src/components/datepicker/datepicker.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/datepicker/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Datepicker",
+          "declaration": {
+            "name": "Datepicker",
+            "module": "./datepicker"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "DatepickerType",
+          "declaration": {
+            "name": "DatepickerType",
+            "module": "./datepicker.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "DatepickerSize",
+          "declaration": {
+            "name": "DatepickerSize",
+            "module": "./datepicker.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "DatepickerVariant",
+          "declaration": {
+            "name": "DatepickerVariant",
+            "module": "./datepicker.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/dialog/dialog.styles.ts",
       "declarations": [
         {
           "kind": "variable",
           "name": "dialogStyles",
-          "default": "css` :host { font-family: 'Hanken Grotesk', sans-serif; } /* Backdrop */ .backdrop { align-items: center; background: rgba(0, 0, 0, var(--lt-dialog-overlay-opacity, 0.5)); display: flex; height: 100vh; justify-content: center; left: 0; opacity: 0; padding: var(--lt-spacing-4); position: fixed; top: 0; transition: opacity 200ms ease; width: 100vw; z-index: 1000; } :host([open]) .backdrop { opacity: 1; } :host(:not([open])) .backdrop { pointer-events: none; } /* lt-surface host — flex item inside .backdrop, sized per size variant */ lt-surface { width: 100%; } :host([size='sm']) lt-surface { max-width: 400px; } :host([size='md']) lt-surface { max-width: 600px; } :host([size='lg']) lt-surface { max-width: 800px; } :host([size='xl']) lt-surface { max-width: 1000px; } :host([size='fullscreen']) .backdrop { padding: 0; } :host([size='fullscreen']) lt-surface { height: 100vh; max-height: 100vh; max-width: 100vw; } /* lt-surface inner div — layout and animation */ lt-surface::part(surface) { display: flex; flex-direction: column; max-height: calc(100vh - var(--lt-spacing-8)); opacity: 0; position: relative; transform: translateY(16px); transition: opacity 220ms ease, transform 220ms cubic-bezier(0.34, 1.2, 0.64, 1); } :host([open]) lt-surface::part(surface) { opacity: 1; transform: translateY(0); } :host([size='fullscreen']) lt-surface::part(surface) { border-radius: 0; max-height: 100vh; } /* Header */ .header { align-items: center; border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-4); padding: var(--lt-spacing-5); position: relative; } .header-content { flex: 1; } .title { color: var(--lt-text-default); } .close-button { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: none; color: var(--lt-color-neutral-500); cursor: pointer; display: flex; height: 32px; justify-content: center; padding: 0; transition: all 120ms ease; width: 32px; } .close-button:hover { background: var(--lt-bg-surface); color: var(--lt-color-neutral-700); } .close-button:active { background: var(--lt-bg-overlay); } .close-button:focus-visible { outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: 2px; } /* Body */ .body { color: var(--lt-color-neutral-700); flex: 1; overflow-y: auto; padding: var(--lt-spacing-5); } /* Footer */ .footer { border-top: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-3); justify-content: flex-end; padding: var(--lt-spacing-5); } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+          "default": "css` :host { font-family: 'Hanken Grotesk', sans-serif; } /* Backdrop */ .backdrop { align-items: center; background: rgba(0, 0, 0, var(--lt-dialog-overlay-opacity, 0.5)); display: flex; height: 100vh; justify-content: center; left: 0; opacity: 0; padding: var(--lt-spacing-4); position: fixed; top: 0; transition: opacity 200ms ease; width: 100vw; z-index: 1000; } :host([open]) .backdrop { opacity: 1; } :host(:not([open])) .backdrop { pointer-events: none; } /* lt-surface host — flex item inside .backdrop, sized per size variant */ lt-surface { width: 100%; } :host([size='sm']) lt-surface { max-width: 400px; } :host([size='md']) lt-surface { max-width: 600px; } :host([size='lg']) lt-surface { max-width: 800px; } :host([size='xl']) lt-surface { max-width: 1000px; } :host([size='fullscreen']) .backdrop { padding: 0; } :host([size='fullscreen']) lt-surface { height: 100vh; max-height: 100vh; max-width: 100vw; } /* lt-surface inner div — layout and animation */ lt-surface::part(surface) { display: flex; flex-direction: column; max-height: calc(100vh - var(--lt-spacing-8)); opacity: 0; position: relative; transform: translateY(16px); transition: opacity 220ms ease, transform 220ms cubic-bezier(0.34, 1.2, 0.64, 1); } :host([open]) lt-surface::part(surface) { opacity: 1; transform: translateY(0); } :host([size='fullscreen']) lt-surface::part(surface) { border-radius: 0; max-height: 100vh; } /* Header */ .header { align-items: center; border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-4); padding: var(--lt-spacing-5); position: relative; } .header-content { flex: 1; } .title { color: var(--lt-text-default); } .close-button { flex-shrink: 0; } /* Body */ .body { color: var(--lt-color-neutral-700); flex: 1; overflow-y: auto; padding: var(--lt-spacing-5); } /* Footer */ .footer { border-top: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-3); justify-content: flex-end; padding: var(--lt-spacing-5); } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
         }
       ],
       "exports": [
@@ -3023,247 +3264,6 @@
           "declaration": {
             "name": "DialogSize",
             "module": "./dialog.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/datepicker/datepicker.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "datepickerStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } .label-text { color: var(--lt-text-default); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } input { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); color: var(--lt-text-default); font-family: inherit; font-size: 0.9375rem; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; width: 100%; box-sizing: border-box; } input:focus { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } input:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) input { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) input { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* Variants */ :host([variant='success']) input { border-color: var(--lt-color-success-500); } :host([variant='success']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input { border-color: var(--lt-color-warning-500); } :host([variant='warning']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input { border-color: var(--lt-color-error-500); } :host([variant='error']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "datepickerStyles",
-          "declaration": {
-            "name": "datepickerStyles",
-            "module": "src/components/datepicker/datepicker.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/datepicker/datepicker.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Date and time picker wrapping the native browser date/time input with design-system styling.",
-          "name": "Datepicker",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "datepickerStyles"
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "DatepickerType"
-              },
-              "default": "'date'",
-              "description": "Native input type."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Current value in the format required by the native input (`YYYY-MM-DD`, `HH:MM`, or `YYYY-MM-DDTHH:MM`)."
-            },
-            {
-              "kind": "field",
-              "name": "min",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Minimum allowed value."
-            },
-            {
-              "kind": "field",
-              "name": "max",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Maximum allowed value."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Field label displayed above the input."
-            },
-            {
-              "kind": "field",
-              "name": "helperText",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Helper or error text displayed below the input."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "DatepickerVariant"
-              },
-              "default": "'default'",
-              "description": "Visual state variant."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "DatepickerSize"
-              },
-              "default": "'md'",
-              "description": "Visual size."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the field is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the field is required."
-            },
-            {
-              "kind": "field",
-              "name": "readonly",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the field is read-only."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name used in form submission."
-            },
-            {
-              "kind": "field",
-              "name": "input",
-              "type": {
-                "text": "HTMLInputElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleChange",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleInput",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Fired when the value changes (on blur).",
-              "name": "lt-change"
-            },
-            {
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Fired on every keystroke / picker selection.",
-              "name": "lt-input"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-datepicker",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Datepicker",
-          "declaration": {
-            "name": "Datepicker",
-            "module": "src/components/datepicker/datepicker.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/datepicker/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Datepicker",
-          "declaration": {
-            "name": "Datepicker",
-            "module": "./datepicker"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "DatepickerType",
-          "declaration": {
-            "name": "DatepickerType",
-            "module": "./datepicker.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "DatepickerSize",
-          "declaration": {
-            "name": "DatepickerSize",
-            "module": "./datepicker.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "DatepickerVariant",
-          "declaration": {
-            "name": "DatepickerVariant",
-            "module": "./datepicker.types"
           }
         }
       ]
@@ -3796,6 +3796,176 @@
           "declaration": {
             "name": "HeaderBackground",
             "module": "./header.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icon-button/icon-button.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "iconButtonStyles",
+          "default": "css` :host { display: inline-flex; } [part='base'] { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; box-sizing: border-box; cursor: pointer; display: inline-flex; justify-content: center; padding: 0; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; user-select: none; } [part='base']:active { transform: translateY(1px); } [part='base']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } [part='base'][disabled] { cursor: not-allowed; opacity: 0.5; pointer-events: none; transform: none; } a[part='base'] { text-decoration: none; color: inherit; } /* sizes */ :host([size='sm']) [part='base'] { height: 28px; width: 28px; } :host([size='md']) [part='base'] { height: 36px; width: 36px; } :host([size='lg']) [part='base'] { height: 44px; width: 44px; } /* ghost — the default appearance; transparent with subtle hover */ :host([appearance='ghost'][variant='primary']) [part='base'] { color: var(--lt-text-primary); } :host([appearance='ghost'][variant='primary']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-primary-subtle); } :host([appearance='ghost'][variant='secondary']) [part='base'] { color: var(--lt-text-secondary); } :host([appearance='ghost'][variant='secondary']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-secondary-subtle); } :host([appearance='ghost'][variant='neutral']) [part='base'] { color: var(--lt-text-subtle); } :host([appearance='ghost'][variant='neutral']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-subtle); color: var(--lt-text-default); } :host([appearance='ghost'][variant='success']) [part='base'] { color: var(--lt-text-success); } :host([appearance='ghost'][variant='success']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-success-subtle); } :host([appearance='ghost'][variant='warning']) [part='base'] { color: var(--lt-text-warning); } :host([appearance='ghost'][variant='warning']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-warning-subtle); } :host([appearance='ghost'][variant='error']) [part='base'] { color: var(--lt-text-error); } :host([appearance='ghost'][variant='error']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-error-subtle); } :host([appearance='ghost'][variant='info']) [part='base'] { color: var(--lt-text-info); } :host([appearance='ghost'][variant='info']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-info-subtle); } /* filled */ :host([appearance='filled'][variant='primary']) [part='base'] { background: var(--lt-interactive-primary-bg); color: var(--lt-text-on-primary); } :host([appearance='filled'][variant='primary']) [part='base']:hover:not([disabled]) { background: var(--lt-interactive-primary-bg-hover); } :host([appearance='filled'][variant='primary']) [part='base']:active:not([disabled]) { background: var(--lt-interactive-primary-bg-active); } :host([appearance='filled'][variant='secondary']) [part='base'] { background: var(--lt-interactive-secondary-bg); color: var(--lt-text-on-secondary); } :host([appearance='filled'][variant='secondary']) [part='base']:hover:not([disabled]) { background: var(--lt-interactive-secondary-bg-hover); } :host([appearance='filled'][variant='secondary']) [part='base']:active:not([disabled]) { background: var(--lt-interactive-secondary-bg-active); } :host([appearance='filled'][variant='neutral']) [part='base'] { background: var(--lt-color-neutral-500); color: var(--lt-color-neutral-50); } :host([appearance='filled'][variant='neutral']) [part='base']:hover:not([disabled]) { background: var(--lt-color-neutral-700); } :host([appearance='filled'][variant='neutral']) [part='base']:active:not([disabled]) { background: var(--lt-color-neutral-800); } :host([appearance='filled'][variant='success']) [part='base'] { background: var(--lt-interactive-success-bg); color: var(--lt-text-on-success); } :host([appearance='filled'][variant='success']) [part='base']:hover:not([disabled]) { background: var(--lt-interactive-success-bg-hover); } :host([appearance='filled'][variant='success']) [part='base']:active:not([disabled]) { background: var(--lt-interactive-success-bg-active); } :host([appearance='filled'][variant='warning']) [part='base'] { background: var(--lt-interactive-warning-bg); color: var(--lt-text-on-warning); } :host([appearance='filled'][variant='warning']) [part='base']:hover:not([disabled]) { background: var(--lt-interactive-warning-bg-hover); } :host([appearance='filled'][variant='warning']) [part='base']:active:not([disabled]) { background: var(--lt-interactive-warning-bg-active); } :host([appearance='filled'][variant='error']) [part='base'] { background: var(--lt-interactive-error-bg); color: var(--lt-text-on-error); } :host([appearance='filled'][variant='error']) [part='base']:hover:not([disabled]) { background: var(--lt-interactive-error-bg-hover); } :host([appearance='filled'][variant='error']) [part='base']:active:not([disabled]) { background: var(--lt-interactive-error-bg-active); } :host([appearance='filled'][variant='info']) [part='base'] { background: var(--lt-interactive-info-bg); color: var(--lt-text-on-info); } :host([appearance='filled'][variant='info']) [part='base']:hover:not([disabled]) { background: var(--lt-interactive-info-bg-hover); } :host([appearance='filled'][variant='info']) [part='base']:active:not([disabled]) { background: var(--lt-interactive-info-bg-active); } /* outlined */ :host([appearance='outlined'][variant='primary']) [part='base'] { border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='primary']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-primary-subtle); } :host([appearance='outlined'][variant='secondary']) [part='base'] { border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='secondary']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-secondary-subtle); } :host([appearance='outlined'][variant='neutral']) [part='base'] { border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='neutral']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-subtle); color: var(--lt-text-default); } :host([appearance='outlined'][variant='success']) [part='base'] { border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='success']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-success-subtle); } :host([appearance='outlined'][variant='warning']) [part='base'] { border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='warning']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-warning-subtle); } :host([appearance='outlined'][variant='error']) [part='base'] { border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='error']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-error-subtle); } :host([appearance='outlined'][variant='info']) [part='base'] { border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } :host([appearance='outlined'][variant='info']) [part='base']:hover:not([disabled]) { background: var(--lt-bg-info-subtle); } /* round shape */ :host([round]) [part='base'] { border-radius: 50%; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "iconButtonStyles",
+          "declaration": {
+            "name": "iconButtonStyles",
+            "module": "src/components/icon-button/icon-button.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icon-button/icon-button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Icon-only button. Requires `label` for screen readers since there is no visible text.",
+          "name": "IconButton",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "iconButtonStyles"
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name from the icon library."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Accessible label for screen readers. Required when there is no visible text."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "IconButtonVariant"
+              },
+              "default": "'neutral'",
+              "description": "Visual variant that determines the icon/background color."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "IconButtonAppearance"
+              },
+              "default": "'ghost'",
+              "description": "Visual treatment."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "IconButtonSize"
+              },
+              "default": "'md'",
+              "description": "Size of the button."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "When set, renders an `<a>` tag instead of `<button>`."
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Forwarded to the anchor's `target` attribute when `href` is set."
+            },
+            {
+              "kind": "field",
+              "name": "rel",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Forwarded to the anchor's `rel` attribute when `href` is set."
+            },
+            {
+              "kind": "field",
+              "name": "round",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders as a circle instead of rounded-rectangle."
+            },
+            {
+              "kind": "method",
+              "name": "_inner",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-icon-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "IconButton",
+          "declaration": {
+            "name": "IconButton",
+            "module": "src/components/icon-button/icon-button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/icon-button/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "IconButton",
+          "declaration": {
+            "name": "IconButton",
+            "module": "./icon-button"
           }
         }
       ]
@@ -5620,7 +5790,7 @@
         {
           "kind": "variable",
           "name": "sidepanelStyles",
-          "default": "css` :host { display: contents; } /* ── Overlay ────────────────────────────────────────────────────────────── */ [part='overlay'] { position: fixed; inset: 0; background: rgba(0, 0, 0, var(--_overlay-opacity, 0.45)); z-index: 400; opacity: 0; pointer-events: none; transition: opacity 200ms ease; } /* ── Panel ──────────────────────────────────────────────────────────────── */ [part='panel'] { position: fixed; background: var(--lt-bg-default); display: flex; flex-direction: column; z-index: 401; pointer-events: none; transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1); } /* ── Anchors — initial off-screen positions ─────────────────────────────── */ :host([anchor='left']) [part='panel'], :host(:not([anchor])) [part='panel'] { inset-block: 0; left: 0; transform: translateX(-100%); box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='right']) [part='panel'] { inset-block: 0; right: 0; transform: translateX(100%); box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='top']) [part='panel'] { inset-inline: 0; top: 0; transform: translateY(-100%); box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12); } :host([anchor='bottom']) [part='panel'] { inset-inline: 0; bottom: 0; transform: translateY(100%); box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12); } /* ── Open state — must come after anchors to win the cascade ────────────── */ :host([open]) [part='overlay'] { opacity: 1; pointer-events: auto; } :host([open]) [part='panel'] { transform: translate(0, 0); pointer-events: auto; } /* ── Header ─────────────────────────────────────────────────────────────── */ .header { display: flex; align-items: center; gap: var(--lt-spacing-4); padding: var(--lt-spacing-4) var(--lt-spacing-5); border-bottom: 1px solid var(--lt-border-default); flex-shrink: 0; } .panel-label { flex: 1; color: var(--lt-text-default); } .close-button { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; margin-left: auto; background: transparent; border: none; border-radius: var(--lt-border-radius); color: var(--lt-color-neutral-500); cursor: pointer; transition: background 120ms ease, color 120ms ease; flex-shrink: 0; } .close-button:hover { background: var(--lt-bg-surface); color: var(--lt-color-neutral-700); } .close-button:active { background: var(--lt-bg-overlay); } .close-button:focus-visible { outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: 2px; } /* ── Body ───────────────────────────────────────────────────────────────── */ .body { flex: 1; overflow-y: auto; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { [part='overlay'], [part='panel'] { transition: none; } } `"
+          "default": "css` :host { display: contents; } /* ── Overlay ────────────────────────────────────────────────────────────── */ [part='overlay'] { position: fixed; inset: 0; background: rgba(0, 0, 0, var(--_overlay-opacity, 0.45)); z-index: 400; opacity: 0; pointer-events: none; transition: opacity 200ms ease; } /* ── Panel ──────────────────────────────────────────────────────────────── */ [part='panel'] { position: fixed; background: var(--lt-bg-default); display: flex; flex-direction: column; z-index: 401; pointer-events: none; transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1); } /* ── Anchors — initial off-screen positions ─────────────────────────────── */ :host([anchor='left']) [part='panel'], :host(:not([anchor])) [part='panel'] { inset-block: 0; left: 0; transform: translateX(-100%); box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='right']) [part='panel'] { inset-block: 0; right: 0; transform: translateX(100%); box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='top']) [part='panel'] { inset-inline: 0; top: 0; transform: translateY(-100%); box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12); } :host([anchor='bottom']) [part='panel'] { inset-inline: 0; bottom: 0; transform: translateY(100%); box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12); } /* ── Open state — must come after anchors to win the cascade ────────────── */ :host([open]) [part='overlay'] { opacity: 1; pointer-events: auto; } :host([open]) [part='panel'] { transform: translate(0, 0); pointer-events: auto; } /* ── Header ─────────────────────────────────────────────────────────────── */ .header { display: flex; align-items: center; gap: var(--lt-spacing-4); padding: var(--lt-spacing-4) var(--lt-spacing-5); border-bottom: 1px solid var(--lt-border-default); flex-shrink: 0; } .panel-label { flex: 1; color: var(--lt-text-default); } .close-button { flex-shrink: 0; margin-left: auto; } /* ── Body ───────────────────────────────────────────────────────────────── */ .body { flex: 1; overflow-y: auto; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { [part='overlay'], [part='panel'] { transition: none; } } `"
         }
       ],
       "exports": [
@@ -6663,210 +6833,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/switch/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Switch",
-          "declaration": {
-            "name": "Switch",
-            "module": "./switch"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SwitchSize",
-          "declaration": {
-            "name": "SwitchSize",
-            "module": "./switch.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SwitchVariant",
-          "declaration": {
-            "name": "SwitchVariant",
-            "module": "./switch.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SwitchLabelPosition",
-          "declaration": {
-            "name": "SwitchLabelPosition",
-            "module": "./switch.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/switch/switch.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "switchStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .switch-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } :host([label-position='left']) .switch-wrapper { flex-direction: row-reverse; } :host([disabled]) .switch-wrapper { cursor: not-allowed; opacity: 0.6; } .switch-container { display: inline-flex; position: relative; } input[type='checkbox'] { appearance: none; background: var(--lt-border-default); border-radius: 999px; cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 200ms ease; } input[type='checkbox']:hover:not(:disabled) { background: var(--lt-border-strong); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .thumb { background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); pointer-events: none; position: absolute; transition: left 200ms ease; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 18px; width: 32px; } :host([size='sm']) .thumb { height: 14px; width: 14px; left: 2px; top: 2px; } :host([size='sm']) input[type='checkbox']:checked ~ .thumb { left: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 22px; width: 40px; } :host([size='md']) .thumb { height: 18px; width: 18px; left: 2px; top: 2px; } :host([size='md']) input[type='checkbox']:checked ~ .thumb { left: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 26px; width: 48px; } :host([size='lg']) .thumb { height: 22px; width: 22px; left: 2px; top: 2px; } :host([size='lg']) input[type='checkbox']:checked ~ .thumb { left: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked { background: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked { background: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked { background: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked { background: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked { background: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "switchStyles",
-          "declaration": {
-            "name": "switchStyles",
-            "module": "src/components/switch/switch.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/switch/switch.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A toggle switch component with sliding animation.\nInternally uses a checkbox input with custom toggle styling.",
-          "name": "Switch",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "switchStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "SwitchVariant"
-              },
-              "default": "'primary'",
-              "description": "Visual variant that determines the color when checked."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "SwitchSize"
-              },
-              "default": "'md'",
-              "description": "Size of the switch."
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the switch is checked (on)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the switch is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the switch is required."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text displayed next to the switch."
-            },
-            {
-              "kind": "field",
-              "name": "labelPosition",
-              "type": {
-                "text": "SwitchLabelPosition"
-              },
-              "default": "'right'",
-              "description": "Position of the label relative to the switch."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "'on'",
-              "description": "Value attribute for form submission."
-            },
-            {
-              "kind": "method",
-              "name": "handleChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  },
-                  "description": "The native change event"
-                }
-              ],
-              "description": "Handles switch change events.\nUpdates the checked state and dispatches a custom change event."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "CustomEvent<{checked: boolean}>"
-              },
-              "description": "Dispatched when the switch state changes"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-switch",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Switch",
-          "declaration": {
-            "name": "Switch",
-            "module": "src/components/switch/switch.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/tab/index.ts",
       "declarations": [],
       "exports": [
@@ -7798,6 +7764,210 @@
           "declaration": {
             "name": "Text",
             "module": "src/components/text/text.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/switch/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Switch",
+          "declaration": {
+            "name": "Switch",
+            "module": "./switch"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SwitchSize",
+          "declaration": {
+            "name": "SwitchSize",
+            "module": "./switch.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SwitchVariant",
+          "declaration": {
+            "name": "SwitchVariant",
+            "module": "./switch.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SwitchLabelPosition",
+          "declaration": {
+            "name": "SwitchLabelPosition",
+            "module": "./switch.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/switch/switch.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "switchStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .switch-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } :host([label-position='left']) .switch-wrapper { flex-direction: row-reverse; } :host([disabled]) .switch-wrapper { cursor: not-allowed; opacity: 0.6; } .switch-container { display: inline-flex; position: relative; } input[type='checkbox'] { appearance: none; background: var(--lt-border-default); border-radius: 999px; cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 200ms ease; } input[type='checkbox']:hover:not(:disabled) { background: var(--lt-border-strong); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .thumb { background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); pointer-events: none; position: absolute; transition: left 200ms ease; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 18px; width: 32px; } :host([size='sm']) .thumb { height: 14px; width: 14px; left: 2px; top: 2px; } :host([size='sm']) input[type='checkbox']:checked ~ .thumb { left: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 22px; width: 40px; } :host([size='md']) .thumb { height: 18px; width: 18px; left: 2px; top: 2px; } :host([size='md']) input[type='checkbox']:checked ~ .thumb { left: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 26px; width: 48px; } :host([size='lg']) .thumb { height: 22px; width: 22px; left: 2px; top: 2px; } :host([size='lg']) input[type='checkbox']:checked ~ .thumb { left: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked { background: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked { background: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked { background: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked { background: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked { background: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "switchStyles",
+          "declaration": {
+            "name": "switchStyles",
+            "module": "src/components/switch/switch.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/switch/switch.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A toggle switch component with sliding animation.\nInternally uses a checkbox input with custom toggle styling.",
+          "name": "Switch",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "switchStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "SwitchVariant"
+              },
+              "default": "'primary'",
+              "description": "Visual variant that determines the color when checked."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "SwitchSize"
+              },
+              "default": "'md'",
+              "description": "Size of the switch."
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the switch is checked (on)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the switch is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the switch is required."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text displayed next to the switch."
+            },
+            {
+              "kind": "field",
+              "name": "labelPosition",
+              "type": {
+                "text": "SwitchLabelPosition"
+              },
+              "default": "'right'",
+              "description": "Position of the label relative to the switch."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "'on'",
+              "description": "Value attribute for form submission."
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  },
+                  "description": "The native change event"
+                }
+              ],
+              "description": "Handles switch change events.\nUpdates the checked state and dispatches a custom change event."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "CustomEvent<{checked: boolean}>"
+              },
+              "description": "Dispatched when the switch state changes"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-switch",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Switch",
+          "declaration": {
+            "name": "Switch",
+            "module": "src/components/switch/switch.ts"
           }
         }
       ]

@@ -12,6 +12,7 @@
  * - Dialog: Modal dialog with backdrop and accessibility features
  * - Dropdown: TODO: describe the Dropdown component
  * - Header: TODO: describe the Header component
+ * - IconButton: Accessible icon-only button with ghost, filled, and outlined appearances
  * - Image: TODO: describe the Image component
  * - Link: TODO: describe the Link component
  * - List: Ordered and unordered lists with customizable marker colors
@@ -97,3 +98,4 @@ export * from './components/datepicker';
 export * from './components/date-input';
 export * from './components/combobox';
 export * from './components/calendar';
+export * from './components/icon-button';

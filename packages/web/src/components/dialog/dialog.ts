@@ -6,7 +6,7 @@ import { dialogStyles } from './dialog.styles';
 import { backdropFeatureStyles } from '../shared/backdrop.styles';
 import { DialogSize } from './dialog.types';
 
-import '@latty/icons';
+import '../icon-button/icon-button';
 import '../surface/surface';
 import '../text/text';
 
@@ -230,14 +230,14 @@ export class Dialog extends ThemeableElement {
             </div>
             ${!this.noCloseButton
               ? html`
-                  <button
+                  <lt-icon-button
                     class="close-button"
-                    @click=${this.handleCloseClick}
-                    aria-label="Close dialog"
                     part="close-button"
-                  >
-                    <lt-icon name="xmark"></lt-icon>
-                  </button>
+                    icon="xmark"
+                    label="Close dialog"
+                    size="sm"
+                    @click=${this.handleCloseClick}
+                  ></lt-icon-button>
                 `
               : ''}
           </div>

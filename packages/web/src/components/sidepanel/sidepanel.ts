@@ -7,7 +7,7 @@ import { backdropFeatureStyles } from '../shared/backdrop.styles';
 import type { SidePanelAnchor } from './sidepanel.types';
 import { dispatch } from '../../utils';
 
-import '@latty/icons';
+import '../icon-button/icon-button';
 import '../text/text';
 
 /**
@@ -122,9 +122,14 @@ export class SidePanel extends ThemeableElement {
         ${hasLabel ? html`<lt-text variant="h6" class="panel-label">${this.label}</lt-text>` : ''}
         ${!this.noCloseButton
           ? html`
-              <button part="close-button" class="close-button" @click=${this.hide} aria-label="Close panel">
-                <lt-icon name="xmark"></lt-icon>
-              </button>
+              <lt-icon-button
+                part="close-button"
+                class="close-button"
+                icon="xmark"
+                label="Close panel"
+                size="sm"
+                @click=${this.hide}
+              ></lt-icon-button>
             `
           : ''}
       </div>

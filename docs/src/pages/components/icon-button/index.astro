@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
+---
+
+<BaseLayout
+  title="Icon Button"
+  description="Accessible icon-only button for actions like close, delete, and navigation."
+>
+  <lt-text variant="h1" tag="h1">Icon Button</lt-text>
+  <lt-text variant="body" tag="p" style="display:block;margin-top:var(--lt-spacing-3);">
+    A compact, accessible button that displays a single icon. Because there is no visible label, a <lt-text
+      variant="code"
+      tag="code">label</lt-text
+    >
+    attribute is required to describe the action for screen readers.
+  </lt-text>
+
+  <lt-text variant="h2" tag="h2" style="display:block;margin-top:var(--lt-spacing-8);">Playground</lt-text>
+  <ComponentPlayground
+    tag="lt-icon-button"
+    defaults={{ icon: 'plus', label: 'Add item', variant: 'neutral', appearance: 'ghost', size: 'md' }}
+  />
+
+  <lt-text variant="h2" tag="h2" style="display:block;margin-top:var(--lt-spacing-8);">Usage</lt-text>
+  <FrameworkTabs
+    html={`<!-- Ghost (default) — for close/dismiss buttons -->
+<lt-icon-button icon="xmark" label="Close"></lt-icon-button>
+
+<!-- Filled primary — for prominent actions -->
+<lt-icon-button icon="plus" label="Add item" variant="primary" appearance="filled"></lt-icon-button>
+
+<!-- Outlined neutral — for toolbar and nav buttons -->
+<lt-icon-button icon="nav-arrow-left" label="Previous" appearance="outlined"></lt-icon-button>
+
+<!-- Round shape -->
+<lt-icon-button icon="heart" label="Like" variant="error" appearance="filled" round></lt-icon-button>`}
+    react={`import { IconButton } from '@latty/react';
+
+// Ghost (default) — for close/dismiss buttons
+<IconButton icon="xmark" label="Close" />
+
+// Filled primary — for prominent actions
+<IconButton icon="plus" label="Add item" variant="primary" appearance="filled" />
+
+// Outlined neutral — for toolbar and nav buttons
+<IconButton icon="nav-arrow-left" label="Previous" appearance="outlined" />
+
+// Round shape
+<IconButton icon="heart" label="Like" variant="error" appearance="filled" round />`}
+    vue={`<template>
+  <!-- Ghost (default) — for close/dismiss buttons -->
+  <lt-icon-button icon="xmark" label="Close" />
+
+  <!-- Filled primary — for prominent actions -->
+  <lt-icon-button icon="plus" label="Add item" variant="primary" appearance="filled" />
+
+  <!-- Outlined neutral — for toolbar and nav buttons -->
+  <lt-icon-button icon="nav-arrow-left" label="Previous" appearance="outlined" />
+
+  <!-- Round shape -->
+  <lt-icon-button icon="heart" label="Like" variant="error" appearance="filled" round />
+</template>`}
+  />
+
+  <lt-text variant="h2" tag="h2" style="display:block;margin-top:var(--lt-spacing-8);">API</lt-text>
+  <ApiTable tag="lt-icon-button" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

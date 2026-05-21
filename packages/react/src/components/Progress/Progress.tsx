@@ -5,6 +5,7 @@ export type ProgressProps = {
   value?: number;
   variant?: ProgressEl['variant'];
   size?: ProgressEl['size'];
+  label?: string;
   indeterminate?: boolean;
   children?: ReactNode;
 };

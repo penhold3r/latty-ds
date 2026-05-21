@@ -2,6 +2,7 @@ import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
 import type { Nav as NavEl } from '@latty/web';
 
 export type NavProps = {
+  label?: string;
   orientation?: NavEl['orientation'];
   children?: ReactNode;
 };

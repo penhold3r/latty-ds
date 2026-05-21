@@ -89,36 +89,8 @@ export const sidepanelStyles = css`
   }
 
   .close-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    margin-left: auto;
-    background: transparent;
-    border: none;
-    border-radius: var(--lt-border-radius);
-    color: var(--lt-color-neutral-500);
-    cursor: pointer;
-    transition:
-      background 120ms ease,
-      color 120ms ease;
     flex-shrink: 0;
-  }
-
-  .close-button:hover {
-    background: var(--lt-bg-surface);
-    color: var(--lt-color-neutral-700);
-  }
-
-  .close-button:active {
-    background: var(--lt-bg-overlay);
-  }
-
-  .close-button:focus-visible {
-    outline: 2px solid var(--lt-interactive-primary-bg);
-    outline-offset: 2px;
+    margin-left: auto;
   }
 
   /* ── Body ───────────────────────────────────────────────────────────────── */

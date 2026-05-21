@@ -1,3 +1,4 @@
+// codegen:manual — extended to set icon-start attribute directly (React 18 lowercases camelCase on custom elements)
 import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
 import type { NavItem as NavItemEl, LattyIconName } from '@latty/web';
 

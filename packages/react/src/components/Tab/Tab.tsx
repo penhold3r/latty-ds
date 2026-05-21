@@ -1,3 +1,4 @@
+// codegen:manual — extended to wire tab-click event (not in CEM; dispatched manually by lt-tab)
 import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
 import type { Tab as TabEl, LattyIconName } from '@latty/web';
 

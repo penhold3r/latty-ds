@@ -7,7 +7,7 @@ import { alertStyles } from './alert.styles';
 import type { AlertVariant, AlertAppearance } from './alert.types';
 import { resolveColorValue, dispatch } from '../../utils';
 
-import '@latty/icons';
+import '../icon-button/icon-button';
 import '../text/text';
 
 /**
@@ -94,9 +94,14 @@ export class Alert extends ThemeableElement {
           <div class="content" part="content"><slot></slot></div>
         </div>
         ${this.closable
-          ? html`<button class="close" @click=${this._handleClose} aria-label="Dismiss" part="close">
-              <lt-icon name="xmark"></lt-icon>
-            </button>`
+          ? html`<lt-icon-button
+              class="close"
+              part="close"
+              icon="xmark"
+              label="Dismiss"
+              size="sm"
+              @click=${this._handleClose}
+            ></lt-icon-button>`
           : ''}
       </div>
     `;
