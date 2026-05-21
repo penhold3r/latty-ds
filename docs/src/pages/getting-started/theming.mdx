@@ -40,6 +40,32 @@ configure({
 
 All options are optional — omit any key to keep the default.
 
+### Preventing flash of unstyled content
+
+Because `<script type="module">` is deferred, there is a small window between the browser's first paint and the moment `configure()` runs. Without a guard, the page briefly renders without your token palette — a flash of unstyled content (FOUC).
+
+Add `data-lt` to `<html>` and a single-line preload style before your module script:
+
+```html
+<html lang="en" data-lt>
+  <head>
+    <!-- Synchronous render-block: hides the page until tokens are ready -->
+    <style>html[data-lt]:not([data-lt-ready]){visibility:hidden}</style>
+
+    <script type="module">
+      import { configure } from '@latty/tokens/configure';
+
+      configure({ colors: { primary: '#6366f1' } });
+      // No reveal needed — configure() sets data-lt-ready automatically
+    </script>
+  </head>
+</html>
+```
+
+`configure()` automatically removes `data-lt-ready` before swapping token values and restores it on the next animation frame, so the browser always paints a fully-styled page. This also prevents flicker when calling `configure()` again at runtime (e.g. a user-triggered theme switch).
+
+The `<style>` is render-blocking and tiny — it is the only piece that must appear before the module script. Everything else is handled by `configure()`.
+
 ### SSR
 
 For server-side rendering use `createStyleSheet()`, which returns the CSS string instead of touching the DOM:
@@ -79,35 +105,89 @@ Spacing can only be overridden this way — it is not available through `configu
 }
 ```
 
-## Dark mode
+## Theme switching
 
-Redefine the neutral palette under a dark selector. Since components only reference CSS vars, every component updates automatically:
+Pass `theme: 'system'` to `configure()` to generate all three layers at once — light at `:root`, dark inside `@media (prefers-color-scheme: dark)`, and explicit overrides for `[data-theme="dark"]` / `[data-theme="light"]`:
 
-```css
-@media (prefers-color-scheme: dark) {
-  :root {
-    --lt-color-neutral-50: #0a0a0a;
-    --lt-color-neutral-100: #171717;
-    --lt-color-neutral-200: #262626;
-    --lt-color-neutral-300: #3a3a3a;
-    --lt-color-neutral-400: #525252;
-    --lt-color-neutral-500: #737373;
-    --lt-color-neutral-600: #a3a3a3;
-    --lt-color-neutral-700: #d4d4d4;
-    --lt-color-neutral-800: #e5e5e5;
-    --lt-color-neutral-900: #f5f5f5;
+```ts
+configure({
+  theme: 'system',
+  colors: { primary: '#6366f1' }
+});
+```
+
+With that single call in place, toggling themes at runtime requires no further calls to `configure()` — just set a `data-theme` attribute on `<html>`:
+
+```ts
+// Follow the OS preference (default — remove any previous override)
+document.documentElement.removeAttribute('data-theme');
+
+// Force light
+document.documentElement.setAttribute('data-theme', 'light');
+
+// Force dark
+document.documentElement.setAttribute('data-theme', 'dark');
+```
+
+To persist the user's choice across page loads, write to `localStorage` alongside the attribute:
+
+```ts
+function setTheme(theme: 'light' | 'dark' | 'system') {
+  if (theme === 'system') {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.removeItem('lt-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('lt-theme', theme);
   }
 }
 ```
 
-Or toggle with a class:
+Restore the saved theme before first paint so there is no flash when the page loads. Place this as a synchronous (non-module) script at the top of `<head>`, before anything else:
 
-```css
-[data-theme='dark'] {
-  --lt-color-neutral-50: #0a0a0a;
-  /* ... */
+```html
+<script>
+  const saved = localStorage.getItem('lt-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+</script>
+```
+
+## Framework notes
+
+**Vanilla JS / Vite / webpack** — call `configure()` in your entry file. The FOUC guard described above applies as-is.
+
+**React (CSR)** — call `configure()` at the top of `main.tsx`, before `ReactDOM.createRoot`. The `data-lt` attribute goes on `<html>` in `index.html`. Everything else works identically to the vanilla JS pattern.
+
+```tsx
+// main.tsx
+import { configure } from '@latty/tokens/configure';
+configure({ colors: { primary: '#6366f1' }, theme: 'system' });
+
+import { createRoot } from 'react-dom/client';
+import App from './App';
+createRoot(document.getElementById('root')!).render(<App />);
+```
+
+**React SSR (Next.js App Router, Remix)** — `configure()` touches `document` and must not run on the server. Use `createStyleSheet()` in your root layout to inject tokens at render time:
+
+```tsx
+// app/layout.tsx (Next.js)
+import { createStyleSheet } from '@latty/tokens/configure';
+
+export default function RootLayout({ children }) {
+  const tokenCss = createStyleSheet({ colors: { primary: '#6366f1' }, theme: 'system' });
+  return (
+    <html lang="en" data-lt>
+      <head>
+        <style id="lt-tokens" dangerouslySetInnerHTML={{ __html: tokenCss }} />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
 }
 ```
+
+Because the tokens are inlined server-side there is no flash and the `data-lt` FOUC guard is not needed. Theme toggling with `data-theme` still works client-side as described above.
 
 ## What's next?
 

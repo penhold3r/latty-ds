@@ -5,8 +5,9 @@ import BaseLayout from '../../../layouts/BaseLayout/index.astro';
 <BaseLayout title="Examples" description="Full-page sites built entirely with Latty">
   <lt-text variant="h1">Examples</lt-text>
   <lt-text variant="body">
-    Full-page sites built entirely with Latty — no custom component library, no design-system workarounds. Each one uses
-    a custom token palette injected at build time via <code>createStyleSheet()</code> for zero flash of unstyled content.
+    Full-page sites built entirely with Latty — no custom component library, no design-system workarounds. Each one is a
+    self-contained HTML file that imports <code>@latty/web</code> and <code>@latty/tokens</code> from a CDN and calls
+    <code>configure()</code> to apply a custom token palette at runtime.
   </lt-text>
 
   <div class="example-grid">

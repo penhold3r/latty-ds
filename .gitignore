@@ -2,6 +2,7 @@ node_modules
 dist
 dist-types
 dist-scripts
+docs/public/assets
 .DS_Store
 pa11y-ci-report
 playwright-a11y-report

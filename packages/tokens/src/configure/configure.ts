@@ -59,19 +59,33 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
  * Injects design tokens into the document as a `<style>` element.
  * Call once at your app's entry point — before any components render.
  *
- * @example
- * ```ts
- * import { configure } from '@latty/tokens/configure';
+ * Add `data-lt` to `<html>` to enable automatic FOUC prevention: configure()
+ * hides the document during token injection and reveals it on the next frame.
+ * For zero FOUC on initial load, also add this one-liner before your module script:
+ * `<style>html[data-lt]:not([data-lt-ready]){visibility:hidden}</style>`
  *
- * configure({
- *   colors: { primary: '#6366f1', secondary: '#f59e0b' },
- *   font:   { family: 'Inter, sans-serif' },
- *   border: { radius: '0.375rem' },
- * });
+ * @example
+ * ```html
+ * <html lang="en" data-lt>
+ *   <head>
+ *     <style>html[data-lt]:not([data-lt-ready]){visibility:hidden}</style>
+ *     <script type="module">
+ *       import { configure } from '@latty/tokens/configure';
+ *       configure({
+ *         colors: { primary: '#6366f1', secondary: '#f59e0b' },
+ *         font:   { family: 'Inter, sans-serif' },
+ *         border: { radius: '0.375rem' },
+ *       });
+ *     </script>
+ *   </head>
+ * </html>
  * ```
  */
 export const configure = (userConfig: LattyConfig = {}): void => {
-  const css = createStyleSheet(userConfig);
+  const root = document.documentElement;
+
+  // Drop the ready flag so the FOUC guard activates while tokens are swapped.
+  root.removeAttribute('data-lt-ready');
 
   let style = document.getElementById('lt-tokens') as HTMLStyleElement | null;
   if (!style) {
@@ -79,5 +93,9 @@ export const configure = (userConfig: LattyConfig = {}): void => {
     style.id = 'lt-tokens';
     document.head.prepend(style);
   }
-  style.textContent = css;
+  // Guard rule keeps html[data-lt] hidden until data-lt-ready is stamped.
+  style.textContent = 'html[data-lt]:not([data-lt-ready]){visibility:hidden}\n' + createStyleSheet(userConfig);
+
+  // Reveal after the browser has processed the new token styles.
+  requestAnimationFrame(() => root.setAttribute('data-lt-ready', ''));
 };

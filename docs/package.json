@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/bundle-examples.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
