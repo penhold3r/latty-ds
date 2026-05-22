@@ -4,6 +4,341 @@
   "modules": [
     {
       "kind": "javascript-module",
+      "path": "src/components/badge/badge.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "badgeStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 600; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: var(--lt-color-white); } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "badgeStyles",
+          "declaration": {
+            "name": "badgeStyles",
+            "module": "src/components/badge/badge.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/badge.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A compact status label for categories, counts, and states.",
+          "name": "Badge",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "badgeStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "BadgeAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual style: tinted fill, outline only, or full-color solid."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "BadgeVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "BadgeSize"
+              },
+              "default": "'md'",
+              "description": "Size."
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text. When empty the badge renders as a circle indicator."
+            },
+            {
+              "kind": "field",
+              "name": "dot",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show a leading status dot (only visible when content is set)."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-badge",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "src/components/badge/badge.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "./badge"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeVariant",
+          "declaration": {
+            "name": "BadgeVariant",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeSize",
+          "declaration": {
+            "name": "BadgeSize",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeAppearance",
+          "declaration": {
+            "name": "BadgeAppearance",
+            "module": "./badge.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/alert/alert.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "alertStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens */ --_bg-subtle: var(--lt-bg-neutral-subtle); --_bg-solid: var(--lt-bg-inverse); --_border: var(--lt-border-strong); --_color: var(--lt-text-default); --_color-solid: var(--lt-text-inverse); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-bg-success-subtle); --_bg-solid: var(--lt-bg-success); --_border: var(--lt-border-success-strong); --_color: var(--lt-text-success); --_color-solid: var(--lt-text-on-success); } :host([variant='warning']) { --_bg-subtle: var(--lt-bg-warning-subtle); --_bg-solid: var(--lt-bg-warning); --_border: var(--lt-border-warning-strong); --_color: var(--lt-text-warning); --_color-solid: var(--lt-text-on-warning); } :host([variant='error']) { --_bg-subtle: var(--lt-bg-error-subtle); --_bg-solid: var(--lt-bg-error); --_border: var(--lt-border-error-strong); --_color: var(--lt-text-error); --_color-solid: var(--lt-text-on-error); } :host([variant='info']) { --_bg-subtle: var(--lt-bg-info-subtle); --_bg-solid: var(--lt-bg-info); --_border: var(--lt-border-info-strong); --_color: var(--lt-text-info); --_color-solid: var(--lt-text-on-info); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: 1px solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: 1px solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } .title + .content { opacity: 0.8; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "alertStyles",
+          "declaration": {
+            "name": "alertStyles",
+            "module": "src/components/alert/alert.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/alert/alert.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Inline notification for persistent contextual feedback.",
+          "name": "Alert",
+          "slots": [
+            {
+              "description": "Alert body. Accepts any HTML — bold, links, lists, etc.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "alertStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "AlertVariant"
+              },
+              "default": "'default'",
+              "description": "Visual style."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "AlertAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual treatment. `filled` uses a tinted background with border, `outlined` uses a white background with border, `solid` uses a solid color background with no border."
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Optional bold heading above the body content."
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon to show before the body. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
+            },
+            {
+              "kind": "field",
+              "name": "closable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the title in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "_iconMap",
+              "type": {
+                "text": "Record<AlertVariant, string>"
+              },
+              "privacy": "private",
+              "static": true,
+              "readonly": true,
+              "default": "{ default: 'info-circle', success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
+            },
+            {
+              "kind": "method",
+              "name": "_handleClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_resolvedIcon",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
+              "name": "lt-close"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-alert",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Alert",
+          "declaration": {
+            "name": "Alert",
+            "module": "src/components/alert/alert.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/alert/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Alert",
+          "declaration": {
+            "name": "Alert",
+            "module": "./alert"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AlertVariant",
+          "declaration": {
+            "name": "AlertVariant",
+            "module": "./alert.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AlertAppearance",
+          "declaration": {
+            "name": "AlertAppearance",
+            "module": "./alert.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/accordion/accordion.styles.ts",
       "declarations": [
         {
@@ -226,326 +561,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "avatarStyles",
-          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-text-neutral); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-text-secondary); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-text-success); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-text-warning); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-text-error); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-text-info); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "avatarStyles",
-          "declaration": {
-            "name": "avatarStyles",
-            "module": "src/components/avatar/avatar.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/avatar.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
-          "name": "Avatar",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "avatarStyles"
-            },
-            {
-              "kind": "field",
-              "name": "src",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "URL of the avatar image."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Full name used to derive initials when no image is available."
-            },
-            {
-              "kind": "field",
-              "name": "alt",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Accessible label for the image (defaults to `name`)."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "AvatarSize"
-              },
-              "default": "'md'",
-              "description": "Size of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "shape",
-              "type": {
-                "text": "AvatarShape"
-              },
-              "default": "'circle'",
-              "description": "Shape of the avatar."
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "AvatarColor"
-              },
-              "default": "'neutral'",
-              "description": "Background color used for the initials and icon fallback states."
-            },
-            {
-              "kind": "field",
-              "name": "_imgError",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "_initials",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleImgError",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-avatar",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "src/components/avatar/avatar.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/avatar/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Avatar",
-          "declaration": {
-            "name": "Avatar",
-            "module": "./avatar"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarSize",
-          "declaration": {
-            "name": "AvatarSize",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarShape",
-          "declaration": {
-            "name": "AvatarShape",
-            "module": "./avatar.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AvatarColor",
-          "declaration": {
-            "name": "AvatarColor",
-            "module": "./avatar.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/badge.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "badgeStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; border-radius: 999px; border: 1px solid transparent; box-sizing: border-box; display: inline-flex; font-weight: 600; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: var(--lt-color-white); } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "badgeStyles",
-          "declaration": {
-            "name": "badgeStyles",
-            "module": "src/components/badge/badge.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/badge.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A compact status label for categories, counts, and states.",
-          "name": "Badge",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "badgeStyles"
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "BadgeAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual style: tinted fill, outline only, or full-color solid."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "BadgeVariant"
-              },
-              "default": "'primary'",
-              "description": "Color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "BadgeSize"
-              },
-              "default": "'md'",
-              "description": "Size."
-            },
-            {
-              "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text. When empty the badge renders as a circle indicator."
-            },
-            {
-              "kind": "field",
-              "name": "dot",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show a leading status dot (only visible when content is set)."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-badge",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Badge",
-          "declaration": {
-            "name": "Badge",
-            "module": "src/components/badge/badge.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Badge",
-          "declaration": {
-            "name": "Badge",
-            "module": "./badge"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeVariant",
-          "declaration": {
-            "name": "BadgeVariant",
-            "module": "./badge.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeSize",
-          "declaration": {
-            "name": "BadgeSize",
-            "module": "./badge.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeAppearance",
-          "declaration": {
-            "name": "BadgeAppearance",
-            "module": "./badge.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/breadcrumb/breadcrumb.styles.ts",
       "declarations": [
         {
@@ -729,128 +744,106 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/alert/alert.styles.ts",
+      "path": "src/components/avatar/avatar.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "alertStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens */ --_bg-subtle: var(--lt-bg-neutral-subtle); --_bg-solid: var(--lt-bg-inverse); --_border: var(--lt-border-strong); --_color: var(--lt-text-default); --_color-solid: var(--lt-text-inverse); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-bg-success-subtle); --_bg-solid: var(--lt-bg-success); --_border: var(--lt-border-success-strong); --_color: var(--lt-text-success); --_color-solid: var(--lt-text-on-success); } :host([variant='warning']) { --_bg-subtle: var(--lt-bg-warning-subtle); --_bg-solid: var(--lt-bg-warning); --_border: var(--lt-border-warning-strong); --_color: var(--lt-text-warning); --_color-solid: var(--lt-text-on-warning); } :host([variant='error']) { --_bg-subtle: var(--lt-bg-error-subtle); --_bg-solid: var(--lt-bg-error); --_border: var(--lt-border-error-strong); --_color: var(--lt-text-error); --_color-solid: var(--lt-text-on-error); } :host([variant='info']) { --_bg-subtle: var(--lt-bg-info-subtle); --_bg-solid: var(--lt-bg-info); --_border: var(--lt-border-info-strong); --_color: var(--lt-text-info); --_color-solid: var(--lt-text-on-info); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: 1px solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: 1px solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } .title + .content { opacity: 0.8; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+          "name": "avatarStyles",
+          "default": "css` :host { display: inline-flex; flex-shrink: 0; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-bg-overlay); box-sizing: border-box; color: var(--lt-color-neutral-700); display: inline-flex; justify-content: center; overflow: hidden; position: relative; } img[part='image'] { height: 100%; object-fit: cover; width: 100%; } .initials { font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.02em; line-height: 1; user-select: none; } /* ── Colors (fallback bg + text) ────────────────────────────────────── */ :host([color='neutral']) span[part='base'] { background: var(--lt-bg-overlay); color: var(--lt-text-neutral); } :host([color='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); } :host([color='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); color: var(--lt-text-secondary); } :host([color='success']) span[part='base'] { background: var(--lt-bg-success-subtle); color: var(--lt-text-success); } :host([color='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); color: var(--lt-text-warning); } :host([color='error']) span[part='base'] { background: var(--lt-bg-error-subtle); color: var(--lt-text-error); } :host([color='info']) span[part='base'] { background: var(--lt-bg-info-subtle); color: var(--lt-text-info); } /* ── Shape ───────────────────────────────────────────────────────────── */ :host([shape='circle']) span[part='base'] { border-radius: 999px; } :host([shape='square']) span[part='base'] { border-radius: var(--lt-border-radius); } /* ── Sizes ───────────────────────────────────────────────────────────── */ :host([size='xs']) span[part='base'] { height: 24px; width: 24px; } :host([size='xs']) .initials { font-size: 0.625rem; } :host([size='sm']) span[part='base'] { height: 32px; width: 32px; } :host([size='sm']) .initials { font-size: 0.75rem; } :host([size='md']) span[part='base'] { height: 40px; width: 40px; } :host([size='md']) .initials { font-size: 0.9375rem; } :host([size='lg']) span[part='base'] { height: 52px; width: 52px; } :host([size='lg']) .initials { font-size: 1.125rem; } :host([size='xl']) span[part='base'] { height: 68px; width: 68px; } :host([size='xl']) .initials { font-size: 1.5rem; } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "alertStyles",
+          "name": "avatarStyles",
           "declaration": {
-            "name": "alertStyles",
-            "module": "src/components/alert/alert.styles.ts"
+            "name": "avatarStyles",
+            "module": "src/components/avatar/avatar.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/alert/alert.ts",
+      "path": "src/components/avatar/avatar.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Inline notification for persistent contextual feedback.",
-          "name": "Alert",
-          "slots": [
-            {
-              "description": "Alert body. Accepts any HTML — bold, links, lists, etc.",
-              "name": ""
-            }
-          ],
+          "description": "Displays a user avatar — image, initials fallback, or icon fallback.",
+          "name": "Avatar",
           "members": [
             {
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "alertStyles"
+              "default": "avatarStyles"
             },
             {
               "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "AlertVariant"
-              },
-              "default": "'default'",
-              "description": "Visual style."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "AlertAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual treatment. `filled` uses a tinted background with border, `outlined` uses a white background with border, `solid` uses a solid color background with no border."
-            },
-            {
-              "kind": "field",
-              "name": "title",
+              "name": "src",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "Optional bold heading above the body content."
+              "description": "URL of the avatar image."
             },
             {
               "kind": "field",
-              "name": "icon",
+              "name": "name",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "Icon to show before the body. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
+              "description": "Full name used to derive initials when no image is available."
             },
             {
               "kind": "field",
-              "name": "closable",
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Accessible label for the image (defaults to `name`)."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "AvatarSize"
+              },
+              "default": "'md'",
+              "description": "Size of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "shape",
+              "type": {
+                "text": "AvatarShape"
+              },
+              "default": "'circle'",
+              "description": "Shape of the avatar."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "AvatarColor"
+              },
+              "default": "'neutral'",
+              "description": "Background color used for the initials and icon fallback states."
+            },
+            {
+              "kind": "field",
+              "name": "_imgError",
               "type": {
                 "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the title in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "_iconMap",
-              "type": {
-                "text": "Record<AlertVariant, string>"
               },
               "privacy": "private",
-              "static": true,
-              "readonly": true,
-              "default": "{ default: 'info-circle', success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
-            },
-            {
-              "kind": "method",
-              "name": "_handleClose",
-              "privacy": "private"
+              "default": "false"
             },
             {
               "kind": "field",
-              "name": "_resolvedIcon",
+              "name": "_initials",
               "type": {
                 "text": "string"
               },
@@ -859,61 +852,68 @@
             },
             {
               "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
+              "name": "_handleImgError",
+              "privacy": "private"
+            },
             {
-              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
-              "name": "lt-close"
+              "kind": "method",
+              "name": "render"
             }
           ],
           "superclass": {
             "name": "ThemeableElement",
             "module": "/src/base"
           },
-          "tagName": "lt-alert",
+          "tagName": "lt-avatar",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Alert",
+          "name": "Avatar",
           "declaration": {
-            "name": "Alert",
-            "module": "src/components/alert/alert.ts"
+            "name": "Avatar",
+            "module": "src/components/avatar/avatar.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/alert/index.ts",
+      "path": "src/components/avatar/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Alert",
+          "name": "Avatar",
           "declaration": {
-            "name": "Alert",
-            "module": "./alert"
+            "name": "Avatar",
+            "module": "./avatar"
           }
         },
         {
           "kind": "js",
-          "name": "AlertVariant",
+          "name": "AvatarSize",
           "declaration": {
-            "name": "AlertVariant",
-            "module": "./alert.types"
+            "name": "AvatarSize",
+            "module": "./avatar.types"
           }
         },
         {
           "kind": "js",
-          "name": "AlertAppearance",
+          "name": "AvatarShape",
           "declaration": {
-            "name": "AlertAppearance",
-            "module": "./alert.types"
+            "name": "AvatarShape",
+            "module": "./avatar.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AvatarColor",
+          "declaration": {
+            "name": "AvatarColor",
+            "module": "./avatar.types"
           }
         }
       ]
@@ -2433,6 +2433,296 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/dialog/dialog.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "dialogStyles",
+          "default": "css` :host { font-family: 'Hanken Grotesk', sans-serif; } /* Backdrop */ .backdrop { align-items: center; background: rgba(0, 0, 0, var(--lt-dialog-overlay-opacity, 0.5)); display: flex; height: 100vh; justify-content: center; left: 0; opacity: 0; padding: var(--lt-spacing-4); position: fixed; top: 0; transition: opacity 200ms ease; width: 100vw; z-index: 1000; } :host([open]) .backdrop { opacity: 1; } :host(:not([open])) .backdrop { pointer-events: none; } /* lt-surface host — flex item inside .backdrop, sized per size variant */ lt-surface { width: 100%; } :host([size='sm']) lt-surface { max-width: 400px; } :host([size='md']) lt-surface { max-width: 600px; } :host([size='lg']) lt-surface { max-width: 800px; } :host([size='xl']) lt-surface { max-width: 1000px; } :host([size='fullscreen']) .backdrop { padding: 0; } :host([size='fullscreen']) lt-surface { height: 100vh; max-height: 100vh; max-width: 100vw; } /* lt-surface inner div — layout and animation */ lt-surface::part(surface) { display: flex; flex-direction: column; max-height: calc(100vh - var(--lt-spacing-8)); opacity: 0; position: relative; transform: translateY(16px); transition: opacity 220ms ease, transform 220ms cubic-bezier(0.34, 1.2, 0.64, 1); } :host([open]) lt-surface::part(surface) { opacity: 1; transform: translateY(0); } :host([size='fullscreen']) lt-surface::part(surface) { border-radius: 0; max-height: 100vh; } /* Header */ .header { align-items: center; border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-4); padding: var(--lt-spacing-5); position: relative; } .header-content { flex: 1; } .title { color: var(--lt-text-default); } .close-button { flex-shrink: 0; } /* Body */ .body { color: var(--lt-color-neutral-700); flex: 1; overflow-y: auto; padding: var(--lt-spacing-5); } /* Footer */ .footer { border-top: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-3); justify-content: flex-end; padding: var(--lt-spacing-5); } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "dialogStyles",
+          "declaration": {
+            "name": "dialogStyles",
+            "module": "src/components/dialog/dialog.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/dialog/dialog.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Dialog component (modal) with backdrop, animations, and accessibility features.",
+          "name": "Dialog",
+          "slots": [
+            {
+              "description": "Dialog body content",
+              "name": ""
+            },
+            {
+              "description": "Custom header content (overrides title prop)",
+              "name": "header"
+            },
+            {
+              "description": "Footer content (typically for action buttons)",
+              "name": "footer"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "type": {
+                "text": "array"
+              },
+              "static": true,
+              "default": "[dialogStyles, backdropFeatureStyles]"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "DialogSize"
+              },
+              "default": "'md'",
+              "description": "Size of the dialog (affects max width)."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dialog is open."
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Dialog title displayed in the header."
+            },
+            {
+              "kind": "field",
+              "name": "noCloseButton",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Suppress the built-in close button in the header."
+            },
+            {
+              "kind": "field",
+              "name": "closeOnBackdropClick",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether clicking the backdrop closes the dialog."
+            },
+            {
+              "kind": "field",
+              "name": "closeOnEscape",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether pressing Escape closes the dialog."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the dialog title in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "backdropBlur",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Apply a frosted-glass blur effect to the backdrop."
+            },
+            {
+              "kind": "field",
+              "name": "dialogElement",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "previouslyFocusedElement",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "privacy": "public",
+              "description": "Opens the dialog."
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "public",
+              "description": "Closes the dialog."
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "privacy": "public",
+              "description": "Toggles the dialog open/closed state."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "restoreFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeydown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleBackdropClick",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleCloseClick",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "hasSlot",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "lt-dialog-open",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when dialog opens"
+            },
+            {
+              "name": "lt-dialog-close",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when dialog closes"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-dialog",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Dialog",
+          "declaration": {
+            "name": "Dialog",
+            "module": "src/components/dialog/dialog.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/dialog/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Dialog",
+          "declaration": {
+            "name": "Dialog",
+            "module": "./dialog"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "DialogSize",
+          "declaration": {
+            "name": "DialogSize",
+            "module": "./dialog.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/combobox/combobox.styles.ts",
       "declarations": [
         {
@@ -2980,296 +3270,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/dialog/dialog.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "dialogStyles",
-          "default": "css` :host { font-family: 'Hanken Grotesk', sans-serif; } /* Backdrop */ .backdrop { align-items: center; background: rgba(0, 0, 0, var(--lt-dialog-overlay-opacity, 0.5)); display: flex; height: 100vh; justify-content: center; left: 0; opacity: 0; padding: var(--lt-spacing-4); position: fixed; top: 0; transition: opacity 200ms ease; width: 100vw; z-index: 1000; } :host([open]) .backdrop { opacity: 1; } :host(:not([open])) .backdrop { pointer-events: none; } /* lt-surface host — flex item inside .backdrop, sized per size variant */ lt-surface { width: 100%; } :host([size='sm']) lt-surface { max-width: 400px; } :host([size='md']) lt-surface { max-width: 600px; } :host([size='lg']) lt-surface { max-width: 800px; } :host([size='xl']) lt-surface { max-width: 1000px; } :host([size='fullscreen']) .backdrop { padding: 0; } :host([size='fullscreen']) lt-surface { height: 100vh; max-height: 100vh; max-width: 100vw; } /* lt-surface inner div — layout and animation */ lt-surface::part(surface) { display: flex; flex-direction: column; max-height: calc(100vh - var(--lt-spacing-8)); opacity: 0; position: relative; transform: translateY(16px); transition: opacity 220ms ease, transform 220ms cubic-bezier(0.34, 1.2, 0.64, 1); } :host([open]) lt-surface::part(surface) { opacity: 1; transform: translateY(0); } :host([size='fullscreen']) lt-surface::part(surface) { border-radius: 0; max-height: 100vh; } /* Header */ .header { align-items: center; border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-4); padding: var(--lt-spacing-5); position: relative; } .header-content { flex: 1; } .title { color: var(--lt-text-default); } .close-button { flex-shrink: 0; } /* Body */ .body { color: var(--lt-color-neutral-700); flex: 1; overflow-y: auto; padding: var(--lt-spacing-5); } /* Footer */ .footer { border-top: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-3); justify-content: flex-end; padding: var(--lt-spacing-5); } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "dialogStyles",
-          "declaration": {
-            "name": "dialogStyles",
-            "module": "src/components/dialog/dialog.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/dialog/dialog.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Dialog component (modal) with backdrop, animations, and accessibility features.",
-          "name": "Dialog",
-          "slots": [
-            {
-              "description": "Dialog body content",
-              "name": ""
-            },
-            {
-              "description": "Custom header content (overrides title prop)",
-              "name": "header"
-            },
-            {
-              "description": "Footer content (typically for action buttons)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "type": {
-                "text": "array"
-              },
-              "static": true,
-              "default": "[dialogStyles, backdropFeatureStyles]"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "DialogSize"
-              },
-              "default": "'md'",
-              "description": "Size of the dialog (affects max width)."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the dialog is open."
-            },
-            {
-              "kind": "field",
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Dialog title displayed in the header."
-            },
-            {
-              "kind": "field",
-              "name": "noCloseButton",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Suppress the built-in close button in the header."
-            },
-            {
-              "kind": "field",
-              "name": "closeOnBackdropClick",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether clicking the backdrop closes the dialog."
-            },
-            {
-              "kind": "field",
-              "name": "closeOnEscape",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether pressing Escape closes the dialog."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the dialog title in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "backdropBlur",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Apply a frosted-glass blur effect to the backdrop."
-            },
-            {
-              "kind": "field",
-              "name": "dialogElement",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "previouslyFocusedElement",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "show",
-              "privacy": "public",
-              "description": "Opens the dialog."
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "privacy": "public",
-              "description": "Closes the dialog."
-            },
-            {
-              "kind": "method",
-              "name": "toggle",
-              "privacy": "public",
-              "description": "Toggles the dialog open/closed state."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changedProperties",
-                  "type": {
-                    "text": "Map<string, unknown>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "restoreFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleKeydown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleBackdropClick",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleCloseClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "hasSlot",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ],
-          "events": [
-            {
-              "name": "lt-dialog-open",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Fired when dialog opens"
-            },
-            {
-              "name": "lt-dialog-close",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Fired when dialog closes"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-dialog",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Dialog",
-          "declaration": {
-            "name": "Dialog",
-            "module": "src/components/dialog/dialog.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/dialog/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Dialog",
-          "declaration": {
-            "name": "Dialog",
-            "module": "./dialog"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "DialogSize",
-          "declaration": {
-            "name": "DialogSize",
-            "module": "./dialog.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/divider/divider.styles.ts",
       "declarations": [
         {
@@ -3692,116 +3692,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/header/header.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "headerStyles",
-          "default": "css` :host { display: block; position: sticky; top: 0; z-index: 100; box-shadow: var(--lt-elevation-1); } :host([background='primary']) { background: var(--lt-bg-primary); color: var(--lt-text-inverse); } :host([background='surface']) { background: var(--lt-bg-default); color: var(--lt-text-default); } header { display: flex; align-items: center; gap: var(--lt-spacing-2); padding: 0 var(--lt-spacing-4); min-height: var(--lt-spacing-px-16); box-sizing: border-box; color: inherit; } .content { flex: 1; display: flex; align-items: center; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "headerStyles",
-          "declaration": {
-            "name": "headerStyles",
-            "module": "src/components/header/header.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/header/header.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A layout component that organises content into a sticky app bar.\nRenders a native `<header>` element for semantics and the ARIA `banner` landmark.",
-          "name": "Header",
-          "slots": [
-            {
-              "description": "Far-left area, typically a hamburger menu or back button",
-              "name": "before"
-            },
-            {
-              "description": "Logo or brand mark, placed to the right of `before`",
-              "name": "logo"
-            },
-            {
-              "description": "Main content area (nav links, search…); stretches to fill available space",
-              "name": "content"
-            },
-            {
-              "description": "Far-right area, typically user actions or icons",
-              "name": "after"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "headerStyles"
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "HeaderBackground"
-              },
-              "default": "'primary'",
-              "description": "Background surface that controls the header's background and text colours."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-header",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Header",
-          "declaration": {
-            "name": "Header",
-            "module": "src/components/header/header.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/header/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Header",
-          "declaration": {
-            "name": "Header",
-            "module": "./header"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "HeaderBackground",
-          "declaration": {
-            "name": "HeaderBackground",
-            "module": "./header.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/icon-button/icon-button.styles.ts",
       "declarations": [
         {
@@ -4092,6 +3982,116 @@
           "declaration": {
             "name": "Image",
             "module": "./image"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/header/header.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "headerStyles",
+          "default": "css` :host { display: block; position: sticky; top: 0; z-index: 100; box-shadow: var(--lt-elevation-1); } :host([background='primary']) { background: var(--lt-bg-primary); color: var(--lt-text-inverse); } :host([background='surface']) { background: var(--lt-bg-default); color: var(--lt-text-default); } header { display: flex; align-items: center; gap: var(--lt-spacing-2); padding: 0 var(--lt-spacing-4); min-height: var(--lt-spacing-px-16); box-sizing: border-box; color: inherit; } .content { flex: 1; display: flex; align-items: center; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "headerStyles",
+          "declaration": {
+            "name": "headerStyles",
+            "module": "src/components/header/header.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/header/header.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A layout component that organises content into a sticky app bar.\nRenders a native `<header>` element for semantics and the ARIA `banner` landmark.",
+          "name": "Header",
+          "slots": [
+            {
+              "description": "Far-left area, typically a hamburger menu or back button",
+              "name": "before"
+            },
+            {
+              "description": "Logo or brand mark, placed to the right of `before`",
+              "name": "logo"
+            },
+            {
+              "description": "Main content area (nav links, search…); stretches to fill available space",
+              "name": "content"
+            },
+            {
+              "description": "Far-right area, typically user actions or icons",
+              "name": "after"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "headerStyles"
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "HeaderBackground"
+              },
+              "default": "'primary'",
+              "description": "Background surface that controls the header's background and text colours."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-header",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Header",
+          "declaration": {
+            "name": "Header",
+            "module": "src/components/header/header.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/header/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Header",
+          "declaration": {
+            "name": "Header",
+            "module": "./header"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "HeaderBackground",
+          "declaration": {
+            "name": "HeaderBackground",
+            "module": "./header.types"
           }
         }
       ]
@@ -5068,6 +5068,209 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/radio-group/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RadioGroup",
+          "declaration": {
+            "name": "RadioGroup",
+            "module": "./radio-group"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "RadioGroupOrientation",
+          "declaration": {
+            "name": "RadioGroupOrientation",
+            "module": "./radio-group.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/radio-group/radio-group.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "radioGroupStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .radio-group { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } .label { color: var(--lt-text-default); margin-bottom: var(--lt-spacing-1); } .required-indicator { color: var(--lt-color-error-500); margin-left: var(--lt-spacing-1); } .radios-container { display: flex; gap: var(--lt-spacing-3); } :host([orientation='vertical']) .radios-container { flex-direction: column; } :host([orientation='horizontal']) .radios-container { flex-direction: row; flex-wrap: wrap; } .helper-text { color: var(--lt-text-subtle); margin-top: var(--lt-spacing-1); } .helper-text::part(base) { font-weight: 200; } :host([error]) .helper-text { color: var(--lt-text-error); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "radioGroupStyles",
+          "declaration": {
+            "name": "radioGroupStyles",
+            "module": "src/components/radio-group/radio-group.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/radio-group/radio-group.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A container component that manages a group of radio buttons.",
+          "name": "RadioGroup",
+          "slots": [
+            {
+              "description": "Radio buttons to be managed by this group",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "radioGroupStyles"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label for the radio group."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name attribute applied to all radio buttons in the group.\nEnsures only one radio can be selected at a time."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Currently selected value in the group."
+            },
+            {
+              "kind": "field",
+              "name": "orientation",
+              "type": {
+                "text": "RadioGroupOrientation"
+              },
+              "default": "'vertical'",
+              "description": "Layout orientation of the radio buttons."
+            },
+            {
+              "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Helper text displayed below the radio group."
+            },
+            {
+              "kind": "field",
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the radio group is in an error state."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "radios",
+              "type": {
+                "text": "Radio[]"
+              },
+              "privacy": "private",
+              "description": "Reference to all slotted radio elements."
+            },
+            {
+              "kind": "field",
+              "name": "_attached",
+              "privacy": "private",
+              "default": "new WeakSet<Radio>()"
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "_syncRadios",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleRadioChange",
+              "privacy": "private",
+              "description": "Handles change events from individual radio buttons.\nUpdates the group value and ensures only one radio is checked.",
+              "parameters": [
+                {
+                  "description": "The change event from a radio button",
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange",
+              "privacy": "private",
+              "description": "Handles slot changes to update radios when content changes."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Dispatched when a radio in the group is selected",
+              "name": "change"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-radio-group",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RadioGroup",
+          "declaration": {
+            "name": "RadioGroup",
+            "module": "src/components/radio-group/radio-group.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/radio/index.ts",
       "declarations": [],
       "exports": [
@@ -5266,209 +5469,6 @@
           "declaration": {
             "name": "Radio",
             "module": "src/components/radio/radio.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio-group/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RadioGroup",
-          "declaration": {
-            "name": "RadioGroup",
-            "module": "./radio-group"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "RadioGroupOrientation",
-          "declaration": {
-            "name": "RadioGroupOrientation",
-            "module": "./radio-group.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio-group/radio-group.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "radioGroupStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .radio-group { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } .label { color: var(--lt-text-default); margin-bottom: var(--lt-spacing-1); } .required-indicator { color: var(--lt-color-error-500); margin-left: var(--lt-spacing-1); } .radios-container { display: flex; gap: var(--lt-spacing-3); } :host([orientation='vertical']) .radios-container { flex-direction: column; } :host([orientation='horizontal']) .radios-container { flex-direction: row; flex-wrap: wrap; } .helper-text { color: var(--lt-text-subtle); margin-top: var(--lt-spacing-1); } .helper-text::part(base) { font-weight: 200; } :host([error]) .helper-text { color: var(--lt-text-error); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "radioGroupStyles",
-          "declaration": {
-            "name": "radioGroupStyles",
-            "module": "src/components/radio-group/radio-group.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio-group/radio-group.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A container component that manages a group of radio buttons.",
-          "name": "RadioGroup",
-          "slots": [
-            {
-              "description": "Radio buttons to be managed by this group",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "radioGroupStyles"
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label for the radio group."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute applied to all radio buttons in the group.\nEnsures only one radio can be selected at a time."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Currently selected value in the group."
-            },
-            {
-              "kind": "field",
-              "name": "orientation",
-              "type": {
-                "text": "RadioGroupOrientation"
-              },
-              "default": "'vertical'",
-              "description": "Layout orientation of the radio buttons."
-            },
-            {
-              "kind": "field",
-              "name": "helperText",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Helper text displayed below the radio group."
-            },
-            {
-              "kind": "field",
-              "name": "error",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the radio group is in an error state."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether selection is required."
-            },
-            {
-              "kind": "field",
-              "name": "radios",
-              "type": {
-                "text": "Radio[]"
-              },
-              "privacy": "private",
-              "description": "Reference to all slotted radio elements."
-            },
-            {
-              "kind": "field",
-              "name": "_attached",
-              "privacy": "private",
-              "default": "new WeakSet<Radio>()"
-            },
-            {
-              "kind": "method",
-              "name": "firstUpdated"
-            },
-            {
-              "kind": "method",
-              "name": "_syncRadios",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleRadioChange",
-              "privacy": "private",
-              "description": "Handles change events from individual radio buttons.\nUpdates the group value and ensures only one radio is checked.",
-              "parameters": [
-                {
-                  "description": "The change event from a radio button",
-                  "name": "e"
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleSlotChange",
-              "privacy": "private",
-              "description": "Handles slot changes to update radios when content changes."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Dispatched when a radio in the group is selected",
-              "name": "change"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-radio-group",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RadioGroup",
-          "declaration": {
-            "name": "RadioGroup",
-            "module": "src/components/radio-group/radio-group.ts"
           }
         }
       ]
@@ -5749,27 +5749,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/shared/backdrop.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "backdropFeatureStyles",
-          "default": "css` :host([backdrop-blur]) .backdrop, :host([backdrop-blur]) [part='overlay'] { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "backdropFeatureStyles",
-          "declaration": {
-            "name": "backdropFeatureStyles",
-            "module": "src/components/shared/backdrop.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/sidepanel/index.ts",
       "declarations": [],
       "exports": [
@@ -6003,6 +5982,246 @@
           "declaration": {
             "name": "SidePanel",
             "module": "src/components/sidepanel/sidepanel.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/snackbar/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Snackbar",
+          "declaration": {
+            "name": "Snackbar",
+            "module": "./snackbar"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SnackbarVariant",
+          "declaration": {
+            "name": "SnackbarVariant",
+            "module": "./snackbar.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/snackbar/snackbar.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "snackbarStyles",
+          "default": "css` :host { display: block; bottom: 24px; left: 50%; max-width: calc(100vw - 48px); opacity: 0; position: fixed; transform: translateX(-50%) translateY(8px); transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease; visibility: hidden; width: max-content; z-index: 9000; } :host([open]) { opacity: 1; transform: translateX(-50%) translateY(0); visibility: visible; } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: center; color: var(--lt-text-inverse); display: flex; font-family: 'Hanken Grotesk', sans-serif; font-size: 0.875rem; gap: var(--lt-spacing-2); line-height: 1.4; padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Variant text colors ─────────────────────────────────── */ :host([variant='success']) .inner { color: var(--lt-text-on-success); } :host([variant='warning']) .inner { color: var(--lt-text-on-warning); } :host([variant='error']) .inner { color: var(--lt-text-on-error); } :host([variant='info']) .inner { color: var(--lt-text-on-info); } /* ── Variant icon ────────────────────────────────────────── */ .variant-icon { flex-shrink: 0; font-size: 1.125rem; } /* ── Message ─────────────────────────────────────────────── */ .message { flex: 1; } /* ── Action button ───────────────────────────────────────── */ .action { background: transparent; border: none; color: inherit; cursor: pointer; font-family: inherit; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.05em; opacity: 0.85; padding: 0 var(--lt-spacing-1); text-transform: uppercase; } .action:hover { opacity: 1; } /* ── Close button ────────────────────────────────────────── */ .close { align-items: center; background: transparent; border: none; color: inherit; cursor: pointer; display: flex; flex-shrink: 0; justify-content: center; opacity: 0.7; padding: 0; } .close:hover { opacity: 1; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "snackbarStyles",
+          "declaration": {
+            "name": "snackbarStyles",
+            "module": "src/components/snackbar/snackbar.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/snackbar/snackbar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Brief notification that appears temporarily at the bottom of the viewport.",
+          "name": "Snackbar",
+          "slots": [
+            {
+              "description": "Notification content. Accepts any HTML — bold, links, etc.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "snackbarStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "SnackbarVariant"
+              },
+              "default": "'default'",
+              "description": "Visual style."
+            },
+            {
+              "kind": "field",
+              "name": "duration",
+              "type": {
+                "text": "number"
+              },
+              "default": "4000",
+              "description": "Auto-dismiss delay in milliseconds. Set to 0 to disable auto-dismiss."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the snackbar is visible."
+            },
+            {
+              "kind": "field",
+              "name": "closable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Show a dismiss button."
+            },
+            {
+              "kind": "field",
+              "name": "actionLabel",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label for the optional action button."
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon to show before the message. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
+            },
+            {
+              "kind": "field",
+              "name": "_timer",
+              "type": {
+                "text": "ReturnType<typeof setTimeout> | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "privacy": "public",
+              "description": "Shows the snackbar and starts the auto-dismiss timer."
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "public",
+              "description": "Dismisses the snackbar."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_startTimer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_clearTimer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleAction",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_iconMap",
+              "type": {
+                "text": "Partial<Record<SnackbarVariant, string>>"
+              },
+              "privacy": "private",
+              "static": true,
+              "readonly": true,
+              "default": "{ success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
+            },
+            {
+              "kind": "field",
+              "name": "_bgMap",
+              "type": {
+                "text": "Record<SnackbarVariant, string>"
+              },
+              "privacy": "private",
+              "static": true,
+              "readonly": true,
+              "default": "{ default: '--lt-bg-inverse', success: '--lt-interactive-success-bg', warning: '--lt-interactive-warning-bg', error: '--lt-interactive-error-bg', info: '--lt-interactive-info-bg' }"
+            },
+            {
+              "kind": "field",
+              "name": "_resolvedIcon",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fired when the snackbar becomes visible.",
+              "name": "lt-show"
+            },
+            {
+              "description": "Fired when the snackbar is dismissed.",
+              "name": "lt-hide"
+            },
+            {
+              "description": "Fired when the action button is clicked.",
+              "name": "lt-action"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-snackbar",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Snackbar",
+          "declaration": {
+            "name": "Snackbar",
+            "module": "src/components/snackbar/snackbar.ts"
           }
         }
       ]
@@ -6359,350 +6578,21 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/snackbar/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Snackbar",
-          "declaration": {
-            "name": "Snackbar",
-            "module": "./snackbar"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SnackbarVariant",
-          "declaration": {
-            "name": "SnackbarVariant",
-            "module": "./snackbar.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/snackbar/snackbar.styles.ts",
+      "path": "src/components/shared/backdrop.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "snackbarStyles",
-          "default": "css` :host { display: block; bottom: 24px; left: 50%; max-width: calc(100vw - 48px); opacity: 0; position: fixed; transform: translateX(-50%) translateY(8px); transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease; visibility: hidden; width: max-content; z-index: 9000; } :host([open]) { opacity: 1; transform: translateX(-50%) translateY(0); visibility: visible; } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: center; color: var(--lt-text-inverse); display: flex; font-family: 'Hanken Grotesk', sans-serif; font-size: 0.875rem; gap: var(--lt-spacing-2); line-height: 1.4; padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Variant text colors ─────────────────────────────────── */ :host([variant='success']) .inner { color: var(--lt-text-on-success); } :host([variant='warning']) .inner { color: var(--lt-text-on-warning); } :host([variant='error']) .inner { color: var(--lt-text-on-error); } :host([variant='info']) .inner { color: var(--lt-text-on-info); } /* ── Variant icon ────────────────────────────────────────── */ .variant-icon { flex-shrink: 0; font-size: 1.125rem; } /* ── Message ─────────────────────────────────────────────── */ .message { flex: 1; } /* ── Action button ───────────────────────────────────────── */ .action { background: transparent; border: none; color: inherit; cursor: pointer; font-family: inherit; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.05em; opacity: 0.85; padding: 0 var(--lt-spacing-1); text-transform: uppercase; } .action:hover { opacity: 1; } /* ── Close button ────────────────────────────────────────── */ .close { align-items: center; background: transparent; border: none; color: inherit; cursor: pointer; display: flex; flex-shrink: 0; justify-content: center; opacity: 0.7; padding: 0; } .close:hover { opacity: 1; } `"
+          "name": "backdropFeatureStyles",
+          "default": "css` :host([backdrop-blur]) .backdrop, :host([backdrop-blur]) [part='overlay'] { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "snackbarStyles",
+          "name": "backdropFeatureStyles",
           "declaration": {
-            "name": "snackbarStyles",
-            "module": "src/components/snackbar/snackbar.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/snackbar/snackbar.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Brief notification that appears temporarily at the bottom of the viewport.",
-          "name": "Snackbar",
-          "slots": [
-            {
-              "description": "Notification content. Accepts any HTML — bold, links, etc.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "snackbarStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "SnackbarVariant"
-              },
-              "default": "'default'",
-              "description": "Visual style."
-            },
-            {
-              "kind": "field",
-              "name": "duration",
-              "type": {
-                "text": "number"
-              },
-              "default": "4000",
-              "description": "Auto-dismiss delay in milliseconds. Set to 0 to disable auto-dismiss."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the snackbar is visible."
-            },
-            {
-              "kind": "field",
-              "name": "closable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Show a dismiss button."
-            },
-            {
-              "kind": "field",
-              "name": "actionLabel",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label for the optional action button."
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon to show before the message. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
-            },
-            {
-              "kind": "field",
-              "name": "_timer",
-              "type": {
-                "text": "ReturnType<typeof setTimeout> | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "show",
-              "privacy": "public",
-              "description": "Shows the snackbar and starts the auto-dismiss timer."
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "privacy": "public",
-              "description": "Dismisses the snackbar."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changedProperties",
-                  "type": {
-                    "text": "Map<string, unknown>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_startTimer",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_clearTimer",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_handleClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "_handleAction",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_iconMap",
-              "type": {
-                "text": "Partial<Record<SnackbarVariant, string>>"
-              },
-              "privacy": "private",
-              "static": true,
-              "readonly": true,
-              "default": "{ success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
-            },
-            {
-              "kind": "field",
-              "name": "_bgMap",
-              "type": {
-                "text": "Record<SnackbarVariant, string>"
-              },
-              "privacy": "private",
-              "static": true,
-              "readonly": true,
-              "default": "{ default: '--lt-bg-inverse', success: '--lt-interactive-success-bg', warning: '--lt-interactive-warning-bg', error: '--lt-interactive-error-bg', info: '--lt-interactive-info-bg' }"
-            },
-            {
-              "kind": "field",
-              "name": "_resolvedIcon",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fired when the snackbar becomes visible.",
-              "name": "lt-show"
-            },
-            {
-              "description": "Fired when the snackbar is dismissed.",
-              "name": "lt-hide"
-            },
-            {
-              "description": "Fired when the action button is clicked.",
-              "name": "lt-action"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-snackbar",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Snackbar",
-          "declaration": {
-            "name": "Snackbar",
-            "module": "src/components/snackbar/snackbar.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/spinner/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Spinner",
-          "declaration": {
-            "name": "Spinner",
-            "module": "./spinner"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SpinnerSize",
-          "declaration": {
-            "name": "SpinnerSize",
-            "module": "./spinner.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SpinnerVariant",
-          "declaration": {
-            "name": "SpinnerVariant",
-            "module": "./spinner.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/spinner/spineer.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "spinnerStyles",
-          "default": "css` :host { --spinner-size: var(--lt-spacing-4, 1rem); --spinner-color: currentColor; display: inline-block; line-height: 0; } /* Sizes */ :host([size='sm']) { --spinner-size: var(--lt-spacing-3, 0.75rem); } :host([size='md']) { --spinner-size: var(--lt-spacing-4, 1rem); } :host([size='lg']) { --spinner-size: var(--lt-spacing-6, 1.5rem); } /* Color */ :host([variant='primary']) { --spinner-color: var(--lt-interactive-primary-bg); } :host([variant='secondary']) { --spinner-color: var(--lt-interactive-secondary-bg); } :host([variant='neutral']) { --spinner-color: var(--lt-color-neutral-500); } :host([variant='current']) { --spinner-color: currentColor; } .spinner { animation: spin 700ms linear infinite; border-bottom-color: var(--spinner-color); border-left-color: var(--spinner-color); border-radius: 999px; border-right-color: transparent; border-style: solid; border-top-color: var(--spinner-color); border-width: 2px; box-sizing: border-box; display: block; height: var(--spinner-size); width: var(--spinner-size); } @keyframes spin { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "spinnerStyles",
-          "declaration": {
-            "name": "spinnerStyles",
-            "module": "src/components/spinner/spineer.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/spinner/spinner.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Spinner component for indicating loading states.",
-          "name": "Spinner",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "spinnerStyles"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "SpinnerSize"
-              },
-              "default": "'md'",
-              "description": "Size of the spinner."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "SpinnerVariant"
-              },
-              "default": "'current'",
-              "description": "Color variant of the spinner.\n'current' inherits color from parent element."
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "description": "Renders the spinner element.\nHidden from assistive technologies with aria-hidden."
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-spinner",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Spinner",
-          "declaration": {
-            "name": "Spinner",
-            "module": "src/components/spinner/spinner.ts"
+            "name": "backdropFeatureStyles",
+            "module": "src/components/shared/backdrop.styles.ts"
           }
         }
       ]
@@ -6827,6 +6717,320 @@
           "declaration": {
             "name": "Surface",
             "module": "src/components/surface/surface.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/spinner/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Spinner",
+          "declaration": {
+            "name": "Spinner",
+            "module": "./spinner"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SpinnerSize",
+          "declaration": {
+            "name": "SpinnerSize",
+            "module": "./spinner.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SpinnerVariant",
+          "declaration": {
+            "name": "SpinnerVariant",
+            "module": "./spinner.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/spinner/spineer.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "spinnerStyles",
+          "default": "css` :host { --spinner-size: var(--lt-spacing-4, 1rem); --spinner-color: currentColor; display: inline-block; line-height: 0; } /* Sizes */ :host([size='sm']) { --spinner-size: var(--lt-spacing-3, 0.75rem); } :host([size='md']) { --spinner-size: var(--lt-spacing-4, 1rem); } :host([size='lg']) { --spinner-size: var(--lt-spacing-6, 1.5rem); } /* Color */ :host([variant='primary']) { --spinner-color: var(--lt-interactive-primary-bg); } :host([variant='secondary']) { --spinner-color: var(--lt-interactive-secondary-bg); } :host([variant='neutral']) { --spinner-color: var(--lt-color-neutral-500); } :host([variant='current']) { --spinner-color: currentColor; } .spinner { animation: spin 700ms linear infinite; border-bottom-color: var(--spinner-color); border-left-color: var(--spinner-color); border-radius: 999px; border-right-color: transparent; border-style: solid; border-top-color: var(--spinner-color); border-width: 2px; box-sizing: border-box; display: block; height: var(--spinner-size); width: var(--spinner-size); } @keyframes spin { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "spinnerStyles",
+          "declaration": {
+            "name": "spinnerStyles",
+            "module": "src/components/spinner/spineer.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/spinner/spinner.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Spinner component for indicating loading states.",
+          "name": "Spinner",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "spinnerStyles"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "SpinnerSize"
+              },
+              "default": "'md'",
+              "description": "Size of the spinner."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "SpinnerVariant"
+              },
+              "default": "'current'",
+              "description": "Color variant of the spinner.\n'current' inherits color from parent element."
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "description": "Renders the spinner element.\nHidden from assistive technologies with aria-hidden."
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-spinner",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Spinner",
+          "declaration": {
+            "name": "Spinner",
+            "module": "src/components/spinner/spinner.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/switch/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Switch",
+          "declaration": {
+            "name": "Switch",
+            "module": "./switch"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SwitchSize",
+          "declaration": {
+            "name": "SwitchSize",
+            "module": "./switch.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SwitchVariant",
+          "declaration": {
+            "name": "SwitchVariant",
+            "module": "./switch.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SwitchLabelPosition",
+          "declaration": {
+            "name": "SwitchLabelPosition",
+            "module": "./switch.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/switch/switch.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "switchStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .switch-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } :host([label-position='left']) .switch-wrapper { flex-direction: row-reverse; } :host([disabled]) .switch-wrapper { cursor: not-allowed; opacity: 0.6; } .switch-container { display: inline-flex; position: relative; } input[type='checkbox'] { appearance: none; background: var(--lt-border-default); border-radius: 999px; cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 200ms ease; } input[type='checkbox']:hover:not(:disabled) { background: var(--lt-border-strong); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .thumb { background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); pointer-events: none; position: absolute; transition: left 200ms ease; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 18px; width: 32px; } :host([size='sm']) .thumb { height: 14px; width: 14px; left: 2px; top: 2px; } :host([size='sm']) input[type='checkbox']:checked ~ .thumb { left: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 22px; width: 40px; } :host([size='md']) .thumb { height: 18px; width: 18px; left: 2px; top: 2px; } :host([size='md']) input[type='checkbox']:checked ~ .thumb { left: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 26px; width: 48px; } :host([size='lg']) .thumb { height: 22px; width: 22px; left: 2px; top: 2px; } :host([size='lg']) input[type='checkbox']:checked ~ .thumb { left: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked { background: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked { background: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked { background: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked { background: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked { background: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "switchStyles",
+          "declaration": {
+            "name": "switchStyles",
+            "module": "src/components/switch/switch.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/switch/switch.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A toggle switch component with sliding animation.\nInternally uses a checkbox input with custom toggle styling.",
+          "name": "Switch",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "switchStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "SwitchVariant"
+              },
+              "default": "'primary'",
+              "description": "Visual variant that determines the color when checked."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "SwitchSize"
+              },
+              "default": "'md'",
+              "description": "Size of the switch."
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the switch is checked (on)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the switch is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the switch is required."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text displayed next to the switch."
+            },
+            {
+              "kind": "field",
+              "name": "labelPosition",
+              "type": {
+                "text": "SwitchLabelPosition"
+              },
+              "default": "'right'",
+              "description": "Position of the label relative to the switch."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "'on'",
+              "description": "Value attribute for form submission."
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  },
+                  "description": "The native change event"
+                }
+              ],
+              "description": "Handles switch change events.\nUpdates the checked state and dispatches a custom change event."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "CustomEvent<{checked: boolean}>"
+              },
+              "description": "Dispatched when the switch state changes"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-switch",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Switch",
+          "declaration": {
+            "name": "Switch",
+            "module": "src/components/switch/switch.ts"
           }
         }
       ]
@@ -7085,204 +7289,6 @@
           "declaration": {
             "name": "Tab",
             "module": "src/components/tab/tab.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tab-group/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TabGroup",
-          "declaration": {
-            "name": "TabGroup",
-            "module": "./tab-group"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TabGroupAppearance",
-          "declaration": {
-            "name": "TabGroupAppearance",
-            "module": "./tab-group.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TabGroupSize",
-          "declaration": {
-            "name": "TabGroupSize",
-            "module": "./tab-group.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tab-group/tab-group.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "tabGroupStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .tab-group { display: flex; flex-direction: column; } .tabs-container { border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-1); overflow-x: auto; scrollbar-width: thin; } .tabs-container::-webkit-scrollbar { height: 4px; } .tabs-container::-webkit-scrollbar-track { background: var(--lt-bg-surface); } .tabs-container::-webkit-scrollbar-thumb { background: var(--lt-color-neutral-300); border-radius: 2px; } .panels-container { padding: var(--lt-spacing-4) 0; } ::slotted([slot='panel']) { display: none; } ::slotted([slot='panel'][active]) { display: block; } /* Pills variant */ :host([appearance='pills']) .tabs-container { background: var(--lt-bg-surface); border: none; border-radius: var(--lt-border-radius); gap: var(--lt-spacing-2); padding: var(--lt-spacing-1); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "tabGroupStyles",
-          "declaration": {
-            "name": "tabGroupStyles",
-            "module": "src/components/tab-group/tab-group.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tab-group/tab-group.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A container component that manages a group of tabs.",
-          "name": "TabGroup",
-          "slots": [
-            {
-              "description": "Tab elements",
-              "name": ""
-            },
-            {
-              "description": "Tab panel content (use multiple panels with matching values)",
-              "name": "panel"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "tabGroupStyles"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Currently selected tab value."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "TabGroupAppearance"
-              },
-              "default": "'default'",
-              "description": "Visual appearance of the tab group."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "TabGroupSize"
-              },
-              "default": "'md'",
-              "description": "Size of the tabs."
-            },
-            {
-              "kind": "field",
-              "name": "tabs",
-              "type": {
-                "text": "Tab[]"
-              },
-              "privacy": "private",
-              "description": "Reference to all slotted tab elements."
-            },
-            {
-              "kind": "field",
-              "name": "panels",
-              "type": {
-                "text": "HTMLElement[]"
-              },
-              "privacy": "private",
-              "description": "Reference to all slotted panel elements."
-            },
-            {
-              "kind": "method",
-              "name": "firstUpdated",
-              "description": "Lifecycle: Called after the element's DOM has been updated."
-            },
-            {
-              "kind": "method",
-              "name": "updateTabs",
-              "privacy": "private",
-              "description": "Updates all tabs with the correct active state and size."
-            },
-            {
-              "kind": "method",
-              "name": "updatePanels",
-              "privacy": "private",
-              "description": "Updates panel visibility based on selected value."
-            },
-            {
-              "kind": "field",
-              "name": "handleTabClick",
-              "privacy": "private",
-              "description": "Handles click events from tabs."
-            },
-            {
-              "kind": "method",
-              "name": "handleSlotChange",
-              "privacy": "private",
-              "description": "Handles slot changes."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "privacy": "protected",
-              "parameters": [
-                {
-                  "name": "changedProperties",
-                  "type": {
-                    "text": "Map<string, unknown>"
-                  }
-                }
-              ],
-              "description": "Watch for value changes."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Dispatched when a tab is selected",
-              "name": "change"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-tab-group",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TabGroup",
-          "declaration": {
-            "name": "TabGroup",
-            "module": "src/components/tab-group/tab-group.ts"
           }
         }
       ]
@@ -7671,6 +7677,204 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/tab-group/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TabGroup",
+          "declaration": {
+            "name": "TabGroup",
+            "module": "./tab-group"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TabGroupAppearance",
+          "declaration": {
+            "name": "TabGroupAppearance",
+            "module": "./tab-group.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TabGroupSize",
+          "declaration": {
+            "name": "TabGroupSize",
+            "module": "./tab-group.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tab-group/tab-group.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "tabGroupStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .tab-group { display: flex; flex-direction: column; } .tabs-container { border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-1); overflow-x: auto; scrollbar-width: thin; } .tabs-container::-webkit-scrollbar { height: 4px; } .tabs-container::-webkit-scrollbar-track { background: var(--lt-bg-surface); } .tabs-container::-webkit-scrollbar-thumb { background: var(--lt-color-neutral-300); border-radius: 2px; } .panels-container { padding: var(--lt-spacing-4) 0; } ::slotted([slot='panel']) { display: none; } ::slotted([slot='panel'][active]) { display: block; } /* Pills variant */ :host([appearance='pills']) .tabs-container { background: var(--lt-bg-surface); border: none; border-radius: var(--lt-border-radius); gap: var(--lt-spacing-2); padding: var(--lt-spacing-1); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "tabGroupStyles",
+          "declaration": {
+            "name": "tabGroupStyles",
+            "module": "src/components/tab-group/tab-group.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tab-group/tab-group.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A container component that manages a group of tabs.",
+          "name": "TabGroup",
+          "slots": [
+            {
+              "description": "Tab elements",
+              "name": ""
+            },
+            {
+              "description": "Tab panel content (use multiple panels with matching values)",
+              "name": "panel"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "tabGroupStyles"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Currently selected tab value."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "TabGroupAppearance"
+              },
+              "default": "'default'",
+              "description": "Visual appearance of the tab group."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "TabGroupSize"
+              },
+              "default": "'md'",
+              "description": "Size of the tabs."
+            },
+            {
+              "kind": "field",
+              "name": "tabs",
+              "type": {
+                "text": "Tab[]"
+              },
+              "privacy": "private",
+              "description": "Reference to all slotted tab elements."
+            },
+            {
+              "kind": "field",
+              "name": "panels",
+              "type": {
+                "text": "HTMLElement[]"
+              },
+              "privacy": "private",
+              "description": "Reference to all slotted panel elements."
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "description": "Lifecycle: Called after the element's DOM has been updated."
+            },
+            {
+              "kind": "method",
+              "name": "updateTabs",
+              "privacy": "private",
+              "description": "Updates all tabs with the correct active state and size."
+            },
+            {
+              "kind": "method",
+              "name": "updatePanels",
+              "privacy": "private",
+              "description": "Updates panel visibility based on selected value."
+            },
+            {
+              "kind": "field",
+              "name": "handleTabClick",
+              "privacy": "private",
+              "description": "Handles click events from tabs."
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange",
+              "privacy": "private",
+              "description": "Handles slot changes."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ],
+              "description": "Watch for value changes."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Dispatched when a tab is selected",
+              "name": "change"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-tab-group",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TabGroup",
+          "declaration": {
+            "name": "TabGroup",
+            "module": "src/components/tab-group/tab-group.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/text/index.ts",
       "declarations": [],
       "exports": [
@@ -7764,210 +7968,6 @@
           "declaration": {
             "name": "Text",
             "module": "src/components/text/text.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/switch/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Switch",
-          "declaration": {
-            "name": "Switch",
-            "module": "./switch"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SwitchSize",
-          "declaration": {
-            "name": "SwitchSize",
-            "module": "./switch.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SwitchVariant",
-          "declaration": {
-            "name": "SwitchVariant",
-            "module": "./switch.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SwitchLabelPosition",
-          "declaration": {
-            "name": "SwitchLabelPosition",
-            "module": "./switch.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/switch/switch.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "switchStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .switch-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } :host([label-position='left']) .switch-wrapper { flex-direction: row-reverse; } :host([disabled]) .switch-wrapper { cursor: not-allowed; opacity: 0.6; } .switch-container { display: inline-flex; position: relative; } input[type='checkbox'] { appearance: none; background: var(--lt-border-default); border-radius: 999px; cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 200ms ease; } input[type='checkbox']:hover:not(:disabled) { background: var(--lt-border-strong); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .thumb { background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); pointer-events: none; position: absolute; transition: left 200ms ease; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 18px; width: 32px; } :host([size='sm']) .thumb { height: 14px; width: 14px; left: 2px; top: 2px; } :host([size='sm']) input[type='checkbox']:checked ~ .thumb { left: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 22px; width: 40px; } :host([size='md']) .thumb { height: 18px; width: 18px; left: 2px; top: 2px; } :host([size='md']) input[type='checkbox']:checked ~ .thumb { left: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 26px; width: 48px; } :host([size='lg']) .thumb { height: 22px; width: 22px; left: 2px; top: 2px; } :host([size='lg']) input[type='checkbox']:checked ~ .thumb { left: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked { background: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked { background: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked { background: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked { background: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked { background: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "switchStyles",
-          "declaration": {
-            "name": "switchStyles",
-            "module": "src/components/switch/switch.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/switch/switch.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A toggle switch component with sliding animation.\nInternally uses a checkbox input with custom toggle styling.",
-          "name": "Switch",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "switchStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "SwitchVariant"
-              },
-              "default": "'primary'",
-              "description": "Visual variant that determines the color when checked."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "SwitchSize"
-              },
-              "default": "'md'",
-              "description": "Size of the switch."
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the switch is checked (on)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the switch is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the switch is required."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text displayed next to the switch."
-            },
-            {
-              "kind": "field",
-              "name": "labelPosition",
-              "type": {
-                "text": "SwitchLabelPosition"
-              },
-              "default": "'right'",
-              "description": "Position of the label relative to the switch."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "'on'",
-              "description": "Value attribute for form submission."
-            },
-            {
-              "kind": "method",
-              "name": "handleChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  },
-                  "description": "The native change event"
-                }
-              ],
-              "description": "Handles switch change events.\nUpdates the checked state and dispatches a custom change event."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "CustomEvent<{checked: boolean}>"
-              },
-              "description": "Dispatched when the switch state changes"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-switch",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Switch",
-          "declaration": {
-            "name": "Switch",
-            "module": "src/components/switch/switch.ts"
           }
         }
       ]

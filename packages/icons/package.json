@@ -25,7 +25,10 @@
     "README.md",
     "LICENSE"
   ],
-  "sideEffects": true,
+  "sideEffects": [
+    "./dist/index.js",
+    "./dist/entries/*.js"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,13 +36,463 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./arrow-down": {
+      "default": "./dist/entries/arrow-down.js"
+    },
+    "./arrow-left": {
+      "default": "./dist/entries/arrow-left.js"
+    },
+    "./arrow-right": {
+      "default": "./dist/entries/arrow-right.js"
+    },
+    "./arrow-up": {
+      "default": "./dist/entries/arrow-up.js"
+    },
+    "./at-sign": {
+      "default": "./dist/entries/at-sign.js"
+    },
+    "./attach": {
+      "default": "./dist/entries/attach.js"
+    },
+    "./award": {
+      "default": "./dist/entries/award.js"
+    },
+    "./bell": {
+      "default": "./dist/entries/bell.js"
+    },
+    "./bluetooth": {
+      "default": "./dist/entries/bluetooth.js"
+    },
+    "./bookmark": {
+      "default": "./dist/entries/bookmark.js"
+    },
+    "./calendar": {
+      "default": "./dist/entries/calendar.js"
+    },
+    "./camera": {
+      "default": "./dist/entries/camera.js"
+    },
+    "./caret-down": {
+      "default": "./dist/entries/caret-down.js"
+    },
+    "./caret-left": {
+      "default": "./dist/entries/caret-left.js"
+    },
+    "./caret-right": {
+      "default": "./dist/entries/caret-right.js"
+    },
+    "./caret-up": {
+      "default": "./dist/entries/caret-up.js"
+    },
+    "./chart": {
+      "default": "./dist/entries/chart.js"
+    },
+    "./chat": {
+      "default": "./dist/entries/chat.js"
+    },
+    "./check": {
+      "default": "./dist/entries/check.js"
+    },
+    "./check-circle": {
+      "default": "./dist/entries/check-circle.js"
+    },
+    "./circle": {
+      "default": "./dist/entries/circle.js"
+    },
+    "./clock": {
+      "default": "./dist/entries/clock.js"
+    },
+    "./cloud": {
+      "default": "./dist/entries/cloud.js"
+    },
+    "./code": {
+      "default": "./dist/entries/code.js"
+    },
+    "./collapse": {
+      "default": "./dist/entries/collapse.js"
+    },
+    "./columns": {
+      "default": "./dist/entries/columns.js"
+    },
+    "./compass": {
+      "default": "./dist/entries/compass.js"
+    },
+    "./copy": {
+      "default": "./dist/entries/copy.js"
+    },
+    "./cpu": {
+      "default": "./dist/entries/cpu.js"
+    },
+    "./crop": {
+      "default": "./dist/entries/crop.js"
+    },
+    "./cursor": {
+      "default": "./dist/entries/cursor.js"
+    },
+    "./database": {
+      "default": "./dist/entries/database.js"
+    },
+    "./diamond": {
+      "default": "./dist/entries/diamond.js"
+    },
+    "./discord": {
+      "default": "./dist/entries/discord.js"
+    },
+    "./double-circle": {
+      "default": "./dist/entries/double-circle.js"
+    },
+    "./download": {
+      "default": "./dist/entries/download.js"
+    },
+    "./drag": {
+      "default": "./dist/entries/drag.js"
+    },
+    "./dribbble": {
+      "default": "./dist/entries/dribbble.js"
+    },
+    "./edit": {
+      "default": "./dist/entries/edit.js"
+    },
+    "./expand": {
+      "default": "./dist/entries/expand.js"
+    },
+    "./external": {
+      "default": "./dist/entries/external.js"
+    },
+    "./eye-close": {
+      "default": "./dist/entries/eye-close.js"
+    },
+    "./eye-open": {
+      "default": "./dist/entries/eye-open.js"
+    },
+    "./facebook": {
+      "default": "./dist/entries/facebook.js"
+    },
+    "./film": {
+      "default": "./dist/entries/film.js"
+    },
+    "./filter": {
+      "default": "./dist/entries/filter.js"
+    },
+    "./fingerprint": {
+      "default": "./dist/entries/fingerprint.js"
+    },
+    "./fire": {
+      "default": "./dist/entries/fire.js"
+    },
+    "./flag": {
+      "default": "./dist/entries/flag.js"
+    },
+    "./flip": {
+      "default": "./dist/entries/flip.js"
+    },
+    "./folder": {
+      "default": "./dist/entries/folder.js"
+    },
+    "./fullscreen": {
+      "default": "./dist/entries/fullscreen.js"
+    },
+    "./github": {
+      "default": "./dist/entries/github.js"
+    },
+    "./globe": {
+      "default": "./dist/entries/globe.js"
+    },
+    "./grid": {
+      "default": "./dist/entries/grid.js"
+    },
+    "./hand": {
+      "default": "./dist/entries/hand.js"
+    },
+    "./hash": {
+      "default": "./dist/entries/hash.js"
+    },
+    "./headphones": {
+      "default": "./dist/entries/headphones.js"
+    },
+    "./heart": {
+      "default": "./dist/entries/heart.js"
+    },
+    "./hexagon": {
+      "default": "./dist/entries/hexagon.js"
+    },
+    "./home": {
+      "default": "./dist/entries/home.js"
+    },
+    "./image": {
+      "default": "./dist/entries/image.js"
+    },
+    "./infinity": {
+      "default": "./dist/entries/infinity.js"
+    },
+    "./info-circle": {
+      "default": "./dist/entries/info-circle.js"
+    },
+    "./instagram": {
+      "default": "./dist/entries/instagram.js"
+    },
+    "./key": {
+      "default": "./dist/entries/key.js"
+    },
+    "./layers": {
+      "default": "./dist/entries/layers.js"
+    },
+    "./leaf": {
+      "default": "./dist/entries/leaf.js"
+    },
+    "./lightning": {
+      "default": "./dist/entries/lightning.js"
+    },
+    "./link": {
+      "default": "./dist/entries/link.js"
+    },
+    "./linkedin": {
+      "default": "./dist/entries/linkedin.js"
+    },
+    "./list-view": {
+      "default": "./dist/entries/list-view.js"
+    },
+    "./location": {
+      "default": "./dist/entries/location.js"
+    },
+    "./lock": {
+      "default": "./dist/entries/lock.js"
+    },
+    "./mail": {
+      "default": "./dist/entries/mail.js"
+    },
+    "./map": {
+      "default": "./dist/entries/map.js"
+    },
+    "./menu": {
+      "default": "./dist/entries/menu.js"
+    },
+    "./microphone": {
+      "default": "./dist/entries/microphone.js"
+    },
+    "./minimize": {
+      "default": "./dist/entries/minimize.js"
+    },
+    "./minus": {
+      "default": "./dist/entries/minus.js"
+    },
+    "./mobile": {
+      "default": "./dist/entries/mobile.js"
+    },
+    "./monitor": {
+      "default": "./dist/entries/monitor.js"
+    },
+    "./moon": {
+      "default": "./dist/entries/moon.js"
+    },
+    "./more-horizontal": {
+      "default": "./dist/entries/more-horizontal.js"
+    },
+    "./more-vertical": {
+      "default": "./dist/entries/more-vertical.js"
+    },
+    "./move": {
+      "default": "./dist/entries/move.js"
+    },
+    "./music": {
+      "default": "./dist/entries/music.js"
+    },
+    "./package": {
+      "default": "./dist/entries/package.js"
+    },
+    "./pause": {
+      "default": "./dist/entries/pause.js"
+    },
+    "./phone": {
+      "default": "./dist/entries/phone.js"
+    },
+    "./pin": {
+      "default": "./dist/entries/pin.js"
+    },
+    "./play": {
+      "default": "./dist/entries/play.js"
+    },
+    "./plug": {
+      "default": "./dist/entries/plug.js"
+    },
+    "./plus": {
+      "default": "./dist/entries/plus.js"
+    },
+    "./print": {
+      "default": "./dist/entries/print.js"
+    },
+    "./question-circle": {
+      "default": "./dist/entries/question-circle.js"
+    },
+    "./record": {
+      "default": "./dist/entries/record.js"
+    },
+    "./redo": {
+      "default": "./dist/entries/redo.js"
+    },
+    "./refresh": {
+      "default": "./dist/entries/refresh.js"
+    },
+    "./return": {
+      "default": "./dist/entries/return.js"
+    },
+    "./rotate-cw": {
+      "default": "./dist/entries/rotate-cw.js"
+    },
+    "./route": {
+      "default": "./dist/entries/route.js"
+    },
+    "./satellite": {
+      "default": "./dist/entries/satellite.js"
+    },
+    "./save": {
+      "default": "./dist/entries/save.js"
+    },
+    "./scissors": {
+      "default": "./dist/entries/scissors.js"
+    },
+    "./search": {
+      "default": "./dist/entries/search.js"
+    },
+    "./select": {
+      "default": "./dist/entries/select.js"
+    },
+    "./send": {
+      "default": "./dist/entries/send.js"
+    },
+    "./server": {
+      "default": "./dist/entries/server.js"
+    },
+    "./settings": {
+      "default": "./dist/entries/settings.js"
+    },
+    "./share": {
+      "default": "./dist/entries/share.js"
+    },
+    "./shield": {
+      "default": "./dist/entries/shield.js"
+    },
+    "./sidebar": {
+      "default": "./dist/entries/sidebar.js"
+    },
+    "./slack": {
+      "default": "./dist/entries/slack.js"
+    },
+    "./sort": {
+      "default": "./dist/entries/sort.js"
+    },
+    "./spiral": {
+      "default": "./dist/entries/spiral.js"
+    },
+    "./square": {
+      "default": "./dist/entries/square.js"
+    },
+    "./star": {
+      "default": "./dist/entries/star.js"
+    },
+    "./stop": {
+      "default": "./dist/entries/stop.js"
+    },
+    "./sun": {
+      "default": "./dist/entries/sun.js"
+    },
+    "./switch": {
+      "default": "./dist/entries/switch.js"
+    },
+    "./tag": {
+      "default": "./dist/entries/tag.js"
+    },
+    "./target": {
+      "default": "./dist/entries/target.js"
+    },
+    "./telegram": {
+      "default": "./dist/entries/telegram.js"
+    },
+    "./terminal": {
+      "default": "./dist/entries/terminal.js"
+    },
+    "./thumb-down": {
+      "default": "./dist/entries/thumb-down.js"
+    },
+    "./thumb-up": {
+      "default": "./dist/entries/thumb-up.js"
+    },
+    "./tiktok": {
+      "default": "./dist/entries/tiktok.js"
+    },
+    "./trash": {
+      "default": "./dist/entries/trash.js"
+    },
+    "./triangle": {
+      "default": "./dist/entries/triangle.js"
+    },
+    "./undo": {
+      "default": "./dist/entries/undo.js"
+    },
+    "./unlock": {
+      "default": "./dist/entries/unlock.js"
+    },
+    "./upload": {
+      "default": "./dist/entries/upload.js"
+    },
+    "./user": {
+      "default": "./dist/entries/user.js"
+    },
+    "./verified": {
+      "default": "./dist/entries/verified.js"
+    },
+    "./volume-high": {
+      "default": "./dist/entries/volume-high.js"
+    },
+    "./volume-low": {
+      "default": "./dist/entries/volume-low.js"
+    },
+    "./volume-off": {
+      "default": "./dist/entries/volume-off.js"
+    },
+    "./warning-triangle": {
+      "default": "./dist/entries/warning-triangle.js"
+    },
+    "./wave": {
+      "default": "./dist/entries/wave.js"
+    },
+    "./whatsapp": {
+      "default": "./dist/entries/whatsapp.js"
+    },
+    "./whatsapp-inverse": {
+      "default": "./dist/entries/whatsapp-inverse.js"
+    },
+    "./wifi": {
+      "default": "./dist/entries/wifi.js"
+    },
+    "./x": {
+      "default": "./dist/entries/x.js"
+    },
+    "./xmark": {
+      "default": "./dist/entries/xmark.js"
+    },
+    "./xmark-circle": {
+      "default": "./dist/entries/xmark-circle.js"
+    },
+    "./youtube": {
+      "default": "./dist/entries/youtube.js"
+    },
+    "./youtube-inverse": {
+      "default": "./dist/entries/youtube-inverse.js"
+    },
+    "./zoom-in": {
+      "default": "./dist/entries/zoom-in.js"
+    },
+    "./zoom-out": {
+      "default": "./dist/entries/zoom-out.js"
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "node scripts/build-entries.mjs && tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist src/entries"
   },
   "devDependencies": {
     "typescript": "^5.5.4"

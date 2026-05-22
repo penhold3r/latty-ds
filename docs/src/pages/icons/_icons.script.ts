@@ -1,4 +1,3 @@
-import '@latty/icons';
 import '@latty/web';
 
 const codeEl =

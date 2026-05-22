@@ -26,7 +26,10 @@
     "LICENSE",
     "custom-elements.json"
   ],
-  "sideEffects": true,
+  "sideEffects": [
+    "./dist/index.js",
+    "./dist/components/*/index.js"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -37,7 +40,127 @@
     },
     "./css/latty.css": "./dist/css/latty.css",
     "./css/font-face.css": "./dist/css/font-face.css",
-    "./manifest.json": "./dist/manifest.json"
+    "./manifest.json": "./dist/manifest.json",
+    "./accordion": {
+      "default": "./dist/components/accordion/index.js"
+    },
+    "./alert": {
+      "default": "./dist/components/alert/index.js"
+    },
+    "./avatar": {
+      "default": "./dist/components/avatar/index.js"
+    },
+    "./badge": {
+      "default": "./dist/components/badge/index.js"
+    },
+    "./breadcrumb": {
+      "default": "./dist/components/breadcrumb/index.js"
+    },
+    "./button": {
+      "default": "./dist/components/button/index.js"
+    },
+    "./calendar": {
+      "default": "./dist/components/calendar/index.js"
+    },
+    "./checkbox": {
+      "default": "./dist/components/checkbox/index.js"
+    },
+    "./chip": {
+      "default": "./dist/components/chip/index.js"
+    },
+    "./combobox": {
+      "default": "./dist/components/combobox/index.js"
+    },
+    "./date-input": {
+      "default": "./dist/components/date-input/index.js"
+    },
+    "./datepicker": {
+      "default": "./dist/components/datepicker/index.js"
+    },
+    "./dialog": {
+      "default": "./dist/components/dialog/index.js"
+    },
+    "./divider": {
+      "default": "./dist/components/divider/index.js"
+    },
+    "./dropdown": {
+      "default": "./dist/components/dropdown/index.js"
+    },
+    "./header": {
+      "default": "./dist/components/header/index.js"
+    },
+    "./icon-button": {
+      "default": "./dist/components/icon-button/index.js"
+    },
+    "./image": {
+      "default": "./dist/components/image/index.js"
+    },
+    "./link": {
+      "default": "./dist/components/link/index.js"
+    },
+    "./list": {
+      "default": "./dist/components/list/index.js"
+    },
+    "./nav": {
+      "default": "./dist/components/nav/index.js"
+    },
+    "./pagination": {
+      "default": "./dist/components/pagination/index.js"
+    },
+    "./progress": {
+      "default": "./dist/components/progress/index.js"
+    },
+    "./radio": {
+      "default": "./dist/components/radio/index.js"
+    },
+    "./radio-group": {
+      "default": "./dist/components/radio-group/index.js"
+    },
+    "./select": {
+      "default": "./dist/components/select/index.js"
+    },
+    "./shared": {
+      "default": "./dist/components/shared/index.js"
+    },
+    "./sidepanel": {
+      "default": "./dist/components/sidepanel/index.js"
+    },
+    "./skeleton": {
+      "default": "./dist/components/skeleton/index.js"
+    },
+    "./slider": {
+      "default": "./dist/components/slider/index.js"
+    },
+    "./snackbar": {
+      "default": "./dist/components/snackbar/index.js"
+    },
+    "./spinner": {
+      "default": "./dist/components/spinner/index.js"
+    },
+    "./surface": {
+      "default": "./dist/components/surface/index.js"
+    },
+    "./switch": {
+      "default": "./dist/components/switch/index.js"
+    },
+    "./tab": {
+      "default": "./dist/components/tab/index.js"
+    },
+    "./tab-group": {
+      "default": "./dist/components/tab-group/index.js"
+    },
+    "./table": {
+      "default": "./dist/components/table/index.js"
+    },
+    "./text": {
+      "default": "./dist/components/text/index.js"
+    },
+    "./textfield": {
+      "default": "./dist/components/textfield/index.js"
+    },
+    "./tooltip": {
+      "default": "./dist/components/tooltip/index.js"
+    }
   },
   "scripts": {
     "clean": "rm -rf dist",

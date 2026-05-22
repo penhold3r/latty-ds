@@ -143,3 +143,29 @@ const iconNames = getIconNames();
 writeFileSync(join(root, 'dist/manifest.json'), JSON.stringify({ _meta: { iconNames }, ...manifest }, null, 2));
 // eslint-disable-next-line no-console
 console.log(`manifest.json → ${Object.keys(manifest).length} components, ${iconNames.length} icons`);
+
+// ── Generate per-component exports map in package.json ────────────────────────
+const componentDirs = readdirSync(join(root, 'dist/components'), { withFileTypes: true })
+  .filter((e) => e.isDirectory())
+  .map((e) => e.name)
+  .sort();
+
+const pkgPath = join(root, 'package.json');
+const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
+
+const perComponentExports = Object.fromEntries(
+  componentDirs.map((dir) => [`./${dir}`, { default: `./dist/components/${dir}/index.js` }])
+);
+
+pkg.exports = {
+  '.': { types: './dist/index.d.ts', default: './dist/index.js' },
+  './css/latty.css': './dist/css/latty.css',
+  './css/font-face.css': './dist/css/font-face.css',
+  './manifest.json': './dist/manifest.json',
+  ...perComponentExports
+};
+
+// Only the barrel and per-component entry points have side effects (customElements.define)
+pkg.sideEffects = ['./dist/index.js', './dist/components/*/index.js'];
+
+writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');

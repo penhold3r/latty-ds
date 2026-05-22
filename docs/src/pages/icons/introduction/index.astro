@@ -32,7 +32,15 @@ npm install @latty/icons
 # yarn
 yarn add @latty/icons`}
   />
-  <CodeSnippet code={`import '@latty/icons'; // registers <lt-icon> with the built-in icon set`} />
+  <CodeSnippet
+    code={`// Import specific icons — only pay for what you use
+import '@latty/icons/star';
+import '@latty/icons/arrow-right';
+
+// Or register all icons at once (e.g. in your app entry point)
+import { iconRegistry, lattyIcons } from '@latty/icons';
+iconRegistry.registerIcons(lattyIcons);`}
+  />
 
   <lt-text variant="h2">Available Icons</lt-text>
 
@@ -87,7 +95,7 @@ yarn add @latty/icons`}
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
-    html={`import '@latty/icons';
+    html={`import '@latty/icons/star';
 
 <!-- Default size (md = 20px) -->
 <lt-icon name="star" />
