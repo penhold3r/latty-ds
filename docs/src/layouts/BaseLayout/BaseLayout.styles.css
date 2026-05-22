@@ -15,16 +15,6 @@
 
 .menu-toggle {
   display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--lt-color-neutral-100);
-  padding: var(--lt-spacing-1);
-  border-radius: 4px;
-
-  &:hover {
-    background: color-mix(in srgb, white 15%, transparent);
-  }
 }
 
 .wordmark {
@@ -59,52 +49,13 @@
   gap: var(--lt-spacing-3);
 }
 
-.theme-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
+.header-btn::part(base) {
   color: var(--lt-color-neutral-100);
-  padding: var(--lt-spacing-1);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    background: color-mix(in srgb, white 15%, transparent);
-  }
 }
 
-.icon-sun {
-  display: none;
-}
-
-:global([data-theme='dark']) .icon-sun {
-  display: block;
-}
-:global([data-theme='dark']) .icon-moon {
-  display: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  :global(:root:not([data-theme='light'])) .icon-sun {
-    display: block;
-  }
-  :global(:root:not([data-theme='light'])) .icon-moon {
-    display: none;
-  }
-}
-
-.github-link {
+.header-btn::part(base):hover {
+  background: color-mix(in srgb, white 15%, transparent);
   color: var(--lt-color-neutral-50);
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  padding: var(--lt-spacing-1);
-  border-radius: 4px;
-
-  &:hover {
-    color: var(--lt-color-neutral-200);
-  }
 }
 
 #nav-panel::part(panel),
@@ -151,8 +102,7 @@
 
 @media (max-width: 768px) {
   .menu-toggle {
-    display: flex;
-    align-items: center;
+    display: inline-flex;
   }
 
   .content {

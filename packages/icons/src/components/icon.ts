@@ -96,19 +96,19 @@ export class Icon extends LitElement {
    */
   @state() private svgContent = '';
 
-  /**
-   * Lifecycle: Component connected to DOM.
-   * Loads the icon on initial mount.
-   */
+  private _unsubscribeRegistry?: () => void;
+
   connectedCallback() {
     super.connectedCallback();
+    this._unsubscribeRegistry = iconRegistry.subscribe(() => this.loadIcon());
     this.loadIcon();
   }
 
-  /**
-   * Lifecycle: Before render.
-   * Reloads icon when name changes so svgContent is ready for the same render pass.
-   */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._unsubscribeRegistry?.();
+  }
+
   willUpdate(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('name')) {
       this.loadIcon();
