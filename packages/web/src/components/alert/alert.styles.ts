@@ -10,12 +10,12 @@ export const alertStyles = css`
       opacity 200ms ease,
       transform 200ms ease;
 
-    /* Default variant tokens */
-    --_bg-subtle: var(--lt-bg-neutral-subtle);
-    --_bg-solid: var(--lt-bg-inverse);
-    --_border: var(--lt-border-strong);
-    --_color: var(--lt-text-default);
-    --_color-solid: var(--lt-text-inverse);
+    /* Default variant tokens — public props override first, then variant defaults */
+    --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-neutral-subtle));
+    --_bg-solid: var(--lt-alert-bg, var(--lt-bg-inverse));
+    --_border: var(--lt-alert-border-color, var(--lt-border-strong));
+    --_color: var(--lt-alert-color, var(--lt-text-default));
+    --_color-solid: var(--lt-alert-color, var(--lt-text-inverse));
   }
 
   :host([dismissed]) {
@@ -26,35 +26,35 @@ export const alertStyles = css`
   /* ── Per-variant tokens ──────────────────────────────────── */
 
   :host([variant='success']) {
-    --_bg-subtle: var(--lt-bg-success-subtle);
-    --_bg-solid: var(--lt-bg-success);
-    --_border: var(--lt-border-success-strong);
-    --_color: var(--lt-text-success);
-    --_color-solid: var(--lt-text-on-success);
+    --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-success-subtle));
+    --_bg-solid: var(--lt-alert-bg, var(--lt-bg-success));
+    --_border: var(--lt-alert-border-color, var(--lt-border-success-strong));
+    --_color: var(--lt-alert-color, var(--lt-text-success));
+    --_color-solid: var(--lt-alert-color, var(--lt-text-on-success));
   }
 
   :host([variant='warning']) {
-    --_bg-subtle: var(--lt-bg-warning-subtle);
-    --_bg-solid: var(--lt-bg-warning);
-    --_border: var(--lt-border-warning-strong);
-    --_color: var(--lt-text-warning);
-    --_color-solid: var(--lt-text-on-warning);
+    --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-warning-subtle));
+    --_bg-solid: var(--lt-alert-bg, var(--lt-bg-warning));
+    --_border: var(--lt-alert-border-color, var(--lt-border-warning-strong));
+    --_color: var(--lt-alert-color, var(--lt-text-warning));
+    --_color-solid: var(--lt-alert-color, var(--lt-text-on-warning));
   }
 
   :host([variant='error']) {
-    --_bg-subtle: var(--lt-bg-error-subtle);
-    --_bg-solid: var(--lt-bg-error);
-    --_border: var(--lt-border-error-strong);
-    --_color: var(--lt-text-error);
-    --_color-solid: var(--lt-text-on-error);
+    --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-error-subtle));
+    --_bg-solid: var(--lt-alert-bg, var(--lt-bg-error));
+    --_border: var(--lt-alert-border-color, var(--lt-border-error-strong));
+    --_color: var(--lt-alert-color, var(--lt-text-error));
+    --_color-solid: var(--lt-alert-color, var(--lt-text-on-error));
   }
 
   :host([variant='info']) {
-    --_bg-subtle: var(--lt-bg-info-subtle);
-    --_bg-solid: var(--lt-bg-info);
-    --_border: var(--lt-border-info-strong);
-    --_color: var(--lt-text-info);
-    --_color-solid: var(--lt-text-on-info);
+    --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-info-subtle));
+    --_bg-solid: var(--lt-alert-bg, var(--lt-bg-info));
+    --_border: var(--lt-alert-border-color, var(--lt-border-info-strong));
+    --_color: var(--lt-alert-color, var(--lt-text-info));
+    --_color-solid: var(--lt-alert-color, var(--lt-text-on-info));
   }
 
   /* ── Layout ──────────────────────────────────────────────── */

@@ -10,7 +10,7 @@ export const sidepanelStyles = css`
   [part='overlay'] {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, var(--_overlay-opacity, 0.45));
+    background: rgba(0, 0, 0, var(--lt-sidepanel-overlay-opacity, 0.45));
     z-index: 400;
     opacity: 0;
     pointer-events: none;

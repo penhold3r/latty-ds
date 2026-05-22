@@ -9,8 +9,10 @@ export const badgeStyles = css`
 
   span[part='base'] {
     align-items: center;
+    background: var(--lt-badge-bg);
     border-radius: 999px;
-    border: 1px solid transparent;
+    border: 1px solid var(--lt-badge-border-color, transparent);
+    color: var(--lt-badge-color);
     box-sizing: border-box;
     display: inline-flex;
     font-weight: 600;

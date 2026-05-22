@@ -4,13 +4,13 @@ export const tooltipStyles = css`
   :host {
     display: inline-block;
     position: relative;
-    --_offset: 8px;
+    --lt-tooltip-offset: 8px;
   }
 
   .tooltip {
-    background: var(--_tooltip-bg, var(--lt-bg-inverse));
+    background: var(--lt-tooltip-bg, var(--lt-bg-inverse));
     border-radius: 4px;
-    color: var(--_tooltip-color, var(--lt-text-inverse));
+    color: var(--lt-tooltip-color, var(--lt-text-inverse));
     opacity: 0;
     padding: var(--lt-spacing-1) var(--lt-spacing-2);
     pointer-events: none;
@@ -46,14 +46,14 @@ export const tooltipStyles = css`
 
   :host(:not([placement])) .tooltip,
   :host([placement='top']) .tooltip {
-    bottom: calc(100% + var(--_offset));
+    bottom: calc(100% + var(--lt-tooltip-offset));
     left: 50%;
     transform: translateX(-50%);
   }
 
   :host(:not([placement])) .arrow,
   :host([placement='top']) .arrow {
-    border-top-color: var(--_tooltip-bg, var(--lt-color-neutral-900));
+    border-top-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
     left: 50%;
     top: 100%;
     transform: translateX(-50%);
@@ -63,12 +63,12 @@ export const tooltipStyles = css`
 
   :host([placement='bottom']) .tooltip {
     left: 50%;
-    top: calc(100% + var(--_offset));
+    top: calc(100% + var(--lt-tooltip-offset));
     transform: translateX(-50%);
   }
 
   :host([placement='bottom']) .arrow {
-    border-bottom-color: var(--_tooltip-bg, var(--lt-color-neutral-900));
+    border-bottom-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
@@ -77,13 +77,13 @@ export const tooltipStyles = css`
   /* ── Left ───────────────────────────────────── */
 
   :host([placement='left']) .tooltip {
-    right: calc(100% + var(--_offset));
+    right: calc(100% + var(--lt-tooltip-offset));
     top: 50%;
     transform: translateY(-50%);
   }
 
   :host([placement='left']) .arrow {
-    border-left-color: var(--_tooltip-bg, var(--lt-color-neutral-900));
+    border-left-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
     left: 100%;
     top: 50%;
     transform: translateY(-50%);
@@ -92,13 +92,13 @@ export const tooltipStyles = css`
   /* ── Right ──────────────────────────────────── */
 
   :host([placement='right']) .tooltip {
-    left: calc(100% + var(--_offset));
+    left: calc(100% + var(--lt-tooltip-offset));
     top: 50%;
     transform: translateY(-50%);
   }
 
   :host([placement='right']) .arrow {
-    border-right-color: var(--_tooltip-bg, var(--lt-color-neutral-900));
+    border-right-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
     right: 100%;
     top: 50%;
     transform: translateY(-50%);

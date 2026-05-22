@@ -49,13 +49,10 @@
   gap: var(--lt-spacing-3);
 }
 
-.header-btn::part(base) {
-  color: var(--lt-color-neutral-100);
-}
-
-.header-btn::part(base):hover {
-  background: color-mix(in srgb, white 15%, transparent);
-  color: var(--lt-color-neutral-50);
+.header-btn {
+  --lt-icon-button-color: var(--lt-color-neutral-100);
+  --lt-icon-button-hover-bg: color-mix(in srgb, white 15%, transparent);
+  --lt-icon-button-hover-color: var(--lt-color-neutral-50);
 }
 
 #nav-panel::part(panel),

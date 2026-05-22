@@ -2,8 +2,8 @@ import { css } from 'lit';
 
 export const spinnerStyles = css`
   :host {
-    --spinner-size: var(--lt-spacing-4, 1rem);
-    --spinner-color: currentColor;
+    --lt-spinner-size: var(--lt-spacing-4, 1rem);
+    --lt-spinner-color: currentColor;
 
     display: inline-block;
     line-height: 0;
@@ -11,42 +11,42 @@ export const spinnerStyles = css`
 
   /* Sizes */
   :host([size='sm']) {
-    --spinner-size: var(--lt-spacing-3, 0.75rem);
+    --lt-spinner-size: var(--lt-spacing-3, 0.75rem);
   }
   :host([size='md']) {
-    --spinner-size: var(--lt-spacing-4, 1rem);
+    --lt-spinner-size: var(--lt-spacing-4, 1rem);
   }
   :host([size='lg']) {
-    --spinner-size: var(--lt-spacing-6, 1.5rem);
+    --lt-spinner-size: var(--lt-spacing-6, 1.5rem);
   }
 
   /* Color */
   :host([variant='primary']) {
-    --spinner-color: var(--lt-interactive-primary-bg);
+    --lt-spinner-color: var(--lt-interactive-primary-bg);
   }
   :host([variant='secondary']) {
-    --spinner-color: var(--lt-interactive-secondary-bg);
+    --lt-spinner-color: var(--lt-interactive-secondary-bg);
   }
   :host([variant='neutral']) {
-    --spinner-color: var(--lt-color-neutral-500);
+    --lt-spinner-color: var(--lt-color-neutral-500);
   }
   :host([variant='current']) {
-    --spinner-color: currentColor;
+    --lt-spinner-color: currentColor;
   }
 
   .spinner {
     animation: spin 700ms linear infinite;
-    border-bottom-color: var(--spinner-color);
-    border-left-color: var(--spinner-color);
+    border-bottom-color: var(--lt-spinner-color);
+    border-left-color: var(--lt-spinner-color);
     border-radius: 999px;
     border-right-color: transparent;
     border-style: solid;
-    border-top-color: var(--spinner-color);
+    border-top-color: var(--lt-spinner-color);
     border-width: 2px;
     box-sizing: border-box;
     display: block;
-    height: var(--spinner-size);
-    width: var(--spinner-size);
+    height: var(--lt-spinner-size);
+    width: var(--lt-spinner-size);
   }
 
   @keyframes spin {

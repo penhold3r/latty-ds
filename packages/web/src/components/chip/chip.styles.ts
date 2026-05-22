@@ -9,8 +9,10 @@ export const chipStyles = css`
 
   span[part='base'] {
     align-items: center;
+    background: var(--lt-chip-bg);
     border-radius: 999px;
-    border: 1px solid transparent;
+    border: 1px solid var(--lt-chip-border-color, transparent);
+    color: var(--lt-chip-color);
     box-sizing: border-box;
     display: inline-flex;
     font-weight: 400;

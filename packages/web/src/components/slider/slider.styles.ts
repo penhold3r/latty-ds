@@ -36,13 +36,13 @@ export const sliderStyles = css`
     appearance: none;
     background: linear-gradient(
       to right,
-      var(--lt-interactive-primary-bg) var(--_fill, 0%),
-      var(--lt-border-strong) var(--_fill, 0%)
+      var(--lt-interactive-primary-bg) var(--lt-slider-fill, 0%),
+      var(--lt-border-strong) var(--lt-slider-fill, 0%)
     );
     border-radius: 9999px;
     cursor: pointer;
     display: block;
-    height: var(--_track-h, 6px);
+    height: var(--lt-slider-track-height, 6px);
     outline: none;
     transition: background 0ms;
     width: 100%;
@@ -69,9 +69,9 @@ export const sliderStyles = css`
     border: 2px solid white;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;
-    height: var(--_thumb-size, 18px);
+    height: var(--lt-slider-thumb-size, 18px);
     transition: transform 100ms ease;
-    width: var(--_thumb-size, 18px);
+    width: var(--lt-slider-thumb-size, 18px);
   }
 
   input[type='range']::-webkit-slider-thumb:hover {
@@ -90,38 +90,38 @@ export const sliderStyles = css`
     border: 2px solid white;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;
-    height: var(--_thumb-size, 18px);
+    height: var(--lt-slider-thumb-size, 18px);
     transition: transform 100ms ease;
-    width: var(--_thumb-size, 18px);
+    width: var(--lt-slider-thumb-size, 18px);
   }
 
   /* Track — Firefox */
   input[type='range']::-moz-range-track {
     background: var(--lt-border-strong);
     border-radius: 9999px;
-    height: var(--_track-h, 6px);
+    height: var(--lt-slider-track-height, 6px);
   }
 
   input[type='range']::-moz-range-progress {
     background: var(--lt-interactive-primary-bg);
     border-radius: 9999px;
-    height: var(--_track-h, 6px);
+    height: var(--lt-slider-track-height, 6px);
   }
 
   /* Sizes */
   :host([size='sm']) {
-    --_track-h: 4px;
-    --_thumb-size: 14px;
+    --lt-slider-track-height: 4px;
+    --lt-slider-thumb-size: 14px;
   }
 
   :host([size='md']) {
-    --_track-h: 6px;
-    --_thumb-size: 18px;
+    --lt-slider-track-height: 6px;
+    --lt-slider-thumb-size: 18px;
   }
 
   :host([size='lg']) {
-    --_track-h: 8px;
-    --_thumb-size: 22px;
+    --lt-slider-track-height: 8px;
+    --lt-slider-thumb-size: 22px;
   }
 
   /* Disabled */

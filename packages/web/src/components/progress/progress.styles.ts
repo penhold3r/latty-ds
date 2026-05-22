@@ -5,14 +5,35 @@ export const progressStyles = css`
     display: block;
   }
 
+  :host {
+    --_fill-color: var(--lt-interactive-primary-bg);
+  }
+
+  :host([variant='primary']) {
+    --_fill-color: var(--lt-interactive-primary-bg);
+  }
+  :host([variant='success']) {
+    --_fill-color: var(--lt-interactive-success-bg);
+  }
+  :host([variant='warning']) {
+    --_fill-color: var(--lt-interactive-warning-bg);
+  }
+  :host([variant='error']) {
+    --_fill-color: var(--lt-interactive-error-bg);
+  }
+  :host([variant='neutral']) {
+    --_fill-color: var(--lt-color-neutral-600);
+  }
+
   [part='track'] {
-    background: var(--lt-color-neutral-200);
+    background: var(--lt-progress-track-color, var(--lt-color-neutral-200));
     border-radius: 999px;
     overflow: hidden;
     width: 100%;
   }
 
   [part='fill'] {
+    background: var(--lt-progress-color, var(--_fill-color));
     border-radius: 999px;
     height: 100%;
     transition: width 300ms ease;
@@ -21,31 +42,13 @@ export const progressStyles = css`
   /* ── Sizes ──────────────────────────────────────────────────────────────── */
 
   :host([size='sm']) [part='track'] {
-    height: 4px;
+    height: var(--lt-progress-height, 4px);
   }
   :host([size='md']) [part='track'] {
-    height: 8px;
+    height: var(--lt-progress-height, 8px);
   }
   :host([size='lg']) [part='track'] {
-    height: 12px;
-  }
-
-  /* ── Variants ───────────────────────────────────────────────────────────── */
-
-  :host([variant='primary']) [part='fill'] {
-    background: var(--lt-interactive-primary-bg);
-  }
-  :host([variant='success']) [part='fill'] {
-    background: var(--lt-interactive-success-bg);
-  }
-  :host([variant='warning']) [part='fill'] {
-    background: var(--lt-interactive-warning-bg);
-  }
-  :host([variant='error']) [part='fill'] {
-    background: var(--lt-interactive-error-bg);
-  }
-  :host([variant='neutral']) [part='fill'] {
-    background: var(--lt-color-neutral-600);
+    height: var(--lt-progress-height, 12px);
   }
 
   /* ── Indeterminate ──────────────────────────────────────────────────────── */

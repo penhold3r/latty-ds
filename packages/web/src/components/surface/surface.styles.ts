@@ -7,7 +7,7 @@ export const surfaceStyles = css`
   }
 
   .surface {
-    background: var(--_surface-bg, var(--lt-bg-subtle));
+    background: var(--lt-surface-bg, var(--lt-bg-subtle));
     border-radius: var(--lt-border-radius);
     box-sizing: border-box;
     transition:
@@ -41,7 +41,7 @@ export const surfaceStyles = css`
   }
 
   :host([appearance='outlined']) .surface {
-    background: var(--_surface-bg, transparent);
+    background: var(--lt-surface-bg, transparent);
     border: 1px solid var(--lt-border-default);
   }
 

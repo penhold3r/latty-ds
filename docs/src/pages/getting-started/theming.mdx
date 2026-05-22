@@ -105,6 +105,45 @@ Spacing can only be overridden this way — it is not available through `configu
 }
 ```
 
+## Component-level overrides
+
+Every component exposes CSS custom properties — named `--lt-[component]-[property]` — that let you adapt it to a specific context without touching internal shadow DOM. Set them on the element itself or any ancestor:
+
+```css
+/* All icon buttons inside the header get a light colour */
+.site-header {
+  --lt-icon-button-color: white;
+  --lt-icon-button-hover-bg: rgba(255, 255, 255, 0.15);
+}
+
+/* A single progress bar with a custom fill colour */
+.upload-progress {
+  --lt-progress-color: #8b5cf6;
+  --lt-progress-track-color: #ede9fe;
+}
+```
+
+Because CSS custom properties inherit through shadow DOM, this works with a plain class name — no `::part()` selector needed. The variant's default value is used as the fallback when the prop is not set, so components look correct out of the box.
+
+Common props by component:
+
+| Component | Props |
+|-----------|-------|
+| `lt-button` | `--lt-button-color` `--lt-button-bg` `--lt-button-border-color` |
+| `lt-icon-button` | `--lt-icon-button-color` `--lt-icon-button-bg` `--lt-icon-button-hover-bg` `--lt-icon-button-hover-color` |
+| `lt-alert` | `--lt-alert-color` `--lt-alert-bg` `--lt-alert-border-color` |
+| `lt-badge` | `--lt-badge-color` `--lt-badge-bg` `--lt-badge-border-color` |
+| `lt-chip` | `--lt-chip-color` `--lt-chip-bg` `--lt-chip-border-color` |
+| `lt-avatar` | `--lt-avatar-color` `--lt-avatar-bg` |
+| `lt-progress` | `--lt-progress-color` `--lt-progress-track-color` `--lt-progress-height` |
+| `lt-slider` | `--lt-slider-fill` `--lt-slider-track-height` `--lt-slider-thumb-size` |
+| `lt-spinner` | `--lt-spinner-color` `--lt-spinner-size` |
+| `lt-tooltip` | `--lt-tooltip-bg` `--lt-tooltip-color` `--lt-tooltip-offset` |
+| `lt-surface` | `--lt-surface-bg` |
+| `lt-sidepanel` | `--lt-sidepanel-overlay-opacity` |
+
+The full list for each component is in its API table.
+
 ## Theme switching
 
 Pass `theme: 'system'` to `configure()` to generate all three layers at once — light at `:root`, dark inside `@media (prefers-color-scheme: dark)`, and explicit overrides for `[data-theme="dark"]` / `[data-theme="light"]`:
