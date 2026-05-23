@@ -417,6 +417,333 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/badge/badge.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "badgeStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-badge-bg); border-radius: 999px; border: 1px solid var(--lt-badge-border-color, transparent); color: var(--lt-badge-color); box-sizing: border-box; display: inline-flex; font-weight: 600; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: var(--lt-color-white); } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "badgeStyles",
+          "declaration": {
+            "name": "badgeStyles",
+            "module": "src/components/badge/badge.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/badge.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A compact status label for categories, counts, and states.",
+          "name": "Badge",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "badgeStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "BadgeAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual style: tinted fill, outline only, or full-color solid."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "BadgeVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "BadgeSize"
+              },
+              "default": "'md'",
+              "description": "Size."
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text. When empty the badge renders as a circle indicator."
+            },
+            {
+              "kind": "field",
+              "name": "dot",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show a leading status dot (only visible when content is set)."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-badge",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "src/components/badge/badge.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "./badge"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeVariant",
+          "declaration": {
+            "name": "BadgeVariant",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeSize",
+          "declaration": {
+            "name": "BadgeSize",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeAppearance",
+          "declaration": {
+            "name": "BadgeAppearance",
+            "module": "./badge.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/breadcrumb.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "breadcrumbStyles",
+          "default": "css` :host { display: block; } [part='list'] { align-items: center; display: flex; flex-wrap: wrap; gap: 0; list-style: none; margin: 0; padding: 0; } `"
+        },
+        {
+          "kind": "variable",
+          "name": "breadcrumbItemStyles",
+          "default": "css` :host { align-items: center; display: inline-flex; font-family: var(--lt-typography-fontfamily); font-size: 0.875rem; } [part='link'] { color: var(--lt-interactive-primary-bg); text-decoration: none; transition: color 120ms ease; } [part='link']:hover { color: var(--lt-interactive-primary-bg-hover); text-decoration: underline; } [part='text'] { color: var(--lt-text-default); font-weight: 600; } [part='separator'] { color: var(--lt-text-muted); margin-inline: var(--lt-spacing-2); user-select: none; } [part='separator']::after { content: var(--lt-breadcrumb-separator, '/'); } :host(:last-child) [part='separator'] { display: none; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "breadcrumbStyles",
+          "declaration": {
+            "name": "breadcrumbStyles",
+            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "breadcrumbItemStyles",
+          "declaration": {
+            "name": "breadcrumbItemStyles",
+            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/breadcrumb.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Navigation breadcrumb trail container.\nPlace `lt-breadcrumb-item` elements inside as direct children.",
+          "name": "Breadcrumb",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "breadcrumbStyles"
+            },
+            {
+              "kind": "field",
+              "name": "separator",
+              "type": {
+                "text": "string"
+              },
+              "default": "'/'",
+              "description": "The character or element to use as a separator between breadcrumb items.\nThis is passed down to all children items via CSS variables."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-breadcrumb",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "A single step in a breadcrumb trail.\nRenders as a link when `href` is provided, or as plain text when `current`.",
+          "name": "BreadcrumbItem",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "breadcrumbItemStyles"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "URL this item links to. Omit for the current (last) item."
+            },
+            {
+              "kind": "field",
+              "name": "current",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Marks this item as the current page. Renders as non-linked text with `aria-current=\"page\"`."
+            },
+            {
+              "kind": "field",
+              "name": "separator",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Custom separator for this specific item. Overrides the parent's separator."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-breadcrumb-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Breadcrumb",
+          "declaration": {
+            "name": "Breadcrumb",
+            "module": "src/components/breadcrumb/breadcrumb.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbItem",
+          "declaration": {
+            "name": "BreadcrumbItem",
+            "module": "src/components/breadcrumb/breadcrumb.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Breadcrumb",
+          "declaration": {
+            "name": "Breadcrumb",
+            "module": "./breadcrumb"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbItem",
+          "declaration": {
+            "name": "BreadcrumbItem",
+            "module": "./breadcrumb"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbSeparator",
+          "declaration": {
+            "name": "BreadcrumbSeparator",
+            "module": "./breadcrumb.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/avatar/avatar.styles.ts",
       "declarations": [
         {
@@ -587,150 +914,6 @@
           "declaration": {
             "name": "AvatarColor",
             "module": "./avatar.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/badge.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "badgeStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-badge-bg); border-radius: 999px; border: 1px solid var(--lt-badge-border-color, transparent); color: var(--lt-badge-color); box-sizing: border-box; display: inline-flex; font-weight: 600; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: var(--lt-color-white); } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "badgeStyles",
-          "declaration": {
-            "name": "badgeStyles",
-            "module": "src/components/badge/badge.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/badge.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A compact status label for categories, counts, and states.",
-          "name": "Badge",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "badgeStyles"
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "BadgeAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual style: tinted fill, outline only, or full-color solid."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "BadgeVariant"
-              },
-              "default": "'primary'",
-              "description": "Color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "BadgeSize"
-              },
-              "default": "'md'",
-              "description": "Size."
-            },
-            {
-              "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text. When empty the badge renders as a circle indicator."
-            },
-            {
-              "kind": "field",
-              "name": "dot",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show a leading status dot (only visible when content is set)."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-badge",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Badge",
-          "declaration": {
-            "name": "Badge",
-            "module": "src/components/badge/badge.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Badge",
-          "declaration": {
-            "name": "Badge",
-            "module": "./badge"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeVariant",
-          "declaration": {
-            "name": "BadgeVariant",
-            "module": "./badge.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeSize",
-          "declaration": {
-            "name": "BadgeSize",
-            "module": "./badge.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeAppearance",
-          "declaration": {
-            "name": "BadgeAppearance",
-            "module": "./badge.types"
           }
         }
       ]
@@ -983,189 +1166,6 @@
           "declaration": {
             "name": "ButtonVariant",
             "module": "./button.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/breadcrumb/breadcrumb.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "breadcrumbStyles",
-          "default": "css` :host { display: block; } [part='list'] { align-items: center; display: flex; flex-wrap: wrap; gap: 0; list-style: none; margin: 0; padding: 0; } `"
-        },
-        {
-          "kind": "variable",
-          "name": "breadcrumbItemStyles",
-          "default": "css` :host { align-items: center; display: inline-flex; font-family: var(--lt-typography-fontfamily); font-size: 0.875rem; } [part='link'] { color: var(--lt-interactive-primary-bg); text-decoration: none; transition: color 120ms ease; } [part='link']:hover { color: var(--lt-interactive-primary-bg-hover); text-decoration: underline; } [part='text'] { color: var(--lt-text-default); font-weight: 600; } [part='separator'] { color: var(--lt-text-muted); margin-inline: var(--lt-spacing-2); user-select: none; } [part='separator']::after { content: var(--lt-breadcrumb-separator, '/'); } :host(:last-child) [part='separator'] { display: none; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "breadcrumbStyles",
-          "declaration": {
-            "name": "breadcrumbStyles",
-            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "breadcrumbItemStyles",
-          "declaration": {
-            "name": "breadcrumbItemStyles",
-            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/breadcrumb/breadcrumb.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Navigation breadcrumb trail container.\nPlace `lt-breadcrumb-item` elements inside as direct children.",
-          "name": "Breadcrumb",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "breadcrumbStyles"
-            },
-            {
-              "kind": "field",
-              "name": "separator",
-              "type": {
-                "text": "string"
-              },
-              "default": "'/'",
-              "description": "The character or element to use as a separator between breadcrumb items.\nThis is passed down to all children items via CSS variables."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changed",
-                  "type": {
-                    "text": "PropertyValues<this>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-breadcrumb",
-          "customElement": true
-        },
-        {
-          "kind": "class",
-          "description": "A single step in a breadcrumb trail.\nRenders as a link when `href` is provided, or as plain text when `current`.",
-          "name": "BreadcrumbItem",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "breadcrumbItemStyles"
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "URL this item links to. Omit for the current (last) item."
-            },
-            {
-              "kind": "field",
-              "name": "current",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Marks this item as the current page. Renders as non-linked text with `aria-current=\"page\"`."
-            },
-            {
-              "kind": "field",
-              "name": "separator",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Custom separator for this specific item. Overrides the parent's separator."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-breadcrumb-item",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Breadcrumb",
-          "declaration": {
-            "name": "Breadcrumb",
-            "module": "src/components/breadcrumb/breadcrumb.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BreadcrumbItem",
-          "declaration": {
-            "name": "BreadcrumbItem",
-            "module": "src/components/breadcrumb/breadcrumb.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/breadcrumb/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Breadcrumb",
-          "declaration": {
-            "name": "Breadcrumb",
-            "module": "./breadcrumb"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BreadcrumbItem",
-          "declaration": {
-            "name": "BreadcrumbItem",
-            "module": "./breadcrumb"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BreadcrumbSeparator",
-          "declaration": {
-            "name": "BreadcrumbSeparator",
-            "module": "./breadcrumb.types"
           }
         }
       ]
@@ -1947,6 +1947,186 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/chip/chip.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "chipStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-chip-bg); border-radius: 999px; border: 1px solid var(--lt-chip-border-color, transparent); color: var(--lt-chip-color); box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-text-info); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "chipStyles",
+          "declaration": {
+            "name": "chipStyles",
+            "module": "src/components/chip/chip.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/chip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Compact label element for tags, filters, and attributes.",
+          "name": "Chip",
+          "slots": [
+            {
+              "description": "Label content",
+              "name": ""
+            },
+            {
+              "description": "Leading icon or avatar",
+              "name": "icon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "chipStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "ChipAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual appearance (filled tinted background or outlined border only)."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ChipVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ChipSize"
+              },
+              "default": "'md'",
+              "description": "Size (affects height, font, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables the chip and its delete button."
+            },
+            {
+              "kind": "field",
+              "name": "deletable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "_deleteIconSize",
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleDelete",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fires when the delete button is clicked (only when `deletable`)",
+              "name": "lt-delete"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-chip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "src/components/chip/chip.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "./chip"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipVariant",
+          "declaration": {
+            "name": "ChipVariant",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipSize",
+          "declaration": {
+            "name": "ChipSize",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipAppearance",
+          "declaration": {
+            "name": "ChipAppearance",
+            "module": "./chip.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/combobox/combobox.styles.ts",
       "declarations": [
         {
@@ -2247,186 +2427,6 @@
           "declaration": {
             "name": "ComboboxVariant",
             "module": "./combobox.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/chip.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "chipStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-chip-bg); border-radius: 999px; border: 1px solid var(--lt-chip-border-color, transparent); color: var(--lt-chip-color); box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-text-info); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "chipStyles",
-          "declaration": {
-            "name": "chipStyles",
-            "module": "src/components/chip/chip.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/chip.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Compact label element for tags, filters, and attributes.",
-          "name": "Chip",
-          "slots": [
-            {
-              "description": "Label content",
-              "name": ""
-            },
-            {
-              "description": "Leading icon or avatar",
-              "name": "icon"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "chipStyles"
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "ChipAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual appearance (filled tinted background or outlined border only)."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ChipVariant"
-              },
-              "default": "'primary'",
-              "description": "Color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ChipSize"
-              },
-              "default": "'md'",
-              "description": "Size (affects height, font, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disables the chip and its delete button."
-            },
-            {
-              "kind": "field",
-              "name": "deletable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "_deleteIconSize",
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleDelete",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fires when the delete button is clicked (only when `deletable`)",
-              "name": "lt-delete"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-chip",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Chip",
-          "declaration": {
-            "name": "Chip",
-            "module": "src/components/chip/chip.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Chip",
-          "declaration": {
-            "name": "Chip",
-            "module": "./chip"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipVariant",
-          "declaration": {
-            "name": "ChipVariant",
-            "module": "./chip.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipSize",
-          "declaration": {
-            "name": "ChipSize",
-            "module": "./chip.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipAppearance",
-          "declaration": {
-            "name": "ChipAppearance",
-            "module": "./chip.types"
           }
         }
       ]
@@ -7295,204 +7295,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/tab-group/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TabGroup",
-          "declaration": {
-            "name": "TabGroup",
-            "module": "./tab-group"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TabGroupAppearance",
-          "declaration": {
-            "name": "TabGroupAppearance",
-            "module": "./tab-group.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TabGroupSize",
-          "declaration": {
-            "name": "TabGroupSize",
-            "module": "./tab-group.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tab-group/tab-group.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "tabGroupStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .tab-group { display: flex; flex-direction: column; } .tabs-container { border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-1); overflow-x: auto; scrollbar-width: thin; } .tabs-container::-webkit-scrollbar { height: 4px; } .tabs-container::-webkit-scrollbar-track { background: var(--lt-bg-surface); } .tabs-container::-webkit-scrollbar-thumb { background: var(--lt-color-neutral-300); border-radius: 2px; } .panels-container { padding: var(--lt-spacing-4) 0; } ::slotted([slot='panel']) { display: none; } ::slotted([slot='panel'][active]) { display: block; } /* Pills variant */ :host([appearance='pills']) .tabs-container { background: var(--lt-bg-surface); border: none; border-radius: var(--lt-border-radius); gap: var(--lt-spacing-2); padding: var(--lt-spacing-1); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "tabGroupStyles",
-          "declaration": {
-            "name": "tabGroupStyles",
-            "module": "src/components/tab-group/tab-group.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tab-group/tab-group.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A container component that manages a group of tabs.",
-          "name": "TabGroup",
-          "slots": [
-            {
-              "description": "Tab elements",
-              "name": ""
-            },
-            {
-              "description": "Tab panel content (use multiple panels with matching values)",
-              "name": "panel"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "tabGroupStyles"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Currently selected tab value."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "TabGroupAppearance"
-              },
-              "default": "'default'",
-              "description": "Visual appearance of the tab group."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "TabGroupSize"
-              },
-              "default": "'md'",
-              "description": "Size of the tabs."
-            },
-            {
-              "kind": "field",
-              "name": "tabs",
-              "type": {
-                "text": "Tab[]"
-              },
-              "privacy": "private",
-              "description": "Reference to all slotted tab elements."
-            },
-            {
-              "kind": "field",
-              "name": "panels",
-              "type": {
-                "text": "HTMLElement[]"
-              },
-              "privacy": "private",
-              "description": "Reference to all slotted panel elements."
-            },
-            {
-              "kind": "method",
-              "name": "firstUpdated",
-              "description": "Lifecycle: Called after the element's DOM has been updated."
-            },
-            {
-              "kind": "method",
-              "name": "updateTabs",
-              "privacy": "private",
-              "description": "Updates all tabs with the correct active state and size."
-            },
-            {
-              "kind": "method",
-              "name": "updatePanels",
-              "privacy": "private",
-              "description": "Updates panel visibility based on selected value."
-            },
-            {
-              "kind": "field",
-              "name": "handleTabClick",
-              "privacy": "private",
-              "description": "Handles click events from tabs."
-            },
-            {
-              "kind": "method",
-              "name": "handleSlotChange",
-              "privacy": "private",
-              "description": "Handles slot changes."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "privacy": "protected",
-              "parameters": [
-                {
-                  "name": "changedProperties",
-                  "type": {
-                    "text": "Map<string, unknown>"
-                  }
-                }
-              ],
-              "description": "Watch for value changes."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Dispatched when a tab is selected",
-              "name": "change"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-tab-group",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TabGroup",
-          "declaration": {
-            "name": "TabGroup",
-            "module": "src/components/tab-group/tab-group.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/table/index.ts",
       "declarations": [],
       "exports": [
@@ -7869,6 +7671,204 @@
           "declaration": {
             "name": "Table",
             "module": "src/components/table/table.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tab-group/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TabGroup",
+          "declaration": {
+            "name": "TabGroup",
+            "module": "./tab-group"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TabGroupAppearance",
+          "declaration": {
+            "name": "TabGroupAppearance",
+            "module": "./tab-group.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TabGroupSize",
+          "declaration": {
+            "name": "TabGroupSize",
+            "module": "./tab-group.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tab-group/tab-group.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "tabGroupStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .tab-group { display: flex; flex-direction: column; } .tabs-container { border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-1); overflow-x: auto; scrollbar-width: thin; } .tabs-container::-webkit-scrollbar { height: 4px; } .tabs-container::-webkit-scrollbar-track { background: var(--lt-bg-surface); } .tabs-container::-webkit-scrollbar-thumb { background: var(--lt-color-neutral-300); border-radius: 2px; } .panels-container { padding: var(--lt-spacing-4) 0; } ::slotted([slot='panel']) { display: none; } ::slotted([slot='panel'][active]) { display: block; } /* Pills variant */ :host([appearance='pills']) .tabs-container { background: var(--lt-bg-surface); border: none; border-radius: var(--lt-border-radius); gap: var(--lt-spacing-2); padding: var(--lt-spacing-1); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "tabGroupStyles",
+          "declaration": {
+            "name": "tabGroupStyles",
+            "module": "src/components/tab-group/tab-group.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tab-group/tab-group.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A container component that manages a group of tabs.",
+          "name": "TabGroup",
+          "slots": [
+            {
+              "description": "Tab elements",
+              "name": ""
+            },
+            {
+              "description": "Tab panel content (use multiple panels with matching values)",
+              "name": "panel"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "tabGroupStyles"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Currently selected tab value."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "TabGroupAppearance"
+              },
+              "default": "'default'",
+              "description": "Visual appearance of the tab group."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "TabGroupSize"
+              },
+              "default": "'md'",
+              "description": "Size of the tabs."
+            },
+            {
+              "kind": "field",
+              "name": "tabs",
+              "type": {
+                "text": "Tab[]"
+              },
+              "privacy": "private",
+              "description": "Reference to all slotted tab elements."
+            },
+            {
+              "kind": "field",
+              "name": "panels",
+              "type": {
+                "text": "HTMLElement[]"
+              },
+              "privacy": "private",
+              "description": "Reference to all slotted panel elements."
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "description": "Lifecycle: Called after the element's DOM has been updated."
+            },
+            {
+              "kind": "method",
+              "name": "updateTabs",
+              "privacy": "private",
+              "description": "Updates all tabs with the correct active state and size."
+            },
+            {
+              "kind": "method",
+              "name": "updatePanels",
+              "privacy": "private",
+              "description": "Updates panel visibility based on selected value."
+            },
+            {
+              "kind": "field",
+              "name": "handleTabClick",
+              "privacy": "private",
+              "description": "Handles click events from tabs."
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange",
+              "privacy": "private",
+              "description": "Handles slot changes."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ],
+              "description": "Watch for value changes."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Dispatched when a tab is selected",
+              "name": "change"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-tab-group",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TabGroup",
+          "declaration": {
+            "name": "TabGroup",
+            "module": "src/components/tab-group/tab-group.ts"
           }
         }
       ]

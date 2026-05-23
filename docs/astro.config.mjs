@@ -21,6 +21,19 @@ export default defineConfig({
     rehypePlugins: [[rehypePrefixLinks, basePath], rehypeLtText]
   },
   vite: {
+    plugins: [
+      {
+        // @latty/web and @latty/icons are aliased to src/ for live HMR, but their
+        // package.json sideEffects only list dist/ paths — Vite would tree-shake
+        // bare `import '@latty/web'` calls into empty chunks without this.
+        name: 'latty-src-side-effects',
+        transform(code, id) {
+          if (id.includes('/packages/web/src/') || id.includes('/packages/icons/src/')) {
+            return { code, moduleSideEffects: true };
+          }
+        }
+      }
+    ],
     server: {
       // Allow Vite to serve files from outside the docs directory
       fs: { allow: [root] }
