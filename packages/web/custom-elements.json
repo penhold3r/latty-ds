@@ -226,197 +226,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/alert/alert.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "alertStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens — public props override first, then variant defaults */ --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-neutral-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-inverse)); --_border: var(--lt-alert-border-color, var(--lt-border-strong)); --_color: var(--lt-alert-color, var(--lt-text-default)); --_color-solid: var(--lt-alert-color, var(--lt-text-inverse)); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-success-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-success)); --_border: var(--lt-alert-border-color, var(--lt-border-success-strong)); --_color: var(--lt-alert-color, var(--lt-text-success)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-success)); } :host([variant='warning']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-warning-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-warning)); --_border: var(--lt-alert-border-color, var(--lt-border-warning-strong)); --_color: var(--lt-alert-color, var(--lt-text-warning)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-warning)); } :host([variant='error']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-error-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-error)); --_border: var(--lt-alert-border-color, var(--lt-border-error-strong)); --_color: var(--lt-alert-color, var(--lt-text-error)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-error)); } :host([variant='info']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-info-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-info)); --_border: var(--lt-alert-border-color, var(--lt-border-info-strong)); --_color: var(--lt-alert-color, var(--lt-text-info)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-info)); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: 1px solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: 1px solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } .title + .content { opacity: 0.8; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "alertStyles",
-          "declaration": {
-            "name": "alertStyles",
-            "module": "src/components/alert/alert.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/alert/alert.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Inline notification for persistent contextual feedback.",
-          "name": "Alert",
-          "slots": [
-            {
-              "description": "Alert body. Accepts any HTML — bold, links, lists, etc.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "alertStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "AlertVariant"
-              },
-              "default": "'default'",
-              "description": "Visual style."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "AlertAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual treatment. `filled` uses a tinted background with border, `outlined` uses a white background with border, `solid` uses a solid color background with no border."
-            },
-            {
-              "kind": "field",
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Optional bold heading above the body content."
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon to show before the body. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
-            },
-            {
-              "kind": "field",
-              "name": "closable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the title in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "_iconMap",
-              "type": {
-                "text": "Record<AlertVariant, string>"
-              },
-              "privacy": "private",
-              "static": true,
-              "readonly": true,
-              "default": "{ default: 'info-circle', success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
-            },
-            {
-              "kind": "method",
-              "name": "_handleClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_resolvedIcon",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
-              "name": "lt-close"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-alert",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Alert",
-          "declaration": {
-            "name": "Alert",
-            "module": "src/components/alert/alert.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/alert/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Alert",
-          "declaration": {
-            "name": "Alert",
-            "module": "./alert"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AlertVariant",
-          "declaration": {
-            "name": "AlertVariant",
-            "module": "./alert.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AlertAppearance",
-          "declaration": {
-            "name": "AlertAppearance",
-            "module": "./alert.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/badge/badge.styles.ts",
       "declarations": [
         {
@@ -744,6 +553,197 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/alert/alert.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "alertStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens — public props override first, then variant defaults */ --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-neutral-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-inverse)); --_border: var(--lt-alert-border-color, var(--lt-border-strong)); --_color: var(--lt-alert-color, var(--lt-text-default)); --_color-solid: var(--lt-alert-color, var(--lt-text-inverse)); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-success-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-success)); --_border: var(--lt-alert-border-color, var(--lt-border-success-strong)); --_color: var(--lt-alert-color, var(--lt-text-success)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-success)); } :host([variant='warning']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-warning-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-warning)); --_border: var(--lt-alert-border-color, var(--lt-border-warning-strong)); --_color: var(--lt-alert-color, var(--lt-text-warning)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-warning)); } :host([variant='error']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-error-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-error)); --_border: var(--lt-alert-border-color, var(--lt-border-error-strong)); --_color: var(--lt-alert-color, var(--lt-text-error)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-error)); } :host([variant='info']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-info-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-info)); --_border: var(--lt-alert-border-color, var(--lt-border-info-strong)); --_color: var(--lt-alert-color, var(--lt-text-info)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-info)); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: 1px solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: 1px solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } .title + .content { opacity: 0.8; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "alertStyles",
+          "declaration": {
+            "name": "alertStyles",
+            "module": "src/components/alert/alert.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/alert/alert.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Inline notification for persistent contextual feedback.",
+          "name": "Alert",
+          "slots": [
+            {
+              "description": "Alert body. Accepts any HTML — bold, links, lists, etc.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "alertStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "AlertVariant"
+              },
+              "default": "'default'",
+              "description": "Visual style."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "AlertAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual treatment. `filled` uses a tinted background with border, `outlined` uses a white background with border, `solid` uses a solid color background with no border."
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Optional bold heading above the body content."
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon to show before the body. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
+            },
+            {
+              "kind": "field",
+              "name": "closable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the title in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "_iconMap",
+              "type": {
+                "text": "Record<AlertVariant, string>"
+              },
+              "privacy": "private",
+              "static": true,
+              "readonly": true,
+              "default": "{ default: 'info-circle', success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
+            },
+            {
+              "kind": "method",
+              "name": "_handleClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_resolvedIcon",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
+              "name": "lt-close"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-alert",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Alert",
+          "declaration": {
+            "name": "Alert",
+            "module": "src/components/alert/alert.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/alert/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Alert",
+          "declaration": {
+            "name": "Alert",
+            "module": "./alert"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AlertVariant",
+          "declaration": {
+            "name": "AlertVariant",
+            "module": "./alert.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AlertAppearance",
+          "declaration": {
+            "name": "AlertAppearance",
+            "module": "./alert.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/avatar/avatar.styles.ts",
       "declarations": [
         {
@@ -925,7 +925,7 @@
         {
           "kind": "variable",
           "name": "buttonStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; /* Internal state props — set per variant/appearance below */ --_color: var(--lt-text-on-primary); --_bg: var(--lt-interactive-primary-bg); --_border-color: transparent; --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([full-width]) { display: block; width: 100%; } :host([full-width]) [part='base'] { width: 100%; } [part='base'] { align-items: center; background: var(--lt-button-bg, var(--_bg)); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-button-border-color, var(--_border-color)); box-sizing: border-box; color: var(--lt-button-color, var(--_color)); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } [part='base']:active { transform: translateY(1px); } [part='base']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } [part='base'][disabled], [part='base'][aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; pointer-events: none; transform: none; } /* anchor reset — browsers apply link color + underline by default */ a[part='base'] { text-decoration: none; color: inherit; } /* sizes */ :host([size='sm']) [part='base'] { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) [part='base'] { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) [part='base'] { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) { --_bg: var(--lt-interactive-primary-bg); --_color: var(--lt-text-on-primary); --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) { --_bg: var(--lt-interactive-secondary-bg); --_color: var(--lt-text-on-secondary); --_hover-bg: var(--lt-interactive-secondary-bg-hover); --_active-bg: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) { --_bg: var(--lt-color-neutral-500); --_color: var(--lt-color-neutral-50); --_hover-bg: var(--lt-color-neutral-700); --_active-bg: var(--lt-color-neutral-800); } :host([variant='success']) { --_bg: var(--lt-interactive-success-bg); --_color: var(--lt-text-on-success); --_hover-bg: var(--lt-interactive-success-bg-hover); --_active-bg: var(--lt-interactive-success-bg-active); } :host([variant='warning']) { --_bg: var(--lt-interactive-warning-bg); --_color: var(--lt-text-on-warning); --_hover-bg: var(--lt-interactive-warning-bg-hover); --_active-bg: var(--lt-interactive-warning-bg-active); } :host([variant='error']) { --_bg: var(--lt-interactive-error-bg); --_color: var(--lt-text-on-error); --_hover-bg: var(--lt-interactive-error-bg-hover); --_active-bg: var(--lt-interactive-error-bg-active); } :host([variant='info']) { --_bg: var(--lt-interactive-info-bg); --_color: var(--lt-text-on-info); --_hover-bg: var(--lt-interactive-info-bg-hover); --_active-bg: var(--lt-interactive-info-bg-active); } [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_hover-bg)); } [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_active-bg)); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) { --_bg: transparent; --_color: var(--lt-text-primary); --_border-color: var(--lt-border-primary-strong); --_hover-bg: var(--lt-bg-primary-subtle); --_active-bg: var(--lt-bg-primary-subtle); } :host([appearance='outlined'][variant='secondary']) { --_bg: transparent; --_color: var(--lt-text-secondary); --_border-color: var(--lt-border-secondary-strong); --_hover-bg: var(--lt-bg-secondary-subtle); --_active-bg: var(--lt-bg-secondary-subtle); } :host([appearance='outlined'][variant='neutral']) { --_bg: transparent; --_color: var(--lt-text-neutral); --_border-color: var(--lt-border-strong); --_hover-bg: var(--lt-bg-subtle); --_active-bg: var(--lt-bg-surface); } :host([appearance='outlined'][variant='success']) { --_bg: transparent; --_color: var(--lt-text-success); --_border-color: var(--lt-border-success-strong); --_hover-bg: var(--lt-bg-success-subtle); --_active-bg: var(--lt-bg-success-subtle); } :host([appearance='outlined'][variant='warning']) { --_bg: transparent; --_color: var(--lt-text-warning); --_border-color: var(--lt-border-warning-strong); --_hover-bg: var(--lt-bg-warning-subtle); --_active-bg: var(--lt-bg-warning-subtle); } :host([appearance='outlined'][variant='error']) { --_bg: transparent; --_color: var(--lt-text-error); --_border-color: var(--lt-border-error-strong); --_hover-bg: var(--lt-bg-error-subtle); --_active-bg: var(--lt-bg-error-subtle); } :host([appearance='outlined'][variant='info']) { --_bg: transparent; --_color: var(--lt-text-info); --_border-color: var(--lt-border-info-strong); --_hover-bg: var(--lt-bg-info-subtle); --_active-bg: var(--lt-bg-info-subtle); } :host([appearance='outlined']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { opacity: 0.8; } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } :host([uppercase]) [part='base'] { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; /* Internal state props — set per variant/appearance below */ --_color: var(--lt-text-on-primary); --_bg: var(--lt-interactive-primary-bg); --_border-color: transparent; --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([full-width]) { display: block; width: 100%; } :host([full-width]) [part='base'] { width: 100%; } [part='base'] { align-items: center; background: var(--lt-button-bg, var(--_bg)); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-button-border-color, var(--_border-color)); box-sizing: border-box; color: var(--lt-button-color, var(--_color)); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } [part='base']:active { transform: translateY(1px); } [part='base']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } [part='base'][disabled], [part='base'][aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; pointer-events: none; transform: none; } /* anchor reset — browsers apply link color + underline by default */ a[part='base'] { text-decoration: none; } /* sizes */ :host([size='sm']) [part='base'] { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) [part='base'] { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) [part='base'] { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) { --_bg: var(--lt-interactive-primary-bg); --_color: var(--lt-text-on-primary); --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) { --_bg: var(--lt-interactive-secondary-bg); --_color: var(--lt-text-on-secondary); --_hover-bg: var(--lt-interactive-secondary-bg-hover); --_active-bg: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) { --_bg: var(--lt-color-neutral-500); --_color: var(--lt-color-neutral-50); --_hover-bg: var(--lt-color-neutral-700); --_active-bg: var(--lt-color-neutral-800); } :host([variant='success']) { --_bg: var(--lt-interactive-success-bg); --_color: var(--lt-text-on-success); --_hover-bg: var(--lt-interactive-success-bg-hover); --_active-bg: var(--lt-interactive-success-bg-active); } :host([variant='warning']) { --_bg: var(--lt-interactive-warning-bg); --_color: var(--lt-text-on-warning); --_hover-bg: var(--lt-interactive-warning-bg-hover); --_active-bg: var(--lt-interactive-warning-bg-active); } :host([variant='error']) { --_bg: var(--lt-interactive-error-bg); --_color: var(--lt-text-on-error); --_hover-bg: var(--lt-interactive-error-bg-hover); --_active-bg: var(--lt-interactive-error-bg-active); } :host([variant='info']) { --_bg: var(--lt-interactive-info-bg); --_color: var(--lt-text-on-info); --_hover-bg: var(--lt-interactive-info-bg-hover); --_active-bg: var(--lt-interactive-info-bg-active); } [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_hover-bg)); } [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_active-bg)); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) { --_bg: transparent; --_color: var(--lt-text-primary); --_border-color: var(--lt-border-primary-strong); --_hover-bg: var(--lt-bg-primary-subtle); --_active-bg: var(--lt-bg-primary-subtle); } :host([appearance='outlined'][variant='secondary']) { --_bg: transparent; --_color: var(--lt-text-secondary); --_border-color: var(--lt-border-secondary-strong); --_hover-bg: var(--lt-bg-secondary-subtle); --_active-bg: var(--lt-bg-secondary-subtle); } :host([appearance='outlined'][variant='neutral']) { --_bg: transparent; --_color: var(--lt-text-neutral); --_border-color: var(--lt-border-strong); --_hover-bg: var(--lt-bg-subtle); --_active-bg: var(--lt-bg-surface); } :host([appearance='outlined'][variant='success']) { --_bg: transparent; --_color: var(--lt-text-success); --_border-color: var(--lt-border-success-strong); --_hover-bg: var(--lt-bg-success-subtle); --_active-bg: var(--lt-bg-success-subtle); } :host([appearance='outlined'][variant='warning']) { --_bg: transparent; --_color: var(--lt-text-warning); --_border-color: var(--lt-border-warning-strong); --_hover-bg: var(--lt-bg-warning-subtle); --_active-bg: var(--lt-bg-warning-subtle); } :host([appearance='outlined'][variant='error']) { --_bg: transparent; --_color: var(--lt-text-error); --_border-color: var(--lt-border-error-strong); --_hover-bg: var(--lt-bg-error-subtle); --_active-bg: var(--lt-bg-error-subtle); } :host([appearance='outlined'][variant='info']) { --_bg: transparent; --_color: var(--lt-text-info); --_border-color: var(--lt-border-info-strong); --_hover-bg: var(--lt-bg-info-subtle); --_active-bg: var(--lt-bg-info-subtle); } :host([appearance='outlined']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { opacity: 0.8; } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } :host([uppercase]) [part='base'] { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
         }
       ],
       "exports": [
@@ -2127,312 +2127,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/combobox/combobox.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "comboboxStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } .label-text { color: var(--lt-text-default); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color 150ms ease, box-shadow 150ms ease; } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } :host([variant='error']) .input-wrap { border-color: var(--lt-color-error-500); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-color-success-500); } :host([variant='warning']) .input-wrap { border-color: var(--lt-color-warning-500); } :host([disabled]) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-color-neutral-400)); } :host([disabled]) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform 150ms ease; } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); box-shadow: var(--lt-shadow-md); left: 0; max-height: 240px; overflow-y: auto; position: absolute; right: 0; top: calc(100% + 4px); z-index: 100; } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: left; width: 100%; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-color-primary-700); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "comboboxStyles",
-          "declaration": {
-            "name": "comboboxStyles",
-            "module": "src/components/combobox/combobox.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/combobox/combobox.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Searchable single-select combobox. The user types to filter options; selecting an option sets the value.",
-          "name": "Combobox",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "comboboxStyles"
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "ComboboxOption[]"
-              },
-              "default": "[]",
-              "description": "Array of selectable options. Set as a JS property (`.options`)."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Currently selected value."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Field label displayed above the input."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Search…'",
-              "description": "Placeholder text shown when nothing is typed."
-            },
-            {
-              "kind": "field",
-              "name": "helperText",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Helper or error text displayed below the input."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ComboboxVariant"
-              },
-              "default": "'default'",
-              "description": "Visual state variant."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ComboboxSize"
-              },
-              "default": "'md'",
-              "description": "Visual size."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the field is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the field is required."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name used in form submission."
-            },
-            {
-              "kind": "field",
-              "name": "query",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "default": "''"
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "activeIndex",
-              "type": {
-                "text": "number"
-              },
-              "privacy": "private",
-              "default": "-1"
-            },
-            {
-              "kind": "field",
-              "name": "_cleanupClickOutside",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "selectedLabel",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "filtered",
-              "type": {
-                "text": "ComboboxOption[]"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "openDropdown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "closeDropdown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "selectOption",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "opt",
-                  "type": {
-                    "text": "ComboboxOption"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleInput",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleKeydown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent<{value: string, label: string}>"
-              },
-              "description": "Fired when the selected value changes.",
-              "name": "lt-change"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-combobox",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Combobox",
-          "declaration": {
-            "name": "Combobox",
-            "module": "src/components/combobox/combobox.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/combobox/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Combobox",
-          "declaration": {
-            "name": "Combobox",
-            "module": "./combobox"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ComboboxOption",
-          "declaration": {
-            "name": "ComboboxOption",
-            "module": "./combobox.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ComboboxSize",
-          "declaration": {
-            "name": "ComboboxSize",
-            "module": "./combobox.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ComboboxVariant",
-          "declaration": {
-            "name": "ComboboxVariant",
-            "module": "./combobox.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/date-input/date-input.styles.ts",
       "declarations": [
         {
@@ -2739,48 +2433,48 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/datepicker/datepicker.styles.ts",
+      "path": "src/components/combobox/combobox.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "datepickerStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } .label-text { color: var(--lt-text-default); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } input { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); color: var(--lt-text-default); font-family: inherit; font-size: 0.9375rem; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; width: 100%; box-sizing: border-box; } input:focus { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } input:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) input { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) input { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* Variants */ :host([variant='success']) input { border-color: var(--lt-color-success-500); } :host([variant='success']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input { border-color: var(--lt-color-warning-500); } :host([variant='warning']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input { border-color: var(--lt-color-error-500); } :host([variant='error']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
+          "name": "comboboxStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } .label-text { color: var(--lt-text-default); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color 150ms ease, box-shadow 150ms ease; } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } :host([variant='error']) .input-wrap { border-color: var(--lt-color-error-500); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-color-success-500); } :host([variant='warning']) .input-wrap { border-color: var(--lt-color-warning-500); } :host([disabled]) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-color-neutral-400)); } :host([disabled]) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform 150ms ease; } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); box-shadow: var(--lt-shadow-md); left: 0; max-height: 240px; overflow-y: auto; position: absolute; right: 0; top: calc(100% + 4px); z-index: 100; } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: left; width: 100%; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-color-primary-700); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "datepickerStyles",
+          "name": "comboboxStyles",
           "declaration": {
-            "name": "datepickerStyles",
-            "module": "src/components/datepicker/datepicker.styles.ts"
+            "name": "comboboxStyles",
+            "module": "src/components/combobox/combobox.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/datepicker/datepicker.ts",
+      "path": "src/components/combobox/combobox.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Date and time picker wrapping the native browser date/time input with design-system styling.",
-          "name": "Datepicker",
+          "description": "Searchable single-select combobox. The user types to filter options; selecting an option sets the value.",
+          "name": "Combobox",
           "members": [
             {
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "datepickerStyles"
+              "default": "comboboxStyles"
             },
             {
               "kind": "field",
-              "name": "type",
+              "name": "options",
               "type": {
-                "text": "DatepickerType"
+                "text": "ComboboxOption[]"
               },
-              "default": "'date'",
-              "description": "Native input type."
+              "default": "[]",
+              "description": "Array of selectable options. Set as a JS property (`.options`)."
             },
             {
               "kind": "field",
@@ -2789,25 +2483,7 @@
                 "text": "string"
               },
               "default": "''",
-              "description": "Current value in the format required by the native input (`YYYY-MM-DD`, `HH:MM`, or `YYYY-MM-DDTHH:MM`)."
-            },
-            {
-              "kind": "field",
-              "name": "min",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Minimum allowed value."
-            },
-            {
-              "kind": "field",
-              "name": "max",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Maximum allowed value."
+              "description": "Currently selected value."
             },
             {
               "kind": "field",
@@ -2817,6 +2493,15 @@
               },
               "default": "''",
               "description": "Field label displayed above the input."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Search…'",
+              "description": "Placeholder text shown when nothing is typed."
             },
             {
               "kind": "field",
@@ -2831,7 +2516,7 @@
               "kind": "field",
               "name": "variant",
               "type": {
-                "text": "DatepickerVariant"
+                "text": "ComboboxVariant"
               },
               "default": "'default'",
               "description": "Visual state variant."
@@ -2840,7 +2525,7 @@
               "kind": "field",
               "name": "size",
               "type": {
-                "text": "DatepickerSize"
+                "text": "ComboboxSize"
               },
               "default": "'md'",
               "description": "Visual size."
@@ -2865,15 +2550,6 @@
             },
             {
               "kind": "field",
-              "name": "readonly",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the field is read-only."
-            },
-            {
-              "kind": "field",
               "name": "name",
               "type": {
                 "text": "string"
@@ -2883,21 +2559,111 @@
             },
             {
               "kind": "field",
-              "name": "input",
+              "name": "query",
               "type": {
-                "text": "HTMLInputElement"
+                "text": "string"
               },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "activeIndex",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "-1"
+            },
+            {
+              "kind": "field",
+              "name": "_cleanupClickOutside",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "selectedLabel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "filtered",
+              "type": {
+                "text": "ComboboxOption[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "openDropdown",
               "privacy": "private"
             },
             {
               "kind": "method",
-              "name": "handleChange",
+              "name": "closeDropdown",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "selectOption",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "opt",
+                  "type": {
+                    "text": "ComboboxOption"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
               "name": "handleInput",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleFocus",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleKeydown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -2907,73 +2673,66 @@
           "events": [
             {
               "type": {
-                "text": "CustomEvent<{value: string}>"
+                "text": "CustomEvent<{value: string, label: string}>"
               },
-              "description": "Fired when the value changes (on blur).",
+              "description": "Fired when the selected value changes.",
               "name": "lt-change"
-            },
-            {
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Fired on every keystroke / picker selection.",
-              "name": "lt-input"
             }
           ],
           "superclass": {
             "name": "ThemeableElement",
             "module": "/src/base"
           },
-          "tagName": "lt-datepicker",
+          "tagName": "lt-combobox",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Datepicker",
+          "name": "Combobox",
           "declaration": {
-            "name": "Datepicker",
-            "module": "src/components/datepicker/datepicker.ts"
+            "name": "Combobox",
+            "module": "src/components/combobox/combobox.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/datepicker/index.ts",
+      "path": "src/components/combobox/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Datepicker",
+          "name": "Combobox",
           "declaration": {
-            "name": "Datepicker",
-            "module": "./datepicker"
+            "name": "Combobox",
+            "module": "./combobox"
           }
         },
         {
           "kind": "js",
-          "name": "DatepickerType",
+          "name": "ComboboxOption",
           "declaration": {
-            "name": "DatepickerType",
-            "module": "./datepicker.types"
+            "name": "ComboboxOption",
+            "module": "./combobox.types"
           }
         },
         {
           "kind": "js",
-          "name": "DatepickerSize",
+          "name": "ComboboxSize",
           "declaration": {
-            "name": "DatepickerSize",
-            "module": "./datepicker.types"
+            "name": "ComboboxSize",
+            "module": "./combobox.types"
           }
         },
         {
           "kind": "js",
-          "name": "DatepickerVariant",
+          "name": "ComboboxVariant",
           "declaration": {
-            "name": "DatepickerVariant",
-            "module": "./datepicker.types"
+            "name": "ComboboxVariant",
+            "module": "./combobox.types"
           }
         }
       ]
@@ -3264,6 +3023,247 @@
           "declaration": {
             "name": "DialogSize",
             "module": "./dialog.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/datepicker/datepicker.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "datepickerStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } .label-text { color: var(--lt-text-default); font-size: 0.875rem; font-weight: 500; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } input { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); color: var(--lt-text-default); font-family: inherit; font-size: 0.9375rem; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; width: 100%; box-sizing: border-box; } input:focus { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } input:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) input { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) input { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* Variants */ :host([variant='success']) input { border-color: var(--lt-color-success-500); } :host([variant='success']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input { border-color: var(--lt-color-warning-500); } :host([variant='warning']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input { border-color: var(--lt-color-error-500); } :host([variant='error']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "datepickerStyles",
+          "declaration": {
+            "name": "datepickerStyles",
+            "module": "src/components/datepicker/datepicker.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/datepicker/datepicker.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Date and time picker wrapping the native browser date/time input with design-system styling.",
+          "name": "Datepicker",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "datepickerStyles"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "DatepickerType"
+              },
+              "default": "'date'",
+              "description": "Native input type."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Current value in the format required by the native input (`YYYY-MM-DD`, `HH:MM`, or `YYYY-MM-DDTHH:MM`)."
+            },
+            {
+              "kind": "field",
+              "name": "min",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Minimum allowed value."
+            },
+            {
+              "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Maximum allowed value."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Field label displayed above the input."
+            },
+            {
+              "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Helper or error text displayed below the input."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "DatepickerVariant"
+              },
+              "default": "'default'",
+              "description": "Visual state variant."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "DatepickerSize"
+              },
+              "default": "'md'",
+              "description": "Visual size."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the field is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the field is required."
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the field is read-only."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name used in form submission."
+            },
+            {
+              "kind": "field",
+              "name": "input",
+              "type": {
+                "text": "HTMLInputElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleInput",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Fired when the value changes (on blur).",
+              "name": "lt-change"
+            },
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Fired on every keystroke / picker selection.",
+              "name": "lt-input"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-datepicker",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Datepicker",
+          "declaration": {
+            "name": "Datepicker",
+            "module": "src/components/datepicker/datepicker.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/datepicker/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Datepicker",
+          "declaration": {
+            "name": "Datepicker",
+            "module": "./datepicker"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "DatepickerType",
+          "declaration": {
+            "name": "DatepickerType",
+            "module": "./datepicker.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "DatepickerSize",
+          "declaration": {
+            "name": "DatepickerSize",
+            "module": "./datepicker.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "DatepickerVariant",
+          "declaration": {
+            "name": "DatepickerVariant",
+            "module": "./datepicker.types"
           }
         }
       ]
@@ -3802,6 +3802,132 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/image/image.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "imageStyles",
+          "default": "css` :host { display: inline-block; } img { display: block; max-width: 100%; height: auto; } /* ── Responsive ─────────────────────────────────────────────────────────── */ :host([responsive]) { display: block; width: 100%; } :host([responsive]) img { width: 100%; height: 100%; object-fit: cover; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "imageStyles",
+          "declaration": {
+            "name": "imageStyles",
+            "module": "src/components/image/image.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/image/image.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A thin wrapper around `<img>` with rounded corners and responsive fill support.",
+          "name": "Image",
+          "cssParts": [
+            {
+              "description": "The underlying `<img>` element",
+              "name": "image"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "imageStyles"
+            },
+            {
+              "kind": "field",
+              "name": "src",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Image source URL."
+            },
+            {
+              "kind": "field",
+              "name": "alt",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Alt text for the image."
+            },
+            {
+              "kind": "field",
+              "name": "rounded",
+              "type": {
+                "text": "string | null"
+              },
+              "default": "null",
+              "description": "Border radius. Present with no value uses the design system default (`--lt-border-radius`).\nAccepts any valid CSS `border-radius` shorthand (e.g. `\"8px\"`, `\"50%\"`, `\"4px 8px\"`)."
+            },
+            {
+              "kind": "field",
+              "name": "responsive",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Makes the image fill its container using `object-fit: cover`.\nSize the `lt-image` element externally to define the crop box."
+            },
+            {
+              "kind": "field",
+              "name": "_borderRadius",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-image",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Image",
+          "declaration": {
+            "name": "Image",
+            "module": "src/components/image/image.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/image/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Image",
+          "declaration": {
+            "name": "Image",
+            "module": "./image"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/icon-button/icon-button.styles.ts",
       "declarations": [
         {
@@ -3966,132 +4092,6 @@
           "declaration": {
             "name": "IconButton",
             "module": "./icon-button"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/image/image.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "imageStyles",
-          "default": "css` :host { display: inline-block; } img { display: block; max-width: 100%; height: auto; } /* ── Responsive ─────────────────────────────────────────────────────────── */ :host([responsive]) { display: block; width: 100%; } :host([responsive]) img { width: 100%; height: 100%; object-fit: cover; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "imageStyles",
-          "declaration": {
-            "name": "imageStyles",
-            "module": "src/components/image/image.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/image/image.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A thin wrapper around `<img>` with rounded corners and responsive fill support.",
-          "name": "Image",
-          "cssParts": [
-            {
-              "description": "The underlying `<img>` element",
-              "name": "image"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "imageStyles"
-            },
-            {
-              "kind": "field",
-              "name": "src",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Image source URL."
-            },
-            {
-              "kind": "field",
-              "name": "alt",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Alt text for the image."
-            },
-            {
-              "kind": "field",
-              "name": "rounded",
-              "type": {
-                "text": "string | null"
-              },
-              "default": "null",
-              "description": "Border radius. Present with no value uses the design system default (`--lt-border-radius`).\nAccepts any valid CSS `border-radius` shorthand (e.g. `\"8px\"`, `\"50%\"`, `\"4px 8px\"`)."
-            },
-            {
-              "kind": "field",
-              "name": "responsive",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Makes the image fill its container using `object-fit: cover`.\nSize the `lt-image` element externally to define the crop box."
-            },
-            {
-              "kind": "field",
-              "name": "_borderRadius",
-              "type": {
-                "text": "string | undefined"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-image",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Image",
-          "declaration": {
-            "name": "Image",
-            "module": "src/components/image/image.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/image/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Image",
-          "declaration": {
-            "name": "Image",
-            "module": "./image"
           }
         }
       ]
@@ -4437,6 +4437,157 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/pagination/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Pagination",
+          "declaration": {
+            "name": "Pagination",
+            "module": "./pagination"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "PaginationSize",
+          "declaration": {
+            "name": "PaginationSize",
+            "module": "./pagination.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/pagination/pagination.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "paginationStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; } nav { align-items: center; display: flex; gap: var(--lt-spacing-1); } button { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-default); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 500; justify-content: center; line-height: 1; transition: background 120ms ease, border-color 120ms ease, color 120ms ease; user-select: none; } /* Sizes */ :host([size='sm']) button { font-size: 0.75rem; height: 28px; min-width: 28px; padding: 0 var(--lt-spacing-1); } :host([size='md']) button, :host(:not([size])) button { font-size: 0.8125rem; height: 36px; min-width: 36px; padding: 0 var(--lt-spacing-2); } :host([size='lg']) button { font-size: 0.9375rem; height: 44px; min-width: 44px; padding: 0 var(--lt-spacing-3); } button:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); } button[aria-current='page'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-color-primary-700); font-weight: 600; } button.ellipsis { cursor: default; pointer-events: none; } button:disabled { color: var(--lt-color-neutral-400); cursor: not-allowed; } :host([disabled]) button { color: var(--lt-color-neutral-400); cursor: not-allowed; pointer-events: none; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "paginationStyles",
+          "declaration": {
+            "name": "paginationStyles",
+            "module": "src/components/pagination/pagination.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/pagination/pagination.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Page navigation control for paged data sets.",
+          "name": "Pagination",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "paginationStyles"
+            },
+            {
+              "kind": "field",
+              "name": "page",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Currently active page (1-indexed)."
+            },
+            {
+              "kind": "field",
+              "name": "totalPages",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Total number of pages."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "PaginationSize"
+              },
+              "default": "'md'",
+              "description": "Visual size."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disable all controls."
+            },
+            {
+              "kind": "method",
+              "name": "_go",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "page",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_pages",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "(number | '…')[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{page: number}>"
+              },
+              "description": "Fired when the user navigates to a different page.",
+              "name": "lt-change"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-pagination",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Pagination",
+          "declaration": {
+            "name": "Pagination",
+            "module": "src/components/pagination/pagination.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/nav/index.ts",
       "declarations": [],
       "exports": [
@@ -4775,157 +4926,6 @@
           "declaration": {
             "name": "Nav",
             "module": "src/components/nav/nav.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/pagination/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Pagination",
-          "declaration": {
-            "name": "Pagination",
-            "module": "./pagination"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "PaginationSize",
-          "declaration": {
-            "name": "PaginationSize",
-            "module": "./pagination.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/pagination/pagination.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "paginationStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; } nav { align-items: center; display: flex; gap: var(--lt-spacing-1); } button { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-default); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 500; justify-content: center; line-height: 1; transition: background 120ms ease, border-color 120ms ease, color 120ms ease; user-select: none; } /* Sizes */ :host([size='sm']) button { font-size: 0.75rem; height: 28px; min-width: 28px; padding: 0 var(--lt-spacing-1); } :host([size='md']) button, :host(:not([size])) button { font-size: 0.8125rem; height: 36px; min-width: 36px; padding: 0 var(--lt-spacing-2); } :host([size='lg']) button { font-size: 0.9375rem; height: 44px; min-width: 44px; padding: 0 var(--lt-spacing-3); } button:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); } button[aria-current='page'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-color-primary-700); font-weight: 600; } button.ellipsis { cursor: default; pointer-events: none; } button:disabled { color: var(--lt-color-neutral-400); cursor: not-allowed; } :host([disabled]) button { color: var(--lt-color-neutral-400); cursor: not-allowed; pointer-events: none; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "paginationStyles",
-          "declaration": {
-            "name": "paginationStyles",
-            "module": "src/components/pagination/pagination.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/pagination/pagination.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Page navigation control for paged data sets.",
-          "name": "Pagination",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "paginationStyles"
-            },
-            {
-              "kind": "field",
-              "name": "page",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Currently active page (1-indexed)."
-            },
-            {
-              "kind": "field",
-              "name": "totalPages",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Total number of pages."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "PaginationSize"
-              },
-              "default": "'md'",
-              "description": "Visual size."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disable all controls."
-            },
-            {
-              "kind": "method",
-              "name": "_go",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "page",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_pages",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "(number | '…')[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent<{page: number}>"
-              },
-              "description": "Fired when the user navigates to a different page.",
-              "name": "lt-change"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-pagination",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Pagination",
-          "declaration": {
-            "name": "Pagination",
-            "module": "src/components/pagination/pagination.ts"
           }
         }
       ]
@@ -5475,6 +5475,245 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/sidepanel/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SidePanel",
+          "declaration": {
+            "name": "SidePanel",
+            "module": "./sidepanel"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/sidepanel/sidepanel.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "sidepanelStyles",
+          "default": "css` :host { display: contents; } /* ── Overlay ────────────────────────────────────────────────────────────── */ [part='overlay'] { position: fixed; inset: 0; background: rgba(0, 0, 0, var(--lt-sidepanel-overlay-opacity, 0.45)); z-index: 400; opacity: 0; pointer-events: none; transition: opacity 200ms ease; } /* ── Panel ──────────────────────────────────────────────────────────────── */ [part='panel'] { position: fixed; background: var(--lt-bg-default); display: flex; flex-direction: column; z-index: 401; pointer-events: none; transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1); } /* ── Anchors — initial off-screen positions ─────────────────────────────── */ :host([anchor='left']) [part='panel'], :host(:not([anchor])) [part='panel'] { inset-block: 0; left: 0; transform: translateX(-100%); box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='right']) [part='panel'] { inset-block: 0; right: 0; transform: translateX(100%); box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='top']) [part='panel'] { inset-inline: 0; top: 0; transform: translateY(-100%); box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12); } :host([anchor='bottom']) [part='panel'] { inset-inline: 0; bottom: 0; transform: translateY(100%); box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12); } /* ── Open state — must come after anchors to win the cascade ────────────── */ :host([open]) [part='overlay'] { opacity: 1; pointer-events: auto; } :host([open]) [part='panel'] { transform: translate(0, 0); pointer-events: auto; } /* ── Header ─────────────────────────────────────────────────────────────── */ .header { display: flex; align-items: center; gap: var(--lt-spacing-4); padding: var(--lt-spacing-4) var(--lt-spacing-5); border-bottom: 1px solid var(--lt-border-default); flex-shrink: 0; } .panel-label { flex: 1; color: var(--lt-text-default); } .close-button { flex-shrink: 0; margin-left: auto; } /* ── Body ───────────────────────────────────────────────────────────────── */ .body { flex: 1; overflow-y: auto; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { [part='overlay'], [part='panel'] { transition: none; } } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "sidepanelStyles",
+          "declaration": {
+            "name": "sidepanelStyles",
+            "module": "src/components/sidepanel/sidepanel.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/sidepanel/sidepanel.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A slide-in panel anchored to any edge of the viewport, with a backdrop overlay.",
+          "name": "SidePanel",
+          "cssParts": [
+            {
+              "description": "The backdrop scrim behind the panel",
+              "name": "overlay"
+            },
+            {
+              "description": "The sliding panel container",
+              "name": "panel"
+            },
+            {
+              "description": "The header bar (contains label and close button)",
+              "name": "header"
+            },
+            {
+              "description": "The close button inside the header",
+              "name": "close-button"
+            },
+            {
+              "description": "The scrollable content area wrapping the default slot",
+              "name": "body"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Content rendered inside the panel body",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "type": {
+                "text": "array"
+              },
+              "static": true,
+              "default": "[sidepanelStyles, backdropFeatureStyles]"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the panel is visible."
+            },
+            {
+              "kind": "field",
+              "name": "anchor",
+              "type": {
+                "text": "SidePanelAnchor"
+              },
+              "default": "'left'",
+              "description": "Edge from which the panel slides in."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "string"
+              },
+              "default": "'320px'",
+              "description": "Panel width (left/right anchors) or height (top/bottom anchors)."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Title shown in the panel header. When empty, the header is hidden."
+            },
+            {
+              "kind": "field",
+              "name": "noCloseButton",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Suppress the built-in close button."
+            },
+            {
+              "kind": "field",
+              "name": "backdropBlur",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Apply a frosted-glass blur effect to the backdrop."
+            },
+            {
+              "kind": "field",
+              "name": "overlayOpacity",
+              "type": {
+                "text": "number"
+              },
+              "default": "0.45",
+              "description": "Backdrop darkness as an alpha value from 0 (transparent) to 1 (opaque)."
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "privacy": "public",
+              "description": "Open the panel."
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "public",
+              "description": "Close the panel."
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "privacy": "public",
+              "description": "Toggle the panel open/closed."
+            },
+            {
+              "kind": "field",
+              "name": "_handleKeyDown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_offScreenTransform",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "_panelStyle",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_renderHeader",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fired when the user requests close (backdrop click, Escape key, or close button)",
+              "name": "lt-close"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-sidepanel",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SidePanel",
+          "declaration": {
+            "name": "SidePanel",
+            "module": "src/components/sidepanel/sidepanel.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/select/index.ts",
       "declarations": [],
       "exports": [
@@ -5764,245 +6003,6 @@
           "declaration": {
             "name": "backdropFeatureStyles",
             "module": "src/components/shared/backdrop.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/sidepanel/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SidePanel",
-          "declaration": {
-            "name": "SidePanel",
-            "module": "./sidepanel"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/sidepanel/sidepanel.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "sidepanelStyles",
-          "default": "css` :host { display: contents; } /* ── Overlay ────────────────────────────────────────────────────────────── */ [part='overlay'] { position: fixed; inset: 0; background: rgba(0, 0, 0, var(--lt-sidepanel-overlay-opacity, 0.45)); z-index: 400; opacity: 0; pointer-events: none; transition: opacity 200ms ease; } /* ── Panel ──────────────────────────────────────────────────────────────── */ [part='panel'] { position: fixed; background: var(--lt-bg-default); display: flex; flex-direction: column; z-index: 401; pointer-events: none; transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1); } /* ── Anchors — initial off-screen positions ─────────────────────────────── */ :host([anchor='left']) [part='panel'], :host(:not([anchor])) [part='panel'] { inset-block: 0; left: 0; transform: translateX(-100%); box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='right']) [part='panel'] { inset-block: 0; right: 0; transform: translateX(100%); box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='top']) [part='panel'] { inset-inline: 0; top: 0; transform: translateY(-100%); box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12); } :host([anchor='bottom']) [part='panel'] { inset-inline: 0; bottom: 0; transform: translateY(100%); box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12); } /* ── Open state — must come after anchors to win the cascade ────────────── */ :host([open]) [part='overlay'] { opacity: 1; pointer-events: auto; } :host([open]) [part='panel'] { transform: translate(0, 0); pointer-events: auto; } /* ── Header ─────────────────────────────────────────────────────────────── */ .header { display: flex; align-items: center; gap: var(--lt-spacing-4); padding: var(--lt-spacing-4) var(--lt-spacing-5); border-bottom: 1px solid var(--lt-border-default); flex-shrink: 0; } .panel-label { flex: 1; color: var(--lt-text-default); } .close-button { flex-shrink: 0; margin-left: auto; } /* ── Body ───────────────────────────────────────────────────────────────── */ .body { flex: 1; overflow-y: auto; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { [part='overlay'], [part='panel'] { transition: none; } } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "sidepanelStyles",
-          "declaration": {
-            "name": "sidepanelStyles",
-            "module": "src/components/sidepanel/sidepanel.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/sidepanel/sidepanel.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A slide-in panel anchored to any edge of the viewport, with a backdrop overlay.",
-          "name": "SidePanel",
-          "cssParts": [
-            {
-              "description": "The backdrop scrim behind the panel",
-              "name": "overlay"
-            },
-            {
-              "description": "The sliding panel container",
-              "name": "panel"
-            },
-            {
-              "description": "The header bar (contains label and close button)",
-              "name": "header"
-            },
-            {
-              "description": "The close button inside the header",
-              "name": "close-button"
-            },
-            {
-              "description": "The scrollable content area wrapping the default slot",
-              "name": "body"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Content rendered inside the panel body",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "type": {
-                "text": "array"
-              },
-              "static": true,
-              "default": "[sidepanelStyles, backdropFeatureStyles]"
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the panel is visible."
-            },
-            {
-              "kind": "field",
-              "name": "anchor",
-              "type": {
-                "text": "SidePanelAnchor"
-              },
-              "default": "'left'",
-              "description": "Edge from which the panel slides in."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "string"
-              },
-              "default": "'320px'",
-              "description": "Panel width (left/right anchors) or height (top/bottom anchors)."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Title shown in the panel header. When empty, the header is hidden."
-            },
-            {
-              "kind": "field",
-              "name": "noCloseButton",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Suppress the built-in close button."
-            },
-            {
-              "kind": "field",
-              "name": "backdropBlur",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Apply a frosted-glass blur effect to the backdrop."
-            },
-            {
-              "kind": "field",
-              "name": "overlayOpacity",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.45",
-              "description": "Backdrop darkness as an alpha value from 0 (transparent) to 1 (opaque)."
-            },
-            {
-              "kind": "method",
-              "name": "show",
-              "privacy": "public",
-              "description": "Open the panel."
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "privacy": "public",
-              "description": "Close the panel."
-            },
-            {
-              "kind": "method",
-              "name": "toggle",
-              "privacy": "public",
-              "description": "Toggle the panel open/closed."
-            },
-            {
-              "kind": "field",
-              "name": "_handleKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "privacy": "protected",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "changed",
-                  "type": {
-                    "text": "PropertyValues"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "_offScreenTransform",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "_panelStyle",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_renderHeader",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fired when the user requests close (backdrop click, Escape key, or close button)",
-              "name": "lt-close"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-sidepanel",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SidePanel",
-          "declaration": {
-            "name": "SidePanel",
-            "module": "src/components/sidepanel/sidepanel.ts"
           }
         }
       ]
@@ -6709,130 +6709,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/surface/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Surface",
-          "declaration": {
-            "name": "Surface",
-            "module": "./surface"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SurfaceElevation",
-          "declaration": {
-            "name": "SurfaceElevation",
-            "module": "./surface.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SurfaceAppearance",
-          "declaration": {
-            "name": "SurfaceAppearance",
-            "module": "./surface.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/surface/surface.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "surfaceStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .surface { background: var(--lt-surface-bg, var(--lt-bg-subtle)); border-radius: var(--lt-border-radius); box-sizing: border-box; transition: box-shadow 120ms ease, border-color 120ms ease; } /* Elevation variants */ :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); } :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); } :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); } :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); } :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); } :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); } /* Visual appearances */ :host([appearance='filled']) .surface { border: none; } :host([appearance='outlined']) .surface { background: var(--lt-surface-bg, transparent); border: 1px solid var(--lt-border-default); } :host([appearance='outlined']:hover) .surface { border-color: var(--lt-border-strong); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "surfaceStyles",
-          "declaration": {
-            "name": "surfaceStyles",
-            "module": "src/components/surface/surface.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/surface/surface.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A container component that provides elevation and surface styling.\nUsed for cards, dropdowns, modals, and other elevated UI elements.",
-          "name": "Surface",
-          "slots": [
-            {
-              "description": "Content to be displayed within the surface",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "surfaceStyles"
-            },
-            {
-              "kind": "field",
-              "name": "elevation",
-              "type": {
-                "text": "SurfaceElevation"
-              },
-              "default": "'1'",
-              "description": "Elevation level that determines shadow depth."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "SurfaceAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual appearance that determines border and background."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-surface",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Surface",
-          "declaration": {
-            "name": "Surface",
-            "module": "src/components/surface/surface.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/switch/index.ts",
       "declarations": [],
       "exports": [
@@ -7295,6 +7171,130 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/surface/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Surface",
+          "declaration": {
+            "name": "Surface",
+            "module": "./surface"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SurfaceElevation",
+          "declaration": {
+            "name": "SurfaceElevation",
+            "module": "./surface.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SurfaceAppearance",
+          "declaration": {
+            "name": "SurfaceAppearance",
+            "module": "./surface.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/surface/surface.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "surfaceStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .surface { background: var(--lt-surface-bg, var(--lt-bg-subtle)); border-radius: var(--lt-border-radius); box-sizing: border-box; transition: box-shadow 120ms ease, border-color 120ms ease; } /* Elevation variants */ :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); } :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); } :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); } :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); } :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); } :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); } /* Visual appearances */ :host([appearance='filled']) .surface { border: none; } :host([appearance='outlined']) .surface { background: var(--lt-surface-bg, transparent); border: 1px solid var(--lt-border-default); } :host([appearance='outlined']:hover) .surface { border-color: var(--lt-border-strong); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "surfaceStyles",
+          "declaration": {
+            "name": "surfaceStyles",
+            "module": "src/components/surface/surface.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/surface/surface.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A container component that provides elevation and surface styling.\nUsed for cards, dropdowns, modals, and other elevated UI elements.",
+          "name": "Surface",
+          "slots": [
+            {
+              "description": "Content to be displayed within the surface",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "surfaceStyles"
+            },
+            {
+              "kind": "field",
+              "name": "elevation",
+              "type": {
+                "text": "SurfaceElevation"
+              },
+              "default": "'1'",
+              "description": "Elevation level that determines shadow depth."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "SurfaceAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual appearance that determines border and background."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-surface",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Surface",
+          "declaration": {
+            "name": "Surface",
+            "module": "src/components/surface/surface.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/tab-group/index.ts",
       "declarations": [],
       "exports": [
@@ -7487,6 +7487,105 @@
           "declaration": {
             "name": "TabGroup",
             "module": "src/components/tab-group/tab-group.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Text",
+          "declaration": {
+            "name": "Text",
+            "module": "./text"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/text.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "textStyles",
+          "default": "css` :host { display: block; color: inherit; } /* Inline variants sit in text flow */ :host([variant='caption']), :host([variant='overline']), :host([variant='label']) { display: inline; } [part='base'] { margin: 0; color: inherit; font-family: var(--lt-typography-fontfamily); } /* ── Display ─────────────────────────────────────────────────────────── */ :host([variant='display-2xl']) [part='base'] { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-xl']) [part='base'] { font-size: clamp(2rem, 5vw, 3.75rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-lg']) [part='base'] { font-size: clamp(2rem, 4vw, 3rem); font-weight: var(--lt-text-weight, 200); line-height: 1.15; letter-spacing: -0.01em; } /* ── Headings ─────────────────────────────────────────────────────────── */ :host([variant='h1']) [part='base'] { font-size: clamp(1.75rem, 2.5vw + 0.75rem, 2.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: -0.02em; } :host([variant='h2']) [part='base'] { font-size: clamp(1.5rem, 2vw + 0.5rem, 2rem); font-weight: var(--lt-text-weight, 600); line-height: 1.25; letter-spacing: -0.01em; } :host([variant='h3']) [part='base'] { font-size: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.3; } :host([variant='h4']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 600); line-height: 1.35; } :host([variant='h5']) [part='base'] { font-size: 1.125rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } :host([variant='h6']) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } /* ── Body ─────────────────────────────────────────────────────────────── */ :host([variant='lead']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body']) [part='base'], :host(:not([variant])) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body-sm']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } /* ── Inline ───────────────────────────────────────────────────────────── */ :host([variant='caption']) [part='base'] { font-size: 0.75rem; font-weight: var(--lt-text-weight, 400); line-height: 1.5; } :host([variant='overline']) [part='base'] { font-size: 0.6875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: 0.08em; text-transform: uppercase; } :host([variant='label']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "textStyles",
+          "declaration": {
+            "name": "textStyles",
+            "module": "src/components/text/text.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/text.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Renders text with a predefined typographic style. Display and heading variants\n(display-2xl → h3) use fluid `clamp()` font sizes that scale between a mobile\nminimum and a desktop maximum. The rendered HTML tag matches the variant by\ndefault but can be overridden with the `as` attribute.\n\nOverride font-weight on any variant with `--lt-text-weight`:\n```css\nlt-text { --lt-text-weight: 700; }\n```",
+          "name": "Text",
+          "cssProperties": [
+            {
+              "description": "Overrides the default font-weight for the variant.",
+              "name": "--lt-text-weight"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "textStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "TextVariant"
+              },
+              "default": "'body'",
+              "description": "Typographic style to apply."
+            },
+            {
+              "kind": "field",
+              "name": "as",
+              "type": {
+                "text": "TextTag | ''"
+              },
+              "default": "''",
+              "description": "HTML tag to render. Defaults to the semantic tag for the chosen variant."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-text",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Text",
+          "declaration": {
+            "name": "Text",
+            "module": "src/components/text/text.ts"
           }
         }
       ]
@@ -7875,52 +7974,60 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/text/index.ts",
+      "path": "src/components/tooltip/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Text",
+          "name": "Tooltip",
           "declaration": {
-            "name": "Text",
-            "module": "./text"
+            "name": "Tooltip",
+            "module": "./tooltip"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TooltipPlacement",
+          "declaration": {
+            "name": "TooltipPlacement",
+            "module": "./tooltip.types"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/text/text.styles.ts",
+      "path": "src/components/tooltip/tooltip.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "textStyles",
-          "default": "css` :host { display: block; color: inherit; } /* Inline variants sit in text flow */ :host([variant='caption']), :host([variant='overline']), :host([variant='label']) { display: inline; } [part='base'] { margin: 0; color: inherit; font-family: var(--lt-typography-fontfamily); } /* ── Display ─────────────────────────────────────────────────────────── */ :host([variant='display-2xl']) [part='base'] { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-xl']) [part='base'] { font-size: clamp(2rem, 5vw, 3.75rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-lg']) [part='base'] { font-size: clamp(2rem, 4vw, 3rem); font-weight: var(--lt-text-weight, 200); line-height: 1.15; letter-spacing: -0.01em; } /* ── Headings ─────────────────────────────────────────────────────────── */ :host([variant='h1']) [part='base'] { font-size: clamp(1.75rem, 2.5vw + 0.75rem, 2.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: -0.02em; } :host([variant='h2']) [part='base'] { font-size: clamp(1.5rem, 2vw + 0.5rem, 2rem); font-weight: var(--lt-text-weight, 600); line-height: 1.25; letter-spacing: -0.01em; } :host([variant='h3']) [part='base'] { font-size: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.3; } :host([variant='h4']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 600); line-height: 1.35; } :host([variant='h5']) [part='base'] { font-size: 1.125rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } :host([variant='h6']) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } /* ── Body ─────────────────────────────────────────────────────────────── */ :host([variant='lead']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body']) [part='base'], :host(:not([variant])) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body-sm']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } /* ── Inline ───────────────────────────────────────────────────────────── */ :host([variant='caption']) [part='base'] { font-size: 0.75rem; font-weight: var(--lt-text-weight, 400); line-height: 1.5; } :host([variant='overline']) [part='base'] { font-size: 0.6875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: 0.08em; text-transform: uppercase; } :host([variant='label']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } `"
+          "name": "tooltipStyles",
+          "default": "css` :host { display: inline-block; position: relative; --lt-tooltip-offset: 8px; } .tooltip { background: var(--lt-tooltip-bg, var(--lt-bg-inverse)); border-radius: 4px; color: var(--lt-tooltip-color, var(--lt-text-inverse)); opacity: 0; padding: var(--lt-spacing-1) var(--lt-spacing-2); pointer-events: none; position: absolute; transition: opacity 150ms ease, visibility 150ms ease; visibility: hidden; white-space: nowrap; z-index: 1000; } .arrow { border: 5px solid transparent; height: 0; position: absolute; width: 0; } :host(:hover) .tooltip, :host(:focus-within) .tooltip { opacity: 1; visibility: visible; } :host([disabled]) .tooltip, :host(:not([content])) .tooltip, :host([content='']) .tooltip { display: none; } /* ── Top (default) ──────────────────────────── */ :host(:not([placement])) .tooltip, :host([placement='top']) .tooltip { bottom: calc(100% + var(--lt-tooltip-offset)); left: 50%; transform: translateX(-50%); } :host(:not([placement])) .arrow, :host([placement='top']) .arrow { border-top-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); left: 50%; top: 100%; transform: translateX(-50%); } /* ── Bottom ─────────────────────────────────── */ :host([placement='bottom']) .tooltip { left: 50%; top: calc(100% + var(--lt-tooltip-offset)); transform: translateX(-50%); } :host([placement='bottom']) .arrow { border-bottom-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); bottom: 100%; left: 50%; transform: translateX(-50%); } /* ── Left ───────────────────────────────────── */ :host([placement='left']) .tooltip { right: calc(100% + var(--lt-tooltip-offset)); top: 50%; transform: translateY(-50%); } :host([placement='left']) .arrow { border-left-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); left: 100%; top: 50%; transform: translateY(-50%); } /* ── Right ──────────────────────────────────── */ :host([placement='right']) .tooltip { left: calc(100% + var(--lt-tooltip-offset)); top: 50%; transform: translateY(-50%); } :host([placement='right']) .arrow { border-right-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); right: 100%; top: 50%; transform: translateY(-50%); } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "textStyles",
+          "name": "tooltipStyles",
           "declaration": {
-            "name": "textStyles",
-            "module": "src/components/text/text.styles.ts"
+            "name": "tooltipStyles",
+            "module": "src/components/tooltip/tooltip.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/text/text.ts",
+      "path": "src/components/tooltip/tooltip.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Renders text with a predefined typographic style. Display and heading variants\n(display-2xl → h3) use fluid `clamp()` font sizes that scale between a mobile\nminimum and a desktop maximum. The rendered HTML tag matches the variant by\ndefault but can be overridden with the `as` attribute.\n\nOverride font-weight on any variant with `--lt-text-weight`:\n```css\nlt-text { --lt-text-weight: 700; }\n```",
-          "name": "Text",
-          "cssProperties": [
+          "description": "Floating label that appears on hover or focus of its trigger element.",
+          "name": "Tooltip",
+          "slots": [
             {
-              "description": "Overrides the default font-weight for the variant.",
-              "name": "--lt-text-weight"
+              "description": "The trigger element the tooltip is anchored to.",
+              "name": ""
             }
           ],
           "members": [
@@ -7928,25 +8035,71 @@
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "textStyles"
+              "default": "tooltipStyles"
             },
             {
               "kind": "field",
-              "name": "variant",
+              "name": "_tooltipId",
+              "privacy": "private",
+              "default": "`lt-tooltip-${++_tooltipIdCounter}`"
+            },
+            {
+              "kind": "field",
+              "name": "_slot",
               "type": {
-                "text": "TextVariant"
+                "text": "HTMLSlotElement"
               },
-              "default": "'body'",
-              "description": "Typographic style to apply."
+              "privacy": "private"
             },
             {
               "kind": "field",
-              "name": "as",
+              "name": "content",
               "type": {
-                "text": "TextTag | ''"
+                "text": "string"
               },
               "default": "''",
-              "description": "HTML tag to render. Defaults to the semantic tag for the chosen variant."
+              "description": "Tooltip label text."
+            },
+            {
+              "kind": "field",
+              "name": "placement",
+              "type": {
+                "text": "TooltipPlacement"
+              },
+              "default": "'top'",
+              "description": "Placement of the tooltip relative to the trigger: top, bottom, left, or right."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Prevent the tooltip from showing."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50)."
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "privacy": "protected"
             },
             {
               "kind": "method",
@@ -7957,17 +8110,17 @@
             "name": "ThemeableElement",
             "module": "/src/base"
           },
-          "tagName": "lt-text",
+          "tagName": "lt-tooltip",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Text",
+          "name": "Tooltip",
           "declaration": {
-            "name": "Text",
-            "module": "src/components/text/text.ts"
+            "name": "Tooltip",
+            "module": "src/components/tooltip/tooltip.ts"
           }
         }
       ]
@@ -8332,159 +8485,6 @@
           "declaration": {
             "name": "Textfield",
             "module": "src/components/textfield/textfield.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Tooltip",
-          "declaration": {
-            "name": "Tooltip",
-            "module": "./tooltip"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TooltipPlacement",
-          "declaration": {
-            "name": "TooltipPlacement",
-            "module": "./tooltip.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/tooltip.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "tooltipStyles",
-          "default": "css` :host { display: inline-block; position: relative; --lt-tooltip-offset: 8px; } .tooltip { background: var(--lt-tooltip-bg, var(--lt-bg-inverse)); border-radius: 4px; color: var(--lt-tooltip-color, var(--lt-text-inverse)); opacity: 0; padding: var(--lt-spacing-1) var(--lt-spacing-2); pointer-events: none; position: absolute; transition: opacity 150ms ease, visibility 150ms ease; visibility: hidden; white-space: nowrap; z-index: 1000; } .arrow { border: 5px solid transparent; height: 0; position: absolute; width: 0; } :host(:hover) .tooltip, :host(:focus-within) .tooltip { opacity: 1; visibility: visible; } :host([disabled]) .tooltip, :host(:not([content])) .tooltip, :host([content='']) .tooltip { display: none; } /* ── Top (default) ──────────────────────────── */ :host(:not([placement])) .tooltip, :host([placement='top']) .tooltip { bottom: calc(100% + var(--lt-tooltip-offset)); left: 50%; transform: translateX(-50%); } :host(:not([placement])) .arrow, :host([placement='top']) .arrow { border-top-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); left: 50%; top: 100%; transform: translateX(-50%); } /* ── Bottom ─────────────────────────────────── */ :host([placement='bottom']) .tooltip { left: 50%; top: calc(100% + var(--lt-tooltip-offset)); transform: translateX(-50%); } :host([placement='bottom']) .arrow { border-bottom-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); bottom: 100%; left: 50%; transform: translateX(-50%); } /* ── Left ───────────────────────────────────── */ :host([placement='left']) .tooltip { right: calc(100% + var(--lt-tooltip-offset)); top: 50%; transform: translateY(-50%); } :host([placement='left']) .arrow { border-left-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); left: 100%; top: 50%; transform: translateY(-50%); } /* ── Right ──────────────────────────────────── */ :host([placement='right']) .tooltip { left: calc(100% + var(--lt-tooltip-offset)); top: 50%; transform: translateY(-50%); } :host([placement='right']) .arrow { border-right-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); right: 100%; top: 50%; transform: translateY(-50%); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "tooltipStyles",
-          "declaration": {
-            "name": "tooltipStyles",
-            "module": "src/components/tooltip/tooltip.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/tooltip.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Floating label that appears on hover or focus of its trigger element.",
-          "name": "Tooltip",
-          "slots": [
-            {
-              "description": "The trigger element the tooltip is anchored to.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "tooltipStyles"
-            },
-            {
-              "kind": "field",
-              "name": "_tooltipId",
-              "privacy": "private",
-              "default": "`lt-tooltip-${++_tooltipIdCounter}`"
-            },
-            {
-              "kind": "field",
-              "name": "_slot",
-              "type": {
-                "text": "HTMLSlotElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Tooltip label text."
-            },
-            {
-              "kind": "field",
-              "name": "placement",
-              "type": {
-                "text": "TooltipPlacement"
-              },
-              "default": "'top'",
-              "description": "Placement of the tooltip relative to the trigger: top, bottom, left, or right."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Prevent the tooltip from showing."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50)."
-            },
-            {
-              "kind": "method",
-              "name": "firstUpdated",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-tooltip",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Tooltip",
-          "declaration": {
-            "name": "Tooltip",
-            "module": "src/components/tooltip/tooltip.ts"
           }
         }
       ]

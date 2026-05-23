@@ -9,7 +9,11 @@
       const saved = urlTheme || localStorage.getItem('lt-theme');
       if (saved) document.documentElement.setAttribute('data-theme', saved);
     </script>
-    <style>html[data-lt]:not([data-lt-ready]){visibility:hidden}</style>
+    <style>
+      html[data-lt]:not([data-lt-ready]) {
+        visibility: hidden;
+      }
+    </style>
     <script type="module">
       import { configure } from '../../assets/latty-configure.js';
       import '../../assets/latty-web.js';
@@ -55,14 +59,63 @@
       ];
 
       table.data = [
-        { customer: 'Apex Solutions', region: 'North America', revenue: '$18,400', growth: 72, status: 'Active', sessions: 1840 },
+        {
+          customer: 'Apex Solutions',
+          region: 'North America',
+          revenue: '$18,400',
+          growth: 72,
+          status: 'Active',
+          sessions: 1840
+        },
         { customer: 'Orion Labs', region: 'Europe', revenue: '$14,200', growth: 55, status: 'Active', sessions: 1230 },
-        { customer: 'Tide Media', region: 'Asia-Pacific', revenue: '$9,800', growth: 38, status: 'Active', sessions: 980 },
-        { customer: 'Crestwood Inc.', region: 'North America', revenue: '$7,600', growth: 29, status: 'Paused', sessions: 760 },
-        { customer: 'Nova Collective', region: 'Europe', revenue: '$6,900', growth: 22, status: 'Active', sessions: 690 },
-        { customer: 'Skyline Partners', region: 'Latin America', revenue: '$5,400', growth: 15, status: 'Paused', sessions: 540 },
-        { customer: 'Meridian Group', region: 'Middle East', revenue: '$3,200', growth: 8, status: 'Churned', sessions: 320 },
-        { customer: 'Vanguard Tech', region: 'Asia-Pacific', revenue: '$2,100', growth: 5, status: 'Churned', sessions: 210 }
+        {
+          customer: 'Tide Media',
+          region: 'Asia-Pacific',
+          revenue: '$9,800',
+          growth: 38,
+          status: 'Active',
+          sessions: 980
+        },
+        {
+          customer: 'Crestwood Inc.',
+          region: 'North America',
+          revenue: '$7,600',
+          growth: 29,
+          status: 'Paused',
+          sessions: 760
+        },
+        {
+          customer: 'Nova Collective',
+          region: 'Europe',
+          revenue: '$6,900',
+          growth: 22,
+          status: 'Active',
+          sessions: 690
+        },
+        {
+          customer: 'Skyline Partners',
+          region: 'Latin America',
+          revenue: '$5,400',
+          growth: 15,
+          status: 'Paused',
+          sessions: 540
+        },
+        {
+          customer: 'Meridian Group',
+          region: 'Middle East',
+          revenue: '$3,200',
+          growth: 8,
+          status: 'Churned',
+          sessions: 320
+        },
+        {
+          customer: 'Vanguard Tech',
+          region: 'Asia-Pacific',
+          revenue: '$2,100',
+          growth: 5,
+          status: 'Churned',
+          sessions: 210
+        }
       ];
 
       const rangeSelect = document.getElementById('time-range');
@@ -239,7 +292,7 @@
       </a>
       <div slot="after" class="header-user">
         <lt-avatar name="Sara Chen" size="sm" color="secondary"></lt-avatar>
-        <lt-text variant="label" tag="span" style="color:white;opacity:0.9;">Sara Chen</lt-text>
+        <lt-text variant="label" tag="span" style="color: white; opacity: 0.9">Sara Chen</lt-text>
       </div>
     </lt-header>
 
@@ -256,11 +309,11 @@
       <main class="main-content" id="main-content">
         <div class="page-header">
           <div>
-            <lt-text variant="h1" tag="h1" style="display:block;">Dashboard</lt-text>
+            <lt-text variant="h1" tag="h1" style="display: block">Dashboard</lt-text>
             <lt-text
               variant="body"
               tag="p"
-              style="display:block;color:var(--lt-text-subtle);margin-top:var(--lt-spacing-1);"
+              style="display: block; color: var(--lt-text-subtle); margin-top: var(--lt-spacing-1)"
             >
               Welcome back, Sara. Here's what's happening this month.
             </lt-text>
@@ -272,10 +325,13 @@
             <lt-text
               variant="overline"
               tag="p"
-              style="display:block;color:var(--lt-text-subtle);margin-bottom:var(--lt-spacing-2);"
+              style="display: block; color: var(--lt-text-subtle); margin-bottom: var(--lt-spacing-2)"
               >Total Revenue</lt-text
             >
-            <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
+            <lt-text
+              variant="display-lg"
+              tag="p"
+              style="display: block; line-height: 1; margin-bottom: var(--lt-spacing-3)"
               >$124,800</lt-text
             >
             <lt-badge variant="success" content="↑ 12.4%" size="sm"></lt-badge>
@@ -285,9 +341,13 @@
             <lt-text
               variant="overline"
               tag="p"
-              style="display:block;color:var(--lt-text-subtle);margin-bottom:var(--lt-spacing-2);">Active Users</lt-text
+              style="display: block; color: var(--lt-text-subtle); margin-bottom: var(--lt-spacing-2)"
+              >Active Users</lt-text
             >
-            <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
+            <lt-text
+              variant="display-lg"
+              tag="p"
+              style="display: block; line-height: 1; margin-bottom: var(--lt-spacing-3)"
               >8,420</lt-text
             >
             <lt-badge variant="success" content="↑ 6.1%" size="sm"></lt-badge>
@@ -297,10 +357,13 @@
             <lt-text
               variant="overline"
               tag="p"
-              style="display:block;color:var(--lt-text-subtle);margin-bottom:var(--lt-spacing-2);"
+              style="display: block; color: var(--lt-text-subtle); margin-bottom: var(--lt-spacing-2)"
               >Conversion Rate</lt-text
             >
-            <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
+            <lt-text
+              variant="display-lg"
+              tag="p"
+              style="display: block; line-height: 1; margin-bottom: var(--lt-spacing-3)"
               >3.6%</lt-text
             >
             <lt-badge variant="error" content="↓ 0.3%" size="sm"></lt-badge>
@@ -310,9 +373,13 @@
             <lt-text
               variant="overline"
               tag="p"
-              style="display:block;color:var(--lt-text-subtle);margin-bottom:var(--lt-spacing-2);">Avg. Session</lt-text
+              style="display: block; color: var(--lt-text-subtle); margin-bottom: var(--lt-spacing-2)"
+              >Avg. Session</lt-text
             >
-            <lt-text variant="display-lg" tag="p" style="display:block;line-height:1;margin-bottom:var(--lt-spacing-3);"
+            <lt-text
+              variant="display-lg"
+              tag="p"
+              style="display: block; line-height: 1; margin-bottom: var(--lt-spacing-3)"
               >4m 12s</lt-text
             >
             <lt-badge variant="success" content="↑ 0.8%" size="sm"></lt-badge>
@@ -322,11 +389,11 @@
         <lt-surface elevation="1" class="table-card">
           <div class="table-header">
             <div>
-              <lt-text variant="h2" tag="h2" style="display:block;">Customer Activity</lt-text>
+              <lt-text variant="h2" tag="h2" style="display: block">Customer Activity</lt-text>
               <lt-text
                 variant="body-sm"
                 tag="p"
-                style="display:block;color:var(--lt-text-subtle);margin-top:var(--lt-spacing-1);"
+                style="display: block; color: var(--lt-text-subtle); margin-top: var(--lt-spacing-1)"
               >
                 Showing data for <span id="range-label">Last 30 days</span>
               </lt-text>

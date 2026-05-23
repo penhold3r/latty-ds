@@ -50,7 +50,11 @@ Add `data-lt` to `<html>` and a single-line preload style before your module scr
 <html lang="en" data-lt>
   <head>
     <!-- Synchronous render-block: hides the page until tokens are ready -->
-    <style>html[data-lt]:not([data-lt-ready]){visibility:hidden}</style>
+    <style>
+      html[data-lt]:not([data-lt-ready]) {
+        visibility: hidden;
+      }
+    </style>
 
     <script type="module">
       import { configure } from '@latty/tokens/configure';
@@ -127,20 +131,20 @@ Because CSS custom properties inherit through shadow DOM, this works with a plai
 
 Common props by component:
 
-| Component | Props |
-|-----------|-------|
-| `lt-button` | `--lt-button-color` `--lt-button-bg` `--lt-button-border-color` |
+| Component        | Props                                                                                                     |
+| ---------------- | --------------------------------------------------------------------------------------------------------- |
+| `lt-button`      | `--lt-button-color` `--lt-button-bg` `--lt-button-border-color`                                           |
 | `lt-icon-button` | `--lt-icon-button-color` `--lt-icon-button-bg` `--lt-icon-button-hover-bg` `--lt-icon-button-hover-color` |
-| `lt-alert` | `--lt-alert-color` `--lt-alert-bg` `--lt-alert-border-color` |
-| `lt-badge` | `--lt-badge-color` `--lt-badge-bg` `--lt-badge-border-color` |
-| `lt-chip` | `--lt-chip-color` `--lt-chip-bg` `--lt-chip-border-color` |
-| `lt-avatar` | `--lt-avatar-color` `--lt-avatar-bg` |
-| `lt-progress` | `--lt-progress-color` `--lt-progress-track-color` `--lt-progress-height` |
-| `lt-slider` | `--lt-slider-fill` `--lt-slider-track-height` `--lt-slider-thumb-size` |
-| `lt-spinner` | `--lt-spinner-color` `--lt-spinner-size` |
-| `lt-tooltip` | `--lt-tooltip-bg` `--lt-tooltip-color` `--lt-tooltip-offset` |
-| `lt-surface` | `--lt-surface-bg` |
-| `lt-sidepanel` | `--lt-sidepanel-overlay-opacity` |
+| `lt-alert`       | `--lt-alert-color` `--lt-alert-bg` `--lt-alert-border-color`                                              |
+| `lt-badge`       | `--lt-badge-color` `--lt-badge-bg` `--lt-badge-border-color`                                              |
+| `lt-chip`        | `--lt-chip-color` `--lt-chip-bg` `--lt-chip-border-color`                                                 |
+| `lt-avatar`      | `--lt-avatar-color` `--lt-avatar-bg`                                                                      |
+| `lt-progress`    | `--lt-progress-color` `--lt-progress-track-color` `--lt-progress-height`                                  |
+| `lt-slider`      | `--lt-slider-fill` `--lt-slider-track-height` `--lt-slider-thumb-size`                                    |
+| `lt-spinner`     | `--lt-spinner-color` `--lt-spinner-size`                                                                  |
+| `lt-tooltip`     | `--lt-tooltip-bg` `--lt-tooltip-color` `--lt-tooltip-offset`                                              |
+| `lt-surface`     | `--lt-surface-bg`                                                                                         |
+| `lt-sidepanel`   | `--lt-sidepanel-overlay-opacity`                                                                          |
 
 The full list for each component is in its API table.
 
