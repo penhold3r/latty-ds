@@ -69,19 +69,19 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 <style>
   .hero {
-    padding: var(--lt-spacing-10) 0 var(--lt-spacing-12);
+    padding: var(--lt-spacing-6) 0 var(--lt-spacing-8);
     border-bottom: 1px solid var(--lt-color-neutral-200);
-    margin-bottom: var(--lt-spacing-10);
+    margin-bottom: var(--lt-spacing-8);
   }
 
   .hero-title {
     color: var(--lt-text-secondary);
-    margin: var(--lt-spacing-4) 0;
+    margin: var(--lt-spacing-3) 0;
   }
 
   .hero-subtitle {
     color: var(--lt-text-subtle);
-    margin-bottom: var(--lt-spacing-6);
+    margin-bottom: var(--lt-spacing-5);
   }
 
   .hero-actions {
@@ -92,14 +92,14 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   .features {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--lt-spacing-6);
-    margin-bottom: var(--lt-spacing-12);
+    grid-template-columns: 1fr;
+    gap: var(--lt-spacing-4);
+    margin-bottom: var(--lt-spacing-10);
     align-items: stretch;
   }
 
   .feature::part(surface) {
-    padding: var(--lt-spacing-5);
+    padding: var(--lt-spacing-4);
     height: 100%;
   }
 
@@ -118,7 +118,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   }
 
   .quick-start {
-    margin-bottom: var(--lt-spacing-12);
+    margin-bottom: var(--lt-spacing-10);
   }
 
   .quick-start-heading {
@@ -128,5 +128,39 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   lt-link {
     display: inline-block;
     margin-top: var(--lt-spacing-4);
+  }
+
+  @media (min-width: 560px) {
+    .features {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--lt-spacing-6);
+    }
+  }
+
+  @media (min-width: 769px) {
+    .hero {
+      padding: var(--lt-spacing-10) 0 var(--lt-spacing-12);
+      margin-bottom: var(--lt-spacing-10);
+    }
+
+    .hero-title {
+      margin: var(--lt-spacing-4) 0;
+    }
+
+    .hero-subtitle {
+      margin-bottom: var(--lt-spacing-6);
+    }
+
+    .features {
+      margin-bottom: var(--lt-spacing-12);
+    }
+
+    .feature::part(surface) {
+      padding: var(--lt-spacing-5);
+    }
+
+    .quick-start {
+      margin-bottom: var(--lt-spacing-12);
+    }
   }
 </style>
