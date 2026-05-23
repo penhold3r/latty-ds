@@ -1,9 +1,13 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import '../../styles/global.css';
 import Sidebar from '../../components/Sidebar/index.astro';
 import lernaJson from '../../../../lerna.json';
-import lattyLogo from '../../assets/latty-logo.png';
+import lattyLogo from '../../assets/latty-logo-white.png';
+import lattyFaviconIco from '../../assets/latty-favicon.ico?url';
+import lattyFaviconSvg from '../../assets/latty-favicon.svg';
+import lattyFaviconPng from '../../assets/latty-favicon.png';
+import lattyOg from '../../assets/latty-og.png';
 
 interface Props {
   title: string;
@@ -15,6 +19,11 @@ const { title, description = 'A framework-agnostic design system built on design
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const version = `v${lernaJson.version}`;
 const year = new Date().getFullYear();
+
+const ogImage = await getImage({ src: lattyOg, format: 'png' });
+const siteOrigin = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const ogImageUrl = `${siteOrigin}${ogImage.src}`;
+const canonicalUrl = `${siteOrigin}${Astro.url.pathname}`;
 ---
 
 <!doctype html>
@@ -23,9 +32,27 @@ const year = new Date().getFullYear();
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+    <link rel="icon" type="image/x-icon" href={lattyFaviconIco} />
+    <link rel="icon" type="image/svg+xml" href={lattyFaviconSvg.src} />
+    <link rel="icon" type="image/png" href={lattyFaviconPng.src} />
+    <link rel="apple-touch-icon" href={lattyFaviconPng.src} />
+    <link rel="canonical" href={canonicalUrl} />
     <meta name="generator" content={Astro.generator} />
     <title>{title} | Latty</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Latty Design System" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={`${title} | Latty`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} | Latty`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
     <!-- Inline: read saved theme before first paint to avoid flash -->
     <script is:inline>
       const urlTheme = new URLSearchParams(location.search).get('theme');

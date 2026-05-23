@@ -226,6 +226,150 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/badge/badge.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "badgeStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-badge-bg); border-radius: 999px; border: 1px solid var(--lt-badge-border-color, transparent); color: var(--lt-badge-color); box-sizing: border-box; display: inline-flex; font-weight: 600; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: var(--lt-color-white); } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "badgeStyles",
+          "declaration": {
+            "name": "badgeStyles",
+            "module": "src/components/badge/badge.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/badge.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A compact status label for categories, counts, and states.",
+          "name": "Badge",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "badgeStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "BadgeAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual style: tinted fill, outline only, or full-color solid."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "BadgeVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "BadgeSize"
+              },
+              "default": "'md'",
+              "description": "Size."
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text. When empty the badge renders as a circle indicator."
+            },
+            {
+              "kind": "field",
+              "name": "dot",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show a leading status dot (only visible when content is set)."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-badge",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "src/components/badge/badge.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "./badge"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeVariant",
+          "declaration": {
+            "name": "BadgeVariant",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeSize",
+          "declaration": {
+            "name": "BadgeSize",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeAppearance",
+          "declaration": {
+            "name": "BadgeAppearance",
+            "module": "./badge.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/alert/alert.styles.ts",
       "declarations": [
         {
@@ -417,84 +561,184 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/badge/badge.styles.ts",
+      "path": "src/components/button/button.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "badgeStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-badge-bg); border-radius: 999px; border: 1px solid var(--lt-badge-border-color, transparent); color: var(--lt-badge-color); box-sizing: border-box; display: inline-flex; font-weight: 600; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: var(--lt-color-white); } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
+          "name": "buttonStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; /* Internal state props — set per variant/appearance below */ --_color: var(--lt-text-on-primary); --_bg: var(--lt-interactive-primary-bg); --_border-color: transparent; --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([full-width]) { display: block; width: 100%; } :host([full-width]) [part='base'] { width: 100%; } [part='base'] { align-items: center; background: var(--lt-button-bg, var(--_bg)); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-button-border-color, var(--_border-color)); box-sizing: border-box; color: var(--lt-button-color, var(--_color)); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } [part='base']:active { transform: translateY(1px); } [part='base']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } [part='base'][disabled], [part='base'][aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; pointer-events: none; transform: none; } /* anchor reset — browsers apply link color + underline by default */ a[part='base'] { text-decoration: none; } /* sizes */ :host([size='sm']) [part='base'] { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) [part='base'] { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) [part='base'] { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) { --_bg: var(--lt-interactive-primary-bg); --_color: var(--lt-text-on-primary); --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) { --_bg: var(--lt-interactive-secondary-bg); --_color: var(--lt-text-on-secondary); --_hover-bg: var(--lt-interactive-secondary-bg-hover); --_active-bg: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) { --_bg: var(--lt-color-neutral-500); --_color: var(--lt-color-neutral-50); --_hover-bg: var(--lt-color-neutral-700); --_active-bg: var(--lt-color-neutral-800); } :host([variant='success']) { --_bg: var(--lt-interactive-success-bg); --_color: var(--lt-text-on-success); --_hover-bg: var(--lt-interactive-success-bg-hover); --_active-bg: var(--lt-interactive-success-bg-active); } :host([variant='warning']) { --_bg: var(--lt-interactive-warning-bg); --_color: var(--lt-text-on-warning); --_hover-bg: var(--lt-interactive-warning-bg-hover); --_active-bg: var(--lt-interactive-warning-bg-active); } :host([variant='error']) { --_bg: var(--lt-interactive-error-bg); --_color: var(--lt-text-on-error); --_hover-bg: var(--lt-interactive-error-bg-hover); --_active-bg: var(--lt-interactive-error-bg-active); } :host([variant='info']) { --_bg: var(--lt-interactive-info-bg); --_color: var(--lt-text-on-info); --_hover-bg: var(--lt-interactive-info-bg-hover); --_active-bg: var(--lt-interactive-info-bg-active); } [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_hover-bg)); } [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_active-bg)); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) { --_bg: transparent; --_color: var(--lt-text-primary); --_border-color: var(--lt-border-primary-strong); --_hover-bg: var(--lt-bg-primary-subtle); --_active-bg: var(--lt-bg-primary-subtle); } :host([appearance='outlined'][variant='secondary']) { --_bg: transparent; --_color: var(--lt-text-secondary); --_border-color: var(--lt-border-secondary-strong); --_hover-bg: var(--lt-bg-secondary-subtle); --_active-bg: var(--lt-bg-secondary-subtle); } :host([appearance='outlined'][variant='neutral']) { --_bg: transparent; --_color: var(--lt-text-neutral); --_border-color: var(--lt-border-strong); --_hover-bg: var(--lt-bg-subtle); --_active-bg: var(--lt-bg-surface); } :host([appearance='outlined'][variant='success']) { --_bg: transparent; --_color: var(--lt-text-success); --_border-color: var(--lt-border-success-strong); --_hover-bg: var(--lt-bg-success-subtle); --_active-bg: var(--lt-bg-success-subtle); } :host([appearance='outlined'][variant='warning']) { --_bg: transparent; --_color: var(--lt-text-warning); --_border-color: var(--lt-border-warning-strong); --_hover-bg: var(--lt-bg-warning-subtle); --_active-bg: var(--lt-bg-warning-subtle); } :host([appearance='outlined'][variant='error']) { --_bg: transparent; --_color: var(--lt-text-error); --_border-color: var(--lt-border-error-strong); --_hover-bg: var(--lt-bg-error-subtle); --_active-bg: var(--lt-bg-error-subtle); } :host([appearance='outlined'][variant='info']) { --_bg: transparent; --_color: var(--lt-text-info); --_border-color: var(--lt-border-info-strong); --_hover-bg: var(--lt-bg-info-subtle); --_active-bg: var(--lt-bg-info-subtle); } :host([appearance='outlined']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { opacity: 0.8; } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } :host([uppercase]) [part='base'] { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "badgeStyles",
+          "name": "buttonStyles",
           "declaration": {
-            "name": "badgeStyles",
-            "module": "src/components/badge/badge.styles.ts"
+            "name": "buttonStyles",
+            "module": "src/components/button/button.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/badge/badge.ts",
+      "path": "src/components/button/button.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "A compact status label for categories, counts, and states.",
-          "name": "Badge",
+          "description": "Button component with multiple variants, sizes, appearances, and loading state support.",
+          "name": "Button",
+          "slots": [
+            {
+              "description": "Button label/content",
+              "name": ""
+            }
+          ],
           "members": [
             {
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "badgeStyles"
+              "default": "buttonStyles"
             },
             {
               "kind": "field",
-              "name": "appearance",
+              "name": "formAssociated",
               "type": {
-                "text": "BadgeAppearance"
+                "text": "boolean"
               },
-              "default": "'filled'",
-              "description": "Visual style: tinted fill, outline only, or full-color solid."
+              "static": true,
+              "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "_internals",
+              "type": {
+                "text": "ElementInternals"
+              },
+              "privacy": "private"
             },
             {
               "kind": "field",
               "name": "variant",
               "type": {
-                "text": "BadgeVariant"
+                "text": "ButtonVariant"
               },
               "default": "'primary'",
-              "description": "Color scheme."
+              "description": "Visual variant that determines the button's color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "ButtonAppearance"
+              },
+              "default": "'filled'",
+              "description": "Appearance style (filled or outlined)."
             },
             {
               "kind": "field",
               "name": "size",
               "type": {
-                "text": "BadgeSize"
+                "text": "ButtonSize"
               },
               "default": "'md'",
-              "description": "Size."
+              "description": "Size of the button (affects height, font size, and padding)."
             },
             {
               "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text. When empty the badge renders as a circle indicator."
-            },
-            {
-              "kind": "field",
-              "name": "dot",
+              "name": "disabled",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Show a leading status dot (only visible when content is set)."
+              "description": "Whether the button is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button is in loading state.\nShows a spinner and disables interaction."
+            },
+            {
+              "kind": "field",
+              "name": "iconStart",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name to display at the start of the button."
+            },
+            {
+              "kind": "field",
+              "name": "iconEnd",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon name to display at the end of the button."
+            },
+            {
+              "kind": "field",
+              "name": "fullWidth",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the button stretches to fill its container's width."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the button label in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "When set, renders an `<a>` tag instead of `<button>`.\nAll visual styles and states are preserved."
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Forwarded to the anchor's `target` attribute when `href` is set."
+            },
+            {
+              "kind": "field",
+              "name": "rel",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Forwarded to the anchor's `rel` attribute when `href` is set.\nDefaults to `noopener noreferrer` when `target=\"_blank\"` and `rel` is not specified."
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "type": {
+                "text": "ButtonType"
+              },
+              "default": "'button'",
+              "description": "Form behaviour when the button is inside a `<form>`.\n`submit` triggers form validation and submission; `reset` restores initial values."
+            },
+            {
+              "kind": "method",
+              "name": "_handleClick",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -505,56 +749,64 @@
             "name": "ThemeableElement",
             "module": "/src/base"
           },
-          "tagName": "lt-badge",
+          "tagName": "lt-button",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Badge",
+          "name": "Button",
           "declaration": {
-            "name": "Badge",
-            "module": "src/components/badge/badge.ts"
+            "name": "Button",
+            "module": "src/components/button/button.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/badge/index.ts",
+      "path": "src/components/button/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Badge",
+          "name": "Button",
           "declaration": {
-            "name": "Badge",
-            "module": "./badge"
+            "name": "Button",
+            "module": "./button"
           }
         },
         {
           "kind": "js",
-          "name": "BadgeVariant",
+          "name": "ButtonAppearance",
           "declaration": {
-            "name": "BadgeVariant",
-            "module": "./badge.types"
+            "name": "ButtonAppearance",
+            "module": "./button.types"
           }
         },
         {
           "kind": "js",
-          "name": "BadgeSize",
+          "name": "ButtonSize",
           "declaration": {
-            "name": "BadgeSize",
-            "module": "./badge.types"
+            "name": "ButtonSize",
+            "module": "./button.types"
           }
         },
         {
           "kind": "js",
-          "name": "BadgeAppearance",
+          "name": "ButtonType",
           "declaration": {
-            "name": "BadgeAppearance",
-            "module": "./badge.types"
+            "name": "ButtonType",
+            "module": "./button.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ButtonVariant",
+          "declaration": {
+            "name": "ButtonVariant",
+            "module": "./button.types"
           }
         }
       ]
@@ -914,258 +1166,6 @@
           "declaration": {
             "name": "AvatarColor",
             "module": "./avatar.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/button.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "buttonStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; /* Internal state props — set per variant/appearance below */ --_color: var(--lt-text-on-primary); --_bg: var(--lt-interactive-primary-bg); --_border-color: transparent; --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([full-width]) { display: block; width: 100%; } :host([full-width]) [part='base'] { width: 100%; } [part='base'] { align-items: center; background: var(--lt-button-bg, var(--_bg)); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-button-border-color, var(--_border-color)); box-sizing: border-box; color: var(--lt-button-color, var(--_color)); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } [part='base']:active { transform: translateY(1px); } [part='base']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } [part='base'][disabled], [part='base'][aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; pointer-events: none; transform: none; } /* anchor reset — browsers apply link color + underline by default */ a[part='base'] { text-decoration: none; } /* sizes */ :host([size='sm']) [part='base'] { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) [part='base'] { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) [part='base'] { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) { --_bg: var(--lt-interactive-primary-bg); --_color: var(--lt-text-on-primary); --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) { --_bg: var(--lt-interactive-secondary-bg); --_color: var(--lt-text-on-secondary); --_hover-bg: var(--lt-interactive-secondary-bg-hover); --_active-bg: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) { --_bg: var(--lt-color-neutral-500); --_color: var(--lt-color-neutral-50); --_hover-bg: var(--lt-color-neutral-700); --_active-bg: var(--lt-color-neutral-800); } :host([variant='success']) { --_bg: var(--lt-interactive-success-bg); --_color: var(--lt-text-on-success); --_hover-bg: var(--lt-interactive-success-bg-hover); --_active-bg: var(--lt-interactive-success-bg-active); } :host([variant='warning']) { --_bg: var(--lt-interactive-warning-bg); --_color: var(--lt-text-on-warning); --_hover-bg: var(--lt-interactive-warning-bg-hover); --_active-bg: var(--lt-interactive-warning-bg-active); } :host([variant='error']) { --_bg: var(--lt-interactive-error-bg); --_color: var(--lt-text-on-error); --_hover-bg: var(--lt-interactive-error-bg-hover); --_active-bg: var(--lt-interactive-error-bg-active); } :host([variant='info']) { --_bg: var(--lt-interactive-info-bg); --_color: var(--lt-text-on-info); --_hover-bg: var(--lt-interactive-info-bg-hover); --_active-bg: var(--lt-interactive-info-bg-active); } [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_hover-bg)); } [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_active-bg)); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) { --_bg: transparent; --_color: var(--lt-text-primary); --_border-color: var(--lt-border-primary-strong); --_hover-bg: var(--lt-bg-primary-subtle); --_active-bg: var(--lt-bg-primary-subtle); } :host([appearance='outlined'][variant='secondary']) { --_bg: transparent; --_color: var(--lt-text-secondary); --_border-color: var(--lt-border-secondary-strong); --_hover-bg: var(--lt-bg-secondary-subtle); --_active-bg: var(--lt-bg-secondary-subtle); } :host([appearance='outlined'][variant='neutral']) { --_bg: transparent; --_color: var(--lt-text-neutral); --_border-color: var(--lt-border-strong); --_hover-bg: var(--lt-bg-subtle); --_active-bg: var(--lt-bg-surface); } :host([appearance='outlined'][variant='success']) { --_bg: transparent; --_color: var(--lt-text-success); --_border-color: var(--lt-border-success-strong); --_hover-bg: var(--lt-bg-success-subtle); --_active-bg: var(--lt-bg-success-subtle); } :host([appearance='outlined'][variant='warning']) { --_bg: transparent; --_color: var(--lt-text-warning); --_border-color: var(--lt-border-warning-strong); --_hover-bg: var(--lt-bg-warning-subtle); --_active-bg: var(--lt-bg-warning-subtle); } :host([appearance='outlined'][variant='error']) { --_bg: transparent; --_color: var(--lt-text-error); --_border-color: var(--lt-border-error-strong); --_hover-bg: var(--lt-bg-error-subtle); --_active-bg: var(--lt-bg-error-subtle); } :host([appearance='outlined'][variant='info']) { --_bg: transparent; --_color: var(--lt-text-info); --_border-color: var(--lt-border-info-strong); --_hover-bg: var(--lt-bg-info-subtle); --_active-bg: var(--lt-bg-info-subtle); } :host([appearance='outlined']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { opacity: 0.8; } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } :host([uppercase]) [part='base'] { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "buttonStyles",
-          "declaration": {
-            "name": "buttonStyles",
-            "module": "src/components/button/button.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/button.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Button component with multiple variants, sizes, appearances, and loading state support.",
-          "name": "Button",
-          "slots": [
-            {
-              "description": "Button label/content",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "buttonStyles"
-            },
-            {
-              "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ButtonVariant"
-              },
-              "default": "'primary'",
-              "description": "Visual variant that determines the button's color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "ButtonAppearance"
-              },
-              "default": "'filled'",
-              "description": "Appearance style (filled or outlined)."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ButtonSize"
-              },
-              "default": "'md'",
-              "description": "Size of the button (affects height, font size, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "loading",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button is in loading state.\nShows a spinner and disables interaction."
-            },
-            {
-              "kind": "field",
-              "name": "iconStart",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon name to display at the start of the button."
-            },
-            {
-              "kind": "field",
-              "name": "iconEnd",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon name to display at the end of the button."
-            },
-            {
-              "kind": "field",
-              "name": "fullWidth",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the button stretches to fill its container's width."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the button label in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "When set, renders an `<a>` tag instead of `<button>`.\nAll visual styles and states are preserved."
-            },
-            {
-              "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the anchor's `target` attribute when `href` is set."
-            },
-            {
-              "kind": "field",
-              "name": "rel",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the anchor's `rel` attribute when `href` is set.\nDefaults to `noopener noreferrer` when `target=\"_blank\"` and `rel` is not specified."
-            },
-            {
-              "kind": "field",
-              "name": "type",
-              "type": {
-                "text": "ButtonType"
-              },
-              "default": "'button'",
-              "description": "Form behaviour when the button is inside a `<form>`.\n`submit` triggers form validation and submission; `reset` restores initial values."
-            },
-            {
-              "kind": "method",
-              "name": "_handleClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-button",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Button",
-          "declaration": {
-            "name": "Button",
-            "module": "src/components/button/button.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/button/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Button",
-          "declaration": {
-            "name": "Button",
-            "module": "./button"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonAppearance",
-          "declaration": {
-            "name": "ButtonAppearance",
-            "module": "./button.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonSize",
-          "declaration": {
-            "name": "ButtonSize",
-            "module": "./button.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonType",
-          "declaration": {
-            "name": "ButtonType",
-            "module": "./button.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ButtonVariant",
-          "declaration": {
-            "name": "ButtonVariant",
-            "module": "./button.types"
           }
         }
       ]
@@ -7295,6 +7295,204 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/tab-group/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TabGroup",
+          "declaration": {
+            "name": "TabGroup",
+            "module": "./tab-group"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TabGroupAppearance",
+          "declaration": {
+            "name": "TabGroupAppearance",
+            "module": "./tab-group.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TabGroupSize",
+          "declaration": {
+            "name": "TabGroupSize",
+            "module": "./tab-group.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tab-group/tab-group.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "tabGroupStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .tab-group { display: flex; flex-direction: column; } .tabs-container { border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-1); overflow-x: auto; scrollbar-width: thin; } .tabs-container::-webkit-scrollbar { height: 4px; } .tabs-container::-webkit-scrollbar-track { background: var(--lt-bg-surface); } .tabs-container::-webkit-scrollbar-thumb { background: var(--lt-color-neutral-300); border-radius: 2px; } .panels-container { padding: var(--lt-spacing-4) 0; } ::slotted([slot='panel']) { display: none; } ::slotted([slot='panel'][active]) { display: block; } /* Pills variant */ :host([appearance='pills']) .tabs-container { background: var(--lt-bg-surface); border: none; border-radius: var(--lt-border-radius); gap: var(--lt-spacing-2); padding: var(--lt-spacing-1); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "tabGroupStyles",
+          "declaration": {
+            "name": "tabGroupStyles",
+            "module": "src/components/tab-group/tab-group.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tab-group/tab-group.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A container component that manages a group of tabs.",
+          "name": "TabGroup",
+          "slots": [
+            {
+              "description": "Tab elements",
+              "name": ""
+            },
+            {
+              "description": "Tab panel content (use multiple panels with matching values)",
+              "name": "panel"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "tabGroupStyles"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Currently selected tab value."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "TabGroupAppearance"
+              },
+              "default": "'default'",
+              "description": "Visual appearance of the tab group."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "TabGroupSize"
+              },
+              "default": "'md'",
+              "description": "Size of the tabs."
+            },
+            {
+              "kind": "field",
+              "name": "tabs",
+              "type": {
+                "text": "Tab[]"
+              },
+              "privacy": "private",
+              "description": "Reference to all slotted tab elements."
+            },
+            {
+              "kind": "field",
+              "name": "panels",
+              "type": {
+                "text": "HTMLElement[]"
+              },
+              "privacy": "private",
+              "description": "Reference to all slotted panel elements."
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "description": "Lifecycle: Called after the element's DOM has been updated."
+            },
+            {
+              "kind": "method",
+              "name": "updateTabs",
+              "privacy": "private",
+              "description": "Updates all tabs with the correct active state and size."
+            },
+            {
+              "kind": "method",
+              "name": "updatePanels",
+              "privacy": "private",
+              "description": "Updates panel visibility based on selected value."
+            },
+            {
+              "kind": "field",
+              "name": "handleTabClick",
+              "privacy": "private",
+              "description": "Handles click events from tabs."
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange",
+              "privacy": "private",
+              "description": "Handles slot changes."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ],
+              "description": "Watch for value changes."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Dispatched when a tab is selected",
+              "name": "change"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-tab-group",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "TabGroup",
+          "declaration": {
+            "name": "TabGroup",
+            "module": "src/components/tab-group/tab-group.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/table/index.ts",
       "declarations": [],
       "exports": [
@@ -7671,204 +7869,6 @@
           "declaration": {
             "name": "Table",
             "module": "src/components/table/table.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tab-group/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TabGroup",
-          "declaration": {
-            "name": "TabGroup",
-            "module": "./tab-group"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TabGroupAppearance",
-          "declaration": {
-            "name": "TabGroupAppearance",
-            "module": "./tab-group.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TabGroupSize",
-          "declaration": {
-            "name": "TabGroupSize",
-            "module": "./tab-group.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tab-group/tab-group.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "tabGroupStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .tab-group { display: flex; flex-direction: column; } .tabs-container { border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-1); overflow-x: auto; scrollbar-width: thin; } .tabs-container::-webkit-scrollbar { height: 4px; } .tabs-container::-webkit-scrollbar-track { background: var(--lt-bg-surface); } .tabs-container::-webkit-scrollbar-thumb { background: var(--lt-color-neutral-300); border-radius: 2px; } .panels-container { padding: var(--lt-spacing-4) 0; } ::slotted([slot='panel']) { display: none; } ::slotted([slot='panel'][active]) { display: block; } /* Pills variant */ :host([appearance='pills']) .tabs-container { background: var(--lt-bg-surface); border: none; border-radius: var(--lt-border-radius); gap: var(--lt-spacing-2); padding: var(--lt-spacing-1); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "tabGroupStyles",
-          "declaration": {
-            "name": "tabGroupStyles",
-            "module": "src/components/tab-group/tab-group.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tab-group/tab-group.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A container component that manages a group of tabs.",
-          "name": "TabGroup",
-          "slots": [
-            {
-              "description": "Tab elements",
-              "name": ""
-            },
-            {
-              "description": "Tab panel content (use multiple panels with matching values)",
-              "name": "panel"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "tabGroupStyles"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Currently selected tab value."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "TabGroupAppearance"
-              },
-              "default": "'default'",
-              "description": "Visual appearance of the tab group."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "TabGroupSize"
-              },
-              "default": "'md'",
-              "description": "Size of the tabs."
-            },
-            {
-              "kind": "field",
-              "name": "tabs",
-              "type": {
-                "text": "Tab[]"
-              },
-              "privacy": "private",
-              "description": "Reference to all slotted tab elements."
-            },
-            {
-              "kind": "field",
-              "name": "panels",
-              "type": {
-                "text": "HTMLElement[]"
-              },
-              "privacy": "private",
-              "description": "Reference to all slotted panel elements."
-            },
-            {
-              "kind": "method",
-              "name": "firstUpdated",
-              "description": "Lifecycle: Called after the element's DOM has been updated."
-            },
-            {
-              "kind": "method",
-              "name": "updateTabs",
-              "privacy": "private",
-              "description": "Updates all tabs with the correct active state and size."
-            },
-            {
-              "kind": "method",
-              "name": "updatePanels",
-              "privacy": "private",
-              "description": "Updates panel visibility based on selected value."
-            },
-            {
-              "kind": "field",
-              "name": "handleTabClick",
-              "privacy": "private",
-              "description": "Handles click events from tabs."
-            },
-            {
-              "kind": "method",
-              "name": "handleSlotChange",
-              "privacy": "private",
-              "description": "Handles slot changes."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "privacy": "protected",
-              "parameters": [
-                {
-                  "name": "changedProperties",
-                  "type": {
-                    "text": "Map<string, unknown>"
-                  }
-                }
-              ],
-              "description": "Watch for value changes."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Dispatched when a tab is selected",
-              "name": "change"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-tab-group",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "TabGroup",
-          "declaration": {
-            "name": "TabGroup",
-            "module": "src/components/tab-group/tab-group.ts"
           }
         }
       ]
