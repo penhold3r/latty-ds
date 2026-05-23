@@ -27,7 +27,9 @@
   ],
   "sideEffects": [
     "./dist/index.js",
-    "./dist/entries/*.js"
+    "./dist/entries/*.js",
+    "./src/index.ts",
+    "./src/**/*.ts"
   ],
   "type": "module",
   "main": "./dist/index.js",
