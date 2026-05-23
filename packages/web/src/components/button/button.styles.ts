@@ -64,7 +64,6 @@ export const buttonStyles = css`
   /* anchor reset — browsers apply link color + underline by default */
   a[part='base'] {
     text-decoration: none;
-    color: inherit;
   }
 
   /* sizes */
