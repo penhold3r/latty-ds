@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Chip as ChipEl } from '@latty/web';
 
-export type ChipProps = {
+export type ChipProps = HTMLAttributes<ChipEl> & {
   appearance?: ChipEl['appearance'];
   variant?: ChipEl['variant'];
   size?: ChipEl['size'];
@@ -9,7 +9,6 @@ export type ChipProps = {
   deletable?: boolean;
   background?: string;
   onLtDelete?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Chip = forwardRef<ChipEl, ChipProps>(function Chip({ onLtDelete, children, ...props }, forwardedRef) {

@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Select as SelectEl } from '@latty/web';
 
-export type SelectProps = {
+export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
   variant?: SelectEl['variant'];
   size?: SelectEl['size'];
   value?: string;
@@ -12,7 +12,6 @@ export type SelectProps = {
   required?: boolean;
   options?: SelectEl['options'];
   onChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Select = forwardRef<SelectEl, SelectProps>(function Select(

@@ -1,10 +1,9 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Text as TextEl } from '@latty/web';
 
-export type TextProps = {
+export type TextProps = HTMLAttributes<TextEl> & {
   variant?: TextEl['variant'];
   as?: TextEl['as'];
-  children?: ReactNode;
 };
 
 export const Text = forwardRef<TextEl, TextProps>(function Text({ children, ...props }, forwardedRef) {

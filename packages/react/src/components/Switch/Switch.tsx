@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Switch as SwitchEl } from '@latty/web';
 
-export type SwitchProps = {
+export type SwitchProps = Omit<HTMLAttributes<SwitchEl>, 'onChange'> & {
   variant?: SwitchEl['variant'];
   size?: SwitchEl['size'];
   checked?: boolean;
@@ -12,7 +12,6 @@ export type SwitchProps = {
   name?: string;
   value?: string;
   onChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Switch = forwardRef<SwitchEl, SwitchProps>(function Switch(

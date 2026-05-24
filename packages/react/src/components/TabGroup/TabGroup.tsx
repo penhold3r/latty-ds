@@ -1,12 +1,11 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { TabGroup as TabGroupEl } from '@latty/web';
 
-export type TabGroupProps = {
+export type TabGroupProps = Omit<HTMLAttributes<TabGroupEl>, 'onChange'> & {
   value?: string;
   appearance?: TabGroupEl['appearance'];
   size?: TabGroupEl['size'];
   onChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const TabGroup = forwardRef<TabGroupEl, TabGroupProps>(function TabGroup(

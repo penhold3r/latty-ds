@@ -1,11 +1,10 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Surface as SurfaceEl } from '@latty/web';
 
-export type SurfaceProps = {
+export type SurfaceProps = HTMLAttributes<SurfaceEl> & {
   elevation?: SurfaceEl['elevation'];
   appearance?: SurfaceEl['appearance'];
   background?: string;
-  children?: ReactNode;
 };
 
 export const Surface = forwardRef<SurfaceEl, SurfaceProps>(function Surface({ children, ...props }, forwardedRef) {

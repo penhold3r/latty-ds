@@ -1,10 +1,9 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Spinner as SpinnerEl } from '@latty/web';
 
-export type SpinnerProps = {
+export type SpinnerProps = HTMLAttributes<SpinnerEl> & {
   size?: SpinnerEl['size'];
   variant?: SpinnerEl['variant'];
-  children?: ReactNode;
 };
 
 export const Spinner = forwardRef<SpinnerEl, SpinnerProps>(function Spinner({ children, ...props }, forwardedRef) {

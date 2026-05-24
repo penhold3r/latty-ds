@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Radio as RadioEl } from '@latty/web';
 
-export type RadioProps = {
+export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
   variant?: RadioEl['variant'];
   size?: RadioEl['size'];
   checked?: boolean;
@@ -12,7 +12,6 @@ export type RadioProps = {
   name?: string;
   value?: string;
   onChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Radio = forwardRef<RadioEl, RadioProps>(function Radio({ onChange, children, ...props }, forwardedRef) {

@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Accordion as AccordionEl, LattyIconName } from '@latty/web';
 
-export type AccordionProps = {
+export type AccordionProps = Omit<HTMLAttributes<AccordionEl>, 'onToggle'> & {
   label?: string;
   iconStart?: LattyIconName;
   appearance?: AccordionEl['appearance'];
@@ -9,7 +9,6 @@ export type AccordionProps = {
   disabled?: boolean;
   uppercase?: boolean;
   onToggle?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Accordion = forwardRef<AccordionEl, AccordionProps>(function Accordion(

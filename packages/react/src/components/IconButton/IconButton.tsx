@@ -1,7 +1,7 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { IconButton as IconButtonEl, LattyIconName } from '@latty/web';
 
-export type IconButtonProps = {
+export type IconButtonProps = HTMLAttributes<IconButtonEl> & {
   icon?: LattyIconName;
   label?: string;
   variant?: IconButtonEl['variant'];
@@ -12,7 +12,6 @@ export type IconButtonProps = {
   target?: string;
   rel?: string;
   round?: boolean;
-  children?: ReactNode;
 };
 
 export const IconButton = forwardRef<IconButtonEl, IconButtonProps>(function IconButton(

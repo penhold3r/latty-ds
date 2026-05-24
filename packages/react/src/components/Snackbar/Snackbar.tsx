@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Snackbar as SnackbarEl, LattyIconName } from '@latty/web';
 
-export type SnackbarProps = {
+export type SnackbarProps = HTMLAttributes<SnackbarEl> & {
   variant?: SnackbarEl['variant'];
   duration?: number;
   open?: boolean;
@@ -11,7 +11,6 @@ export type SnackbarProps = {
   onLtShow?: (event: CustomEvent) => void;
   onLtHide?: (event: CustomEvent) => void;
   onLtAction?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(

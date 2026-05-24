@@ -1,10 +1,9 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Link as LinkEl } from '@latty/web';
 
-export type LinkProps = {
+export type LinkProps = HTMLAttributes<LinkEl> & {
   href?: string;
   external?: boolean;
-  children?: ReactNode;
 };
 
 export const Link = forwardRef<LinkEl, LinkProps>(function Link({ children, ...props }, forwardedRef) {

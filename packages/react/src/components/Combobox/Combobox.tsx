@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Combobox as ComboboxEl } from '@latty/web';
 
-export type ComboboxProps = {
+export type ComboboxProps = HTMLAttributes<ComboboxEl> & {
   options?: ComboboxEl['options'];
   value?: string;
   label?: string;
@@ -13,7 +13,6 @@ export type ComboboxProps = {
   required?: boolean;
   name?: string;
   onLtChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(

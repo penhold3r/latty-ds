@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Alert as AlertEl, LattyIconName } from '@latty/web';
 
-export type AlertProps = {
+export type AlertProps = HTMLAttributes<AlertEl> & {
   variant?: AlertEl['variant'];
   appearance?: AlertEl['appearance'];
   title?: string;
@@ -10,7 +10,6 @@ export type AlertProps = {
   background?: string;
   uppercase?: boolean;
   onLtClose?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Alert = forwardRef<AlertEl, AlertProps>(function Alert({ onLtClose, children, ...props }, forwardedRef) {

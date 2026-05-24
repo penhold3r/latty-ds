@@ -1,10 +1,9 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { TabPanel as TabPanelEl } from '@latty/web';
 
-export type TabPanelProps = {
+export type TabPanelProps = HTMLAttributes<TabPanelEl> & {
   value?: string;
   active?: boolean;
-  children?: ReactNode;
 };
 
 export const TabPanel = forwardRef<TabPanelEl, TabPanelProps>(function TabPanel({ children, ...props }, forwardedRef) {

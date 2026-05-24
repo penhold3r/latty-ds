@@ -1,12 +1,11 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Dropdown as DropdownEl } from '@latty/web';
 
-export type DropdownProps = {
+export type DropdownProps = HTMLAttributes<DropdownEl> & {
   open?: boolean;
   placement?: DropdownEl['placement'];
   onLtOpen?: (event: CustomEvent) => void;
   onLtClose?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Dropdown = forwardRef<DropdownEl, DropdownProps>(function Dropdown(

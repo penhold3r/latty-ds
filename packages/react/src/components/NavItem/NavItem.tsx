@@ -1,8 +1,8 @@
 // codegen:manual — extended to set icon-start attribute directly (React 18 lowercases camelCase on custom elements)
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { NavItem as NavItemEl, LattyIconName } from '@latty/web';
 
-export type NavItemProps = {
+export type NavItemProps = HTMLAttributes<NavItemEl> & {
   href?: string;
   label?: string;
   iconStart?: LattyIconName;
@@ -12,7 +12,6 @@ export type NavItemProps = {
   orientation?: NavItemEl['orientation'];
   onLtNavItemClick?: (event: CustomEvent) => void;
   onLtNavCollapse?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(

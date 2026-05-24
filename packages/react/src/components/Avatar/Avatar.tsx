@@ -1,14 +1,13 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Avatar as AvatarEl } from '@latty/web';
 
-export type AvatarProps = {
+export type AvatarProps = HTMLAttributes<AvatarEl> & {
   src?: string;
   name?: string;
   alt?: string;
   size?: AvatarEl['size'];
   shape?: AvatarEl['shape'];
   color?: AvatarEl['color'];
-  children?: ReactNode;
 };
 
 export const Avatar = forwardRef<AvatarEl, AvatarProps>(function Avatar({ children, ...props }, forwardedRef) {

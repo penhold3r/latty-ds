@@ -26,6 +26,11 @@ const SKIP_FIELDS = new Set(['styles', 'render', 'updated', 'renderChevron', 'sh
 const SIMPLE_TYPES = new Set(['string', 'boolean', 'number']);
 const ICON_FIELDS = new Set(['icon', 'iconEnd', 'iconStart']);
 
+// Native DOM event names that React already exposes as typed handlers in HTMLAttributes.
+// When a Latty component fires one of these, its custom handler type conflicts with the
+// React type, so we Omit the React version and re-declare with (event: CustomEvent).
+const NATIVE_TO_REACT_HANDLER = { change: 'onChange', input: 'onInput', toggle: 'onToggle' };
+
 // ── Read CEM ──────────────────────────────────────────────────────────────────
 const cem = JSON.parse(readFileSync(CEM_PATH, 'utf8'));
 
@@ -96,16 +101,22 @@ for (const { name, tagName, fields, events } of components) {
       ? `\n    useImperativeHandle(forwardedRef, () => innerRef.current!);\n${effectBlocks}\n`
       : '\n    useImperativeHandle(forwardedRef, () => innerRef.current!);\n';
 
-  const reactImports = ['useRef', 'useImperativeHandle', 'forwardRef', 'type ReactNode'];
+  const reactImports = ['useRef', 'useImperativeHandle', 'forwardRef', 'type HTMLAttributes'];
   if (events.length > 0) reactImports.splice(1, 0, 'useEffect');
+
+  // Determine which React HTMLAttributes keys to Omit due to type conflicts with custom events.
+  const omitKeys = events
+    .filter((e) => NATIVE_TO_REACT_HANDLER[e.name])
+    .map((e) => `'${NATIVE_TO_REACT_HANDLER[e.name]}'`);
+  const baseType =
+    omitKeys.length > 0 ? `Omit<HTMLAttributes<${name}El>, ${omitKeys.join(' | ')}>` : `HTMLAttributes<${name}El>`;
 
   const webImports = [`${name} as ${name}El`, ...(hasIconFields ? ['LattyIconName'] : [])].join(', ');
   const componentContent = `import { ${reactImports.join(', ')} } from 'react';
 import type { ${webImports} } from '@latty/web';
 
-export type ${name}Props = {
+export type ${name}Props = ${baseType} & {
 ${[...fieldProps, ...eventProps].join('\n')}
-  children?: ReactNode;
 };
 
 export const ${name} = forwardRef<${name}El, ${name}Props>(

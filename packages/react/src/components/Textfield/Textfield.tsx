@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Textfield as TextfieldEl, LattyIconName } from '@latty/web';
 
-export type TextfieldProps = {
+export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onChange'> & {
   variant?: TextfieldEl['variant'];
   size?: TextfieldEl['size'];
   type?: TextfieldEl['type'];
@@ -19,7 +19,6 @@ export type TextfieldProps = {
   uppercase?: boolean;
   onInput?: (event: CustomEvent) => void;
   onChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfield(

@@ -1,13 +1,12 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { List as ListEl } from '@latty/web';
 
-export type ListProps = {
+export type ListProps = HTMLAttributes<ListEl> & {
   type?: ListEl['type'];
   size?: ListEl['size'];
   markerColor?: string;
   divider?: boolean;
   noMarker?: boolean;
-  children?: ReactNode;
 };
 
 export const List = forwardRef<ListEl, ListProps>(function List({ children, ...props }, forwardedRef) {

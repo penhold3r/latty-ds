@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Calendar as CalendarEl } from '@latty/web';
 
-export type CalendarProps = {
+export type CalendarProps = HTMLAttributes<CalendarEl> & {
   mode?: CalendarEl['mode'];
   value?: string;
   valueStart?: string;
@@ -16,7 +16,6 @@ export type CalendarProps = {
   disabledDates?: CalendarEl['disabledDates'];
   onLtChange?: (event: CustomEvent) => void;
   onLtMonthChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(

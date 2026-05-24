@@ -1,10 +1,9 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Nav as NavEl } from '@latty/web';
 
-export type NavProps = {
+export type NavProps = HTMLAttributes<NavEl> & {
   label?: string;
   orientation?: NavEl['orientation'];
-  children?: ReactNode;
 };
 
 export const Nav = forwardRef<NavEl, NavProps>(function Nav({ children, ...props }, forwardedRef) {

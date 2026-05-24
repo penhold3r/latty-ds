@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Checkbox as CheckboxEl } from '@latty/web';
 
-export type CheckboxProps = {
+export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
   variant?: CheckboxEl['variant'];
   size?: CheckboxEl['size'];
   checked?: boolean;
@@ -13,7 +13,6 @@ export type CheckboxProps = {
   name?: string;
   value?: string;
   onChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(

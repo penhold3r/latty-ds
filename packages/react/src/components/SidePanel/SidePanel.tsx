@@ -1,8 +1,8 @@
 // codegen:manual — extended to set no-close-button attribute directly (React 18 lowercases camelCase on custom elements)
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { SidePanel as SidePanelEl } from '@latty/web';
 
-export type SidePanelProps = {
+export type SidePanelProps = HTMLAttributes<SidePanelEl> & {
   open?: boolean;
   anchor?: SidePanelEl['anchor'];
   size?: string;
@@ -11,7 +11,6 @@ export type SidePanelProps = {
   backdropBlur?: boolean;
   overlayOpacity?: number;
   onLtClose?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const SidePanel = forwardRef<SidePanelEl, SidePanelProps>(function SidePanel(

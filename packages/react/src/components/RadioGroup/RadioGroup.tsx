@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { RadioGroup as RadioGroupEl } from '@latty/web';
 
-export type RadioGroupProps = {
+export type RadioGroupProps = Omit<HTMLAttributes<RadioGroupEl>, 'onChange'> & {
   label?: string;
   name?: string;
   value?: string;
@@ -10,7 +10,6 @@ export type RadioGroupProps = {
   error?: boolean;
   required?: boolean;
   onChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const RadioGroup = forwardRef<RadioGroupEl, RadioGroupProps>(function RadioGroup(

@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Dialog as DialogEl } from '@latty/web';
 
-export type DialogProps = {
+export type DialogProps = HTMLAttributes<DialogEl> & {
   size?: DialogEl['size'];
   open?: boolean;
   title?: string;
@@ -12,7 +12,6 @@ export type DialogProps = {
   backdropBlur?: boolean;
   onLtDialogOpen?: (event: CustomEvent) => void;
   onLtDialogClose?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(

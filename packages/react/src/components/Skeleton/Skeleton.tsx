@@ -1,12 +1,11 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Skeleton as SkeletonEl } from '@latty/web';
 
-export type SkeletonProps = {
+export type SkeletonProps = HTMLAttributes<SkeletonEl> & {
   shape?: SkeletonEl['shape'];
   width?: string;
   height?: string;
   animated?: boolean;
-  children?: ReactNode;
 };
 
 export const Skeleton = forwardRef<SkeletonEl, SkeletonProps>(function Skeleton({ children, ...props }, forwardedRef) {

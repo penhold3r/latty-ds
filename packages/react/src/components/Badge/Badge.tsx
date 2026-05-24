@@ -1,13 +1,12 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Badge as BadgeEl } from '@latty/web';
 
-export type BadgeProps = {
+export type BadgeProps = HTMLAttributes<BadgeEl> & {
   appearance?: BadgeEl['appearance'];
   variant?: BadgeEl['variant'];
   size?: BadgeEl['size'];
   content?: string;
   dot?: boolean;
-  children?: ReactNode;
 };
 
 export const Badge = forwardRef<BadgeEl, BadgeProps>(function Badge({ children, ...props }, forwardedRef) {

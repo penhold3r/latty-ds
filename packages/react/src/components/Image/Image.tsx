@@ -1,12 +1,11 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Image as ImageEl } from '@latty/web';
 
-export type ImageProps = {
+export type ImageProps = HTMLAttributes<ImageEl> & {
   src?: string;
   alt?: string;
   rounded?: ImageEl['rounded'];
   responsive?: boolean;
-  children?: ReactNode;
 };
 
 export const Image = forwardRef<ImageEl, ImageProps>(function Image({ children, ...props }, forwardedRef) {

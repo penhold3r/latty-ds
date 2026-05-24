@@ -1,13 +1,12 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Progress as ProgressEl } from '@latty/web';
 
-export type ProgressProps = {
+export type ProgressProps = HTMLAttributes<ProgressEl> & {
   value?: number;
   variant?: ProgressEl['variant'];
   size?: ProgressEl['size'];
   label?: string;
   indeterminate?: boolean;
-  children?: ReactNode;
 };
 
 export const Progress = forwardRef<ProgressEl, ProgressProps>(function Progress({ children, ...props }, forwardedRef) {

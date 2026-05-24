@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Datepicker as DatepickerEl } from '@latty/web';
 
-export type DatepickerProps = {
+export type DatepickerProps = HTMLAttributes<DatepickerEl> & {
   type?: DatepickerEl['type'];
   value?: string;
   min?: string;
@@ -16,7 +16,6 @@ export type DatepickerProps = {
   name?: string;
   onLtChange?: (event: CustomEvent) => void;
   onLtInput?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Datepicker = forwardRef<DatepickerEl, DatepickerProps>(function Datepicker(

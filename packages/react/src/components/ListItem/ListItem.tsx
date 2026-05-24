@@ -1,10 +1,9 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { ListItem as ListItemEl, LattyIconName } from '@latty/web';
 
-export type ListItemProps = {
+export type ListItemProps = HTMLAttributes<ListItemEl> & {
   iconStart?: LattyIconName;
   iconEnd?: LattyIconName;
-  children?: ReactNode;
 };
 
 export const ListItem = forwardRef<ListItemEl, ListItemProps>(function ListItem({ children, ...props }, forwardedRef) {

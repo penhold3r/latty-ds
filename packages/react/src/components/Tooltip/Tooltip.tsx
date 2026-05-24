@@ -1,13 +1,12 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Tooltip as TooltipEl } from '@latty/web';
 
-export type TooltipProps = {
+export type TooltipProps = HTMLAttributes<TooltipEl> & {
   content?: string;
   placement?: TooltipEl['placement'];
   disabled?: boolean;
   background?: string;
   color?: string;
-  children?: ReactNode;
 };
 
 export const Tooltip = forwardRef<TooltipEl, TooltipProps>(function Tooltip({ children, ...props }, forwardedRef) {

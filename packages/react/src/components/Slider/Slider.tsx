@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Slider as SliderEl } from '@latty/web';
 
-export type SliderProps = {
+export type SliderProps = HTMLAttributes<SliderEl> & {
   size?: SliderEl['size'];
   disabled?: boolean;
   tooltip?: boolean;
@@ -13,7 +13,6 @@ export type SliderProps = {
   name?: string;
   onLtInput?: (event: CustomEvent) => void;
   onLtChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(

@@ -1,13 +1,12 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Pagination as PaginationEl } from '@latty/web';
 
-export type PaginationProps = {
+export type PaginationProps = HTMLAttributes<PaginationEl> & {
   page?: number;
   totalPages?: number;
   size?: PaginationEl['size'];
   disabled?: boolean;
   onLtChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Pagination = forwardRef<PaginationEl, PaginationProps>(function Pagination(

@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Table as TableEl } from '@latty/web';
 
-export type TableProps = {
+export type TableProps = HTMLAttributes<TableEl> & {
   columns?: TableEl['columns'];
   data?: TableEl['data'];
   density?: TableEl['density'];
@@ -14,7 +14,6 @@ export type TableProps = {
   rowKey?: string;
   sort?: TableEl['sort'];
   onLtSortChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const Table = forwardRef<TableEl, TableProps>(function Table(

@@ -1,11 +1,10 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Divider as DividerEl } from '@latty/web';
 
-export type DividerProps = {
+export type DividerProps = HTMLAttributes<DividerEl> & {
   orientation?: DividerEl['orientation'];
   appearance?: DividerEl['appearance'];
   label?: string;
-  children?: ReactNode;
 };
 
 export const Divider = forwardRef<DividerEl, DividerProps>(function Divider({ children, ...props }, forwardedRef) {

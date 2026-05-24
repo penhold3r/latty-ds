@@ -1,9 +1,8 @@
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Breadcrumb as BreadcrumbEl } from '@latty/web';
 
-export type BreadcrumbProps = {
+export type BreadcrumbProps = HTMLAttributes<BreadcrumbEl> & {
   separator?: string;
-  children?: ReactNode;
 };
 
 export const Breadcrumb = forwardRef<BreadcrumbEl, BreadcrumbProps>(function Breadcrumb(

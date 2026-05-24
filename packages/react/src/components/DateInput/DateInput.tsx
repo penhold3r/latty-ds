@@ -1,7 +1,7 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { DateInput as DateInputEl } from '@latty/web';
 
-export type DateInputProps = {
+export type DateInputProps = HTMLAttributes<DateInputEl> & {
   value?: string;
   min?: string;
   max?: string;
@@ -18,7 +18,6 @@ export type DateInputProps = {
   name?: string;
   disabledDates?: DateInputEl['disabledDates'];
   onLtChange?: (event: CustomEvent) => void;
-  children?: ReactNode;
 };
 
 export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateInput(
