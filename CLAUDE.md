@@ -93,6 +93,8 @@ Commit `bundle-report.json` updates when intentionally adding code. The `--fail-
 
 ### Scaffolding
 
+Slash command scripts live in `.claude/commands/` (e.g. `new-component.sh`, `new-token.sh`, `new-icon.sh`). Edit these files to change scaffolding behavior.
+
 ```bash
 /new-component <ComponentName> [--variants v1,v2] [--sizes sm,md,lg] [--disabled] [--events e1,e2]
 ```
@@ -169,7 +171,10 @@ The `@latty/tokens` package has a unique multi-step build (`pnpm run build:scrip
    - Builds spacing scales (rem and px variants)
    - Outputs `dist/tokens.css`, `dist/tokens.json`, `dist/tokens.js`
    - Outputs `dist/semantic.css` (semantic token layer — maps raw tokens to role-based vars)
-3. **Browser runtime**: `tsup` also bundles `src/configure/index.ts` → `dist/configure.js` (the `configure()` API for runtime theming)
+3. **Browser runtime**: `tsup` also bundles `src/configure/index.ts` → `dist/configure.js`, exporting `configure()` and `createStyleSheet()`:
+   - `configure(config?)` — injects tokens as a `<style>` element at runtime (call once at app entry).
+   - `createStyleSheet(config?)` — returns a CSS string for SSR; inject into `<head>` to avoid FOUC.
+   - Both accept `{ colors, font, border, theme }`. The `theme` field is `'light' | 'dark' | 'system'` (system = light + dark via `prefers-color-scheme` + `[data-theme]` overrides).
 4. **Type definitions**: `tsc -p tsconfig.types.json` generates public type definitions into `dist/`
 
 Spacing tokens have special handling: `spacing.rem["4"]` becomes `--lt-spacing-4`, while `spacing.px["4"]` becomes `--lt-spacing-px-4`.
@@ -328,7 +333,7 @@ Tests use Vitest with jsdom environment. Test files are located at `packages/**/
 
 ## Tooling
 
-**ESLint**: Uses v9 flat config (`eslint.config.mts`) with Astro, JSON, CSS, and Markdown support. CSS rules allow unknown `--lt-*` custom properties (`allowUnknownVariables: true`) since they are resolved at runtime by `@latty/tokens`. `no-console` is an error — use the `logger` utility from `@latty/utils` in scripts instead.
+**ESLint**: Uses v9 flat config (`eslint.config.mts`) with Astro, JSON, CSS, and Markdown support. CSS rules allow unknown `--lt-*` custom properties (`allowUnknownVariables: true`) since they are resolved at runtime by `@latty/tokens`. `no-console` is an error — use the `logger` utility from `@latty/utils` in scripts instead. Never use `any` or suppress linting warnings unless explicitly instructed.
 
 **Prettier**: `printWidth: 120`, `singleQuote: true`, `trailingComma: "none"`. Includes `prettier-plugin-astro` for `.astro` file formatting.
 
