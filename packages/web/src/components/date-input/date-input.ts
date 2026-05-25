@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
 import '@latty/icons';
 import '../calendar/calendar';
+import '../text/text';
 
 import { dateInputStyles } from './date-input.styles';
 import type { DateInputSize, DateInputVariant, DateInputFormat } from './date-input.types';
@@ -88,11 +89,21 @@ export class DateInput extends ThemeableElement {
 
   private _openDropdown() {
     if (this.disabled || this._open) return;
+    const btn = this.shadowRoot?.querySelector<HTMLElement>('.field-btn');
+    const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
+    if (btn && dropdown) {
+      const rect = btn.getBoundingClientRect();
+      dropdown.style.top = `${rect.bottom + 4}px`;
+      dropdown.style.left = `${rect.left}px`;
+      (dropdown as HTMLElement & { showPopover?(): void }).showPopover?.();
+    }
     this._open = true;
     this._cleanupClickOutside = createClickOutsideHandler(this, () => this._closeDropdown());
   }
 
   private _closeDropdown() {
+    const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
+    (dropdown as HTMLElement & { hidePopover?(): void })?.hidePopover?.();
     this._open = false;
     this._cleanupClickOutside?.();
     this._cleanupClickOutside = null;
@@ -128,11 +139,8 @@ export class DateInput extends ThemeableElement {
       <div class="wrapper">
         ${this.label
           ? html`<label for="field-btn">
-              <span class="label-text">
-                ${this.label}${this.required
-                  ? html`<span class="required-indicator" aria-hidden="true">*</span>`
-                  : nothing}
-              </span>
+              <lt-text variant="label" as="span">${this.label}</lt-text>
+              ${this.required ? html`<span class="required-indicator" aria-hidden="true">*</span>` : nothing}
             </label>`
           : nothing}
 

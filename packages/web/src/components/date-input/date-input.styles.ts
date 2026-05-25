@@ -13,16 +13,8 @@ export const dateInputStyles = css`
   }
 
   label {
-    cursor: default;
-    display: flex;
-    flex-direction: column;
-    gap: var(--lt-spacing-1);
-  }
-
-  .label-text {
     color: var(--lt-text-default);
-    font-size: 0.875rem;
-    font-weight: 500;
+    cursor: default;
   }
 
   .required-indicator {
@@ -134,9 +126,9 @@ export const dateInputStyles = css`
 
   .dropdown {
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
-    left: 0;
-    position: absolute;
-    top: calc(100% + 4px);
+    left: var(--_dropdown-left, 0px);
+    position: fixed;
+    top: var(--_dropdown-top, 0px);
     z-index: 9999;
   }
 

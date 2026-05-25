@@ -13,20 +13,14 @@ export const datepickerStyles = css`
   }
 
   label {
+    color: var(--lt-text-default);
     display: flex;
     flex-direction: column;
     gap: var(--lt-spacing-1);
   }
 
-  .label-text {
-    color: var(--lt-text-default);
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
   .required-indicator {
     color: var(--lt-color-error-500);
-    margin-left: 2px;
   }
 
   input {

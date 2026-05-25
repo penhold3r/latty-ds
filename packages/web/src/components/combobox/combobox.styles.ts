@@ -13,10 +13,8 @@ export const comboboxStyles = css`
     gap: var(--lt-spacing-1);
   }
 
-  .label-text {
+  label {
     color: var(--lt-text-default);
-    font-size: 0.875rem;
-    font-weight: 500;
   }
 
   .required-indicator {

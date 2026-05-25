@@ -129,6 +129,64 @@ describe('<lt-date-input>', () => {
     expect(el.shadowRoot!.querySelector('lt-calendar')).toBeTruthy();
   });
 
+  it('sets --_dropdown-top and --_dropdown-left from field-btn bounding rect', async () => {
+    const btn = el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!;
+    vi.spyOn(btn, 'getBoundingClientRect').mockReturnValue({
+      bottom: 120,
+      left: 40,
+      top: 80,
+      right: 200,
+      width: 160,
+      height: 40,
+      x: 40,
+      y: 80,
+      toJSON: () => ({})
+    } as DOMRect);
+    btn.click();
+    await el.updateComplete;
+    expect(el.style.getPropertyValue('--_dropdown-top')).toBe('124px');
+    expect(el.style.getPropertyValue('--_dropdown-left')).toBe('40px');
+  });
+
+  it('recomputes position from fresh bounding rect each time the dropdown opens', async () => {
+    const btn = el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!;
+    vi.spyOn(btn, 'getBoundingClientRect')
+      .mockReturnValueOnce({
+        bottom: 120,
+        left: 40,
+        top: 80,
+        right: 200,
+        width: 160,
+        height: 40,
+        x: 40,
+        y: 80,
+        toJSON: () => ({})
+      } as DOMRect)
+      .mockReturnValueOnce({
+        bottom: 200,
+        left: 60,
+        top: 160,
+        right: 220,
+        width: 160,
+        height: 40,
+        x: 60,
+        y: 160,
+        toJSON: () => ({})
+      } as DOMRect);
+
+    btn.click();
+    await el.updateComplete;
+    el.shadowRoot!.querySelector('lt-calendar')!.dispatchEvent(
+      new CustomEvent('lt-change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
+    );
+    await el.updateComplete;
+
+    btn.click();
+    await el.updateComplete;
+    expect(el.style.getPropertyValue('--_dropdown-top')).toBe('204px');
+    expect(el.style.getPropertyValue('--_dropdown-left')).toBe('60px');
+  });
+
   it('aria-expanded reflects open state', async () => {
     const btn = el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!;
     expect(btn.getAttribute('aria-expanded')).toBe('false');

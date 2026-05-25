@@ -7,10 +7,9 @@ export const sliderStyles = css`
     width: 100%;
   }
 
-  .label {
+  label {
     color: var(--lt-text-default);
     display: block;
-    font-size: 0.875rem;
     margin-bottom: var(--lt-spacing-1);
     user-select: none;
   }

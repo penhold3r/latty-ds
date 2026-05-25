@@ -6,6 +6,7 @@ import { comboboxStyles } from './combobox.styles';
 import type { ComboboxOption, ComboboxSize, ComboboxVariant } from './combobox.types';
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty/icons';
+import '../text/text';
 
 /**
  * Searchable single-select combobox. The user types to filter options; selecting an option sets the value.
@@ -138,6 +139,7 @@ export class Combobox extends ThemeableElement {
     const inputRow = html`
       <div class="input-wrap" @click=${this.openDropdown}>
         <input
+          id="combobox-input"
           role="combobox"
           aria-expanded=${this.open}
           aria-autocomplete="list"
@@ -158,9 +160,10 @@ export class Combobox extends ThemeableElement {
     return html`
       <div class="wrapper">
         ${this.label
-          ? html`<span class="label-text">
-              ${this.label}${this.required ? html`<span class="required-indicator">*</span>` : nothing}
-            </span>`
+          ? html`<label for="combobox-input">
+              <lt-text variant="label" as="span">${this.label}</lt-text>
+              ${this.required ? html`<span class="required-indicator">*</span>` : nothing}
+            </label>`
           : nothing}
         ${inputRow}
         ${this.open

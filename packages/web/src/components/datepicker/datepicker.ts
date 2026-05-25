@@ -5,6 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { datepickerStyles } from './datepicker.styles';
 import type { DatepickerType, DatepickerSize, DatepickerVariant } from './datepicker.types';
 import { dispatch } from '../../utils';
+import '../text/text';
 
 /**
  * Date and time picker wrapping the native browser date/time input with design-system styling.
@@ -96,10 +97,8 @@ export class Datepicker extends ThemeableElement {
       <div class="wrapper">
         ${this.label
           ? html`<label>
-              <span class="label-text">
-                ${this.label}${this.required ? html`<span class="required-indicator">*</span>` : nothing}
-              </span>
-              ${inputEl}
+              <lt-text variant="label" as="span">${this.label}</lt-text>
+              ${this.required ? html`<span class="required-indicator">*</span>` : nothing} ${inputEl}
             </label>`
           : inputEl}
         ${this.helperText ? html`<span class="helper-text">${this.helperText}</span>` : nothing}

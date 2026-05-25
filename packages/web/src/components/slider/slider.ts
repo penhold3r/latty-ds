@@ -5,6 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { sliderStyles } from './slider.styles';
 import type { SliderSize } from './slider.types';
 import '../tooltip/tooltip';
+import '../text/text';
 
 /**
  * A range slider component for selecting a numeric value within a range.
@@ -100,7 +101,7 @@ export class Slider extends ThemeableElement {
     `;
 
     return html`
-      ${this.label ? html`<label class="label" for="input">${this.label}</label>` : ''}
+      ${this.label ? html`<label for="input"><lt-text variant="label" as="span">${this.label}</lt-text></label>` : ''}
       <div class="track-wrap">
         <lt-tooltip content=${String(this.value)} ?disabled=${!this.tooltip} placement="top"> ${input} </lt-tooltip>
       </div>
