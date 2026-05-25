@@ -10,12 +10,12 @@ export type NavItemProps = HTMLAttributes<NavItemEl> & {
   disabled?: boolean;
   open?: boolean;
   orientation?: NavItemEl['orientation'];
-  onLtNavItemClick?: (event: CustomEvent) => void;
-  onLtNavCollapse?: (event: CustomEvent) => void;
+  onNavItemClick?: (event: CustomEvent) => void;
+  onNavCollapse?: (event: CustomEvent) => void;
 };
 
 export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
-  { onLtNavItemClick, onLtNavCollapse, iconStart, children, ...props },
+  { onNavItemClick, onNavCollapse, iconStart, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<NavItemEl>(null);
@@ -24,18 +24,18 @@ export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtNavItemClick) return;
-    const h = (ev: Event) => onLtNavItemClick!(ev as CustomEvent);
-    el.addEventListener('lt-nav-item-click', h);
-    return () => el.removeEventListener('lt-nav-item-click', h);
-  }, [onLtNavItemClick]);
+    if (!el || !onNavItemClick) return;
+    const h = (ev: Event) => onNavItemClick!(ev as CustomEvent);
+    el.addEventListener('nav-item-click', h);
+    return () => el.removeEventListener('nav-item-click', h);
+  }, [onNavItemClick]);
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtNavCollapse) return;
-    const h = (ev: Event) => onLtNavCollapse!(ev as CustomEvent);
-    el.addEventListener('lt-nav-collapse', h);
-    return () => el.removeEventListener('lt-nav-collapse', h);
-  }, [onLtNavCollapse]);
+    if (!el || !onNavCollapse) return;
+    const h = (ev: Event) => onNavCollapse!(ev as CustomEvent);
+    el.addEventListener('nav-collapse', h);
+    return () => el.removeEventListener('nav-collapse', h);
+  }, [onNavCollapse]);
   // React 18 lowercases camelCase props on custom elements — set as attribute directly
   useEffect(() => {
     const el = innerRef.current;

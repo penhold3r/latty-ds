@@ -29,19 +29,19 @@ describe('Chip', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-chip');
   });
 
-  it('calls onLtDelete when lt-delete event fires', () => {
-    const onLtDelete = vi.fn();
-    const { container } = render(<Chip onLtDelete={onLtDelete}>Label</Chip>);
-    container.querySelector('lt-chip')!.dispatchEvent(new CustomEvent('lt-delete'));
-    expect(onLtDelete).toHaveBeenCalledOnce();
+  it('calls onDelete when delete event fires', () => {
+    const onDelete = vi.fn();
+    const { container } = render(<Chip onDelete={onDelete}>Label</Chip>);
+    container.querySelector('lt-chip')!.dispatchEvent(new CustomEvent('delete'));
+    expect(onDelete).toHaveBeenCalledOnce();
   });
 
-  it('removes lt-delete listener on unmount', () => {
-    const onLtDelete = vi.fn();
-    const { container, unmount } = render(<Chip onLtDelete={onLtDelete}>Label</Chip>);
+  it('removes delete listener on unmount', () => {
+    const onDelete = vi.fn();
+    const { container, unmount } = render(<Chip onDelete={onDelete}>Label</Chip>);
     const el = container.querySelector('lt-chip')!;
     unmount();
-    el.dispatchEvent(new CustomEvent('lt-delete'));
-    expect(onLtDelete).not.toHaveBeenCalled();
+    el.dispatchEvent(new CustomEvent('delete'));
+    expect(onDelete).not.toHaveBeenCalled();
   });
 });

@@ -11,8 +11,8 @@ import '../text/text';
  * A range slider component for selecting a numeric value within a range.
  *
  * @element lt-slider
- * @fires {CustomEvent<{value: number}>} lt-input - Dispatched on every value change while dragging
- * @fires {CustomEvent<{value: number}>} lt-change - Dispatched when the user commits a value (mouseup/keyup)
+ * @fires {CustomEvent<{value: number}>} input - Dispatched on every value change while dragging
+ * @fires {CustomEvent<{value: number}>} change - Dispatched when the user commits a value (mouseup/keyup)
  */
 @customElement('lt-slider')
 export class Slider extends ThemeableElement {
@@ -57,10 +57,11 @@ export class Slider extends ThemeableElement {
   }
 
   private _onInput(e: Event) {
+    e.stopPropagation();
     const target = e.target as HTMLInputElement;
     this.value = Number(target.value);
     this.dispatchEvent(
-      new CustomEvent<{ value: number }>('lt-input', {
+      new CustomEvent<{ value: number }>('input', {
         detail: { value: this.value },
         bubbles: true,
         composed: true
@@ -69,10 +70,11 @@ export class Slider extends ThemeableElement {
   }
 
   private _onChange(e: Event) {
+    e.stopPropagation();
     const target = e.target as HTMLInputElement;
     this.value = Number(target.value);
     this.dispatchEvent(
-      new CustomEvent<{ value: number }>('lt-change', {
+      new CustomEvent<{ value: number }>('change', {
         detail: { value: this.value },
         bubbles: true,
         composed: true

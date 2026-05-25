@@ -10,11 +10,11 @@ export type SidePanelProps = HTMLAttributes<SidePanelEl> & {
   noCloseButton?: boolean;
   backdropBlur?: boolean;
   overlayOpacity?: number;
-  onLtClose?: (event: CustomEvent) => void;
+  onClose?: (event: CustomEvent) => void;
 };
 
 export const SidePanel = forwardRef<SidePanelEl, SidePanelProps>(function SidePanel(
-  { onLtClose, noCloseButton, children, ...props },
+  { onClose, noCloseButton, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SidePanelEl>(null);
@@ -23,11 +23,11 @@ export const SidePanel = forwardRef<SidePanelEl, SidePanelProps>(function SidePa
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtClose) return;
-    const h = (ev: Event) => onLtClose!(ev as CustomEvent);
-    el.addEventListener('lt-close', h);
-    return () => el.removeEventListener('lt-close', h);
-  }, [onLtClose]);
+    if (!el || !onClose) return;
+    const h = (ev: Event) => onClose!(ev as CustomEvent);
+    el.addEventListener('close', h);
+    return () => el.removeEventListener('close', h);
+  }, [onClose]);
   // React 18 lowercases camelCase props on custom elements — set as attribute directly
   useEffect(() => {
     const el = innerRef.current;

@@ -34,11 +34,11 @@ describe('DropdownItem', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-dropdown-item');
   });
 
-  it('wires onLtSelect event handler', () => {
+  it('wires onSelect event handler', () => {
     const handler = vi.fn();
-    const { container } = render(<DropdownItem onLtSelect={handler}>Action</DropdownItem>);
+    const { container } = render(<DropdownItem onSelect={handler}>Action</DropdownItem>);
     const el = container.querySelector('lt-dropdown-item')!;
-    el.dispatchEvent(new CustomEvent('lt-select', { bubbles: true }));
+    el.dispatchEvent(new CustomEvent('select', { bubbles: true }));
     expect(handler).toHaveBeenCalledOnce();
   });
 });

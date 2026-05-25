@@ -1,7 +1,7 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Combobox as ComboboxEl } from '@latty/web';
 
-export type ComboboxProps = HTMLAttributes<ComboboxEl> & {
+export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   options?: ComboboxEl['options'];
   value?: string;
   label?: string;
@@ -12,11 +12,11 @@ export type ComboboxProps = HTMLAttributes<ComboboxEl> & {
   disabled?: boolean;
   required?: boolean;
   name?: string;
-  onLtChange?: (event: CustomEvent) => void;
+  onChange?: (event: CustomEvent) => void;
 };
 
 export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
-  { onLtChange, children, ...props },
+  { onChange, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<ComboboxEl>(null);
@@ -25,11 +25,11 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtChange) return;
-    const h = (ev: Event) => onLtChange!(ev as CustomEvent);
-    el.addEventListener('lt-change', h);
-    return () => el.removeEventListener('lt-change', h);
-  }, [onLtChange]);
+    if (!el || !onChange) return;
+    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    el.addEventListener('change', h);
+    return () => el.removeEventListener('change', h);
+  }, [onChange]);
 
   return (
     <lt-combobox ref={innerRef} {...(props as Record<string, unknown>)}>

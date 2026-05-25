@@ -29,19 +29,19 @@ describe('Alert', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-alert');
   });
 
-  it('calls onLtClose when lt-close event fires', () => {
-    const onLtClose = vi.fn();
-    const { container } = render(<Alert onLtClose={onLtClose}>Message</Alert>);
-    container.querySelector('lt-alert')!.dispatchEvent(new CustomEvent('lt-close'));
-    expect(onLtClose).toHaveBeenCalledOnce();
+  it('calls onClose when close event fires', () => {
+    const onClose = vi.fn();
+    const { container } = render(<Alert onClose={onClose}>Message</Alert>);
+    container.querySelector('lt-alert')!.dispatchEvent(new CustomEvent('close'));
+    expect(onClose).toHaveBeenCalledOnce();
   });
 
-  it('removes lt-close listener on unmount', () => {
-    const onLtClose = vi.fn();
-    const { container, unmount } = render(<Alert onLtClose={onLtClose}>Message</Alert>);
+  it('removes close listener on unmount', () => {
+    const onClose = vi.fn();
+    const { container, unmount } = render(<Alert onClose={onClose}>Message</Alert>);
     const el = container.querySelector('lt-alert')!;
     unmount();
-    el.dispatchEvent(new CustomEvent('lt-close'));
-    expect(onLtClose).not.toHaveBeenCalled();
+    el.dispatchEvent(new CustomEvent('close'));
+    expect(onClose).not.toHaveBeenCalled();
   });
 });

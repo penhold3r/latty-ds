@@ -44,11 +44,11 @@ describe('SidePanel', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-sidepanel');
   });
 
-  it('wires onLtClose event handler', () => {
+  it('wires onClose event handler', () => {
     const handler = vi.fn();
-    const { container } = render(<SidePanel onLtClose={handler} />);
+    const { container } = render(<SidePanel onClose={handler} />);
     const el = container.querySelector('lt-sidepanel')!;
-    el.dispatchEvent(new CustomEvent('lt-close', { bubbles: true }));
+    el.dispatchEvent(new CustomEvent('close', { bubbles: true }));
     expect(handler).toHaveBeenCalledOnce();
   });
 });

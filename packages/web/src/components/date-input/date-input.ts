@@ -16,7 +16,7 @@ import { openFloating, closeFloating } from '../shared/floating';
  *
  * @element lt-date-input
  *
- * @fires {CustomEvent<{value: string}>} lt-change - Fired when the user selects a date.
+ * @fires {CustomEvent<{value: string}>} change - Fired when the user selects a date.
  *
  * @example
  * ```html
@@ -121,7 +121,7 @@ export class DateInput extends ThemeableElement {
   private _handleCalendarChange(e: CustomEvent<{ value: string }>) {
     e.stopPropagation();
     this.value = e.detail.value;
-    dispatch(this, 'lt-change', { value: this.value });
+    dispatch(this, 'change', { value: this.value });
     this._closeDropdown();
     this.shadowRoot?.querySelector<HTMLElement>('.field-btn')?.focus();
   }
@@ -181,7 +181,7 @@ export class DateInput extends ThemeableElement {
                   locale=${this.locale}
                   week-start=${this.weekStart}
                   .disabledDates=${this.disabledDates}
-                  @lt-change=${this._handleCalendarChange}
+                  @change=${this._handleCalendarChange}
                 ></lt-calendar>`
               : nothing}
           </div>

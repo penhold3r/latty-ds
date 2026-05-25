@@ -15,7 +15,7 @@ import '../text/text';
  *
  * @element lt-sidepanel
  * @slot - Content rendered inside the panel body
- * @fires lt-close - Fired when the user requests close (backdrop click, Escape key, or close button)
+ * @fires close - Fired when the user requests close (backdrop click, Escape key, or close button)
  * @part overlay - The backdrop scrim behind the panel
  * @part panel - The sliding panel container
  * @part header - The header bar (contains label and close button)
@@ -55,7 +55,7 @@ export class SidePanel extends ThemeableElement {
   /** Close the panel. */
   public hide() {
     this.open = false;
-    dispatch(this, 'lt-close');
+    dispatch(this, 'close');
   }
 
   /** Toggle the panel open/closed. */

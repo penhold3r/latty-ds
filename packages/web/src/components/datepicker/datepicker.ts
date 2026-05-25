@@ -12,8 +12,8 @@ import '../text/text';
  *
  * @element lt-datepicker
  *
- * @fires {CustomEvent<{value: string}>} lt-change - Fired when the value changes (on blur).
- * @fires {CustomEvent<{value: string}>} lt-input - Fired on every keystroke / picker selection.
+ * @fires {CustomEvent<{value: string}>} change - Fired when the value changes (on blur).
+ * @fires {CustomEvent<{value: string}>} input - Fired on every keystroke / picker selection.
  *
  * @example
  * ```html
@@ -69,12 +69,12 @@ export class Datepicker extends ThemeableElement {
 
   private handleChange() {
     this.value = this.input.value;
-    dispatch(this, 'lt-change', { value: this.value });
+    dispatch(this, 'change', { value: this.value });
   }
 
   private handleInput() {
     this.value = this.input.value;
-    dispatch(this, 'lt-input', { value: this.value });
+    dispatch(this, 'input', { value: this.value });
   }
 
   render() {

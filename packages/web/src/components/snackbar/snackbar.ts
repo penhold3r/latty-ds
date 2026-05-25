@@ -16,9 +16,9 @@ import '../surface/surface';
  *
  * @slot - Notification content. Accepts any HTML — bold, links, etc.
  *
- * @fires lt-show - Fired when the snackbar becomes visible.
- * @fires lt-hide - Fired when the snackbar is dismissed.
- * @fires lt-action - Fired when the action button is clicked.
+ * @fires show - Fired when the snackbar becomes visible.
+ * @fires hide - Fired when the snackbar is dismissed.
+ * @fires action - Fired when the action button is clicked.
  *
  * @example
  * ```html
@@ -76,10 +76,10 @@ export class Snackbar extends ThemeableElement {
     if (changedProperties.has('open')) {
       if (this.open) {
         this._startTimer();
-        dispatch(this, 'lt-show');
+        dispatch(this, 'show');
       } else {
         this._clearTimer();
-        dispatch(this, 'lt-hide');
+        dispatch(this, 'hide');
       }
     }
   }
@@ -108,7 +108,7 @@ export class Snackbar extends ThemeableElement {
   }
 
   private _handleAction() {
-    dispatch(this, 'lt-action');
+    dispatch(this, 'action');
     this.hide();
   }
 

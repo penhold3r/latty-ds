@@ -51,19 +51,19 @@ describe('Slider', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-slider');
   });
 
-  it('wires onLtInput event handler', () => {
+  it('wires onInput event handler', () => {
     const handler = vi.fn();
-    const { container } = render(<Slider onLtInput={handler} />);
+    const { container } = render(<Slider onInput={handler} />);
     const el = container.querySelector('lt-slider')!;
-    el.dispatchEvent(new CustomEvent('lt-input', { bubbles: true }));
+    el.dispatchEvent(new CustomEvent('input', { bubbles: true }));
     expect(handler).toHaveBeenCalledOnce();
   });
 
-  it('wires onLtChange event handler', () => {
+  it('wires onChange event handler', () => {
     const handler = vi.fn();
-    const { container } = render(<Slider onLtChange={handler} />);
+    const { container } = render(<Slider onChange={handler} />);
     const el = container.querySelector('lt-slider')!;
-    el.dispatchEvent(new CustomEvent('lt-change', { bubbles: true }));
+    el.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     expect(handler).toHaveBeenCalledOnce();
   });
 });

@@ -1,7 +1,7 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Calendar as CalendarEl } from '@latty/web';
 
-export type CalendarProps = HTMLAttributes<CalendarEl> & {
+export type CalendarProps = Omit<HTMLAttributes<CalendarEl>, 'onChange'> & {
   mode?: CalendarEl['mode'];
   value?: string;
   valueStart?: string;
@@ -14,12 +14,12 @@ export type CalendarProps = HTMLAttributes<CalendarEl> & {
   disabled?: boolean;
   months?: number;
   disabledDates?: CalendarEl['disabledDates'];
-  onLtChange?: (event: CustomEvent) => void;
-  onLtMonthChange?: (event: CustomEvent) => void;
+  onChange?: (event: CustomEvent) => void;
+  onMonthChange?: (event: CustomEvent) => void;
 };
 
 export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
-  { onLtChange, onLtMonthChange, children, ...props },
+  { onChange, onMonthChange, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<CalendarEl>(null);
@@ -28,18 +28,18 @@ export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtChange) return;
-    const h = (ev: Event) => onLtChange!(ev as CustomEvent);
-    el.addEventListener('lt-change', h);
-    return () => el.removeEventListener('lt-change', h);
-  }, [onLtChange]);
+    if (!el || !onChange) return;
+    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    el.addEventListener('change', h);
+    return () => el.removeEventListener('change', h);
+  }, [onChange]);
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtMonthChange) return;
-    const h = (ev: Event) => onLtMonthChange!(ev as CustomEvent);
-    el.addEventListener('lt-month-change', h);
-    return () => el.removeEventListener('lt-month-change', h);
-  }, [onLtMonthChange]);
+    if (!el || !onMonthChange) return;
+    const h = (ev: Event) => onMonthChange!(ev as CustomEvent);
+    el.addEventListener('month-change', h);
+    return () => el.removeEventListener('month-change', h);
+  }, [onMonthChange]);
 
   return (
     <lt-calendar ref={innerRef} {...(props as Record<string, unknown>)}>

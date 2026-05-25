@@ -13,11 +13,11 @@ export type TableProps = HTMLAttributes<TableEl> & {
   emptyMessage?: string;
   rowKey?: string;
   sort?: TableEl['sort'];
-  onLtSortChange?: (event: CustomEvent) => void;
+  onSortChange?: (event: CustomEvent) => void;
 };
 
 export const Table = forwardRef<TableEl, TableProps>(function Table(
-  { onLtSortChange, children, ...props },
+  { onSortChange, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<TableEl>(null);
@@ -26,11 +26,11 @@ export const Table = forwardRef<TableEl, TableProps>(function Table(
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtSortChange) return;
-    const h = (ev: Event) => onLtSortChange!(ev as CustomEvent);
-    el.addEventListener('lt-sort-change', h);
-    return () => el.removeEventListener('lt-sort-change', h);
-  }, [onLtSortChange]);
+    if (!el || !onSortChange) return;
+    const h = (ev: Event) => onSortChange!(ev as CustomEvent);
+    el.addEventListener('sort-change', h);
+    return () => el.removeEventListener('sort-change', h);
+  }, [onSortChange]);
 
   return (
     <lt-table ref={innerRef} {...(props as Record<string, unknown>)}>

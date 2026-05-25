@@ -8,13 +8,13 @@ export type SnackbarProps = HTMLAttributes<SnackbarEl> & {
   closable?: boolean;
   actionLabel?: string;
   icon?: LattyIconName;
-  onLtShow?: (event: CustomEvent) => void;
-  onLtHide?: (event: CustomEvent) => void;
-  onLtAction?: (event: CustomEvent) => void;
+  onShow?: (event: CustomEvent) => void;
+  onHide?: (event: CustomEvent) => void;
+  onAction?: (event: CustomEvent) => void;
 };
 
 export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(
-  { onLtShow, onLtHide, onLtAction, children, ...props },
+  { onShow, onHide, onAction, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SnackbarEl>(null);
@@ -23,25 +23,25 @@ export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtShow) return;
-    const h = (ev: Event) => onLtShow!(ev as CustomEvent);
-    el.addEventListener('lt-show', h);
-    return () => el.removeEventListener('lt-show', h);
-  }, [onLtShow]);
+    if (!el || !onShow) return;
+    const h = (ev: Event) => onShow!(ev as CustomEvent);
+    el.addEventListener('show', h);
+    return () => el.removeEventListener('show', h);
+  }, [onShow]);
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtHide) return;
-    const h = (ev: Event) => onLtHide!(ev as CustomEvent);
-    el.addEventListener('lt-hide', h);
-    return () => el.removeEventListener('lt-hide', h);
-  }, [onLtHide]);
+    if (!el || !onHide) return;
+    const h = (ev: Event) => onHide!(ev as CustomEvent);
+    el.addEventListener('hide', h);
+    return () => el.removeEventListener('hide', h);
+  }, [onHide]);
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtAction) return;
-    const h = (ev: Event) => onLtAction!(ev as CustomEvent);
-    el.addEventListener('lt-action', h);
-    return () => el.removeEventListener('lt-action', h);
-  }, [onLtAction]);
+    if (!el || !onAction) return;
+    const h = (ev: Event) => onAction!(ev as CustomEvent);
+    el.addEventListener('action', h);
+    return () => el.removeEventListener('action', h);
+  }, [onAction]);
 
   return (
     <lt-snackbar ref={innerRef} {...(props as Record<string, unknown>)}>

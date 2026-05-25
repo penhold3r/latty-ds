@@ -10,12 +10,12 @@ export type DialogProps = HTMLAttributes<DialogEl> & {
   closeOnEscape?: boolean;
   uppercase?: boolean;
   backdropBlur?: boolean;
-  onLtDialogOpen?: (event: CustomEvent) => void;
-  onLtDialogClose?: (event: CustomEvent) => void;
+  onDialogOpen?: (event: CustomEvent) => void;
+  onDialogClose?: (event: CustomEvent) => void;
 };
 
 export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(
-  { onLtDialogOpen, onLtDialogClose, children, ...props },
+  { onDialogOpen, onDialogClose, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DialogEl>(null);
@@ -24,18 +24,18 @@ export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtDialogOpen) return;
-    const h = (ev: Event) => onLtDialogOpen!(ev as CustomEvent);
-    el.addEventListener('lt-dialog-open', h);
-    return () => el.removeEventListener('lt-dialog-open', h);
-  }, [onLtDialogOpen]);
+    if (!el || !onDialogOpen) return;
+    const h = (ev: Event) => onDialogOpen!(ev as CustomEvent);
+    el.addEventListener('dialog-open', h);
+    return () => el.removeEventListener('dialog-open', h);
+  }, [onDialogOpen]);
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtDialogClose) return;
-    const h = (ev: Event) => onLtDialogClose!(ev as CustomEvent);
-    el.addEventListener('lt-dialog-close', h);
-    return () => el.removeEventListener('lt-dialog-close', h);
-  }, [onLtDialogClose]);
+    if (!el || !onDialogClose) return;
+    const h = (ev: Event) => onDialogClose!(ev as CustomEvent);
+    el.addEventListener('dialog-close', h);
+    return () => el.removeEventListener('dialog-close', h);
+  }, [onDialogClose]);
 
   return (
     <lt-dialog ref={innerRef} {...(props as Record<string, unknown>)}>

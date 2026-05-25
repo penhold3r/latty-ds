@@ -29,19 +29,19 @@ describe('Dropdown', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-dropdown');
   });
 
-  it('wires onLtOpen event handler', () => {
+  it('wires onOpen event handler', () => {
     const handler = vi.fn();
-    const { container } = render(<Dropdown onLtOpen={handler} />);
+    const { container } = render(<Dropdown onOpen={handler} />);
     const el = container.querySelector('lt-dropdown')!;
-    el.dispatchEvent(new CustomEvent('lt-open', { bubbles: true }));
+    el.dispatchEvent(new CustomEvent('open', { bubbles: true }));
     expect(handler).toHaveBeenCalledOnce();
   });
 
-  it('wires onLtClose event handler', () => {
+  it('wires onClose event handler', () => {
     const handler = vi.fn();
-    const { container } = render(<Dropdown onLtClose={handler} />);
+    const { container } = render(<Dropdown onClose={handler} />);
     const el = container.querySelector('lt-dropdown')!;
-    el.dispatchEvent(new CustomEvent('lt-close', { bubbles: true }));
+    el.dispatchEvent(new CustomEvent('close', { bubbles: true }));
     expect(handler).toHaveBeenCalledOnce();
   });
 });

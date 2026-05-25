@@ -157,7 +157,7 @@ describe('<lt-date-input>', () => {
     await el.updateComplete;
     await Promise.resolve();
     el.shadowRoot!.querySelector('lt-calendar')!.dispatchEvent(
-      new CustomEvent('lt-change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
+      new CustomEvent('change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
     );
     await el.updateComplete;
     expect(dropdown.style.display).toBe('');
@@ -183,7 +183,7 @@ describe('<lt-date-input>', () => {
 
     // Close via calendar selection
     el.shadowRoot!.querySelector('lt-calendar')!.dispatchEvent(
-      new CustomEvent('lt-change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
+      new CustomEvent('change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
     );
     await el.updateComplete;
 
@@ -207,13 +207,13 @@ describe('<lt-date-input>', () => {
     expect(btn.getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('selecting a date fires lt-change with the ISO value', async () => {
+  it('selecting a date fires change with the ISO value', async () => {
     const spy = vi.fn();
-    el.addEventListener('lt-change', spy);
+    el.addEventListener('change', spy);
     el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!.click();
     await el.updateComplete;
     const cal = el.shadowRoot!.querySelector('lt-calendar')!;
-    cal.dispatchEvent(new CustomEvent('lt-change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true }));
+    cal.dispatchEvent(new CustomEvent('change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true }));
     await el.updateComplete;
     expect(spy).toHaveBeenCalledOnce();
     expect((spy.mock.calls[0][0] as CustomEvent).detail.value).toBe('2026-06-15');
@@ -223,7 +223,7 @@ describe('<lt-date-input>', () => {
     el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!.click();
     await el.updateComplete;
     el.shadowRoot!.querySelector('lt-calendar')!.dispatchEvent(
-      new CustomEvent('lt-change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
+      new CustomEvent('change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
     );
     await el.updateComplete;
     expect(el.value).toBe('2026-06-15');
@@ -233,7 +233,7 @@ describe('<lt-date-input>', () => {
     el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!.click();
     await el.updateComplete;
     el.shadowRoot!.querySelector('lt-calendar')!.dispatchEvent(
-      new CustomEvent('lt-change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
+      new CustomEvent('change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
     );
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('lt-calendar')).toBeNull();

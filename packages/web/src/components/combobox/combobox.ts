@@ -14,7 +14,7 @@ import { openFloating, closeFloating } from '../shared/floating';
  *
  * @element lt-combobox
  *
- * @fires {CustomEvent<{value: string, label: string}>} lt-change - Fired when the selected value changes.
+ * @fires {CustomEvent<{value: string, label: string}>} change - Fired when the selected value changes.
  *
  * @example
  * ```html
@@ -101,7 +101,7 @@ export class Combobox extends ThemeableElement {
     if (opt.disabled) return;
     this.value = opt.value;
     this.closeDropdown();
-    dispatch(this, 'lt-change', { value: opt.value, label: opt.label });
+    dispatch(this, 'change', { value: opt.value, label: opt.label });
   }
 
   private handleInput(e: Event) {

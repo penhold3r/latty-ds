@@ -30,8 +30,8 @@ import '../text/text';
  * @slot header - Custom header content (overrides title prop)
  * @slot footer - Footer content (typically for action buttons)
  *
- * @fires lt-dialog-open - Fired when dialog opens
- * @fires lt-dialog-close - Fired when dialog closes
+ * @fires dialog-open - Fired when dialog opens
+ * @fires dialog-close - Fired when dialog closes
  *
  * @example
  * ```html
@@ -162,7 +162,7 @@ export class Dialog extends ThemeableElement {
 
     // Dispatch open event
     this.dispatchEvent(
-      new CustomEvent('lt-dialog-open', {
+      new CustomEvent('dialog-open', {
         bubbles: true,
         composed: true
       })
@@ -178,7 +178,7 @@ export class Dialog extends ThemeableElement {
 
     // Dispatch close event
     this.dispatchEvent(
-      new CustomEvent('lt-dialog-close', {
+      new CustomEvent('dialog-close', {
         bubbles: true,
         composed: true
       })

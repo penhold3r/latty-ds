@@ -73,7 +73,7 @@ describe('<lt-dropdown>', () => {
 
   it('dispatches lt-open when opened', async () => {
     const spy = vi.fn();
-    el.addEventListener('lt-open', spy);
+    el.addEventListener('open', spy);
     el.show();
     await el.updateComplete;
     expect(spy).toHaveBeenCalledOnce();
@@ -83,7 +83,7 @@ describe('<lt-dropdown>', () => {
     el.open = true;
     await el.updateComplete;
     const spy = vi.fn();
-    el.addEventListener('lt-close', spy);
+    el.addEventListener('close', spy);
     el.hide();
     await el.updateComplete;
     expect(spy).toHaveBeenCalledOnce();
@@ -128,7 +128,7 @@ describe('<lt-dropdown>', () => {
   it('closes when a lt-select event bubbles up from an item', async () => {
     el.open = true;
     await el.updateComplete;
-    el.dispatchEvent(new CustomEvent('lt-select', { bubbles: true, composed: true }));
+    el.dispatchEvent(new CustomEvent('select', { bubbles: true, composed: true }));
     await el.updateComplete;
     expect(el.open).toBe(false);
   });

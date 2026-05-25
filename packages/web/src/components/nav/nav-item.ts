@@ -17,9 +17,9 @@ import '@latty/icons';
  *
  * @element lt-nav-item
  *
- * @fires {CustomEvent<{ href: string; label: string }>} lt-nav-item-click - Fired when the item
+ * @fires {CustomEvent<{ href: string; label: string }>} nav-item-click - Fired when the item
  *   is clicked (even when it has no href).
- * @fires {CustomEvent<{ open: boolean }>} lt-nav-collapse - Fired when a collapsible item
+ * @fires {CustomEvent<{ open: boolean }>} nav-collapse - Fired when a collapsible item
  *   is opened or closed.
  *
  * @slot - Nested `<lt-nav-item>` children (makes this item a collapsible group)
@@ -121,7 +121,7 @@ export class NavItem extends ThemeableElement {
     if (this.disabled) return;
 
     this.dispatchEvent(
-      new CustomEvent('lt-nav-item-click', {
+      new CustomEvent('nav-item-click', {
         detail: { href: this.href, label: this.label },
         bubbles: true,
         composed: true
@@ -132,7 +132,7 @@ export class NavItem extends ThemeableElement {
       e.preventDefault();
       this.open = !this.open;
       this.dispatchEvent(
-        new CustomEvent('lt-nav-collapse', {
+        new CustomEvent('nav-collapse', {
           detail: { open: this.open },
           bubbles: true,
           composed: true

@@ -29,26 +29,26 @@ describe('Dialog', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-dialog');
   });
 
-  it('calls onLtDialogOpen when lt-dialog-open fires', () => {
-    const onLtDialogOpen = vi.fn();
-    const { container } = render(<Dialog onLtDialogOpen={onLtDialogOpen}>Content</Dialog>);
-    container.querySelector('lt-dialog')!.dispatchEvent(new CustomEvent('lt-dialog-open'));
-    expect(onLtDialogOpen).toHaveBeenCalledOnce();
+  it('calls onDialogOpen when dialog-open fires', () => {
+    const onDialogOpen = vi.fn();
+    const { container } = render(<Dialog onDialogOpen={onDialogOpen}>Content</Dialog>);
+    container.querySelector('lt-dialog')!.dispatchEvent(new CustomEvent('dialog-open'));
+    expect(onDialogOpen).toHaveBeenCalledOnce();
   });
 
-  it('calls onLtDialogClose when lt-dialog-close fires', () => {
-    const onLtDialogClose = vi.fn();
-    const { container } = render(<Dialog onLtDialogClose={onLtDialogClose}>Content</Dialog>);
-    container.querySelector('lt-dialog')!.dispatchEvent(new CustomEvent('lt-dialog-close'));
-    expect(onLtDialogClose).toHaveBeenCalledOnce();
+  it('calls onDialogClose when dialog-close fires', () => {
+    const onDialogClose = vi.fn();
+    const { container } = render(<Dialog onDialogClose={onDialogClose}>Content</Dialog>);
+    container.querySelector('lt-dialog')!.dispatchEvent(new CustomEvent('dialog-close'));
+    expect(onDialogClose).toHaveBeenCalledOnce();
   });
 
   it('removes event listeners on unmount', () => {
-    const onLtDialogOpen = vi.fn();
-    const { container, unmount } = render(<Dialog onLtDialogOpen={onLtDialogOpen}>Content</Dialog>);
+    const onDialogOpen = vi.fn();
+    const { container, unmount } = render(<Dialog onDialogOpen={onDialogOpen}>Content</Dialog>);
     const el = container.querySelector('lt-dialog')!;
     unmount();
-    el.dispatchEvent(new CustomEvent('lt-dialog-open'));
-    expect(onLtDialogOpen).not.toHaveBeenCalled();
+    el.dispatchEvent(new CustomEvent('dialog-open'));
+    expect(onDialogOpen).not.toHaveBeenCalled();
   });
 });

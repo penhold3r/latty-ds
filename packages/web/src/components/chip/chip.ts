@@ -14,7 +14,7 @@ import { resolveColorValue, dispatch } from '../../utils';
  * @element lt-chip
  * @slot - Label content
  * @slot icon - Leading icon or avatar
- * @fires lt-delete - Fires when the delete button is clicked (only when `deletable`)
+ * @fires delete - Fires when the delete button is clicked (only when `deletable`)
  *
  * @example
  * ```html
@@ -49,7 +49,7 @@ export class Chip extends ThemeableElement {
   }
 
   private _handleDelete() {
-    dispatch(this, 'lt-delete');
+    dispatch(this, 'delete');
   }
 
   render() {

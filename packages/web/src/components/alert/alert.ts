@@ -17,7 +17,7 @@ import '../text/text';
  *
  * @slot - Alert body. Accepts any HTML — bold, links, lists, etc.
  *
- * @fires lt-close - Fired when the dismiss button is clicked, just before the element is removed.
+ * @fires close - Fired when the dismiss button is clicked, just before the element is removed.
  *
  * @example
  * ```html
@@ -70,7 +70,7 @@ export class Alert extends ThemeableElement {
   };
 
   private _handleClose() {
-    const cancelled = !dispatch(this, 'lt-close', undefined, { cancelable: true });
+    const cancelled = !dispatch(this, 'close', undefined, { cancelable: true });
     if (cancelled) return;
     this.setAttribute('dismissed', '');
     setTimeout(() => this.remove(), 200);

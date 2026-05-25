@@ -1,16 +1,16 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Pagination as PaginationEl } from '@latty/web';
 
-export type PaginationProps = HTMLAttributes<PaginationEl> & {
+export type PaginationProps = Omit<HTMLAttributes<PaginationEl>, 'onChange'> & {
   page?: number;
   totalPages?: number;
   size?: PaginationEl['size'];
   disabled?: boolean;
-  onLtChange?: (event: CustomEvent) => void;
+  onChange?: (event: CustomEvent) => void;
 };
 
 export const Pagination = forwardRef<PaginationEl, PaginationProps>(function Pagination(
-  { onLtChange, children, ...props },
+  { onChange, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<PaginationEl>(null);
@@ -19,11 +19,11 @@ export const Pagination = forwardRef<PaginationEl, PaginationProps>(function Pag
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtChange) return;
-    const h = (ev: Event) => onLtChange!(ev as CustomEvent);
-    el.addEventListener('lt-change', h);
-    return () => el.removeEventListener('lt-change', h);
-  }, [onLtChange]);
+    if (!el || !onChange) return;
+    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    el.addEventListener('change', h);
+    return () => el.removeEventListener('change', h);
+  }, [onChange]);
 
   return (
     <lt-pagination ref={innerRef} {...(props as Record<string, unknown>)}>

@@ -103,7 +103,7 @@ describe('<lt-combobox>', () => {
 
   it('dispatches lt-change when an option is selected', async () => {
     const events: Array<{ value: string; label: string }> = [];
-    el.addEventListener('lt-change', (e) => events.push((e as CustomEvent).detail));
+    el.addEventListener('change', (e) => events.push((e as CustomEvent).detail));
 
     const input = el.shadowRoot!.querySelector('input')!;
     input.dispatchEvent(new FocusEvent('focus'));

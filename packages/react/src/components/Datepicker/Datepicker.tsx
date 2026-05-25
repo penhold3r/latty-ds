@@ -1,7 +1,7 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Datepicker as DatepickerEl } from '@latty/web';
 
-export type DatepickerProps = HTMLAttributes<DatepickerEl> & {
+export type DatepickerProps = Omit<HTMLAttributes<DatepickerEl>, 'onChange' | 'onInput'> & {
   type?: DatepickerEl['type'];
   value?: string;
   min?: string;
@@ -14,12 +14,12 @@ export type DatepickerProps = HTMLAttributes<DatepickerEl> & {
   required?: boolean;
   readonly?: boolean;
   name?: string;
-  onLtChange?: (event: CustomEvent) => void;
-  onLtInput?: (event: CustomEvent) => void;
+  onChange?: (event: CustomEvent) => void;
+  onInput?: (event: CustomEvent) => void;
 };
 
 export const Datepicker = forwardRef<DatepickerEl, DatepickerProps>(function Datepicker(
-  { onLtChange, onLtInput, children, ...props },
+  { onChange, onInput, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DatepickerEl>(null);
@@ -28,18 +28,18 @@ export const Datepicker = forwardRef<DatepickerEl, DatepickerProps>(function Dat
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtChange) return;
-    const h = (ev: Event) => onLtChange!(ev as CustomEvent);
-    el.addEventListener('lt-change', h);
-    return () => el.removeEventListener('lt-change', h);
-  }, [onLtChange]);
+    if (!el || !onChange) return;
+    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    el.addEventListener('change', h);
+    return () => el.removeEventListener('change', h);
+  }, [onChange]);
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtInput) return;
-    const h = (ev: Event) => onLtInput!(ev as CustomEvent);
-    el.addEventListener('lt-input', h);
-    return () => el.removeEventListener('lt-input', h);
-  }, [onLtInput]);
+    if (!el || !onInput) return;
+    const h = (ev: Event) => onInput!(ev as CustomEvent);
+    el.addEventListener('input', h);
+    return () => el.removeEventListener('input', h);
+  }, [onInput]);
 
   return (
     <lt-datepicker ref={innerRef} {...(props as Record<string, unknown>)}>

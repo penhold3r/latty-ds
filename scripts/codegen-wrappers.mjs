@@ -57,10 +57,11 @@ for (const mod of cem.modules) {
       });
 
     const events = (decl.events ?? []).map((e) => {
-      // Convert event name like "lt-close" to "onLtClose"
+      // Strip the "lt-" vendor prefix, then convert "lt-close" → "onClose"
+      const stripped = e.name.replace(/^lt-/, '');
       const handlerName =
-        'on' + e.name.replace(/[-:](.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, (c) => c.toUpperCase());
-      return { name: e.name, handlerName };
+        'on' + stripped.replace(/[-:](.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, (c) => c.toUpperCase());
+      return { name: e.name, handlerName, strippedName: stripped };
     });
 
     components.push({ name: decl.name, tagName: decl.tagName, fields, events });
@@ -106,8 +107,8 @@ for (const { name, tagName, fields, events } of components) {
 
   // Determine which React HTMLAttributes keys to Omit due to type conflicts with custom events.
   const omitKeys = events
-    .filter((e) => NATIVE_TO_REACT_HANDLER[e.name])
-    .map((e) => `'${NATIVE_TO_REACT_HANDLER[e.name]}'`);
+    .filter((e) => NATIVE_TO_REACT_HANDLER[e.strippedName])
+    .map((e) => `'${NATIVE_TO_REACT_HANDLER[e.strippedName]}'`);
   const baseType =
     omitKeys.length > 0 ? `Omit<HTMLAttributes<${name}El>, ${omitKeys.join(' | ')}>` : `HTMLAttributes<${name}El>`;
 

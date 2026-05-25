@@ -44,19 +44,19 @@ describe('NavItem', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-nav-item');
   });
 
-  it('wires onLtNavItemClick event handler', () => {
+  it('wires onNavItemClick event handler', () => {
     const handler = vi.fn();
-    const { container } = render(<NavItem onLtNavItemClick={handler} />);
+    const { container } = render(<NavItem onNavItemClick={handler} />);
     const el = container.querySelector('lt-nav-item')!;
-    el.dispatchEvent(new CustomEvent('lt-nav-item-click', { bubbles: true }));
+    el.dispatchEvent(new CustomEvent('nav-item-click', { bubbles: true }));
     expect(handler).toHaveBeenCalledOnce();
   });
 
-  it('wires onLtNavCollapse event handler', () => {
+  it('wires onNavCollapse event handler', () => {
     const handler = vi.fn();
-    const { container } = render(<NavItem onLtNavCollapse={handler} />);
+    const { container } = render(<NavItem onNavCollapse={handler} />);
     const el = container.querySelector('lt-nav-item')!;
-    el.dispatchEvent(new CustomEvent('lt-nav-collapse', { bubbles: true }));
+    el.dispatchEvent(new CustomEvent('nav-collapse', { bubbles: true }));
     expect(handler).toHaveBeenCalledOnce();
   });
 });

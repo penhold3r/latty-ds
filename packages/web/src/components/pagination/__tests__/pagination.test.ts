@@ -69,7 +69,7 @@ describe('<lt-pagination>', () => {
     el.page = 3;
     await el.updateComplete;
     const events: number[] = [];
-    el.addEventListener('lt-change', (e) => events.push((e as CustomEvent<{ page: number }>).detail.page));
+    el.addEventListener('change', (e) => events.push((e as CustomEvent<{ page: number }>).detail.page));
     const buttons = Array.from(el.shadowRoot!.querySelectorAll('button'));
     const nextBtn = buttons[buttons.length - 2] as HTMLButtonElement;
     nextBtn.click();
@@ -81,7 +81,7 @@ describe('<lt-pagination>', () => {
     el.page = 1;
     await el.updateComplete;
     const events: number[] = [];
-    el.addEventListener('lt-change', (e) => events.push((e as CustomEvent<{ page: number }>).detail.page));
+    el.addEventListener('change', (e) => events.push((e as CustomEvent<{ page: number }>).detail.page));
     const pageButtons = Array.from(el.shadowRoot!.querySelectorAll('button[aria-label^="Page"]'));
     (pageButtons[2] as HTMLButtonElement).click();
     expect(events).toEqual([3]);
@@ -92,7 +92,7 @@ describe('<lt-pagination>', () => {
     el.page = 3;
     await el.updateComplete;
     const events: number[] = [];
-    el.addEventListener('lt-change', (e) => events.push((e as CustomEvent<{ page: number }>).detail.page));
+    el.addEventListener('change', (e) => events.push((e as CustomEvent<{ page: number }>).detail.page));
     const buttons = Array.from(el.shadowRoot!.querySelectorAll('button'));
     const nextBtn = buttons[buttons.length - 2] as HTMLButtonElement;
     nextBtn.click();

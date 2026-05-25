@@ -91,7 +91,7 @@ describe('<lt-slider>', () => {
   it('dispatches lt-input with value detail', async () => {
     await el.updateComplete;
     const spy = vi.fn();
-    el.addEventListener('lt-input', spy);
+    el.addEventListener('input', spy);
 
     const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
     input.value = '42';
@@ -104,7 +104,7 @@ describe('<lt-slider>', () => {
   it('dispatches lt-change with value detail', async () => {
     await el.updateComplete;
     const spy = vi.fn();
-    el.addEventListener('lt-change', spy);
+    el.addEventListener('change', spy);
 
     const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
     input.value = '75';

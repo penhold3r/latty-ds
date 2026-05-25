@@ -43,7 +43,7 @@ describe('<lt-sidepanel>', () => {
 
   it('dispatches lt-close when hide() is called', () => {
     let fired = false;
-    el.addEventListener('lt-close', () => {
+    el.addEventListener('close', () => {
       fired = true;
     });
     el.hide();
@@ -54,7 +54,7 @@ describe('<lt-sidepanel>', () => {
     el.open = true;
     await el.updateComplete;
     let fired = false;
-    el.addEventListener('lt-close', () => {
+    el.addEventListener('close', () => {
       fired = true;
     });
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
@@ -63,7 +63,7 @@ describe('<lt-sidepanel>', () => {
 
   it('does not dispatch lt-close on Escape key when closed', () => {
     let fired = false;
-    el.addEventListener('lt-close', () => {
+    el.addEventListener('close', () => {
       fired = true;
     });
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));

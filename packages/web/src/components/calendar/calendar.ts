@@ -12,9 +12,9 @@ import { dispatch } from '../../utils';
  *
  * @element lt-calendar
  *
- * @fires {CustomEvent<{value: string}>} lt-change - Fired when a single date is selected (mode="single").
- * @fires {CustomEvent<{valueStart: string, valueEnd: string}>} lt-change - Fired when a full range is selected (mode="range").
- * @fires {CustomEvent<{year: number, month: number}>} lt-month-change - Fired when the viewed month changes.
+ * @fires {CustomEvent<{value: string}>} change - Fired when a single date is selected (mode="single").
+ * @fires {CustomEvent<{valueStart: string, valueEnd: string}>} change - Fired when a full range is selected (mode="range").
+ * @fires {CustomEvent<{year: number, month: number}>} month-change - Fired when the viewed month changes.
  *
  * @example
  * ```html
@@ -246,7 +246,7 @@ export class Calendar extends ThemeableElement {
     this._viewMonth = month;
     this._viewYear = year;
     this._focusedDate = null;
-    dispatch(this, 'lt-month-change', { year: this._viewYear, month: this._viewMonth });
+    dispatch(this, 'month-change', { year: this._viewYear, month: this._viewMonth });
   }
 
   private _openPicker() {
@@ -263,7 +263,7 @@ export class Calendar extends ThemeableElement {
     this._viewMonth = month;
     this._pickingMonthYear = false;
     this._focusedDate = null;
-    dispatch(this, 'lt-month-change', { year: this._viewYear, month: this._viewMonth });
+    dispatch(this, 'month-change', { year: this._viewYear, month: this._viewMonth });
   }
 
   private _selectDay(day: CalendarDay) {
@@ -298,7 +298,7 @@ export class Calendar extends ThemeableElement {
         }
 
         if (this.valueStart && this.valueEnd) {
-          dispatch(this, 'lt-change', { valueStart: this.valueStart, valueEnd: this.valueEnd });
+          dispatch(this, 'change', { valueStart: this.valueStart, valueEnd: this.valueEnd });
         }
       }
       this._focusedDate = day.date;
@@ -308,7 +308,7 @@ export class Calendar extends ThemeableElement {
     const iso = this._toIso(day.date);
     this.value = iso;
     this._focusedDate = day.date;
-    dispatch(this, 'lt-change', { value: iso });
+    dispatch(this, 'change', { value: iso });
   }
 
   private _goToToday() {

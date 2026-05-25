@@ -78,7 +78,7 @@ describe('<lt-datepicker>', () => {
 
   it('dispatches lt-input on input event', async () => {
     const events: string[] = [];
-    el.addEventListener('lt-input', (e) => events.push((e as CustomEvent<{ value: string }>).detail.value));
+    el.addEventListener('input', (e) => events.push((e as CustomEvent<{ value: string }>).detail.value));
     const input = el.shadowRoot!.querySelector('input')!;
     input.value = '2025-06-01';
     input.dispatchEvent(new Event('input'));
@@ -87,7 +87,7 @@ describe('<lt-datepicker>', () => {
 
   it('dispatches lt-change on change event', async () => {
     const events: string[] = [];
-    el.addEventListener('lt-change', (e) => events.push((e as CustomEvent<{ value: string }>).detail.value));
+    el.addEventListener('change', (e) => events.push((e as CustomEvent<{ value: string }>).detail.value));
     const input = el.shadowRoot!.querySelector('input')!;
     input.value = '2025-06-15';
     input.dispatchEvent(new Event('change'));

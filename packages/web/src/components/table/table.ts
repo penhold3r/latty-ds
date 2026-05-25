@@ -39,7 +39,7 @@ import '@latty/icons';
  * - Hide columns on mobile
  * - Accessible with keyboard navigation
  *
- * @fires lt-sort-change - Fired when sort changes
+ * @fires sort-change - Fired when sort changes
  *
  * @example
  * ```typescript
@@ -245,7 +245,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
     // Dispatch event
     this.dispatchEvent(
-      new CustomEvent<SortChangeDetail>('lt-sort-change', {
+      new CustomEvent<SortChangeDetail>('sort-change', {
         bubbles: true,
         composed: true,
         detail: {

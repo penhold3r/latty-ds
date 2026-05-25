@@ -106,7 +106,7 @@ describe('<lt-alert>', () => {
     el.closable = true;
     await el.updateComplete;
     const handler = vi.fn();
-    el.addEventListener('lt-close', handler);
+    el.addEventListener('close', handler);
     (el.shadowRoot!.querySelector('.close') as HTMLElement).click();
     expect(handler).toHaveBeenCalledOnce();
   });
@@ -125,7 +125,7 @@ describe('<lt-alert>', () => {
     vi.useFakeTimers();
     el.closable = true;
     await el.updateComplete;
-    el.addEventListener('lt-close', (e) => e.preventDefault());
+    el.addEventListener('close', (e) => e.preventDefault());
     (el.shadowRoot!.querySelector('.close') as HTMLElement).click();
     vi.advanceTimersByTime(200);
     expect(document.body.contains(el)).toBe(true);

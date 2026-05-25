@@ -49,7 +49,7 @@ describe('<lt-snackbar>', () => {
 
   it('dispatches lt-show event on show()', async () => {
     const handler = vi.fn();
-    el.addEventListener('lt-show', handler);
+    el.addEventListener('show', handler);
     el.show();
     await el.updateComplete;
     expect(handler).toHaveBeenCalledOnce();
@@ -59,7 +59,7 @@ describe('<lt-snackbar>', () => {
     const handler = vi.fn();
     el.show();
     await el.updateComplete;
-    el.addEventListener('lt-hide', handler);
+    el.addEventListener('hide', handler);
     el.hide();
     await el.updateComplete;
     expect(handler).toHaveBeenCalledOnce();
@@ -75,7 +75,7 @@ describe('<lt-snackbar>', () => {
 
   it('dispatches lt-action and hides on action button click', async () => {
     const handler = vi.fn();
-    el.addEventListener('lt-action', handler);
+    el.addEventListener('action', handler);
     el.setAttribute('action-label', 'Undo');
     el.show();
     await el.updateComplete;

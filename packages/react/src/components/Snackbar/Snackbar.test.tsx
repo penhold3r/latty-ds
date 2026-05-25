@@ -24,33 +24,33 @@ describe('Snackbar', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-snackbar');
   });
 
-  it('calls onLtShow when lt-show event fires', () => {
-    const onLtShow = vi.fn();
-    const { container } = render(<Snackbar onLtShow={onLtShow}>Message</Snackbar>);
-    container.querySelector('lt-snackbar')!.dispatchEvent(new CustomEvent('lt-show'));
-    expect(onLtShow).toHaveBeenCalledOnce();
+  it('calls onShow when show event fires', () => {
+    const onShow = vi.fn();
+    const { container } = render(<Snackbar onShow={onShow}>Message</Snackbar>);
+    container.querySelector('lt-snackbar')!.dispatchEvent(new CustomEvent('show'));
+    expect(onShow).toHaveBeenCalledOnce();
   });
 
-  it('calls onLtHide when lt-hide event fires', () => {
-    const onLtHide = vi.fn();
-    const { container } = render(<Snackbar onLtHide={onLtHide}>Message</Snackbar>);
-    container.querySelector('lt-snackbar')!.dispatchEvent(new CustomEvent('lt-hide'));
-    expect(onLtHide).toHaveBeenCalledOnce();
+  it('calls onHide when hide event fires', () => {
+    const onHide = vi.fn();
+    const { container } = render(<Snackbar onHide={onHide}>Message</Snackbar>);
+    container.querySelector('lt-snackbar')!.dispatchEvent(new CustomEvent('hide'));
+    expect(onHide).toHaveBeenCalledOnce();
   });
 
-  it('calls onLtAction when lt-action event fires', () => {
-    const onLtAction = vi.fn();
-    const { container } = render(<Snackbar onLtAction={onLtAction}>Message</Snackbar>);
-    container.querySelector('lt-snackbar')!.dispatchEvent(new CustomEvent('lt-action'));
-    expect(onLtAction).toHaveBeenCalledOnce();
+  it('calls onAction when action event fires', () => {
+    const onAction = vi.fn();
+    const { container } = render(<Snackbar onAction={onAction}>Message</Snackbar>);
+    container.querySelector('lt-snackbar')!.dispatchEvent(new CustomEvent('action'));
+    expect(onAction).toHaveBeenCalledOnce();
   });
 
   it('removes event listeners on unmount', () => {
-    const onLtShow = vi.fn();
-    const { container, unmount } = render(<Snackbar onLtShow={onLtShow}>Message</Snackbar>);
+    const onShow = vi.fn();
+    const { container, unmount } = render(<Snackbar onShow={onShow}>Message</Snackbar>);
     const el = container.querySelector('lt-snackbar')!;
     unmount();
-    el.dispatchEvent(new CustomEvent('lt-show'));
-    expect(onLtShow).not.toHaveBeenCalled();
+    el.dispatchEvent(new CustomEvent('show'));
+    expect(onShow).not.toHaveBeenCalled();
   });
 });

@@ -12,7 +12,7 @@ import '@latty/icons';
  *
  * @element lt-pagination
  *
- * @fires {CustomEvent<{page: number}>} lt-change - Fired when the user navigates to a different page.
+ * @fires {CustomEvent<{page: number}>} change - Fired when the user navigates to a different page.
  *
  * @example
  * ```html
@@ -43,7 +43,7 @@ export class Pagination extends ThemeableElement {
   private _go(page: number) {
     if (this.disabled || page < 1 || page > this.totalPages || page === this.page) return;
     this.page = page;
-    dispatch(this, 'lt-change', { page });
+    dispatch(this, 'change', { page });
   }
 
   private _pages(): (number | '…')[] {

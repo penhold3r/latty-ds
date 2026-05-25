@@ -8,21 +8,21 @@ export type ChipProps = HTMLAttributes<ChipEl> & {
   disabled?: boolean;
   deletable?: boolean;
   background?: string;
-  onLtDelete?: (event: CustomEvent) => void;
+  onDelete?: (event: CustomEvent) => void;
 };
 
-export const Chip = forwardRef<ChipEl, ChipProps>(function Chip({ onLtDelete, children, ...props }, forwardedRef) {
+export const Chip = forwardRef<ChipEl, ChipProps>(function Chip({ onDelete, children, ...props }, forwardedRef) {
   const innerRef = useRef<ChipEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtDelete) return;
-    const h = (ev: Event) => onLtDelete!(ev as CustomEvent);
-    el.addEventListener('lt-delete', h);
-    return () => el.removeEventListener('lt-delete', h);
-  }, [onLtDelete]);
+    if (!el || !onDelete) return;
+    const h = (ev: Event) => onDelete!(ev as CustomEvent);
+    el.addEventListener('delete', h);
+    return () => el.removeEventListener('delete', h);
+  }, [onDelete]);
 
   return (
     <lt-chip ref={innerRef} {...(props as Record<string, unknown>)}>

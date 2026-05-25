@@ -61,7 +61,7 @@ describe('<lt-dropdown-item>', () => {
 
   it('dispatches lt-select on click', async () => {
     const spy = vi.fn();
-    el.addEventListener('lt-select', spy);
+    el.addEventListener('select', spy);
     el.shadowRoot!.querySelector<HTMLButtonElement>('button')!.click();
     expect(spy).toHaveBeenCalledOnce();
   });
@@ -70,17 +70,17 @@ describe('<lt-dropdown-item>', () => {
     el.disabled = true;
     await el.updateComplete;
     const spy = vi.fn();
-    el.addEventListener('lt-select', spy);
+    el.addEventListener('select', spy);
     // pointer-events: none prevents real clicks, but we test the guard directly
     el.shadowRoot!.querySelector('button')?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('lt-select event bubbles and is composed', async () => {
+  it('select event bubbles and is composed', async () => {
     const spy = vi.fn();
-    document.addEventListener('lt-select', spy);
+    document.addEventListener('select', spy);
     el.shadowRoot!.querySelector<HTMLButtonElement>('button')!.click();
-    document.removeEventListener('lt-select', spy);
+    document.removeEventListener('select', spy);
     expect(spy).toHaveBeenCalledOnce();
   });
 

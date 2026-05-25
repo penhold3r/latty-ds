@@ -29,19 +29,19 @@ describe('Table', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-table');
   });
 
-  it('calls onLtSortChange when lt-sort-change event fires', () => {
-    const onLtSortChange = vi.fn();
-    const { container } = render(<Table onLtSortChange={onLtSortChange} />);
-    container.querySelector('lt-table')!.dispatchEvent(new CustomEvent('lt-sort-change'));
-    expect(onLtSortChange).toHaveBeenCalledOnce();
+  it('calls onSortChange when sort-change event fires', () => {
+    const onSortChange = vi.fn();
+    const { container } = render(<Table onSortChange={onSortChange} />);
+    container.querySelector('lt-table')!.dispatchEvent(new CustomEvent('sort-change'));
+    expect(onSortChange).toHaveBeenCalledOnce();
   });
 
-  it('removes lt-sort-change listener on unmount', () => {
-    const onLtSortChange = vi.fn();
-    const { container, unmount } = render(<Table onLtSortChange={onLtSortChange} />);
+  it('removes sort-change listener on unmount', () => {
+    const onSortChange = vi.fn();
+    const { container, unmount } = render(<Table onSortChange={onSortChange} />);
     const el = container.querySelector('lt-table')!;
     unmount();
-    el.dispatchEvent(new CustomEvent('lt-sort-change'));
-    expect(onLtSortChange).not.toHaveBeenCalled();
+    el.dispatchEvent(new CustomEvent('sort-change'));
+    expect(onSortChange).not.toHaveBeenCalled();
   });
 });

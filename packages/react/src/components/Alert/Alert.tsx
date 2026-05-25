@@ -9,21 +9,21 @@ export type AlertProps = HTMLAttributes<AlertEl> & {
   closable?: boolean;
   background?: string;
   uppercase?: boolean;
-  onLtClose?: (event: CustomEvent) => void;
+  onClose?: (event: CustomEvent) => void;
 };
 
-export const Alert = forwardRef<AlertEl, AlertProps>(function Alert({ onLtClose, children, ...props }, forwardedRef) {
+export const Alert = forwardRef<AlertEl, AlertProps>(function Alert({ onClose, children, ...props }, forwardedRef) {
   const innerRef = useRef<AlertEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtClose) return;
-    const h = (ev: Event) => onLtClose!(ev as CustomEvent);
-    el.addEventListener('lt-close', h);
-    return () => el.removeEventListener('lt-close', h);
-  }, [onLtClose]);
+    if (!el || !onClose) return;
+    const h = (ev: Event) => onClose!(ev as CustomEvent);
+    el.addEventListener('close', h);
+    return () => el.removeEventListener('close', h);
+  }, [onClose]);
 
   return (
     <lt-alert ref={innerRef} {...(props as Record<string, unknown>)}>

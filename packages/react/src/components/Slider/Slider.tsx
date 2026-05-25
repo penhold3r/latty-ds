@@ -1,7 +1,7 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Slider as SliderEl } from '@latty/web';
 
-export type SliderProps = HTMLAttributes<SliderEl> & {
+export type SliderProps = Omit<HTMLAttributes<SliderEl>, 'onInput' | 'onChange'> & {
   size?: SliderEl['size'];
   disabled?: boolean;
   tooltip?: boolean;
@@ -11,12 +11,12 @@ export type SliderProps = HTMLAttributes<SliderEl> & {
   value?: number;
   label?: string;
   name?: string;
-  onLtInput?: (event: CustomEvent) => void;
-  onLtChange?: (event: CustomEvent) => void;
+  onInput?: (event: CustomEvent) => void;
+  onChange?: (event: CustomEvent) => void;
 };
 
 export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
-  { onLtInput, onLtChange, children, ...props },
+  { onInput, onChange, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SliderEl>(null);
@@ -25,18 +25,18 @@ export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtInput) return;
-    const h = (ev: Event) => onLtInput!(ev as CustomEvent);
-    el.addEventListener('lt-input', h);
-    return () => el.removeEventListener('lt-input', h);
-  }, [onLtInput]);
+    if (!el || !onInput) return;
+    const h = (ev: Event) => onInput!(ev as CustomEvent);
+    el.addEventListener('input', h);
+    return () => el.removeEventListener('input', h);
+  }, [onInput]);
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtChange) return;
-    const h = (ev: Event) => onLtChange!(ev as CustomEvent);
-    el.addEventListener('lt-change', h);
-    return () => el.removeEventListener('lt-change', h);
-  }, [onLtChange]);
+    if (!el || !onChange) return;
+    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    el.addEventListener('change', h);
+    return () => el.removeEventListener('change', h);
+  }, [onChange]);
 
   return (
     <lt-slider ref={innerRef} {...(props as Record<string, unknown>)}>

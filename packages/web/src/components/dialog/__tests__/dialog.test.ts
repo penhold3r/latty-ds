@@ -142,7 +142,7 @@ describe('<lt-dialog>', () => {
 
   it('dispatches lt-dialog-open event when opened', async () => {
     const handler = vi.fn();
-    el.addEventListener('lt-dialog-open', handler);
+    el.addEventListener('dialog-open', handler);
 
     el.open = true;
     await el.updateComplete;
@@ -152,7 +152,7 @@ describe('<lt-dialog>', () => {
 
   it('dispatches lt-dialog-close event when closed', async () => {
     const handler = vi.fn();
-    el.addEventListener('lt-dialog-close', handler);
+    el.addEventListener('dialog-close', handler);
 
     el.open = true;
     await el.updateComplete;

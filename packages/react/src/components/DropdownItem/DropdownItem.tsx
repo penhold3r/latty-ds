@@ -5,11 +5,11 @@ export type DropdownItemProps = HTMLAttributes<DropdownItemEl> & {
   disabled?: boolean;
   selected?: boolean;
   href?: string;
-  onLtSelect?: (event: CustomEvent) => void;
+  onSelect?: (event: CustomEvent) => void;
 };
 
 export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(function DropdownItem(
-  { onLtSelect, children, ...props },
+  { onSelect, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DropdownItemEl>(null);
@@ -18,11 +18,11 @@ export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(functi
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtSelect) return;
-    const h = (ev: Event) => onLtSelect!(ev as CustomEvent);
-    el.addEventListener('lt-select', h);
-    return () => el.removeEventListener('lt-select', h);
-  }, [onLtSelect]);
+    if (!el || !onSelect) return;
+    const h = (ev: Event) => onSelect!(ev as CustomEvent);
+    el.addEventListener('select', h);
+    return () => el.removeEventListener('select', h);
+  }, [onSelect]);
 
   return (
     <lt-dropdown-item ref={innerRef} {...(props as Record<string, unknown>)}>

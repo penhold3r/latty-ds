@@ -4,12 +4,12 @@ import type { Dropdown as DropdownEl } from '@latty/web';
 export type DropdownProps = HTMLAttributes<DropdownEl> & {
   open?: boolean;
   placement?: DropdownEl['placement'];
-  onLtOpen?: (event: CustomEvent) => void;
-  onLtClose?: (event: CustomEvent) => void;
+  onOpen?: (event: CustomEvent) => void;
+  onClose?: (event: CustomEvent) => void;
 };
 
 export const Dropdown = forwardRef<DropdownEl, DropdownProps>(function Dropdown(
-  { onLtOpen, onLtClose, children, ...props },
+  { onOpen, onClose, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DropdownEl>(null);
@@ -18,18 +18,18 @@ export const Dropdown = forwardRef<DropdownEl, DropdownProps>(function Dropdown(
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtOpen) return;
-    const h = (ev: Event) => onLtOpen!(ev as CustomEvent);
-    el.addEventListener('lt-open', h);
-    return () => el.removeEventListener('lt-open', h);
-  }, [onLtOpen]);
+    if (!el || !onOpen) return;
+    const h = (ev: Event) => onOpen!(ev as CustomEvent);
+    el.addEventListener('open', h);
+    return () => el.removeEventListener('open', h);
+  }, [onOpen]);
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onLtClose) return;
-    const h = (ev: Event) => onLtClose!(ev as CustomEvent);
-    el.addEventListener('lt-close', h);
-    return () => el.removeEventListener('lt-close', h);
-  }, [onLtClose]);
+    if (!el || !onClose) return;
+    const h = (ev: Event) => onClose!(ev as CustomEvent);
+    el.addEventListener('close', h);
+    return () => el.removeEventListener('close', h);
+  }, [onClose]);
 
   return (
     <lt-dropdown ref={innerRef} {...(props as Record<string, unknown>)}>

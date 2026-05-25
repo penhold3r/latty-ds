@@ -15,8 +15,8 @@ import { openFloating, closeFloating } from '../shared/floating';
  * @element lt-dropdown
  * @slot trigger - The element that opens/closes the menu (e.g. lt-button)
  * @slot - Menu items (lt-dropdown-item elements)
- * @fires {CustomEvent} lt-open - Fired when the menu opens
- * @fires {CustomEvent} lt-close - Fired when the menu closes
+ * @fires {CustomEvent} open - Fired when the menu opens
+ * @fires {CustomEvent} close - Fired when the menu closes
  */
 @customElement('lt-dropdown')
 export class Dropdown extends ThemeableElement {
@@ -31,13 +31,13 @@ export class Dropdown extends ThemeableElement {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('keydown', this._onKeydown);
-    this.addEventListener('lt-select', this.hide);
+    this.addEventListener('select', this.hide);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('keydown', this._onKeydown);
-    this.removeEventListener('lt-select', this.hide);
+    this.removeEventListener('select', this.hide);
     this._cleanupClickOutside?.();
     this._cleanupClickOutside = null;
     this._floatingCleanup?.();
@@ -56,7 +56,7 @@ export class Dropdown extends ThemeableElement {
         });
       }
       requestAnimationFrame(() => this._items()[0]?.focus());
-      dispatch(this, 'lt-open');
+      dispatch(this, 'open');
     } else {
       this._cleanupClickOutside?.();
       this._cleanupClickOutside = null;
@@ -64,7 +64,7 @@ export class Dropdown extends ThemeableElement {
       if (menu) closeFloating(menu, this._floatingCleanup);
       this._floatingCleanup = null;
       this._triggerEl()?.focus();
-      dispatch(this, 'lt-close');
+      dispatch(this, 'close');
     }
   }
 

@@ -85,7 +85,7 @@ describe('<lt-chip>', () => {
     el.deletable = true;
     await el.updateComplete;
     let fired = false;
-    el.addEventListener('lt-delete', () => {
+    el.addEventListener('delete', () => {
       fired = true;
     });
     el.shadowRoot!.querySelector<HTMLButtonElement>('.delete')!.click();
@@ -94,7 +94,7 @@ describe('<lt-chip>', () => {
 
   it('dispatches lt-delete event via internal handler', () => {
     let fired = false;
-    el.addEventListener('lt-delete', () => {
+    el.addEventListener('delete', () => {
       fired = true;
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

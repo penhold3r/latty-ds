@@ -90,7 +90,7 @@ describe('<lt-nav-item>', () => {
     await el.updateComplete;
 
     let fired = false;
-    el.addEventListener('lt-nav-item-click', () => (fired = true));
+    el.addEventListener('nav-item-click', () => (fired = true));
     el.shadowRoot!.querySelector<HTMLElement>('.item-trigger')!.click();
     expect(fired).toBe(true);
   });
@@ -107,7 +107,7 @@ describe('<lt-nav-item>', () => {
     await el.updateComplete;
 
     let detail: { open: boolean } | null = null;
-    el.addEventListener('lt-nav-collapse', (e) => (detail = (e as CustomEvent).detail));
+    el.addEventListener('nav-collapse', (e) => (detail = (e as CustomEvent).detail));
     el.shadowRoot!.querySelector<HTMLElement>('.item-trigger')!.click();
     await el.updateComplete;
 
@@ -122,7 +122,7 @@ describe('<lt-nav-item>', () => {
     await el.updateComplete;
 
     let fired = false;
-    el.addEventListener('lt-nav-item-click', () => (fired = true));
+    el.addEventListener('nav-item-click', () => (fired = true));
     el.shadowRoot!.querySelector<HTMLElement>('.item-trigger')!.click();
     expect(fired).toBe(false);
   });

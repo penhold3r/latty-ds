@@ -10,7 +10,7 @@ import { dispatch } from '../../utils';
  *
  * @element lt-dropdown-item
  * @slot - Item label / content
- * @fires {CustomEvent} lt-select - Fired when the item is activated (click or Enter/Space)
+ * @fires {CustomEvent} select - Fired when the item is activated (click or Enter/Space)
  */
 @customElement('lt-dropdown-item')
 export class DropdownItem extends ThemeableElement {
@@ -23,7 +23,7 @@ export class DropdownItem extends ThemeableElement {
 
   private _onActivate() {
     if (this.disabled) return;
-    dispatch(this, 'lt-select', { item: this });
+    dispatch(this, 'select', { item: this });
   }
 
   render() {

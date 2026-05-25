@@ -57,7 +57,7 @@ describe('<lt-calendar>', () => {
     await el.updateComplete;
 
     let detail: { value: string } | undefined;
-    el.addEventListener('lt-change', (e) => {
+    el.addEventListener('change', (e) => {
       detail = (e as CustomEvent<{ value: string }>).detail;
     });
 
@@ -75,7 +75,7 @@ describe('<lt-calendar>', () => {
     await el.updateComplete;
 
     let fired = false;
-    el.addEventListener('lt-change', () => {
+    el.addEventListener('change', () => {
       fired = true;
     });
 
@@ -90,7 +90,7 @@ describe('<lt-calendar>', () => {
     await el.updateComplete;
 
     let monthChangeDetail: { year: number; month: number } | undefined;
-    el.addEventListener('lt-month-change', (e) => {
+    el.addEventListener('month-change', (e) => {
       monthChangeDetail = (e as CustomEvent<{ year: number; month: number }>).detail;
     });
 
@@ -216,7 +216,7 @@ describe('<lt-calendar>', () => {
     await el.updateComplete;
 
     let detail: { value: string } | null = null;
-    el.addEventListener('lt-change', (e) => {
+    el.addEventListener('change', (e) => {
       detail = (e as CustomEvent<{ value: string }>).detail;
     });
 
@@ -364,7 +364,7 @@ describe('<lt-calendar> month/year picker', () => {
     await el.updateComplete;
 
     let detail: { year: number; month: number } | undefined;
-    el.addEventListener('lt-month-change', (e) => {
+    el.addEventListener('month-change', (e) => {
       detail = (e as CustomEvent<{ year: number; month: number }>).detail;
     });
 
@@ -515,7 +515,7 @@ describe('<lt-calendar mode="range">', () => {
     await el.updateComplete;
 
     let detail: { valueStart: string; valueEnd: string } | undefined;
-    el.addEventListener('lt-change', (e) => {
+    el.addEventListener('change', (e) => {
       detail = (e as CustomEvent<{ valueStart: string; valueEnd: string }>).detail;
     });
 
@@ -606,9 +606,9 @@ describe('<lt-calendar mode="range">', () => {
     expect(day05.classList.contains('day--range-confirmed')).toBe(false);
   });
 
-  it('lt-change is not fired when only start is selected', async () => {
+  it('change is not fired when only start is selected', async () => {
     let fired = false;
-    el.addEventListener('lt-change', () => {
+    el.addEventListener('change', () => {
       fired = true;
     });
 
