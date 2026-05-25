@@ -1,6 +1,14 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { Combobox } from '../combobox';
 import '../combobox';
+
+vi.mock('@floating-ui/dom', () => ({
+  computePosition: vi.fn().mockResolvedValue({ x: 0, y: 0 }),
+  autoUpdate: vi.fn().mockReturnValue(vi.fn()),
+  offset: vi.fn(),
+  flip: vi.fn(),
+  shift: vi.fn()
+}));
 
 const OPTIONS = [
   { value: 'us', label: 'United States' },
@@ -51,7 +59,7 @@ describe('<lt-combobox>', () => {
   it('renders a label when set', async () => {
     el.label = 'Country';
     await el.updateComplete;
-    expect(el.shadowRoot!.querySelector('.label-text')!.textContent!.trim()).toContain('Country');
+    expect(el.shadowRoot!.querySelector('label')!.textContent!.trim()).toContain('Country');
   });
 
   it('renders helper text when set', async () => {

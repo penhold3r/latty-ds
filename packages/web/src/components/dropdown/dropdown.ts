@@ -7,6 +7,7 @@ import type { DropdownPlacement } from './dropdown.types';
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import './dropdown-item';
 import '../surface/surface';
+import { openFloating, closeFloating } from '../shared/floating';
 
 /**
  * A floating menu anchored to a trigger element.
@@ -25,6 +26,7 @@ export class Dropdown extends ThemeableElement {
   @property({ reflect: true }) placement: DropdownPlacement = 'bottom-start';
 
   private _cleanupClickOutside: (() => void) | null = null;
+  private _floatingCleanup: (() => void) | null = null;
 
   connectedCallback() {
     super.connectedCallback();
@@ -38,17 +40,29 @@ export class Dropdown extends ThemeableElement {
     this.removeEventListener('lt-select', this.hide);
     this._cleanupClickOutside?.();
     this._cleanupClickOutside = null;
+    this._floatingCleanup?.();
+    this._floatingCleanup = null;
   }
 
   updated(changed: Map<string, unknown>) {
     if (!changed.has('open')) return;
     if (this.open) {
       this._cleanupClickOutside = createClickOutsideHandler(this, () => this.hide(), { event: 'click', capture: true });
+      const triggerEl = this._triggerEl() ?? this;
+      const menu = this.shadowRoot!.querySelector<HTMLElement>('lt-surface.menu')!;
+      if (menu) {
+        openFloating(triggerEl, menu, { placement: this.placement }).then((cleanup) => {
+          this._floatingCleanup = cleanup;
+        });
+      }
       requestAnimationFrame(() => this._items()[0]?.focus());
       dispatch(this, 'lt-open');
     } else {
       this._cleanupClickOutside?.();
       this._cleanupClickOutside = null;
+      const menu = this.shadowRoot?.querySelector<HTMLElement>('lt-surface.menu');
+      if (menu) closeFloating(menu, this._floatingCleanup);
+      this._floatingCleanup = null;
       this._triggerEl()?.focus();
       dispatch(this, 'lt-close');
     }
@@ -114,6 +128,7 @@ export class Dropdown extends ThemeableElement {
       </div>
       <lt-surface
         class="menu"
+        popover="manual"
         appearance="outlined"
         elevation="2"
         background-color="--lt-bg-default"

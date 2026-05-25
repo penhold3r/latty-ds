@@ -9,6 +9,7 @@ import { dateInputStyles } from './date-input.styles';
 import type { DateInputSize, DateInputVariant, DateInputFormat } from './date-input.types';
 import type { Calendar } from '../calendar/calendar';
 import { dispatch, createClickOutsideHandler } from '../../utils';
+import { openFloating, closeFloating } from '../shared/floating';
 
 /**
  * A text field that opens an `lt-calendar` popover for visual date selection.
@@ -79,6 +80,7 @@ export class DateInput extends ThemeableElement {
   @state() private _open = false;
 
   private _cleanupClickOutside: (() => void) | null = null;
+  private _floatingCleanup: (() => void) | null = null;
 
   private get _displayValue(): string {
     if (!this.value) return '';
@@ -87,23 +89,22 @@ export class DateInput extends ThemeableElement {
     return new Intl.DateTimeFormat(this.locale, { dateStyle: this.format }).format(date);
   }
 
-  private _openDropdown() {
+  private async _openDropdown() {
     if (this.disabled || this._open) return;
-    const btn = this.shadowRoot?.querySelector<HTMLElement>('.field-btn');
+    this._open = true;
+    await this.updateComplete;
+    const btn = this.shadowRoot?.querySelector<HTMLElement>('#field-btn');
     const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
     if (btn && dropdown) {
-      const rect = btn.getBoundingClientRect();
-      dropdown.style.top = `${rect.bottom + 4}px`;
-      dropdown.style.left = `${rect.left}px`;
-      (dropdown as HTMLElement & { showPopover?(): void }).showPopover?.();
+      this._floatingCleanup = await openFloating(btn, dropdown);
     }
-    this._open = true;
     this._cleanupClickOutside = createClickOutsideHandler(this, () => this._closeDropdown());
   }
 
   private _closeDropdown() {
     const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
-    (dropdown as HTMLElement & { hidePopover?(): void })?.hidePopover?.();
+    if (dropdown) closeFloating(dropdown, this._floatingCleanup);
+    this._floatingCleanup = null;
     this._open = false;
     this._cleanupClickOutside?.();
     this._cleanupClickOutside = null;
@@ -111,6 +112,8 @@ export class DateInput extends ThemeableElement {
 
   override disconnectedCallback() {
     super.disconnectedCallback();
+    this._floatingCleanup?.();
+    this._floatingCleanup = null;
     this._cleanupClickOutside?.();
     this._cleanupClickOutside = null;
   }
@@ -163,9 +166,15 @@ export class DateInput extends ThemeableElement {
             </span>
           </button>
 
-          ${this._open
-            ? html`<div class="dropdown" role="dialog" aria-label="Date picker" @keydown=${this._handleDropdownKeyDown}>
-                <lt-calendar
+          <div
+            class="dropdown"
+            popover="manual"
+            role="dialog"
+            aria-label="Date picker"
+            @keydown=${this._handleDropdownKeyDown}
+          >
+            ${this._open
+              ? html`<lt-calendar
                   value=${this.value}
                   min=${this.min}
                   max=${this.max}
@@ -173,9 +182,9 @@ export class DateInput extends ThemeableElement {
                   week-start=${this.weekStart}
                   .disabledDates=${this.disabledDates}
                   @lt-change=${this._handleCalendarChange}
-                ></lt-calendar>
-              </div>`
-            : nothing}
+                ></lt-calendar>`
+              : nothing}
+          </div>
         </div>
 
         ${this.name ? html`<input type="hidden" name=${this.name} .value=${this.value} />` : nothing}

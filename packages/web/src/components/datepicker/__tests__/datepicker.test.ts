@@ -56,8 +56,7 @@ describe('<lt-datepicker>', () => {
   it('renders label when set', async () => {
     el.label = 'Start date';
     await el.updateComplete;
-    expect(el.shadowRoot!.querySelector('label')).toBeTruthy();
-    expect(el.shadowRoot!.querySelector('.label-text')!.textContent!.trim()).toContain('Start date');
+    expect(el.shadowRoot!.querySelector('label')!.textContent!.trim()).toContain('Start date');
   });
 
   it('does not render label element when label is empty', async () => {

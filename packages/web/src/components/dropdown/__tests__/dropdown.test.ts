@@ -3,6 +3,14 @@ import type { Dropdown } from '../dropdown';
 import '../dropdown';
 import '../dropdown-item';
 
+vi.mock('@floating-ui/dom', () => ({
+  computePosition: vi.fn().mockResolvedValue({ x: 0, y: 0 }),
+  autoUpdate: vi.fn().mockReturnValue(vi.fn()),
+  offset: vi.fn(),
+  flip: vi.fn(),
+  shift: vi.fn()
+}));
+
 describe('<lt-dropdown>', () => {
   let el: Dropdown;
 
@@ -34,18 +42,24 @@ describe('<lt-dropdown>', () => {
     expect(el.hasAttribute('open')).toBe(false);
   });
 
-  it('show() opens the menu', async () => {
+  it('show() opens the menu and sets display:block inline', async () => {
+    const menu = el.shadowRoot!.querySelector<HTMLElement>('lt-surface.menu')!;
     el.show();
     await el.updateComplete;
+    await Promise.resolve(); // flush openFloating
     expect(el.open).toBe(true);
+    expect(menu.style.display).toBe('block');
   });
 
-  it('hide() closes the menu', async () => {
+  it('hide() closes the menu and resets display', async () => {
+    const menu = el.shadowRoot!.querySelector<HTMLElement>('lt-surface.menu')!;
     el.open = true;
     await el.updateComplete;
+    await Promise.resolve();
     el.hide();
     await el.updateComplete;
     expect(el.open).toBe(false);
+    expect(menu.style.display).toBe('');
   });
 
   it('toggle() flips open state', async () => {

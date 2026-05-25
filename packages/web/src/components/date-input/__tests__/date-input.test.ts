@@ -3,6 +3,14 @@ import type { DateInput } from '../date-input';
 import '../date-input';
 import '../../calendar/calendar';
 
+vi.mock('@floating-ui/dom', () => ({
+  computePosition: vi.fn().mockResolvedValue({ x: 100, y: 200 }),
+  autoUpdate: vi.fn().mockReturnValue(vi.fn()),
+  offset: vi.fn(),
+  flip: vi.fn(),
+  shift: vi.fn()
+}));
+
 describe('<lt-date-input>', () => {
   let el: DateInput;
 
@@ -10,10 +18,15 @@ describe('<lt-date-input>', () => {
     el = document.createElement('lt-date-input') as DateInput;
     document.body.appendChild(el);
     await el.updateComplete;
+    // Stub Popover API — not supported in jsdom
+    const dropdown = el.shadowRoot!.querySelector<HTMLElement>('.dropdown')!;
+    (dropdown as any).showPopover = vi.fn();
+    (dropdown as any).hidePopover = vi.fn();
   });
 
   afterEach(() => {
     el.remove();
+    vi.clearAllMocks();
   });
 
   // ── Rendering ──────────────────────────────────────────────────────────────
@@ -119,72 +132,71 @@ describe('<lt-date-input>', () => {
   // ── Dropdown ───────────────────────────────────────────────────────────────
 
   it('dropdown is closed by default', () => {
-    expect(el.shadowRoot!.querySelector('.dropdown')).toBeNull();
+    expect(el.shadowRoot!.querySelector('.dropdown')).toBeTruthy();
+    expect(el.shadowRoot!.querySelector('lt-calendar')).toBeNull();
   });
 
   it('clicking the trigger opens the dropdown with lt-calendar', async () => {
     el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!.click();
     await el.updateComplete;
-    expect(el.shadowRoot!.querySelector('.dropdown')).toBeTruthy();
     expect(el.shadowRoot!.querySelector('lt-calendar')).toBeTruthy();
   });
 
-  it('sets --_dropdown-top and --_dropdown-left from field-btn bounding rect', async () => {
-    const btn = el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!;
-    vi.spyOn(btn, 'getBoundingClientRect').mockReturnValue({
-      bottom: 120,
-      left: 40,
-      top: 80,
-      right: 200,
-      width: 160,
-      height: 40,
-      x: 40,
-      y: 80,
-      toJSON: () => ({})
-    } as DOMRect);
-    btn.click();
+  it('dropdown gets display:block inline style when opened', async () => {
+    const dropdown = el.shadowRoot!.querySelector<HTMLElement>('.dropdown')!;
+    expect(dropdown.style.display).toBe('');
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!.click();
     await el.updateComplete;
-    expect(el.style.getPropertyValue('--_dropdown-top')).toBe('124px');
-    expect(el.style.getPropertyValue('--_dropdown-left')).toBe('40px');
+    await Promise.resolve();
+    expect(dropdown.style.display).toBe('block');
   });
 
-  it('recomputes position from fresh bounding rect each time the dropdown opens', async () => {
+  it('closing the dropdown resets display so CSS display:none takes over', async () => {
+    const dropdown = el.shadowRoot!.querySelector<HTMLElement>('.dropdown')!;
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!.click();
+    await el.updateComplete;
+    await Promise.resolve();
+    el.shadowRoot!.querySelector('lt-calendar')!.dispatchEvent(
+      new CustomEvent('lt-change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
+    );
+    await el.updateComplete;
+    expect(dropdown.style.display).toBe('');
+  });
+
+  it('positions dropdown via openFloating using field-btn as reference', async () => {
     const btn = el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!;
-    vi.spyOn(btn, 'getBoundingClientRect')
-      .mockReturnValueOnce({
-        bottom: 120,
-        left: 40,
-        top: 80,
-        right: 200,
-        width: 160,
-        height: 40,
-        x: 40,
-        y: 80,
-        toJSON: () => ({})
-      } as DOMRect)
-      .mockReturnValueOnce({
-        bottom: 200,
-        left: 60,
-        top: 160,
-        right: 220,
-        width: 160,
-        height: 40,
-        x: 60,
-        y: 160,
-        toJSON: () => ({})
-      } as DOMRect);
+    btn.click();
+    await el.updateComplete;
+    await Promise.resolve(); // flush openFloating's async computePosition
+    const dropdown = el.shadowRoot!.querySelector<HTMLElement>('.dropdown')!;
+    expect(dropdown.style.left).toBe('100px');
+    expect(dropdown.style.top).toBe('200px');
+  });
+
+  it('recomputes position each time the dropdown opens', async () => {
+    const { computePosition } = await import('@floating-ui/dom');
+    const btn = el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!;
 
     btn.click();
     await el.updateComplete;
+    await Promise.resolve();
+
+    // Close via calendar selection
     el.shadowRoot!.querySelector('lt-calendar')!.dispatchEvent(
       new CustomEvent('lt-change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
     );
     await el.updateComplete;
 
+    // Re-stub showPopover/hidePopover since a new dropdown element was re-queried
+    const dropdown = el.shadowRoot!.querySelector<HTMLElement>('.dropdown')!;
+    (dropdown as any).showPopover = vi.fn();
+    (dropdown as any).hidePopover = vi.fn();
+
     btn.click();
     await el.updateComplete;
-    expect(el.style.getPropertyValue('--_dropdown-top')).toBe('204px');
-    expect(el.style.getPropertyValue('--_dropdown-left')).toBe('60px');
+    await Promise.resolve();
+
+    expect((computePosition as ReturnType<typeof vi.fn>).mock.calls.length).toBeGreaterThanOrEqual(2);
   });
 
   it('aria-expanded reflects open state', async () => {
@@ -224,7 +236,7 @@ describe('<lt-date-input>', () => {
       new CustomEvent('lt-change', { detail: { value: '2026-06-15' }, bubbles: true, composed: true })
     );
     await el.updateComplete;
-    expect(el.shadowRoot!.querySelector('.dropdown')).toBeNull();
+    expect(el.shadowRoot!.querySelector('lt-calendar')).toBeNull();
   });
 
   it('Escape key on dropdown closes it', async () => {
@@ -234,7 +246,7 @@ describe('<lt-date-input>', () => {
       new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })
     );
     await el.updateComplete;
-    expect(el.shadowRoot!.querySelector('.dropdown')).toBeNull();
+    expect(el.shadowRoot!.querySelector('lt-calendar')).toBeNull();
   });
 
   // ── Disabled ───────────────────────────────────────────────────────────────
@@ -250,7 +262,7 @@ describe('<lt-date-input>', () => {
     await el.updateComplete;
     el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!.click();
     await el.updateComplete;
-    expect(el.shadowRoot!.querySelector('.dropdown')).toBeNull();
+    expect(el.shadowRoot!.querySelector('lt-calendar')).toBeNull();
   });
 
   // ── Reflected attributes ───────────────────────────────────────────────────

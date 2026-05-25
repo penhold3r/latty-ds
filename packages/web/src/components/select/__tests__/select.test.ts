@@ -1,7 +1,15 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { Select } from '../select';
 import type { SelectOption } from '../select.types';
 import '../select';
+
+vi.mock('@floating-ui/dom', () => ({
+  computePosition: vi.fn().mockResolvedValue({ x: 0, y: 0 }),
+  autoUpdate: vi.fn().mockReturnValue(vi.fn()),
+  offset: vi.fn(),
+  flip: vi.fn(),
+  shift: vi.fn()
+}));
 
 describe('<lt-select>', () => {
   let el: Select;
@@ -17,6 +25,10 @@ describe('<lt-select>', () => {
     el.options = mockOptions;
     document.body.appendChild(el);
     await el.updateComplete;
+    // Stub Popover API — not supported in jsdom
+    const listbox = el.shadowRoot!.querySelector<HTMLElement>('lt-surface.dropdown')!;
+    (listbox as any).showPopover = vi.fn();
+    (listbox as any).hidePopover = vi.fn();
   });
 
   afterEach(() => {
@@ -93,27 +105,32 @@ describe('<lt-select>', () => {
     expect(valueSpan?.textContent?.trim()).toBe('Apple');
   });
 
-  it('opens dropdown when trigger is clicked', async () => {
+  it('opens dropdown when trigger is clicked — sets display:block inline', async () => {
     const trigger = el.shadowRoot!.querySelector('.select-trigger') as HTMLElement;
-    expect(el.hasAttribute('open')).toBe(false);
+    const dropdown = el.shadowRoot!.querySelector<HTMLElement>('lt-surface.dropdown')!;
+    expect(dropdown.style.display).toBe('');
 
     trigger.click();
     await el.updateComplete;
+    await Promise.resolve(); // flush openFloating's async computePosition
 
     expect(el.hasAttribute('open')).toBe(true);
+    expect(dropdown.style.display).toBe('block');
   });
 
-  it('closes dropdown when clicking outside', async () => {
+  it('closing resets display so CSS display:none takes over', async () => {
     const trigger = el.shadowRoot!.querySelector('.select-trigger') as HTMLElement;
+    const dropdown = el.shadowRoot!.querySelector<HTMLElement>('lt-surface.dropdown')!;
 
     trigger.click();
     await el.updateComplete;
-    expect(el.hasAttribute('open')).toBe(true);
+    await Promise.resolve();
 
     // Simulate click outside
     document.body.click();
     await el.updateComplete;
     expect(el.hasAttribute('open')).toBe(false);
+    expect(dropdown.style.display).toBe('');
   });
 
   it('selects an option when clicked', async () => {

@@ -8,6 +8,7 @@ import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty/icons';
 import '../surface/';
 import '../text/text';
+import { openFloating, closeFloating } from '../shared/floating';
 
 /**
  * A customizable select dropdown component with support for multiple variants and sizes.
@@ -105,6 +106,7 @@ export class Select extends ThemeableElement {
   @state() private isOpen = false;
 
   private _cleanupClickOutside: (() => void) | null = null;
+  private _floatingCleanup: (() => void) | null = null;
 
   /**
    * Toggles the dropdown open/closed state.
@@ -193,6 +195,8 @@ export class Select extends ThemeableElement {
     super.disconnectedCallback();
     this._cleanupClickOutside?.();
     this._cleanupClickOutside = null;
+    this._floatingCleanup?.();
+    this._floatingCleanup = null;
   }
 
   /**
@@ -208,12 +212,19 @@ export class Select extends ThemeableElement {
    * Reflects the open state as an attribute for CSS styling.
    */
   updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has('isOpen')) {
-      if (this.isOpen) {
-        this.setAttribute('open', '');
-      } else {
-        this.removeAttribute('open');
-      }
+    if (!changedProperties.has('isOpen')) return;
+    if (this.isOpen) {
+      this.setAttribute('open', '');
+      const trigger = this.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!;
+      const listbox = this.shadowRoot!.querySelector<HTMLElement>('lt-surface.dropdown')!;
+      openFloating(trigger, listbox, { matchWidth: true }).then((cleanup) => {
+        this._floatingCleanup = cleanup;
+      });
+    } else {
+      this.removeAttribute('open');
+      const listbox = this.shadowRoot?.querySelector<HTMLElement>('lt-surface.dropdown');
+      if (listbox) closeFloating(listbox, this._floatingCleanup);
+      this._floatingCleanup = null;
     }
   }
 
@@ -248,7 +259,7 @@ export class Select extends ThemeableElement {
             </span>
             <lt-icon class="icon-end" name="caret-down"></lt-icon>
           </div>
-          <lt-surface class="dropdown" elevation="2" role="listbox">
+          <lt-surface class="dropdown" popover="manual" elevation="2" role="listbox">
             <div class="options-container">
               ${this.options.map(
                 (option) => html`

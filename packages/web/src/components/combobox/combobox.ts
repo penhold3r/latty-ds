@@ -7,6 +7,7 @@ import type { ComboboxOption, ComboboxSize, ComboboxVariant } from './combobox.t
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty/icons';
 import '../text/text';
+import { openFloating, closeFloating } from '../shared/floating';
 
 /**
  * Searchable single-select combobox. The user types to filter options; selecting an option sets the value.
@@ -63,6 +64,7 @@ export class Combobox extends ThemeableElement {
   @state() private activeIndex = -1;
 
   private _cleanupClickOutside: (() => void) | null = null;
+  private _floatingCleanup: (() => void) | null = null;
 
   private get selectedLabel(): string {
     return this.options.find((o) => o.value === this.value)?.label ?? '';
@@ -73,15 +75,24 @@ export class Combobox extends ThemeableElement {
     return this.options.filter((o) => o.label.toLowerCase().includes(q));
   }
 
-  private openDropdown() {
+  private async openDropdown() {
     if (this.disabled) return;
     this.open = true;
     this.setAttribute('open', '');
     this.query = '';
     this.activeIndex = -1;
+    await this.updateComplete;
+    const inputWrap = this.shadowRoot!.querySelector<HTMLElement>('.input-wrap')!;
+    const dropdown = this.shadowRoot!.querySelector<HTMLElement>('.dropdown')!;
+    if (inputWrap && dropdown) {
+      this._floatingCleanup = await openFloating(inputWrap, dropdown, { matchWidth: true });
+    }
   }
 
   private closeDropdown() {
+    const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
+    if (dropdown) closeFloating(dropdown, this._floatingCleanup);
+    this._floatingCleanup = null;
     this.open = false;
     this.removeAttribute('open');
   }
@@ -130,6 +141,8 @@ export class Combobox extends ThemeableElement {
     super.disconnectedCallback();
     this._cleanupClickOutside?.();
     this._cleanupClickOutside = null;
+    this._floatingCleanup?.();
+    this._floatingCleanup = null;
   }
 
   render() {
@@ -168,7 +181,7 @@ export class Combobox extends ThemeableElement {
         ${inputRow}
         ${this.open
           ? html`
-              <div class="dropdown" role="listbox">
+              <div class="dropdown" popover="manual" role="listbox">
                 ${opts.length > 0
                   ? opts.map(
                       (opt, i) => html`

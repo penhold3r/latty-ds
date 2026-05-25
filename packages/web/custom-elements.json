@@ -4,197 +4,6 @@
   "modules": [
     {
       "kind": "javascript-module",
-      "path": "src/components/alert/alert.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "alertStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens — public props override first, then variant defaults */ --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-neutral-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-inverse)); --_border: var(--lt-alert-border-color, var(--lt-border-strong)); --_color: var(--lt-alert-color, var(--lt-text-default)); --_color-solid: var(--lt-alert-color, var(--lt-text-inverse)); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-success-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-success)); --_border: var(--lt-alert-border-color, var(--lt-border-success-strong)); --_color: var(--lt-alert-color, var(--lt-text-success)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-success)); } :host([variant='warning']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-warning-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-warning)); --_border: var(--lt-alert-border-color, var(--lt-border-warning-strong)); --_color: var(--lt-alert-color, var(--lt-text-warning)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-warning)); } :host([variant='error']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-error-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-error)); --_border: var(--lt-alert-border-color, var(--lt-border-error-strong)); --_color: var(--lt-alert-color, var(--lt-text-error)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-error)); } :host([variant='info']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-info-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-info)); --_border: var(--lt-alert-border-color, var(--lt-border-info-strong)); --_color: var(--lt-alert-color, var(--lt-text-info)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-info)); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: 1px solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: 1px solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } .title + .content { opacity: 0.8; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "alertStyles",
-          "declaration": {
-            "name": "alertStyles",
-            "module": "src/components/alert/alert.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/alert/alert.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Inline notification for persistent contextual feedback.",
-          "name": "Alert",
-          "slots": [
-            {
-              "description": "Alert body. Accepts any HTML — bold, links, lists, etc.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "alertStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "AlertVariant"
-              },
-              "default": "'default'",
-              "description": "Visual style."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "AlertAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual treatment. `filled` uses a tinted background with border, `outlined` uses a white background with border, `solid` uses a solid color background with no border."
-            },
-            {
-              "kind": "field",
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Optional bold heading above the body content."
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon to show before the body. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
-            },
-            {
-              "kind": "field",
-              "name": "closable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the title in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "_iconMap",
-              "type": {
-                "text": "Record<AlertVariant, string>"
-              },
-              "privacy": "private",
-              "static": true,
-              "readonly": true,
-              "default": "{ default: 'info-circle', success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
-            },
-            {
-              "kind": "method",
-              "name": "_handleClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_resolvedIcon",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
-              "name": "lt-close"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-alert",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Alert",
-          "declaration": {
-            "name": "Alert",
-            "module": "src/components/alert/alert.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/alert/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Alert",
-          "declaration": {
-            "name": "Alert",
-            "module": "./alert"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AlertVariant",
-          "declaration": {
-            "name": "AlertVariant",
-            "module": "./alert.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AlertAppearance",
-          "declaration": {
-            "name": "AlertAppearance",
-            "module": "./alert.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/accordion/accordion.styles.ts",
       "declarations": [
         {
@@ -417,183 +226,191 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/breadcrumb/breadcrumb.styles.ts",
+      "path": "src/components/alert/alert.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "breadcrumbStyles",
-          "default": "css` :host { display: block; } [part='list'] { align-items: center; display: flex; flex-wrap: wrap; gap: 0; list-style: none; margin: 0; padding: 0; } `"
-        },
-        {
-          "kind": "variable",
-          "name": "breadcrumbItemStyles",
-          "default": "css` :host { align-items: center; display: inline-flex; font-family: var(--lt-typography-fontfamily); font-size: 0.875rem; } [part='link'] { color: var(--lt-interactive-primary-bg); text-decoration: none; transition: color 120ms ease; } [part='link']:hover { color: var(--lt-interactive-primary-bg-hover); text-decoration: underline; } [part='text'] { color: var(--lt-text-default); font-weight: 600; } [part='separator'] { color: var(--lt-text-muted); margin-inline: var(--lt-spacing-2); user-select: none; } [part='separator']::after { content: var(--lt-breadcrumb-separator, '/'); } :host(:last-child) [part='separator'] { display: none; } `"
+          "name": "alertStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens — public props override first, then variant defaults */ --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-neutral-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-inverse)); --_border: var(--lt-alert-border-color, var(--lt-border-strong)); --_color: var(--lt-alert-color, var(--lt-text-default)); --_color-solid: var(--lt-alert-color, var(--lt-text-inverse)); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-success-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-success)); --_border: var(--lt-alert-border-color, var(--lt-border-success-strong)); --_color: var(--lt-alert-color, var(--lt-text-success)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-success)); } :host([variant='warning']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-warning-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-warning)); --_border: var(--lt-alert-border-color, var(--lt-border-warning-strong)); --_color: var(--lt-alert-color, var(--lt-text-warning)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-warning)); } :host([variant='error']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-error-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-error)); --_border: var(--lt-alert-border-color, var(--lt-border-error-strong)); --_color: var(--lt-alert-color, var(--lt-text-error)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-error)); } :host([variant='info']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-info-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-info)); --_border: var(--lt-alert-border-color, var(--lt-border-info-strong)); --_color: var(--lt-alert-color, var(--lt-text-info)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-info)); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: 1px solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: 1px solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } .title + .content { opacity: 0.8; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "breadcrumbStyles",
+          "name": "alertStyles",
           "declaration": {
-            "name": "breadcrumbStyles",
-            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "breadcrumbItemStyles",
-          "declaration": {
-            "name": "breadcrumbItemStyles",
-            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
+            "name": "alertStyles",
+            "module": "src/components/alert/alert.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/breadcrumb/breadcrumb.ts",
+      "path": "src/components/alert/alert.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Navigation breadcrumb trail container.\nPlace `lt-breadcrumb-item` elements inside as direct children.",
-          "name": "Breadcrumb",
-          "members": [
+          "description": "Inline notification for persistent contextual feedback.",
+          "name": "Alert",
+          "slots": [
             {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "breadcrumbStyles"
-            },
-            {
-              "kind": "field",
-              "name": "separator",
-              "type": {
-                "text": "string"
-              },
-              "default": "'/'",
-              "description": "The character or element to use as a separator between breadcrumb items.\nThis is passed down to all children items via CSS variables."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changed",
-                  "type": {
-                    "text": "PropertyValues<this>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "render"
+              "description": "Alert body. Accepts any HTML — bold, links, lists, etc.",
+              "name": ""
             }
           ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-breadcrumb",
-          "customElement": true
-        },
-        {
-          "kind": "class",
-          "description": "A single step in a breadcrumb trail.\nRenders as a link when `href` is provided, or as plain text when `current`.",
-          "name": "BreadcrumbItem",
           "members": [
             {
               "kind": "field",
               "name": "styles",
               "static": true,
-              "default": "breadcrumbItemStyles"
+              "default": "alertStyles"
             },
             {
               "kind": "field",
-              "name": "href",
+              "name": "variant",
+              "type": {
+                "text": "AlertVariant"
+              },
+              "default": "'default'",
+              "description": "Visual style."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "AlertAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual treatment. `filled` uses a tinted background with border, `outlined` uses a white background with border, `solid` uses a solid color background with no border."
+            },
+            {
+              "kind": "field",
+              "name": "title",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "URL this item links to. Omit for the current (last) item."
+              "description": "Optional bold heading above the body content."
             },
             {
               "kind": "field",
-              "name": "current",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon to show before the body. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
+            },
+            {
+              "kind": "field",
+              "name": "closable",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Marks this item as the current page. Renders as non-linked text with `aria-current=\"page\"`."
+              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
             },
             {
               "kind": "field",
-              "name": "separator",
+              "name": "background",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "Custom separator for this specific item. Overrides the parent's separator."
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the title in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "_iconMap",
+              "type": {
+                "text": "Record<AlertVariant, string>"
+              },
+              "privacy": "private",
+              "static": true,
+              "readonly": true,
+              "default": "{ default: 'info-circle', success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
+            },
+            {
+              "kind": "method",
+              "name": "_handleClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_resolvedIcon",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "method",
               "name": "render"
             }
           ],
+          "events": [
+            {
+              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
+              "name": "lt-close"
+            }
+          ],
           "superclass": {
             "name": "ThemeableElement",
             "module": "/src/base"
           },
-          "tagName": "lt-breadcrumb-item",
+          "tagName": "lt-alert",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Breadcrumb",
+          "name": "Alert",
           "declaration": {
-            "name": "Breadcrumb",
-            "module": "src/components/breadcrumb/breadcrumb.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BreadcrumbItem",
-          "declaration": {
-            "name": "BreadcrumbItem",
-            "module": "src/components/breadcrumb/breadcrumb.ts"
+            "name": "Alert",
+            "module": "src/components/alert/alert.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/breadcrumb/index.ts",
+      "path": "src/components/alert/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Breadcrumb",
+          "name": "Alert",
           "declaration": {
-            "name": "Breadcrumb",
-            "module": "./breadcrumb"
+            "name": "Alert",
+            "module": "./alert"
           }
         },
         {
           "kind": "js",
-          "name": "BreadcrumbItem",
+          "name": "AlertVariant",
           "declaration": {
-            "name": "BreadcrumbItem",
-            "module": "./breadcrumb"
+            "name": "AlertVariant",
+            "module": "./alert.types"
           }
         },
         {
           "kind": "js",
-          "name": "BreadcrumbSeparator",
+          "name": "AlertAppearance",
           "declaration": {
-            "name": "BreadcrumbSeparator",
-            "module": "./breadcrumb.types"
+            "name": "AlertAppearance",
+            "module": "./alert.types"
           }
         }
       ]
@@ -1166,6 +983,189 @@
           "declaration": {
             "name": "BadgeAppearance",
             "module": "./badge.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/breadcrumb.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "breadcrumbStyles",
+          "default": "css` :host { display: block; } [part='list'] { align-items: center; display: flex; flex-wrap: wrap; gap: 0; list-style: none; margin: 0; padding: 0; } `"
+        },
+        {
+          "kind": "variable",
+          "name": "breadcrumbItemStyles",
+          "default": "css` :host { align-items: center; display: inline-flex; font-family: var(--lt-typography-fontfamily); font-size: 0.875rem; } [part='link'] { color: var(--lt-interactive-primary-bg); text-decoration: none; transition: color 120ms ease; } [part='link']:hover { color: var(--lt-interactive-primary-bg-hover); text-decoration: underline; } [part='text'] { color: var(--lt-text-default); font-weight: 600; } [part='separator'] { color: var(--lt-text-muted); margin-inline: var(--lt-spacing-2); user-select: none; } [part='separator']::after { content: var(--lt-breadcrumb-separator, '/'); } :host(:last-child) [part='separator'] { display: none; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "breadcrumbStyles",
+          "declaration": {
+            "name": "breadcrumbStyles",
+            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "breadcrumbItemStyles",
+          "declaration": {
+            "name": "breadcrumbItemStyles",
+            "module": "src/components/breadcrumb/breadcrumb.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/breadcrumb.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Navigation breadcrumb trail container.\nPlace `lt-breadcrumb-item` elements inside as direct children.",
+          "name": "Breadcrumb",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "breadcrumbStyles"
+            },
+            {
+              "kind": "field",
+              "name": "separator",
+              "type": {
+                "text": "string"
+              },
+              "default": "'/'",
+              "description": "The character or element to use as a separator between breadcrumb items.\nThis is passed down to all children items via CSS variables."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-breadcrumb",
+          "customElement": true
+        },
+        {
+          "kind": "class",
+          "description": "A single step in a breadcrumb trail.\nRenders as a link when `href` is provided, or as plain text when `current`.",
+          "name": "BreadcrumbItem",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "breadcrumbItemStyles"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "URL this item links to. Omit for the current (last) item."
+            },
+            {
+              "kind": "field",
+              "name": "current",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Marks this item as the current page. Renders as non-linked text with `aria-current=\"page\"`."
+            },
+            {
+              "kind": "field",
+              "name": "separator",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Custom separator for this specific item. Overrides the parent's separator."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-breadcrumb-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Breadcrumb",
+          "declaration": {
+            "name": "Breadcrumb",
+            "module": "src/components/breadcrumb/breadcrumb.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbItem",
+          "declaration": {
+            "name": "BreadcrumbItem",
+            "module": "src/components/breadcrumb/breadcrumb.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/breadcrumb/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Breadcrumb",
+          "declaration": {
+            "name": "Breadcrumb",
+            "module": "./breadcrumb"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbItem",
+          "declaration": {
+            "name": "BreadcrumbItem",
+            "module": "./breadcrumb"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BreadcrumbSeparator",
+          "declaration": {
+            "name": "BreadcrumbSeparator",
+            "module": "./breadcrumb.types"
           }
         }
       ]
@@ -1952,7 +1952,10 @@
         {
           "kind": "variable",
           "name": "comboboxStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color 150ms ease, box-shadow 150ms ease; } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } :host([variant='error']) .input-wrap { border-color: var(--lt-color-error-500); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-color-success-500); } :host([variant='warning']) .input-wrap { border-color: var(--lt-color-warning-500); } :host([disabled]) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-color-neutral-400)); } :host([disabled]) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform 150ms ease; } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); box-shadow: var(--lt-shadow-md); left: 0; max-height: 240px; overflow-y: auto; position: absolute; right: 0; top: calc(100% + 4px); z-index: 100; } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: left; width: 100%; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-color-primary-700); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
+          "type": {
+            "text": "array"
+          },
+          "default": "[ floatingPanelReset, css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color 150ms ease, box-shadow 150ms ease; } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } :host([variant='error']) .input-wrap { border-color: var(--lt-color-error-500); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-color-success-500); } :host([variant='warning']) .input-wrap { border-color: var(--lt-color-warning-500); } :host([disabled]) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-color-neutral-400)); } :host([disabled]) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform 150ms ease; } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); box-shadow: var(--lt-shadow-md); max-height: 240px; overflow-y: auto; z-index: 100; } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: left; width: 100%; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-color-primary-700); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } ` ]"
         }
       ],
       "exports": [
@@ -2109,6 +2112,15 @@
             },
             {
               "kind": "field",
+              "name": "_floatingCleanup",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
               "name": "selectedLabel",
               "type": {
                 "text": "string"
@@ -2253,12 +2265,195 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/chip/chip.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "chipStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-chip-bg); border-radius: 999px; border: 1px solid var(--lt-chip-border-color, transparent); color: var(--lt-chip-color); box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-text-info); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "chipStyles",
+          "declaration": {
+            "name": "chipStyles",
+            "module": "src/components/chip/chip.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/chip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Compact label element for tags, filters, and attributes.",
+          "name": "Chip",
+          "slots": [
+            {
+              "description": "Label content",
+              "name": ""
+            },
+            {
+              "description": "Leading icon or avatar",
+              "name": "icon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "chipStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "ChipAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual appearance (filled tinted background or outlined border only)."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ChipVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ChipSize"
+              },
+              "default": "'md'",
+              "description": "Size (affects height, font, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables the chip and its delete button."
+            },
+            {
+              "kind": "field",
+              "name": "deletable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "_deleteIconSize",
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_handleDelete",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fires when the delete button is clicked (only when `deletable`)",
+              "name": "lt-delete"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-chip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "src/components/chip/chip.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/chip/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Chip",
+          "declaration": {
+            "name": "Chip",
+            "module": "./chip"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipVariant",
+          "declaration": {
+            "name": "ChipVariant",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipSize",
+          "declaration": {
+            "name": "ChipSize",
+            "module": "./chip.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ChipAppearance",
+          "declaration": {
+            "name": "ChipAppearance",
+            "module": "./chip.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/date-input/date-input.styles.ts",
       "declarations": [
         {
           "kind": "variable",
           "name": "dateInputStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); cursor: default; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } /* ── Field ── */ .field { position: relative; } .field-btn { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; outline: none; text-align: left; transition: border-color 150ms ease, box-shadow 150ms ease; width: 100%; } .field-btn:focus-visible { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } .field-btn:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } .display-value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .display-value--placeholder { color: var(--lt-text-muted); } .calendar-icon { color: var(--lt-text-subtle); flex-shrink: 0; line-height: 0; margin-left: var(--lt-spacing-2); } /* ── Sizes ── */ :host([size='sm']) .field-btn { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) .field-btn, :host(:not([size])) .field-btn { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) .field-btn { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* ── Variants ── */ :host([variant='success']) .field-btn { border-color: var(--lt-color-success-500); } :host([variant='success']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) .field-btn { border-color: var(--lt-color-warning-500); } :host([variant='warning']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) .field-btn { border-color: var(--lt-color-error-500); } :host([variant='error']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } /* ── Dropdown ── */ .dropdown { filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08)); left: var(--_dropdown-left, 0px); position: fixed; top: var(--_dropdown-top, 0px); z-index: 9999; } /* ── Helper text ── */ .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } `"
+          "type": {
+            "text": "array"
+          },
+          "default": "[ floatingPanelReset, css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); cursor: default; } .required-indicator { color: var(--lt-color-error-500); margin-left: 2px; } /* ── Field ── */ .field { position: relative; } .field-btn { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; outline: none; text-align: left; transition: border-color 150ms ease, box-shadow 150ms ease; width: 100%; } .field-btn:focus-visible { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } .field-btn:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } .display-value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .display-value--placeholder { color: var(--lt-text-muted); } .calendar-icon { color: var(--lt-text-subtle); flex-shrink: 0; line-height: 0; margin-left: var(--lt-spacing-2); } /* ── Sizes ── */ :host([size='sm']) .field-btn { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) .field-btn, :host(:not([size])) .field-btn { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) .field-btn { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* ── Variants ── */ :host([variant='success']) .field-btn { border-color: var(--lt-color-success-500); } :host([variant='success']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) .field-btn { border-color: var(--lt-color-warning-500); } :host([variant='warning']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) .field-btn { border-color: var(--lt-color-error-500); } :host([variant='error']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } /* ── Dropdown ── */ .dropdown { display: none; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08)); z-index: 9999; } /* ── Helper text ── */ .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-color-error-600); } :host([variant='success']) .helper-text { color: var(--lt-color-success-600); } :host([variant='warning']) .helper-text { color: var(--lt-color-warning-700); } ` ]"
         }
       ],
       "exports": [
@@ -2434,6 +2629,15 @@
             {
               "kind": "field",
               "name": "_cleanupClickOutside",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_floatingCleanup",
               "type": {
                 "text": "(() => void) | null"
               },
@@ -3326,7 +3530,10 @@
         {
           "kind": "variable",
           "name": "dropdownStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; position: relative; } .trigger-wrap { display: contents; } lt-surface.menu { display: none; min-width: 10rem; position: absolute; top: calc(100% + var(--lt-spacing-1)); left: 0; z-index: 1000; } :host([open]) lt-surface.menu { display: block; } lt-surface.menu::part(surface) { overflow: hidden; } /* Placement variants */ :host([placement='bottom-end']) lt-surface.menu { left: auto; right: 0; } :host([placement='bottom']) lt-surface.menu { left: 50%; transform: translateX(-50%); } :host([placement='top-start']) lt-surface.menu { top: auto; bottom: calc(100% + var(--lt-spacing-1)); } :host([placement='top-end']) lt-surface.menu { top: auto; bottom: calc(100% + var(--lt-spacing-1)); left: auto; right: 0; } :host([placement='top']) lt-surface.menu { top: auto; bottom: calc(100% + var(--lt-spacing-1)); left: 50%; transform: translateX(-50%); } `"
+          "type": {
+            "text": "array"
+          },
+          "default": "[ floatingPanelReset, css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .trigger-wrap { display: contents; } lt-surface.menu { display: none; min-width: 10rem; z-index: 1000; } lt-surface.menu::part(surface) { overflow: hidden; } ` ]"
         }
       ],
       "exports": [
@@ -3384,6 +3591,15 @@
             {
               "kind": "field",
               "name": "_cleanupClickOutside",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_floatingCleanup",
               "type": {
                 "text": "(() => void) | null"
               },
@@ -3616,186 +3832,6 @@
           "declaration": {
             "name": "HeaderBackground",
             "module": "./header.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/chip.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "chipStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-chip-bg); border-radius: 999px; border: 1px solid var(--lt-chip-border-color, transparent); color: var(--lt-chip-color); box-sizing: border-box; display: inline-flex; font-weight: 400; line-height: 1; transition: background-color 120ms ease, border-color 120ms ease; user-select: none; white-space: nowrap; } ::slotted([slot='icon']) { flex-shrink: 0; } .delete { align-items: center; background: none; border-radius: 999px; border: none; color: inherit; cursor: pointer; display: inline-flex; flex-shrink: 0; justify-content: center; opacity: 0.6; padding: 0; transition: opacity 120ms ease, background-color 120ms ease; } .delete:hover:not(:disabled) { opacity: 1; } .delete:disabled { cursor: not-allowed; } :host([disabled]) span[part='base'] { cursor: not-allowed; opacity: 0.5; pointer-events: none; } /* ── Sizes ────────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.75rem; gap: var(--lt-spacing-1); height: 20px; padding-inline: var(--lt-spacing-2); } :host([size='md']) span[part='base'] { font-size: 0.8125rem; gap: var(--lt-spacing-1); height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) span[part='base'] { font-size: 0.9375rem; gap: var(--lt-spacing-2); height: 32px; padding-inline: var(--lt-spacing-4); } /* ── Filled (tinted bg, colored border, dark text) ───────────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='info']) span[part='base'] { background: var(--lt-bg-info-subtle); border-color: var(--lt-border-info); color: var(--lt-text-info); } /* ── Outlined (transparent bg, colored border and text) ──────────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='info']) span[part='base'] { background: transparent; border-color: var(--lt-border-info-strong); color: var(--lt-text-info); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "chipStyles",
-          "declaration": {
-            "name": "chipStyles",
-            "module": "src/components/chip/chip.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/chip.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Compact label element for tags, filters, and attributes.",
-          "name": "Chip",
-          "slots": [
-            {
-              "description": "Label content",
-              "name": ""
-            },
-            {
-              "description": "Leading icon or avatar",
-              "name": "icon"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "chipStyles"
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "ChipAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual appearance (filled tinted background or outlined border only)."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ChipVariant"
-              },
-              "default": "'primary'",
-              "description": "Color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ChipSize"
-              },
-              "default": "'md'",
-              "description": "Size (affects height, font, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disables the chip and its delete button."
-            },
-            {
-              "kind": "field",
-              "name": "deletable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "_deleteIconSize",
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_handleDelete",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fires when the delete button is clicked (only when `deletable`)",
-              "name": "lt-delete"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-chip",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Chip",
-          "declaration": {
-            "name": "Chip",
-            "module": "src/components/chip/chip.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/chip/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Chip",
-          "declaration": {
-            "name": "Chip",
-            "module": "./chip"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipVariant",
-          "declaration": {
-            "name": "ChipVariant",
-            "module": "./chip.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipSize",
-          "declaration": {
-            "name": "ChipSize",
-            "module": "./chip.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ChipAppearance",
-          "declaration": {
-            "name": "ChipAppearance",
-            "module": "./chip.types"
           }
         }
       ]
@@ -5475,6 +5511,406 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/select/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Select",
+          "declaration": {
+            "name": "Select",
+            "module": "./select"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SelectOption",
+          "declaration": {
+            "name": "SelectOption",
+            "module": "./select.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SelectSize",
+          "declaration": {
+            "name": "SelectSize",
+            "module": "./select.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SelectVariant",
+          "declaration": {
+            "name": "SelectVariant",
+            "module": "./select.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/select/select.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "selectStyles",
+          "type": {
+            "text": "array"
+          },
+          "default": "[ floatingPanelReset, css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; position: relative; width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-color-error-500); margin-left: var(--lt-spacing-1); } .select-container { position: relative; width: 100%; } .select-trigger { align-items: center; background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); box-sizing: border-box; cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; transition: border-color 120ms ease, box-shadow 120ms ease; width: 100%; } .select-trigger:hover:not([aria-disabled='true']) { border-color: var(--lt-border-strong); } .select-trigger:focus-visible { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-border-focus); outline: none; } .select-trigger[aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; } .select-value { color: var(--lt-text-default); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .select-value.placeholder { color: var(--lt-text-muted); } .icon-end { color: var(--lt-text-subtle); flex-shrink: 0; transition: transform 120ms ease; } :host([open]) .icon-end { transform: rotate(180deg); } .dropdown { display: none; max-height: 300px; z-index: 1000; } .options-container { max-height: 300px; overflow: hidden auto; } .option { align-items: center; background: transparent; border: none; border-radius: var(--lt-border-radius); box-sizing: border-box; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; text-align: left; transition: background-color 80ms ease; width: 100%; } .option:hover:not([disabled]) { background: var(--lt-bg-surface); } .option:focus-visible { background: var(--lt-bg-surface); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 600; } .option[disabled] { color: var(--lt-text-muted); cursor: not-allowed; opacity: 0.6; } .helper-text::part(base) { font-weight: 200; } /* Size variants */ :host([size='sm']) .select-trigger { font-size: 0.875rem; height: 32px; padding: 0 var(--lt-spacing-3); } :host([size='sm']) .option { font-size: 0.875rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([size='md']) .select-trigger { font-size: 1rem; height: 40px; padding: 0 var(--lt-spacing-4); } :host([size='md']) .option { font-size: 1rem; padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([size='lg']) .select-trigger { font-size: 1.0625rem; height: 48px; padding: 0 var(--lt-spacing-5); } :host([size='lg']) .option { font-size: 1.0625rem; padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* Variant styles */ :host([variant='success']) .select-trigger { border-color: var(--lt-border-success-strong); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .select-trigger { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .select-trigger { border-color: var(--lt-border-error-strong); } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='default']) .helper-text { color: var(--lt-text-subtle); } ` ]"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "selectStyles",
+          "declaration": {
+            "name": "selectStyles",
+            "module": "src/components/select/select.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/select/select.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A customizable select dropdown component with support for multiple variants and sizes.",
+          "name": "Select",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "selectStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "SelectVariant"
+              },
+              "default": "'default'",
+              "description": "Visual variant that determines styling."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "SelectSize"
+              },
+              "default": "'md'",
+              "description": "Size of the select (affects height, font size, and padding)."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Current selected value."
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "default": "'Select an option'",
+              "description": "Placeholder text shown when no option is selected."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text displayed above the select."
+            },
+            {
+              "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Helper text displayed below the select. Color changes based on variant."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the select is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the select is required. Shows asterisk in label when true."
+            },
+            {
+              "kind": "field",
+              "name": "options",
+              "type": {
+                "text": "SelectOption[]"
+              },
+              "default": "[]",
+              "description": "Array of options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "isOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Internal state tracking whether the dropdown is open."
+            },
+            {
+              "kind": "field",
+              "name": "_cleanupClickOutside",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_floatingCleanup",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "method",
+              "name": "toggleDropdown",
+              "privacy": "private",
+              "description": "Toggles the dropdown open/closed state."
+            },
+            {
+              "kind": "method",
+              "name": "closeDropdown",
+              "privacy": "private",
+              "description": "Closes the dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "selectOption",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "option",
+                  "type": {
+                    "text": "SelectOption"
+                  },
+                  "description": "The selected option"
+                }
+              ],
+              "description": "Handles option selection.\nUpdates the value, dispatches change event, and closes dropdown."
+            },
+            {
+              "kind": "method",
+              "name": "handleKeydown",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "KeyboardEvent"
+                  },
+                  "description": "The keyboard event"
+                }
+              ],
+              "description": "Handles keyboard navigation in the dropdown.\nSupports Arrow Up/Down for navigation, Enter/Space for selection, and Escape to close."
+            },
+            {
+              "kind": "method",
+              "name": "getSelectedLabel",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "description": "Gets the display label for the currently selected value."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ],
+              "description": "Reflects the open state as an attribute for CSS styling."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Dispatched when the selected value changes",
+              "name": "change"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-select",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Select",
+          "declaration": {
+            "name": "Select",
+            "module": "src/components/select/select.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/backdrop.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "backdropFeatureStyles",
+          "default": "css` :host([backdrop-blur]) .backdrop, :host([backdrop-blur]) [part='overlay'] { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "backdropFeatureStyles",
+          "declaration": {
+            "name": "backdropFeatureStyles",
+            "module": "src/components/shared/backdrop.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/floating.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "openFloating",
+          "return": {
+            "type": {
+              "text": "Promise<() => void>"
+            }
+          },
+          "parameters": [
+            {
+              "name": "reference",
+              "type": {
+                "text": "Element"
+              }
+            },
+            {
+              "name": "floating",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "name": "opts",
+              "optional": true,
+              "type": {
+                "text": "FloatingOptions"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "closeFloating",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "parameters": [
+            {
+              "name": "floating",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "name": "cleanup",
+              "type": {
+                "text": "(() => void) | null"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "floatingPanelReset",
+          "type": {
+            "text": "CSSResult"
+          },
+          "default": "css` [popover] { border: 0; inset: unset; margin: 0; overflow: visible; padding: 0; position: fixed; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "openFloating",
+          "declaration": {
+            "name": "openFloating",
+            "module": "src/components/shared/floating.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "closeFloating",
+          "declaration": {
+            "name": "closeFloating",
+            "module": "src/components/shared/floating.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "floatingPanelReset",
+          "declaration": {
+            "name": "floatingPanelReset",
+            "module": "src/components/shared/floating.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/sidepanel/index.ts",
       "declarations": [],
       "exports": [
@@ -6064,280 +6500,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/select/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Select",
-          "declaration": {
-            "name": "Select",
-            "module": "./select"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SelectOption",
-          "declaration": {
-            "name": "SelectOption",
-            "module": "./select.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SelectSize",
-          "declaration": {
-            "name": "SelectSize",
-            "module": "./select.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SelectVariant",
-          "declaration": {
-            "name": "SelectVariant",
-            "module": "./select.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/select/select.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "selectStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; position: relative; width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-color-error-500); margin-left: var(--lt-spacing-1); } .select-container { position: relative; width: 100%; } .select-trigger { align-items: center; background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-border-default); box-sizing: border-box; cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; transition: border-color 120ms ease, box-shadow 120ms ease; width: 100%; } .select-trigger:hover:not([aria-disabled='true']) { border-color: var(--lt-border-strong); } .select-trigger:focus-visible { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-border-focus); outline: none; } .select-trigger[aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; } .select-value { color: var(--lt-text-default); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .select-value.placeholder { color: var(--lt-text-muted); } .icon-end { color: var(--lt-text-subtle); flex-shrink: 0; transition: transform 120ms ease; } :host([open]) .icon-end { transform: rotate(180deg); } .dropdown { display: none; margin-top: var(--lt-spacing-1); max-height: 300px; position: absolute; width: 100%; z-index: 1000; } :host([open]) .dropdown { animation: slideDown 150ms ease; display: block; } .options-container { max-height: 300px; overflow: hidden auto; } @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } } .option { align-items: center; background: transparent; border: none; border-radius: var(--lt-border-radius); box-sizing: border-box; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; text-align: left; transition: background-color 80ms ease; width: 100%; } .option:hover:not([disabled]) { background: var(--lt-bg-surface); } .option:focus-visible { background: var(--lt-bg-surface); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 600; } .option[disabled] { color: var(--lt-text-muted); cursor: not-allowed; opacity: 0.6; } .helper-text::part(base) { font-weight: 200; } /* Size variants */ :host([size='sm']) .select-trigger { font-size: 0.875rem; height: 32px; padding: 0 var(--lt-spacing-3); } :host([size='sm']) .option { font-size: 0.875rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([size='md']) .select-trigger { font-size: 1rem; height: 40px; padding: 0 var(--lt-spacing-4); } :host([size='md']) .option { font-size: 1rem; padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([size='lg']) .select-trigger { font-size: 1.0625rem; height: 48px; padding: 0 var(--lt-spacing-5); } :host([size='lg']) .option { font-size: 1.0625rem; padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* Variant styles */ :host([variant='success']) .select-trigger { border-color: var(--lt-border-success-strong); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .select-trigger { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .select-trigger { border-color: var(--lt-border-error-strong); } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='default']) .helper-text { color: var(--lt-text-subtle); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "selectStyles",
-          "declaration": {
-            "name": "selectStyles",
-            "module": "src/components/select/select.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/select/select.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A customizable select dropdown component with support for multiple variants and sizes.",
-          "name": "Select",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "selectStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "SelectVariant"
-              },
-              "default": "'default'",
-              "description": "Visual variant that determines styling."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "SelectSize"
-              },
-              "default": "'md'",
-              "description": "Size of the select (affects height, font size, and padding)."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Current selected value."
-            },
-            {
-              "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "'Select an option'",
-              "description": "Placeholder text shown when no option is selected."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text displayed above the select."
-            },
-            {
-              "kind": "field",
-              "name": "helperText",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Helper text displayed below the select. Color changes based on variant."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the select is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the select is required. Shows asterisk in label when true."
-            },
-            {
-              "kind": "field",
-              "name": "options",
-              "type": {
-                "text": "SelectOption[]"
-              },
-              "default": "[]",
-              "description": "Array of options to display in the dropdown."
-            },
-            {
-              "kind": "field",
-              "name": "isOpen",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false",
-              "description": "Internal state tracking whether the dropdown is open."
-            },
-            {
-              "kind": "field",
-              "name": "_cleanupClickOutside",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "method",
-              "name": "toggleDropdown",
-              "privacy": "private",
-              "description": "Toggles the dropdown open/closed state."
-            },
-            {
-              "kind": "method",
-              "name": "closeDropdown",
-              "privacy": "private",
-              "description": "Closes the dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "selectOption",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "option",
-                  "type": {
-                    "text": "SelectOption"
-                  },
-                  "description": "The selected option"
-                }
-              ],
-              "description": "Handles option selection.\nUpdates the value, dispatches change event, and closes dropdown."
-            },
-            {
-              "kind": "method",
-              "name": "handleKeydown",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "KeyboardEvent"
-                  },
-                  "description": "The keyboard event"
-                }
-              ],
-              "description": "Handles keyboard navigation in the dropdown.\nSupports Arrow Up/Down for navigation, Enter/Space for selection, and Escape to close."
-            },
-            {
-              "kind": "method",
-              "name": "getSelectedLabel",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "string"
-                }
-              },
-              "description": "Gets the display label for the currently selected value."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changedProperties",
-                  "type": {
-                    "text": "Map<string, unknown>"
-                  }
-                }
-              ],
-              "description": "Reflects the open state as an attribute for CSS styling."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Dispatched when the selected value changes",
-              "name": "change"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-select",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Select",
-          "declaration": {
-            "name": "Select",
-            "module": "src/components/select/select.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/snackbar/index.ts",
       "declarations": [],
       "exports": [
@@ -6578,21 +6740,110 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/shared/backdrop.styles.ts",
+      "path": "src/components/spinner/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Spinner",
+          "declaration": {
+            "name": "Spinner",
+            "module": "./spinner"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SpinnerSize",
+          "declaration": {
+            "name": "SpinnerSize",
+            "module": "./spinner.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SpinnerVariant",
+          "declaration": {
+            "name": "SpinnerVariant",
+            "module": "./spinner.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/spinner/spineer.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "backdropFeatureStyles",
-          "default": "css` :host([backdrop-blur]) .backdrop, :host([backdrop-blur]) [part='overlay'] { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); } `"
+          "name": "spinnerStyles",
+          "default": "css` :host { --lt-spinner-size: var(--lt-spacing-4, 1rem); --lt-spinner-color: currentColor; display: inline-block; line-height: 0; } /* Sizes */ :host([size='sm']) { --lt-spinner-size: var(--lt-spacing-3, 0.75rem); } :host([size='md']) { --lt-spinner-size: var(--lt-spacing-4, 1rem); } :host([size='lg']) { --lt-spinner-size: var(--lt-spacing-6, 1.5rem); } /* Color */ :host([variant='primary']) { --lt-spinner-color: var(--lt-interactive-primary-bg); } :host([variant='secondary']) { --lt-spinner-color: var(--lt-interactive-secondary-bg); } :host([variant='neutral']) { --lt-spinner-color: var(--lt-color-neutral-500); } :host([variant='current']) { --lt-spinner-color: currentColor; } .spinner { animation: spin 700ms linear infinite; border-bottom-color: var(--lt-spinner-color); border-left-color: var(--lt-spinner-color); border-radius: 999px; border-right-color: transparent; border-style: solid; border-top-color: var(--lt-spinner-color); border-width: 2px; box-sizing: border-box; display: block; height: var(--lt-spinner-size); width: var(--lt-spinner-size); } @keyframes spin { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "backdropFeatureStyles",
+          "name": "spinnerStyles",
           "declaration": {
-            "name": "backdropFeatureStyles",
-            "module": "src/components/shared/backdrop.styles.ts"
+            "name": "spinnerStyles",
+            "module": "src/components/spinner/spineer.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/spinner/spinner.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Spinner component for indicating loading states.",
+          "name": "Spinner",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "spinnerStyles"
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "SpinnerSize"
+              },
+              "default": "'md'",
+              "description": "Size of the spinner."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "SpinnerVariant"
+              },
+              "default": "'current'",
+              "description": "Color variant of the spinner.\n'current' inherits color from parent element."
+            },
+            {
+              "kind": "method",
+              "name": "render",
+              "description": "Renders the spinner element.\nHidden from assistive technologies with aria-hidden."
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-spinner",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Spinner",
+          "declaration": {
+            "name": "Spinner",
+            "module": "src/components/spinner/spinner.ts"
           }
         }
       ]
@@ -7864,269 +8115,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/tooltip/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Tooltip",
-          "declaration": {
-            "name": "Tooltip",
-            "module": "./tooltip"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "TooltipPlacement",
-          "declaration": {
-            "name": "TooltipPlacement",
-            "module": "./tooltip.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/tooltip.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "tooltipStyles",
-          "default": "css` :host { display: inline-block; position: relative; --lt-tooltip-offset: 8px; } .tooltip { background: var(--lt-tooltip-bg, var(--lt-bg-inverse)); border-radius: 4px; color: var(--lt-tooltip-color, var(--lt-text-inverse)); opacity: 0; padding: var(--lt-spacing-1) var(--lt-spacing-2); pointer-events: none; position: absolute; transition: opacity 150ms ease, visibility 150ms ease; visibility: hidden; white-space: nowrap; z-index: 1000; } .arrow { border: 5px solid transparent; height: 0; position: absolute; width: 0; } :host(:hover) .tooltip, :host(:focus-within) .tooltip { opacity: 1; visibility: visible; } :host([disabled]) .tooltip, :host(:not([content])) .tooltip, :host([content='']) .tooltip { display: none; } /* ── Top (default) ──────────────────────────── */ :host(:not([placement])) .tooltip, :host([placement='top']) .tooltip { bottom: calc(100% + var(--lt-tooltip-offset)); left: 50%; transform: translateX(-50%); } :host(:not([placement])) .arrow, :host([placement='top']) .arrow { border-top-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); left: 50%; top: 100%; transform: translateX(-50%); } /* ── Bottom ─────────────────────────────────── */ :host([placement='bottom']) .tooltip { left: 50%; top: calc(100% + var(--lt-tooltip-offset)); transform: translateX(-50%); } :host([placement='bottom']) .arrow { border-bottom-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); bottom: 100%; left: 50%; transform: translateX(-50%); } /* ── Left ───────────────────────────────────── */ :host([placement='left']) .tooltip { right: calc(100% + var(--lt-tooltip-offset)); top: 50%; transform: translateY(-50%); } :host([placement='left']) .arrow { border-left-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); left: 100%; top: 50%; transform: translateY(-50%); } /* ── Right ──────────────────────────────────── */ :host([placement='right']) .tooltip { left: calc(100% + var(--lt-tooltip-offset)); top: 50%; transform: translateY(-50%); } :host([placement='right']) .arrow { border-right-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); right: 100%; top: 50%; transform: translateY(-50%); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "tooltipStyles",
-          "declaration": {
-            "name": "tooltipStyles",
-            "module": "src/components/tooltip/tooltip.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/tooltip/tooltip.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Floating label that appears on hover or focus of its trigger element.",
-          "name": "Tooltip",
-          "slots": [
-            {
-              "description": "The trigger element the tooltip is anchored to.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "tooltipStyles"
-            },
-            {
-              "kind": "field",
-              "name": "_tooltipId",
-              "privacy": "private",
-              "default": "`lt-tooltip-${++_tooltipIdCounter}`"
-            },
-            {
-              "kind": "field",
-              "name": "_slot",
-              "type": {
-                "text": "HTMLSlotElement"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Tooltip label text."
-            },
-            {
-              "kind": "field",
-              "name": "placement",
-              "type": {
-                "text": "TooltipPlacement"
-              },
-              "default": "'top'",
-              "description": "Placement of the tooltip relative to the trigger: top, bottom, left, or right."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Prevent the tooltip from showing."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "color",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50)."
-            },
-            {
-              "kind": "method",
-              "name": "firstUpdated",
-              "privacy": "protected"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-tooltip",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Tooltip",
-          "declaration": {
-            "name": "Tooltip",
-            "module": "src/components/tooltip/tooltip.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/spinner/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Spinner",
-          "declaration": {
-            "name": "Spinner",
-            "module": "./spinner"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SpinnerSize",
-          "declaration": {
-            "name": "SpinnerSize",
-            "module": "./spinner.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SpinnerVariant",
-          "declaration": {
-            "name": "SpinnerVariant",
-            "module": "./spinner.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/spinner/spineer.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "spinnerStyles",
-          "default": "css` :host { --lt-spinner-size: var(--lt-spacing-4, 1rem); --lt-spinner-color: currentColor; display: inline-block; line-height: 0; } /* Sizes */ :host([size='sm']) { --lt-spinner-size: var(--lt-spacing-3, 0.75rem); } :host([size='md']) { --lt-spinner-size: var(--lt-spacing-4, 1rem); } :host([size='lg']) { --lt-spinner-size: var(--lt-spacing-6, 1.5rem); } /* Color */ :host([variant='primary']) { --lt-spinner-color: var(--lt-interactive-primary-bg); } :host([variant='secondary']) { --lt-spinner-color: var(--lt-interactive-secondary-bg); } :host([variant='neutral']) { --lt-spinner-color: var(--lt-color-neutral-500); } :host([variant='current']) { --lt-spinner-color: currentColor; } .spinner { animation: spin 700ms linear infinite; border-bottom-color: var(--lt-spinner-color); border-left-color: var(--lt-spinner-color); border-radius: 999px; border-right-color: transparent; border-style: solid; border-top-color: var(--lt-spinner-color); border-width: 2px; box-sizing: border-box; display: block; height: var(--lt-spinner-size); width: var(--lt-spinner-size); } @keyframes spin { to { transform: rotate(360deg); } } @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "spinnerStyles",
-          "declaration": {
-            "name": "spinnerStyles",
-            "module": "src/components/spinner/spineer.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/spinner/spinner.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Spinner component for indicating loading states.",
-          "name": "Spinner",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "spinnerStyles"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "SpinnerSize"
-              },
-              "default": "'md'",
-              "description": "Size of the spinner."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "SpinnerVariant"
-              },
-              "default": "'current'",
-              "description": "Color variant of the spinner.\n'current' inherits color from parent element."
-            },
-            {
-              "kind": "method",
-              "name": "render",
-              "description": "Renders the spinner element.\nHidden from assistive technologies with aria-hidden."
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-spinner",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Spinner",
-          "declaration": {
-            "name": "Spinner",
-            "module": "src/components/spinner/spinner.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/textfield/index.ts",
       "declarations": [],
       "exports": [
@@ -8485,6 +8473,159 @@
           "declaration": {
             "name": "Textfield",
             "module": "src/components/textfield/textfield.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tooltip/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Tooltip",
+          "declaration": {
+            "name": "Tooltip",
+            "module": "./tooltip"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "TooltipPlacement",
+          "declaration": {
+            "name": "TooltipPlacement",
+            "module": "./tooltip.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tooltip/tooltip.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "tooltipStyles",
+          "default": "css` :host { display: inline-block; position: relative; --lt-tooltip-offset: 8px; } .tooltip { background: var(--lt-tooltip-bg, var(--lt-bg-inverse)); border-radius: 4px; color: var(--lt-tooltip-color, var(--lt-text-inverse)); opacity: 0; padding: var(--lt-spacing-1) var(--lt-spacing-2); pointer-events: none; position: absolute; transition: opacity 150ms ease, visibility 150ms ease; visibility: hidden; white-space: nowrap; z-index: 1000; } .arrow { border: 5px solid transparent; height: 0; position: absolute; width: 0; } :host(:hover) .tooltip, :host(:focus-within) .tooltip { opacity: 1; visibility: visible; } :host([disabled]) .tooltip, :host(:not([content])) .tooltip, :host([content='']) .tooltip { display: none; } /* ── Top (default) ──────────────────────────── */ :host(:not([placement])) .tooltip, :host([placement='top']) .tooltip { bottom: calc(100% + var(--lt-tooltip-offset)); left: 50%; transform: translateX(-50%); } :host(:not([placement])) .arrow, :host([placement='top']) .arrow { border-top-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); left: 50%; top: 100%; transform: translateX(-50%); } /* ── Bottom ─────────────────────────────────── */ :host([placement='bottom']) .tooltip { left: 50%; top: calc(100% + var(--lt-tooltip-offset)); transform: translateX(-50%); } :host([placement='bottom']) .arrow { border-bottom-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); bottom: 100%; left: 50%; transform: translateX(-50%); } /* ── Left ───────────────────────────────────── */ :host([placement='left']) .tooltip { right: calc(100% + var(--lt-tooltip-offset)); top: 50%; transform: translateY(-50%); } :host([placement='left']) .arrow { border-left-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); left: 100%; top: 50%; transform: translateY(-50%); } /* ── Right ──────────────────────────────────── */ :host([placement='right']) .tooltip { left: calc(100% + var(--lt-tooltip-offset)); top: 50%; transform: translateY(-50%); } :host([placement='right']) .arrow { border-right-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900)); right: 100%; top: 50%; transform: translateY(-50%); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "tooltipStyles",
+          "declaration": {
+            "name": "tooltipStyles",
+            "module": "src/components/tooltip/tooltip.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/tooltip/tooltip.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Floating label that appears on hover or focus of its trigger element.",
+          "name": "Tooltip",
+          "slots": [
+            {
+              "description": "The trigger element the tooltip is anchored to.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "tooltipStyles"
+            },
+            {
+              "kind": "field",
+              "name": "_tooltipId",
+              "privacy": "private",
+              "default": "`lt-tooltip-${++_tooltipIdCounter}`"
+            },
+            {
+              "kind": "field",
+              "name": "_slot",
+              "type": {
+                "text": "HTMLSlotElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Tooltip label text."
+            },
+            {
+              "kind": "field",
+              "name": "placement",
+              "type": {
+                "text": "TooltipPlacement"
+              },
+              "default": "'top'",
+              "description": "Placement of the tooltip relative to the trigger: top, bottom, left, or right."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Prevent the tooltip from showing."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "color",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50)."
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-tooltip",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Tooltip",
+          "declaration": {
+            "name": "Tooltip",
+            "module": "src/components/tooltip/tooltip.ts"
           }
         }
       ]
