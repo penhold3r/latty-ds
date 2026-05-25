@@ -153,7 +153,7 @@ const indexLines = components
   .map((c) => `export { ${c.name}, type ${c.name}Props } from './components/${c.name}';`)
   .join('\n');
 
-writeFileSync(REACT_INDEX, indexLines + '\n', 'utf8');
+writeFileSync(REACT_INDEX, `import '@latty/web';\n` + indexLines + '\n', 'utf8');
 
 logger.success(`${components.length} React wrappers written → packages/react/src/components/`);
 logger.info('Run: pnpm --filter @latty/react build');

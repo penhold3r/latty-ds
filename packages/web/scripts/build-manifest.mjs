@@ -154,18 +154,21 @@ const pkgPath = join(root, 'package.json');
 const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
 
 const perComponentExports = Object.fromEntries(
-  componentDirs.map((dir) => [`./${dir}`, { default: `./dist/components/${dir}/index.js` }])
+  componentDirs.map((dir) => [
+    `./${dir}`,
+    { import: `./dist/components/${dir}/index.js`, default: `./dist/components/${dir}/index.js` }
+  ])
 );
 
 pkg.exports = {
-  '.': { types: './dist/index.d.ts', default: './dist/index.js' },
+  '.': { types: './dist/index.d.ts', import: './dist/index.js', default: './dist/index.js' },
   './css/latty.css': './dist/css/latty.css',
   './css/font-face.css': './dist/css/font-face.css',
   './manifest.json': './dist/manifest.json',
   ...perComponentExports
 };
 
-// Only the barrel and per-component entry points have side effects (customElements.define)
-pkg.sideEffects = ['./dist/index.js', './dist/components/*/index.js'];
+// Every dist file calls customElements.define() — bundlers must not tree-shake them
+pkg.sideEffects = true;
 
 writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');

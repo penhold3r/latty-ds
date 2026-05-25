@@ -26,10 +26,7 @@
     "LICENSE",
     "custom-elements.json"
   ],
-  "sideEffects": [
-    "./dist/index.js",
-    "./dist/components/*/index.js"
-  ],
+  "sideEffects": true,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -119,9 +116,6 @@
     "./select": {
       "default": "./dist/components/select/index.js"
     },
-    "./shared": {
-      "default": "./dist/components/shared/index.js"
-    },
     "./sidepanel": {
       "default": "./dist/components/sidepanel/index.js"
     },
@@ -164,7 +158,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build:ts": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "build:ts": "tsup",
     "build:assets": "mkdir -p dist/css dist/fonts && cp -R src/css/* dist/css/ && cp -R src/font/* dist/fonts/",
     "build:manifest": "cem analyze --config cem.config.mjs && node scripts/build-manifest.mjs",
     "build": "pnpm run clean && pnpm run build:ts && pnpm run build:assets && pnpm run build:manifest",
@@ -172,6 +166,7 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
+    "tsup": "^8.5.1",
     "typescript": "^5.5.4"
   },
   "dependencies": {
