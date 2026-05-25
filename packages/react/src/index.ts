@@ -1,3 +1,4 @@
+import '@latty/web';
 export { Accordion, type AccordionProps } from './components/Accordion';
 export { Alert, type AlertProps } from './components/Alert';
 export { Badge, type BadgeProps } from './components/Badge';
