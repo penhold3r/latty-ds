@@ -3,6 +3,7 @@ import { bellSvg } from './bell';
 import { calendarSvg } from './calendar';
 import { chartSvg } from './chart';
 import { clockSvg } from './clock';
+import { colorPaletteSvg } from './color-palette';
 import { columnsSvg } from './columns';
 import { folderSvg } from './folder';
 import { gridSvg } from './grid';
@@ -20,24 +21,25 @@ import { sidebarSvg } from './sidebar';
 import { userSvg } from './user';
 
 export const uiIcons = {
-  search: searchSvg,
-  menu: menuSvg,
-  settings: settingsSvg,
-  home: homeSvg,
-  user: userSvg,
+  'at-sign': atSignSvg,
   bell: bellSvg,
   calendar: calendarSvg,
-  clock: clockSvg,
-  mail: mailSvg,
-  phone: phoneSvg,
   chart: chartSvg,
+  clock: clockSvg,
+  'color-palette': colorPaletteSvg,
+  columns: columnsSvg,
   folder: folderSvg,
   grid: gridSvg,
-  'list-view': listViewSvg,
-  columns: columnsSvg,
+  hash: hashSvg,
+  home: homeSvg,
   image: imageSvg,
   layers: layersSvg,
-  'at-sign': atSignSvg,
-  hash: hashSvg,
-  sidebar: sidebarSvg
+  'list-view': listViewSvg,
+  mail: mailSvg,
+  menu: menuSvg,
+  phone: phoneSvg,
+  search: searchSvg,
+  settings: settingsSvg,
+  sidebar: sidebarSvg,
+  user: userSvg
 } as const;

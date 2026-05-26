@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout/index.astro';
+import ComponentPlayground from '../../../components/ComponentPlayground/index.astro';
+import FrameworkTabs from '../../../components/FrameworkTabs/index.astro';
+import ApiTable from '../../../components/ApiTable/index.astro';
+---
+
+<BaseLayout
+  title="Color Input"
+  description="A read-only textfield that opens the native color picker and displays the selected hex value."
+>
+  <lt-text as="h1">Color Input</lt-text>
+  <lt-text as="p">
+    A read-only textfield that opens the browser's native color picker on click. Displays the selected hex value
+    alongside a live color swatch preview.
+  </lt-text>
+
+  <lt-text as="h2">Playground</lt-text>
+  <ComponentPlayground tag="lt-color-input" defaults={{ label: 'Brand color', value: '#7c3aed' }} />
+
+  <lt-text as="h2">Usage</lt-text>
+  <FrameworkTabs
+    html={`<lt-color-input label="Brand color" value="#7c3aed"></lt-color-input>`}
+    react={`
+import { ColorInput } from '@latty/react';
+
+<ColorInput label="Brand color" value="#7c3aed" onChange={(e) => console.log(e.detail.value)} />
+    `}
+    vue={`
+<template>
+  <lt-color-input label="Brand color" value="#7c3aed" @change="onColorChange"></lt-color-input>
+</template>
+    `}
+  />
+
+  <lt-text as="h2">API</lt-text>
+  <ApiTable tag="lt-color-input" />
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

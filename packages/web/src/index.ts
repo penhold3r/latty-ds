@@ -9,6 +9,7 @@
  * - Button: Interactive button with multiple variants and loading states
  * - Calendar: TODO: describe the Calendar component
  * - Checkbox: Checkbox input with support for indeterminate state
+ * - ColorInput: TODO: describe the ColorInput component
  * - Dialog: Modal dialog with backdrop and accessibility features
  * - Dropdown: TODO: describe the Dropdown component
  * - Header: TODO: describe the Header component
@@ -99,3 +100,4 @@ export * from './components/date-input';
 export * from './components/combobox';
 export * from './components/calendar';
 export * from './components/icon-button';
+export * from './components/color-input';

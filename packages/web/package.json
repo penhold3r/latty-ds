@@ -76,6 +76,10 @@
       "import": "./dist/components/chip/index.js",
       "default": "./dist/components/chip/index.js"
     },
+    "./color-input": {
+      "import": "./dist/components/color-input/index.js",
+      "default": "./dist/components/color-input/index.js"
+    },
     "./combobox": {
       "import": "./dist/components/combobox/index.js",
       "default": "./dist/components/combobox/index.js"
