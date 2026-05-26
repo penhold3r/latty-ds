@@ -28,137 +28,182 @@
   ],
   "sideEffects": true,
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./css/latty.css": "./dist/css/latty.css",
     "./css/font-face.css": "./dist/css/font-face.css",
     "./manifest.json": "./dist/manifest.json",
     "./accordion": {
+      "import": "./dist/components/accordion/index.js",
       "default": "./dist/components/accordion/index.js"
     },
     "./alert": {
+      "import": "./dist/components/alert/index.js",
       "default": "./dist/components/alert/index.js"
     },
     "./avatar": {
+      "import": "./dist/components/avatar/index.js",
       "default": "./dist/components/avatar/index.js"
     },
     "./badge": {
+      "import": "./dist/components/badge/index.js",
       "default": "./dist/components/badge/index.js"
     },
     "./breadcrumb": {
+      "import": "./dist/components/breadcrumb/index.js",
       "default": "./dist/components/breadcrumb/index.js"
     },
     "./button": {
+      "import": "./dist/components/button/index.js",
       "default": "./dist/components/button/index.js"
     },
     "./calendar": {
+      "import": "./dist/components/calendar/index.js",
       "default": "./dist/components/calendar/index.js"
     },
     "./checkbox": {
+      "import": "./dist/components/checkbox/index.js",
       "default": "./dist/components/checkbox/index.js"
     },
     "./chip": {
+      "import": "./dist/components/chip/index.js",
       "default": "./dist/components/chip/index.js"
     },
     "./combobox": {
+      "import": "./dist/components/combobox/index.js",
       "default": "./dist/components/combobox/index.js"
     },
     "./date-input": {
+      "import": "./dist/components/date-input/index.js",
       "default": "./dist/components/date-input/index.js"
     },
     "./datepicker": {
+      "import": "./dist/components/datepicker/index.js",
       "default": "./dist/components/datepicker/index.js"
     },
     "./dialog": {
+      "import": "./dist/components/dialog/index.js",
       "default": "./dist/components/dialog/index.js"
     },
     "./divider": {
+      "import": "./dist/components/divider/index.js",
       "default": "./dist/components/divider/index.js"
     },
     "./dropdown": {
+      "import": "./dist/components/dropdown/index.js",
       "default": "./dist/components/dropdown/index.js"
     },
     "./header": {
+      "import": "./dist/components/header/index.js",
       "default": "./dist/components/header/index.js"
     },
     "./icon-button": {
+      "import": "./dist/components/icon-button/index.js",
       "default": "./dist/components/icon-button/index.js"
     },
     "./image": {
+      "import": "./dist/components/image/index.js",
       "default": "./dist/components/image/index.js"
     },
     "./link": {
+      "import": "./dist/components/link/index.js",
       "default": "./dist/components/link/index.js"
     },
     "./list": {
+      "import": "./dist/components/list/index.js",
       "default": "./dist/components/list/index.js"
     },
     "./nav": {
+      "import": "./dist/components/nav/index.js",
       "default": "./dist/components/nav/index.js"
     },
     "./pagination": {
+      "import": "./dist/components/pagination/index.js",
       "default": "./dist/components/pagination/index.js"
     },
     "./progress": {
+      "import": "./dist/components/progress/index.js",
       "default": "./dist/components/progress/index.js"
     },
     "./radio": {
+      "import": "./dist/components/radio/index.js",
       "default": "./dist/components/radio/index.js"
     },
     "./radio-group": {
+      "import": "./dist/components/radio-group/index.js",
       "default": "./dist/components/radio-group/index.js"
     },
     "./select": {
+      "import": "./dist/components/select/index.js",
       "default": "./dist/components/select/index.js"
     },
+    "./shared": {
+      "import": "./dist/components/shared/index.js",
+      "default": "./dist/components/shared/index.js"
+    },
     "./sidepanel": {
+      "import": "./dist/components/sidepanel/index.js",
       "default": "./dist/components/sidepanel/index.js"
     },
     "./skeleton": {
+      "import": "./dist/components/skeleton/index.js",
       "default": "./dist/components/skeleton/index.js"
     },
     "./slider": {
+      "import": "./dist/components/slider/index.js",
       "default": "./dist/components/slider/index.js"
     },
     "./snackbar": {
+      "import": "./dist/components/snackbar/index.js",
       "default": "./dist/components/snackbar/index.js"
     },
     "./spinner": {
+      "import": "./dist/components/spinner/index.js",
       "default": "./dist/components/spinner/index.js"
     },
     "./surface": {
+      "import": "./dist/components/surface/index.js",
       "default": "./dist/components/surface/index.js"
     },
     "./switch": {
+      "import": "./dist/components/switch/index.js",
       "default": "./dist/components/switch/index.js"
     },
     "./tab": {
+      "import": "./dist/components/tab/index.js",
       "default": "./dist/components/tab/index.js"
     },
     "./tab-group": {
+      "import": "./dist/components/tab-group/index.js",
       "default": "./dist/components/tab-group/index.js"
     },
     "./table": {
+      "import": "./dist/components/table/index.js",
       "default": "./dist/components/table/index.js"
     },
     "./text": {
+      "import": "./dist/components/text/index.js",
       "default": "./dist/components/text/index.js"
     },
     "./textfield": {
+      "import": "./dist/components/textfield/index.js",
       "default": "./dist/components/textfield/index.js"
     },
     "./tooltip": {
+      "import": "./dist/components/tooltip/index.js",
       "default": "./dist/components/tooltip/index.js"
     }
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build:ts": "tsup",
+    "build:ts": "tsup && tsc --emitDeclarationOnly -p tsconfig.build.json",
     "build:assets": "mkdir -p dist/css dist/fonts && cp -R src/css/* dist/css/ && cp -R src/font/* dist/fonts/",
     "build:manifest": "cem analyze --config cem.config.mjs && node scripts/build-manifest.mjs",
     "build": "pnpm run clean && pnpm run build:ts && pnpm run build:assets && pnpm run build:manifest",
@@ -166,13 +211,16 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
+    "lit": "^3.2.0",
     "tsup": "^8.5.1",
     "typescript": "^5.5.4"
   },
+  "peerDependencies": {
+    "lit": "^3.2.0"
+  },
   "dependencies": {
     "@floating-ui/dom": "^1.7.6",
-    "@latty/icons": "workspace:*",
-    "lit": "^3.2.0"
+    "@latty/icons": "workspace:*"
   },
   "customElements": "custom-elements.json"
 }

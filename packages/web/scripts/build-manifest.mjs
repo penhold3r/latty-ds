@@ -160,8 +160,15 @@ const perComponentExports = Object.fromEntries(
   ])
 );
 
+pkg.main = './dist/index.cjs';
+
 pkg.exports = {
-  '.': { types: './dist/index.d.ts', import: './dist/index.js', default: './dist/index.js' },
+  '.': {
+    types: './dist/index.d.ts',
+    require: './dist/index.cjs',
+    import: './dist/index.js',
+    default: './dist/index.js'
+  },
   './css/latty.css': './dist/css/latty.css',
   './css/font-face.css': './dist/css/font-face.css',
   './manifest.json': './dist/manifest.json',

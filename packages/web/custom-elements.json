@@ -226,6 +226,197 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/alert/alert.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "alertStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens — public props override first, then variant defaults */ --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-neutral-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-inverse)); --_border: var(--lt-alert-border-color, var(--lt-border-strong)); --_color: var(--lt-alert-color, var(--lt-text-default)); --_color-solid: var(--lt-alert-color, var(--lt-text-inverse)); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-success-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-success)); --_border: var(--lt-alert-border-color, var(--lt-border-success-strong)); --_color: var(--lt-alert-color, var(--lt-text-success)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-success)); } :host([variant='warning']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-warning-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-warning)); --_border: var(--lt-alert-border-color, var(--lt-border-warning-strong)); --_color: var(--lt-alert-color, var(--lt-text-warning)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-warning)); } :host([variant='error']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-error-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-error)); --_border: var(--lt-alert-border-color, var(--lt-border-error-strong)); --_color: var(--lt-alert-color, var(--lt-text-error)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-error)); } :host([variant='info']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-info-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-info)); --_border: var(--lt-alert-border-color, var(--lt-border-info-strong)); --_color: var(--lt-alert-color, var(--lt-text-info)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-info)); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: 1px solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: 1px solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } .title + .content { opacity: 0.8; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "alertStyles",
+          "declaration": {
+            "name": "alertStyles",
+            "module": "src/components/alert/alert.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/alert/alert.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Inline notification for persistent contextual feedback.",
+          "name": "Alert",
+          "slots": [
+            {
+              "description": "Alert body. Accepts any HTML — bold, links, lists, etc.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "alertStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "AlertVariant"
+              },
+              "default": "'default'",
+              "description": "Visual style."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "AlertAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual treatment. `filled` uses a tinted background with border, `outlined` uses a white background with border, `solid` uses a solid color background with no border."
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Optional bold heading above the body content."
+            },
+            {
+              "kind": "field",
+              "name": "icon",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Icon to show before the body. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
+            },
+            {
+              "kind": "field",
+              "name": "closable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the title in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "_iconMap",
+              "type": {
+                "text": "Record<AlertVariant, string>"
+              },
+              "privacy": "private",
+              "static": true,
+              "readonly": true,
+              "default": "{ default: 'info-circle', success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
+            },
+            {
+              "kind": "method",
+              "name": "_handleClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_resolvedIcon",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
+              "name": "close"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-alert",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Alert",
+          "declaration": {
+            "name": "Alert",
+            "module": "src/components/alert/alert.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/alert/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Alert",
+          "declaration": {
+            "name": "Alert",
+            "module": "./alert"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AlertVariant",
+          "declaration": {
+            "name": "AlertVariant",
+            "module": "./alert.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AlertAppearance",
+          "declaration": {
+            "name": "AlertAppearance",
+            "module": "./alert.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/avatar/avatar.styles.ts",
       "declarations": [
         {
@@ -585,341 +776,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/badge/badge.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "badgeStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-badge-bg); border-radius: 999px; border: 1px solid var(--lt-badge-border-color, transparent); color: var(--lt-badge-color); box-sizing: border-box; display: inline-flex; font-weight: 600; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: var(--lt-color-white); } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "badgeStyles",
-          "declaration": {
-            "name": "badgeStyles",
-            "module": "src/components/badge/badge.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/badge.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A compact status label for categories, counts, and states.",
-          "name": "Badge",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "badgeStyles"
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "BadgeAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual style: tinted fill, outline only, or full-color solid."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "BadgeVariant"
-              },
-              "default": "'primary'",
-              "description": "Color scheme."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "BadgeSize"
-              },
-              "default": "'md'",
-              "description": "Size."
-            },
-            {
-              "kind": "field",
-              "name": "content",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text. When empty the badge renders as a circle indicator."
-            },
-            {
-              "kind": "field",
-              "name": "dot",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show a leading status dot (only visible when content is set)."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-badge",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Badge",
-          "declaration": {
-            "name": "Badge",
-            "module": "src/components/badge/badge.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/badge/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Badge",
-          "declaration": {
-            "name": "Badge",
-            "module": "./badge"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeVariant",
-          "declaration": {
-            "name": "BadgeVariant",
-            "module": "./badge.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeSize",
-          "declaration": {
-            "name": "BadgeSize",
-            "module": "./badge.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "BadgeAppearance",
-          "declaration": {
-            "name": "BadgeAppearance",
-            "module": "./badge.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/alert/alert.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "alertStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens — public props override first, then variant defaults */ --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-neutral-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-inverse)); --_border: var(--lt-alert-border-color, var(--lt-border-strong)); --_color: var(--lt-alert-color, var(--lt-text-default)); --_color-solid: var(--lt-alert-color, var(--lt-text-inverse)); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-success-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-success)); --_border: var(--lt-alert-border-color, var(--lt-border-success-strong)); --_color: var(--lt-alert-color, var(--lt-text-success)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-success)); } :host([variant='warning']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-warning-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-warning)); --_border: var(--lt-alert-border-color, var(--lt-border-warning-strong)); --_color: var(--lt-alert-color, var(--lt-text-warning)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-warning)); } :host([variant='error']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-error-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-error)); --_border: var(--lt-alert-border-color, var(--lt-border-error-strong)); --_color: var(--lt-alert-color, var(--lt-text-error)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-error)); } :host([variant='info']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-info-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-info)); --_border: var(--lt-alert-border-color, var(--lt-border-info-strong)); --_color: var(--lt-alert-color, var(--lt-text-info)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-info)); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: 1px solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: 1px solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } .title + .content { opacity: 0.8; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "alertStyles",
-          "declaration": {
-            "name": "alertStyles",
-            "module": "src/components/alert/alert.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/alert/alert.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Inline notification for persistent contextual feedback.",
-          "name": "Alert",
-          "slots": [
-            {
-              "description": "Alert body. Accepts any HTML — bold, links, lists, etc.",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "alertStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "AlertVariant"
-              },
-              "default": "'default'",
-              "description": "Visual style."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "AlertAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual treatment. `filled` uses a tinted background with border, `outlined` uses a white background with border, `solid` uses a solid color background with no border."
-            },
-            {
-              "kind": "field",
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Optional bold heading above the body content."
-            },
-            {
-              "kind": "field",
-              "name": "icon",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Icon to show before the body. Leave empty for auto (shows variant icon for status variants),\nset to `\"none\"` to suppress, or pass any icon name to override."
-            },
-            {
-              "kind": "field",
-              "name": "closable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the title in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "_iconMap",
-              "type": {
-                "text": "Record<AlertVariant, string>"
-              },
-              "privacy": "private",
-              "static": true,
-              "readonly": true,
-              "default": "{ default: 'info-circle', success: 'check-circle', warning: 'warning-triangle', error: 'xmark-circle', info: 'info-circle' }"
-            },
-            {
-              "kind": "method",
-              "name": "_handleClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_resolvedIcon",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
-              "name": "close"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-alert",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Alert",
-          "declaration": {
-            "name": "Alert",
-            "module": "src/components/alert/alert.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/alert/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Alert",
-          "declaration": {
-            "name": "Alert",
-            "module": "./alert"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AlertVariant",
-          "declaration": {
-            "name": "AlertVariant",
-            "module": "./alert.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "AlertAppearance",
-          "declaration": {
-            "name": "AlertAppearance",
-            "module": "./alert.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/button/button.styles.ts",
       "declarations": [
         {
@@ -1166,6 +1022,150 @@
           "declaration": {
             "name": "ButtonVariant",
             "module": "./button.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/badge.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "badgeStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; vertical-align: middle; } span[part='base'] { align-items: center; background: var(--lt-badge-bg); border-radius: 999px; border: 1px solid var(--lt-badge-border-color, transparent); color: var(--lt-badge-color); box-sizing: border-box; display: inline-flex; font-weight: 600; gap: var(--lt-spacing-1); line-height: 1; user-select: none; white-space: nowrap; } .dot { border-radius: 50%; flex-shrink: 0; } /* ── Sizes ──────────────────────────────────────────────────────────── */ :host([size='sm']) span[part='base'] { font-size: 0.6875rem; height: 18px; padding-inline: var(--lt-spacing-2); } :host([size='sm']) .dot { height: 6px; width: 6px; } :host([size='md']) span[part='base'] { font-size: 0.75rem; height: 22px; padding-inline: var(--lt-spacing-2); } :host([size='md']) .dot { height: 7px; width: 7px; } :host([size='lg']) span[part='base'] { font-size: 0.8125rem; height: 26px; padding-inline: var(--lt-spacing-3); } :host([size='lg']) .dot { height: 8px; width: 8px; } /* When dot is the only content, fill it to the circle size */ :host([dot][content='']) .dot, :host([dot]:not([content])) .dot { height: 40%; width: 40%; } /* ── Empty = perfect circle (covers content=\"\" and absent attribute) */ :host([content='']) span[part='base'], :host(:not([content])) span[part='base'] { aspect-ratio: 1; justify-content: center; padding: 0; } /* ── Filled (tinted bg, colored border, dark text) ───────────────── */ :host([appearance='filled'][variant='primary']) span[part='base'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-text-primary); } :host([appearance='filled'][variant='secondary']) span[part='base'] { background: var(--lt-bg-secondary-subtle); border-color: var(--lt-border-secondary); color: var(--lt-text-secondary); } :host([appearance='filled'][variant='success']) span[part='base'] { background: var(--lt-bg-success-subtle); border-color: var(--lt-border-success); color: var(--lt-text-success); } :host([appearance='filled'][variant='warning']) span[part='base'] { background: var(--lt-bg-warning-subtle); border-color: var(--lt-border-warning); color: var(--lt-text-warning); } :host([appearance='filled'][variant='error']) span[part='base'] { background: var(--lt-bg-error-subtle); border-color: var(--lt-border-error); color: var(--lt-text-error); } :host([appearance='filled'][variant='neutral']) span[part='base'] { background: var(--lt-bg-surface); border-color: var(--lt-border-default); color: var(--lt-text-neutral); } /* ── Outlined (transparent bg, colored border and text) ──────────── */ :host([appearance='outlined'][variant='primary']) span[part='base'] { background: transparent; border-color: var(--lt-border-primary-strong); color: var(--lt-text-primary); } :host([appearance='outlined'][variant='secondary']) span[part='base'] { background: transparent; border-color: var(--lt-border-secondary-strong); color: var(--lt-text-secondary); } :host([appearance='outlined'][variant='success']) span[part='base'] { background: transparent; border-color: var(--lt-border-success-strong); color: var(--lt-text-success); } :host([appearance='outlined'][variant='warning']) span[part='base'] { background: transparent; border-color: var(--lt-border-warning-strong); color: var(--lt-text-warning); } :host([appearance='outlined'][variant='error']) span[part='base'] { background: transparent; border-color: var(--lt-border-error-strong); color: var(--lt-text-error); } :host([appearance='outlined'][variant='neutral']) span[part='base'] { background: transparent; border-color: var(--lt-border-strong); color: var(--lt-text-neutral); } /* ── Solid (full-color bg, white text) ───────────────────────────── */ :host([appearance='solid'][variant='primary']) span[part='base'] { background: var(--lt-interactive-primary-bg); border-color: transparent; color: var(--lt-text-on-primary); } :host([appearance='solid'][variant='secondary']) span[part='base'] { background: var(--lt-interactive-secondary-bg); border-color: transparent; color: var(--lt-text-on-secondary); } :host([appearance='solid'][variant='success']) span[part='base'] { background: var(--lt-interactive-success-bg); border-color: transparent; color: var(--lt-text-on-success); } :host([appearance='solid'][variant='warning']) span[part='base'] { background: var(--lt-interactive-warning-bg); border-color: transparent; color: var(--lt-text-on-warning); } :host([appearance='solid'][variant='error']) span[part='base'] { background: var(--lt-interactive-error-bg); border-color: transparent; color: var(--lt-text-on-error); } :host([appearance='solid'][variant='neutral']) span[part='base'] { background: var(--lt-color-neutral-500); border-color: transparent; color: var(--lt-color-white); } /* ── Dot color inherits text color ───────────────────────────────── */ .dot { background: currentColor; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "badgeStyles",
+          "declaration": {
+            "name": "badgeStyles",
+            "module": "src/components/badge/badge.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/badge.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A compact status label for categories, counts, and states.",
+          "name": "Badge",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "badgeStyles"
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "BadgeAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual style: tinted fill, outline only, or full-color solid."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "BadgeVariant"
+              },
+              "default": "'primary'",
+              "description": "Color scheme."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "BadgeSize"
+              },
+              "default": "'md'",
+              "description": "Size."
+            },
+            {
+              "kind": "field",
+              "name": "content",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text. When empty the badge renders as a circle indicator."
+            },
+            {
+              "kind": "field",
+              "name": "dot",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Show a leading status dot (only visible when content is set)."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-badge",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "src/components/badge/badge.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/badge/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Badge",
+          "declaration": {
+            "name": "Badge",
+            "module": "./badge"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeVariant",
+          "declaration": {
+            "name": "BadgeVariant",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeSize",
+          "declaration": {
+            "name": "BadgeSize",
+            "module": "./badge.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "BadgeAppearance",
+          "declaration": {
+            "name": "BadgeAppearance",
+            "module": "./badge.types"
           }
         }
       ]
@@ -3004,296 +3004,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/dialog/dialog.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "dialogStyles",
-          "default": "css` :host { font-family: 'Hanken Grotesk', sans-serif; } /* Backdrop */ .backdrop { align-items: center; background: rgba(0, 0, 0, var(--lt-dialog-overlay-opacity, 0.5)); display: flex; height: 100vh; justify-content: center; left: 0; opacity: 0; padding: var(--lt-spacing-4); position: fixed; top: 0; transition: opacity 200ms ease; width: 100vw; z-index: 1000; } :host([open]) .backdrop { opacity: 1; } :host(:not([open])) .backdrop { pointer-events: none; } /* lt-surface host — flex item inside .backdrop, sized per size variant */ lt-surface { width: 100%; } :host([size='sm']) lt-surface { max-width: 400px; } :host([size='md']) lt-surface { max-width: 600px; } :host([size='lg']) lt-surface { max-width: 800px; } :host([size='xl']) lt-surface { max-width: 1000px; } :host([size='fullscreen']) .backdrop { padding: 0; } :host([size='fullscreen']) lt-surface { height: 100vh; max-height: 100vh; max-width: 100vw; } /* lt-surface inner div — layout and animation */ lt-surface::part(surface) { display: flex; flex-direction: column; max-height: calc(100vh - var(--lt-spacing-8)); opacity: 0; position: relative; transform: translateY(16px); transition: opacity 220ms ease, transform 220ms cubic-bezier(0.34, 1.2, 0.64, 1); } :host([open]) lt-surface::part(surface) { opacity: 1; transform: translateY(0); } :host([size='fullscreen']) lt-surface::part(surface) { border-radius: 0; max-height: 100vh; } /* Header */ .header { align-items: center; border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-4); padding: var(--lt-spacing-5); position: relative; } .header-content { flex: 1; } .title { color: var(--lt-text-default); } .close-button { flex-shrink: 0; } /* Body */ .body { color: var(--lt-color-neutral-700); flex: 1; overflow-y: auto; padding: var(--lt-spacing-5); } /* Footer */ .footer { border-top: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-3); justify-content: flex-end; padding: var(--lt-spacing-5); } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "dialogStyles",
-          "declaration": {
-            "name": "dialogStyles",
-            "module": "src/components/dialog/dialog.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/dialog/dialog.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Dialog component (modal) with backdrop, animations, and accessibility features.",
-          "name": "Dialog",
-          "slots": [
-            {
-              "description": "Dialog body content",
-              "name": ""
-            },
-            {
-              "description": "Custom header content (overrides title prop)",
-              "name": "header"
-            },
-            {
-              "description": "Footer content (typically for action buttons)",
-              "name": "footer"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "type": {
-                "text": "array"
-              },
-              "static": true,
-              "default": "[dialogStyles, backdropFeatureStyles]"
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "DialogSize"
-              },
-              "default": "'md'",
-              "description": "Size of the dialog (affects max width)."
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the dialog is open."
-            },
-            {
-              "kind": "field",
-              "name": "title",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Dialog title displayed in the header."
-            },
-            {
-              "kind": "field",
-              "name": "noCloseButton",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Suppress the built-in close button in the header."
-            },
-            {
-              "kind": "field",
-              "name": "closeOnBackdropClick",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether clicking the backdrop closes the dialog."
-            },
-            {
-              "kind": "field",
-              "name": "closeOnEscape",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "true",
-              "description": "Whether pressing Escape closes the dialog."
-            },
-            {
-              "kind": "field",
-              "name": "uppercase",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Renders the dialog title in small caps with wider letter spacing."
-            },
-            {
-              "kind": "field",
-              "name": "backdropBlur",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Apply a frosted-glass blur effect to the backdrop."
-            },
-            {
-              "kind": "field",
-              "name": "dialogElement",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "previouslyFocusedElement",
-              "type": {
-                "text": "HTMLElement | undefined"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "show",
-              "privacy": "public",
-              "description": "Opens the dialog."
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "privacy": "public",
-              "description": "Closes the dialog."
-            },
-            {
-              "kind": "method",
-              "name": "toggle",
-              "privacy": "public",
-              "description": "Toggles the dialog open/closed state."
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "parameters": [
-                {
-                  "name": "changedProperties",
-                  "type": {
-                    "text": "Map<string, unknown>"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleOpen",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleClose",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "restoreFocus",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "handleKeydown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "handleBackdropClick",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "event",
-                  "type": {
-                    "text": "MouseEvent"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "handleCloseClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            },
-            {
-              "kind": "method",
-              "name": "hasSlot",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": {
-                    "text": "string"
-                  }
-                }
-              ]
-            }
-          ],
-          "events": [
-            {
-              "name": "dialog-open",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Fired when dialog opens"
-            },
-            {
-              "name": "dialog-close",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Fired when dialog closes"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-dialog",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Dialog",
-          "declaration": {
-            "name": "Dialog",
-            "module": "src/components/dialog/dialog.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/dialog/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Dialog",
-          "declaration": {
-            "name": "Dialog",
-            "module": "./dialog"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "DialogSize",
-          "declaration": {
-            "name": "DialogSize",
-            "module": "./dialog.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/divider/divider.styles.ts",
       "declarations": [
         {
@@ -3728,110 +3438,290 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/header/header.styles.ts",
+      "path": "src/components/dialog/dialog.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "headerStyles",
-          "default": "css` :host { display: block; position: sticky; top: 0; z-index: 100; box-shadow: var(--lt-elevation-1); } :host([background='primary']) { background: var(--lt-bg-primary); color: var(--lt-text-inverse); } :host([background='surface']) { background: var(--lt-bg-default); color: var(--lt-text-default); } header { display: flex; align-items: center; gap: var(--lt-spacing-2); padding: 0 var(--lt-spacing-4); min-height: var(--lt-spacing-px-16); box-sizing: border-box; color: inherit; } .content { flex: 1; display: flex; align-items: center; } `"
+          "name": "dialogStyles",
+          "default": "css` :host { font-family: 'Hanken Grotesk', sans-serif; } /* Backdrop */ .backdrop { align-items: center; background: rgba(0, 0, 0, var(--lt-dialog-overlay-opacity, 0.5)); display: flex; height: 100vh; justify-content: center; left: 0; opacity: 0; padding: var(--lt-spacing-4); position: fixed; top: 0; transition: opacity 200ms ease; width: 100vw; z-index: 1000; } :host([open]) .backdrop { opacity: 1; } :host(:not([open])) .backdrop { pointer-events: none; } /* lt-surface host — flex item inside .backdrop, sized per size variant */ lt-surface { width: 100%; } :host([size='sm']) lt-surface { max-width: 400px; } :host([size='md']) lt-surface { max-width: 600px; } :host([size='lg']) lt-surface { max-width: 800px; } :host([size='xl']) lt-surface { max-width: 1000px; } :host([size='fullscreen']) .backdrop { padding: 0; } :host([size='fullscreen']) lt-surface { height: 100vh; max-height: 100vh; max-width: 100vw; } /* lt-surface inner div — layout and animation */ lt-surface::part(surface) { display: flex; flex-direction: column; max-height: calc(100vh - var(--lt-spacing-8)); opacity: 0; position: relative; transform: translateY(16px); transition: opacity 220ms ease, transform 220ms cubic-bezier(0.34, 1.2, 0.64, 1); } :host([open]) lt-surface::part(surface) { opacity: 1; transform: translateY(0); } :host([size='fullscreen']) lt-surface::part(surface) { border-radius: 0; max-height: 100vh; } /* Header */ .header { align-items: center; border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-4); padding: var(--lt-spacing-5); position: relative; } .header-content { flex: 1; } .title { color: var(--lt-text-default); } .close-button { flex-shrink: 0; } /* Body */ .body { color: var(--lt-color-neutral-700); flex: 1; overflow-y: auto; padding: var(--lt-spacing-5); } /* Footer */ .footer { border-top: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-3); justify-content: flex-end; padding: var(--lt-spacing-5); } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "headerStyles",
+          "name": "dialogStyles",
           "declaration": {
-            "name": "headerStyles",
-            "module": "src/components/header/header.styles.ts"
+            "name": "dialogStyles",
+            "module": "src/components/dialog/dialog.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/header/header.ts",
+      "path": "src/components/dialog/dialog.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "A layout component that organises content into a sticky app bar.\nRenders a native `<header>` element for semantics and the ARIA `banner` landmark.",
-          "name": "Header",
+          "description": "Dialog component (modal) with backdrop, animations, and accessibility features.",
+          "name": "Dialog",
           "slots": [
             {
-              "description": "Far-left area, typically a hamburger menu or back button",
-              "name": "before"
+              "description": "Dialog body content",
+              "name": ""
             },
             {
-              "description": "Logo or brand mark, placed to the right of `before`",
-              "name": "logo"
+              "description": "Custom header content (overrides title prop)",
+              "name": "header"
             },
             {
-              "description": "Main content area (nav links, search…); stretches to fill available space",
-              "name": "content"
-            },
-            {
-              "description": "Far-right area, typically user actions or icons",
-              "name": "after"
+              "description": "Footer content (typically for action buttons)",
+              "name": "footer"
             }
           ],
           "members": [
             {
               "kind": "field",
               "name": "styles",
+              "type": {
+                "text": "array"
+              },
               "static": true,
-              "default": "headerStyles"
+              "default": "[dialogStyles, backdropFeatureStyles]"
             },
             {
               "kind": "field",
-              "name": "background",
+              "name": "size",
               "type": {
-                "text": "HeaderBackground"
+                "text": "DialogSize"
               },
-              "default": "'primary'",
-              "description": "Background surface that controls the header's background and text colours."
+              "default": "'md'",
+              "description": "Size of the dialog (affects max width)."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the dialog is open."
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Dialog title displayed in the header."
+            },
+            {
+              "kind": "field",
+              "name": "noCloseButton",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Suppress the built-in close button in the header."
+            },
+            {
+              "kind": "field",
+              "name": "closeOnBackdropClick",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether clicking the backdrop closes the dialog."
+            },
+            {
+              "kind": "field",
+              "name": "closeOnEscape",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether pressing Escape closes the dialog."
+            },
+            {
+              "kind": "field",
+              "name": "uppercase",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the dialog title in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "backdropBlur",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Apply a frosted-glass blur effect to the backdrop."
+            },
+            {
+              "kind": "field",
+              "name": "dialogElement",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "previouslyFocusedElement",
+              "type": {
+                "text": "HTMLElement | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "privacy": "public",
+              "description": "Opens the dialog."
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "public",
+              "description": "Closes the dialog."
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "privacy": "public",
+              "description": "Toggles the dialog open/closed state."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleOpen",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleClose",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "restoreFocus",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleKeydown",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "handleBackdropClick",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "event",
+                  "type": {
+                    "text": "MouseEvent"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleCloseClick",
+              "privacy": "private"
             },
             {
               "kind": "method",
               "name": "render"
+            },
+            {
+              "kind": "method",
+              "name": "hasSlot",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            }
+          ],
+          "events": [
+            {
+              "name": "dialog-open",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when dialog opens"
+            },
+            {
+              "name": "dialog-close",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when dialog closes"
             }
           ],
           "superclass": {
             "name": "ThemeableElement",
             "module": "/src/base"
           },
-          "tagName": "lt-header",
+          "tagName": "lt-dialog",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "Header",
+          "name": "Dialog",
           "declaration": {
-            "name": "Header",
-            "module": "src/components/header/header.ts"
+            "name": "Dialog",
+            "module": "src/components/dialog/dialog.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/header/index.ts",
+      "path": "src/components/dialog/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Header",
+          "name": "Dialog",
           "declaration": {
-            "name": "Header",
-            "module": "./header"
+            "name": "Dialog",
+            "module": "./dialog"
           }
         },
         {
           "kind": "js",
-          "name": "HeaderBackground",
+          "name": "DialogSize",
           "declaration": {
-            "name": "HeaderBackground",
-            "module": "./header.types"
+            "name": "DialogSize",
+            "module": "./dialog.types"
           }
         }
       ]
@@ -4134,99 +4024,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/link/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Link",
-          "declaration": {
-            "name": "Link",
-            "module": "./link"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/link/link.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "linkStyles",
-          "default": "css` :host { display: inline; } a[part='base'] { align-items: center; color: var(--lt-text-primary); cursor: pointer; display: inline-flex; font: inherit; gap: 0.25em; text-decoration: none; vertical-align: baseline; } a[part='base']:hover { color: var(--lt-text-primary); text-decoration: underline; } a[part='base']:focus-visible { border-radius: 2px; outline: 2px solid var(--lt-border-focus); outline-offset: 2px; } lt-icon[part='icon'] { flex-shrink: 0; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "linkStyles",
-          "declaration": {
-            "name": "linkStyles",
-            "module": "src/components/link/link.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/link/link.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A styled anchor element. Uses the primary color by default with an underline on hover.\nSet `external` to open in a new tab and display a trailing external-link icon.",
-          "name": "Link",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "linkStyles"
-            },
-            {
-              "kind": "field",
-              "name": "href",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Destination URL forwarded to the underlying `<a>` element."
-            },
-            {
-              "kind": "field",
-              "name": "external",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Opens the link in a new tab and appends an external-link icon."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-link",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Link",
-          "declaration": {
-            "name": "Link",
-            "module": "src/components/link/link.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/list/index.ts",
       "declarations": [],
       "exports": [
@@ -4467,6 +4264,1017 @@
           "declaration": {
             "name": "List",
             "module": "src/components/list/list.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/header/header.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "headerStyles",
+          "default": "css` :host { display: block; position: sticky; top: 0; z-index: 100; box-shadow: var(--lt-elevation-1); } :host([background='primary']) { background: var(--lt-bg-primary); color: var(--lt-text-inverse); } :host([background='surface']) { background: var(--lt-bg-default); color: var(--lt-text-default); } header { display: flex; align-items: center; gap: var(--lt-spacing-2); padding: 0 var(--lt-spacing-4); min-height: var(--lt-spacing-px-16); box-sizing: border-box; color: inherit; } .content { flex: 1; display: flex; align-items: center; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "headerStyles",
+          "declaration": {
+            "name": "headerStyles",
+            "module": "src/components/header/header.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/header/header.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A layout component that organises content into a sticky app bar.\nRenders a native `<header>` element for semantics and the ARIA `banner` landmark.",
+          "name": "Header",
+          "slots": [
+            {
+              "description": "Far-left area, typically a hamburger menu or back button",
+              "name": "before"
+            },
+            {
+              "description": "Logo or brand mark, placed to the right of `before`",
+              "name": "logo"
+            },
+            {
+              "description": "Main content area (nav links, search…); stretches to fill available space",
+              "name": "content"
+            },
+            {
+              "description": "Far-right area, typically user actions or icons",
+              "name": "after"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "headerStyles"
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "HeaderBackground"
+              },
+              "default": "'primary'",
+              "description": "Background surface that controls the header's background and text colours."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-header",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Header",
+          "declaration": {
+            "name": "Header",
+            "module": "src/components/header/header.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/header/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Header",
+          "declaration": {
+            "name": "Header",
+            "module": "./header"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "HeaderBackground",
+          "declaration": {
+            "name": "HeaderBackground",
+            "module": "./header.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/pagination/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Pagination",
+          "declaration": {
+            "name": "Pagination",
+            "module": "./pagination"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "PaginationSize",
+          "declaration": {
+            "name": "PaginationSize",
+            "module": "./pagination.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/pagination/pagination.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "paginationStyles",
+          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; } nav { align-items: center; display: flex; gap: var(--lt-spacing-1); } button { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-default); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 500; justify-content: center; line-height: 1; transition: background 120ms ease, border-color 120ms ease, color 120ms ease; user-select: none; } /* Sizes */ :host([size='sm']) button { font-size: 0.75rem; height: 28px; min-width: 28px; padding: 0 var(--lt-spacing-1); } :host([size='md']) button, :host(:not([size])) button { font-size: 0.8125rem; height: 36px; min-width: 36px; padding: 0 var(--lt-spacing-2); } :host([size='lg']) button { font-size: 0.9375rem; height: 44px; min-width: 44px; padding: 0 var(--lt-spacing-3); } button:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); } button[aria-current='page'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-color-primary-700); font-weight: 600; } button.ellipsis { cursor: default; pointer-events: none; } button:disabled { color: var(--lt-color-neutral-400); cursor: not-allowed; } :host([disabled]) button { color: var(--lt-color-neutral-400); cursor: not-allowed; pointer-events: none; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "paginationStyles",
+          "declaration": {
+            "name": "paginationStyles",
+            "module": "src/components/pagination/pagination.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/pagination/pagination.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Page navigation control for paged data sets.",
+          "name": "Pagination",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "paginationStyles"
+            },
+            {
+              "kind": "field",
+              "name": "page",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Currently active page (1-indexed)."
+            },
+            {
+              "kind": "field",
+              "name": "totalPages",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Total number of pages."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "PaginationSize"
+              },
+              "default": "'md'",
+              "description": "Visual size."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disable all controls."
+            },
+            {
+              "kind": "method",
+              "name": "_go",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "page",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_pages",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "(number | '…')[]"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{page: number}>"
+              },
+              "description": "Fired when the user navigates to a different page.",
+              "name": "change"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-pagination",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Pagination",
+          "declaration": {
+            "name": "Pagination",
+            "module": "src/components/pagination/pagination.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/progress/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Progress",
+          "declaration": {
+            "name": "Progress",
+            "module": "./progress"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ProgressVariant",
+          "declaration": {
+            "name": "ProgressVariant",
+            "module": "./progress.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ProgressSize",
+          "declaration": {
+            "name": "ProgressSize",
+            "module": "./progress.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/progress/progress.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "progressStyles",
+          "default": "css` :host { display: block; } :host { --_fill-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) { --_fill-color: var(--lt-interactive-primary-bg); } :host([variant='success']) { --_fill-color: var(--lt-interactive-success-bg); } :host([variant='warning']) { --_fill-color: var(--lt-interactive-warning-bg); } :host([variant='error']) { --_fill-color: var(--lt-interactive-error-bg); } :host([variant='neutral']) { --_fill-color: var(--lt-color-neutral-600); } [part='track'] { background: var(--lt-progress-track-color, var(--lt-color-neutral-200)); border-radius: 999px; overflow: hidden; width: 100%; } [part='fill'] { background: var(--lt-progress-color, var(--_fill-color)); border-radius: 999px; height: 100%; transition: width 300ms ease; } /* ── Sizes ──────────────────────────────────────────────────────────────── */ :host([size='sm']) [part='track'] { height: var(--lt-progress-height, 4px); } :host([size='md']) [part='track'] { height: var(--lt-progress-height, 8px); } :host([size='lg']) [part='track'] { height: var(--lt-progress-height, 12px); } /* ── Indeterminate ──────────────────────────────────────────────────────── */ :host([indeterminate]) [part='fill'] { animation: indeterminate 1.5s ease-in-out infinite; width: 40%; } @keyframes indeterminate { 0% { transform: translateX(-250%); } 100% { transform: translateX(350%); } } @media (prefers-reduced-motion: reduce) { [part='fill'] { transition: none; } :host([indeterminate]) [part='fill'] { animation: none; width: 100%; } } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "progressStyles",
+          "declaration": {
+            "name": "progressStyles",
+            "module": "src/components/progress/progress.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/progress/progress.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A horizontal bar that shows how far along a process is.\nSupports determinate (0–100 value) and indeterminate modes.",
+          "name": "Progress",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "progressStyles"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "Current progress value (0–100). Ignored when `indeterminate` is true."
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "ProgressVariant"
+              },
+              "default": "'primary'",
+              "description": "Color variant of the progress bar."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "ProgressSize"
+              },
+              "default": "'md'",
+              "description": "Height of the track."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Accessible label for screen readers."
+            },
+            {
+              "kind": "field",
+              "name": "indeterminate",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "When true the bar animates continuously without a set value."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-progress",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Progress",
+          "declaration": {
+            "name": "Progress",
+            "module": "src/components/progress/progress.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/link/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Link",
+          "declaration": {
+            "name": "Link",
+            "module": "./link"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/link/link.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "linkStyles",
+          "default": "css` :host { display: inline; } a[part='base'] { align-items: center; color: var(--lt-text-primary); cursor: pointer; display: inline-flex; font: inherit; gap: 0.25em; text-decoration: none; vertical-align: baseline; } a[part='base']:hover { color: var(--lt-text-primary); text-decoration: underline; } a[part='base']:focus-visible { border-radius: 2px; outline: 2px solid var(--lt-border-focus); outline-offset: 2px; } lt-icon[part='icon'] { flex-shrink: 0; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "linkStyles",
+          "declaration": {
+            "name": "linkStyles",
+            "module": "src/components/link/link.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/link/link.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A styled anchor element. Uses the primary color by default with an underline on hover.\nSet `external` to open in a new tab and display a trailing external-link icon.",
+          "name": "Link",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "linkStyles"
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Destination URL forwarded to the underlying `<a>` element."
+            },
+            {
+              "kind": "field",
+              "name": "external",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Opens the link in a new tab and appends an external-link icon."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-link",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Link",
+          "declaration": {
+            "name": "Link",
+            "module": "src/components/link/link.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/radio/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Radio",
+          "declaration": {
+            "name": "Radio",
+            "module": "./radio"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "RadioSize",
+          "declaration": {
+            "name": "RadioSize",
+            "module": "./radio.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "RadioVariant",
+          "declaration": {
+            "name": "RadioVariant",
+            "module": "./radio.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "RadioLabelPosition",
+          "declaration": {
+            "name": "RadioLabelPosition",
+            "module": "./radio.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/radio/radio.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "radioStyles",
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .radio-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } .radio-container { display: inline-flex; position: relative; } :host([label-position='left']) .radio-wrapper { flex-direction: row-reverse; } :host([disabled]) .radio-wrapper { cursor: not-allowed; opacity: 0.6; } input[type='radio'] { appearance: none; border-radius: 50%; border: 2px solid var(--lt-border-strong); cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='radio']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='radio']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='radio']:disabled { cursor: not-allowed; } .dot { background: white; border-radius: 50%; display: none; pointer-events: none; position: absolute; } input[type='radio']:checked ~ .dot { display: block; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='radio'] { height: 16px; width: 16px; } :host([size='sm']) .dot { height: 8px; width: 8px; left: 4px; top: 4px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='radio'] { height: 20px; width: 20px; } :host([size='md']) .dot { height: 10px; width: 10px; left: 5px; top: 5px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='radio'] { height: 24px; width: 24px; } :host([size='lg']) .dot { height: 12px; width: 12px; left: 6px; top: 6px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='radio']:checked { background: var(--lt-interactive-primary-bg); border-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); border-color: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='radio']:checked { background: var(--lt-interactive-secondary-bg); border-color: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); border-color: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='radio']:checked { background: var(--lt-interactive-success-bg); border-color: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); border-color: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='radio']:checked { background: var(--lt-interactive-error-bg); border-color: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); border-color: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='radio']:checked { background: var(--lt-interactive-info-bg); border-color: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); border-color: var(--lt-interactive-info-bg-hover); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "radioStyles",
+          "declaration": {
+            "name": "radioStyles",
+            "module": "src/components/radio/radio.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/radio/radio.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A customizable radio button component with support for multiple variants and sizes.",
+          "name": "Radio",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "radioStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "RadioVariant"
+              },
+              "default": "'primary'",
+              "description": "Visual variant that determines the color when checked."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "RadioSize"
+              },
+              "default": "'md'",
+              "description": "Size of the radio button."
+            },
+            {
+              "kind": "field",
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the radio is checked."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the radio is disabled."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the radio is required."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label text displayed next to the radio button."
+            },
+            {
+              "kind": "field",
+              "name": "labelPosition",
+              "type": {
+                "text": "RadioLabelPosition"
+              },
+              "default": "'right'",
+              "description": "Position of the label relative to the radio button."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name attribute for radio group.\nAll radios with the same name belong to the same group."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Value attribute for form submission."
+            },
+            {
+              "kind": "method",
+              "name": "handleChange",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  },
+                  "description": "The native change event"
+                }
+              ],
+              "description": "Handles radio change events.\nUpdates the checked state and dispatches a custom change event."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "CustomEvent<{value: string, checked: boolean}>"
+              },
+              "description": "Dispatched when the radio is selected"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-radio",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Radio",
+          "declaration": {
+            "name": "Radio",
+            "module": "src/components/radio/radio.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/backdrop.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "backdropFeatureStyles",
+          "default": "css` :host([backdrop-blur]) .backdrop, :host([backdrop-blur]) [part='overlay'] { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "backdropFeatureStyles",
+          "declaration": {
+            "name": "backdropFeatureStyles",
+            "module": "src/components/shared/backdrop.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/floating.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "openFloating",
+          "return": {
+            "type": {
+              "text": "Promise<() => void>"
+            }
+          },
+          "parameters": [
+            {
+              "name": "reference",
+              "type": {
+                "text": "Element"
+              }
+            },
+            {
+              "name": "floating",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "name": "opts",
+              "optional": true,
+              "type": {
+                "text": "FloatingOptions"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "closeFloating",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "parameters": [
+            {
+              "name": "floating",
+              "type": {
+                "text": "HTMLElement"
+              }
+            },
+            {
+              "name": "cleanup",
+              "type": {
+                "text": "(() => void) | null"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "variable",
+          "name": "floatingPanelReset",
+          "type": {
+            "text": "CSSResult"
+          },
+          "default": "css` [popover] { border: 0; inset: unset; margin: 0; overflow: visible; padding: 0; position: fixed; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "openFloating",
+          "declaration": {
+            "name": "openFloating",
+            "module": "src/components/shared/floating.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "closeFloating",
+          "declaration": {
+            "name": "closeFloating",
+            "module": "src/components/shared/floating.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "floatingPanelReset",
+          "declaration": {
+            "name": "floatingPanelReset",
+            "module": "src/components/shared/floating.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/radio-group/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RadioGroup",
+          "declaration": {
+            "name": "RadioGroup",
+            "module": "./radio-group"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "RadioGroupOrientation",
+          "declaration": {
+            "name": "RadioGroupOrientation",
+            "module": "./radio-group.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/radio-group/radio-group.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "radioGroupStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .radio-group { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } .label { color: var(--lt-text-default); margin-bottom: var(--lt-spacing-1); } .required-indicator { color: var(--lt-color-error-500); margin-left: var(--lt-spacing-1); } .radios-container { display: flex; gap: var(--lt-spacing-3); } :host([orientation='vertical']) .radios-container { flex-direction: column; } :host([orientation='horizontal']) .radios-container { flex-direction: row; flex-wrap: wrap; } .helper-text { color: var(--lt-text-subtle); margin-top: var(--lt-spacing-1); } .helper-text::part(base) { font-weight: 200; } :host([error]) .helper-text { color: var(--lt-text-error); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "radioGroupStyles",
+          "declaration": {
+            "name": "radioGroupStyles",
+            "module": "src/components/radio-group/radio-group.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/radio-group/radio-group.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A container component that manages a group of radio buttons.",
+          "name": "RadioGroup",
+          "slots": [
+            {
+              "description": "Radio buttons to be managed by this group",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "radioGroupStyles"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Label for the radio group."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name attribute applied to all radio buttons in the group.\nEnsures only one radio can be selected at a time."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Currently selected value in the group."
+            },
+            {
+              "kind": "field",
+              "name": "orientation",
+              "type": {
+                "text": "RadioGroupOrientation"
+              },
+              "default": "'vertical'",
+              "description": "Layout orientation of the radio buttons."
+            },
+            {
+              "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Helper text displayed below the radio group."
+            },
+            {
+              "kind": "field",
+              "name": "error",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the radio group is in an error state."
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether selection is required."
+            },
+            {
+              "kind": "field",
+              "name": "radios",
+              "type": {
+                "text": "Radio[]"
+              },
+              "privacy": "private",
+              "description": "Reference to all slotted radio elements."
+            },
+            {
+              "kind": "field",
+              "name": "_attached",
+              "privacy": "private",
+              "default": "new WeakSet<Radio>()"
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "_syncRadios",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "handleRadioChange",
+              "privacy": "private",
+              "description": "Handles change events from individual radio buttons.\nUpdates the group value and ensures only one radio is checked.",
+              "parameters": [
+                {
+                  "description": "The change event from a radio button",
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "handleSlotChange",
+              "privacy": "private",
+              "description": "Handles slot changes to update radios when content changes."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Dispatched when a radio in the group is selected",
+              "name": "change"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-radio-group",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "RadioGroup",
+          "declaration": {
+            "name": "RadioGroup",
+            "module": "src/components/radio-group/radio-group.ts"
           }
         }
       ]
@@ -4817,550 +5625,73 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/pagination/index.ts",
+      "path": "src/components/sidepanel/index.ts",
       "declarations": [],
       "exports": [
         {
           "kind": "js",
-          "name": "Pagination",
+          "name": "SidePanel",
           "declaration": {
-            "name": "Pagination",
-            "module": "./pagination"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "PaginationSize",
-          "declaration": {
-            "name": "PaginationSize",
-            "module": "./pagination.types"
+            "name": "SidePanel",
+            "module": "./sidepanel"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/pagination/pagination.styles.ts",
+      "path": "src/components/sidepanel/sidepanel.styles.ts",
       "declarations": [
         {
           "kind": "variable",
-          "name": "paginationStyles",
-          "default": "css` :host { display: inline-flex; font-family: 'Hanken Grotesk', sans-serif; } nav { align-items: center; display: flex; gap: var(--lt-spacing-1); } button { align-items: center; background: transparent; border-radius: var(--lt-border-radius); border: 1px solid transparent; color: var(--lt-text-default); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 500; justify-content: center; line-height: 1; transition: background 120ms ease, border-color 120ms ease, color 120ms ease; user-select: none; } /* Sizes */ :host([size='sm']) button { font-size: 0.75rem; height: 28px; min-width: 28px; padding: 0 var(--lt-spacing-1); } :host([size='md']) button, :host(:not([size])) button { font-size: 0.8125rem; height: 36px; min-width: 36px; padding: 0 var(--lt-spacing-2); } :host([size='lg']) button { font-size: 0.9375rem; height: 44px; min-width: 44px; padding: 0 var(--lt-spacing-3); } button:hover:not(:disabled) { background: var(--lt-bg-neutral-subtle); border-color: var(--lt-border-default); } button[aria-current='page'] { background: var(--lt-bg-primary-subtle); border-color: var(--lt-border-primary); color: var(--lt-color-primary-700); font-weight: 600; } button.ellipsis { cursor: default; pointer-events: none; } button:disabled { color: var(--lt-color-neutral-400); cursor: not-allowed; } :host([disabled]) button { color: var(--lt-color-neutral-400); cursor: not-allowed; pointer-events: none; } `"
+          "name": "sidepanelStyles",
+          "default": "css` :host { display: contents; } /* ── Overlay ────────────────────────────────────────────────────────────── */ [part='overlay'] { position: fixed; inset: 0; background: rgba(0, 0, 0, var(--lt-sidepanel-overlay-opacity, 0.45)); z-index: 400; opacity: 0; pointer-events: none; transition: opacity 200ms ease; } /* ── Panel ──────────────────────────────────────────────────────────────── */ [part='panel'] { position: fixed; background: var(--lt-bg-default); display: flex; flex-direction: column; z-index: 401; pointer-events: none; transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1); } /* ── Anchors — initial off-screen positions ─────────────────────────────── */ :host([anchor='left']) [part='panel'], :host(:not([anchor])) [part='panel'] { inset-block: 0; left: 0; transform: translateX(-100%); box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='right']) [part='panel'] { inset-block: 0; right: 0; transform: translateX(100%); box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='top']) [part='panel'] { inset-inline: 0; top: 0; transform: translateY(-100%); box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12); } :host([anchor='bottom']) [part='panel'] { inset-inline: 0; bottom: 0; transform: translateY(100%); box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12); } /* ── Open state — must come after anchors to win the cascade ────────────── */ :host([open]) [part='overlay'] { opacity: 1; pointer-events: auto; } :host([open]) [part='panel'] { transform: translate(0, 0); pointer-events: auto; } /* ── Header ─────────────────────────────────────────────────────────────── */ .header { display: flex; align-items: center; gap: var(--lt-spacing-4); padding: var(--lt-spacing-4) var(--lt-spacing-5); border-bottom: 1px solid var(--lt-border-default); flex-shrink: 0; } .panel-label { flex: 1; color: var(--lt-text-default); } .close-button { flex-shrink: 0; margin-left: auto; } /* ── Body ───────────────────────────────────────────────────────────────── */ .body { flex: 1; overflow-y: auto; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { [part='overlay'], [part='panel'] { transition: none; } } `"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "paginationStyles",
+          "name": "sidepanelStyles",
           "declaration": {
-            "name": "paginationStyles",
-            "module": "src/components/pagination/pagination.styles.ts"
+            "name": "sidepanelStyles",
+            "module": "src/components/sidepanel/sidepanel.styles.ts"
           }
         }
       ]
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/pagination/pagination.ts",
+      "path": "src/components/sidepanel/sidepanel.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Page navigation control for paged data sets.",
-          "name": "Pagination",
-          "members": [
+          "description": "A slide-in panel anchored to any edge of the viewport, with a backdrop overlay.",
+          "name": "SidePanel",
+          "cssParts": [
             {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "paginationStyles"
+              "description": "The backdrop scrim behind the panel",
+              "name": "overlay"
             },
             {
-              "kind": "field",
-              "name": "page",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Currently active page (1-indexed)."
+              "description": "The sliding panel container",
+              "name": "panel"
             },
             {
-              "kind": "field",
-              "name": "totalPages",
-              "type": {
-                "text": "number"
-              },
-              "default": "1",
-              "description": "Total number of pages."
+              "description": "The header bar (contains label and close button)",
+              "name": "header"
             },
             {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "PaginationSize"
-              },
-              "default": "'md'",
-              "description": "Visual size."
+              "description": "The close button inside the header",
+              "name": "close-button"
             },
             {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Disable all controls."
-            },
-            {
-              "kind": "method",
-              "name": "_go",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "page",
-                  "type": {
-                    "text": "number"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
-              "name": "_pages",
-              "privacy": "private",
-              "return": {
-                "type": {
-                  "text": "(number | '…')[]"
-                }
-              }
-            },
-            {
-              "kind": "method",
-              "name": "render"
+              "description": "The scrollable content area wrapping the default slot",
+              "name": "body"
             }
           ],
-          "events": [
-            {
-              "type": {
-                "text": "CustomEvent<{page: number}>"
-              },
-              "description": "Fired when the user navigates to a different page.",
-              "name": "change"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-pagination",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Pagination",
-          "declaration": {
-            "name": "Pagination",
-            "module": "src/components/pagination/pagination.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/progress/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Progress",
-          "declaration": {
-            "name": "Progress",
-            "module": "./progress"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ProgressVariant",
-          "declaration": {
-            "name": "ProgressVariant",
-            "module": "./progress.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "ProgressSize",
-          "declaration": {
-            "name": "ProgressSize",
-            "module": "./progress.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/progress/progress.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "progressStyles",
-          "default": "css` :host { display: block; } :host { --_fill-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) { --_fill-color: var(--lt-interactive-primary-bg); } :host([variant='success']) { --_fill-color: var(--lt-interactive-success-bg); } :host([variant='warning']) { --_fill-color: var(--lt-interactive-warning-bg); } :host([variant='error']) { --_fill-color: var(--lt-interactive-error-bg); } :host([variant='neutral']) { --_fill-color: var(--lt-color-neutral-600); } [part='track'] { background: var(--lt-progress-track-color, var(--lt-color-neutral-200)); border-radius: 999px; overflow: hidden; width: 100%; } [part='fill'] { background: var(--lt-progress-color, var(--_fill-color)); border-radius: 999px; height: 100%; transition: width 300ms ease; } /* ── Sizes ──────────────────────────────────────────────────────────────── */ :host([size='sm']) [part='track'] { height: var(--lt-progress-height, 4px); } :host([size='md']) [part='track'] { height: var(--lt-progress-height, 8px); } :host([size='lg']) [part='track'] { height: var(--lt-progress-height, 12px); } /* ── Indeterminate ──────────────────────────────────────────────────────── */ :host([indeterminate]) [part='fill'] { animation: indeterminate 1.5s ease-in-out infinite; width: 40%; } @keyframes indeterminate { 0% { transform: translateX(-250%); } 100% { transform: translateX(350%); } } @media (prefers-reduced-motion: reduce) { [part='fill'] { transition: none; } :host([indeterminate]) [part='fill'] { animation: none; width: 100%; } } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "progressStyles",
-          "declaration": {
-            "name": "progressStyles",
-            "module": "src/components/progress/progress.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/progress/progress.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A horizontal bar that shows how far along a process is.\nSupports determinate (0–100 value) and indeterminate modes.",
-          "name": "Progress",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "progressStyles"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "number"
-              },
-              "default": "0",
-              "description": "Current progress value (0–100). Ignored when `indeterminate` is true."
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "ProgressVariant"
-              },
-              "default": "'primary'",
-              "description": "Color variant of the progress bar."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "ProgressSize"
-              },
-              "default": "'md'",
-              "description": "Height of the track."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Accessible label for screen readers."
-            },
-            {
-              "kind": "field",
-              "name": "indeterminate",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "When true the bar animates continuously without a set value."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-progress",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Progress",
-          "declaration": {
-            "name": "Progress",
-            "module": "src/components/progress/progress.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Radio",
-          "declaration": {
-            "name": "Radio",
-            "module": "./radio"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "RadioSize",
-          "declaration": {
-            "name": "RadioSize",
-            "module": "./radio.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "RadioVariant",
-          "declaration": {
-            "name": "RadioVariant",
-            "module": "./radio.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "RadioLabelPosition",
-          "declaration": {
-            "name": "RadioLabelPosition",
-            "module": "./radio.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio/radio.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "radioStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; } .radio-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } .radio-container { display: inline-flex; position: relative; } :host([label-position='left']) .radio-wrapper { flex-direction: row-reverse; } :host([disabled]) .radio-wrapper { cursor: not-allowed; opacity: 0.6; } input[type='radio'] { appearance: none; border-radius: 50%; border: 2px solid var(--lt-border-strong); cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='radio']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='radio']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='radio']:disabled { cursor: not-allowed; } .dot { background: white; border-radius: 50%; display: none; pointer-events: none; position: absolute; } input[type='radio']:checked ~ .dot { display: block; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='radio'] { height: 16px; width: 16px; } :host([size='sm']) .dot { height: 8px; width: 8px; left: 4px; top: 4px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='radio'] { height: 20px; width: 20px; } :host([size='md']) .dot { height: 10px; width: 10px; left: 5px; top: 5px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='radio'] { height: 24px; width: 24px; } :host([size='lg']) .dot { height: 12px; width: 12px; left: 6px; top: 6px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='radio']:checked { background: var(--lt-interactive-primary-bg); border-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); border-color: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='radio']:checked { background: var(--lt-interactive-secondary-bg); border-color: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); border-color: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='radio']:checked { background: var(--lt-interactive-success-bg); border-color: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); border-color: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='radio']:checked { background: var(--lt-interactive-error-bg); border-color: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); border-color: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='radio']:checked { background: var(--lt-interactive-info-bg); border-color: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); border-color: var(--lt-interactive-info-bg-hover); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "radioStyles",
-          "declaration": {
-            "name": "radioStyles",
-            "module": "src/components/radio/radio.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio/radio.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A customizable radio button component with support for multiple variants and sizes.",
-          "name": "Radio",
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "radioStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "RadioVariant"
-              },
-              "default": "'primary'",
-              "description": "Visual variant that determines the color when checked."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "RadioSize"
-              },
-              "default": "'md'",
-              "description": "Size of the radio button."
-            },
-            {
-              "kind": "field",
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the radio is checked."
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the radio is disabled."
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the radio is required."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Label text displayed next to the radio button."
-            },
-            {
-              "kind": "field",
-              "name": "labelPosition",
-              "type": {
-                "text": "RadioLabelPosition"
-              },
-              "default": "'right'",
-              "description": "Position of the label relative to the radio button."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute for radio group.\nAll radios with the same name belong to the same group."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Value attribute for form submission."
-            },
-            {
-              "kind": "method",
-              "name": "handleChange",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "e",
-                  "type": {
-                    "text": "Event"
-                  },
-                  "description": "The native change event"
-                }
-              ],
-              "description": "Handles radio change events.\nUpdates the checked state and dispatches a custom change event."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "CustomEvent<{value: string, checked: boolean}>"
-              },
-              "description": "Dispatched when the radio is selected"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-radio",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Radio",
-          "declaration": {
-            "name": "Radio",
-            "module": "src/components/radio/radio.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio-group/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "RadioGroup",
-          "declaration": {
-            "name": "RadioGroup",
-            "module": "./radio-group"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "RadioGroupOrientation",
-          "declaration": {
-            "name": "RadioGroupOrientation",
-            "module": "./radio-group.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio-group/radio-group.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "radioGroupStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .radio-group { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } .label { color: var(--lt-text-default); margin-bottom: var(--lt-spacing-1); } .required-indicator { color: var(--lt-color-error-500); margin-left: var(--lt-spacing-1); } .radios-container { display: flex; gap: var(--lt-spacing-3); } :host([orientation='vertical']) .radios-container { flex-direction: column; } :host([orientation='horizontal']) .radios-container { flex-direction: row; flex-wrap: wrap; } .helper-text { color: var(--lt-text-subtle); margin-top: var(--lt-spacing-1); } .helper-text::part(base) { font-weight: 200; } :host([error]) .helper-text { color: var(--lt-text-error); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "radioGroupStyles",
-          "declaration": {
-            "name": "radioGroupStyles",
-            "module": "src/components/radio-group/radio-group.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/radio-group/radio-group.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A container component that manages a group of radio buttons.",
-          "name": "RadioGroup",
           "slots": [
             {
-              "description": "Radio buttons to be managed by this group",
+              "description": "Content rendered inside the panel body",
               "name": ""
             }
           ],
@@ -5368,8 +5699,38 @@
             {
               "kind": "field",
               "name": "styles",
+              "type": {
+                "text": "array"
+              },
               "static": true,
-              "default": "radioGroupStyles"
+              "default": "[sidepanelStyles, backdropFeatureStyles]"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Whether the panel is visible."
+            },
+            {
+              "kind": "field",
+              "name": "anchor",
+              "type": {
+                "text": "SidePanelAnchor"
+              },
+              "default": "'left'",
+              "description": "Edge from which the panel slides in."
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "type": {
+                "text": "string"
+              },
+              "default": "'320px'",
+              "description": "Panel width (left/right anchors) or height (top/bottom anchors)."
             },
             {
               "kind": "field",
@@ -5378,103 +5739,98 @@
                 "text": "string"
               },
               "default": "''",
-              "description": "Label for the radio group."
+              "description": "Title shown in the panel header. When empty, the header is hidden."
             },
             {
               "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute applied to all radio buttons in the group.\nEnsures only one radio can be selected at a time."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Currently selected value in the group."
-            },
-            {
-              "kind": "field",
-              "name": "orientation",
-              "type": {
-                "text": "RadioGroupOrientation"
-              },
-              "default": "'vertical'",
-              "description": "Layout orientation of the radio buttons."
-            },
-            {
-              "kind": "field",
-              "name": "helperText",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Helper text displayed below the radio group."
-            },
-            {
-              "kind": "field",
-              "name": "error",
+              "name": "noCloseButton",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the radio group is in an error state."
+              "description": "Suppress the built-in close button."
             },
             {
               "kind": "field",
-              "name": "required",
+              "name": "backdropBlur",
               "type": {
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether selection is required."
+              "description": "Apply a frosted-glass blur effect to the backdrop."
             },
             {
               "kind": "field",
-              "name": "radios",
+              "name": "overlayOpacity",
               "type": {
-                "text": "Radio[]"
+                "text": "number"
               },
-              "privacy": "private",
-              "description": "Reference to all slotted radio elements."
+              "default": "0.45",
+              "description": "Backdrop darkness as an alpha value from 0 (transparent) to 1 (opaque)."
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "privacy": "public",
+              "description": "Open the panel."
+            },
+            {
+              "kind": "method",
+              "name": "hide",
+              "privacy": "public",
+              "description": "Close the panel."
+            },
+            {
+              "kind": "method",
+              "name": "toggle",
+              "privacy": "public",
+              "description": "Toggle the panel open/closed."
             },
             {
               "kind": "field",
-              "name": "_attached",
-              "privacy": "private",
-              "default": "new WeakSet<Radio>()"
-            },
-            {
-              "kind": "method",
-              "name": "firstUpdated"
-            },
-            {
-              "kind": "method",
-              "name": "_syncRadios",
+              "name": "_handleKeyDown",
               "privacy": "private"
             },
             {
-              "kind": "field",
-              "name": "handleRadioChange",
-              "privacy": "private",
-              "description": "Handles change events from individual radio buttons.\nUpdates the group value and ensures only one radio is checked.",
+              "kind": "method",
+              "name": "updated",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
               "parameters": [
                 {
-                  "description": "The change event from a radio button",
-                  "name": "e"
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues"
+                  }
                 }
               ]
             },
             {
-              "kind": "method",
-              "name": "handleSlotChange",
+              "kind": "field",
+              "name": "_offScreenTransform",
+              "type": {
+                "text": "string"
+              },
               "privacy": "private",
-              "description": "Handles slot changes to update radios when content changes."
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "_panelStyle",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_renderHeader",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -5483,28 +5839,25 @@
           ],
           "events": [
             {
-              "type": {
-                "text": "CustomEvent<{value: string}>"
-              },
-              "description": "Dispatched when a radio in the group is selected",
-              "name": "change"
+              "description": "Fired when the user requests close (backdrop click, Escape key, or close button)",
+              "name": "close"
             }
           ],
           "superclass": {
             "name": "ThemeableElement",
             "module": "/src/base"
           },
-          "tagName": "lt-radio-group",
+          "tagName": "lt-sidepanel",
           "customElement": true
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "RadioGroup",
+          "name": "SidePanel",
           "declaration": {
-            "name": "RadioGroup",
-            "module": "src/components/radio-group/radio-group.ts"
+            "name": "SidePanel",
+            "module": "src/components/sidepanel/sidepanel.ts"
           }
         }
       ]
@@ -5791,359 +6144,6 @@
           "declaration": {
             "name": "Select",
             "module": "src/components/select/select.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/shared/backdrop.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "backdropFeatureStyles",
-          "default": "css` :host([backdrop-blur]) .backdrop, :host([backdrop-blur]) [part='overlay'] { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "backdropFeatureStyles",
-          "declaration": {
-            "name": "backdropFeatureStyles",
-            "module": "src/components/shared/backdrop.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/shared/floating.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "openFloating",
-          "return": {
-            "type": {
-              "text": "Promise<() => void>"
-            }
-          },
-          "parameters": [
-            {
-              "name": "reference",
-              "type": {
-                "text": "Element"
-              }
-            },
-            {
-              "name": "floating",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "name": "opts",
-              "optional": true,
-              "type": {
-                "text": "FloatingOptions"
-              }
-            }
-          ]
-        },
-        {
-          "kind": "function",
-          "name": "closeFloating",
-          "return": {
-            "type": {
-              "text": "void"
-            }
-          },
-          "parameters": [
-            {
-              "name": "floating",
-              "type": {
-                "text": "HTMLElement"
-              }
-            },
-            {
-              "name": "cleanup",
-              "type": {
-                "text": "(() => void) | null"
-              }
-            }
-          ]
-        },
-        {
-          "kind": "variable",
-          "name": "floatingPanelReset",
-          "type": {
-            "text": "CSSResult"
-          },
-          "default": "css` [popover] { border: 0; inset: unset; margin: 0; overflow: visible; padding: 0; position: fixed; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "openFloating",
-          "declaration": {
-            "name": "openFloating",
-            "module": "src/components/shared/floating.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "closeFloating",
-          "declaration": {
-            "name": "closeFloating",
-            "module": "src/components/shared/floating.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "floatingPanelReset",
-          "declaration": {
-            "name": "floatingPanelReset",
-            "module": "src/components/shared/floating.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/sidepanel/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SidePanel",
-          "declaration": {
-            "name": "SidePanel",
-            "module": "./sidepanel"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/sidepanel/sidepanel.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "sidepanelStyles",
-          "default": "css` :host { display: contents; } /* ── Overlay ────────────────────────────────────────────────────────────── */ [part='overlay'] { position: fixed; inset: 0; background: rgba(0, 0, 0, var(--lt-sidepanel-overlay-opacity, 0.45)); z-index: 400; opacity: 0; pointer-events: none; transition: opacity 200ms ease; } /* ── Panel ──────────────────────────────────────────────────────────────── */ [part='panel'] { position: fixed; background: var(--lt-bg-default); display: flex; flex-direction: column; z-index: 401; pointer-events: none; transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1); } /* ── Anchors — initial off-screen positions ─────────────────────────────── */ :host([anchor='left']) [part='panel'], :host(:not([anchor])) [part='panel'] { inset-block: 0; left: 0; transform: translateX(-100%); box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='right']) [part='panel'] { inset-block: 0; right: 0; transform: translateX(100%); box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12); } :host([anchor='top']) [part='panel'] { inset-inline: 0; top: 0; transform: translateY(-100%); box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12); } :host([anchor='bottom']) [part='panel'] { inset-inline: 0; bottom: 0; transform: translateY(100%); box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12); } /* ── Open state — must come after anchors to win the cascade ────────────── */ :host([open]) [part='overlay'] { opacity: 1; pointer-events: auto; } :host([open]) [part='panel'] { transform: translate(0, 0); pointer-events: auto; } /* ── Header ─────────────────────────────────────────────────────────────── */ .header { display: flex; align-items: center; gap: var(--lt-spacing-4); padding: var(--lt-spacing-4) var(--lt-spacing-5); border-bottom: 1px solid var(--lt-border-default); flex-shrink: 0; } .panel-label { flex: 1; color: var(--lt-text-default); } .close-button { flex-shrink: 0; margin-left: auto; } /* ── Body ───────────────────────────────────────────────────────────────── */ .body { flex: 1; overflow-y: auto; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { [part='overlay'], [part='panel'] { transition: none; } } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "sidepanelStyles",
-          "declaration": {
-            "name": "sidepanelStyles",
-            "module": "src/components/sidepanel/sidepanel.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/sidepanel/sidepanel.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A slide-in panel anchored to any edge of the viewport, with a backdrop overlay.",
-          "name": "SidePanel",
-          "cssParts": [
-            {
-              "description": "The backdrop scrim behind the panel",
-              "name": "overlay"
-            },
-            {
-              "description": "The sliding panel container",
-              "name": "panel"
-            },
-            {
-              "description": "The header bar (contains label and close button)",
-              "name": "header"
-            },
-            {
-              "description": "The close button inside the header",
-              "name": "close-button"
-            },
-            {
-              "description": "The scrollable content area wrapping the default slot",
-              "name": "body"
-            }
-          ],
-          "slots": [
-            {
-              "description": "Content rendered inside the panel body",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "type": {
-                "text": "array"
-              },
-              "static": true,
-              "default": "[sidepanelStyles, backdropFeatureStyles]"
-            },
-            {
-              "kind": "field",
-              "name": "open",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the panel is visible."
-            },
-            {
-              "kind": "field",
-              "name": "anchor",
-              "type": {
-                "text": "SidePanelAnchor"
-              },
-              "default": "'left'",
-              "description": "Edge from which the panel slides in."
-            },
-            {
-              "kind": "field",
-              "name": "size",
-              "type": {
-                "text": "string"
-              },
-              "default": "'320px'",
-              "description": "Panel width (left/right anchors) or height (top/bottom anchors)."
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Title shown in the panel header. When empty, the header is hidden."
-            },
-            {
-              "kind": "field",
-              "name": "noCloseButton",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Suppress the built-in close button."
-            },
-            {
-              "kind": "field",
-              "name": "backdropBlur",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Apply a frosted-glass blur effect to the backdrop."
-            },
-            {
-              "kind": "field",
-              "name": "overlayOpacity",
-              "type": {
-                "text": "number"
-              },
-              "default": "0.45",
-              "description": "Backdrop darkness as an alpha value from 0 (transparent) to 1 (opaque)."
-            },
-            {
-              "kind": "method",
-              "name": "show",
-              "privacy": "public",
-              "description": "Open the panel."
-            },
-            {
-              "kind": "method",
-              "name": "hide",
-              "privacy": "public",
-              "description": "Close the panel."
-            },
-            {
-              "kind": "method",
-              "name": "toggle",
-              "privacy": "public",
-              "description": "Toggle the panel open/closed."
-            },
-            {
-              "kind": "field",
-              "name": "_handleKeyDown",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "updated",
-              "privacy": "protected",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "changed",
-                  "type": {
-                    "text": "PropertyValues"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "field",
-              "name": "_offScreenTransform",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "_panelStyle",
-              "type": {
-                "text": "string"
-              },
-              "privacy": "private",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "_renderHeader",
-              "privacy": "private"
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "events": [
-            {
-              "description": "Fired when the user requests close (backdrop click, Escape key, or close button)",
-              "name": "close"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-sidepanel",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "SidePanel",
-          "declaration": {
-            "name": "SidePanel",
-            "module": "src/components/sidepanel/sidepanel.ts"
           }
         }
       ]
@@ -6850,130 +6850,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/surface/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Surface",
-          "declaration": {
-            "name": "Surface",
-            "module": "./surface"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SurfaceElevation",
-          "declaration": {
-            "name": "SurfaceElevation",
-            "module": "./surface.types"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "SurfaceAppearance",
-          "declaration": {
-            "name": "SurfaceAppearance",
-            "module": "./surface.types"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/surface/surface.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "surfaceStyles",
-          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .surface { background: var(--lt-surface-bg, var(--lt-bg-subtle)); border-radius: var(--lt-border-radius); box-sizing: border-box; transition: box-shadow 120ms ease, border-color 120ms ease; } /* Elevation variants */ :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); } :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); } :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); } :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); } :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); } :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); } /* Visual appearances */ :host([appearance='filled']) .surface { border: none; } :host([appearance='outlined']) .surface { background: var(--lt-surface-bg, transparent); border: 1px solid var(--lt-border-default); } :host([appearance='outlined']:hover) .surface { border-color: var(--lt-border-strong); } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "surfaceStyles",
-          "declaration": {
-            "name": "surfaceStyles",
-            "module": "src/components/surface/surface.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/surface/surface.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "A container component that provides elevation and surface styling.\nUsed for cards, dropdowns, modals, and other elevated UI elements.",
-          "name": "Surface",
-          "slots": [
-            {
-              "description": "Content to be displayed within the surface",
-              "name": ""
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "surfaceStyles"
-            },
-            {
-              "kind": "field",
-              "name": "elevation",
-              "type": {
-                "text": "SurfaceElevation"
-              },
-              "default": "'1'",
-              "description": "Elevation level that determines shadow depth."
-            },
-            {
-              "kind": "field",
-              "name": "appearance",
-              "type": {
-                "text": "SurfaceAppearance"
-              },
-              "default": "'filled'",
-              "description": "Visual appearance that determines border and background."
-            },
-            {
-              "kind": "field",
-              "name": "background",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-surface",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Surface",
-          "declaration": {
-            "name": "Surface",
-            "module": "src/components/surface/surface.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/switch/index.ts",
       "declarations": [],
       "exports": [
@@ -7172,6 +7048,130 @@
           "declaration": {
             "name": "Switch",
             "module": "src/components/switch/switch.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/surface/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Surface",
+          "declaration": {
+            "name": "Surface",
+            "module": "./surface"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SurfaceElevation",
+          "declaration": {
+            "name": "SurfaceElevation",
+            "module": "./surface.types"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SurfaceAppearance",
+          "declaration": {
+            "name": "SurfaceAppearance",
+            "module": "./surface.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/surface/surface.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "surfaceStyles",
+          "default": "css` :host { display: block; font-family: 'Hanken Grotesk', sans-serif; } .surface { background: var(--lt-surface-bg, var(--lt-bg-subtle)); border-radius: var(--lt-border-radius); box-sizing: border-box; transition: box-shadow 120ms ease, border-color 120ms ease; } /* Elevation variants */ :host([elevation='0']) .surface { box-shadow: var(--lt-elevation-0); } :host([elevation='1']) .surface { box-shadow: var(--lt-elevation-1); } :host([elevation='2']) .surface { box-shadow: var(--lt-elevation-2); } :host([elevation='3']) .surface { box-shadow: var(--lt-elevation-3); } :host([elevation='4']) .surface { box-shadow: var(--lt-elevation-4); } :host([elevation='5']) .surface { box-shadow: var(--lt-elevation-5); } /* Visual appearances */ :host([appearance='filled']) .surface { border: none; } :host([appearance='outlined']) .surface { background: var(--lt-surface-bg, transparent); border: 1px solid var(--lt-border-default); } :host([appearance='outlined']:hover) .surface { border-color: var(--lt-border-strong); } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "surfaceStyles",
+          "declaration": {
+            "name": "surfaceStyles",
+            "module": "src/components/surface/surface.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/surface/surface.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A container component that provides elevation and surface styling.\nUsed for cards, dropdowns, modals, and other elevated UI elements.",
+          "name": "Surface",
+          "slots": [
+            {
+              "description": "Content to be displayed within the surface",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "surfaceStyles"
+            },
+            {
+              "kind": "field",
+              "name": "elevation",
+              "type": {
+                "text": "SurfaceElevation"
+              },
+              "default": "'1'",
+              "description": "Elevation level that determines shadow depth."
+            },
+            {
+              "kind": "field",
+              "name": "appearance",
+              "type": {
+                "text": "SurfaceAppearance"
+              },
+              "default": "'filled'",
+              "description": "Visual appearance that determines border and background."
+            },
+            {
+              "kind": "field",
+              "name": "background",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-surface",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Surface",
+          "declaration": {
+            "name": "Surface",
+            "module": "src/components/surface/surface.ts"
           }
         }
       ]
@@ -7634,6 +7634,105 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/text/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Text",
+          "declaration": {
+            "name": "Text",
+            "module": "./text"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/text.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "textStyles",
+          "default": "css` :host { display: block; color: inherit; } /* Inline variants sit in text flow */ :host([variant='caption']), :host([variant='overline']), :host([variant='label']) { display: inline; } [part='base'] { margin: 0; color: inherit; font-family: var(--lt-typography-fontfamily); } /* ── Display ─────────────────────────────────────────────────────────── */ :host([variant='display-2xl']) [part='base'] { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-xl']) [part='base'] { font-size: clamp(2rem, 5vw, 3.75rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-lg']) [part='base'] { font-size: clamp(2rem, 4vw, 3rem); font-weight: var(--lt-text-weight, 200); line-height: 1.15; letter-spacing: -0.01em; } /* ── Headings ─────────────────────────────────────────────────────────── */ :host([variant='h1']) [part='base'] { font-size: clamp(1.75rem, 2.5vw + 0.75rem, 2.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: -0.02em; } :host([variant='h2']) [part='base'] { font-size: clamp(1.5rem, 2vw + 0.5rem, 2rem); font-weight: var(--lt-text-weight, 600); line-height: 1.25; letter-spacing: -0.01em; } :host([variant='h3']) [part='base'] { font-size: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.3; } :host([variant='h4']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 600); line-height: 1.35; } :host([variant='h5']) [part='base'] { font-size: 1.125rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } :host([variant='h6']) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } /* ── Body ─────────────────────────────────────────────────────────────── */ :host([variant='lead']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body']) [part='base'], :host(:not([variant])) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body-sm']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } /* ── Inline ───────────────────────────────────────────────────────────── */ :host([variant='caption']) [part='base'] { font-size: 0.75rem; font-weight: var(--lt-text-weight, 400); line-height: 1.5; } :host([variant='overline']) [part='base'] { font-size: 0.6875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: 0.08em; text-transform: uppercase; } :host([variant='label']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "textStyles",
+          "declaration": {
+            "name": "textStyles",
+            "module": "src/components/text/text.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/text/text.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Renders text with a predefined typographic style. Display and heading variants\n(display-2xl → h3) use fluid `clamp()` font sizes that scale between a mobile\nminimum and a desktop maximum. The rendered HTML tag matches the variant by\ndefault but can be overridden with the `as` attribute.\n\nOverride font-weight on any variant with `--lt-text-weight`:\n```css\nlt-text { --lt-text-weight: 700; }\n```",
+          "name": "Text",
+          "cssProperties": [
+            {
+              "description": "Overrides the default font-weight for the variant.",
+              "name": "--lt-text-weight"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "textStyles"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "type": {
+                "text": "TextVariant"
+              },
+              "default": "'body'",
+              "description": "Typographic style to apply."
+            },
+            {
+              "kind": "field",
+              "name": "as",
+              "type": {
+                "text": "TextTag | ''"
+              },
+              "default": "''",
+              "description": "HTML tag to render. Defaults to the semantic tag for the chosen variant."
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-text",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Text",
+          "declaration": {
+            "name": "Text",
+            "module": "src/components/text/text.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/table/index.ts",
       "declarations": [],
       "exports": [
@@ -8010,105 +8109,6 @@
           "declaration": {
             "name": "Table",
             "module": "src/components/table/table.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/text/index.ts",
-      "declarations": [],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Text",
-          "declaration": {
-            "name": "Text",
-            "module": "./text"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/text/text.styles.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "textStyles",
-          "default": "css` :host { display: block; color: inherit; } /* Inline variants sit in text flow */ :host([variant='caption']), :host([variant='overline']), :host([variant='label']) { display: inline; } [part='base'] { margin: 0; color: inherit; font-family: var(--lt-typography-fontfamily); } /* ── Display ─────────────────────────────────────────────────────────── */ :host([variant='display-2xl']) [part='base'] { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-xl']) [part='base'] { font-size: clamp(2rem, 5vw, 3.75rem); font-weight: var(--lt-text-weight, 200); line-height: 1.1; letter-spacing: -0.02em; } :host([variant='display-lg']) [part='base'] { font-size: clamp(2rem, 4vw, 3rem); font-weight: var(--lt-text-weight, 200); line-height: 1.15; letter-spacing: -0.01em; } /* ── Headings ─────────────────────────────────────────────────────────── */ :host([variant='h1']) [part='base'] { font-size: clamp(1.75rem, 2.5vw + 0.75rem, 2.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: -0.02em; } :host([variant='h2']) [part='base'] { font-size: clamp(1.5rem, 2vw + 0.5rem, 2rem); font-weight: var(--lt-text-weight, 600); line-height: 1.25; letter-spacing: -0.01em; } :host([variant='h3']) [part='base'] { font-size: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem); font-weight: var(--lt-text-weight, 600); line-height: 1.3; } :host([variant='h4']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 600); line-height: 1.35; } :host([variant='h5']) [part='base'] { font-size: 1.125rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } :host([variant='h6']) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } /* ── Body ─────────────────────────────────────────────────────────────── */ :host([variant='lead']) [part='base'] { font-size: 1.25rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body']) [part='base'], :host(:not([variant])) [part='base'] { font-size: 1rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } :host([variant='body-sm']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 400); line-height: 1.6; } /* ── Inline ───────────────────────────────────────────────────────────── */ :host([variant='caption']) [part='base'] { font-size: 0.75rem; font-weight: var(--lt-text-weight, 400); line-height: 1.5; } :host([variant='overline']) [part='base'] { font-size: 0.6875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.2; letter-spacing: 0.08em; text-transform: uppercase; } :host([variant='label']) [part='base'] { font-size: 0.875rem; font-weight: var(--lt-text-weight, 600); line-height: 1.4; } `"
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "textStyles",
-          "declaration": {
-            "name": "textStyles",
-            "module": "src/components/text/text.styles.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/text/text.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Renders text with a predefined typographic style. Display and heading variants\n(display-2xl → h3) use fluid `clamp()` font sizes that scale between a mobile\nminimum and a desktop maximum. The rendered HTML tag matches the variant by\ndefault but can be overridden with the `as` attribute.\n\nOverride font-weight on any variant with `--lt-text-weight`:\n```css\nlt-text { --lt-text-weight: 700; }\n```",
-          "name": "Text",
-          "cssProperties": [
-            {
-              "description": "Overrides the default font-weight for the variant.",
-              "name": "--lt-text-weight"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "styles",
-              "static": true,
-              "default": "textStyles"
-            },
-            {
-              "kind": "field",
-              "name": "variant",
-              "type": {
-                "text": "TextVariant"
-              },
-              "default": "'body'",
-              "description": "Typographic style to apply."
-            },
-            {
-              "kind": "field",
-              "name": "as",
-              "type": {
-                "text": "TextTag | ''"
-              },
-              "default": "''",
-              "description": "HTML tag to render. Defaults to the semantic tag for the chosen variant."
-            },
-            {
-              "kind": "method",
-              "name": "render"
-            }
-          ],
-          "superclass": {
-            "name": "ThemeableElement",
-            "module": "/src/base"
-          },
-          "tagName": "lt-text",
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "Text",
-          "declaration": {
-            "name": "Text",
-            "module": "src/components/text/text.ts"
           }
         }
       ]

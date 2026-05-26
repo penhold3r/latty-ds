@@ -86,7 +86,7 @@ function onEmail(e: Event) {
 
 <template>
   <lt-button variant="primary" @click="save">Save changes</lt-button>
-  <lt-textfield label="Email" type="email" @lt-change="onEmail"></lt-textfield>
+  <lt-textfield label="Email" type="email" @change="onEmail"></lt-textfield>
 </template>
 ```
 
@@ -94,19 +94,19 @@ No wrapper package needed — `lt-*` elements work natively in Vue templates.
 
 ## Listening to events
 
-Components dispatch standard DOM events:
+Components dispatch standard DOM events with no prefix:
 
 ```js
 const dialog = document.querySelector('lt-dialog');
 
-dialog.addEventListener('lt-open', () => console.log('opened'));
-dialog.addEventListener('lt-close', () => console.log('closed'));
+dialog.addEventListener('open', () => console.log('opened'));
+dialog.addEventListener('close', () => console.log('closed'));
 ```
 
 ```js
 const textfield = document.querySelector('lt-textfield');
 
-textfield.addEventListener('lt-change', (e) => {
+textfield.addEventListener('change', (e) => {
   console.log(e.detail.value);
 });
 ```

@@ -10,17 +10,33 @@ const componentEntries = Object.fromEntries(
   componentDirs.map((name) => [`components/${name}/index`, `src/components/${name}/index.ts`])
 );
 
-export default defineConfig({
-  entry: {
-    index: 'src/index.ts',
-    base: 'src/base/index.ts',
-    ...componentEntries
+const entry = {
+  index: 'src/index.ts',
+  'base/index': 'src/base/index.ts',
+  ...componentEntries
+};
+
+export default defineConfig([
+  {
+    entry,
+    format: ['esm'],
+    dts: false,
+    clean: true,
+    splitting: false,
+    external: ['lit', 'lit/*', '@lit/*', '@latty/icons', '@latty/tokens'],
+    noExternal: ['@floating-ui/dom'],
+    outExtension: () => ({ js: '.js' })
   },
-  format: ['esm'],
-  dts: true,
-  clean: true,
-  splitting: false,
-  external: ['lit', 'lit/*', '@lit/*', '@latty/icons', '@latty/tokens'],
-  noExternal: ['@floating-ui/dom'],
-  outExtension: () => ({ js: '.js' })
-});
+  {
+    // CJS build: fully self-contained so webpack/CJS consumers don't need lit installed.
+    // Lit is ESM-only and cannot be require()'d, so we bundle it in here.
+    entry: { index: 'src/index.ts' },
+    format: ['cjs'],
+    dts: false,
+    clean: false,
+    splitting: false,
+    external: ['@latty/icons', '@latty/tokens'],
+    noExternal: ['@floating-ui/dom', 'lit', 'lit/*', '@lit/*'],
+    outExtension: () => ({ js: '.cjs' })
+  }
+]);
