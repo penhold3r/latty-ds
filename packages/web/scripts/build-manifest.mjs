@@ -57,7 +57,7 @@ function parseDefault(raw) {
 
 /** Convert a CEM field declaration into a manifest member, or null to skip. */
 function toMember(field, componentDir) {
-  const { name: propName, attribute, type, default: rawDefault, privacy, static: isStatic } = field;
+  const { name: propName, attribute, type, default: rawDefault, privacy, static: isStatic, description } = field;
   const name = attribute ?? toAttrName(propName);
 
   if (isStatic) return null;
@@ -69,21 +69,21 @@ function toMember(field, componentDir) {
   const typeText = type?.text ?? 'string';
 
   if (typeText === 'boolean') {
-    return { name, type: 'boolean', default: rawDefault === 'true' };
+    return { name, description, type: 'boolean', default: rawDefault === 'true' };
   }
 
   if (typeText === 'number') {
-    return { name, type: 'number', default: rawDefault !== undefined ? Number(rawDefault) : 0 };
+    return { name, description, type: 'number', default: rawDefault !== undefined ? Number(rawDefault) : 0 };
   }
 
   if (typeText === 'string') {
     if (['icon', 'icon-start', 'icon-end'].includes(name)) {
-      return { name, type: 'icon', default: '' };
+      return { name, description, type: 'icon', default: '' };
     }
     if (['color', 'background'].includes(name)) {
-      return { name, type: 'color', default: '' };
+      return { name, description, type: 'color', default: '' };
     }
-    return { name, type: 'text', default: parseDefault(rawDefault) ?? '' };
+    return { name, description, type: 'text', default: parseDefault(rawDefault) ?? '' };
   }
 
   // Unknown / complex type (arrays, objects, Element refs) → skip
@@ -113,11 +113,11 @@ function toMember(field, componentDir) {
     const def = parseDefault(rawDefault) ?? options[0];
     // Prepend '' option so the playground can show "— default —"
     const finalOptions = hasEmptySentinel ? ['', ...options] : options;
-    return { name, type: 'select', options: finalOptions, default: def };
+    return { name, description, type: 'select', options: finalOptions, default: def };
   }
 
   // Fallback: treat as free-text
-  return { name, type: 'text', default: parseDefault(rawDefault) ?? '' };
+  return { name, description, type: 'text', default: parseDefault(rawDefault) ?? '' };
 }
 
 const manifest = {};
