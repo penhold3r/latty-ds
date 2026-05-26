@@ -79,7 +79,7 @@ Add the following to `src/index.tsx`:
 // src/index.tsx
 import { configure } from '@latty/tokens/configure';
 import { iconRegistry, lattyIcons } from '@latty/icons';
-import '@latty/web'; // registers all web components
+import '@latty/react'; // CJS bundle auto-registers all web components
 
 configure({
   colors: { primary: '#7c3aed' },
@@ -89,8 +89,13 @@ configure({
 iconRegistry.registerIcons(lattyIcons);
 ```
 
-**Why the explicit `import '@latty/web'`?**
-webpack's tree-shaking can silently drop ESM side-effect imports that come through a transitive dependency chain. Adding the import directly to your entry point guarantees web components are registered regardless of bundler behaviour.
+If you're using `@latty/web` directly (without `@latty/react`), add an explicit import instead:
+
+```tsx
+import '@latty/web'; // registers all web components
+```
+
+webpack's ESM tree-shaking can silently drop side-effect imports that come through a transitive dependency chain, but `@latty/react`'s CJS bundle includes a `require('@latty/web')` call that webpack always executes — so web components are registered automatically when you import `@latty/react`.
 
 ## Using components
 
@@ -122,4 +127,29 @@ el.addEventListener('change', (e) => console.log(e.detail.value));
 
 ## Mocking in Jest
 
-`@latty/web` renders in shadow DOM, which jsdom doesn't support. Mock `@latty/react` in your test setup so components render as plain HTML elements. See the [Testing guide](/getting-started/testing) for a complete mock template.
+`@latty/web` renders in shadow DOM, which jsdom doesn't support. Mock `@latty/react` in your test setup so components render as plain HTML elements:
+
+```js
+// src/__mocks__/@latty/react.js
+const React = require('react');
+
+const handler = {
+  get(_, tag) {
+    return React.forwardRef((props, ref) => React.createElement(tag, { ...props, ref }));
+  },
+};
+
+module.exports = new Proxy({}, handler);
+```
+
+Add the mock path to Jest's `moduleNameMapper` in `package.json`:
+
+```json
+{
+  "jest": {
+    "moduleNameMapper": {
+      "^@latty/react$": "<rootDir>/src/__mocks__/@latty/react.js"
+    }
+  }
+}
+```

@@ -10,14 +10,16 @@ description: Add Latty to your project
 
 ```bash
 # pnpm
-pnpm add @latty/tokens @latty/web
+pnpm add @latty/tokens @latty/web lit
 
 # npm
-npm install @latty/tokens @latty/web
+npm install @latty/tokens @latty/web lit
 
 # yarn
-yarn add @latty/tokens @latty/web
+yarn add @latty/tokens @latty/web lit
 ```
+
+`lit` is a peer dependency of `@latty/web` — required when using the ESM build (Vite, Rollup, and other modern bundlers). webpack consumers using the CJS build have lit bundled in and don't need to install it separately.
 
 `@latty/icons` is bundled inside `@latty/web` — you don't need to install it separately unless you want to use the icon registry API directly.
 
