@@ -9,7 +9,7 @@ export const listItemStyles = css`
 
   .inner {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--lt-spacing-2);
   }
 
