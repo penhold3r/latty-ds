@@ -27,7 +27,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 <lt-pagination page="5" total-pages="10" disabled></lt-pagination>
 
 <script type="module">
-  document.querySelector('lt-pagination').addEventListener('lt-change', (e) => {
+  document.querySelector('lt-pagination').addEventListener('change', (e) => {
     console.log('navigated to page', e.detail.page);
   });
 <\/script>
@@ -44,7 +44,7 @@ import { Pagination } from '@latty/react';
   <lt-pagination
     :page="currentPage"
     :total-pages="totalPages"
-    @lt-change="(e) => currentPage = e.detail.page"
+    @change="(e) => currentPage = e.detail.page"
   />
 </template>
     `}

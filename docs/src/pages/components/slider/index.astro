@@ -9,7 +9,8 @@ import ApiTable from '../../../components/ApiTable/index.astro';
   <lt-text variant="h1">Slider</lt-text>
   <lt-text variant="body">
     A styled range input for selecting a numeric value between a minimum and maximum. Supports size variants, labels,
-    and exposes <code>lt-input</code> / <code>lt-change</code> events with the current numeric value in the event detail.
+    and exposes <code>input</code> (fires continuously while dragging) and <code>change</code> (fires once on release) events,
+    both carrying the current numeric value in <code>event.detail.value</code>.
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
@@ -34,8 +35,12 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 <!-- Listen for events -->
 <lt-slider id="vol" label="Volume" value="0"></lt-slider>
 <script>
-  document.getElementById('vol').addEventListener('lt-input', (e) => {
-    console.log('Value:', e.detail.value);
+  const vol = document.getElementById('vol');
+  vol.addEventListener('input', (e) => {
+    console.log('dragging:', e.detail.value);
+  });
+  vol.addEventListener('change', (e) => {
+    console.log('committed:', e.detail.value);
   });
 </script>
     `}
@@ -52,7 +57,7 @@ function VolumeControl() {
       min={0}
       max={100}
       step={1}
-      onLtInput={(e) => setVolume(e.detail.value)}
+      onInput={(e) => setVolume(e.detail.value)}
     />
   );
 }
@@ -70,7 +75,7 @@ const volume = ref(40)
     :min="0"
     :max="100"
     :step="1"
-    @lt-input="volume = $event.detail.value"
+    @input="volume = $event.detail.value"
   ></lt-slider>
 </template>
     `}

@@ -9,7 +9,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
   <lt-text variant="h1">Dialog</lt-text>
   <lt-text variant="body">
     A modal dialog with backdrop, keyboard trap, and focus management. Supports a <code>footer</code> slot for actions. Emits
-    <code>lt-open</code> and <code>lt-close</code> events.
+    <code>open</code> and <code>close</code> events.
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
@@ -58,7 +58,7 @@ function Example() {
         open={open}
         title="Confirm action"
         size="sm"
-        onLtDialogClose={() => setOpen(false)}
+        onClose={() => setOpen(false)}
       >
         <Text>Are you sure you want to proceed?</Text>
         <div slot="footer">
@@ -81,7 +81,7 @@ const open = ref(false)
   <lt-button variant="primary" @click="open = true">Open dialog</lt-button>
 
   <lt-dialog :open="open" title="Confirm action" size="sm"
-    @lt-dialog-close="open = false">
+    @close="open = false">
     <lt-text>Are you sure you want to proceed?</lt-text>
     <div slot="footer">
       <lt-button variant="neutral" appearance="outlined"

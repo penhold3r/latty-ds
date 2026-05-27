@@ -38,7 +38,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 </lt-sidepanel>
 
 <script>
-  document.getElementById('panel').addEventListener('lt-close', () => {
+  document.getElementById('panel').addEventListener('close', () => {
     document.getElementById('panel').open = false;
   });
 </script>
@@ -60,7 +60,7 @@ export default function Example() {
         label="Settings"
         anchor="left"
         size="320px"
-        onLtClose={() => setOpen(false)}
+        onClose={() => setOpen(false)}
       >
         <div style={{ padding: 'var(--lt-spacing-5)' }}>
           <p>Panel content goes here.</p>
@@ -82,7 +82,7 @@ const open = ref(false)
     label="Settings"
     anchor="left"
     size="320px"
-    @lt-close="open = false"
+    @close="open = false"
   >
     <div style="padding: var(--lt-spacing-5);">
       <p>Panel content goes here.</p>

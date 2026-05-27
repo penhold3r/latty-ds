@@ -20,6 +20,13 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 <lt-checkbox label="Accept terms and conditions"></lt-checkbox>
 <lt-checkbox label="Enable notifications" variant="success" checked></lt-checkbox>
 <lt-checkbox label="Unavailable option" disabled></lt-checkbox>
+
+<lt-checkbox id="terms" label="Accept terms and conditions"></lt-checkbox>
+<script>
+  document.getElementById('terms').addEventListener('change', (e) => {
+    console.log('checked:', e.detail.checked);
+  });
+</script>
     `}
     react={`
 import { Checkbox } from '@latty/react';
@@ -27,12 +34,27 @@ import { Checkbox } from '@latty/react';
 <Checkbox label="Accept terms and conditions" />
 <Checkbox label="Enable notifications" variant="success" checked />
 <Checkbox label="Unavailable option" disabled />
+
+<Checkbox
+  label="Accept terms and conditions"
+  onChange={(e) => console.log('checked:', e.detail.checked)}
+/>
     `}
     vue={`
+<script setup>
+import { ref } from 'vue'
+const accepted = ref(false)
+</script>
+
 <template>
   <lt-checkbox label="Accept terms and conditions"></lt-checkbox>
   <lt-checkbox label="Enable notifications" variant="success" checked></lt-checkbox>
   <lt-checkbox label="Unavailable option" disabled></lt-checkbox>
+
+  <lt-checkbox
+    label="Accept terms and conditions"
+    @change="(e) => accepted = e.detail.checked"
+  ></lt-checkbox>
 </template>
     `}
   />

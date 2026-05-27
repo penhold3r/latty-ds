@@ -57,7 +57,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
   <lt-dropdown-item>Delete</lt-dropdown-item>
 </lt-dropdown>
 <script>
-  document.getElementById('my-menu').addEventListener('lt-select', (e) => {
+  document.getElementById('my-menu').addEventListener('select', (e) => {
     console.log('Selected:', e.detail.item.textContent);
   });
 </script>
@@ -68,7 +68,7 @@ import { Button } from '@latty/react';
 
 function ActionsMenu() {
   return (
-    <Dropdown onLtSelect={(e) => console.log('Selected:', e.detail.item.textContent)}>
+    <Dropdown onSelect={(e) => console.log('Selected:', e.detail.item.textContent)}>
       <Button slot="trigger" appearance="outlined">Options</Button>
       <DropdownItem>Profile</DropdownItem>
       <DropdownItem>Settings</DropdownItem>
@@ -88,7 +88,7 @@ function onSelect(e) {
 </script>
 
 <template>
-  <lt-dropdown @lt-select="onSelect">
+  <lt-dropdown @select="onSelect">
     <lt-button slot="trigger" appearance="outlined">Options</lt-button>
     <lt-dropdown-item>Profile</lt-dropdown-item>
     <lt-dropdown-item>Settings</lt-dropdown-item>

@@ -48,7 +48,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
     { value: 'de', label: 'Germany' },
     { value: 'fr', label: 'France' }
   ];
-  cb.addEventListener('lt-change', (e) => {
+  cb.addEventListener('change', (e) => {
     console.log('selected', e.detail.value, e.detail.label);
   });
 <\/script>
@@ -76,7 +76,7 @@ const countries = [
     label="Country"
     placeholder="Search countries…"
     :options="countries"
-    @lt-change="(e) => selected = e.detail.value"
+    @change="(e) => selected = e.detail.value"
   />
 </template>
     `}

@@ -20,6 +20,13 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 <lt-switch label="Enable notifications"></lt-switch>
 <lt-switch label="Dark mode" variant="success" checked></lt-switch>
 <lt-switch label="Unavailable" disabled></lt-switch>
+
+<lt-switch id="notif" label="Enable notifications"></lt-switch>
+<script>
+  document.getElementById('notif').addEventListener('change', (e) => {
+    console.log('checked:', e.detail.checked);
+  });
+</script>
     `}
     react={`
 import { Switch } from '@latty/react';
@@ -27,12 +34,27 @@ import { Switch } from '@latty/react';
 <Switch label="Enable notifications" />
 <Switch label="Dark mode" variant="success" checked />
 <Switch label="Unavailable" disabled />
+
+<Switch
+  label="Enable notifications"
+  onChange={(e) => console.log('checked:', e.detail.checked)}
+/>
     `}
     vue={`
+<script setup>
+import { ref } from 'vue'
+const enabled = ref(false)
+</script>
+
 <template>
   <lt-switch label="Enable notifications"></lt-switch>
   <lt-switch label="Dark mode" variant="success" checked></lt-switch>
   <lt-switch label="Unavailable" disabled></lt-switch>
+
+  <lt-switch
+    label="Enable notifications"
+    @change="(e) => enabled = e.detail.checked"
+  ></lt-switch>
 </template>
     `}
   />

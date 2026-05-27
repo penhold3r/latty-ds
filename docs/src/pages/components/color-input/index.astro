@@ -9,16 +9,16 @@ import ApiTable from '../../../components/ApiTable/index.astro';
   title="Color Input"
   description="A read-only textfield that opens the native color picker and displays the selected hex value."
 >
-  <lt-text as="h1">Color Input</lt-text>
-  <lt-text as="p">
+  <lt-text variant="h1">Color Input</lt-text>
+  <lt-text variant="body">
     A read-only textfield that opens the browser's native color picker on click. Displays the selected hex value
     alongside a live color swatch preview.
   </lt-text>
 
-  <lt-text as="h2">Playground</lt-text>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground tag="lt-color-input" defaults={{ label: 'Brand color', value: '#7c3aed' }} />
 
-  <lt-text as="h2">Usage</lt-text>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`<lt-color-input label="Brand color" value="#7c3aed"></lt-color-input>`}
     react={`
@@ -33,7 +33,7 @@ import { ColorInput } from '@latty/react';
     `}
   />
 
-  <lt-text as="h2">API</lt-text>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-color-input" />
 </BaseLayout>
 

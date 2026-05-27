@@ -52,7 +52,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 ></lt-datepicker>
 
 <script type="module">
-  document.querySelector('lt-datepicker').addEventListener('lt-change', (e) => {
+  document.querySelector('lt-datepicker').addEventListener('change', (e) => {
     console.log('selected:', e.detail.value);
   });
 <\/script>
@@ -80,7 +80,7 @@ import { Datepicker } from '@latty/react';
   <lt-datepicker
     label="Start date"
     type="date"
-    @lt-change="(e) => date = e.detail.value"
+    @change="(e) => date = e.detail.value"
   />
 </template>
     `}
