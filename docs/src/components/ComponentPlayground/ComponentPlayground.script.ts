@@ -112,7 +112,7 @@ const initPlayground = async (playground: Element): Promise<void> => {
 
   if (previewTrigger) {
     document.getElementById(`${id}-trigger`)?.addEventListener('click', openEl);
-    el.addEventListener('lt-close', closeEl);
+    el.addEventListener('close', closeEl);
   }
   el.querySelectorAll('[data-action="close"]').forEach((btn: any) => {
     btn.addEventListener('click', closeEl);
@@ -300,7 +300,7 @@ const initPlayground = async (playground: Element): Promise<void> => {
     if (type === 'boolean') ctrl.addEventListener('change', (e: any) => onChange(e.detail.checked));
     else if (type === 'select') ctrl.addEventListener('change', (e: any) => onChange(e.detail.value));
     else if (type === 'text' || type === 'number') ctrl.addEventListener('input', (e: any) => onChange(e.detail.value));
-    else if (type === 'icon') ctrl.addEventListener('lt-change', (e: any) => onChange(e.detail.value));
+    else if (type === 'icon') ctrl.addEventListener('change', (e: any) => onChange(e.detail.value));
     else if (type === 'color')
       ctrl.addEventListener('input', (e: Event) => onChange((e.target as HTMLInputElement).value));
   });
@@ -367,7 +367,7 @@ const initPlayground = async (playground: Element): Promise<void> => {
 
   let eventCount = 0;
   let logOpen = false;
-  const LOG_EVENTS = ['lt-change', 'lt-input', 'lt-close', 'change', 'input', 'close', 'open', 'toggle'];
+  const LOG_EVENTS = ['change', 'input', 'close', 'open', 'toggle', 'select'];
 
   LOG_EVENTS.forEach((evtName) => {
     el.addEventListener(

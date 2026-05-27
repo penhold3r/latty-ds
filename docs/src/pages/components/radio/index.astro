@@ -13,7 +13,12 @@ import ApiTable from '../../../components/ApiTable/index.astro';
   </lt-text>
 
   <lt-text variant="h2">Playground</lt-text>
-  <ComponentPlayground tag="lt-radio" defaults={{ label: 'Option' }} />
+  <ComponentPlayground
+    tag="lt-radio-group"
+    defaults={{ label: 'Preferred contact', name: 'contact', value: 'email' }}
+    content={'<lt-radio label="Email" value="email"></lt-radio><lt-radio label="Phone" value="phone"></lt-radio><lt-radio label="Post" value="post"></lt-radio>'}
+    subTags={['lt-radio']}
+  />
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs

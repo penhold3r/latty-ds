@@ -164,7 +164,7 @@ fi
   echo " *"
   echo " * @element ${TAG}"
   echo " * @slot - Default slot content"
-  for ev in ${EVENT_LIST[@]+"${EVENT_LIST[@]}"}; do echo " * @fires lt-${ev}"; done
+  for ev in ${EVENT_LIST[@]+"${EVENT_LIST[@]}"}; do echo " * @fires ${ev}"; done
   echo " */"
   echo "@customElement('${TAG}')"
   echo "export class ${NAME_PASCAL} extends ThemeableElement {"
@@ -187,7 +187,7 @@ fi
     cap="$(capitalize "$ev")"
     echo ""
     echo "  private _handle${cap}() {"
-    echo "    this.dispatchEvent(new CustomEvent('lt-${ev}', { bubbles: true, composed: true }));"
+    echo "    this.dispatchEvent(new CustomEvent('${ev}', { bubbles: true, composed: true }));"
     echo "  }"
   done
 
@@ -290,9 +290,9 @@ fi
   for ev in ${EVENT_LIST[@]+"${EVENT_LIST[@]}"}; do
     cap="$(capitalize "$ev")"
     echo ""
-    echo "  it('dispatches lt-${ev} event', () => {"
+    echo "  it('dispatches ${ev} event', () => {"
     echo "    let fired = false;"
-    echo "    el.addEventListener('lt-${ev}', () => { fired = true; });"
+    echo "    el.addEventListener('${ev}', () => { fired = true; });"
     echo "    (el as any)._handle${cap}();"
     echo "    expect(fired).toBe(true);"
     echo "  });"
@@ -344,14 +344,14 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 ---
 
 <BaseLayout title="${NAME_PASCAL}" description="TODO: describe the ${NAME_PASCAL} component">
-  <h1>${NAME_PASCAL}</h1>
-  <p>TODO: describe the ${NAME_PASCAL} component.</p>
+  <lt-text variant="h1">${NAME_PASCAL}</lt-text>
+  <lt-text variant="body">TODO: describe the ${NAME_PASCAL} component.</lt-text>
 
-  <h2>Playground</h2>
+  <lt-text variant="h2">Playground</lt-text>
   {/* TODO: replace content with a real usage example once the component is implemented */}
   <ComponentPlayground tag="${TAG}" content="${NAME_PASCAL}" />
 
-  <h2>Usage</h2>
+  <lt-text variant="h2">Usage</lt-text>
   {/* TODO: add html, react, and vue usage examples */}
   <FrameworkTabs
     html={\`<${TAG}>${NAME_PASCAL}</${TAG}>\`}
@@ -367,13 +367,50 @@ import { ${NAME_PASCAL} } from '@latty/react';
     \`}
   />
 
-  <h2>API</h2>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="${TAG}" />
 </BaseLayout>
 
 <script>import '@latty/web';</script>
 EOF
 echo "✅  Created docs/src/pages/components/${NAME_LOWER}/index.astro"
+
+# ── _components.data.ts ───────────────────────────────────────────────────────
+COMPONENTS_DATA="${REPO_ROOT}/docs/src/pages/components/introduction/_components.data.ts"
+
+if grep -qF "name: '${NAME_PASCAL}'" "$COMPONENTS_DATA"; then
+  echo "ℹ️   _components.data.ts entry already present"
+else
+  COMPONENTS_DATA="$COMPONENTS_DATA" \
+  NAME_PASCAL="$NAME_PASCAL" \
+  TAG="$TAG" \
+  NAME_LOWER="$NAME_LOWER" \
+  node --input-type=module << 'JSEOF'
+import { readFileSync, writeFileSync } from 'fs';
+const file = process.env.COMPONENTS_DATA;
+const name = process.env.NAME_PASCAL;
+const tag = process.env.TAG;
+const nameLower = process.env.NAME_LOWER;
+
+let src = readFileSync(file, 'utf8');
+const entry = `  {\n    name: '${name}',\n    tag: '${tag}',\n    href: '/components/${nameLower}',\n    desc: 'TODO: describe the ${name} component'\n  },`;
+
+const allExistingNames = [...src.matchAll(/name: '([^']+)'/g)].map((m) => m[1]);
+const sorted = [...allExistingNames, name].sort();
+const insertAfter = sorted[sorted.indexOf(name) - 1];
+
+if (!insertAfter) {
+  src = src.replace('export const components: ComponentEntry[] = [', `export const components: ComponentEntry[] = [\n${entry}`);
+} else {
+  const pos = src.indexOf(`name: '${insertAfter}'`);
+  const closePos = src.indexOf('\n  },', pos) + 5;
+  src = src.slice(0, closePos) + '\n' + entry + src.slice(closePos);
+}
+
+writeFileSync(file, src);
+JSEOF
+  echo "✅  Added ${NAME_PASCAL} to _components.data.ts"
+fi
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 SIDEBAR_ENTRY="      { label: '${NAME_PASCAL}', href: '/components/${NAME_LOWER}' },"
