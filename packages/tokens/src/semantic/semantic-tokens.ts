@@ -37,8 +37,9 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToke
   map['text-neutral'] = 'color-neutral-700';
 
   for (const v of VARIANTS) {
-    map[`text-${v}`] = `color-${v}-800`;
+    map[`text-${v}`] = `color-${v}-700`;
     map[`text-on-${v}`] = 'color-white';
+    map[`text-on-warning`] = 'color-warning-800';
   }
   if (opts.primary500) map['text-on-primary'] = accessibleTextOn(opts.primary500);
 
