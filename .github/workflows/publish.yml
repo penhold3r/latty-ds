@@ -32,6 +32,6 @@ jobs:
 
       - run: pnpm test
 
-      - run: pnpm exec lerna publish from-git --yes
+      - run: pnpm exec lerna publish from-package --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
