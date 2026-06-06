@@ -40,6 +40,11 @@ import '@latty-ds/icons';
 export class ListItem extends ThemeableElement {
   static styles = listItemStyles;
 
+  override connectedCallback() {
+    super.connectedCallback();
+    if (!this.hasAttribute('role')) this.setAttribute('role', 'listitem');
+  }
+
   /** Icon name to display before the item content. */
   @property({ attribute: 'icon-start' }) iconStart = '';
 

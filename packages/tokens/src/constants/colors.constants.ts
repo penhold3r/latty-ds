@@ -17,7 +17,7 @@ export const L_BY_STEP = {
   400: 0.7,
   500: 0.62,
   600: 0.54,
-  700: 0.45,
+  700: 0.42,
   800: 0.36,
   900: 0.27
 } satisfies Record<(typeof STEPS)[number], number>;
