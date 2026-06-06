@@ -61,9 +61,20 @@ export default defineConfig([
   },
   {
     files: ['**/*.md'],
+    ignores: ['**/CHANGELOG.md'],
     plugins: { markdown },
     language: 'markdown/commonmark',
     extends: ['markdown/recommended']
+  },
+  {
+    files: ['**/CHANGELOG.md'],
+    plugins: { markdown },
+    language: 'markdown/commonmark',
+    extends: ['markdown/recommended'],
+    rules: {
+      'markdown/no-multiple-h1': 'off',
+      'markdown/heading-increment': 'off'
+    }
   },
   {
     files: ['**/*.css'],
