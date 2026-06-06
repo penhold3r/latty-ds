@@ -1,5 +1,5 @@
 /**
- * @latty/utils - Utility functions for the Latty Design System
+ * @latty-ds/utils - Utility functions for the Latty Design System
  *
  * Provides common utility functions including:
  * - Colorized console logger with timestamps and icons
@@ -10,7 +10,7 @@
  * @example
  * Using the logger:
  * ```typescript
- * import { logger } from '@latty/utils';
+ * import { logger } from '@latty-ds/utils';
  *
  * logger.info('Processing data...');
  * logger.success('Operation completed');
@@ -21,7 +21,7 @@
  * @example
  * String utilities:
  * ```typescript
- * import { toTitleCase } from '@latty/utils';
+ * import { toTitleCase } from '@latty-ds/utils';
  *
  * toTitleCase('hello-world'); // "Hello World"
  * toTitleCase('camelCase');   // "Camel Case"

@@ -1,18 +1,18 @@
-# @latty/react
+# @latty-ds/react
 
-React wrappers for the Latty design system — typed React components backed by `@latty/web`.
+React wrappers for the Latty design system — typed React components backed by `@latty-ds/web`.
 
 Each component is a thin wrapper that forwards props to the underlying Web Component, handles React's synthetic event system, and provides full TypeScript types.
 
 ## Requirements
 
 - React 18 or 19
-- `@latty/tokens` and `@latty/web` must be installed and their CSS imported
+- `@latty-ds/tokens` and `@latty-ds/web` must be installed and their CSS imported
 
 ## Installation
 
 ```bash
-pnpm add @latty/tokens @latty/web @latty/react
+pnpm add @latty-ds/tokens @latty-ds/web @latty-ds/react
 ```
 
 ## Setup
@@ -21,14 +21,14 @@ Import the CSS tokens once in your app entry point:
 
 ```css
 /* your global stylesheet */
-@import '@latty/tokens/tokens.css';
-@import '@latty/tokens/semantic.css';
+@import '@latty-ds/tokens/tokens.css';
+@import '@latty-ds/tokens/semantic.css';
 ```
 
 ## Usage
 
 ```tsx
-import { Button, Textfield, Badge, Spinner } from '@latty/react';
+import { Button, Textfield, Badge, Spinner } from '@latty-ds/react';
 
 function App() {
   return (
@@ -55,7 +55,7 @@ React wrappers map custom events to `onEventName` props:
 
 ### All components
 
-All components from `@latty/web` are available as named exports:
+All components from `@latty-ds/web` are available as named exports:
 
 ```ts
 import {
@@ -91,7 +91,7 @@ import {
   Text,
   Textfield,
   Tooltip
-} from '@latty/react';
+} from '@latty-ds/react';
 ```
 
 ### TypeScript
@@ -99,7 +99,7 @@ import {
 All components are fully typed. Props mirror the Web Component's properties:
 
 ```tsx
-import type { ButtonProps } from '@latty/react';
+import type { ButtonProps } from '@latty-ds/react';
 
 function MyButton(props: ButtonProps) {
   return <Button {...props} />;
@@ -108,7 +108,7 @@ function MyButton(props: ButtonProps) {
 
 ## How it works
 
-The wrappers are auto-generated from `custom-elements.json` (the Custom Elements Manifest produced by `@latty/web`). Run `pnpm codegen:wrappers` in the repo root after modifying web components to regenerate them.
+The wrappers are auto-generated from `custom-elements.json` (the Custom Elements Manifest produced by `@latty-ds/web`). Run `pnpm codegen:wrappers` in the repo root after modifying web components to regenerate them.
 
 ## License
 

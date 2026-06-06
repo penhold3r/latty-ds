@@ -5,7 +5,7 @@
  *   src/entries/<name>.ts  — side-effect module that self-registers the icon
  *
  * Then writes the exports field in package.json so consumers can do:
- *   import '@latty/icons/xmark'
+ *   import '@latty-ds/icons/xmark'
  */
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
 import { resolve, join, dirname } from 'path';

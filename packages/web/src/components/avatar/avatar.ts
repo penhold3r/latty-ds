@@ -4,7 +4,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 import { avatarStyles } from './avatar.styles';
 import type { AvatarSize, AvatarShape, AvatarColor } from './avatar.types';
-import '@latty/icons';
+import '@latty-ds/icons';
 
 /**
  * Displays a user avatar — image, initials fallback, or icon fallback.

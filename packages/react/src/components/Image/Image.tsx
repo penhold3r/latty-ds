@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Image as ImageEl } from '@latty/web';
+import type { Image as ImageEl } from '@latty-ds/web';
 
 export type ImageProps = HTMLAttributes<ImageEl> & {
   src?: string;

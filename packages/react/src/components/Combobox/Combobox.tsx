@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Combobox as ComboboxEl } from '@latty/web';
+import type { Combobox as ComboboxEl } from '@latty-ds/web';
 
 export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   options?: ComboboxEl['options'];

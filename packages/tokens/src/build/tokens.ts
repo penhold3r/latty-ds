@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
 
-import { logger } from '@latty/utils';
+import { logger } from '@latty-ds/utils';
 import type { Config } from '../types/';
 
 import { buildTokens, tokensToCss, semanticTokensToCss } from '../core/';
@@ -47,4 +47,4 @@ fs.writeFileSync(
 fs.writeFileSync(path.join(outDir, 'tokens.js'), `export const tokens = ${JSON.stringify(jsonOutput)};\n`, 'utf8');
 fs.writeFileSync(path.join(outDir, 'index.js'), `export * from "./tokens.js";\n`, 'utf8');
 
-logger.success('[@latty/tokens] wrote dist/tokens.css + dist/semantic.css + dist/tokens.json');
+logger.success('[@latty-ds/tokens] wrote dist/tokens.css + dist/semantic.css + dist/tokens.json');

@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { ListItem as ListItemEl, LattyIconName } from '@latty/web';
+import type { ListItem as ListItemEl, LattyIconName } from '@latty-ds/web';
 
 export type ListItemProps = HTMLAttributes<ListItemEl> & {
   iconStart?: LattyIconName;

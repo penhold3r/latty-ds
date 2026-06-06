@@ -1,7 +1,7 @@
 import { html, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
-import '@latty/icons';
+import '@latty-ds/icons';
 import '../calendar/calendar';
 import '../text/text';
 

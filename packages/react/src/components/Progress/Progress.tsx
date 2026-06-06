@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Progress as ProgressEl } from '@latty/web';
+import type { Progress as ProgressEl } from '@latty-ds/web';
 
 export type ProgressProps = HTMLAttributes<ProgressEl> & {
   value?: number;

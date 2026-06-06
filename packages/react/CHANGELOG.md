@@ -9,7 +9,7 @@ Initial beta release.
 
 ### Features
 
-- React wrappers for all `@latty/web` components
+- React wrappers for all `@latty-ds/web` components
 - Full TypeScript types generated from `custom-elements.json`
 - ESM + CommonJS dual build for broad bundler compatibility
 - React 18 and 19 support via peer dependency range

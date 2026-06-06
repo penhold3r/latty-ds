@@ -1,4 +1,4 @@
-import '@latty/web';
+import '@latty-ds/web';
 
 const codeEl =
   (color: string, nowrap = false) =>

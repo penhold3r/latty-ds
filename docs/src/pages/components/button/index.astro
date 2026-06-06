@@ -24,7 +24,7 @@ import VariantPresets from '../../../components/VariantPresets/index.astro';
 <lt-button variant="error" icon-start="trash" loading>Deleting…</lt-button>
     `}
     react={`
-import { Button } from '@latty/react';
+import { Button } from '@latty-ds/react';
 
 <Button variant="primary">Save changes</Button>
 <Button variant="primary" appearance="outlined" iconStart="download">Download</Button>
@@ -56,7 +56,7 @@ function save() { /* ... */ }
   <lt-button type="reset" variant="neutral" appearance="outlined">Clear</lt-button>
 </form>
 <script type="module">
-  import '@latty/web';
+  import '@latty-ds/web';
   document.getElementById('demo-form').addEventListener('submit', (e) => {
     e.preventDefault();
     alert('Submitted!');
@@ -64,7 +64,7 @@ function save() { /* ... */ }
 </script>
     `}
     react={`
-import { Button, Textfield } from '@latty/react';
+import { Button, Textfield } from '@latty-ds/react';
 
 function NewsletterForm() {
   function handleSubmit(e) {
@@ -96,5 +96,5 @@ function NewsletterForm() {
 </BaseLayout>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 </script>

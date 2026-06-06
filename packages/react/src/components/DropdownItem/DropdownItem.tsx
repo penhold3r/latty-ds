@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { DropdownItem as DropdownItemEl } from '@latty/web';
+import type { DropdownItem as DropdownItemEl } from '@latty-ds/web';
 
 export type DropdownItemProps = HTMLAttributes<DropdownItemEl> & {
   disabled?: boolean;

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Select as SelectEl } from '@latty/web';
+import type { Select as SelectEl } from '@latty-ds/web';
 
 export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
   variant?: SelectEl['variant'];

@@ -38,8 +38,8 @@ import ApiTable from '../../../components/ApiTable/index.astro';
     `}
     react={`
 import { useRef } from 'react';
-import { Snackbar, Button } from '@latty/react';
-import type { Snackbar as SnackbarEl } from '@latty/web';
+import { Snackbar, Button } from '@latty-ds/react';
+import type { Snackbar as SnackbarEl } from '@latty-ds/web';
 
 function Example() {
   const ref = useRef<SnackbarEl>(null);
@@ -100,5 +100,5 @@ const snackbar = ref(null)
 </BaseLayout>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 </script>

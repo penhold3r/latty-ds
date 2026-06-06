@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { listItemStyles } from './list-item.styles';
 
-import '@latty/icons';
+import '@latty-ds/icons';
 
 /**
  * A list item component that renders a `<li>` element in shadow DOM.

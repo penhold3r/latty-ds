@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { DateInput as DateInputEl } from '@latty/web';
+import type { DateInput as DateInputEl } from '@latty-ds/web';
 
 export type DateInputProps = Omit<HTMLAttributes<DateInputEl>, 'onChange'> & {
   value?: string;

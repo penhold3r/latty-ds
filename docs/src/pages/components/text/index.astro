@@ -42,7 +42,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 <!-- Override tag without changing style -->
 <lt-text variant="h1" as="h2">Visually h1, semantically h2</lt-text>`}
     react={`
-import { Text } from '@latty/react';
+import { Text } from '@latty-ds/react';
 
 <Text variant="h1">Heading 1</Text>
 <Text variant="lead">Lead paragraph copy.</Text>
@@ -102,7 +102,7 @@ import { Text } from '@latty/react';
 </style>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 
   type VariantMeta = { label: string; size: string; weight: string; extra?: string };
 

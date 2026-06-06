@@ -1,11 +1,11 @@
-# @latty/web
+# @latty-ds/web
 
 Web Components for the Latty Design System — framework-agnostic UI components built with Lit and driven by design tokens.
 
 ## Installation
 
 ```bash
-pnpm add @latty/tokens @latty/web
+pnpm add @latty-ds/tokens @latty-ds/web
 ```
 
 ## Setup
@@ -14,19 +14,19 @@ Import the CSS tokens once in your app entry point, then import the component li
 
 ```css
 /* your global stylesheet */
-@import '@latty/tokens/tokens.css';
-@import '@latty/tokens/semantic.css';
+@import '@latty-ds/tokens/tokens.css';
+@import '@latty-ds/tokens/semantic.css';
 ```
 
 ```js
-import '@latty/web';
+import '@latty-ds/web';
 ```
 
 Or import individual components to keep bundles small:
 
 ```js
-import '@latty/web/dist/components/button';
-import '@latty/web/dist/components/textfield';
+import '@latty-ds/web/dist/components/button';
+import '@latty-ds/web/dist/components/textfield';
 ```
 
 ## Components
@@ -67,7 +67,7 @@ Pass an icon name to components that support them:
 <lt-textfield icon-start="search" placeholder="Search…"></lt-textfield>
 ```
 
-See [@latty/icons](../icons/README.md) for the full icon reference.
+See [@latty-ds/icons](../icons/README.md) for the full icon reference.
 
 ### CSS customization
 
@@ -96,7 +96,7 @@ lt-button {
 Full type definitions are included. Import types directly:
 
 ```ts
-import type { Button } from '@latty/web';
+import type { Button } from '@latty-ds/web';
 ```
 
 The `custom-elements.json` manifest (at the package root) is compatible with VS Code's custom data format for HTML IntelliSense.

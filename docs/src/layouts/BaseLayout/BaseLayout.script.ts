@@ -1,8 +1,8 @@
-import '@latty/web';
-import { iconRegistry, lattyIcons } from '@latty/icons';
+import '@latty-ds/web';
+import { iconRegistry, lattyIcons } from '@latty-ds/icons';
 iconRegistry.registerIcons(lattyIcons);
 
-import type { SidePanel } from '@latty/web';
+import type { SidePanel } from '@latty-ds/web';
 
 const themeBtn = document.getElementById('theme-toggle') as HTMLElement | null;
 

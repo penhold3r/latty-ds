@@ -33,7 +33,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 ></lt-textfield>
     `}
     react={`
-import { Textfield } from '@latty/react';
+import { Textfield } from '@latty-ds/react';
 
 <Textfield label="Email" type="email" placeholder="you@example.com" required />
 
@@ -104,7 +104,7 @@ import { Textfield } from '@latty/react';
 ></lt-textfield>
     `}
     react={`
-import { Textfield } from '@latty/react';
+import { Textfield } from '@latty-ds/react';
 
 <Textfield
   type="email"
@@ -181,7 +181,7 @@ import { Textfield } from '@latty/react';
 ></lt-textfield>
     `}
     react={`
-import { Textfield } from '@latty/react';
+import { Textfield } from '@latty-ds/react';
 
 {/* Character length: must be 8–64 chars */}
 <Textfield
@@ -234,7 +234,7 @@ import { Textfield } from '@latty/react';
     html={`
 <lt-textfield type="email" label="Email" id="email-field"></lt-textfield>
 <script type="module">
-  import '@latty/web';
+  import '@latty-ds/web';
   document.querySelector('#email-field').helperText =
     (error) => error ? 'Enter a valid email address' : "We'll never share your email";
 </script>
@@ -242,14 +242,14 @@ import { Textfield } from '@latty/react';
 <!-- Password with length hint that turns into an error message -->
 <lt-textfield type="text" label="Password" id="pw-field"></lt-textfield>
 <script type="module">
-  import '@latty/web';
+  import '@latty-ds/web';
   document.querySelector('#pw-field').helperText =
     (error) => error ? 'Password is too short' : 'Minimum 8 characters';
   document.querySelector('#pw-field').min = 8;
 </script>
     `}
     react={`
-import { Textfield } from '@latty/react';
+import { Textfield } from '@latty-ds/react';
 
 <Textfield
   type="email"
@@ -289,5 +289,5 @@ import { Textfield } from '@latty/react';
 </BaseLayout>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 </script>

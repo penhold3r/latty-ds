@@ -70,7 +70,7 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
  *   <head>
  *     <style>html[data-lt]:not([data-lt-ready]){visibility:hidden}</style>
  *     <script type="module">
- *       import { configure } from '@latty/tokens/configure';
+ *       import { configure } from '@latty-ds/tokens/configure';
  *       configure({
  *         colors: { primary: '#6366f1', secondary: '#f59e0b' },
  *         font:   { family: 'Inter, sans-serif' },

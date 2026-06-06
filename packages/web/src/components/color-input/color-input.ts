@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
 import { colorInputStyles } from './color-input.styles';
 import { ColorInputFormat, ColorInputSize } from './color-input.types';
-import '@latty/icons';
+import '@latty-ds/icons';
 import '../text/text';
 
 // ── Color conversion helpers ──────────────────────────────────────────────────

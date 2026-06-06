@@ -1,4 +1,4 @@
-import '@latty/web';
+import '@latty-ds/web';
 import type { PlaygroundMember, PlaygroundGroup, ChildItem } from './ComponentPlayground.types.ts';
 
 const encodeState = (s: Record<string, unknown>) => btoa(unescape(encodeURIComponent(JSON.stringify(s))));
@@ -133,7 +133,7 @@ const initPlayground = async (playground: Element): Promise<void> => {
     const assignments = entries
       .map(([k, v]) => `  el.${k} = ${JSON.stringify(v, null, 2).replace(/\n/g, '\n  ')};`)
       .join('\n');
-    return `\n<script type="module">\n  import '@latty/web';\n  const el = document.querySelector('${tag}');\n${assignments}\n</script>`;
+    return `\n<script type="module">\n  import '@latty-ds/web';\n  const el = document.querySelector('${tag}');\n${assignments}\n</script>`;
   };
 
   const buildParentAttrParts = (forReact = false): string[] => {
@@ -192,7 +192,7 @@ const initPlayground = async (playground: Element): Promise<void> => {
     const allAttrParts = [...attrParts, ...seedEntries.map(([k]) => `${k}={${k}}`)];
 
     if (!subTagsData.length) {
-      const importLine = `import { ${parentName} } from '@latty/react';`;
+      const importLine = `import { ${parentName} } from '@latty-ds/react';`;
       const constBlock = seedConsts ? `\n${seedConsts}\n` : '';
       const propsStr = allAttrParts.length ? '\n  ' + allAttrParts.join('\n  ') + '\n' : '';
       const children = slotContent ? `\n  ${slotContent}\n` : '';
@@ -201,7 +201,7 @@ const initPlayground = async (playground: Element): Promise<void> => {
     }
 
     const childTagNames = [...new Set(childItems.map((item) => item.tag))];
-    const importLine = `import { ${[parentName, ...childTagNames.map(toPascalCase)].join(', ')} } from '@latty/react';`;
+    const importLine = `import { ${[parentName, ...childTagNames.map(toPascalCase)].join(', ')} } from '@latty-ds/react';`;
 
     const childLines = childItems.map((item) => {
       const componentName = toPascalCase(item.tag);

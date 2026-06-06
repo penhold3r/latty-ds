@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Calendar as CalendarEl } from '@latty/web';
+import type { Calendar as CalendarEl } from '@latty-ds/web';
 
 export type CalendarProps = Omit<HTMLAttributes<CalendarEl>, 'onChange'> & {
   mode?: CalendarEl['mode'];

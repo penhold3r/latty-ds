@@ -13,7 +13,7 @@ import CodeSnippet from '../../components/CodeSnippet/index.astro';
   </lt-text>
   <CodeSnippet
     lang="js"
-    code={`import { iconRegistry, lattyIcons } from '@latty/icons';
+    code={`import { iconRegistry, lattyIcons } from '@latty-ds/icons';
 
 iconRegistry.registerIcons(lattyIcons);`}
   />
@@ -29,14 +29,14 @@ iconRegistry.registerIcons(lattyIcons);`}
     code={`<!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="node_modules/@latty/tokens/dist/tokens.css" />
-    <link rel="stylesheet" href="node_modules/@latty/tokens/dist/semantic.css" />
+    <link rel="stylesheet" href="node_modules/@latty-ds/tokens/dist/tokens.css" />
+    <link rel="stylesheet" href="node_modules/@latty-ds/tokens/dist/semantic.css" />
   </head>
   <body>
     <lt-button variant="primary" icon-start="save">Save changes</lt-button>
 
     <script type="module">
-      import '@latty/web';
+      import '@latty-ds/web';
     <\/script>
   </body>
 </html>`}
@@ -46,9 +46,9 @@ iconRegistry.registerIcons(lattyIcons);`}
   <CodeSnippet
     lang="js"
     title="entry.js"
-    code={`import '@latty/tokens/tokens.css';
-import '@latty/tokens/semantic.css';
-import '@latty/web';`}
+    code={`import '@latty-ds/tokens/tokens.css';
+import '@latty-ds/tokens/semantic.css';
+import '@latty-ds/web';`}
   />
   <CodeSnippet
     lang="html"
@@ -64,11 +64,11 @@ import '@latty/web';`}
 
   <lt-text variant="h2">React</lt-text>
   <lt-text variant="body">
-    Use the <code>@latty/react</code> wrapper package for typed props and idiomatic React event names:
+    Use the <code>@latty-ds/react</code> wrapper package for typed props and idiomatic React event names:
   </lt-text>
   <CodeSnippet
     lang="tsx"
-    code={`import { Button, Textfield } from '@latty/react';
+    code={`import { Button, Textfield } from '@latty-ds/react';
 
 export function Example() {
   return (
@@ -81,7 +81,7 @@ export function Example() {
 
   <lt-text variant="h3">Without the React wrapper</lt-text>
   <lt-text variant="body">
-    If you use <code>lt-*</code> elements directly in React without <code>@latty/react</code>, attach event listeners
+    If you use <code>lt-*</code> elements directly in React without <code>@latty-ds/react</code>, attach event listeners
     via <code>ref</code> — React's synthetic event system does not handle custom DOM events:
   </lt-text>
   <CodeSnippet
@@ -112,7 +112,7 @@ function EmailField() {
     lang="tsx"
     code={`'use client';
 
-import { Button, Dialog } from '@latty/react';
+import { Button, Dialog } from '@latty-ds/react';
 
 export function ConfirmDialog({ onConfirm }: { onConfirm: () => void }) {
   return (
@@ -129,9 +129,9 @@ export function ConfirmDialog({ onConfirm }: { onConfirm: () => void }) {
     lang="ts"
     title="main.ts"
     code={`import { createApp } from 'vue';
-import '@latty/tokens/tokens.css';
-import '@latty/tokens/semantic.css';
-import '@latty/web';
+import '@latty-ds/tokens/tokens.css';
+import '@latty-ds/tokens/semantic.css';
+import '@latty-ds/web';
 import App from './App.vue';
 
 const app = createApp(App);
@@ -164,9 +164,9 @@ function onEmail(e: Event) {
     lang="svelte"
     title="+layout.svelte"
     code={`<script>
-  import '@latty/tokens/tokens.css';
-  import '@latty/tokens/semantic.css';
-  import '@latty/web';
+  import '@latty-ds/tokens/tokens.css';
+  import '@latty-ds/tokens/semantic.css';
+  import '@latty-ds/web';
 </script>
 
 <slot />`}
@@ -356,7 +356,7 @@ table.data = [
 </form>
 
 <script type="module">
-  import '@latty/web';
+  import '@latty-ds/web';
 
   const roleSelect = document.getElementById('role-select');
   roleSelect.options = [
@@ -385,5 +385,5 @@ table.data = [
 </BaseLayout>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 </script>

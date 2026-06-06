@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Button as ButtonEl, LattyIconName } from '@latty/web';
+import type { Button as ButtonEl, LattyIconName } from '@latty-ds/web';
 
 export type ButtonProps = HTMLAttributes<ButtonEl> & {
   formAssociated?: boolean;

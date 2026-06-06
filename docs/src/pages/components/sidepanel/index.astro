@@ -46,7 +46,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 <!-- Hide the built-in close button -->
 <lt-sidepanel label="No close btn" no-close-button>...</lt-sidepanel>`}
     react={`import { useState } from 'react';
-import { SidePanel, Button } from '@latty/react';
+import { SidePanel, Button } from '@latty-ds/react';
 
 export default function Example() {
   const [open, setOpen] = useState(false);
@@ -96,5 +96,5 @@ const open = ref(false)
 </BaseLayout>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 </script>

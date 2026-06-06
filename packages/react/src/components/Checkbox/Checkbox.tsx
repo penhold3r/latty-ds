@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Checkbox as CheckboxEl } from '@latty/web';
+import type { Checkbox as CheckboxEl } from '@latty-ds/web';
 
 export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
   variant?: CheckboxEl['variant'];

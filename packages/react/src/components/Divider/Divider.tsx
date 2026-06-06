@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Divider as DividerEl } from '@latty/web';
+import type { Divider as DividerEl } from '@latty-ds/web';
 
 export type DividerProps = HTMLAttributes<DividerEl> & {
   orientation?: DividerEl['orientation'];

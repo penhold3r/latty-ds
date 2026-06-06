@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { ColorInput as ColorInputEl } from '@latty/web';
+import type { ColorInput as ColorInputEl } from '@latty-ds/web';
 
 export type ColorInputProps = Omit<HTMLAttributes<ColorInputEl>, 'onChange'> & {
   value?: string;

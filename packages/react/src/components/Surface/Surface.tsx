@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Surface as SurfaceEl } from '@latty/web';
+import type { Surface as SurfaceEl } from '@latty-ds/web';
 
 export type SurfaceProps = HTMLAttributes<SurfaceEl> & {
   elevation?: SurfaceEl['elevation'];

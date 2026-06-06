@@ -22,7 +22,7 @@ pnpm docs:dev               # Start Astro dev server only (skips pre-builds)
 | Component logic / styles (`*.ts`, `*.styles.ts`)                | Nothing — Vite picks it up via source alias                    |
 | Docs page (`.astro`)                                            | Nothing — Astro watches `docs/src/**` automatically            |
 | Component prop added / renamed (affects playground + API table) | Restart `pnpm dev` — it rebuilds `manifest.json` on start      |
-| Token values (`tokens.config.json`)                             | Restart `pnpm dev` — it rebuilds `@latty/tokens` on start      |
+| Token values (`tokens.config.json`)                             | Restart `pnpm dev` — it rebuilds `@latty-ds/tokens` on start   |
 | Stale browser after restart                                     | Hard-refresh (`Cmd+Shift+R`) or run `pnpm docs:dev -- --force` |
 
 The `manifest.json` (`packages/web/dist/manifest.json`) is the only genuinely dist-based artifact the dev server reads at SSR time. `ComponentPlayground` and `ApiTable` both use it to render controls and prop tables — it must be rebuilt whenever a component's public API changes.
@@ -39,9 +39,9 @@ pnpm docs:preview           # Preview built documentation
 
 ```bash
 pnpm build                  # Build all packages recursively
-pnpm --filter @latty/tokens build   # Build tokens package only
-pnpm --filter @latty/web build      # Build web components only
-pnpm --filter @latty/docs build     # Build documentation site
+pnpm --filter @latty-ds/tokens build   # Build tokens package only
+pnpm --filter @latty-ds/web build      # Build web components only
+pnpm --filter @latty-ds/docs build     # Build documentation site
 ```
 
 ### Testing
@@ -80,7 +80,7 @@ pnpm clean                  # Remove all dist directories
 pnpm codegen:wrappers       # Regenerate React wrappers from custom-elements.json
 ```
 
-Run this after adding or modifying web components so `@latty/react` stays in sync.
+Run this after adding or modifying web components so `@latty-ds/react` stays in sync.
 
 ### Bundle size
 
@@ -105,7 +105,7 @@ Creates all boilerplate in one shot: web component files, Vitest test, docs page
 /new-token color <name> <hex>
 ```
 
-Adds a new color to the design system: registers it in `COLOR_NAMES`, updates `tokens.config.json`, and rebuilds `@latty/tokens`. Example: `/new-token color purple #a855f7`.
+Adds a new color to the design system: registers it in `COLOR_NAMES`, updates `tokens.config.json`, and rebuilds `@latty-ds/tokens`. Example: `/new-token color purple #a855f7`.
 
 ```bash
 /new-icon <category> <icon-name>
@@ -130,7 +130,7 @@ The `pre-push` hook also runs `pnpm check:boundaries && pnpm typecheck` before e
 
 ### Releasing
 
-All five publishable packages (`@latty/tokens`, `@latty/web`, `@latty/icons`, `@latty/react`, `@latty/utils`) are versioned together using Lerna with fixed versioning.
+All five publishable packages (`@latty-ds/tokens`, `@latty-ds/web`, `@latty-ds/icons`, `@latty-ds/react`, `@latty-ds/utils`) are versioned together using Lerna with fixed versioning.
 
 ```bash
 pnpm release          # Bump versions via conventional commits, commit, and tag
@@ -153,18 +153,18 @@ To do a dry run without pushing: `pnpm exec lerna version --conventional-commits
 
 This is a pnpm workspace monorepo with the following packages:
 
-- **@latty/tokens** - Design tokens system that generates CSS variables, JSON, and JavaScript exports from `tokens.config.json`
-- **@latty/web** - Web Components built with Lit (uses `lt-` prefix for custom elements)
-- **@latty/icons** - Icon components using Iconoir library with pluggable provider system
-- **@latty/docs** - Astro-based documentation site with MDX support and live component demos (lives at `docs/` in repo root, not `packages/`)
-- **@latty/react** - React wrappers for web components (auto-generated from `custom-elements.json`)
-- **@latty/utils** - Shared utilities
+- **@latty-ds/tokens** - Design tokens system that generates CSS variables, JSON, and JavaScript exports from `tokens.config.json`
+- **@latty-ds/web** - Web Components built with Lit (uses `lt-` prefix for custom elements)
+- **@latty-ds/icons** - Icon components using Iconoir library with pluggable provider system
+- **@latty-ds/docs** - Astro-based documentation site with MDX support and live component demos (lives at `docs/` in repo root, not `packages/`)
+- **@latty-ds/react** - React wrappers for web components (auto-generated from `custom-elements.json`)
+- **@latty-ds/utils** - Shared utilities
 
 ### Design Tokens Build Process
 
-The `@latty/tokens` package has a unique multi-step build (`pnpm run build:scripts && build:tokens && build:types`):
+The `@latty-ds/tokens` package has a unique multi-step build (`pnpm run build:scripts && build:tokens && build:types`):
 
-1. **Build scripts**: `tsup` bundles `src/build/tokens.ts` into `dist-scripts/tokens.js`. `@latty/utils` is inlined via `noExternal` so the script is fully self-contained.
+1. **Build scripts**: `tsup` bundles `src/build/tokens.ts` into `dist-scripts/tokens.js`. `@latty-ds/utils` is inlined via `noExternal` so the script is fully self-contained.
 2. **Generate tokens**: Node executes `dist-scripts/tokens.js` which:
    - Reads `tokens.config.json` (base hex values for each semantic color)
    - Generates full color palettes with tints/shades using culori (OKLCH)
@@ -183,7 +183,7 @@ To add a new color, use `/new-token color <name> <hex>` — do not edit `tokens.
 
 ### Web Components
 
-Components in `@latty/web` follow this structure:
+Components in `@latty-ds/web` follow this structure:
 
 ```text
 components/
@@ -201,15 +201,15 @@ All custom elements use the `lt-` prefix (e.g., `lt-button`, `lt-spinner`). Comp
 
 **Adding a new component**: always use the `/new-component <Name>` slash command — it creates the 5 web package files, registers the export in `packages/web/src/index.ts`, creates the docs page, and adds the sidebar entry alphabetically. Never create these manually. After scaffolding, run `pnpm codegen:wrappers` to regenerate the React wrappers.
 
-**Custom Elements Manifest**: `pnpm build` in `@latty/web` runs `cem analyze` (via `cem.config.mjs`) to generate `custom-elements.json` at the package root. This manifest is what `pnpm codegen:wrappers` reads to produce React wrappers — always rebuild the web package before running codegen after changing component APIs.
+**Custom Elements Manifest**: `pnpm build` in `@latty-ds/web` runs `cem analyze` (via `cem.config.mjs`) to generate `custom-elements.json` at the package root. This manifest is what `pnpm codegen:wrappers` reads to produce React wrappers — always rebuild the web package before running codegen after changing component APIs.
 
-**Font assets**: `pnpm build` in `@latty/web` also copies Hanken Grotesk font files (`HankenGrotesk-Variable.woff2`, `HankenGrotesk-VariableItalic.woff2`) to `dist/fonts/` and `src/css/` to `dist/css/`. The package exports `dist/css/font-face.css` and `dist/css/latty.css` for consumers who want to load fonts and base styles without a bundler.
+**Font assets**: `pnpm build` in `@latty-ds/web` also copies Hanken Grotesk font files (`HankenGrotesk-Variable.woff2`, `HankenGrotesk-VariableItalic.woff2`) to `dist/fonts/` and `src/css/` to `dist/css/`. The package exports `dist/css/font-face.css` and `dist/css/latty.css` for consumers who want to load fonts and base styles without a bundler.
 
 **Reuse existing components**: before writing custom CSS for a new component, check whether an existing component can provide the same structure. For example, `lt-surface` provides background, elevation (shadow), and border-radius — new components that need a styled container should use it rather than hand-rolling those styles. Import the dependency with a side-effect import (e.g. `import '../surface/surface'`) and use `::part(surface)` to style layout internals from the consumer's shadow DOM.
 
 ### Documentation Site
 
-The `@latty/docs` package uses Astro with MDX for documentation:
+The `@latty-ds/docs` package uses Astro with MDX for documentation:
 
 ```text
 docs/
@@ -267,16 +267,16 @@ Documentation pages can:
 `tsconfig.base.json` defines no path aliases. The rule is:
 
 - **Within a package**: use relative imports (`../foo/bar`)
-- **Across packages**: use the package name declared as a `workspace:*` dep (`@latty/utils`, `@latty/web`, etc.)
+- **Across packages**: use the package name declared as a `workspace:*` dep (`@latty-ds/utils`, `@latty-ds/web`, etc.)
 - **Never**: use relative imports that leave a package root (e.g. `../../other-package/`)
 
 The `pnpm check:boundaries` script (also runs on `git push`) enforces this and exits 1 on any violation.
 
 Cross-package dependencies must be declared in the consuming package's `package.json`. Currently wired:
 
-- `@latty/web` depends on `@latty/icons` and `@latty/tokens` (CSS only)
-- `@latty/tokens` depends on `@latty/utils`
-- `@latty/react` depends on `@latty/web`
+- `@latty-ds/web` depends on `@latty-ds/icons` and `@latty-ds/tokens` (CSS only)
+- `@latty-ds/tokens` depends on `@latty-ds/utils`
+- `@latty-ds/react` depends on `@latty-ds/web`
 
 Vitest resolves imports at test time via `vite-tsconfig-paths` (no aliases needed).
 
@@ -309,13 +309,13 @@ Use **`ComponentPlayground`** for all component pages. It reads attributes autom
 />
 ```
 
-The docs page must `import '@latty/web'` inside a `<script>` tag to register the custom elements in the browser.
+The docs page must `import '@latty-ds/web'` inside a `<script>` tag to register the custom elements in the browser.
 
 **The docs site is a showcase of the design system.** Every docs page must use Latty components wherever possible — headings, body copy, buttons, badges, tables, alerts, links. Reach for `lt-text`, `lt-button`, `lt-badge`, `lt-alert`, `lt-link`, etc. before writing plain HTML or inline styles. Native HTML elements are only acceptable when no Latty component covers the use case. This rule applies to layout pages, overview pages, recipe pages, and getting-started guides — not just component demo pages.
 
 ## Naming Conventions
 
-- **npm scope**: `@latty/*`
+- **npm scope**: `@latty-ds/*`
 - **Custom element prefix**: `lt-`
 - **CSS variable prefix**: `--lt-*`
 
@@ -333,7 +333,7 @@ Tests use Vitest with jsdom environment. Test files are located at `packages/**/
 
 ## Tooling
 
-**ESLint**: Uses v9 flat config (`eslint.config.mts`) with Astro, JSON, CSS, and Markdown support. CSS rules allow unknown `--lt-*` custom properties (`allowUnknownVariables: true`) since they are resolved at runtime by `@latty/tokens`. `no-console` is an error — use the `logger` utility from `@latty/utils` in scripts instead. Never use `any` or suppress linting warnings unless explicitly instructed.
+**ESLint**: Uses v9 flat config (`eslint.config.mts`) with Astro, JSON, CSS, and Markdown support. CSS rules allow unknown `--lt-*` custom properties (`allowUnknownVariables: true`) since they are resolved at runtime by `@latty-ds/tokens`. `no-console` is an error — use the `logger` utility from `@latty-ds/utils` in scripts instead. Never use `any` or suppress linting warnings unless explicitly instructed.
 
 **Prettier**: `printWidth: 120`, `singleQuote: true`, `trailingComma: "none"`. Includes `prettier-plugin-astro` for `.astro` file formatting.
 

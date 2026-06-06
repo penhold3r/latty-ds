@@ -5,7 +5,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 import { textfieldStyles } from './textfield.styles';
 import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant } from './textfield.types';
-import '@latty/icons';
+import '@latty-ds/icons';
 import '../text/text';
 
 /**

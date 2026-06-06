@@ -29,7 +29,7 @@ importers:
       '@eslint/markdown':
         specifier: ^7.5.1
         version: 7.5.1
-      '@latty/utils':
+      '@latty-ds/utils':
         specifier: workspace:^
         version: link:packages/utils
       '@markuplint/astro-parser':
@@ -149,13 +149,13 @@ importers:
       '@astrojs/sitemap':
         specifier: ^3.7.2
         version: 3.7.2
-      '@latty/icons':
+      '@latty-ds/icons':
         specifier: workspace:*
         version: link:../packages/icons
-      '@latty/tokens':
+      '@latty-ds/tokens':
         specifier: workspace:*
         version: link:../packages/tokens
-      '@latty/web':
+      '@latty-ds/web':
         specifier: workspace:*
         version: link:../packages/web
       astro:
@@ -177,10 +177,10 @@ importers:
 
   packages/react:
     dependencies:
-      '@latty/icons':
+      '@latty-ds/icons':
         specifier: workspace:*
         version: link:../icons
-      '@latty/web':
+      '@latty-ds/web':
         specifier: workspace:*
         version: link:../web
     devDependencies:
@@ -211,7 +211,7 @@ importers:
 
   packages/tokens:
     dependencies:
-      '@latty/utils':
+      '@latty-ds/utils':
         specifier: workspace:*
         version: link:../utils
       culori:
@@ -236,7 +236,7 @@ importers:
       '@floating-ui/dom':
         specifier: ^1.7.6
         version: 1.7.6
-      '@latty/icons':
+      '@latty-ds/icons':
         specifier: workspace:*
         version: link:../icons
     devDependencies:

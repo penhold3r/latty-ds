@@ -1,6 +1,6 @@
 // codegen:manual — extended to wire tab-click event (not in CEM; dispatched manually by lt-tab)
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Tab as TabEl, LattyIconName } from '@latty/web';
+import type { Tab as TabEl, LattyIconName } from '@latty-ds/web';
 
 export type TabProps = HTMLAttributes<TabEl> & {
   label?: string;

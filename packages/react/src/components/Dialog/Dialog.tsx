@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Dialog as DialogEl } from '@latty/web';
+import type { Dialog as DialogEl } from '@latty-ds/web';
 
 export type DialogProps = HTMLAttributes<DialogEl> & {
   size?: DialogEl['size'];

@@ -29,7 +29,7 @@ function resolveUnion(typeName, componentDir) {
   return [...match[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
 }
 
-/** Enumerate all icon names from the @latty/icons source directory. */
+/** Enumerate all icon names from the @latty-ds/icons source directory. */
 function getIconNames() {
   const iconsRoot = resolve(__dirname, '../../icons/src/icons');
   if (!existsSync(iconsRoot)) return [];

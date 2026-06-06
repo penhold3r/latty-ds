@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Nav as NavEl } from '@latty/web';
+import type { Nav as NavEl } from '@latty-ds/web';
 
 export type NavProps = HTMLAttributes<NavEl> & {
   label?: string;

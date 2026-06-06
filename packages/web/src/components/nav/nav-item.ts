@@ -5,7 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { navItemStyles } from './nav.styles';
 import { NavOrientation } from './nav.types';
 
-import '@latty/icons';
+import '@latty-ds/icons';
 
 /**
  * A single navigation item. Can render as an anchor link or a collapsible group header

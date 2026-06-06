@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Spinner as SpinnerEl } from '@latty/web';
+import type { Spinner as SpinnerEl } from '@latty-ds/web';
 
 export type SpinnerProps = HTMLAttributes<SpinnerEl> & {
   size?: SpinnerEl['size'];

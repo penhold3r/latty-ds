@@ -10,7 +10,7 @@
 import { readFileSync, readdirSync } from 'fs';
 import { resolve, join, relative, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { logger } from '@latty/utils';
+import { logger } from '@latty-ds/utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');

@@ -1,5 +1,5 @@
 {
-  "name": "@latty/docs",
+  "name": "@latty-ds/docs",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -15,9 +15,9 @@
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/sitemap": "^3.7.2",
-    "@latty/icons": "workspace:*",
-    "@latty/tokens": "workspace:*",
-    "@latty/web": "workspace:*",
+    "@latty-ds/icons": "workspace:*",
+    "@latty-ds/tokens": "workspace:*",
+    "@latty-ds/web": "workspace:*",
     "astro": "^6.1.4",
     "sharp": "^0.34.5"
   }

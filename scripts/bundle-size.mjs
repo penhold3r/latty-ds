@@ -16,7 +16,7 @@ import { gzipSync } from 'zlib';
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { logger } from '@latty/utils';
+import { logger } from '@latty-ds/utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -24,7 +24,7 @@ const COMPONENTS_DIR = join(ROOT, 'packages/web/src/components');
 const REPORT_PATH = join(ROOT, 'bundle-report.json');
 
 const THRESHOLD_PCT = 10; // flag regressions larger than this %
-const EXTERNAL = ['lit', 'lit/*', 'lit/decorators.js', '@lit/*', '@latty/icons'];
+const EXTERNAL = ['lit', 'lit/*', 'lit/decorators.js', '@lit/*', '@latty-ds/icons'];
 
 const UPDATE = process.argv.includes('--update');
 const FAIL_ON_REGRESSION = process.argv.includes('--fail-on-regression');

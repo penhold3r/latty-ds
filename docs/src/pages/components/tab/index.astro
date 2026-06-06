@@ -39,7 +39,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 <\/script>
     `}
     react={`
-import { TabGroup, Tab } from '@latty/react';
+import { TabGroup, Tab } from '@latty-ds/react';
 
 <TabGroup value="tab1" onChange={(e) => console.log('active tab:', e.detail.value)}>
   <Tab label="Overview" value="tab1" iconStart="home" />
@@ -67,5 +67,5 @@ import { TabGroup, Tab } from '@latty/react';
 </BaseLayout>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 </script>

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Table as TableEl } from '@latty/web';
+import type { Table as TableEl } from '@latty-ds/web';
 
 export type TableProps = HTMLAttributes<TableEl> & {
   columns?: TableEl['columns'];

@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { TabPanel as TabPanelEl } from '@latty/web';
+import type { TabPanel as TabPanelEl } from '@latty-ds/web';
 
 export type TabPanelProps = HTMLAttributes<TabPanelEl> & {
   value?: string;

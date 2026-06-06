@@ -7,9 +7,9 @@ import CodeSnippet from '../../components/CodeSnippet/index.astro';
   <lt-text variant="h1">Installation</lt-text>
 
   <lt-text variant="h2">Install packages</lt-text>
-  <CodeSnippet lang="bash" title="pnpm" code={`pnpm add @latty/tokens @latty/web`} />
-  <CodeSnippet lang="bash" title="npm" code={`npm install @latty/tokens @latty/web`} />
-  <CodeSnippet lang="bash" title="yarn" code={`yarn add @latty/tokens @latty/web`} />
+  <CodeSnippet lang="bash" title="pnpm" code={`pnpm add @latty-ds/tokens @latty-ds/web`} />
+  <CodeSnippet lang="bash" title="npm" code={`npm install @latty-ds/tokens @latty-ds/web`} />
+  <CodeSnippet lang="bash" title="yarn" code={`yarn add @latty-ds/tokens @latty-ds/web`} />
 
   <lt-text variant="h2">Load the tokens</lt-text>
   <lt-text variant="body">
@@ -18,32 +18,32 @@ import CodeSnippet from '../../components/CodeSnippet/index.astro';
   <CodeSnippet
     lang="js"
     title="JS / bundler"
-    code={`import '@latty/tokens/tokens.css';
-import '@latty/tokens/semantic.css';`}
+    code={`import '@latty-ds/tokens/tokens.css';
+import '@latty-ds/tokens/semantic.css';`}
   />
   <CodeSnippet
     lang="css"
     title="CSS @import"
-    code={`@import '@latty/tokens/tokens.css';
-@import '@latty/tokens/semantic.css';`}
+    code={`@import '@latty-ds/tokens/tokens.css';
+@import '@latty-ds/tokens/semantic.css';`}
   />
   <CodeSnippet
     lang="html"
     title="Plain HTML"
-    code={`<link rel="stylesheet" href="node_modules/@latty/tokens/dist/tokens.css" />
-<link rel="stylesheet" href="node_modules/@latty/tokens/dist/semantic.css" />`}
+    code={`<link rel="stylesheet" href="node_modules/@latty-ds/tokens/dist/tokens.css" />
+<link rel="stylesheet" href="node_modules/@latty-ds/tokens/dist/semantic.css" />`}
   />
 
   <lt-text variant="h2">Register components</lt-text>
   <CodeSnippet
     lang="js"
     code={`// All components at once
-import '@latty/web';
+import '@latty-ds/web';
 
 // Or cherry-pick to keep bundles small
-import '@latty/web/button';
-import '@latty/web/textfield';
-import '@latty/web/dialog';`}
+import '@latty-ds/web/button';
+import '@latty-ds/web/textfield';
+import '@latty-ds/web/dialog';`}
   />
   <lt-text variant="body">
     Components are self-registering custom elements. Once imported, use them anywhere in your HTML.
@@ -53,7 +53,7 @@ import '@latty/web/dialog';`}
   <lt-text variant="body">
     For typed props and idiomatic React event names, install the React wrapper package:
   </lt-text>
-  <CodeSnippet lang="bash" code={`pnpm add @latty/react`} />
+  <CodeSnippet lang="bash" code={`pnpm add @latty-ds/react`} />
   <lt-text variant="body">
     Vue and Svelte users don't need a wrapper — <code>lt-*</code> elements work natively in both. See the
     <a href="/getting-started/usage">Usage guide</a> for framework-specific setup.
@@ -72,5 +72,5 @@ import '@latty/web/dialog';`}
 </BaseLayout>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 </script>

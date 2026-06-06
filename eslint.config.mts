@@ -71,7 +71,7 @@ export default defineConfig([
     language: 'css/css',
     extends: ['css/recommended'],
     rules: {
-      // --lt-* custom properties are resolved at runtime by @latty/tokens
+      // --lt-* custom properties are resolved at runtime by @latty-ds/tokens
       'css/no-invalid-properties': ['error', { allowUnknownVariables: true }]
     }
   },

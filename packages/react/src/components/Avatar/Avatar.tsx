@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Avatar as AvatarEl } from '@latty/web';
+import type { Avatar as AvatarEl } from '@latty-ds/web';
 
 export type AvatarProps = HTMLAttributes<AvatarEl> & {
   src?: string;

@@ -18,26 +18,26 @@ Framework-agnostic design system built on design tokens and Web Components. One 
 
 ## Packages
 
-| Package                            | Description                                         |
-| ---------------------------------- | --------------------------------------------------- |
-| [`@latty/tokens`](packages/tokens) | Design tokens → CSS variables, JSON, and JS exports |
-| [`@latty/web`](packages/web)       | Web Components (`lt-` prefix, built with Lit)       |
-| [`@latty/icons`](packages/icons)   | Icon components with pluggable provider system      |
-| [`@latty/react`](packages/react)   | React wrappers auto-generated from the web manifest |
-| [`@latty/utils`](packages/utils)   | Shared internal utilities                           |
+| Package                               | Description                                         |
+| ------------------------------------- | --------------------------------------------------- |
+| [`@latty-ds/tokens`](packages/tokens) | Design tokens → CSS variables, JSON, and JS exports |
+| [`@latty-ds/web`](packages/web)       | Web Components (`lt-` prefix, built with Lit)       |
+| [`@latty-ds/icons`](packages/icons)   | Icon components with pluggable provider system      |
+| [`@latty-ds/react`](packages/react)   | React wrappers auto-generated from the web manifest |
+| [`@latty-ds/utils`](packages/utils)   | Shared internal utilities                           |
 
 ## Installation
 
 ```bash
-pnpm add @latty/tokens @latty/web
-# or: npm install @latty/tokens @latty/web
+pnpm add @latty-ds/tokens @latty-ds/web
+# or: npm install @latty-ds/tokens @latty-ds/web
 ```
 
 Import the token CSS once at the root of your app:
 
 ```js
-import '@latty/tokens/dist/tokens.css';
-import '@latty/web';
+import '@latty-ds/tokens/dist/tokens.css';
+import '@latty-ds/web';
 ```
 
 ### HTML / Web Components
@@ -51,11 +51,11 @@ import '@latty/web';
 ### React
 
 ```bash
-pnpm add @latty/react
+pnpm add @latty-ds/react
 ```
 
 ```tsx
-import { Button, Textfield, Badge } from '@latty/react';
+import { Button, Textfield, Badge } from '@latty-ds/react';
 
 <Button variant="primary">Save changes</Button>
 <Textfield label="Email" type="email" required />
@@ -78,7 +78,7 @@ Web Components work natively in Vue — no extra package needed:
 Latty exposes a `configure()` API for runtime theming — useful for white-labelling, dark mode, or per-tenant colour schemes:
 
 ```ts
-import { configure } from '@latty/tokens/configure';
+import { configure } from '@latty-ds/tokens/configure';
 
 configure({
   colors: { primary: '#7c3aed' },
@@ -90,7 +90,7 @@ configure({
 For **zero flash of unstyled content** at build time (Astro, Next.js, etc.), use `createStyleSheet()` and inject the result into your `<head>` before any components render:
 
 ```ts
-import { createStyleSheet } from '@latty/tokens/configure';
+import { createStyleSheet } from '@latty-ds/tokens/configure';
 
 const css = createStyleSheet({ colors: { primary: '#7c3aed' } });
 // inject as <style> in <head>

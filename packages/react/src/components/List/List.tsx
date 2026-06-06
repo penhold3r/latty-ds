@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { List as ListEl } from '@latty/web';
+import type { List as ListEl } from '@latty-ds/web';
 
 export type ListProps = HTMLAttributes<ListEl> & {
   type?: ListEl['type'];

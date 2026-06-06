@@ -6,7 +6,7 @@ import { ThemeableElement } from '../../base';
 import { iconButtonStyles } from './icon-button.styles';
 import type { IconButtonVariant, IconButtonAppearance, IconButtonSize } from './icon-button.types';
 
-import '@latty/icons';
+import '@latty-ds/icons';
 
 /**
  * Icon-only button. Requires `label` for screen readers since there is no visible text.

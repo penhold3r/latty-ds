@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { TabGroup as TabGroupEl } from '@latty/web';
+import type { TabGroup as TabGroupEl } from '@latty-ds/web';
 
 export type TabGroupProps = Omit<HTMLAttributes<TabGroupEl>, 'onChange'> & {
   value?: string;

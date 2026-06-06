@@ -5,7 +5,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { comboboxStyles } from './combobox.styles';
 import type { ComboboxOption, ComboboxSize, ComboboxVariant } from './combobox.types';
 import { dispatch, createClickOutsideHandler } from '../../utils';
-import '@latty/icons';
+import '@latty-ds/icons';
 import '../text/text';
 import { openFloating, closeFloating } from '../shared/floating';
 

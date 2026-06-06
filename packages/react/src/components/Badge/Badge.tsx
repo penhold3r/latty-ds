@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Badge as BadgeEl } from '@latty/web';
+import type { Badge as BadgeEl } from '@latty-ds/web';
 
 export type BadgeProps = HTMLAttributes<BadgeEl> & {
   appearance?: BadgeEl['appearance'];

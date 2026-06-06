@@ -6,7 +6,7 @@ import { snackbarStyles } from './snackbar.styles';
 import type { SnackbarVariant } from './snackbar.types';
 import { dispatch } from '../../utils';
 
-import '@latty/icons';
+import '@latty-ds/icons';
 import '../surface/surface';
 
 /**

@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { IconButton as IconButtonEl, LattyIconName } from '@latty/web';
+import type { IconButton as IconButtonEl, LattyIconName } from '@latty-ds/web';
 
 export type IconButtonProps = HTMLAttributes<IconButtonEl> & {
   icon?: LattyIconName;

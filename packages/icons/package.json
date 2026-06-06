@@ -1,5 +1,5 @@
 {
-  "name": "@latty/icons",
+  "name": "@latty-ds/icons",
   "version": "0.1.0",
   "description": "Icon components for the Latty design system — pluggable icon registry with Iconoir as the default provider",
   "license": "MIT",
@@ -111,6 +111,9 @@
     },
     "./collapse": {
       "default": "./dist/entries/collapse.js"
+    },
+    "./color-palette": {
+      "default": "./dist/entries/color-palette.js"
     },
     "./columns": {
       "default": "./dist/entries/columns.js"

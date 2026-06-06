@@ -22,7 +22,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
   <FrameworkTabs
     html={`<lt-color-input label="Brand color" value="#7c3aed"></lt-color-input>`}
     react={`
-import { ColorInput } from '@latty/react';
+import { ColorInput } from '@latty-ds/react';
 
 <ColorInput label="Brand color" value="#7c3aed" onChange={(e) => console.log(e.detail.value)} />
     `}
@@ -38,5 +38,5 @@ import { ColorInput } from '@latty/react';
 </BaseLayout>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 </script>

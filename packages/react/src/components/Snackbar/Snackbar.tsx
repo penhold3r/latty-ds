@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Snackbar as SnackbarEl, LattyIconName } from '@latty/web';
+import type { Snackbar as SnackbarEl, LattyIconName } from '@latty-ds/web';
 
 export type SnackbarProps = HTMLAttributes<SnackbarEl> & {
   variant?: SnackbarEl['variant'];

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Switch as SwitchEl } from '@latty/web';
+import type { Switch as SwitchEl } from '@latty-ds/web';
 
 export type SwitchProps = Omit<HTMLAttributes<SwitchEl>, 'onChange'> & {
   variant?: SwitchEl['variant'];

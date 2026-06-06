@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Accordion as AccordionEl, LattyIconName } from '@latty/web';
+import type { Accordion as AccordionEl, LattyIconName } from '@latty-ds/web';
 
 export type AccordionProps = Omit<HTMLAttributes<AccordionEl>, 'onToggle'> & {
   label?: string;

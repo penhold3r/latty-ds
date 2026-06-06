@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Textfield as TextfieldEl, LattyIconName } from '@latty/web';
+import type { Textfield as TextfieldEl, LattyIconName } from '@latty-ds/web';
 
 export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onChange'> & {
   variant?: TextfieldEl['variant'];

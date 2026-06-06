@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Alert as AlertEl, LattyIconName } from '@latty/web';
+import type { Alert as AlertEl, LattyIconName } from '@latty-ds/web';
 
 export type AlertProps = HTMLAttributes<AlertEl> & {
   variant?: AlertEl['variant'];

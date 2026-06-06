@@ -14,7 +14,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { resolve, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { logger } from '@latty/utils';
+import { logger } from '@latty-ds/utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -114,7 +114,7 @@ for (const { name, tagName, fields, events } of components) {
 
   const webImports = [`${name} as ${name}El`, ...(hasIconFields ? ['LattyIconName'] : [])].join(', ');
   const componentContent = `import { ${reactImports.join(', ')} } from 'react';
-import type { ${webImports} } from '@latty/web';
+import type { ${webImports} } from '@latty-ds/web';
 
 export type ${name}Props = ${baseType} & {
 ${[...fieldProps, ...eventProps].join('\n')}
@@ -153,7 +153,7 @@ const indexLines = components
   .map((c) => `export { ${c.name}, type ${c.name}Props } from './components/${c.name}';`)
   .join('\n');
 
-writeFileSync(REACT_INDEX, `import '@latty/web';\n` + indexLines + '\n', 'utf8');
+writeFileSync(REACT_INDEX, `import '@latty-ds/web';\n` + indexLines + '\n', 'utf8');
 
 logger.success(`${components.length} React wrappers written → packages/react/src/components/`);
-logger.info('Run: pnpm --filter @latty/react build');
+logger.info('Run: pnpm --filter @latty-ds/react build');

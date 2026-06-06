@@ -8,19 +8,19 @@ This file provides foundational mandates, project-specific conventions, architec
 
 - **Philosophy:** "Tokens first, components second". Design tokens generate CSS variables, and components consume them.
 - **Monorepo Structure:** pnpm workspace.
-  - `@latty/tokens`: Design token generation (CSS, JSON, JS).
-  - `@latty/web`: Lit-based Web Components.
-  - `@latty/icons`: Icon registry and components.
-  - `@latty/react`: Auto-generated React wrappers.
-  - `@latty/utils`: Shared utilities.
+  - `@latty-ds/tokens`: Design token generation (CSS, JSON, JS).
+  - `@latty-ds/web`: Lit-based Web Components.
+  - `@latty-ds/icons`: Icon registry and components.
+  - `@latty-ds/react`: Auto-generated React wrappers.
+  - `@latty-ds/utils`: Shared utilities.
   - `docs`: Astro/MDX documentation site.
 - **Naming Conventions:**
-  - npm scope: `@latty/*`
+  - npm scope: `@latty-ds/*`
   - Custom element prefix: `lt-`
   - CSS variable prefix: `--lt-*`
 - **Package Boundaries:**
   - **Within a package:** Use relative imports (`../foo/bar`).
-  - **Across packages:** Use the package name (`@latty/web`, etc.).
+  - **Across packages:** Use the package name (`@latty-ds/web`, etc.).
   - **Never:** Use relative imports that leave a package root.
   - Path aliases are NOT used in `tsconfig.base.json`.
 
@@ -43,7 +43,7 @@ This file provides foundational mandates, project-specific conventions, architec
 - **New Component:** Use `/new-component <ComponentName>`. This creates web component files, tests, and docs.
 - **New Token:** Use `/new-token color <name> <hex>`.
 - **New Icon:** Use `/new-icon <category> <icon-name>`.
-- **React Wrappers:** After modifying web components, run `pnpm codegen:wrappers` to keep `@latty/react` in sync.
+- **React Wrappers:** After modifying web components, run `pnpm codegen:wrappers` to keep `@latty-ds/react` in sync.
 
 ### Build and Test
 

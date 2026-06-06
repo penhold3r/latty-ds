@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { RadioGroup as RadioGroupEl } from '@latty/web';
+import type { RadioGroup as RadioGroupEl } from '@latty-ds/web';
 
 export type RadioGroupProps = Omit<HTMLAttributes<RadioGroupEl>, 'onChange'> & {
   label?: string;

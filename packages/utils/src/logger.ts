@@ -14,7 +14,7 @@ const SILENT = process.env.LATTY_SILENT === 'true';
  *
  * @example
  * ```typescript
- * import { logger } from '@latty/utils';
+ * import { logger } from '@latty-ds/utils';
  *
  * logger.info('Processing tokens...');
  * logger.success('Tokens generated successfully');
@@ -117,7 +117,7 @@ class Logger {
  *
  * @example
  * ```typescript
- * import { logger } from '@latty/utils';
+ * import { logger } from '@latty-ds/utils';
  * logger.info('Starting build process');
  * ```
  */

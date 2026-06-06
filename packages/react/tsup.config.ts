@@ -4,7 +4,7 @@ export default defineConfig({
   entry: ['src/index.ts'],
   format: ['esm', 'cjs'],
   clean: true,
-  external: ['react', 'react/jsx-runtime', '@latty/web'],
+  external: ['react', 'react/jsx-runtime', '@latty-ds/web'],
   outExtension({ format }) {
     return { js: format === 'cjs' ? '.cjs' : '.js' };
   }

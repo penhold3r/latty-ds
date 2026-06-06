@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Radio as RadioEl } from '@latty/web';
+import type { Radio as RadioEl } from '@latty-ds/web';
 
 export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
   variant?: RadioEl['variant'];

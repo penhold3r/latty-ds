@@ -20,7 +20,7 @@ const jsonArrayConverter = {
   }
 };
 
-import '@latty/icons';
+import '@latty-ds/icons';
 
 /**
  * Table component with sorting, responsive modes, and extensive customization.

@@ -1,4 +1,4 @@
-# @latty/tokens
+# @latty-ds/tokens
 
 Design token package for the Latty Design System. Generates CSS custom properties, a JSON token object, and a browser-runtime API from a single configuration file.
 
@@ -49,7 +49,7 @@ Edit `tokens.config.json` to set the base hex for each semantic color. The build
 Then rebuild:
 
 ```bash
-pnpm --filter @latty/tokens build
+pnpm --filter @latty-ds/tokens build
 ```
 
 ---
@@ -62,10 +62,10 @@ Import once in your app's global stylesheet. Requires a build step.
 
 ```css
 /* Primitive tokens (color scales, spacing, elevation, …) */
-@import '@latty/tokens/tokens.css';
+@import '@latty-ds/tokens/tokens.css';
 
 /* Semantic tokens (intent-based, reference primitives via var()) */
-@import '@latty/tokens/semantic.css';
+@import '@latty-ds/tokens/semantic.css';
 ```
 
 ### Option B — Runtime `configure()` (no build step for the consumer)
@@ -73,7 +73,7 @@ Import once in your app's global stylesheet. Requires a build step.
 Call `configure()` once at your app's entry point. It generates the full token set from the provided config and injects it into `document.head`. Useful when the palette must be determined at runtime (e.g. white-labelling, per-tenant theming).
 
 ```ts
-import { configure } from '@latty/tokens/configure';
+import { configure } from '@latty-ds/tokens/configure';
 
 configure({
   colors: {
@@ -92,7 +92,7 @@ All fields are optional — omitted values fall back to the defaults in `tokens.
 For server-side rendering, use `createStyleSheet()` to get the CSS string and inject it yourself.
 
 ```ts
-import { createStyleSheet } from '@latty/tokens/configure';
+import { createStyleSheet } from '@latty-ds/tokens/configure';
 
 const css = createStyleSheet({ colors: { primary: '#6366f1' } });
 // inject `css` into a <style> tag in your server-rendered HTML
@@ -103,7 +103,7 @@ const css = createStyleSheet({ colors: { primary: '#6366f1' } });
 Import the static token object for programmatic access (e.g. in a Tailwind config or a JS-driven style system).
 
 ```ts
-import { tokens } from '@latty/tokens';
+import { tokens } from '@latty-ds/tokens';
 
 console.log(tokens.color.primary['500']); // "#0097be"
 console.log(tokens.spacing.rem['4']); // "1rem"
@@ -176,13 +176,13 @@ Key semantic tokens:
 
 ## Package exports
 
-| Export                       | File                | Use                                          |
-| ---------------------------- | ------------------- | -------------------------------------------- |
-| `@latty/tokens`              | `dist/index.js`     | JS token object                              |
-| `@latty/tokens/configure`    | `dist/configure.js` | Runtime `configure()` / `createStyleSheet()` |
-| `@latty/tokens/tokens.css`   | `dist/tokens.css`   | Primitive CSS custom properties              |
-| `@latty/tokens/semantic.css` | `dist/semantic.css` | Semantic CSS custom properties               |
-| `@latty/tokens/tokens.json`  | `dist/tokens.json`  | Full token object as JSON                    |
+| Export                          | File                | Use                                          |
+| ------------------------------- | ------------------- | -------------------------------------------- |
+| `@latty-ds/tokens`              | `dist/index.js`     | JS token object                              |
+| `@latty-ds/tokens/configure`    | `dist/configure.js` | Runtime `configure()` / `createStyleSheet()` |
+| `@latty-ds/tokens/tokens.css`   | `dist/tokens.css`   | Primitive CSS custom properties              |
+| `@latty-ds/tokens/semantic.css` | `dist/semantic.css` | Semantic CSS custom properties               |
+| `@latty-ds/tokens/tokens.json`  | `dist/tokens.json`  | Full token object as JSON                    |
 
 ---
 
@@ -215,11 +215,11 @@ src/
 
 ```bash
 # Build the package (all three steps)
-pnpm --filter @latty/tokens build
+pnpm --filter @latty-ds/tokens build
 
 # Run tests
 pnpm test
 
 # Clean dist
-pnpm --filter @latty/tokens clean
+pnpm --filter @latty-ds/tokens clean
 ```

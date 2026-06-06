@@ -1,1 +1,1 @@
-import '@latty/web';
+import '@latty-ds/web';

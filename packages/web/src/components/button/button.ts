@@ -7,7 +7,7 @@ import { buttonStyles } from './button.styles';
 import { ButtonAppearance, ButtonSize, ButtonType, ButtonVariant } from './button.types';
 
 import '../spinner/';
-import '@latty/icons';
+import '@latty-ds/icons';
 
 /**
  * Button component with multiple variants, sizes, appearances, and loading state support.

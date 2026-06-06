@@ -1,4 +1,4 @@
-import '@latty/web';
+import '@latty-ds/web';
 
 document.querySelectorAll('[data-snippet-id]').forEach((icon) => {
   icon.addEventListener('click', async () => {

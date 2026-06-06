@@ -2,7 +2,7 @@ import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
-import '@latty/icons';
+import '@latty-ds/icons';
 
 import { linkStyles } from './link.styles';
 

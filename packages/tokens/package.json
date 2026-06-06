@@ -1,5 +1,5 @@
 {
-  "name": "@latty/tokens",
+  "name": "@latty-ds/tokens",
   "version": "0.1.0",
   "description": "Design tokens for the Latty design system — generates CSS custom properties, JSON, and JavaScript exports from a single config file",
   "license": "MIT",
@@ -57,7 +57,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@latty/utils": "workspace:*",
+    "@latty-ds/utils": "workspace:*",
     "culori": "^4.0.2"
   }
 }

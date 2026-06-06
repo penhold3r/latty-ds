@@ -1,5 +1,5 @@
 /**
- * @latty/web - Web components for the Latty Design System
+ * @latty-ds/web - Web components for the Latty Design System
  *
  * A collection of reusable, accessible web components built with Lit.
  *
@@ -38,7 +38,7 @@
  * @example
  * Import and use components:
  * ```typescript
- * import '@latty/web';
+ * import '@latty-ds/web';
  * ```
  *
  * ```html
@@ -58,7 +58,7 @@
  * ```
  */
 
-export type { LattyIconName } from '@latty/icons';
+export type { LattyIconName } from '@latty-ds/icons';
 
 export * from './base';
 export * from './components/accordion';

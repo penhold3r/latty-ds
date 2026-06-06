@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Breadcrumb as BreadcrumbEl } from '@latty/web';
+import type { Breadcrumb as BreadcrumbEl } from '@latty-ds/web';
 
 export type BreadcrumbProps = HTMLAttributes<BreadcrumbEl> & {
   separator?: string;

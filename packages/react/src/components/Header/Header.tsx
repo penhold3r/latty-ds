@@ -1,6 +1,6 @@
 // codegen:manual
 import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
-import type { Header as HeaderEl } from '@latty/web';
+import type { Header as HeaderEl } from '@latty-ds/web';
 
 export type HeaderProps = {
   background?: HeaderEl['background'];

@@ -1,4 +1,4 @@
-import '@latty/web';
+import '@latty-ds/web';
 export { Alert, type AlertProps } from './components/Alert';
 export { Breadcrumb, type BreadcrumbProps } from './components/Breadcrumb';
 export { BreadcrumbItem, type BreadcrumbItemProps } from './components/BreadcrumbItem';

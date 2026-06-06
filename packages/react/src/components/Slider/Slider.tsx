@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Slider as SliderEl } from '@latty/web';
+import type { Slider as SliderEl } from '@latty-ds/web';
 
 export type SliderProps = Omit<HTMLAttributes<SliderEl>, 'onInput' | 'onChange'> & {
   size?: SliderEl['size'];

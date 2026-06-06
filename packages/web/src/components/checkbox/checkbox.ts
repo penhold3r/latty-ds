@@ -5,7 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { checkboxStyles } from './checkbox.styles';
 import { CheckboxSize, CheckboxVariant, CheckboxLabelPosition } from './checkbox.types';
 
-import '@latty/icons';
+import '@latty-ds/icons';
 
 /**
  * A customizable checkbox component with support for multiple variants and sizes.

@@ -5,7 +5,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { paginationStyles } from './pagination.styles';
 import type { PaginationSize } from './pagination.types';
 import { dispatch } from '../../utils';
-import '@latty/icons';
+import '@latty-ds/icons';
 
 /**
  * Page navigation control for paged data sets.

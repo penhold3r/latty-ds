@@ -1,7 +1,7 @@
 import { html, type PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
-import '@latty/icons';
+import '@latty-ds/icons';
 
 import { calendarStyles } from './calendar.styles';
 import type { CalendarDay, CalendarMode, CalendarWeekStart } from './calendar.types';

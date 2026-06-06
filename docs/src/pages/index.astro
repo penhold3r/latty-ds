@@ -53,8 +53,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <div class="quick-start">
     <lt-text variant="h2" as="h2" class="quick-start-heading">Quick start</lt-text>
-    <CodeSnippet lang="bash" code="pnpm add @latty/tokens @latty/web" />
-    <CodeSnippet lang="js" code={`import '@latty/tokens/dist/tokens.css';\nimport '@latty/web';`} />
+    <CodeSnippet lang="bash" code="pnpm add @latty-ds/tokens @latty-ds/web" />
+    <CodeSnippet lang="js" code={`import '@latty-ds/tokens/dist/tokens.css';\nimport '@latty-ds/web';`} />
     <CodeSnippet
       lang="html"
       code={`<lt-button variant="primary" icon-start="save">Save changes</lt-button>\n\n<lt-textfield label="Email" type="email" required></lt-textfield>`}
@@ -64,7 +64,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 </BaseLayout>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 </script>
 
 <style>

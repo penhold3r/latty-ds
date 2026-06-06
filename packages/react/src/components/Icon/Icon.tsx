@@ -1,7 +1,7 @@
 // codegen:manual
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Icon as IconEl, LattyIconName, IconSize } from '@latty/icons';
-import '@latty/icons';
+import type { Icon as IconEl, LattyIconName, IconSize } from '@latty-ds/icons';
+import '@latty-ds/icons';
 
 export type IconProps = HTMLAttributes<IconEl> & {
   name: LattyIconName;

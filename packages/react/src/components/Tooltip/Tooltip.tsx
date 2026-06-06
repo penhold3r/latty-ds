@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Tooltip as TooltipEl } from '@latty/web';
+import type { Tooltip as TooltipEl } from '@latty-ds/web';
 
 export type TooltipProps = HTMLAttributes<TooltipEl> & {
   content?: string;

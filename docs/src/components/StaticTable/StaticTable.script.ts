@@ -1,4 +1,4 @@
-import '@latty/web';
+import '@latty-ds/web';
 
 interface ColDef {
   key: string;

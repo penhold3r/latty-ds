@@ -1,4 +1,4 @@
-# @latty/docs
+# @latty-ds/docs
 
 Astro-based documentation site for the Latty Design System. Provides a live component playground, full API reference, token explorer, and getting-started guides.
 

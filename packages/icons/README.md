@@ -1,4 +1,4 @@
-# @latty/icons
+# @latty-ds/icons
 
 Icon system for the Latty Design System. Ships a curated set of pre-registered icons from [Iconoir](https://iconoir.com) and a pluggable provider registry for adding your own.
 
@@ -7,7 +7,7 @@ See the [icon gallery](https://penhold3r.github.io/latty-ds/) in the docs for th
 ## Installation
 
 ```bash
-pnpm add @latty/icons
+pnpm add @latty-ds/icons
 ```
 
 ## Basic usage
@@ -31,7 +31,7 @@ Icons inherit `currentColor`, so color them with CSS:
 ## Registering custom icons
 
 ```typescript
-import { iconRegistry } from '@latty/icons';
+import { iconRegistry } from '@latty-ds/icons';
 
 // Single icon
 iconRegistry.registerIcon('my-icon', '<svg>...</svg>');
@@ -52,8 +52,8 @@ iconRegistry.registerIcon('check', '<svg><!-- your custom check --></svg>');
 ## Custom providers
 
 ```typescript
-import { iconRegistry } from '@latty/icons';
-import type { IconProvider } from '@latty/icons';
+import { iconRegistry } from '@latty-ds/icons';
+import type { IconProvider } from '@latty-ds/icons';
 
 class MyProvider implements IconProvider {
   name = 'my-provider';

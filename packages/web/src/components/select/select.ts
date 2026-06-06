@@ -5,7 +5,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { selectStyles } from './select.styles';
 import { SelectOption, SelectSize, SelectVariant } from './select.types';
 import { dispatch, createClickOutsideHandler } from '../../utils';
-import '@latty/icons';
+import '@latty-ds/icons';
 import '../surface/';
 import '../text/text';
 import { openFloating, closeFloating } from '../shared/floating';

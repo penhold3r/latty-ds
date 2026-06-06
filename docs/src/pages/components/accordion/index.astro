@@ -28,18 +28,18 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 </lt-accordion>
 
 <lt-accordion label="Installation" icon-start="download" open>
-  Install with: pnpm add @latty/tokens @latty/web
+  Install with: pnpm add @latty-ds/tokens @latty-ds/web
 </lt-accordion>
     `}
     react={`
-import { Accordion } from '@latty/react';
+import { Accordion } from '@latty-ds/react';
 
 <Accordion label="What is Latty?">
   Latty is a framework-agnostic design system built on design tokens and Web Components.
 </Accordion>
 
 <Accordion label="Installation" iconStart="download" open>
-  Install with: pnpm add @latty/tokens @latty/web
+  Install with: pnpm add @latty-ds/tokens @latty-ds/web
 </Accordion>
     `}
     vue={`
@@ -49,7 +49,7 @@ import { Accordion } from '@latty/react';
   </lt-accordion>
 
   <lt-accordion label="Installation" icon-start="download" open>
-    Install with: pnpm add @latty/tokens @latty/web
+    Install with: pnpm add @latty-ds/tokens @latty-ds/web
   </lt-accordion>
 </template>
     `}
@@ -60,5 +60,5 @@ import { Accordion } from '@latty/react';
 </BaseLayout>
 
 <script>
-  import '@latty/web';
+  import '@latty-ds/web';
 </script>

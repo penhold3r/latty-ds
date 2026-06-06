@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Link as LinkEl } from '@latty/web';
+import type { Link as LinkEl } from '@latty-ds/web';
 
 export type LinkProps = HTMLAttributes<LinkEl> & {
   href?: string;

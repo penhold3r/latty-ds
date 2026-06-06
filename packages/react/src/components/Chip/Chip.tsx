@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Chip as ChipEl } from '@latty/web';
+import type { Chip as ChipEl } from '@latty-ds/web';
 
 export type ChipProps = HTMLAttributes<ChipEl> & {
   appearance?: ChipEl['appearance'];

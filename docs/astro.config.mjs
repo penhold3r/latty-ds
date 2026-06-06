@@ -23,9 +23,9 @@ export default defineConfig({
   vite: {
     plugins: [
       {
-        // @latty/web and @latty/icons are aliased to src/ for live HMR, but their
+        // @latty-ds/web and @latty-ds/icons are aliased to src/ for live HMR, but their
         // package.json sideEffects only list dist/ paths — Vite would tree-shake
-        // bare `import '@latty/web'` calls into empty chunks without this.
+        // bare `import '@latty-ds/web'` calls into empty chunks without this.
         name: 'latty-src-side-effects',
         transform(code, id) {
           if (id.includes('/packages/web/src/') || id.includes('/packages/icons/src/')) {
@@ -42,21 +42,21 @@ export default defineConfig({
       alias: [
         // Subpath exports must come before the package root alias
         {
-          find: '@latty/web/manifest.json',
+          find: '@latty-ds/web/manifest.json',
           replacement: resolve(root, 'packages/web/dist/manifest.json')
         },
         // Point these packages to src so Astro/Vite picks up changes live.
         // Vite reads each package's tsconfig.json (experimentalDecorators,
         // useDefineForClassFields) so Lit decorators are handled correctly.
         {
-          find: '@latty/web',
+          find: '@latty-ds/web',
           replacement: resolve(root, 'packages/web/src/index.ts')
         },
         {
-          find: '@latty/icons',
+          find: '@latty-ds/icons',
           replacement: resolve(root, 'packages/icons/src/index.ts')
         }
-        // @latty/tokens stays dist-based: tokens.css / semantic.css / tokens.json
+        // @latty-ds/tokens stays dist-based: tokens.css / semantic.css / tokens.json
         // are generated outputs with no raw-source equivalent.
       ]
     }

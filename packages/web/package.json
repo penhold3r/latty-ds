@@ -1,5 +1,5 @@
 {
-  "name": "@latty/web",
+  "name": "@latty-ds/web",
   "version": "0.1.0",
   "description": "Web Components for the Latty design system — framework-agnostic UI components built with Lit",
   "license": "MIT",
@@ -224,7 +224,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.7.6",
-    "@latty/icons": "workspace:*"
+    "@latty-ds/icons": "workspace:*"
   },
   "customElements": "custom-elements.json"
 }

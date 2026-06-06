@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Datepicker as DatepickerEl } from '@latty/web';
+import type { Datepicker as DatepickerEl } from '@latty-ds/web';
 
 export type DatepickerProps = Omit<HTMLAttributes<DatepickerEl>, 'onChange' | 'onInput'> & {
   type?: DatepickerEl['type'];

@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Skeleton as SkeletonEl } from '@latty/web';
+import type { Skeleton as SkeletonEl } from '@latty-ds/web';
 
 export type SkeletonProps = HTMLAttributes<SkeletonEl> & {
   shape?: SkeletonEl['shape'];

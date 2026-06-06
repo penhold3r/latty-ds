@@ -18,27 +18,27 @@ const totalIcons = iconGroups.reduce((sum, g) => sum + g.icons.length, 0);
 
   <lt-text variant="h2">Installation</lt-text>
   <lt-text variant="body"
-    >Icons are included in <code>@latty/web</code> — no extra package needed for basic usage:</lt-text
+    >Icons are included in <code>@latty-ds/web</code> — no extra package needed for basic usage:</lt-text
   >
-  <CodeSnippet code={`import '@latty/web'; // registers <lt-icon> along with all other components`} />
+  <CodeSnippet code={`import '@latty-ds/web'; // registers <lt-icon> along with all other components`} />
   <lt-text variant="body">If you only need icons (no other components), install the icons package directly:</lt-text>
   <CodeSnippet
     code={`# pnpm
-pnpm add @latty/icons
+pnpm add @latty-ds/icons
 
 # npm
-npm install @latty/icons
+npm install @latty-ds/icons
 
 # yarn
-yarn add @latty/icons`}
+yarn add @latty-ds/icons`}
   />
   <CodeSnippet
     code={`// Import specific icons — only pay for what you use
-import '@latty/icons/star';
-import '@latty/icons/arrow-right';
+import '@latty-ds/icons/star';
+import '@latty-ds/icons/arrow-right';
 
 // Or register all icons at once (e.g. in your app entry point)
-import { iconRegistry, lattyIcons } from '@latty/icons';
+import { iconRegistry, lattyIcons } from '@latty-ds/icons';
 iconRegistry.registerIcons(lattyIcons);`}
   />
 
@@ -95,7 +95,7 @@ iconRegistry.registerIcons(lattyIcons);`}
 
   <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
-    html={`import '@latty/icons/star';
+    html={`import '@latty-ds/icons/star';
 
 <!-- Default size (md = 20px) -->
 <lt-icon name="star" />
@@ -105,7 +105,7 @@ iconRegistry.registerIcons(lattyIcons);`}
 
 <!-- Color is inherited from CSS -->
 <lt-icon name="check-circle" style="color: var(--lt-color-success-500)" />`}
-    react={`import { Icon } from '@latty/react';
+    react={`import { Icon } from '@latty-ds/react';
 
 {/* Default size (md = 20px) */}
 <Icon name="star" />
@@ -119,7 +119,7 @@ iconRegistry.registerIcons(lattyIcons);`}
 
   <lt-text variant="h3">Custom icons</lt-text>
   <CodeSnippet
-    code={`import { iconRegistry } from '@latty/icons';
+    code={`import { iconRegistry } from '@latty-ds/icons';
 
 // Register a single icon
 iconRegistry.registerIcon('my-logo', '<svg viewBox="0 0 24 24">...</svg>');

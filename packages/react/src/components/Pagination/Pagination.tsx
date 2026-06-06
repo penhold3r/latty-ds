@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Pagination as PaginationEl } from '@latty/web';
+import type { Pagination as PaginationEl } from '@latty-ds/web';
 
 export type PaginationProps = Omit<HTMLAttributes<PaginationEl>, 'onChange'> & {
   page?: number;

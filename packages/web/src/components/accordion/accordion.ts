@@ -5,7 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { accordionStyles } from './accordion.styles';
 import { AccordionAppearance } from './accordion.types';
 
-import '@latty/icons';
+import '@latty-ds/icons';
 import '../text/text';
 
 /**

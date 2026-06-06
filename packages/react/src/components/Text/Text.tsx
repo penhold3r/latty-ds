@@ -1,5 +1,5 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
-import type { Text as TextEl } from '@latty/web';
+import type { Text as TextEl } from '@latty-ds/web';
 
 export type TextProps = HTMLAttributes<TextEl> & {
   variant?: TextEl['variant'];

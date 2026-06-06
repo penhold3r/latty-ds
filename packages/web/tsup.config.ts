@@ -23,7 +23,7 @@ export default defineConfig([
     dts: false,
     clean: true,
     splitting: false,
-    external: ['lit', 'lit/*', '@lit/*', '@latty/icons', '@latty/tokens'],
+    external: ['lit', 'lit/*', '@lit/*', '@latty-ds/icons', '@latty-ds/tokens'],
     noExternal: ['@floating-ui/dom'],
     outExtension: () => ({ js: '.js' })
   },
@@ -35,7 +35,7 @@ export default defineConfig([
     dts: false,
     clean: false,
     splitting: false,
-    external: ['@latty/icons', '@latty/tokens'],
+    external: ['@latty-ds/icons', '@latty-ds/tokens'],
     noExternal: ['@floating-ui/dom', 'lit', 'lit/*', '@lit/*'],
     outExtension: () => ({ js: '.cjs' })
   }
