@@ -28,6 +28,8 @@ jobs:
 
       - run: pnpm build
 
+      - run: git checkout packages/web/custom-elements.json
+
       - run: pnpm test
 
       - run: pnpm exec lerna publish from-git --yes
