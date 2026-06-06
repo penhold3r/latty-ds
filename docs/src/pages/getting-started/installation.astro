@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../../layouts/BaseLayout/index.astro';
+import CodeSnippet from '../../components/CodeSnippet/index.astro';
+---
+
+<BaseLayout title="Installation" description="Add Latty to your project">
+  <lt-text variant="h1">Installation</lt-text>
+
+  <lt-text variant="h2">Install packages</lt-text>
+  <CodeSnippet lang="bash" title="pnpm" code={`pnpm add @latty/tokens @latty/web`} />
+  <CodeSnippet lang="bash" title="npm" code={`npm install @latty/tokens @latty/web`} />
+  <CodeSnippet lang="bash" title="yarn" code={`yarn add @latty/tokens @latty/web`} />
+
+  <lt-text variant="h2">Load the tokens</lt-text>
+  <lt-text variant="body">
+    Both CSS files must be loaded before any components render — import them once at your app's entry point.
+  </lt-text>
+  <CodeSnippet
+    lang="js"
+    title="JS / bundler"
+    code={`import '@latty/tokens/tokens.css';
+import '@latty/tokens/semantic.css';`}
+  />
+  <CodeSnippet
+    lang="css"
+    title="CSS @import"
+    code={`@import '@latty/tokens/tokens.css';
+@import '@latty/tokens/semantic.css';`}
+  />
+  <CodeSnippet
+    lang="html"
+    title="Plain HTML"
+    code={`<link rel="stylesheet" href="node_modules/@latty/tokens/dist/tokens.css" />
+<link rel="stylesheet" href="node_modules/@latty/tokens/dist/semantic.css" />`}
+  />
+
+  <lt-text variant="h2">Register components</lt-text>
+  <CodeSnippet
+    lang="js"
+    code={`// All components at once
+import '@latty/web';
+
+// Or cherry-pick to keep bundles small
+import '@latty/web/button';
+import '@latty/web/textfield';
+import '@latty/web/dialog';`}
+  />
+  <lt-text variant="body">
+    Components are self-registering custom elements. Once imported, use them anywhere in your HTML.
+  </lt-text>
+
+  <lt-text variant="h2">React wrappers (optional)</lt-text>
+  <lt-text variant="body">
+    For typed props and idiomatic React event names, install the React wrapper package:
+  </lt-text>
+  <CodeSnippet lang="bash" code={`pnpm add @latty/react`} />
+  <lt-text variant="body">
+    Vue and Svelte users don't need a wrapper — <code>lt-*</code> elements work natively in both. See the
+    <a href="/getting-started/usage">Usage guide</a> for framework-specific setup.
+  </lt-text>
+
+  <lt-text variant="h2">TypeScript</lt-text>
+  <lt-text variant="body">
+    All packages ship with <code>.d.ts</code> files — no extra setup needed.
+  </lt-text>
+
+  <lt-text variant="h2">Next steps</lt-text>
+  <lt-list>
+    <lt-list-item><a href="/getting-started/usage">Usage</a> — start using components</lt-list-item>
+    <lt-list-item><a href="/getting-started/theming">Theming</a> — customize the look and feel</lt-list-item>
+  </lt-list>
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>

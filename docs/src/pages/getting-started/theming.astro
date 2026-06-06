@@ -1,0 +1,239 @@
+---
+import BaseLayout from '../../layouts/BaseLayout/index.astro';
+import CodeSnippet from '../../components/CodeSnippet/index.astro';
+---
+
+<BaseLayout title="Theming" description="Customize Latty's look and feel with design tokens">
+  <lt-text variant="h1">Theming</lt-text>
+  <lt-text variant="body">
+    Latty's theme engine generates a full color palette from a single base color, giving you consistent light and dark
+    modes without hand-crafting every shade.
+  </lt-text>
+
+  <lt-text variant="h2">Changing the brand color</lt-text>
+  <lt-text variant="body">
+    Use <code>configure()</code> from <code>@latty/tokens/configure</code> to apply a custom theme. Call it once at your app's
+    entry point, before any components render:
+  </lt-text>
+  <CodeSnippet
+    lang="ts"
+    code={`import { configure } from '@latty/tokens/configure';
+
+configure({
+  colors: { primary: '#6366f1', secondary: '#f59e0b' },
+  font: { family: 'Inter, sans-serif' },
+  border: { radius: '0.375rem' }
+});`}
+  />
+  <lt-text variant="body">
+    <code>configure()</code> generates the full token palette from your base colors and injects them as a
+    <code>&lt;style id="lt-tokens"&gt;</code> element into <code>&lt;head&gt;</code>. Calling it again replaces the
+    previous values. All options are optional — omit any key to keep the default.
+  </lt-text>
+
+  <lt-text variant="h3">Preventing flash of unstyled content</lt-text>
+  <lt-text variant="body">
+    Because <code>&lt;script type="module"&gt;</code> is deferred, there is a brief window between first paint and when <code
+      >configure()</code
+    > runs. Add <code>data-lt</code> to <code>&lt;html&gt;</code> and a tiny synchronous style before your module script:
+  </lt-text>
+  <CodeSnippet
+    lang="html"
+    code={`<html lang="en" data-lt>
+  <head>
+    <style>
+      html[data-lt]:not([data-lt-ready]) { visibility: hidden; }
+    </style>
+
+    <script type="module">
+      import { configure } from '@latty/tokens/configure';
+      configure({ colors: { primary: '#6366f1' } });
+      <!-- configure() sets data-lt-ready automatically — no reveal needed -->
+    <\/script>
+  </head>
+</html>`}
+  />
+  <lt-text variant="body">
+    <code>configure()</code> removes <code>data-lt-ready</code> before swapping tokens and restores it on the next animation
+    frame, so the browser always paints a fully-styled page.
+  </lt-text>
+
+  <lt-text variant="h3">SSR</lt-text>
+  <lt-text variant="body">
+    For server-side rendering use <code>createStyleSheet()</code>, which returns the CSS string instead of touching the
+    DOM:
+  </lt-text>
+  <CodeSnippet
+    lang="ts"
+    code={`import { createStyleSheet } from '@latty/tokens/configure';
+
+const css = createStyleSheet({ colors: { primary: '#6366f1' } });
+// inject \`css\` into a <style> tag in your server-rendered HTML`}
+  />
+
+  <lt-text variant="h2">CSS overrides</lt-text>
+  <lt-text variant="body">
+    Override individual tokens directly in your stylesheet for one-off adjustments or scoped changes:
+  </lt-text>
+  <CodeSnippet
+    lang="css"
+    code={`:root {
+  --lt-border-radius: 2px;                    /* sharper corners globally */
+  --lt-typography-fontFamily: 'Inter', sans-serif; /* swap font */
+}
+
+/* Scoped to a section of the page */
+.sidebar {
+  --lt-color-neutral-50: #f8f8ff;
+  --lt-color-neutral-100: #f0f0f8;
+}
+
+/* Spacing tokens — only overridable this way, not via configure() */
+:root {
+  --lt-spacing-4: 1.25rem; /* default: 1rem */
+}`}
+  />
+
+  <lt-text variant="h2">Component-level overrides</lt-text>
+  <lt-text variant="body">
+    Every component exposes CSS custom properties — named <code>--lt-[component]-[property]</code> — that let you adapt it
+    to a specific context. Set them on the element or any ancestor:
+  </lt-text>
+  <CodeSnippet
+    lang="css"
+    code={`/* All icon buttons in the header get a light colour */
+.site-header {
+  --lt-icon-button-color: white;
+  --lt-icon-button-hover-bg: rgba(255, 255, 255, 0.15);
+}
+
+/* A single progress bar with a custom fill colour */
+.upload-progress {
+  --lt-progress-color: #8b5cf6;
+  --lt-progress-track-color: #ede9fe;
+}`}
+  />
+  <lt-text variant="body">
+    Because CSS custom properties inherit through shadow DOM, this works with a plain class name — no
+    <code>::part()</code> selector needed. The full list of props for each component is in its API table.
+  </lt-text>
+
+  <lt-text variant="h2">Theme switching</lt-text>
+  <lt-text variant="body">
+    Pass <code>theme: 'system'</code> to <code>configure()</code> to generate light, dark, and
+    <code>prefers-color-scheme</code> layers in one call:
+  </lt-text>
+  <CodeSnippet
+    lang="ts"
+    code={`configure({
+  theme: 'system',
+  colors: { primary: '#6366f1' }
+});`}
+  />
+  <lt-text variant="body">
+    With that in place, toggling themes at runtime requires no further calls to <code>configure()</code> — just set a <code
+      >data-theme</code
+    > attribute on <code>&lt;html&gt;</code>:
+  </lt-text>
+  <CodeSnippet
+    lang="ts"
+    code={`// Follow the OS preference (remove any previous override)
+document.documentElement.removeAttribute('data-theme');
+
+// Force light
+document.documentElement.setAttribute('data-theme', 'light');
+
+// Force dark
+document.documentElement.setAttribute('data-theme', 'dark');`}
+  />
+
+  <lt-text variant="h3">Persisting the user's choice</lt-text>
+  <CodeSnippet
+    lang="ts"
+    code={`function setTheme(theme: 'light' | 'dark' | 'system') {
+  if (theme === 'system') {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.removeItem('lt-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('lt-theme', theme);
+  }
+}`}
+  />
+  <lt-text variant="body">
+    Restore the saved theme before first paint by placing a synchronous script at the top of
+    <code>&lt;head&gt;</code>:
+  </lt-text>
+  <CodeSnippet
+    lang="html"
+    code={`<script>
+  const saved = localStorage.getItem('lt-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+<\/script>`}
+  />
+
+  <lt-text variant="h2">Framework notes</lt-text>
+
+  <lt-text variant="h3">Vanilla JS / Vite / webpack</lt-text>
+  <lt-text variant="body">
+    Call <code>configure()</code> in your entry file. Apply the FOUC guard described above.
+  </lt-text>
+
+  <lt-text variant="h3">React (CSR)</lt-text>
+  <lt-text variant="body">
+    Call <code>configure()</code> at the top of <code>main.tsx</code>, before <code>ReactDOM.createRoot</code>. Add <code
+      >data-lt</code
+    > to <code>&lt;html&gt;</code> in <code>index.html</code>:
+  </lt-text>
+  <CodeSnippet
+    lang="tsx"
+    title="main.tsx"
+    code={`import { configure } from '@latty/tokens/configure';
+configure({ colors: { primary: '#6366f1' }, theme: 'system' });
+
+import { createRoot } from 'react-dom/client';
+import App from './App';
+createRoot(document.getElementById('root')!).render(<App />);`}
+  />
+
+  <lt-text variant="h3">React SSR (Next.js App Router, Remix)</lt-text>
+  <lt-text variant="body">
+    <code>configure()</code> touches <code>document</code> and must not run on the server. Use
+    <code>createStyleSheet()</code> in your root layout to inject tokens at render time:
+  </lt-text>
+  <CodeSnippet
+    lang="tsx"
+    title="app/layout.tsx"
+    code={`import { createStyleSheet } from '@latty/tokens/configure';
+
+export default function RootLayout({ children }) {
+  const tokenCss = createStyleSheet({ colors: { primary: '#6366f1' }, theme: 'system' });
+  return (
+    <html lang="en" data-lt>
+      <head>
+        <style id="lt-tokens" dangerouslySetInnerHTML={{ __html: tokenCss }} />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}`}
+  />
+  <lt-text variant="body">
+    Tokens are inlined server-side so there is no flash and the <code>data-lt</code> FOUC guard is not needed. Theme toggling
+    with <code>data-theme</code> still works client-side as described above.
+  </lt-text>
+
+  <lt-text variant="h2">Next steps</lt-text>
+  <lt-list>
+    <lt-list-item>
+      <a href="/tokens/introduction">Tokens overview</a> — browse all available tokens
+    </lt-list-item>
+    <lt-list-item>
+      <a href="/tokens/colors">Colors</a> — see the full generated palettes
+    </lt-list-item>
+  </lt-list>
+</BaseLayout>
+
+<script>
+  import '@latty/web';
+</script>
