@@ -14,8 +14,8 @@ export type CalendarProps = Omit<HTMLAttributes<CalendarEl>, 'onChange'> & {
   disabled?: boolean;
   months?: number;
   disabledDates?: CalendarEl['disabledDates'];
-  onChange?: (event: CustomEvent) => void;
-  onMonthChange?: (event: CustomEvent) => void;
+  onChange?: (detail: { valueStart: string; valueEnd: string }) => void;
+  onMonthChange?: (detail: { year: number; month: number }) => void;
 };
 
 export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
@@ -29,14 +29,14 @@ export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onMonthChange) return;
-    const h = (ev: Event) => onMonthChange!(ev as CustomEvent);
+    const h = (ev: Event) => onMonthChange!((ev as CustomEvent).detail);
     el.addEventListener('month-change', h);
     return () => el.removeEventListener('month-change', h);
   }, [onMonthChange]);

@@ -15,8 +15,8 @@ export type DatepickerProps = Omit<HTMLAttributes<DatepickerEl>, 'onChange' | 'o
   required?: boolean;
   readonly?: boolean;
   name?: string;
-  onChange?: (event: CustomEvent) => void;
-  onInput?: (event: CustomEvent) => void;
+  onChange?: (detail: { value: string }) => void;
+  onInput?: (detail: { value: string }) => void;
 };
 
 export const Datepicker = forwardRef<DatepickerEl, DatepickerProps>(function Datepicker(
@@ -30,14 +30,14 @@ export const Datepicker = forwardRef<DatepickerEl, DatepickerProps>(function Dat
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onInput) return;
-    const h = (ev: Event) => onInput!(ev as CustomEvent);
+    const h = (ev: Event) => onInput!((ev as CustomEvent).detail);
     el.addEventListener('input', h);
     return () => el.removeEventListener('input', h);
   }, [onInput]);

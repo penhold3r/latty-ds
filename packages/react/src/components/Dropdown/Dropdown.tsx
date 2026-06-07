@@ -4,8 +4,8 @@ import type { Dropdown as DropdownEl } from '@latty-ds/web';
 export type DropdownProps = HTMLAttributes<DropdownEl> & {
   open?: boolean;
   placement?: DropdownEl['placement'];
-  onOpen?: (event: CustomEvent) => void;
-  onClose?: (event: CustomEvent) => void;
+  onOpen?: () => void;
+  onClose?: () => void;
 };
 
 export const Dropdown = forwardRef<DropdownEl, DropdownProps>(function Dropdown(
@@ -19,14 +19,14 @@ export const Dropdown = forwardRef<DropdownEl, DropdownProps>(function Dropdown(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onOpen) return;
-    const h = (ev: Event) => onOpen!(ev as CustomEvent);
+    const h = () => onOpen!();
     el.addEventListener('open', h);
     return () => el.removeEventListener('open', h);
   }, [onOpen]);
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onClose) return;
-    const h = (ev: Event) => onClose!(ev as CustomEvent);
+    const h = () => onClose!();
     el.addEventListener('close', h);
     return () => el.removeEventListener('close', h);
   }, [onClose]);

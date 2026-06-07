@@ -61,7 +61,11 @@ for (const mod of cem.modules) {
       const stripped = e.name.replace(/^lt-/, '');
       const handlerName =
         'on' + stripped.replace(/[-:](.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, (c) => c.toUpperCase());
-      return { name: e.name, handlerName, strippedName: stripped };
+      // Extract inner type from CustomEvent<DetailType> if present
+      const typeText = e.type?.text ?? '';
+      const detailMatch = typeText.match(/^CustomEvent<(.+)>$/s);
+      const detailType = detailMatch ? detailMatch[1].trim() : null;
+      return { name: e.name, handlerName, strippedName: stripped, detailType };
     });
 
     components.push({ name: decl.name, tagName: decl.tagName, fields, events });
@@ -76,7 +80,9 @@ for (const { name, tagName, fields, events } of components) {
   const hasIconFields = fields.some((f) => f.displayType === 'LattyIconName');
   const fieldProps = fields.map((f) => `  ${f.name}?: ${f.displayType};`);
 
-  const eventProps = events.map((e) => `  ${e.handlerName}?: (event: CustomEvent) => void;`);
+  const eventProps = events.map((e) =>
+    e.detailType ? `  ${e.handlerName}?: (detail: ${e.detailType}) => void;` : `  ${e.handlerName}?: () => void;`
+  );
 
   // Destructured event handler names
   const handlerNames = events.map((e) => e.handlerName);
@@ -90,7 +96,7 @@ for (const { name, tagName, fields, events } of components) {
     useEffect(() => {
       const el = innerRef.current;
       if (!el || !${e.handlerName}) return;
-      const h = (ev: Event) => ${e.handlerName}!(ev as CustomEvent);
+      const h = ${e.detailType ? `(ev: Event) => ${e.handlerName}!((ev as CustomEvent).detail)` : `() => ${e.handlerName}!()`};
       el.addEventListener('${e.name}', h);
       return () => el.removeEventListener('${e.name}', h);
     }, [${e.handlerName}]);`

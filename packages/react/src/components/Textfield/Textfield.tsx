@@ -19,8 +19,8 @@ export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onCh
   min?: TextfieldEl['min'];
   max?: TextfieldEl['max'];
   uppercase?: boolean;
-  onInput?: (event: CustomEvent) => void;
-  onChange?: (event: CustomEvent) => void;
+  onInput?: (detail: { value: string }) => void;
+  onChange?: (detail: { value: string }) => void;
 };
 
 export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfield(
@@ -34,14 +34,14 @@ export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfi
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onInput) return;
-    const h = (ev: Event) => onInput!(ev as CustomEvent);
+    const h = (ev: Event) => onInput!((ev as CustomEvent).detail);
     el.addEventListener('input', h);
     return () => el.removeEventListener('input', h);
   }, [onInput]);
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);

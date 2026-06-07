@@ -13,7 +13,7 @@ export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   disabled?: boolean;
   required?: boolean;
   name?: string;
-  onChange?: (event: CustomEvent) => void;
+  onChange?: (detail: { value: string }) => void;
 };
 
 export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
@@ -27,7 +27,7 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);

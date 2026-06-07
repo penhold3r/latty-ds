@@ -5,7 +5,7 @@ export type DropdownItemProps = HTMLAttributes<DropdownItemEl> & {
   disabled?: boolean;
   selected?: boolean;
   href?: string;
-  onSelect?: (event: CustomEvent) => void;
+  onSelect?: () => void;
 };
 
 export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(function DropdownItem(
@@ -19,7 +19,7 @@ export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(functi
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onSelect) return;
-    const h = (ev: Event) => onSelect!(ev as CustomEvent);
+    const h = () => onSelect!();
     el.addEventListener('select', h);
     return () => el.removeEventListener('select', h);
   }, [onSelect]);

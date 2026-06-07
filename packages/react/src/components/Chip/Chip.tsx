@@ -8,7 +8,7 @@ export type ChipProps = HTMLAttributes<ChipEl> & {
   disabled?: boolean;
   deletable?: boolean;
   background?: string;
-  onDelete?: (event: CustomEvent) => void;
+  onDelete?: () => void;
 };
 
 export const Chip = forwardRef<ChipEl, ChipProps>(function Chip({ onDelete, children, ...props }, forwardedRef) {
@@ -19,7 +19,7 @@ export const Chip = forwardRef<ChipEl, ChipProps>(function Chip({ onDelete, chil
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onDelete) return;
-    const h = (ev: Event) => onDelete!(ev as CustomEvent);
+    const h = () => onDelete!();
     el.addEventListener('delete', h);
     return () => el.removeEventListener('delete', h);
   }, [onDelete]);

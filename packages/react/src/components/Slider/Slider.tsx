@@ -12,8 +12,8 @@ export type SliderProps = Omit<HTMLAttributes<SliderEl>, 'onInput' | 'onChange'>
   value?: number;
   label?: string;
   name?: string;
-  onInput?: (event: CustomEvent) => void;
-  onChange?: (event: CustomEvent) => void;
+  onInput?: (detail: { value: number }) => void;
+  onChange?: (detail: { value: number }) => void;
 };
 
 export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
@@ -27,14 +27,14 @@ export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onInput) return;
-    const h = (ev: Event) => onInput!(ev as CustomEvent);
+    const h = (ev: Event) => onInput!((ev as CustomEvent).detail);
     el.addEventListener('input', h);
     return () => el.removeEventListener('input', h);
   }, [onInput]);
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);

@@ -9,7 +9,7 @@ export type AlertProps = HTMLAttributes<AlertEl> & {
   closable?: boolean;
   background?: string;
   uppercase?: boolean;
-  onClose?: (event: CustomEvent) => void;
+  onClose?: () => void;
 };
 
 export const Alert = forwardRef<AlertEl, AlertProps>(function Alert({ onClose, children, ...props }, forwardedRef) {
@@ -20,7 +20,7 @@ export const Alert = forwardRef<AlertEl, AlertProps>(function Alert({ onClose, c
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onClose) return;
-    const h = (ev: Event) => onClose!(ev as CustomEvent);
+    const h = () => onClose!();
     el.addEventListener('close', h);
     return () => el.removeEventListener('close', h);
   }, [onClose]);

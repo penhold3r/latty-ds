@@ -8,9 +8,9 @@ export type SnackbarProps = HTMLAttributes<SnackbarEl> & {
   closable?: boolean;
   actionLabel?: string;
   icon?: LattyIconName;
-  onShow?: (event: CustomEvent) => void;
-  onHide?: (event: CustomEvent) => void;
-  onAction?: (event: CustomEvent) => void;
+  onShow?: () => void;
+  onHide?: () => void;
+  onAction?: () => void;
 };
 
 export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(
@@ -24,21 +24,21 @@ export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onShow) return;
-    const h = (ev: Event) => onShow!(ev as CustomEvent);
+    const h = () => onShow!();
     el.addEventListener('show', h);
     return () => el.removeEventListener('show', h);
   }, [onShow]);
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onHide) return;
-    const h = (ev: Event) => onHide!(ev as CustomEvent);
+    const h = () => onHide!();
     el.addEventListener('hide', h);
     return () => el.removeEventListener('hide', h);
   }, [onHide]);
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onAction) return;
-    const h = (ev: Event) => onAction!(ev as CustomEvent);
+    const h = () => onAction!();
     el.addEventListener('action', h);
     return () => el.removeEventListener('action', h);
   }, [onAction]);

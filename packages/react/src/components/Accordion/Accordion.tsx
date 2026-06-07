@@ -8,7 +8,7 @@ export type AccordionProps = Omit<HTMLAttributes<AccordionEl>, 'onToggle'> & {
   open?: boolean;
   disabled?: boolean;
   uppercase?: boolean;
-  onToggle?: (event: CustomEvent) => void;
+  onToggle?: (detail: { open: boolean }) => void;
 };
 
 export const Accordion = forwardRef<AccordionEl, AccordionProps>(function Accordion(
@@ -22,7 +22,7 @@ export const Accordion = forwardRef<AccordionEl, AccordionProps>(function Accord
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onToggle) return;
-    const h = (ev: Event) => onToggle!(ev as CustomEvent);
+    const h = (ev: Event) => onToggle!((ev as CustomEvent).detail);
     el.addEventListener('toggle', h);
     return () => el.removeEventListener('toggle', h);
   }, [onToggle]);

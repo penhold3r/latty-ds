@@ -13,7 +13,7 @@ export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
   labelPosition?: CheckboxEl['labelPosition'];
   name?: string;
   value?: string;
-  onChange?: (event: CustomEvent) => void;
+  onChange?: (detail: { checked: boolean }) => void;
 };
 
 export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
@@ -27,7 +27,7 @@ export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!(ev as CustomEvent);
+    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);

@@ -13,7 +13,7 @@ export type TableProps = HTMLAttributes<TableEl> & {
   emptyMessage?: string;
   rowKey?: string;
   sort?: TableEl['sort'];
-  onSortChange?: (event: CustomEvent) => void;
+  onSortChange?: () => void;
 };
 
 export const Table = forwardRef<TableEl, TableProps>(function Table(
@@ -27,7 +27,7 @@ export const Table = forwardRef<TableEl, TableProps>(function Table(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onSortChange) return;
-    const h = (ev: Event) => onSortChange!(ev as CustomEvent);
+    const h = () => onSortChange!();
     el.addEventListener('sort-change', h);
     return () => el.removeEventListener('sort-change', h);
   }, [onSortChange]);
