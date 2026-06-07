@@ -53,11 +53,11 @@
     "clean": "rm -rf dist dist-scripts"
   },
   "devDependencies": {
+    "@latty-ds/utils": "workspace:*",
     "@types/culori": "^4.0.1",
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@latty-ds/utils": "workspace:*",
     "culori": "^4.0.2"
   }
 }

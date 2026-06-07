@@ -33,13 +33,10 @@ npm install @latty-ds/icons
 yarn add @latty-ds/icons`}
   />
   <CodeSnippet
-    code={`// Import specific icons — only pay for what you use
+    code={`// All built-in icons are registered automatically when the package is imported.
+// For per-icon tree-shaking, import individual icons instead:
 import '@latty-ds/icons/star';
-import '@latty-ds/icons/arrow-right';
-
-// Or register all icons at once (e.g. in your app entry point)
-import { iconRegistry, lattyIcons } from '@latty-ds/icons';
-iconRegistry.registerIcons(lattyIcons);`}
+import '@latty-ds/icons/arrow-right';`}
   />
 
   <lt-text variant="h2">Available Icons</lt-text>

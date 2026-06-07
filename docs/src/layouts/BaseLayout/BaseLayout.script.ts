@@ -1,6 +1,4 @@
 import '@latty-ds/web';
-import { iconRegistry, lattyIcons } from '@latty-ds/icons';
-iconRegistry.registerIcons(lattyIcons);
 
 import type { SidePanel } from '@latty-ds/web';
 

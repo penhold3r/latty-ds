@@ -6,22 +6,6 @@ import CodeSnippet from '../../components/CodeSnippet/index.astro';
 <BaseLayout title="Usage" description="Start using Latty components in your project">
   <lt-text variant="h1">Usage</lt-text>
 
-  <lt-text variant="h2">Icons</lt-text>
-  <lt-text variant="body">
-    Named icons used via <code>icon-start</code>, <code>icon-end</code>, and <code>icon</code> attributes require registering
-    the icon set once at your app's entry point:
-  </lt-text>
-  <CodeSnippet
-    lang="js"
-    code={`import { iconRegistry, lattyIcons } from '@latty-ds/icons';
-
-iconRegistry.registerIcons(lattyIcons);`}
-  />
-  <lt-text variant="body">
-    Without this call, icon attributes are silently ignored. Skip it only if your project uses no icon attributes on any
-    component.
-  </lt-text>
-
   <lt-text variant="h2">Vanilla HTML</lt-text>
   <lt-text variant="body">No build tool required:</lt-text>
   <CodeSnippet

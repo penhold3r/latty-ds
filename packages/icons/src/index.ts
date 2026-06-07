@@ -8,7 +8,11 @@ export { iconRegistry } from './registry/icon-registry';
 export type { IconSize, IconDefinition } from './types/icons.types';
 export type { LattyIconName } from './icons';
 
-// Full icon map — no auto-registration.
-// Call iconRegistry.registerIcons(lattyIcons) yourself, or import individual icons
-// via @latty-ds/icons/<name> for per-icon tree-shaking.
+// Full icon map — exported for custom tooling and type inference.
+// Per-icon tree-shaking: import '@latty-ds/icons/<name>' instead of the main entry.
 export { lattyIcons } from './icons';
+
+// Auto-register all built-in icons when this package is imported.
+import { iconRegistry } from './registry/icon-registry';
+import { lattyIcons } from './icons';
+iconRegistry.registerIcons(lattyIcons);
