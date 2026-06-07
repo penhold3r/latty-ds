@@ -2,6 +2,7 @@ import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes
 import type { Checkbox as CheckboxEl } from '@latty-ds/web';
 
 export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
+  formAssociated?: boolean;
   variant?: CheckboxEl['variant'];
   size?: CheckboxEl['size'];
   checked?: boolean;

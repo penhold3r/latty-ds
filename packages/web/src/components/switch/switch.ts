@@ -39,6 +39,14 @@ import { SwitchSize, SwitchVariant, SwitchLabelPosition } from './switch.types';
 @customElement('lt-switch')
 export class Switch extends ThemeableElement {
   static styles = switchStyles;
+  static formAssociated = true;
+
+  private _internals!: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   /**
    * Visual variant that determines the color when checked.
@@ -74,7 +82,7 @@ export class Switch extends ThemeableElement {
    * Label text displayed next to the switch.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /**
    * Position of the label relative to the switch.
@@ -86,13 +94,13 @@ export class Switch extends ThemeableElement {
    * Name attribute for form submission.
    * @default ''
    */
-  @property() name = '';
+  @property({ reflect: true }) name = '';
 
   /**
    * Value attribute for form submission.
    * @default 'on'
    */
-  @property() value = 'on';
+  @property({ reflect: true }) value = 'on';
 
   /**
    * Handles switch change events.
@@ -101,6 +109,28 @@ export class Switch extends ThemeableElement {
    * @param e - The native change event
    * @private
    */
+  updated() {
+    this._internals.setFormValue(this.checked ? this.value : null);
+    const input = this.shadowRoot?.querySelector<HTMLElement>('input');
+    if (this.required && !this.checked && input) {
+      this._internals.setValidity({ valueMissing: true }, 'Please check this switch', input);
+    } else {
+      this._internals.setValidity({});
+    }
+  }
+
+  formResetCallback() {
+    this.checked = false;
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity();
+  }
+
+  reportValidity() {
+    return this._internals.reportValidity();
+  }
+
   private handleChange(e: Event) {
     const target = e.target as HTMLInputElement;
     this.checked = target.checked;

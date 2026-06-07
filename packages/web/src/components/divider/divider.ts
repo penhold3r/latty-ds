@@ -39,7 +39,7 @@ export class Divider extends ThemeableElement {
    * Optional label text centered within the divider line.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   render() {
     return html`

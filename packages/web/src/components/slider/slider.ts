@@ -17,6 +17,14 @@ import '../text/text';
 @customElement('lt-slider')
 export class Slider extends ThemeableElement {
   static styles = sliderStyles;
+  static formAssociated = true;
+
+  private _internals!: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   @property({ reflect: true }) size: SliderSize = 'md';
   @property({ type: Boolean, reflect: true }) disabled = false;
@@ -26,12 +34,12 @@ export class Slider extends ThemeableElement {
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 100;
   @property({ type: Number }) step = 1;
-  @property({ type: Number }) value = 0;
+  @property({ type: Number, reflect: true }) value = 0;
 
   /** Label displayed above the track */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
   /** Name attribute for form submission */
-  @property() name = '';
+  @property({ reflect: true }) name = '';
 
   @query('input') private input!: HTMLInputElement;
 
@@ -54,6 +62,21 @@ export class Slider extends ThemeableElement {
       const centerPx = (fill / 100) * (trackW - thumbPx) + thumbPx / 2;
       this.style.setProperty('--_thumb-left', `${(centerPx / trackW) * 100}%`);
     }
+
+    this._internals.setFormValue(String(this.value));
+    this._internals.setValidity({});
+  }
+
+  formResetCallback() {
+    this.value = this.min;
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity();
+  }
+
+  reportValidity() {
+    return this._internals.reportValidity();
   }
 
   private _onInput(e: Event) {

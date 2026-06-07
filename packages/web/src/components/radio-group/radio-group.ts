@@ -47,20 +47,20 @@ export class RadioGroup extends ThemeableElement {
    * Label for the radio group.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /**
    * Name attribute applied to all radio buttons in the group.
    * Ensures only one radio can be selected at a time.
    * @default ''
    */
-  @property() name = '';
+  @property({ reflect: true }) name = '';
 
   /**
    * Currently selected value in the group.
    * @default ''
    */
-  @property() value = '';
+  @property({ reflect: true }) value = '';
 
   /**
    * Layout orientation of the radio buttons.

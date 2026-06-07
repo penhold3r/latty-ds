@@ -1,4 +1,4 @@
-import { html, nothing } from 'lit';
+import { html, nothing, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
@@ -28,21 +28,29 @@ import '../text/text';
 @customElement('lt-datepicker')
 export class Datepicker extends ThemeableElement {
   static styles = datepickerStyles;
+  static formAssociated = true;
+
+  private _internals: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   /** Native input type. */
   @property({ reflect: true }) type: DatepickerType = 'date';
 
   /** Current value in the format required by the native input (`YYYY-MM-DD`, `HH:MM`, or `YYYY-MM-DDTHH:MM`). */
-  @property() value = '';
+  @property({ reflect: true }) value = '';
 
   /** Minimum allowed value. */
-  @property() min = '';
+  @property({ reflect: true }) min = '';
 
   /** Maximum allowed value. */
-  @property() max = '';
+  @property({ reflect: true }) max = '';
 
   /** Field label displayed above the input. */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /** Helper or error text displayed below the input. */
   @property({ attribute: 'helper-text' }) helperText = '';
@@ -63,9 +71,32 @@ export class Datepicker extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) readonly = false;
 
   /** Name used in form submission. */
-  @property() name = '';
+  @property({ reflect: true }) name = '';
 
   @query('input') private input!: HTMLInputElement;
+
+  protected updated(changed: PropertyValues) {
+    if (changed.has('value') || changed.has('required')) {
+      this._internals.setFormValue(this.value || null);
+      if (this.required && !this.value) {
+        this._internals.setValidity({ valueMissing: true }, 'Please select a date', this.input);
+      } else {
+        this._internals.setValidity({});
+      }
+    }
+  }
+
+  formResetCallback() {
+    this.value = '';
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity();
+  }
+
+  reportValidity() {
+    return this._internals.reportValidity();
+  }
 
   private handleChange() {
     this.value = this.input.value;
@@ -84,7 +115,6 @@ export class Datepicker extends ThemeableElement {
         .value=${this.value}
         min=${this.min || nothing}
         max=${this.max || nothing}
-        name=${this.name || nothing}
         ?disabled=${this.disabled}
         ?required=${this.required}
         ?readonly=${this.readonly}

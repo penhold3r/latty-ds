@@ -2,12 +2,14 @@ import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes
 import type { Textfield as TextfieldEl, LattyIconName } from '@latty-ds/web';
 
 export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onChange'> & {
+  formAssociated?: boolean;
   variant?: TextfieldEl['variant'];
   size?: TextfieldEl['size'];
   type?: TextfieldEl['type'];
   value?: string;
   placeholder?: string;
   label?: string;
+  name?: string;
   helperText?: TextfieldEl['helperText'];
   disabled?: boolean;
   required?: boolean;

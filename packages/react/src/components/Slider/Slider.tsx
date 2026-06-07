@@ -2,6 +2,7 @@ import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes
 import type { Slider as SliderEl } from '@latty-ds/web';
 
 export type SliderProps = Omit<HTMLAttributes<SliderEl>, 'onInput' | 'onChange'> & {
+  formAssociated?: boolean;
   size?: SliderEl['size'];
   disabled?: boolean;
   tooltip?: boolean;

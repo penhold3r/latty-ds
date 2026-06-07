@@ -2,11 +2,14 @@ import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes
 import type { ColorInput as ColorInputEl } from '@latty-ds/web';
 
 export type ColorInputProps = Omit<HTMLAttributes<ColorInputEl>, 'onChange'> & {
+  formAssociated?: boolean;
   value?: string;
   format?: ColorInputEl['format'];
   label?: string;
   placeholder?: string;
   disabled?: boolean;
+  required?: boolean;
+  name?: string;
   size?: ColorInputEl['size'];
   onChange?: (event: CustomEvent) => void;
 };

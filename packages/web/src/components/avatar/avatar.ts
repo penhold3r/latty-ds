@@ -19,7 +19,7 @@ export class Avatar extends ThemeableElement {
   @property() src = '';
 
   /** Full name used to derive initials when no image is available. */
-  @property() name = '';
+  @property({ reflect: true }) name = '';
 
   /** Accessible label for the image (defaults to `name`). */
   @property() alt = '';

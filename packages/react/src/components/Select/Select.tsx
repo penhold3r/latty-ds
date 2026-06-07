@@ -2,11 +2,13 @@ import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes
 import type { Select as SelectEl } from '@latty-ds/web';
 
 export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
+  formAssociated?: boolean;
   variant?: SelectEl['variant'];
   size?: SelectEl['size'];
   value?: string;
   placeholder?: string;
   label?: string;
+  name?: string;
   helperText?: string;
   disabled?: boolean;
   required?: boolean;

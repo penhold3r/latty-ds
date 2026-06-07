@@ -114,7 +114,6 @@ describe('<lt-combobox>', () => {
 
     expect(events).toHaveLength(1);
     expect(events[0].value).toBe('us');
-    expect(events[0].label).toBe('United States');
   });
 
   it('does not open when disabled', async () => {

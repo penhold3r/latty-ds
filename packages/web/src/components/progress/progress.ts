@@ -26,7 +26,7 @@ export class Progress extends ThemeableElement {
    * Current progress value (0–100). Ignored when `indeterminate` is true.
    * @default 0
    */
-  @property({ type: Number }) value = 0;
+  @property({ type: Number, reflect: true }) value = 0;
 
   /**
    * Color variant of the progress bar.
@@ -44,7 +44,7 @@ export class Progress extends ThemeableElement {
    * Accessible label for screen readers.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /**
    * When true the bar animates continuously without a set value.

@@ -2,6 +2,7 @@ import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes
 import type { Switch as SwitchEl } from '@latty-ds/web';
 
 export type SwitchProps = Omit<HTMLAttributes<SwitchEl>, 'onChange'> & {
+  formAssociated?: boolean;
   variant?: SwitchEl['variant'];
   size?: SwitchEl['size'];
   checked?: boolean;

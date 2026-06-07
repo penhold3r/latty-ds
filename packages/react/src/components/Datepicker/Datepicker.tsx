@@ -2,6 +2,7 @@ import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes
 import type { Datepicker as DatepickerEl } from '@latty-ds/web';
 
 export type DatepickerProps = Omit<HTMLAttributes<DatepickerEl>, 'onChange' | 'onInput'> & {
+  formAssociated?: boolean;
   type?: DatepickerEl['type'];
   value?: string;
   min?: string;

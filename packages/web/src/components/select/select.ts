@@ -44,6 +44,14 @@ import { openFloating, closeFloating } from '../shared/floating';
 @customElement('lt-select')
 export class Select extends ThemeableElement {
   static styles = selectStyles;
+  static formAssociated = true;
+
+  private _internals!: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   /**
    * Visual variant that determines styling.
@@ -61,19 +69,25 @@ export class Select extends ThemeableElement {
    * Current selected value.
    * @default ''
    */
-  @property() value = '';
+  @property({ reflect: true }) value = '';
 
   /**
    * Placeholder text shown when no option is selected.
    * @default 'Select an option'
    */
-  @property() placeholder = 'Select an option';
+  @property({ reflect: true }) placeholder = 'Select an option';
 
   /**
    * Label text displayed above the select.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
+
+  /**
+   * Name used when submitting a form.
+   * @default ''
+   */
+  @property({ reflect: true }) name = '';
 
   /**
    * Helper text displayed below the select. Color changes based on variant.
@@ -208,16 +222,21 @@ export class Select extends ThemeableElement {
     return selected ? selected.label : '';
   }
 
-  /**
-   * Reflects the open state as an attribute for CSS styling.
-   */
   updated(changedProperties: Map<string, unknown>) {
+    this._internals.setFormValue(this.value || null);
+    const trigger = this.shadowRoot?.querySelector<HTMLElement>('.select-trigger');
+    if (this.required && !this.value && trigger) {
+      this._internals.setValidity({ valueMissing: true }, 'Please select an option', trigger);
+    } else {
+      this._internals.setValidity({});
+    }
+
     if (!changedProperties.has('isOpen')) return;
     if (this.isOpen) {
       this.setAttribute('open', '');
-      const trigger = this.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!;
+      const selectTrigger = this.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!;
       const listbox = this.shadowRoot!.querySelector<HTMLElement>('lt-surface.dropdown')!;
-      openFloating(trigger, listbox, { matchWidth: true }).then((cleanup) => {
+      openFloating(selectTrigger, listbox, { matchWidth: true }).then((cleanup) => {
         this._floatingCleanup = cleanup;
       });
     } else {
@@ -226,6 +245,18 @@ export class Select extends ThemeableElement {
       if (listbox) closeFloating(listbox, this._floatingCleanup);
       this._floatingCleanup = null;
     }
+  }
+
+  formResetCallback() {
+    this.value = '';
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity();
+  }
+
+  reportValidity() {
+    return this._internals.reportValidity();
   }
 
   render() {

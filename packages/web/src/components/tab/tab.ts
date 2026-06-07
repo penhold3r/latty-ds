@@ -32,13 +32,13 @@ export class Tab extends ThemeableElement {
    * Label text for the tab.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /**
    * Value identifier for the tab.
    * @default ''
    */
-  @property() value = '';
+  @property({ reflect: true }) value = '';
 
   /**
    * Icon name to display at the start of the tab.

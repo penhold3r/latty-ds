@@ -47,7 +47,7 @@ export class NavItem extends ThemeableElement {
   @property() href = '';
 
   /** Label text shown in the item. */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /**
    * Icon name (from the built-in Latty icon set) shown before the label.

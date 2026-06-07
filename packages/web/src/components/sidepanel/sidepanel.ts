@@ -36,7 +36,7 @@ export class SidePanel extends ThemeableElement {
   @property() size = '320px';
 
   /** Title shown in the panel header. When empty, the header is hidden. */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /** Suppress the built-in close button. */
   @property({ type: Boolean, attribute: 'no-close-button' }) noCloseButton = false;

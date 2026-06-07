@@ -14,7 +14,7 @@ import { openFloating, closeFloating } from '../shared/floating';
  *
  * @element lt-combobox
  *
- * @fires {CustomEvent<{value: string, label: string}>} change - Fired when the selected value changes.
+ * @fires {CustomEvent<{value: string}>} change - Fired when the selected value changes.
  *
  * @example
  * ```html
@@ -28,18 +28,26 @@ import { openFloating, closeFloating } from '../shared/floating';
 @customElement('lt-combobox')
 export class Combobox extends ThemeableElement {
   static styles = comboboxStyles;
+  static formAssociated = true;
+
+  private _internals!: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   /** Array of selectable options. Set as a JS property (`.options`). */
   @property({ type: Array }) options: ComboboxOption[] = [];
 
   /** Currently selected value. */
-  @property() value = '';
+  @property({ reflect: true }) value = '';
 
   /** Field label displayed above the input. */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /** Placeholder text shown when nothing is typed. */
-  @property() placeholder = 'Search…';
+  @property({ reflect: true }) placeholder = 'Search…';
 
   /** Helper or error text displayed below the input. */
   @property({ attribute: 'helper-text' }) helperText = '';
@@ -57,7 +65,7 @@ export class Combobox extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) required = false;
 
   /** Name used in form submission. */
-  @property() name = '';
+  @property({ reflect: true }) name = '';
 
   @state() private query = '';
   @state() private open = false;
@@ -101,7 +109,7 @@ export class Combobox extends ThemeableElement {
     if (opt.disabled) return;
     this.value = opt.value;
     this.closeDropdown();
-    dispatch(this, 'change', { value: opt.value, label: opt.label });
+    dispatch(this, 'change', { value: opt.value });
   }
 
   private handleInput(e: Event) {
@@ -145,6 +153,28 @@ export class Combobox extends ThemeableElement {
     this._floatingCleanup = null;
   }
 
+  updated() {
+    this._internals.setFormValue(this.value || null);
+    const input = this.shadowRoot?.querySelector<HTMLElement>('input');
+    if (this.required && !this.value && input) {
+      this._internals.setValidity({ valueMissing: true }, 'Please select an option', input);
+    } else {
+      this._internals.setValidity({});
+    }
+  }
+
+  formResetCallback() {
+    this.value = '';
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity();
+  }
+
+  reportValidity() {
+    return this._internals.reportValidity();
+  }
+
   render() {
     const opts = this.filtered;
     const displayValue = this.open ? this.query : this.selectedLabel;
@@ -158,7 +188,6 @@ export class Combobox extends ThemeableElement {
           aria-autocomplete="list"
           aria-required=${this.required}
           autocomplete="off"
-          name=${this.name || nothing}
           placeholder=${this.open ? this.placeholder : this.selectedLabel || this.placeholder}
           .value=${displayValue}
           ?disabled=${this.disabled}

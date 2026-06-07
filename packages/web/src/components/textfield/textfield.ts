@@ -50,6 +50,14 @@ import '../text/text';
 @customElement('lt-textfield')
 export class Textfield extends ThemeableElement {
   static styles = textfieldStyles;
+  static formAssociated = true;
+
+  private _internals!: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   /**
    * Visual variant that determines styling and automatic end icon.
@@ -73,19 +81,25 @@ export class Textfield extends ThemeableElement {
    * Current value of the input.
    * @default ''
    */
-  @property() value = '';
+  @property({ reflect: true }) value = '';
 
   /**
    * Placeholder text shown when input is empty.
    * @default ''
    */
-  @property() placeholder = '';
+  @property({ reflect: true }) placeholder = '';
 
   /**
    * Label text displayed above the input.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
+
+  /**
+   * Name used when submitting a form.
+   * @default ''
+   */
+  @property({ reflect: true }) name = '';
 
   /**
    * Helper text displayed below the input. Can be a static string or a function
@@ -258,6 +272,26 @@ export class Textfield extends ThemeableElement {
   override updated(changed: PropertyValues) {
     super.updated(changed);
     this.toggleAttribute('data-invalid', this._autoError);
+    this._internals.setFormValue(this.value || null);
+    const anchor = (this.shadowRoot!.querySelector('input') ??
+      this.shadowRoot!.querySelector('textarea')) as HTMLElement | null;
+    if (this.required && !this.value && anchor) {
+      this._internals.setValidity({ valueMissing: true }, 'Please fill in this field', anchor);
+    } else {
+      this._internals.setValidity({});
+    }
+  }
+
+  formResetCallback() {
+    this.value = '';
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity();
+  }
+
+  reportValidity() {
+    return this._internals.reportValidity();
   }
 
   render() {

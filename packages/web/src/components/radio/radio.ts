@@ -44,6 +44,14 @@ import { RadioSize, RadioVariant, RadioLabelPosition } from './radio.types';
 @customElement('lt-radio')
 export class Radio extends ThemeableElement {
   static styles = radioStyles;
+  static formAssociated = true;
+
+  private _internals!: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   /**
    * Visual variant that determines the color when checked.
@@ -79,7 +87,7 @@ export class Radio extends ThemeableElement {
    * Label text displayed next to the radio button.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /**
    * Position of the label relative to the radio button.
@@ -92,13 +100,35 @@ export class Radio extends ThemeableElement {
    * All radios with the same name belong to the same group.
    * @default ''
    */
-  @property() name = '';
+  @property({ reflect: true }) name = '';
 
   /**
    * Value attribute for form submission.
    * @default ''
    */
-  @property() value = '';
+  @property({ reflect: true }) value = '';
+
+  updated() {
+    this._internals.setFormValue(this.checked ? this.value : null);
+    const input = this.shadowRoot?.querySelector<HTMLElement>('input');
+    if (this.required && !this.checked && input) {
+      this._internals.setValidity({ valueMissing: true }, 'Please select this option', input);
+    } else {
+      this._internals.setValidity({});
+    }
+  }
+
+  formResetCallback() {
+    this.checked = false;
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity();
+  }
+
+  reportValidity() {
+    return this._internals.reportValidity();
+  }
 
   /**
    * Handles radio change events.

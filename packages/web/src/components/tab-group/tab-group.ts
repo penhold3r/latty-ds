@@ -51,7 +51,7 @@ export class TabGroup extends ThemeableElement {
    * Currently selected tab value.
    * @default ''
    */
-  @property() value = '';
+  @property({ reflect: true }) value = '';
 
   /**
    * Visual appearance of the tab group.

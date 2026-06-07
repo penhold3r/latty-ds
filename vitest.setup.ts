@@ -8,3 +8,13 @@ expect.extend(axeMatchers);
 import { iconRegistry } from './packages/icons/src/registry/icon-registry';
 import { lattyIcons } from './packages/icons/src/icons';
 iconRegistry.registerIcons(lattyIcons);
+
+// jsdom's ElementInternals is a partial stub — patch the form-association methods
+// so tests don't blow up on components that use static formAssociated = true.
+if (typeof ElementInternals !== 'undefined') {
+  const p = ElementInternals.prototype as Record<string, unknown>;
+  if (typeof p['setFormValue'] !== 'function') p['setFormValue'] = () => {};
+  if (typeof p['setValidity'] !== 'function') p['setValidity'] = () => {};
+  if (typeof p['checkValidity'] !== 'function') p['checkValidity'] = () => true;
+  if (typeof p['reportValidity'] !== 'function') p['reportValidity'] = () => true;
+}

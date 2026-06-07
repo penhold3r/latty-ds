@@ -31,6 +31,14 @@ import { openFloating, closeFloating } from '../shared/floating';
 @customElement('lt-date-input')
 export class DateInput extends ThemeableElement {
   static styles = dateInputStyles;
+  static formAssociated = true;
+
+  private _internals!: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   /** Selected date in ISO format (YYYY-MM-DD). */
   @property({ reflect: true }) value = '';
@@ -51,10 +59,10 @@ export class DateInput extends ThemeableElement {
   @property({ attribute: 'week-start', reflect: true }) weekStart: '0' | '1' = '0';
 
   /** Field label displayed above the trigger. */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /** Placeholder text shown when no date is selected. */
-  @property() placeholder = 'Select a date';
+  @property({ reflect: true }) placeholder = 'Select a date';
 
   /** Helper or error text displayed below the field. */
   @property({ attribute: 'helper-text' }) helperText = '';
@@ -72,7 +80,7 @@ export class DateInput extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) required = false;
 
   /** Name used in form submission via a hidden input. */
-  @property() name = '';
+  @property({ reflect: true }) name = '';
 
   /** Individual dates to disable in the calendar, as Date objects. */
   disabledDates: Calendar['disabledDates'] = [];
@@ -134,6 +142,28 @@ export class DateInput extends ThemeableElement {
     }
   }
 
+  updated() {
+    this._internals.setFormValue(this.value || null);
+    const btn = this.shadowRoot?.querySelector<HTMLElement>('#field-btn');
+    if (this.required && !this.value && btn) {
+      this._internals.setValidity({ valueMissing: true }, 'Please select a date', btn);
+    } else {
+      this._internals.setValidity({});
+    }
+  }
+
+  formResetCallback() {
+    this.value = '';
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity();
+  }
+
+  reportValidity() {
+    return this._internals.reportValidity();
+  }
+
   render() {
     const displayText = this._displayValue || this.placeholder;
     const isPlaceholder = !this._displayValue;
@@ -187,7 +217,6 @@ export class DateInput extends ThemeableElement {
           </div>
         </div>
 
-        ${this.name ? html`<input type="hidden" name=${this.name} .value=${this.value} />` : nothing}
         ${this.helperText ? html`<span class="helper-text">${this.helperText}</span>` : nothing}
       </div>
     `;

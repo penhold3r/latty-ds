@@ -45,7 +45,7 @@ export class Nav extends ThemeableElement {
    * Accessible label for the navigation region. Required when multiple nav elements appear on one page.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /**
    * Layout direction of the navigation.

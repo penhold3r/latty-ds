@@ -12,7 +12,7 @@ import '@latty-ds/icons';
  *
  * @element lt-checkbox
  *
- * @fires {CustomEvent<{checked: boolean, indeterminate: boolean}>} change - Dispatched when the checked state changes
+ * @fires {CustomEvent<{checked: boolean}>} change - Dispatched when the checked state changes
  *
  * @example
  * ```html
@@ -40,6 +40,14 @@ import '@latty-ds/icons';
 @customElement('lt-checkbox')
 export class Checkbox extends ThemeableElement {
   static styles = checkboxStyles;
+  static formAssociated = true;
+
+  private _internals!: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   /**
    * Visual variant that determines the color when checked.
@@ -82,7 +90,7 @@ export class Checkbox extends ThemeableElement {
    * Label text displayed next to the checkbox.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /**
    * Position of the label relative to the checkbox.
@@ -94,13 +102,13 @@ export class Checkbox extends ThemeableElement {
    * Name attribute for form submission.
    * @default ''
    */
-  @property() name = '';
+  @property({ reflect: true }) name = '';
 
   /**
    * Value attribute for form submission.
    * @default 'on'
    */
-  @property() value = 'on';
+  @property({ reflect: true }) value = 'on';
 
   /**
    * Reference to the native input element.
@@ -108,14 +116,28 @@ export class Checkbox extends ThemeableElement {
    */
   @query('input[type="checkbox"]') private input!: HTMLInputElement;
 
-  /**
-   * Handles changes to the indeterminate property.
-   * Updates the native input's indeterminate state.
-   */
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('indeterminate') && this.input) {
       this.input.indeterminate = this.indeterminate;
     }
+    this._internals.setFormValue(this.checked ? this.value : null);
+    if (this.required && !this.checked && this.input) {
+      this._internals.setValidity({ valueMissing: true }, 'Please check this box', this.input);
+    } else {
+      this._internals.setValidity({});
+    }
+  }
+
+  formResetCallback() {
+    this.checked = false;
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity();
+  }
+
+  reportValidity() {
+    return this._internals.reportValidity();
   }
 
   /**
@@ -132,7 +154,7 @@ export class Checkbox extends ThemeableElement {
 
     this.dispatchEvent(
       new CustomEvent('change', {
-        detail: { checked: this.checked, indeterminate: this.indeterminate },
+        detail: { checked: this.checked },
         bubbles: true,
         composed: true
       })

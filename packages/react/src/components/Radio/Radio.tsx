@@ -2,6 +2,7 @@ import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes
 import type { Radio as RadioEl } from '@latty-ds/web';
 
 export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
+  formAssociated?: boolean;
   variant?: RadioEl['variant'];
   size?: RadioEl['size'];
   checked?: boolean;

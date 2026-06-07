@@ -95,13 +95,21 @@ function formatColor(hex: string, format: ColorInputFormat): string {
 @customElement('lt-color-input')
 export class ColorInput extends ThemeableElement {
   static styles = colorInputStyles;
+  static formAssociated = true;
+
+  private _internals!: ElementInternals;
+
+  constructor() {
+    super();
+    this._internals = this.attachInternals();
+  }
 
   /**
    * The current color value. Accepts hex (`#7c3aed`), rgb (`rgb(124, 58, 237)`),
    * or hsl (`hsl(263, 70%, 58%)`). Emitted values match the `format` prop.
    * @default ''
    */
-  @property() value = '';
+  @property({ reflect: true }) value = '';
 
   /**
    * Output format for the displayed value and emitted `change` events.
@@ -113,13 +121,13 @@ export class ColorInput extends ThemeableElement {
    * Label text displayed above the input.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /**
    * Placeholder shown when no color is selected.
    * @default 'Pick a color'
    */
-  @property() placeholder = 'Pick a color';
+  @property({ reflect: true }) placeholder = 'Pick a color';
 
   /**
    * Whether the input is disabled.
@@ -128,10 +136,44 @@ export class ColorInput extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) disabled = false;
 
   /**
+   * Whether the field is required.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) required = false;
+
+  /**
+   * Name used when submitting a form.
+   * @default ''
+   */
+  @property({ reflect: true }) name = '';
+
+  /**
    * Size of the input — affects height and padding.
    * @default 'md'
    */
   @property({ reflect: true }) size: ColorInputSize = 'md';
+
+  updated() {
+    this._internals.setFormValue(this.value || null);
+    const input = this.shadowRoot?.querySelector<HTMLElement>('input[type="color"]');
+    if (this.required && !this.value && input) {
+      this._internals.setValidity({ valueMissing: true }, 'Please select a color', input);
+    } else {
+      this._internals.setValidity({});
+    }
+  }
+
+  formResetCallback() {
+    this.value = '';
+  }
+
+  checkValidity() {
+    return this._internals.checkValidity();
+  }
+
+  reportValidity() {
+    return this._internals.reportValidity();
+  }
 
   private _handleChange(e: Event) {
     const pickerHex = (e.target as HTMLInputElement).value; // always #rrggbb from native picker

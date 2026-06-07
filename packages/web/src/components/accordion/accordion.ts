@@ -45,7 +45,7 @@ export class Accordion extends ThemeableElement {
    * Label/title text for the accordion header.
    * @default ''
    */
-  @property() label = '';
+  @property({ reflect: true }) label = '';
 
   /**
    * Icon name to display at the start of the header.

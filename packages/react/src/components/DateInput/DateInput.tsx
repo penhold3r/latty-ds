@@ -2,6 +2,7 @@ import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes
 import type { DateInput as DateInputEl } from '@latty-ds/web';
 
 export type DateInputProps = Omit<HTMLAttributes<DateInputEl>, 'onChange'> & {
+  formAssociated?: boolean;
   value?: string;
   min?: string;
   max?: string;

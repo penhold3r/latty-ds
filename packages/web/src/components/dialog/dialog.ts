@@ -30,8 +30,10 @@ import '../text/text';
  * @slot header - Custom header content (overrides title prop)
  * @slot footer - Footer content (typically for action buttons)
  *
- * @fires dialog-open - Fired when dialog opens
- * @fires dialog-close - Fired when dialog closes
+ * @fires open - Fired when dialog opens
+ * @fires close - Fired when dialog closes
+ * @fires dialog-open - Fired when dialog opens (deprecated, use `open`)
+ * @fires dialog-close - Fired when dialog closes (deprecated, use `close`)
  *
  * @example
  * ```html
@@ -160,13 +162,10 @@ export class Dialog extends ThemeableElement {
       this.dialogElement?.focus();
     });
 
-    // Dispatch open event
-    this.dispatchEvent(
-      new CustomEvent('dialog-open', {
-        bubbles: true,
-        composed: true
-      })
-    );
+    // Dispatch open events (dialog-open kept for backward compat)
+    const openEvent = new CustomEvent('open', { bubbles: true, composed: true });
+    this.dispatchEvent(openEvent);
+    this.dispatchEvent(new CustomEvent('dialog-open', { bubbles: true, composed: true }));
   }
 
   private handleClose() {
@@ -176,13 +175,9 @@ export class Dialog extends ThemeableElement {
     // Restore focus to previously focused element
     this.restoreFocus();
 
-    // Dispatch close event
-    this.dispatchEvent(
-      new CustomEvent('dialog-close', {
-        bubbles: true,
-        composed: true
-      })
-    );
+    // Dispatch close events (dialog-close kept for backward compat)
+    this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('dialog-close', { bubbles: true, composed: true }));
   }
 
   private restoreFocus() {
