@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/penhold3r/latty-ds/compare/v0.2.0...v0.3.0) (2026-06-07)
+
+### Bug Fixes
+
+- **ci:** add npm whoami diagnostic before publish ([6fd1814](https://github.com/penhold3r/latty-ds/commit/6fd1814cb17a56d6652c581fc349c4f8f426a4bc))
+
+### Features
+
+- **icons:** auto-register built-in icons on import ([28cd0bc](https://github.com/penhold3r/latty-ds/commit/28cd0bcc86190b5bfd71516e95c32a93e791b5e1))
+
 # 0.2.0 (2026-06-06)
 
 ### Bug Fixes

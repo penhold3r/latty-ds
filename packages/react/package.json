@@ -1,6 +1,6 @@
 {
   "name": "@latty-ds/react",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "React wrappers for the Latty design system — typed React components backed by @latty-ds/web",
   "license": "MIT",
   "repository": {
