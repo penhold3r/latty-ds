@@ -31,19 +31,6 @@
   display: block;
 }
 
-.version-badge {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.75);
-  background: rgba(0, 0, 0, 0.12);
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 2px 8px;
-  border-radius: 999px;
-  letter-spacing: 0.03em;
-  align-self: center;
-  line-height: 1.6;
-}
-
 .header-end {
   display: flex;
   align-items: center;

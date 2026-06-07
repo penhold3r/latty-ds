@@ -76,7 +76,7 @@ const canonicalUrl = `${siteOrigin}${Astro.url.pathname}`;
         <Image src={lattyLogo} alt="Latty" height={28} class="wordmark-logo" />
       </a>
       <div slot="after" class="header-end">
-        <span class="version-badge">{version}</span>
+        <lt-badge content={version} variant="neutral" appearance="subtle" size="sm"></lt-badge>
         <lt-icon-button class="header-btn" id="theme-toggle" label="Toggle theme" icon="moon" size="sm" round
         ></lt-icon-button>
         <lt-icon-button
