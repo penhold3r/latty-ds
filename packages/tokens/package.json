@@ -1,6 +1,6 @@
 {
   "name": "@latty-ds/tokens",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Design tokens for the Latty design system — generates CSS custom properties, JSON, and JavaScript exports from a single config file",
   "license": "MIT",
   "repository": {

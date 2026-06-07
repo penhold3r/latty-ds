@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/penhold3r/latty-ds/compare/v0.3.0...v0.4.0) (2026-06-07)
+
+### Bug Fixes
+
+- **docs:** replace custom version-badge span with lt-badge component ([4705b8b](https://github.com/penhold3r/latty-ds/commit/4705b8bb82ec77114cccd86ac5afa3b2dbcfa8a1))
+
+### Features
+
+- **web,react:** add property reflection, event standardization, and form association ([e015945](https://github.com/penhold3r/latty-ds/commit/e0159451d6f32e6780bb6bf280a8b66af13ad8bc))
+
 # [0.3.0](https://github.com/penhold3r/latty-ds/compare/v0.2.0...v0.3.0) (2026-06-07)
 
 ### Bug Fixes
