@@ -16,9 +16,7 @@
     "logger",
     "latty"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "files": [
     "dist",
     "README.md",
