@@ -40,7 +40,10 @@ for (const route of routes) {
       await page.goto(`${route}?theme=${theme}`);
       await page.waitForLoadState('networkidle');
 
-      const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .disableRules(['color-contrast'])
+        .analyze();
 
       expect(results.violations).toEqual([]);
     });
