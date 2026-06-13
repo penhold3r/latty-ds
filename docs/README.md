@@ -2,7 +2,7 @@
 
 Astro-based documentation site for the Latty Design System. Provides a live component playground, full API reference, token explorer, and getting-started guides.
 
-**Live site:** https://penhold3r.github.io/latty-ds/
+**Live site:** https://latty-ds.com
 
 ## Development
 
@@ -47,4 +47,4 @@ src/
 
 ## Deployment
 
-The site deploys automatically to GitHub Pages on every push to `main` via `.github/workflows/deploy-docs.yml`. The workflow sets `SITE_URL=https://penhold3r.github.io` and `BASE_PATH=/latty-ds`. No manual step needed.
+The site deploys automatically to GitHub Pages on every push to `main` via `.github/workflows/deploy-docs.yml`. The workflow sets `SITE_URL=https://latty-ds.com` and `BASE_PATH=/`. No manual step needed.

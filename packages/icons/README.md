@@ -2,7 +2,7 @@
 
 Icon system for the Latty Design System. Ships a curated set of pre-registered icons from [Iconoir](https://iconoir.com) and a pluggable provider registry for adding your own.
 
-See the [icon gallery](https://penhold3r.github.io/latty-ds/) in the docs for the full list of available icons.
+See the [icon gallery](https://latty-ds.com) in the docs for the full list of available icons.
 
 ## Installation
 

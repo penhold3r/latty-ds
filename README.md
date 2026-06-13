@@ -6,7 +6,7 @@
 
 Framework-agnostic design system built on design tokens and Web Components. One token change cascades through every component in every framework — no re-theming, no duplication.
 
-**Docs:** https://penhold3r.github.io/latty-ds/
+**Docs:** https://latty-ds.com
 
 ## Highlights
 

@@ -31,7 +31,7 @@ import '@latty-ds/web/dist/components/textfield';
 
 ## Components
 
-Buttons, inputs, overlays, navigation, data display, and more — all prefixed `lt-*`. See the [full component reference](https://penhold3r.github.io/latty-ds/) for props, events, and live examples.
+Buttons, inputs, overlays, navigation, data display, and more — all prefixed `lt-*`. See the [full component reference](https://latty-ds.com) for props, events, and live examples.
 
 ## Usage
 
