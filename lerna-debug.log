@@ -1,0 +1,145 @@
+0 silly argv {
+0 silly argv   _: [ 'version' ],
+0 silly argv   'conventional-commits': true,
+0 silly argv   conventionalCommits: true,
+0 silly argv   lernaVersion: '9.0.7',
+0 silly argv   '$0': 'node_modules/lerna/dist/cli.js'
+0 silly argv }
+1 notice cli v9.0.7
+2 verbose packageConfigs Package manager "pnpm" detected. Resolving packages using `pnpm-workspace.yaml`.
+3 verbose rootPath /Users/nico/Documents/CODE/latty-ds
+4 info current version 0.3.0
+5 silly isAnythingCommitted
+6 verbose isAnythingCommitted 1
+7 silly getCurrentBranch
+8 verbose currentBranch main
+9 silly remoteBranchExists
+10 silly isBehindUpstream
+11 silly isBehindUpstream main is behind origin/main by 0 commit(s) and ahead by 2
+12 silly hasTags
+13 verbose hasTags true
+14 silly git-describe.sync "v0.3.0-2-g4705b8b" => {"lastTagName":"v0.3.0","lastVersion":"v0.3.0","refCount":"2","sha":"4705b8b","isDirty":false}
+15 info Looking for changed packages since v0.3.0
+16 silly checking diff docs
+17 silly found diff in docs/src/layouts/BaseLayout/BaseLayout.styles.css
+17 silly found diff in docs/src/layouts/BaseLayout/index.astro
+18 verbose filtered diff [
+18 verbose filtered diff   'docs/src/layouts/BaseLayout/BaseLayout.styles.css',
+18 verbose filtered diff   'docs/src/layouts/BaseLayout/index.astro'
+18 verbose filtered diff ]
+19 silly checking diff packages/icons
+20 silly no diff found in @latty-ds/icons
+21 silly checking diff packages/react
+22 silly found diff in packages/react/src/components/Checkbox/Checkbox.tsx
+22 silly found diff in packages/react/src/components/ColorInput/ColorInput.tsx
+22 silly found diff in packages/react/src/components/Combobox/Combobox.tsx
+22 silly found diff in packages/react/src/components/DateInput/DateInput.tsx
+22 silly found diff in packages/react/src/components/Datepicker/Datepicker.tsx
+22 silly found diff in packages/react/src/components/Dialog/Dialog.tsx
+22 silly found diff in packages/react/src/components/Radio/Radio.tsx
+22 silly found diff in packages/react/src/components/Select/Select.tsx
+22 silly found diff in packages/react/src/components/Slider/Slider.tsx
+22 silly found diff in packages/react/src/components/Switch/Switch.tsx
+22 silly found diff in packages/react/src/components/Textfield/Textfield.tsx
+22 silly found diff in packages/react/src/index.ts
+23 verbose filtered diff [
+23 verbose filtered diff   'packages/react/src/components/Checkbox/Checkbox.tsx',
+23 verbose filtered diff   'packages/react/src/components/ColorInput/ColorInput.tsx',
+23 verbose filtered diff   'packages/react/src/components/Combobox/Combobox.tsx',
+23 verbose filtered diff   'packages/react/src/components/DateInput/DateInput.tsx',
+23 verbose filtered diff   'packages/react/src/components/Datepicker/Datepicker.tsx',
+23 verbose filtered diff   'packages/react/src/components/Dialog/Dialog.tsx',
+23 verbose filtered diff   'packages/react/src/components/Radio/Radio.tsx',
+23 verbose filtered diff   'packages/react/src/components/Select/Select.tsx',
+23 verbose filtered diff   'packages/react/src/components/Slider/Slider.tsx',
+23 verbose filtered diff   'packages/react/src/components/Switch/Switch.tsx',
+23 verbose filtered diff   'packages/react/src/components/Textfield/Textfield.tsx',
+23 verbose filtered diff   'packages/react/src/index.ts'
+23 verbose filtered diff ]
+24 silly checking diff packages/tokens
+25 silly no diff found in @latty-ds/tokens
+26 silly checking diff packages/utils
+27 silly no diff found in @latty-ds/utils
+28 silly checking diff packages/web
+29 silly found diff in packages/web/custom-elements.json
+29 silly found diff in packages/web/src/components/accordion/accordion.ts
+29 silly found diff in packages/web/src/components/avatar/avatar.ts
+29 silly found diff in packages/web/src/components/checkbox/checkbox.ts
+29 silly found diff in packages/web/src/components/color-input/color-input.ts
+29 silly found diff in packages/web/src/components/combobox/__tests__/combobox.test.ts
+29 silly found diff in packages/web/src/components/combobox/combobox.ts
+29 silly found diff in packages/web/src/components/date-input/date-input.ts
+29 silly found diff in packages/web/src/components/datepicker/datepicker.ts
+29 silly found diff in packages/web/src/components/dialog/dialog.ts
+29 silly found diff in packages/web/src/components/divider/divider.ts
+29 silly found diff in packages/web/src/components/nav/nav-item.ts
+29 silly found diff in packages/web/src/components/nav/nav.ts
+29 silly found diff in packages/web/src/components/progress/progress.ts
+29 silly found diff in packages/web/src/components/radio-group/radio-group.ts
+29 silly found diff in packages/web/src/components/radio/radio.ts
+29 silly found diff in packages/web/src/components/select/select.ts
+29 silly found diff in packages/web/src/components/sidepanel/sidepanel.ts
+29 silly found diff in packages/web/src/components/slider/slider.ts
+29 silly found diff in packages/web/src/components/switch/switch.ts
+29 silly found diff in packages/web/src/components/tab-group/tab-group.ts
+29 silly found diff in packages/web/src/components/tab/tab.ts
+29 silly found diff in packages/web/src/components/textfield/textfield.ts
+30 verbose filtered diff [
+30 verbose filtered diff   'packages/web/custom-elements.json',
+30 verbose filtered diff   'packages/web/src/components/accordion/accordion.ts',
+30 verbose filtered diff   'packages/web/src/components/avatar/avatar.ts',
+30 verbose filtered diff   'packages/web/src/components/checkbox/checkbox.ts',
+30 verbose filtered diff   'packages/web/src/components/color-input/color-input.ts',
+30 verbose filtered diff   'packages/web/src/components/combobox/__tests__/combobox.test.ts',
+30 verbose filtered diff   'packages/web/src/components/combobox/combobox.ts',
+30 verbose filtered diff   'packages/web/src/components/date-input/date-input.ts',
+30 verbose filtered diff   'packages/web/src/components/datepicker/datepicker.ts',
+30 verbose filtered diff   'packages/web/src/components/dialog/dialog.ts',
+30 verbose filtered diff   'packages/web/src/components/divider/divider.ts',
+30 verbose filtered diff   'packages/web/src/components/nav/nav-item.ts',
+30 verbose filtered diff   'packages/web/src/components/nav/nav.ts',
+30 verbose filtered diff   'packages/web/src/components/progress/progress.ts',
+30 verbose filtered diff   'packages/web/src/components/radio-group/radio-group.ts',
+30 verbose filtered diff   'packages/web/src/components/radio/radio.ts',
+30 verbose filtered diff   'packages/web/src/components/select/select.ts',
+30 verbose filtered diff   'packages/web/src/components/sidepanel/sidepanel.ts',
+30 verbose filtered diff   'packages/web/src/components/slider/slider.ts',
+30 verbose filtered diff   'packages/web/src/components/switch/switch.ts',
+30 verbose filtered diff   'packages/web/src/components/tab-group/tab-group.ts',
+30 verbose filtered diff   'packages/web/src/components/tab/tab.ts',
+30 verbose filtered diff   'packages/web/src/components/textfield/textfield.ts'
+30 verbose filtered diff ]
+31 verbose updated @latty-ds/docs
+32 verbose updated @latty-ds/react
+33 verbose updated @latty-ds/web
+34 verbose git-describe undefined => "v0.3.0-2-g4705b8b"
+35 silly git-describe parsed => {"lastTagName":"v0.3.0","lastVersion":"v0.3.0","refCount":"2","sha":"4705b8b","isDirty":false}
+36 silly fixed for @latty-ds/docs at /Users/nico/Documents/CODE/latty-ds/docs
+37 verbose getChangelogConfig using preset "conventional-changelog-angular"
+38 silly npa Result {
+38 silly npa   type: 'range',
+38 silly npa   registry: true,
+38 silly npa   where: undefined,
+38 silly npa   raw: 'conventional-changelog-angular',
+38 silly npa   name: 'conventional-changelog-angular',
+38 silly npa   escapedName: 'conventional-changelog-angular',
+38 silly npa   scope: undefined,
+38 silly npa   rawSpec: '*',
+38 silly npa   saveSpec: null,
+38 silly npa   fetchSpec: '*',
+38 silly npa   gitRange: undefined,
+38 silly npa   gitCommittish: undefined,
+38 silly npa   gitSubdir: undefined,
+38 silly npa   hosted: undefined
+38 silly npa }
+39 verbose getChangelogConfig Attempting to resolve preset "conventional-changelog-angular"
+40 info getChangelogConfig Successfully resolved preset "conventional-changelog-angular"
+41 verbose fixed increment 0.3.0 by patch
+42 silly fixed for @latty-ds/react at /Users/nico/Documents/CODE/latty-ds/packages/react
+43 verbose fixed increment 0.3.0 by minor
+44 silly fixed for @latty-ds/web at /Users/nico/Documents/CODE/latty-ds/packages/web
+45 verbose fixed increment 0.3.0 by minor
+46 error ExitPromptError: User force closed the prompt with 0 null
+46 error     at /Users/nico/Documents/CODE/latty-ds/node_modules/.pnpm/@inquirer+core@10.3.2_@types+node@25.2.1/node_modules/@inquirer/core/dist/commonjs/lib/create-prompt.js:96:20
+46 error     at Emitter.emit (/Users/nico/Documents/CODE/latty-ds/node_modules/.pnpm/signal-exit@4.1.0/node_modules/signal-exit/dist/cjs/index.js:71:19)
+46 error     at #processEmit (/Users/nico/Documents/CODE/latty-ds/node_modules/.pnpm/signal-exit@4.1.0/node_modules/signal-exit/dist/cjs/index.js:240:27)
