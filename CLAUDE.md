@@ -339,11 +339,22 @@ Tests use Vitest with jsdom environment. Test files are located at `packages/**/
 
 ## Agent Documents
 
-Planning documents, design decisions, audits, and research produced during a session belong in `_agent-docs/` at the repo root. This directory is tracked in git and is the canonical place for reference docs that span sessions.
+Two directories at the repo root hold agent-produced documents. Both are tracked in git and survive context resets.
 
-- Name files in SCREAMING-KEBAB: `DARK-THEME-PLAN.md`, `EXAMPLE-SITES-AUDIT.md`, etc.
-- Always write a file here when creating a multi-step plan, capturing a design decision, or producing research that future sessions will need.
-- Do not rely on the ephemeral `~/.claude/plans/` file alone — write to `_agent-docs/` so the user can review and the content survives context resets.
+### `_agent-plans/` — Implementation and refactor plans
+
+Use this for any task with multiple steps that need tracking across a session.
+
+- Name files in SCREAMING-KEBAB: `ICONS-SVG-DOWNLOAD.md`, `DARK-THEME-REFACTOR.md`, etc.
+- Every plan must use a **checkbox list** (`- [ ]`) so progress is visible at a glance and can be checked off as steps complete.
+- Always write here before starting a multi-step implementation — do not rely on the ephemeral `~/.claude/plans/` file alone.
+
+### `_agent-docs/` — Design decisions, audits, and research
+
+Use this for non-actionable reference material: architectural decisions, audits, research notes, and context that future sessions will need.
+
+- Name files in SCREAMING-KEBAB: `EXAMPLE-SITES-AUDIT.md`, `A11Y-CONTRAST-NOTES.md`, etc.
+- No checkbox lists — these are reference docs, not task trackers.
 
 ## CI/CD
 

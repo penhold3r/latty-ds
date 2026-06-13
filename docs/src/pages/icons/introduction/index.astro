@@ -16,6 +16,15 @@ const totalIcons = iconGroups.reduce((sum, g) => sum + g.icons.length, 0);
     Click any icon below to copy its usage snippet.
   </lt-text>
 
+  <lt-text variant="h2">Design Assets</lt-text>
+  <lt-text variant="body">
+    Download all {totalIcons} icons as ready-to-use SVG files for Figma, Sketch, or any design tool. Each icon is a 24×24
+    SVG with a black stroke — import once, then recolor freely.
+  </lt-text>
+  <a href="/assets/latty-icons.zip" download="latty-icons.zip">
+    <lt-button icon-start="download" variant="secondary">Download SVGs (.zip, {totalIcons} icons)</lt-button>
+  </a>
+
   <lt-text variant="h2">Installation</lt-text>
   <lt-text variant="body"
     >Icons are included in <code>@latty-ds/web</code> — no extra package needed for basic usage:</lt-text
