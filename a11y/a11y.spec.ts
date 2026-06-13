@@ -40,12 +40,24 @@ for (const route of routes) {
       await page.goto(`${route}?theme=${theme}`);
       await page.waitForLoadState('networkidle');
 
-      const results = await new AxeBuilder({ page })
-        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-        .disableRules(['color-contrast'])
-        .analyze();
+      const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
 
-      expect(results.violations).toEqual([]);
+      // Filter out color-contrast violations for elements inside primary background containers
+      const filtered = {
+        ...results,
+        violations: results.violations.filter((v) => {
+          if (v.id !== 'color-contrast') return true;
+          // Exclude violations if the element or any related element has background="primary"
+          return !v.nodes.some((n) => {
+            const hasInHeader =
+              n.html.includes('background="primary"') ||
+              n.any?.some((a) => a.relatedNodes?.some((rn) => rn.html?.includes('background="primary"')));
+            return hasInHeader;
+          });
+        })
+      };
+
+      expect(filtered.violations).toEqual([]);
     });
   }
 }
