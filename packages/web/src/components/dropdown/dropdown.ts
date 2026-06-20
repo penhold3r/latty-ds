@@ -52,7 +52,10 @@ export class Dropdown extends ThemeableElement {
       const menu = this.shadowRoot!.querySelector<HTMLElement>('lt-surface.menu')!;
       if (menu) {
         openFloating(triggerEl, menu, { placement: this.placement }).then((cleanup) => {
-          this._floatingCleanup = cleanup;
+          // Guard against a close that happened while openFloating was resolving —
+          // otherwise the autoUpdate cleanup is orphaned and runs forever on a hidden menu.
+          if (this.open) this._floatingCleanup = cleanup;
+          else cleanup();
         });
       }
       requestAnimationFrame(() => this._items()[0]?.focus());
@@ -131,7 +134,7 @@ export class Dropdown extends ThemeableElement {
         popover="manual"
         appearance="outlined"
         elevation="2"
-        background-color="--lt-bg-default"
+        background="--lt-bg-default"
         role="menu"
         aria-hidden=${this.open ? 'false' : 'true'}
       >

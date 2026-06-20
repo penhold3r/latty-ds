@@ -237,7 +237,10 @@ export class Select extends ThemeableElement {
       const selectTrigger = this.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!;
       const listbox = this.shadowRoot!.querySelector<HTMLElement>('lt-surface.dropdown')!;
       openFloating(selectTrigger, listbox, { matchWidth: true }).then((cleanup) => {
-        this._floatingCleanup = cleanup;
+        // Guard against a close that happened while openFloating was resolving —
+        // otherwise the autoUpdate cleanup is orphaned and runs forever on a hidden listbox.
+        if (this.isOpen) this._floatingCleanup = cleanup;
+        else cleanup();
       });
     } else {
       this.removeAttribute('open');

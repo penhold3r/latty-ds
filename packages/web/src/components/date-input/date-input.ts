@@ -104,8 +104,12 @@ export class DateInput extends ThemeableElement {
     const btn = this.shadowRoot?.querySelector<HTMLElement>('#field-btn');
     const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
     if (btn && dropdown) {
-      this._floatingCleanup = await openFloating(btn, dropdown);
+      const cleanup = await openFloating(btn, dropdown);
+      // Guard against a close during the await — otherwise the autoUpdate cleanup is orphaned.
+      if (this._open) this._floatingCleanup = cleanup;
+      else cleanup();
     }
+    if (!this._open) return;
     this._cleanupClickOutside = createClickOutsideHandler(this, () => this._closeDropdown());
   }
 

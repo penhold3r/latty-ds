@@ -2,7 +2,7 @@ import { html } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
-import { spinnerStyles } from './spineer.styles';
+import { spinnerStyles } from './spinner.styles';
 import type { SpinnerSize, SpinnerVariant } from './spinner.types';
 
 /**

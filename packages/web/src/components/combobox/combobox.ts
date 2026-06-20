@@ -93,7 +93,10 @@ export class Combobox extends ThemeableElement {
     const inputWrap = this.shadowRoot!.querySelector<HTMLElement>('.input-wrap')!;
     const dropdown = this.shadowRoot!.querySelector<HTMLElement>('.dropdown')!;
     if (inputWrap && dropdown) {
-      this._floatingCleanup = await openFloating(inputWrap, dropdown, { matchWidth: true });
+      const cleanup = await openFloating(inputWrap, dropdown, { matchWidth: true });
+      // Guard against a close during the await — otherwise the autoUpdate cleanup is orphaned.
+      if (this.open) this._floatingCleanup = cleanup;
+      else cleanup();
     }
   }
 

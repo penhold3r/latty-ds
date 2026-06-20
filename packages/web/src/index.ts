@@ -3,35 +3,10 @@
  *
  * A collection of reusable, accessible web components built with Lit.
  *
- * Available components:
- * - Accordion: Collapsible content using native details/summary
- * - Alert: TODO: describe the Alert component
- * - Button: Interactive button with multiple variants and loading states
- * - Calendar: TODO: describe the Calendar component
- * - Checkbox: Checkbox input with support for indeterminate state
- * - ColorInput: TODO: describe the ColorInput component
- * - Dialog: Modal dialog with backdrop and accessibility features
- * - Dropdown: TODO: describe the Dropdown component
- * - Header: TODO: describe the Header component
- * - IconButton: Accessible icon-only button with ghost, filled, and outlined appearances
- * - Image: TODO: describe the Image component
- * - Link: TODO: describe the Link component
- * - List: Ordered and unordered lists with customizable marker colors
- * - Radio: Radio button for single selection within a group
- * - RadioGroup: Container for managing radio button groups
- * - Switch: Toggle switch with sliding animation
- * - Spinner: Loading indicator with customizable size and color
- * - Textfield: Text input with validation states and password toggle
- * - Select: Dropdown select with customizable options and variants
- * - SidePanel: TODO: describe the SidePanel component
- * - Slider: TODO: describe the Slider component
- * - Snackbar: TODO: describe the Snackbar component
- * - Surface: Container component with elevation and surface styling
- * - Tab: Individual tab element for use within tab groups
- * - TabGroup: Container for managing tabbed interfaces
- * - Table: Data table with sorting and responsive design
- * - Text: TODO: describe the Text component
- * - Tooltip: Floating label anchored to a trigger element
+ * Importing this entry point registers every `lt-*` custom element (see the
+ * `export *` list below for the full set). Each component also has its own
+ * module under `./components/<name>` for granular imports. Per-component docs
+ * live at https://latty-ds — and in each component's source JSDoc.
  *
  * @packageDocumentation
  *
