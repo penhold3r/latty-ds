@@ -59,5 +59,5 @@ This file provides foundational mandates, project-specific conventions, architec
 
 ## Research and Planning
 
-- **Agent Documents:** Planning documents and research belong in `_agent-docs/` using `SCREAMING-KEBAB.md` naming.
+- **Agent Documents:** Planning documents and research belong in `_agent-plans/` (gitignored, local-only) using `SCREAMING-KEBAB.md` naming. Do not use `_agent-docs/`.
 - **Private Memory:** Local setup or private notes go to `/Users/nico/.gemini/tmp/latty-ds/memory/MEMORY.md`.
