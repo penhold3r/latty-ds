@@ -16,8 +16,8 @@
       }
     </style>
     <script type="module">
-      import { configure } from '../../assets/latty-configure.js';
-      import '../../assets/latty-web.js';
+      import { configure } from 'https://esm.sh/@latty-ds/tokens@0.5.0/configure';
+      import 'https://esm.sh/@latty-ds/web@0.5.0';
 
       configure({
         theme: 'light',
@@ -75,7 +75,7 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        color: var(--lt-color-primary-200);
+        color: var(--lt-color-primary-100);
         text-decoration: none;
         font-size: 1.25rem;
         font-weight: 700;
@@ -86,6 +86,44 @@
 
       .brand--footer {
         color: var(--lt-color-primary-200);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--lt-spacing-3, 0.75rem);
+      }
+
+      .mobile-menu-btn {
+        display: none;
+        color: var(--lt-color-primary-100);
+      }
+
+      .side-nav {
+        display: flex;
+        flex-direction: column;
+        gap: var(--lt-spacing-1, 0.25rem);
+      }
+
+      .side-nav a {
+        color: var(--lt-text-default);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.125rem;
+        padding: var(--lt-spacing-3, 0.75rem) var(--lt-spacing-2, 0.5rem);
+        border-radius: var(--lt-border-radius, 0.5rem);
+        transition:
+          color 0.2s,
+          background 0.2s;
+      }
+
+      .side-nav a:hover {
+        color: var(--lt-text-primary);
+        background: var(--lt-bg-subtle);
+      }
+
+      .side-nav-cta {
+        margin-top: var(--lt-spacing-4, 1rem);
       }
 
       .hero {
@@ -276,6 +314,15 @@
       }
 
       @media (max-width: 768px) {
+        lt-nav,
+        .header-cta {
+          display: none;
+        }
+
+        .mobile-menu-btn {
+          display: inline-flex;
+        }
+
         .story-section {
           grid-template-columns: 1fr;
         }
@@ -316,8 +363,34 @@
         <lt-nav-item href="#story" label="Story"></lt-nav-item>
         <lt-nav-item href="#visit" label="Visit"></lt-nav-item>
       </lt-nav>
-      <lt-button slot="after" variant="primary" size="sm">Order Online</lt-button>
+      <div slot="after" class="header-actions">
+        <lt-button class="header-cta" variant="primary" size="sm">Order Online</lt-button>
+        <lt-icon-button
+          class="mobile-menu-btn"
+          id="menu-btn"
+          icon="menu"
+          label="Open navigation menu"
+          size="md"
+        ></lt-icon-button>
+      </div>
     </lt-header>
+
+    <lt-sidepanel id="nav-panel" anchor="right" label="Menu">
+      <nav class="side-nav" aria-label="Mobile navigation">
+        <a href="#menu" data-nav-link>Menu</a>
+        <a href="#story" data-nav-link>Story</a>
+        <a href="#visit" data-nav-link>Visit</a>
+        <lt-button variant="primary" size="lg" data-nav-link class="side-nav-cta">Order Online</lt-button>
+      </nav>
+    </lt-sidepanel>
+
+    <script>
+      const navPanel = document.getElementById('nav-panel');
+      document.getElementById('menu-btn')?.addEventListener('click', () => navPanel.show());
+      navPanel?.querySelectorAll('[data-nav-link]').forEach((link) => {
+        link.addEventListener('click', () => navPanel.hide());
+      });
+    </script>
 
     <main>
       <section class="hero" aria-labelledby="hero-heading">
@@ -384,7 +457,7 @@
                 <lt-text variant="h5" tag="h3" style="color: var(--lt-text-default); display: block"
                   >Signature Espresso</lt-text
                 >
-                <lt-text variant="body-sm" tag="p" style="color: var(--lt-text-subtle); display: block; flex: 1">
+                <lt-text variant="body-sm" tag="p" style="color: var(--lt-text-default); display: block; flex: 1">
                   A bright, syrupy shot with notes of dark cherry and bittersweet chocolate. Our most-ordered drink.
                 </lt-text>
                 <lt-text variant="label" tag="p" style="color: var(--lt-text-primary); display: block">$4.50</lt-text>
@@ -404,7 +477,7 @@
                 <lt-text variant="h5" tag="h3" style="color: var(--lt-text-default); display: block"
                   >Cold Brew Reserve</lt-text
                 >
-                <lt-text variant="body-sm" tag="p" style="color: var(--lt-text-subtle); display: block; flex: 1">
+                <lt-text variant="body-sm" tag="p" style="color: var(--lt-text-default); display: block; flex: 1">
                   Steeped for 20 hours. Smooth, low-acid, and intensely satisfying over ice.
                 </lt-text>
                 <lt-text variant="label" tag="p" style="color: var(--lt-text-primary); display: block">$5.50</lt-text>
@@ -424,7 +497,7 @@
                 <lt-text variant="h5" tag="h3" style="color: var(--lt-text-default); display: block"
                   >Cardamom Latte</lt-text
                 >
-                <lt-text variant="body-sm" tag="p" style="color: var(--lt-text-subtle); display: block; flex: 1">
+                <lt-text variant="body-sm" tag="p" style="color: var(--lt-text-default); display: block; flex: 1">
                   House-made cardamom syrup, steamed oat milk, and a ristretto. Warmly spiced.
                 </lt-text>
                 <lt-text variant="label" tag="p" style="color: var(--lt-text-primary); display: block">$6.00</lt-text>

@@ -20,8 +20,8 @@
       }
     </style>
     <script type="module">
-      import { configure } from '../../assets/latty-configure.js';
-      import '../../assets/latty-web.js';
+      import { configure } from 'https://esm.sh/@latty-ds/tokens@0.5.0/configure';
+      import 'https://esm.sh/@latty-ds/web@0.5.0';
 
       configure({
         theme: 'system',
@@ -74,6 +74,10 @@
         gap: var(--lt-spacing-4, 1rem);
       }
 
+      .mobile-menu-btn {
+        display: none;
+      }
+
       .brand {
         display: flex;
         align-items: center;
@@ -83,6 +87,33 @@
         font-weight: 600;
         font-size: 1.1rem;
         letter-spacing: -0.01em;
+      }
+
+      .side-nav {
+        display: flex;
+        flex-direction: column;
+        gap: var(--lt-spacing-1, 0.25rem);
+      }
+
+      .side-nav a {
+        color: var(--lt-text-default);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.125rem;
+        padding: var(--lt-spacing-3, 0.75rem) var(--lt-spacing-2, 0.5rem);
+        border-radius: var(--lt-border-radius, 0.5rem);
+        transition:
+          color 0.2s,
+          background 0.2s;
+      }
+
+      .side-nav a:hover {
+        color: var(--lt-text-primary);
+        background: var(--lt-bg-subtle);
+      }
+
+      .side-nav-cta {
+        margin-top: var(--lt-spacing-4, 1rem);
       }
 
       .hero {
@@ -274,6 +305,69 @@
         gap: var(--lt-spacing-6, 1.5rem);
         flex-wrap: wrap;
       }
+
+      @media (max-width: 1024px) {
+        .work-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .about-inner,
+        .contact-inner {
+          grid-template-columns: 1fr;
+          gap: 3rem;
+        }
+      }
+
+      @media (max-width: 640px) {
+        lt-header::part(inner) {
+          padding-inline: var(--lt-spacing-4, 1rem);
+        }
+
+        .brand {
+          font-size: 1rem;
+        }
+
+        lt-nav,
+        .header-actions lt-switch,
+        .header-cta {
+          display: none;
+        }
+
+        .mobile-menu-btn {
+          display: inline-flex;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+          padding: 3rem var(--lt-spacing-4, 1rem) 2rem;
+          min-height: auto;
+          gap: var(--lt-spacing-6, 1.5rem);
+        }
+
+        .hero-decoration {
+          max-width: 240px;
+          justify-self: center;
+        }
+
+        .work-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .work-section,
+        .about-section,
+        .contact-section {
+          padding: 3rem var(--lt-spacing-4, 1rem);
+        }
+
+        .section-header {
+          margin-bottom: 2rem;
+        }
+
+        .footer-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
     </style>
   </head>
   <body>
@@ -293,9 +387,33 @@
       </lt-nav>
       <div slot="after" class="header-actions">
         <lt-switch id="theme-switch" label="Light mode" label-position="left" size="sm"></lt-switch>
-        <lt-button variant="primary" size="sm">Start a project</lt-button>
+        <lt-button class="header-cta" variant="primary" size="sm">Start a project</lt-button>
+        <lt-icon-button
+          class="mobile-menu-btn"
+          id="menu-btn"
+          icon="menu"
+          label="Open navigation menu"
+          size="md"
+        ></lt-icon-button>
       </div>
     </lt-header>
+
+    <lt-sidepanel id="nav-panel" anchor="right" label="Menu">
+      <nav class="side-nav" aria-label="Mobile navigation">
+        <a href="#work" data-nav-link>Work</a>
+        <a href="#about" data-nav-link>About</a>
+        <a href="#contact" data-nav-link>Contact</a>
+        <lt-button variant="primary" size="lg" data-nav-link class="side-nav-cta">Start a project</lt-button>
+      </nav>
+    </lt-sidepanel>
+
+    <script>
+      const navPanel = document.getElementById('nav-panel');
+      document.getElementById('menu-btn')?.addEventListener('click', () => navPanel.show());
+      navPanel?.querySelectorAll('[data-nav-link]').forEach((link) => {
+        link.addEventListener('click', () => navPanel.hide());
+      });
+    </script>
 
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-inner">
