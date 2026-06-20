@@ -9,14 +9,15 @@
       const saved = urlTheme || localStorage.getItem('lt-theme');
       if (saved) document.documentElement.setAttribute('data-theme', saved);
     </script>
+    <link rel="preconnect" href="https://esm.sh" />
     <style>
       html[data-lt]:not([data-lt-ready]) {
         visibility: hidden;
       }
     </style>
     <script type="module">
-      import { configure } from 'https://esm.sh/@latty-ds/tokens@0.5.0/configure';
-      import 'https://esm.sh/@latty-ds/web@0.5.0';
+      import { configure } from 'https://esm.sh/@latty-ds/tokens@0.5.0/configure?bundle';
+      import 'https://esm.sh/@latty-ds/web@0.5.0?bundle';
 
       configure({
         theme: 'system',
