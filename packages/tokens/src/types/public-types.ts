@@ -22,8 +22,7 @@ import type { ElevationTokens } from '../elevation/';
  *     px: { "0": "0px", "1": "4px", ... }
  *   },
  *   border: {
- *     radius: "0.375rem",
- *     square: false
+ *     radius: "0.375rem"
  *   },
  *   typography: {
  *     fontFamily: "Hanken Grotesk, sans-serif"
@@ -41,7 +40,6 @@ export type Tokens = {
   spacing: SpacingTokens;
   border: {
     radius: string;
-    square: false;
   };
   typography: {
     fontFamily: string;

@@ -53,24 +53,24 @@ const rampFromBase = (
 
   const cMax = clamp(base.c * chromaScale, 0, 0.5);
 
-  const c500 = L_BY_STEP[500];
-  const c50 = L_BY_STEP[50];
-  const c900 = L_BY_STEP[900];
+  const l500 = L_BY_STEP[500];
+  const l50 = L_BY_STEP[50];
+  const l900 = L_BY_STEP[900];
 
   for (const step of STEPS) {
     const canonical = L_BY_STEP[step];
 
-    // Proportionally stretch each half so the full range [c50, c900] is
+    // Proportionally stretch each half so the full range [l50, l900] is
     // preserved while the pivot step maps to lPivot.
     let lTarget: number;
-    if (canonical >= c500) {
-      // Light side: map [c500, c50] → [lPivot, c50]
-      const t = (canonical - c500) / (c50 - c500);
-      lTarget = lPivot + t * (c50 - lPivot);
+    if (canonical >= l500) {
+      // Light side: map [l500, l50] → [lPivot, l50]
+      const t = (canonical - l500) / (l50 - l500);
+      lTarget = lPivot + t * (l50 - lPivot);
     } else {
-      // Dark side: map [c500, c900] → [lPivot, c900]
-      const t = (canonical - c500) / (c900 - c500);
-      lTarget = lPivot + t * (c900 - lPivot);
+      // Dark side: map [l500, l900] → [lPivot, l900]
+      const t = (canonical - l500) / (l900 - l500);
+      lTarget = lPivot + t * (l900 - lPivot);
     }
     lTarget = clamp(lTarget, 0, 1);
 

@@ -39,8 +39,9 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToke
   for (const v of VARIANTS) {
     map[`text-${v}`] = `color-${v}-700`;
     map[`text-on-${v}`] = 'color-white';
-    map[`text-on-warning`] = 'color-warning-800';
   }
+  // Warning ramps are light amber in every theme — white text fails contrast, so force dark text.
+  map['text-on-warning'] = 'color-warning-800';
   if (opts.primary500) map['text-on-primary'] = accessibleTextOn(opts.primary500);
 
   // Background
@@ -92,6 +93,8 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToken
     map[`text-${v}`] = `color-${v}-300`;
     map[`text-on-${v}`] = 'color-white';
   }
+  // Warning ramps are light amber in every theme — white text fails contrast, so force dark text.
+  map['text-on-warning'] = 'color-warning-800';
   if (opts.primary400) map['text-on-primary'] = accessibleTextOn(opts.primary400);
 
   // Background
