@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/penhold3r/latty-ds/compare/v0.5.0...v0.6.0) (2026-06-20)
+
+### Bug Fixes
+
+- **tokens:** correct dark-mode warning text contrast ([fec4bd5](https://github.com/penhold3r/latty-ds/commit/fec4bd5fce5e93ac71ca515f75a2d10dd73131a9))
+
 # [0.5.0](https://github.com/penhold3r/latty-ds/compare/v0.4.0...v0.5.0) (2026-06-07)
 
 **Note:** Version bump only for package @latty-ds/tokens

@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/penhold3r/latty-ds/compare/v0.5.0...v0.6.0) (2026-06-20)
+
+### Bug Fixes
+
+- **docs:** revert Agent Documents section to original guidance ([4bbcb22](https://github.com/penhold3r/latty-ds/commit/4bbcb22d0112a845a47f50b640dc70114ed94881))
+- **docs:** use primary button for icon download to fix dark mode contrast ([d74cd24](https://github.com/penhold3r/latty-ds/commit/d74cd243f77f13a0af50544d847703913eb15f1b))
+- **tokens:** correct dark-mode warning text contrast ([fec4bd5](https://github.com/penhold3r/latty-ds/commit/fec4bd5fce5e93ac71ca515f75a2d10dd73131a9))
+- **web:** guard floating-overlay cleanup race and dropdown background ([6f5c5dd](https://github.com/penhold3r/latty-ds/commit/6f5c5ddbca991fe78d1ad359b63ff0eeb581cd2f))
+
+### Features
+
+- **docs,icons:** add SVG download for design tools ([1d57ad2](https://github.com/penhold3r/latty-ds/commit/1d57ad23a5b4c6672f9fe58ec8def89fa74c303b))
+- **docs:** load examples from npm CDN and add mobile navigation ([0a13c4c](https://github.com/penhold3r/latty-ds/commit/0a13c4ceef15f85be9bb31f0b4d2ff3cca06dbaf))
+
+### Performance Improvements
+
+- **docs:** bundle esm.sh imports and remove dead bundle script ([d634a5d](https://github.com/penhold3r/latty-ds/commit/d634a5d4052544efb2de1d2a57083696a75f13f4))
+
 # [0.5.0](https://github.com/penhold3r/latty-ds/compare/v0.4.0...v0.5.0) (2026-06-07)
 
 ### Features

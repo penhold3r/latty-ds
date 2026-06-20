@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/penhold3r/latty-ds/compare/v0.5.0...v0.6.0) (2026-06-20)
+
+### Bug Fixes
+
+- **docs:** use primary button for icon download to fix dark mode contrast ([d74cd24](https://github.com/penhold3r/latty-ds/commit/d74cd243f77f13a0af50544d847703913eb15f1b))
+
+### Features
+
+- **docs,icons:** add SVG download for design tools ([1d57ad2](https://github.com/penhold3r/latty-ds/commit/1d57ad23a5b4c6672f9fe58ec8def89fa74c303b))
+- **docs:** load examples from npm CDN and add mobile navigation ([0a13c4c](https://github.com/penhold3r/latty-ds/commit/0a13c4ceef15f85be9bb31f0b4d2ff3cca06dbaf))
+
+### Performance Improvements
+
+- **docs:** bundle esm.sh imports and remove dead bundle script ([d634a5d](https://github.com/penhold3r/latty-ds/commit/d634a5d4052544efb2de1d2a57083696a75f13f4))
+
 # [0.5.0](https://github.com/penhold3r/latty-ds/compare/v0.4.0...v0.5.0) (2026-06-07)
 
 **Note:** Version bump only for package @latty-ds/docs
