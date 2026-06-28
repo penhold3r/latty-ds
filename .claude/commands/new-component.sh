@@ -109,6 +109,13 @@ fi
   echo "  :host {"
   echo "    display: inline-block;"
   echo "  }"
+  echo ""
+  echo "  /* Single wrapper around the slot so rich inline content (text, code,"
+  echo "     nested elements) flows as one unit and never fragments if :host or"
+  echo "     an inner container becomes a flex/grid context. See lt-list-item. */"
+  echo "  .content {"
+  echo "    min-width: 0;"
+  echo "  }"
 
   if [[ ${#SIZE_LIST[@]} -gt 0 ]]; then
     echo ""
@@ -193,7 +200,7 @@ fi
 
   echo ""
   echo "  render() {"
-  echo "    return html\`<slot></slot>\`;"
+  echo "    return html\`<span class=\"content\"><slot></slot></span>\`;"
   echo "  }"
   echo "}"
 } > "${WEB_DIR}/${NAME_LOWER}.ts"
