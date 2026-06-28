@@ -55,7 +55,7 @@ export class ListItem extends ThemeableElement {
     return html`
       <div class="inner">
         ${this.iconStart ? html`<lt-icon class="icon-start" name=${this.iconStart}></lt-icon>` : nothing}
-        <slot></slot>
+        <span class="content"><slot></slot></span>
         ${this.iconEnd ? html`<lt-icon class="icon-end" name=${this.iconEnd}></lt-icon>` : nothing}
       </div>
     `;
