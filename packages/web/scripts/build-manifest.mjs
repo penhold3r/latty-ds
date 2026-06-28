@@ -17,7 +17,17 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
 
-const cem = JSON.parse(readFileSync(join(root, 'custom-elements.json'), 'utf8'));
+const cemPath = join(root, 'custom-elements.json');
+const cem = JSON.parse(readFileSync(cemPath, 'utf8'));
+
+// ── Normalize CEM ordering ────────────────────────────────────────────────────
+// `cem analyze` emits modules in a non-deterministic order (filesystem glob
+// enumeration), so every local build produced phantom diffs against the
+// checked-in file. Sort modules by path to make the output stable, then rewrite
+// in cem's own format (2-space indent + trailing newline) so it's a no-op when
+// already sorted.
+cem.modules.sort((a, b) => a.path.localeCompare(b.path));
+writeFileSync(cemPath, JSON.stringify(cem, null, 2) + '\n', 'utf8');
 
 /** Parse union string literals from a *.types.ts source file. */
 function resolveUnion(typeName, componentDir) {
