@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout/index.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout title="Page not found · Latty" description="The page you were looking for doesn't exist.">
+  <div class="not-found">
+    <lt-badge content="404"></lt-badge>
+    <lt-text variant="display-xl" as="h1">This part of the lattice is missing</lt-text>
+    <lt-text variant="lead">
+      The page you were looking for doesn't exist, moved, or never had a place in the grid. Let's get you back to solid
+      structure.
+    </lt-text>
+    <div class="not-found-actions">
+      <lt-button href={`${base}/`} variant="primary" size="lg">Back home</lt-button>
+      <lt-button href={`${base}/components/button`} variant="primary" appearance="outlined" size="lg"
+        >Browse components</lt-button
+      >
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import '@latty-ds/web';
+</script>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--lt-spacing-4);
+    padding: var(--lt-spacing-8) 0;
+    max-width: 640px;
+  }
+
+  .not-found-actions {
+    display: flex;
+    gap: var(--lt-spacing-3);
+    flex-wrap: wrap;
+    margin-top: var(--lt-spacing-2);
+  }
+
+  @media (min-width: 769px) {
+    .not-found {
+      padding: var(--lt-spacing-12) 0;
+    }
+  }
+</style>
