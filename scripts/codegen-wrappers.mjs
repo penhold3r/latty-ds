@@ -14,6 +14,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { resolve, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 import { logger } from '@latty-ds/utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -71,6 +72,10 @@ for (const mod of cem.modules) {
     components.push({ name: decl.name, tagName: decl.tagName, fields, events });
   }
 }
+
+// Sort by component name so the generated output (and the root index barrel) is
+// deterministic regardless of the order modules appear in custom-elements.json.
+components.sort((a, b) => a.name.localeCompare(b.name));
 
 // ── Generate one wrapper per component ────────────────────────────────────────
 mkdirSync(REACT_COMPONENTS_DIR, { recursive: true });
@@ -160,6 +165,11 @@ const indexLines = components
   .join('\n');
 
 writeFileSync(REACT_INDEX, `import '@latty-ds/web';\n` + indexLines + '\n', 'utf8');
+
+// Normalize formatting to the repo's prettier config. Without this, the raw
+// template output differs from the lint-staged-formatted committed files, so
+// every run shows phantom whitespace-only diffs across all wrappers.
+execSync('pnpm exec prettier --write "packages/react/src/**/*.{ts,tsx}"', { cwd: ROOT, stdio: 'ignore' });
 
 logger.success(`${components.length} React wrappers written → packages/react/src/components/`);
 logger.info('Run: pnpm --filter @latty-ds/react build');
