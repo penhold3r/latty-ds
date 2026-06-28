@@ -13,7 +13,7 @@ import BaseLayout from '../../../layouts/BaseLayout/index.astro';
   <div class="example-grid">
     <a class="example-card" href="/examples/coffee-shop">
       <lt-surface elevation="1">
-        <div class="card-swatch" style="background:linear-gradient(135deg,#92400e,#b45309);"></div>
+        <div class="card-swatch card-swatch--coffee"></div>
         <div class="card-body">
           <div class="card-title-row">
             <lt-text variant="label">Ember Coffee &amp; Co.</lt-text>
@@ -23,9 +23,7 @@ import BaseLayout from '../../../layouts/BaseLayout/index.astro';
             >Warm artisan café landing page with hero, menu cards, story section, and newsletter signup.</lt-text
           >
           <div class="card-meta">
-            <lt-text variant="caption" tag="span" style="color:var(--lt-text-subtle);"
-              >Amber palette · Playfair Display</lt-text
-            >
+            <lt-text variant="caption" tag="span" class="text-muted">Amber palette · Playfair Display</lt-text>
           </div>
         </div>
       </lt-surface>
@@ -33,7 +31,7 @@ import BaseLayout from '../../../layouts/BaseLayout/index.astro';
 
     <a class="example-card" href="/examples/pulse-analytics">
       <lt-surface elevation="1">
-        <div class="card-swatch" style="background:linear-gradient(135deg,#3730a3,#4f46e5);"></div>
+        <div class="card-swatch card-swatch--pulse"></div>
         <div class="card-body">
           <div class="card-title-row">
             <lt-text variant="label">Meridian Analytics</lt-text>
@@ -43,7 +41,7 @@ import BaseLayout from '../../../layouts/BaseLayout/index.astro';
             >SaaS dashboard shell with KPI cards, sortable data table, filters, and sidebar navigation.</lt-text
           >
           <div class="card-meta">
-            <lt-text variant="caption" tag="span" style="color:var(--lt-text-subtle);">Indigo palette · Inter</lt-text>
+            <lt-text variant="caption" tag="span" class="text-muted">Indigo palette · Inter</lt-text>
           </div>
         </div>
       </lt-surface>
@@ -51,7 +49,7 @@ import BaseLayout from '../../../layouts/BaseLayout/index.astro';
 
     <a class="example-card" href="/examples/forma-studio">
       <lt-surface elevation="1">
-        <div class="card-swatch" style="background:linear-gradient(135deg,#164e63,#0891b2);"></div>
+        <div class="card-swatch card-swatch--forma"></div>
         <div class="card-body">
           <div class="card-title-row">
             <lt-text variant="label">Forma Studio</lt-text>
@@ -61,9 +59,7 @@ import BaseLayout from '../../../layouts/BaseLayout/index.astro';
             >Dark-mode creative agency with project grid, team section, and contact form.</lt-text
           >
           <div class="card-meta">
-            <lt-text variant="caption" tag="span" style="color:var(--lt-text-subtle);"
-              >Cyan palette · Space Grotesk · Dark theme</lt-text
-            >
+            <lt-text variant="caption" tag="span" class="text-muted">Cyan palette · Space Grotesk · Dark theme</lt-text>
           </div>
         </div>
       </lt-surface>
@@ -100,6 +96,18 @@ import BaseLayout from '../../../layouts/BaseLayout/index.astro';
   .card-swatch {
     height: 100px;
     flex-shrink: 0;
+  }
+
+  .card-swatch--coffee {
+    background: linear-gradient(135deg, #92400e, #b45309);
+  }
+
+  .card-swatch--pulse {
+    background: linear-gradient(135deg, #3730a3, #4f46e5);
+  }
+
+  .card-swatch--forma {
+    background: linear-gradient(135deg, #164e63, #0891b2);
   }
 
   .card-body {

@@ -9,8 +9,8 @@ import ApiTable from '../../../components/ApiTable/index.astro';
   title="Icon Button"
   description="Accessible icon-only button for actions like close, delete, and navigation."
 >
-  <lt-text variant="h1" tag="h1">Icon Button</lt-text>
-  <lt-text variant="body" tag="p" style="display:block;margin-top:var(--lt-spacing-3);">
+  <lt-text variant="h1">Icon Button</lt-text>
+  <lt-text variant="body">
     A compact, accessible button that displays a single icon. Because there is no visible label, a <lt-text
       variant="code"
       tag="code">label</lt-text
@@ -18,13 +18,13 @@ import ApiTable from '../../../components/ApiTable/index.astro';
     attribute is required to describe the action for screen readers.
   </lt-text>
 
-  <lt-text variant="h2" tag="h2" style="display:block;margin-top:var(--lt-spacing-8);">Playground</lt-text>
+  <lt-text variant="h2">Playground</lt-text>
   <ComponentPlayground
     tag="lt-icon-button"
     defaults={{ icon: 'plus', label: 'Add item', variant: 'neutral', appearance: 'ghost', size: 'md' }}
   />
 
-  <lt-text variant="h2" tag="h2" style="display:block;margin-top:var(--lt-spacing-8);">Usage</lt-text>
+  <lt-text variant="h2">Usage</lt-text>
   <FrameworkTabs
     html={`<!-- Ghost (default) — for close/dismiss buttons -->
 <lt-icon-button icon="xmark" label="Close"></lt-icon-button>
@@ -65,7 +65,7 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 </template>`}
   />
 
-  <lt-text variant="h2" tag="h2" style="display:block;margin-top:var(--lt-spacing-8);">API</lt-text>
+  <lt-text variant="h2">API</lt-text>
   <ApiTable tag="lt-icon-button" />
 </BaseLayout>
 

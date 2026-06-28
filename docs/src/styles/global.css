@@ -71,6 +71,9 @@ h6 {
   overflow-wrap: break-word;
 }
 
+lt-text[variant='display-2xl'],
+lt-text[variant='display-xl'],
+lt-text[variant='display-lg'],
 lt-text[variant='h1'],
 lt-text[variant='h2'],
 lt-text[variant='h3'],
@@ -78,6 +81,16 @@ lt-text[variant='h4'],
 lt-text[variant='h5'],
 lt-text[variant='h6'] {
   color: var(--lt-text-secondary);
+}
+
+lt-text[variant='lead'] {
+  color: var(--lt-text-subtle);
+}
+
+/* Muted secondary text (captions, role subtitles, stat labels). Use instead of
+   inline color overrides so the subtle tone has a single source of truth. */
+.text-muted {
+  color: var(--lt-text-subtle);
 }
 
 code {
