@@ -207,6 +207,8 @@ All custom elements use the `lt-` prefix (e.g., `lt-button`, `lt-spinner`). Comp
 
 **Reuse existing components**: before writing custom CSS for a new component, check whether an existing component can provide the same structure. For example, `lt-surface` provides background, elevation (shadow), and border-radius — new components that need a styled container should use it rather than hand-rolling those styles. Import the dependency with a side-effect import (e.g. `import '../surface/surface'`) and use `::part(surface)` to style layout internals from the consumer's shadow DOM.
 
+**Content wrapper convention**: render the default `<slot>` inside a single `.content` wrapper (`<span class="content"><slot></slot></span>`), not as a bare slot. A flex/grid container promotes _each_ top-level slotted node into its own item, so rich slotted content (text + `<strong>` + `<code>` + multiple text runs) gets split into separately-shrinking items and fragments into narrow lanes — the bug `lt-list-item` originally had with its `.inner { display: flex }`. Wrapping the slot keeps slotted content flowing as one unit; pair it with `.content { min-width: 0 }` so it can still wrap inside a flex parent. The `/new-component` scaffold emits this pattern by default — keep it when filling in `render()`, and never put a bare `<slot>` directly inside a flex/grid container.
+
 ### Documentation Site
 
 The `@latty-ds/docs` package uses Astro with MDX for documentation:
