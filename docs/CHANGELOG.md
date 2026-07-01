@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/penhold3r/latty-ds/compare/v0.6.0...v0.7.0) (2026-07-01)
+
+### Bug Fixes
+
+- **docs:** keep inline code chips from splitting across line breaks ([5896fd7](https://github.com/penhold3r/latty-ds/commit/5896fd71dc64ed6428e9c44229a3e9ca172487fd))
+
+### Features
+
+- **docs:** add 404 page ([684b318](https://github.com/penhold3r/latty-ds/commit/684b318749fbb4a0c07c888d7ce621e09c657b78))
+
 # [0.6.0](https://github.com/penhold3r/latty-ds/compare/v0.5.0...v0.6.0) (2026-06-20)
 
 ### Bug Fixes
