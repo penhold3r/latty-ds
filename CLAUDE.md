@@ -130,7 +130,7 @@ The `pre-push` hook also runs `pnpm check:boundaries && pnpm typecheck` before e
 
 ### Releasing
 
-All five publishable packages (`@latty-ds/tokens`, `@latty-ds/web`, `@latty-ds/icons`, `@latty-ds/react`, `@latty-ds/utils`) are versioned together using Lerna with fixed versioning.
+The four public packages (`@latty-ds/tokens`, `@latty-ds/web`, `@latty-ds/icons`, `@latty-ds/react`) are versioned together using Lerna with fixed versioning. `@latty-ds/utils` and `@latty-ds/docs` are `private: true` — they are excluded from versioning via `command.version.private: false` in `lerna.json`, so their commits (e.g. a `feat(docs):`) never drive a bump of the public version, and they are neither versioned nor published. `@latty-ds/utils` is consumed only at build time (inlined via `noExternal`), so freezing its version has no downstream effect.
 
 ```bash
 pnpm release          # Bump versions via conventional commits, commit, and tag
@@ -139,7 +139,7 @@ pnpm release          # Bump versions via conventional commits, commit, and tag
 This runs `lerna version --conventional-commits`, which:
 
 1. Inspects commits since the last tag to determine the version bump
-2. Updates `version` in each package's `package.json` and `lerna.json`
+2. Updates `version` in each public package's `package.json` and `lerna.json`
 3. Creates a `chore(release): publish vX.Y.Z` commit and a `vX.Y.Z` git tag
 4. Pushes the commit and tag to `origin`
 
