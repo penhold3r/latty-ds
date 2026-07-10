@@ -4,6 +4,11 @@ import type { ListItem as ListItemEl, LattyIconName } from '@latty-ds/web';
 export type ListItemProps = HTMLAttributes<ListItemEl> & {
   iconStart?: LattyIconName;
   iconEnd?: LattyIconName;
+  clickable?: boolean;
+  href?: string;
+  target?: string;
+  rel?: string;
+  disabled?: boolean;
 };
 
 export const ListItem = forwardRef<ListItemEl, ListItemProps>(function ListItem({ children, ...props }, forwardedRef) {
