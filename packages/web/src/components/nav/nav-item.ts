@@ -15,10 +15,15 @@ import '@latty-ds/icons';
  * and nested children appear as a dropdown panel. In vertical mode, nested children
  * collapse/expand inline.
  *
+ * SPA router integration: `nav-item-click` is cancelable — call `event.preventDefault()`
+ * to stop the anchor's native navigation, navigate programmatically, and drive the
+ * highlighted item via the `active` property (which also sets `aria-current="page"`).
+ *
  * @element lt-nav-item
  *
  * @fires {CustomEvent<{ href: string; label: string }>} nav-item-click - Fired when the item
- *   is clicked (even when it has no href).
+ *   is clicked (even when it has no href). Cancelable: `preventDefault()` stops the native
+ *   anchor navigation so an SPA router can handle it.
  * @fires {CustomEvent<{ open: boolean }>} nav-collapse - Fired when a collapsible item
  *   is opened or closed.
  *
@@ -57,6 +62,7 @@ export class NavItem extends ThemeableElement {
 
   /**
    * Whether this item is currently the active/selected page.
+   * Sets `aria-current="page"` on the internal trigger.
    * @default false
    */
   @property({ type: Boolean, reflect: true }) active = false;
@@ -120,13 +126,15 @@ export class NavItem extends ThemeableElement {
   private _handleTriggerClick(e: MouseEvent) {
     if (this.disabled) return;
 
-    this.dispatchEvent(
+    const proceed = this.dispatchEvent(
       new CustomEvent('nav-item-click', {
         detail: { href: this.href, label: this.label },
         bubbles: true,
-        composed: true
+        composed: true,
+        cancelable: true
       })
     );
+    if (!proceed) e.preventDefault();
 
     if (this._hasChildren) {
       e.preventDefault();
@@ -150,11 +158,24 @@ export class NavItem extends ThemeableElement {
       ${showChevron ? html`<lt-icon class="chevron" name="caret-down" size="sm"></lt-icon>` : nothing}
     `;
 
+    const ariaCurrent = this.active ? 'page' : nothing;
+
     if (this.href && !this._hasChildren) {
-      return html`<a class="item-trigger" href=${this.href} @click=${this._handleTriggerClick}>${inner}</a>`;
+      return html`<a
+        class="item-trigger"
+        href=${this.href}
+        aria-current=${ariaCurrent}
+        @click=${this._handleTriggerClick}
+        >${inner}</a
+      >`;
     }
 
-    return html`<button class="item-trigger" @click=${this._handleTriggerClick} ?disabled=${this.disabled}>
+    return html`<button
+      class="item-trigger"
+      aria-current=${ariaCurrent}
+      @click=${this._handleTriggerClick}
+      ?disabled=${this.disabled}
+    >
       ${inner}
     </button>`;
   }

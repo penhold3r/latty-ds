@@ -114,6 +114,69 @@ describe('<lt-nav-item>', () => {
     expect(detail).toEqual({ open: true });
   });
 
+  it('sets aria-current="page" on the anchor when active', async () => {
+    el = document.createElement('lt-nav-item') as NavItem;
+    el.setAttribute('label', 'Home');
+    el.setAttribute('href', '/');
+    el.active = true;
+    document.body.appendChild(el);
+    await el.updateComplete;
+
+    const trigger = el.shadowRoot!.querySelector('.item-trigger')!;
+    expect(trigger.getAttribute('aria-current')).toBe('page');
+  });
+
+  it('sets aria-current="page" on the button trigger when active without href', async () => {
+    el = document.createElement('lt-nav-item') as NavItem;
+    el.setAttribute('label', 'Home');
+    el.active = true;
+    document.body.appendChild(el);
+    await el.updateComplete;
+
+    const trigger = el.shadowRoot!.querySelector('button.item-trigger')!;
+    expect(trigger.getAttribute('aria-current')).toBe('page');
+  });
+
+  it('omits aria-current when not active', async () => {
+    el = document.createElement('lt-nav-item') as NavItem;
+    el.setAttribute('label', 'Home');
+    el.setAttribute('href', '/');
+    document.body.appendChild(el);
+    await el.updateComplete;
+
+    expect(el.shadowRoot!.querySelector('.item-trigger')!.hasAttribute('aria-current')).toBe(false);
+  });
+
+  it('prevents native navigation when nav-item-click is canceled', async () => {
+    el = document.createElement('lt-nav-item') as NavItem;
+    el.setAttribute('label', 'Home');
+    el.setAttribute('href', '/somewhere');
+    document.body.appendChild(el);
+    await el.updateComplete;
+
+    el.addEventListener('nav-item-click', (e) => e.preventDefault());
+
+    const anchor = el.shadowRoot!.querySelector<HTMLAnchorElement>('a.item-trigger')!;
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
+    anchor.dispatchEvent(clickEvent);
+
+    expect(clickEvent.defaultPrevented).toBe(true);
+  });
+
+  it('does not prevent navigation when nav-item-click is not canceled', async () => {
+    el = document.createElement('lt-nav-item') as NavItem;
+    el.setAttribute('label', 'Home');
+    el.setAttribute('href', '/somewhere');
+    document.body.appendChild(el);
+    await el.updateComplete;
+
+    const anchor = el.shadowRoot!.querySelector<HTMLAnchorElement>('a.item-trigger')!;
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
+    anchor.dispatchEvent(clickEvent);
+
+    expect(clickEvent.defaultPrevented).toBe(false);
+  });
+
   it('does not respond to clicks when disabled', async () => {
     el = document.createElement('lt-nav-item') as NavItem;
     el.setAttribute('label', 'Locked');
