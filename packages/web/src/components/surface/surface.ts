@@ -57,7 +57,8 @@ export class Surface extends ThemeableElement {
   @property({ reflect: true }) background = '';
 
   render() {
-    const style = this.background ? { '--_surface-bg': resolveColorValue(this.background) } : {};
+    // Must set --lt-surface-bg — it's the custom property the stylesheet consumes.
+    const style = this.background ? { '--lt-surface-bg': resolveColorValue(this.background) } : {};
 
     return html`
       <div class="surface" part="surface" style=${styleMap(style)}>

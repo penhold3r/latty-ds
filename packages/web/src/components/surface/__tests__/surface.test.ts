@@ -71,4 +71,27 @@ describe('<lt-surface>', () => {
     const surface = el.shadowRoot!.querySelector('.surface');
     expect(surface).toBeTruthy();
   });
+
+  describe('background override', () => {
+    it('sets --lt-surface-bg (the property the stylesheet consumes) from a token name', async () => {
+      el.background = '--lt-interactive-success-bg';
+      await el.updateComplete;
+
+      const surface = el.shadowRoot!.querySelector<HTMLElement>('.surface')!;
+      expect(surface.style.getPropertyValue('--lt-surface-bg')).toBe('var(--lt-interactive-success-bg)');
+    });
+
+    it('sets --lt-surface-bg from a raw color value', async () => {
+      el.background = '#1a1a2e';
+      await el.updateComplete;
+
+      const surface = el.shadowRoot!.querySelector<HTMLElement>('.surface')!;
+      expect(surface.style.getPropertyValue('--lt-surface-bg')).toBe('#1a1a2e');
+    });
+
+    it('sets no inline background when the prop is empty', () => {
+      const surface = el.shadowRoot!.querySelector<HTMLElement>('.surface')!;
+      expect(surface.style.getPropertyValue('--lt-surface-bg')).toBe('');
+    });
+  });
 });
