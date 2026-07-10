@@ -14,12 +14,13 @@ export type ButtonVariant = 'primary' | 'secondary' | 'neutral' | 'success' | 'w
 
 /**
  * Appearance style of the button component.
- * Determines whether the button is filled or outlined.
+ * Determines whether the button is filled, outlined, or ghost.
  *
  * - `filled`: Solid background with the variant color (default)
  * - `outlined`: Transparent background with colored border and text
+ * - `ghost`: Transparent background with colored text and no border (low-emphasis text button)
  */
-export type ButtonAppearance = 'filled' | 'outlined';
+export type ButtonAppearance = 'filled' | 'outlined' | 'ghost';
 
 /**
  * Size variant of the button component.

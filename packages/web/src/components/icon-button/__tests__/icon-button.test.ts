@@ -67,4 +67,29 @@ describe('<lt-icon-button>', () => {
     await el.updateComplete;
     expect(el.hasAttribute('round')).toBe(true);
   });
+
+  describe('aria forwarding', () => {
+    // MutationObserver callbacks are async — flush them before asserting
+    const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+    it.each(['aria-pressed', 'aria-expanded', 'aria-haspopup', 'aria-controls', 'aria-current'] as const)(
+      'forwards %s onto the internal button',
+      async (attr) => {
+        el.setAttribute(attr, 'true');
+        await tick();
+        await el.updateComplete;
+        expect(el.shadowRoot!.querySelector('button')!.getAttribute(attr)).toBe('true');
+      }
+    );
+
+    it('removes the forwarded attribute when it is removed from the host', async () => {
+      el.setAttribute('aria-expanded', 'true');
+      await tick();
+      await el.updateComplete;
+      el.removeAttribute('aria-expanded');
+      await tick();
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('button')!.hasAttribute('aria-expanded')).toBe(false);
+    });
+  });
 });

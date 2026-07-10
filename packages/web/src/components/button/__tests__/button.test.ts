@@ -97,7 +97,7 @@ describe('<lt-button>', () => {
     expect(el.getAttribute('size')).toBe(size);
   });
 
-  it.each(['filled', 'outlined'] as const)('reflects %s appearance to attribute', async (appearance) => {
+  it.each(['filled', 'outlined', 'ghost'] as const)('reflects %s appearance to attribute', async (appearance) => {
     el.appearance = appearance;
     await el.updateComplete;
     expect(el.getAttribute('appearance')).toBe(appearance);
@@ -183,6 +183,65 @@ describe('<lt-button>', () => {
 
       expect(requestSubmit).not.toHaveBeenCalled();
       form.remove();
+    });
+  });
+
+  describe('aria forwarding', () => {
+    // MutationObserver callbacks are async — flush them before asserting
+    const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+    it('forwards aria-pressed set before connect to the internal button', async () => {
+      const pressed = document.createElement('lt-button') as Button;
+      pressed.setAttribute('aria-pressed', 'true');
+      document.body.appendChild(pressed);
+      await pressed.updateComplete;
+      expect(pressed.shadowRoot!.querySelector('button')!.getAttribute('aria-pressed')).toBe('true');
+      pressed.remove();
+    });
+
+    it.each(['aria-pressed', 'aria-expanded', 'aria-haspopup', 'aria-controls', 'aria-current'] as const)(
+      'forwards %s onto the internal button',
+      async (attr) => {
+        el.setAttribute(attr, 'true');
+        await tick();
+        await el.updateComplete;
+        expect(el.shadowRoot!.querySelector('button')!.getAttribute(attr)).toBe('true');
+      }
+    );
+
+    it('re-forwards when the host attribute changes', async () => {
+      el.setAttribute('aria-pressed', 'true');
+      await tick();
+      await el.updateComplete;
+      el.setAttribute('aria-pressed', 'false');
+      await tick();
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('button')!.getAttribute('aria-pressed')).toBe('false');
+    });
+
+    it('removes the forwarded attribute when it is removed from the host', async () => {
+      el.setAttribute('aria-pressed', 'true');
+      await tick();
+      await el.updateComplete;
+      el.removeAttribute('aria-pressed');
+      await tick();
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('button')!.hasAttribute('aria-pressed')).toBe(false);
+    });
+
+    it('forwards onto the anchor when href is set', async () => {
+      el.href = '/dashboard';
+      el.setAttribute('aria-current', 'page');
+      await tick();
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('a')!.getAttribute('aria-current')).toBe('page');
+    });
+
+    it('has no axe violations with aria-pressed set', async () => {
+      el.setAttribute('aria-pressed', 'true');
+      await tick();
+      await el.updateComplete;
+      expect(await axe(el)).toHaveNoViolations();
     });
   });
 

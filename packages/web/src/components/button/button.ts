@@ -5,6 +5,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 
 import { buttonStyles } from './button.styles';
 import { ButtonAppearance, ButtonSize, ButtonType, ButtonVariant } from './button.types';
+import { AriaForwardingController } from '../shared/aria-forwarding';
 
 import '../spinner/';
 import '@latty-ds/icons';
@@ -16,16 +17,20 @@ import '@latty-ds/icons';
  *
  * Features:
  * - Multiple visual variants (primary, secondary, neutral, success, warning, error, info)
- * - Two appearance styles (filled, outlined)
+ * - Three appearance styles (filled, outlined, ghost)
  * - Three size options (sm, md, lg)
  * - Loading state with spinner
  * - Icon support at start and end positions
  * - Disabled state
  * - Accessible with aria-busy for loading state
+ * - Forwards host `aria-pressed`, `aria-expanded`, `aria-haspopup`, `aria-controls`, and
+ *   `aria-current` onto the internal native control (e.g. for toggle buttons)
  * - Renders as `<a>` when `href` is provided (link button)
  * - Form-associated: `type="submit"` submits the containing form, `type="reset"` resets it
  *
  * @slot - Button label/content
+ *
+ * @cssprop [--lt-button-min-width=88px] - Minimum width of the button; set to `0` for compact/inline buttons
  *
  * @example
  * ```html
@@ -49,6 +54,8 @@ export class Button extends ThemeableElement {
 
   private _internals: ElementInternals;
 
+  private _ariaForwarding = new AriaForwardingController(this, () => this.shadowRoot?.querySelector('[part="base"]'));
+
   constructor() {
     super();
     this._internals = this.attachInternals();
@@ -61,7 +68,7 @@ export class Button extends ThemeableElement {
   @property({ reflect: true }) variant: ButtonVariant = 'primary';
 
   /**
-   * Appearance style (filled or outlined).
+   * Appearance style (filled, outlined, or ghost).
    * @default 'filled'
    */
   @property({ reflect: true }) appearance: ButtonAppearance = 'filled';

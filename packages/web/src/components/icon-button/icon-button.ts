@@ -5,11 +5,15 @@ import { ThemeableElement } from '../../base';
 
 import { iconButtonStyles } from './icon-button.styles';
 import type { IconButtonVariant, IconButtonAppearance, IconButtonSize } from './icon-button.types';
+import { AriaForwardingController } from '../shared/aria-forwarding';
 
 import '@latty-ds/icons';
 
 /**
  * Icon-only button. Requires `label` for screen readers since there is no visible text.
+ *
+ * Forwards host `aria-pressed`, `aria-expanded`, `aria-haspopup`, `aria-controls`, and
+ * `aria-current` onto the internal native control (e.g. for dropdown triggers).
  *
  * @element lt-icon-button
  *
@@ -26,6 +30,8 @@ import '@latty-ds/icons';
 @customElement('lt-icon-button')
 export class IconButton extends ThemeableElement {
   static styles = iconButtonStyles;
+
+  private _ariaForwarding = new AriaForwardingController(this, () => this.shadowRoot?.querySelector('[part="base"]'));
 
   /** Icon name from the icon library. */
   @property({ reflect: true }) icon = '';

@@ -36,7 +36,7 @@ export const buttonStyles = css`
     gap: var(--lt-spacing-2);
     justify-content: center;
     line-height: 1;
-    min-width: 88px;
+    min-width: var(--lt-button-min-width, 88px);
     user-select: none;
     transition:
       background-color 120ms ease,
@@ -188,7 +188,52 @@ export const buttonStyles = css`
     --_active-bg: var(--lt-bg-info-subtle);
   }
 
-  :host([appearance='outlined']) [part='base']:active:not([disabled]):not([aria-disabled='true']) {
+  /* ghost appearance — transparent background, no border, low-emphasis text button */
+  :host([appearance='ghost'][variant='primary']) {
+    --_bg: transparent;
+    --_color: var(--lt-text-primary);
+    --_hover-bg: var(--lt-bg-primary-subtle);
+    --_active-bg: var(--lt-bg-primary-subtle);
+  }
+  :host([appearance='ghost'][variant='secondary']) {
+    --_bg: transparent;
+    --_color: var(--lt-text-secondary);
+    --_hover-bg: var(--lt-bg-secondary-subtle);
+    --_active-bg: var(--lt-bg-secondary-subtle);
+  }
+  :host([appearance='ghost'][variant='neutral']) {
+    --_bg: transparent;
+    --_color: var(--lt-text-neutral);
+    --_hover-bg: var(--lt-bg-subtle);
+    --_active-bg: var(--lt-bg-surface);
+  }
+  :host([appearance='ghost'][variant='success']) {
+    --_bg: transparent;
+    --_color: var(--lt-text-success);
+    --_hover-bg: var(--lt-bg-success-subtle);
+    --_active-bg: var(--lt-bg-success-subtle);
+  }
+  :host([appearance='ghost'][variant='warning']) {
+    --_bg: transparent;
+    --_color: var(--lt-text-warning);
+    --_hover-bg: var(--lt-bg-warning-subtle);
+    --_active-bg: var(--lt-bg-warning-subtle);
+  }
+  :host([appearance='ghost'][variant='error']) {
+    --_bg: transparent;
+    --_color: var(--lt-text-error);
+    --_hover-bg: var(--lt-bg-error-subtle);
+    --_active-bg: var(--lt-bg-error-subtle);
+  }
+  :host([appearance='ghost'][variant='info']) {
+    --_bg: transparent;
+    --_color: var(--lt-text-info);
+    --_hover-bg: var(--lt-bg-info-subtle);
+    --_active-bg: var(--lt-bg-info-subtle);
+  }
+
+  :host([appearance='outlined']) [part='base']:active:not([disabled]):not([aria-disabled='true']),
+  :host([appearance='ghost']) [part='base']:active:not([disabled]):not([aria-disabled='true']) {
     opacity: 0.8;
   }
 
