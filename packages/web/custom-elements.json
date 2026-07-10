@@ -925,7 +925,7 @@
         {
           "kind": "variable",
           "name": "buttonStyles",
-          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; /* Internal state props — set per variant/appearance below */ --_color: var(--lt-text-on-primary); --_bg: var(--lt-interactive-primary-bg); --_border-color: transparent; --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([full-width]) { display: block; width: 100%; } :host([full-width]) [part='base'] { width: 100%; } [part='base'] { align-items: center; background: var(--lt-button-bg, var(--_bg)); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-button-border-color, var(--_border-color)); box-sizing: border-box; color: var(--lt-button-color, var(--_color)); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: 88px; user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } [part='base']:active { transform: translateY(1px); } [part='base']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } [part='base'][disabled], [part='base'][aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; pointer-events: none; transform: none; } /* anchor reset — browsers apply link color + underline by default */ a[part='base'] { text-decoration: none; } /* sizes */ :host([size='sm']) [part='base'] { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) [part='base'] { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) [part='base'] { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) { --_bg: var(--lt-interactive-primary-bg); --_color: var(--lt-text-on-primary); --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) { --_bg: var(--lt-interactive-secondary-bg); --_color: var(--lt-text-on-secondary); --_hover-bg: var(--lt-interactive-secondary-bg-hover); --_active-bg: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) { --_bg: var(--lt-color-neutral-500); --_color: var(--lt-color-neutral-50); --_hover-bg: var(--lt-color-neutral-700); --_active-bg: var(--lt-color-neutral-800); } :host([variant='success']) { --_bg: var(--lt-interactive-success-bg); --_color: var(--lt-text-on-success); --_hover-bg: var(--lt-interactive-success-bg-hover); --_active-bg: var(--lt-interactive-success-bg-active); } :host([variant='warning']) { --_bg: var(--lt-interactive-warning-bg); --_color: var(--lt-text-on-warning); --_hover-bg: var(--lt-interactive-warning-bg-hover); --_active-bg: var(--lt-interactive-warning-bg-active); } :host([variant='error']) { --_bg: var(--lt-interactive-error-bg); --_color: var(--lt-text-on-error); --_hover-bg: var(--lt-interactive-error-bg-hover); --_active-bg: var(--lt-interactive-error-bg-active); } :host([variant='info']) { --_bg: var(--lt-interactive-info-bg); --_color: var(--lt-text-on-info); --_hover-bg: var(--lt-interactive-info-bg-hover); --_active-bg: var(--lt-interactive-info-bg-active); } [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_hover-bg)); } [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_active-bg)); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) { --_bg: transparent; --_color: var(--lt-text-primary); --_border-color: var(--lt-border-primary-strong); --_hover-bg: var(--lt-bg-primary-subtle); --_active-bg: var(--lt-bg-primary-subtle); } :host([appearance='outlined'][variant='secondary']) { --_bg: transparent; --_color: var(--lt-text-secondary); --_border-color: var(--lt-border-secondary-strong); --_hover-bg: var(--lt-bg-secondary-subtle); --_active-bg: var(--lt-bg-secondary-subtle); } :host([appearance='outlined'][variant='neutral']) { --_bg: transparent; --_color: var(--lt-text-neutral); --_border-color: var(--lt-border-strong); --_hover-bg: var(--lt-bg-subtle); --_active-bg: var(--lt-bg-surface); } :host([appearance='outlined'][variant='success']) { --_bg: transparent; --_color: var(--lt-text-success); --_border-color: var(--lt-border-success-strong); --_hover-bg: var(--lt-bg-success-subtle); --_active-bg: var(--lt-bg-success-subtle); } :host([appearance='outlined'][variant='warning']) { --_bg: transparent; --_color: var(--lt-text-warning); --_border-color: var(--lt-border-warning-strong); --_hover-bg: var(--lt-bg-warning-subtle); --_active-bg: var(--lt-bg-warning-subtle); } :host([appearance='outlined'][variant='error']) { --_bg: transparent; --_color: var(--lt-text-error); --_border-color: var(--lt-border-error-strong); --_hover-bg: var(--lt-bg-error-subtle); --_active-bg: var(--lt-bg-error-subtle); } :host([appearance='outlined'][variant='info']) { --_bg: transparent; --_color: var(--lt-text-info); --_border-color: var(--lt-border-info-strong); --_hover-bg: var(--lt-bg-info-subtle); --_active-bg: var(--lt-bg-info-subtle); } :host([appearance='outlined']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { opacity: 0.8; } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } :host([uppercase]) [part='base'] { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+          "default": "css` :host { display: inline-block; font-family: 'Hanken Grotesk', sans-serif; /* Internal state props — set per variant/appearance below */ --_color: var(--lt-text-on-primary); --_bg: var(--lt-interactive-primary-bg); --_border-color: transparent; --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([full-width]) { display: block; width: 100%; } :host([full-width]) [part='base'] { width: 100%; } [part='base'] { align-items: center; background: var(--lt-button-bg, var(--_bg)); border-radius: var(--lt-border-radius); border: 1px solid var(--lt-button-border-color, var(--_border-color)); box-sizing: border-box; color: var(--lt-button-color, var(--_color)); cursor: pointer; display: inline-flex; font-family: inherit; font-weight: 400; gap: var(--lt-spacing-2); justify-content: center; line-height: 1; min-width: var(--lt-button-min-width, 88px); user-select: none; transition: background-color 120ms ease, border-color 120ms ease, transform 50ms ease; } [part='base']:active { transform: translateY(1px); } [part='base']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } [part='base'][disabled], [part='base'][aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; pointer-events: none; transform: none; } /* anchor reset — browsers apply link color + underline by default */ a[part='base'] { text-decoration: none; } /* sizes */ :host([size='sm']) [part='base'] { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='md']) [part='base'] { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='lg']) [part='base'] { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } /* variants — solid */ :host([variant='primary']) { --_bg: var(--lt-interactive-primary-bg); --_color: var(--lt-text-on-primary); --_hover-bg: var(--lt-interactive-primary-bg-hover); --_active-bg: var(--lt-interactive-primary-bg-active); } :host([variant='secondary']) { --_bg: var(--lt-interactive-secondary-bg); --_color: var(--lt-text-on-secondary); --_hover-bg: var(--lt-interactive-secondary-bg-hover); --_active-bg: var(--lt-interactive-secondary-bg-active); } :host([variant='neutral']) { --_bg: var(--lt-color-neutral-500); --_color: var(--lt-color-neutral-50); --_hover-bg: var(--lt-color-neutral-700); --_active-bg: var(--lt-color-neutral-800); } :host([variant='success']) { --_bg: var(--lt-interactive-success-bg); --_color: var(--lt-text-on-success); --_hover-bg: var(--lt-interactive-success-bg-hover); --_active-bg: var(--lt-interactive-success-bg-active); } :host([variant='warning']) { --_bg: var(--lt-interactive-warning-bg); --_color: var(--lt-text-on-warning); --_hover-bg: var(--lt-interactive-warning-bg-hover); --_active-bg: var(--lt-interactive-warning-bg-active); } :host([variant='error']) { --_bg: var(--lt-interactive-error-bg); --_color: var(--lt-text-on-error); --_hover-bg: var(--lt-interactive-error-bg-hover); --_active-bg: var(--lt-interactive-error-bg-active); } :host([variant='info']) { --_bg: var(--lt-interactive-info-bg); --_color: var(--lt-text-on-info); --_hover-bg: var(--lt-interactive-info-bg-hover); --_active-bg: var(--lt-interactive-info-bg-active); } [part='base']:hover:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_hover-bg)); } [part='base']:active:not([disabled]):not([aria-disabled='true']) { background: var(--lt-button-bg, var(--_active-bg)); } /* outlined appearance */ :host([appearance='outlined'][variant='primary']) { --_bg: transparent; --_color: var(--lt-text-primary); --_border-color: var(--lt-border-primary-strong); --_hover-bg: var(--lt-bg-primary-subtle); --_active-bg: var(--lt-bg-primary-subtle); } :host([appearance='outlined'][variant='secondary']) { --_bg: transparent; --_color: var(--lt-text-secondary); --_border-color: var(--lt-border-secondary-strong); --_hover-bg: var(--lt-bg-secondary-subtle); --_active-bg: var(--lt-bg-secondary-subtle); } :host([appearance='outlined'][variant='neutral']) { --_bg: transparent; --_color: var(--lt-text-neutral); --_border-color: var(--lt-border-strong); --_hover-bg: var(--lt-bg-subtle); --_active-bg: var(--lt-bg-surface); } :host([appearance='outlined'][variant='success']) { --_bg: transparent; --_color: var(--lt-text-success); --_border-color: var(--lt-border-success-strong); --_hover-bg: var(--lt-bg-success-subtle); --_active-bg: var(--lt-bg-success-subtle); } :host([appearance='outlined'][variant='warning']) { --_bg: transparent; --_color: var(--lt-text-warning); --_border-color: var(--lt-border-warning-strong); --_hover-bg: var(--lt-bg-warning-subtle); --_active-bg: var(--lt-bg-warning-subtle); } :host([appearance='outlined'][variant='error']) { --_bg: transparent; --_color: var(--lt-text-error); --_border-color: var(--lt-border-error-strong); --_hover-bg: var(--lt-bg-error-subtle); --_active-bg: var(--lt-bg-error-subtle); } :host([appearance='outlined'][variant='info']) { --_bg: transparent; --_color: var(--lt-text-info); --_border-color: var(--lt-border-info-strong); --_hover-bg: var(--lt-bg-info-subtle); --_active-bg: var(--lt-bg-info-subtle); } /* ghost appearance — transparent background, no border, low-emphasis text button */ :host([appearance='ghost'][variant='primary']) { --_bg: transparent; --_color: var(--lt-text-primary); --_hover-bg: var(--lt-bg-primary-subtle); --_active-bg: var(--lt-bg-primary-subtle); } :host([appearance='ghost'][variant='secondary']) { --_bg: transparent; --_color: var(--lt-text-secondary); --_hover-bg: var(--lt-bg-secondary-subtle); --_active-bg: var(--lt-bg-secondary-subtle); } :host([appearance='ghost'][variant='neutral']) { --_bg: transparent; --_color: var(--lt-text-neutral); --_hover-bg: var(--lt-bg-subtle); --_active-bg: var(--lt-bg-surface); } :host([appearance='ghost'][variant='success']) { --_bg: transparent; --_color: var(--lt-text-success); --_hover-bg: var(--lt-bg-success-subtle); --_active-bg: var(--lt-bg-success-subtle); } :host([appearance='ghost'][variant='warning']) { --_bg: transparent; --_color: var(--lt-text-warning); --_hover-bg: var(--lt-bg-warning-subtle); --_active-bg: var(--lt-bg-warning-subtle); } :host([appearance='ghost'][variant='error']) { --_bg: transparent; --_color: var(--lt-text-error); --_hover-bg: var(--lt-bg-error-subtle); --_active-bg: var(--lt-bg-error-subtle); } :host([appearance='ghost'][variant='info']) { --_bg: transparent; --_color: var(--lt-text-info); --_hover-bg: var(--lt-bg-info-subtle); --_active-bg: var(--lt-bg-info-subtle); } :host([appearance='outlined']) [part='base']:active:not([disabled]):not([aria-disabled='true']), :host([appearance='ghost']) [part='base']:active:not([disabled]):not([aria-disabled='true']) { opacity: 0.8; } /* loading */ .spinner { animation: spin 700ms linear infinite; border-radius: 999px; border-right-color: transparent; border: 2px solid currentColor; height: 1em; width: 1em; } @keyframes spin { to { transform: rotate(360deg); } } .icon, .end { align-items: center; display: inline-flex; justify-content: center; } :host([uppercase]) [part='base'] { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
         }
       ],
       "exports": [
@@ -947,6 +947,13 @@
           "kind": "class",
           "description": "Button component with multiple variants, sizes, appearances, and loading state support.",
           "name": "Button",
+          "cssProperties": [
+            {
+              "description": "Minimum width of the button; set to `0` for compact/inline buttons",
+              "name": "--lt-button-min-width",
+              "default": "88px"
+            }
+          ],
           "slots": [
             {
               "description": "Button label/content",
@@ -979,6 +986,12 @@
             },
             {
               "kind": "field",
+              "name": "_ariaForwarding",
+              "privacy": "private",
+              "default": "new AriaForwardingController(this, () => this.shadowRoot?.querySelector('[part=\"base\"]'))"
+            },
+            {
+              "kind": "field",
               "name": "variant",
               "type": {
                 "text": "ButtonVariant"
@@ -993,7 +1006,7 @@
                 "text": "ButtonAppearance"
               },
               "default": "'filled'",
-              "description": "Appearance style (filled or outlined)."
+              "description": "Appearance style (filled, outlined, or ghost)."
             },
             {
               "kind": "field",
@@ -4212,7 +4225,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "Icon-only button. Requires `label` for screen readers since there is no visible text.",
+          "description": "Icon-only button. Requires `label` for screen readers since there is no visible text.\n\nForwards host `aria-pressed`, `aria-expanded`, `aria-haspopup`, `aria-controls`, and\n`aria-current` onto the internal native control (e.g. for dropdown triggers).",
           "name": "IconButton",
           "members": [
             {
@@ -4220,6 +4233,12 @@
               "name": "styles",
               "static": true,
               "default": "iconButtonStyles"
+            },
+            {
+              "kind": "field",
+              "name": "_ariaForwarding",
+              "privacy": "private",
+              "default": "new AriaForwardingController(this, () => this.shadowRoot?.querySelector('[part=\"base\"]'))"
             },
             {
               "kind": "field",
@@ -4382,12 +4401,18 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A thin wrapper around `<img>` with rounded corners and responsive fill support.",
+          "description": "A thin wrapper around `<img>` with rounded corners, responsive fill support,\nnative lazy loading, and an error fallback mechanism.\n\nNative `load`/`error` events don't cross the shadow boundary, so they are\nre-dispatched as composed `lt-load`/`lt-error` custom events. When a load\nfails, the `fallback` slot is shown in place of the broken image; setting a\nnew `src` retries.",
           "name": "Image",
           "cssParts": [
             {
               "description": "The underlying `<img>` element",
               "name": "image"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Content shown in place of the image when loading fails",
+              "name": "fallback"
             }
           ],
           "members": [
@@ -4435,6 +4460,25 @@
             },
             {
               "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "ImageLoading | ''"
+              },
+              "default": "''",
+              "description": "Forwarded to the underlying `<img loading>` attribute.\n`lazy` defers loading until the image approaches the viewport."
+            },
+            {
+              "kind": "field",
+              "name": "_errored",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false",
+              "description": "Whether the current `src` failed to load — shows the `fallback` slot."
+            },
+            {
+              "kind": "field",
               "name": "_borderRadius",
               "type": {
                 "text": "string | undefined"
@@ -4444,7 +4488,64 @@
             },
             {
               "kind": "method",
+              "name": "willUpdate",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_dispatch",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "'lt-load' | 'lt-error'"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_handleLoad",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_handleError",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
               "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "name": "name",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "type": {
+                "text": "CustomEvent<{ src: string }>"
+              },
+              "description": "Fired when the image loads successfully",
+              "name": "lt-load"
+            },
+            {
+              "type": {
+                "text": "CustomEvent<{ src: string }>"
+              },
+              "description": "Fired when the image fails to load",
+              "name": "lt-error"
             }
           ],
           "superclass": {
@@ -4620,7 +4721,7 @@
         {
           "kind": "variable",
           "name": "listItemStyles",
-          "default": "css` :host { display: list-item; margin: 0; padding: 0; } .inner { display: flex; align-items: flex-start; gap: var(--lt-spacing-2); } /* Keep the slotted content as a single flex item so rich inline markup (strong, code, multiple text runs) flows as normal prose instead of each node becoming its own shrunk flex item. min-width: 0 lets it wrap. */ .content { flex: 1 1 auto; min-width: 0; } lt-icon { flex-shrink: 0; color: var(--lt-color-neutral-500); font-size: inherit; } `"
+          "default": "css` :host { display: list-item; margin: 0; padding: 0; } .inner { display: flex; align-items: flex-start; gap: var(--lt-spacing-2); } /* Keep the slotted content as a single flex item so rich inline markup (strong, code, multiple text runs) flows as normal prose instead of each node becoming its own shrunk flex item. min-width: 0 lets it wrap. */ .content { flex: 1 1 auto; min-width: 0; } lt-icon { flex-shrink: 0; color: var(--lt-color-neutral-500); font-size: inherit; } /* interactive rows — native button/anchor reset + states */ a.inner, button.inner { background: transparent; border: none; border-radius: var(--lt-border-radius); box-sizing: border-box; color: inherit; cursor: pointer; font: inherit; margin: 0; padding: var(--lt-spacing-2); text-align: start; text-decoration: none; transition: background-color 120ms ease; width: 100%; } a.inner:hover:not([aria-disabled='true']), button.inner:hover:not([disabled]) { background: var(--lt-list-item-hover-bg, var(--lt-bg-subtle)); } a.inner:active:not([aria-disabled='true']), button.inner:active:not([disabled]) { background: var(--lt-list-item-active-bg, var(--lt-bg-surface)); } a.inner:focus-visible, button.inner:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: -3px; } button.inner[disabled], a.inner[aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; pointer-events: none; } `"
         }
       ],
       "exports": [
@@ -4640,8 +4741,14 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A list item component that renders a `<li>` element in shadow DOM.\n\nThis component solves the HTML parser issue where nested `<lt-list>` components\ncannot contain plain `<li>` elements due to browser parsing rules. By wrapping\nthe `<li>` in a custom element's shadow DOM, we can properly nest lists.",
+          "description": "A list item component that renders a `<li>` element in shadow DOM.\n\nThis component solves the HTML parser issue where nested `<lt-list>` components\ncannot contain plain `<li>` elements due to browser parsing rules. By wrapping\nthe `<li>` in a custom element's shadow DOM, we can properly nest lists.\n\nItems can also be interactive: set `clickable` to render the row as a native\n`<button>` (picker rows, settings rows), or `href` to render it as an `<a>`.\nInteractive rows get hover/active/focus states and a disabled state.",
           "name": "ListItem",
+          "cssParts": [
+            {
+              "description": "The row container (`<div>`, `<button>` when `clickable`, or `<a>` when `href` is set)",
+              "name": "base"
+            }
+          ],
           "slots": [
             {
               "description": "Default slot for list item content",
@@ -4672,6 +4779,51 @@
               },
               "default": "''",
               "description": "Icon name to display after the item content."
+            },
+            {
+              "kind": "field",
+              "name": "clickable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Renders the row as a native `<button>` with hover/active/focus states.\nListen for `click` on the element to react. Ignored when `href` is set."
+            },
+            {
+              "kind": "field",
+              "name": "href",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "When set, renders the row as an `<a>` with hover/active/focus states."
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Forwarded to the anchor's `target` attribute when `href` is set."
+            },
+            {
+              "kind": "field",
+              "name": "rel",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Forwarded to the anchor's `rel` attribute when `href` is set.\nDefaults to `noopener noreferrer` when `target=\"_blank\"` and `rel` is not specified."
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Disables the interactive row. Only relevant with `clickable` or `href`."
             },
             {
               "kind": "method",
@@ -4857,7 +5009,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A single navigation item. Can render as an anchor link or a collapsible group header\nwhen children are slotted.\n\nWhen slotted inside `<lt-nav orientation=\"horizontal\">`, top-level items lay out in a row\nand nested children appear as a dropdown panel. In vertical mode, nested children\ncollapse/expand inline.",
+          "description": "A single navigation item. Can render as an anchor link or a collapsible group header\nwhen children are slotted.\n\nWhen slotted inside `<lt-nav orientation=\"horizontal\">`, top-level items lay out in a row\nand nested children appear as a dropdown panel. In vertical mode, nested children\ncollapse/expand inline.\n\nSPA router integration: `nav-item-click` is cancelable — call `event.preventDefault()`\nto stop the anchor's native navigation, navigate programmatically, and drive the\nhighlighted item via the `active` property (which also sets `aria-current=\"page\"`).",
           "name": "NavItem",
           "slots": [
             {
@@ -4906,7 +5058,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether this item is currently the active/selected page."
+              "description": "Whether this item is currently the active/selected page.\nSets `aria-current=\"page\"` on the internal trigger."
             },
             {
               "kind": "field",
@@ -5020,7 +5172,7 @@
               "type": {
                 "text": "CustomEvent<{ href: string; label: string }>"
               },
-              "description": "Fired when the item is clicked (even when it has no href)."
+              "description": "Fired when the item is clicked (even when it has no href). Cancelable: `preventDefault()` stops the native anchor navigation so an SPA router can handle it."
             },
             {
               "name": "nav-collapse",
@@ -6210,6 +6362,85 @@
           "declaration": {
             "name": "Select",
             "module": "src/components/select/select.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/aria-forwarding.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "FORWARDED_ARIA_ATTRIBUTES",
+          "type": {
+            "text": "[\n  'aria-pressed',\n  'aria-expanded',\n  'aria-haspopup',\n  'aria-controls',\n  'aria-current'\n]"
+          },
+          "default": "[ 'aria-pressed', 'aria-expanded', 'aria-haspopup', 'aria-controls', 'aria-current' ]",
+          "description": "Host `aria-*` attributes forwarded onto the internal native control.\n\nInteractive components render their semantics on a native element inside the\nshadow DOM, so ARIA attributes set on the host (`<lt-button aria-pressed=\"true\">`)\nnever reach the element screen readers actually interact with. Components that\ninstall an AriaForwardingController mirror this documented subset onto\ntheir internal control and keep it in sync as the host attributes change.\n\nNote: `aria-controls` contains an idref — it can only resolve when the referenced\nelement lives in the same tree as the internal control, so cross-shadow references\nare forwarded but may be ignored by assistive technology."
+        },
+        {
+          "kind": "class",
+          "description": "Reactive controller that forwards FORWARDED_ARIA_ATTRIBUTES from the\nhost element onto an internal target element (typically the native `<button>`\nor `<a>` rendered in the shadow DOM).\n\nA `MutationObserver` watches the host so dynamic changes (e.g. a framework\ntoggling `aria-pressed`) are re-forwarded after every update. Attributes\nremoved from the host are removed from the target — components should not\nrender any of the forwarded attributes themselves.",
+          "name": "AriaForwardingController",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_host",
+              "type": {
+                "text": "AriaForwardingHost"
+              },
+              "privacy": "private",
+              "default": "host"
+            },
+            {
+              "kind": "field",
+              "name": "_getTarget",
+              "type": {
+                "text": "() => Element | null | undefined"
+              },
+              "privacy": "private",
+              "default": "getTarget"
+            },
+            {
+              "kind": "field",
+              "name": "_observer",
+              "type": {
+                "text": "MutationObserver"
+              },
+              "privacy": "private",
+              "default": "new MutationObserver(() => this._host.requestUpdate())"
+            },
+            {
+              "kind": "method",
+              "name": "hostConnected"
+            },
+            {
+              "kind": "method",
+              "name": "hostDisconnected"
+            },
+            {
+              "kind": "method",
+              "name": "hostUpdated"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FORWARDED_ARIA_ATTRIBUTES",
+          "declaration": {
+            "name": "FORWARDED_ARIA_ATTRIBUTES",
+            "module": "src/components/shared/aria-forwarding.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "AriaForwardingController",
+          "declaration": {
+            "name": "AriaForwardingController",
+            "module": "src/components/shared/aria-forwarding.ts"
           }
         }
       ]
