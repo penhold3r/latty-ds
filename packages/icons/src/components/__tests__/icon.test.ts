@@ -38,14 +38,10 @@ describe('<lt-icon>', () => {
     expect(el.getAttribute('size')).toBe('lg');
   });
 
-  it('supports all sizes', async () => {
-    const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
-
-    for (const size of sizes) {
-      el.size = size;
-      await el.updateComplete;
-      expect(el.getAttribute('size')).toBe(size);
-    }
+  it.each(['xs', 'sm', 'md', 'lg', 'xl', 'inherit'] as const)('reflects %s size to attribute', async (size) => {
+    el.size = size;
+    await el.updateComplete;
+    expect(el.getAttribute('size')).toBe(size);
   });
 
   it('renders nothing when name is empty', async () => {

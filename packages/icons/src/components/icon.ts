@@ -10,15 +10,22 @@ import type { IconSize } from '../types/icons.types';
  * @element lt-icon
  *
  * Features:
- * - Supports multiple sizes (xs, sm, md, lg, xl)
+ * - Supports multiple fixed sizes (xs, sm, md, lg, xl) plus `inherit` (1em, scales with font-size)
+ * - Overridable via the `--lt-icon-size` custom property (wins over the `size` attribute)
  * - Inherits color from parent via currentColor
  * - Loads icons from the global icon registry
  * - Automatically cleans SVG attributes for consistent sizing
+ *
+ * Note: setting `font-size` on the icon has no effect on its own — use `size="inherit"`
+ * (then `font-size` drives the 1em box) or `--lt-icon-size` for fluid sizing.
+ *
+ * @cssprop [--lt-icon-size] - Width/height of the icon; overrides the `size` attribute (e.g. `1.5em`, `18px`)
  *
  * @example
  * ```html
  * <lt-icon name="search" size="md"></lt-icon>
  * <lt-icon name="user" size="lg" style="color: blue;"></lt-icon>
+ * <lt-icon name="star" size="inherit"></lt-icon> <!-- scales with surrounding text -->
  * ```
  */
 @customElement('lt-icon')
@@ -37,30 +44,36 @@ export class Icon extends LitElement {
       display: block;
     }
 
-    /* sizes */
+    /* sizes — --lt-icon-size always wins over the size attribute */
     :host([size='xs']) {
-      width: 12px;
-      height: 12px;
+      width: var(--lt-icon-size, 12px);
+      height: var(--lt-icon-size, 12px);
     }
 
     :host([size='sm']) {
-      width: 16px;
-      height: 16px;
+      width: var(--lt-icon-size, 16px);
+      height: var(--lt-icon-size, 16px);
     }
 
     :host([size='md']) {
-      width: 20px;
-      height: 20px;
+      width: var(--lt-icon-size, 20px);
+      height: var(--lt-icon-size, 20px);
     }
 
     :host([size='lg']) {
-      width: 24px;
-      height: 24px;
+      width: var(--lt-icon-size, 24px);
+      height: var(--lt-icon-size, 24px);
     }
 
     :host([size='xl']) {
-      width: 32px;
-      height: 32px;
+      width: var(--lt-icon-size, 32px);
+      height: var(--lt-icon-size, 32px);
+    }
+
+    /* 1em box — scales with the inherited font-size */
+    :host([size='inherit']) {
+      width: var(--lt-icon-size, 1em);
+      height: var(--lt-icon-size, 1em);
     }
 
     /* Allow color inheritance */

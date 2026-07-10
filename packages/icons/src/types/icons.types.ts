@@ -5,8 +5,9 @@
  * - `md`: 20px (default)
  * - `lg`: 24px
  * - `xl`: 32px
+ * - `inherit`: 1em — scales with the surrounding `font-size`
  */
-export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'inherit';
 
 /**
  * Icon definition structure.
