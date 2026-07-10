@@ -89,7 +89,7 @@ pnpm bundle-size            # Print per-component gzip sizes + diff vs baseline
 pnpm bundle-size:update     # Same, and write new baseline to bundle-report.json
 ```
 
-Commit `bundle-report.json` updates when intentionally adding code. The `--fail-on-regression` flag (used in CI) exits 1 if any component grows ≥ 10%.
+Commit `bundle-report.json` updates when intentionally adding code. The `--fail-on-regression` flag exits 1 if any component grows ≥ 10% (available for CI use, but not currently wired into any workflow).
 
 ### Scaffolding
 
@@ -126,7 +126,11 @@ Example: `feat(web): add tooltip component`
 
 Subject max length is 100 characters (longer than conventional default). Body lines may be up to 120 characters.
 
-The `pre-push` hook also runs `pnpm check:boundaries && pnpm typecheck` before every push — fix any violations before pushing rather than skipping the hook.
+Git hooks (husky):
+
+- `pre-commit` runs `lint-staged` — Prettier + `eslint --fix` on staged files.
+- `commit-msg` runs commitlint.
+- `pre-push` runs `pnpm check:boundaries`, `pnpm typecheck`, `pnpm lint`, and `pnpm test` — fix any violations before pushing rather than skipping the hook.
 
 ### Releasing
 
@@ -143,7 +147,7 @@ This runs `lerna version --conventional-commits`, which:
 3. Creates a `chore(release): publish vX.Y.Z` commit and a `vX.Y.Z` git tag
 4. Pushes the commit and tag to `origin`
 
-CI then picks up the tag and runs `lerna publish from-git` to publish to npm (see `.github/workflows/publish.yml`). Two secrets must be set in the GitHub repo: `NPM_TOKEN` (npm publish token) and `GH_TOKEN` (GitHub PAT with write access, needed to push version bumps).
+CI then picks up the tag (`.github/workflows/publish.yml`, triggered on `v*` tags or manual dispatch): it builds all packages, restores the committed `custom-elements.json` (the build regenerates it), runs tests, and publishes via `lerna publish from-package --yes`. The only required repo secret is `NPM_TOKEN` (npm publish token) — version bumps are pushed from the local machine by `lerna version`, not from CI.
 
 To do a dry run without pushing: `pnpm exec lerna version --conventional-commits --no-push`.
 
@@ -350,7 +354,11 @@ Planning documents, design decisions, audits, and research produced during a ses
 
 ## CI/CD
 
-The docs site deploys automatically to GitHub Pages on every push to `main` via `.github/workflows/deploy-docs.yml`. The workflow installs with `--frozen-lockfile` and runs `pnpm docs:build`. No manual deploy step is needed.
+Three workflows in `.github/workflows/`:
+
+- **`ci.yml`** — on every push to `main` and every PR: builds all packages, then runs `pnpm lint`, `pnpm lint:markup`, `pnpm typecheck`, and `pnpm test`; a second job builds the docs site and runs the full `pnpm a11y` suite against a preview server.
+- **`deploy-docs.yml`** — deploys the docs site to GitHub Pages on every push to `main` (installs with `--frozen-lockfile`, runs `pnpm docs:build`). No manual deploy step is needed.
+- **`publish.yml`** — publishes the public packages to npm on `v*` tags (see Releasing above).
 
 ## Node Version
 
