@@ -71,6 +71,62 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 </Nav>`}
   />
 
+  <lt-text variant="h3">SPA router integration</lt-text>
+  <lt-text variant="body">
+    <code>nav-item-click</code> is cancelable: call <code>preventDefault()</code> to stop the anchor's full-page navigation
+    and hand the URL to your router. Drive the highlighted item with the <code>active</code> property — it also sets <code
+      >aria-current="page"</code
+    > on the internal trigger.
+  </lt-text>
+  <FrameworkTabs
+    html={`<lt-nav id="app-nav">
+  <lt-nav-item href="/dashboard" label="Dashboard" icon-start="home"></lt-nav-item>
+  <lt-nav-item href="/reviews" label="Reviews" icon-start="star"></lt-nav-item>
+</lt-nav>
+<script type="module">
+  import '@latty-ds/web';
+  const nav = document.getElementById('app-nav');
+  nav.addEventListener('nav-item-click', (e) => {
+    e.preventDefault(); // stop the full-page navigation
+    router.navigate(e.detail.href); // your SPA router
+    nav.querySelectorAll('lt-nav-item').forEach((item) => {
+      item.active = item.href === e.detail.href;
+    });
+  });
+</script>`}
+    react={`import { Nav, NavItem } from '@latty-ds/react';
+import { useLocation, useNavigate } from 'react-router';
+
+function AppNav() {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  function handleNavClick(e) {
+    e.preventDefault(); // stop the full-page navigation
+    navigate(e.detail.href);
+  }
+
+  return (
+    <Nav>
+      <NavItem
+        href="/dashboard"
+        label="Dashboard"
+        iconStart="home"
+        active={pathname === '/dashboard'}
+        onNavItemClick={handleNavClick}
+      />
+      <NavItem
+        href="/reviews"
+        label="Reviews"
+        iconStart="star"
+        active={pathname === '/reviews'}
+        onNavItemClick={handleNavClick}
+      />
+    </Nav>
+  );
+}`}
+  />
+
   <lt-text variant="h2">API — lt-nav</lt-text>
   <ApiTable tag="lt-nav" />
 

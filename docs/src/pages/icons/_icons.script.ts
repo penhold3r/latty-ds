@@ -29,9 +29,15 @@ if (iconApiTable) {
     },
     {
       name: 'size',
-      type: "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
+      type: "'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'inherit'",
       default: "'md'",
-      description: 'Rendered size — 12 / 16 / 20 / 24 / 32 px.'
+      description: "Rendered size — 12 / 16 / 20 / 24 / 32 px, or 'inherit' for a 1em box that scales with font-size."
+    },
+    {
+      name: '--lt-icon-size',
+      type: 'CSS length',
+      default: '—',
+      description: 'Custom property override for the icon box; wins over the size attribute (e.g. 1.4rem).'
     }
   ];
 }

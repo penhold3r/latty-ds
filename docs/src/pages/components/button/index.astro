@@ -21,14 +21,22 @@ import VariantPresets from '../../../components/VariantPresets/index.astro';
     html={`
 <lt-button variant="primary">Save changes</lt-button>
 <lt-button variant="primary" appearance="outlined" icon-start="download">Download</lt-button>
+<lt-button variant="neutral" appearance="ghost">Cancel</lt-button>
 <lt-button variant="error" icon-start="trash" loading>Deleting…</lt-button>
+
+<!-- Toggle button — aria-pressed on the host is forwarded to the internal native button -->
+<lt-button variant="neutral" icon-start="heart" aria-pressed="true">42</lt-button>
     `}
     react={`
 import { Button } from '@latty-ds/react';
 
 <Button variant="primary">Save changes</Button>
 <Button variant="primary" appearance="outlined" iconStart="download">Download</Button>
+<Button variant="neutral" appearance="ghost">Cancel</Button>
 <Button variant="error" iconStart="trash" loading>Deleting…</Button>
+
+{/* Toggle button — aria-pressed on the host is forwarded to the internal native button */}
+<Button variant="neutral" iconStart="heart" aria-pressed={liked}>{count}</Button>
     `}
     vue={`
 <script setup lang="ts">
@@ -38,7 +46,11 @@ function save() { /* ... */ }
 <template>
   <lt-button variant="primary" @click="save">Save changes</lt-button>
   <lt-button variant="primary" appearance="outlined" icon-start="download">Download</lt-button>
+  <lt-button variant="neutral" appearance="ghost">Cancel</lt-button>
   <lt-button variant="error" icon-start="trash" loading>Deleting…</lt-button>
+
+  <!-- Toggle button — aria-pressed on the host is forwarded to the internal native button -->
+  <lt-button variant="neutral" icon-start="heart" :aria-pressed="String(liked)">{{ count }}</lt-button>
 </template>
     `}
   />

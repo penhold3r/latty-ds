@@ -57,6 +57,12 @@ import ApiTable from '../../../components/ApiTable/index.astro';
   <lt-list-item icon-start="check">Feature two</lt-list-item>
   <lt-list-item icon-start="check">Feature three</lt-list-item>
 </lt-list>
+
+<!-- Interactive rows — clickable renders a native button, href an anchor -->
+<lt-list no-marker>
+  <lt-list-item clickable icon-end="arrow-right">Pick an album</lt-list-item>
+  <lt-list-item href="/settings/profile" icon-start="user">Profile</lt-list-item>
+</lt-list>
     `}
     react={`
 import { List, ListItem } from '@latty-ds/react';
@@ -95,6 +101,12 @@ import { List, ListItem } from '@latty-ds/react';
   <ListItem iconStart="check">Feature two</ListItem>
   <ListItem iconStart="check">Feature three</ListItem>
 </List>
+
+{/* Interactive rows — clickable renders a native button, href an anchor */}
+<List noMarker>
+  <ListItem clickable iconEnd="arrow-right" onClick={pickAlbum}>Pick an album</ListItem>
+  <ListItem href="/settings/profile" iconStart="user">Profile</ListItem>
+</List>
     `}
     vue={`
 <template>
@@ -131,6 +143,12 @@ import { List, ListItem } from '@latty-ds/react';
     <lt-list-item icon-start="check">Feature one</lt-list-item>
     <lt-list-item icon-start="check">Feature two</lt-list-item>
     <lt-list-item icon-start="check">Feature three</lt-list-item>
+  </lt-list>
+
+  <!-- Interactive rows — clickable renders a native button, href an anchor -->
+  <lt-list no-marker>
+    <lt-list-item clickable icon-end="arrow-right" @click="pickAlbum">Pick an album</lt-list-item>
+    <lt-list-item href="/settings/profile" icon-start="user">Profile</lt-list-item>
   </lt-list>
 </template>
     `}

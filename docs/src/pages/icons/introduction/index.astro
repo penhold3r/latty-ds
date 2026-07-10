@@ -109,6 +109,12 @@ import '@latty-ds/icons/arrow-right';`}
 <!-- With explicit size -->
 <lt-icon name="arrow-right" size="lg" />
 
+<!-- Fluid: 1em box, scales with the surrounding font-size -->
+<lt-icon name="star" size="inherit" />
+
+<!-- Fluid via custom property (wins over the size attribute) -->
+<lt-icon name="star" style="--lt-icon-size: 1.4rem" />
+
 <!-- Color is inherited from CSS -->
 <lt-icon name="check-circle" style="color: var(--lt-color-success-500)" />`}
     react={`import { Icon } from '@latty-ds/react';
@@ -119,9 +125,17 @@ import '@latty-ds/icons/arrow-right';`}
 {/* With explicit size */}
 <Icon name="arrow-right" size="lg" />
 
+{/* Fluid: 1em box, scales with the surrounding font-size */}
+<Icon name="star" size="inherit" />
+
 {/* Color is inherited via CSS */}
 <Icon name="check-circle" style={{ color: 'var(--lt-color-success-500)' }} />`}
   />
+  <lt-text variant="body">
+    Setting <code>font-size</code> on an icon has no effect on its own — the icon box is fixed by <code>size</code>. Use <code
+      >size="inherit"</code
+    > to get a 1em box that follows the text, or set <code>--lt-icon-size</code> to any length.
+  </lt-text>
 
   <lt-text variant="h3">Custom icons</lt-text>
   <CodeSnippet

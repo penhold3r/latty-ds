@@ -35,7 +35,12 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 <!-- Responsive — fills its container with object-fit: cover -->
 <div style="width: 400px; height: 240px;">
   <lt-image src="photo.jpg" alt="A scenic view" responsive rounded></lt-image>
-</div>`}
+</div>
+
+<!-- Lazy loading + error fallback -->
+<lt-image src="cover.jpg" alt="Album cover" loading="lazy">
+  <div slot="fallback">No cover available</div>
+</lt-image>`}
     react={`import { Image } from '@latty-ds/react';
 
 // Default
@@ -48,7 +53,12 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 // Responsive fill
 <div style={{ width: 400, height: 240 }}>
   <Image src="photo.jpg" alt="A scenic view" responsive rounded />
-</div>`}
+</div>
+
+// Lazy loading + error fallback (lt-error also fires as onLtError)
+<Image src="cover.jpg" alt="Album cover" loading="lazy">
+  <div slot="fallback">No cover available</div>
+</Image>`}
     vue={`<template>
   <!-- Default -->
   <lt-image src="photo.jpg" alt="A scenic view" />
@@ -61,6 +71,11 @@ import ApiTable from '../../../components/ApiTable/index.astro';
   <div style="width: 400px; height: 240px;">
     <lt-image src="photo.jpg" alt="A scenic view" responsive rounded />
   </div>
+
+  <!-- Lazy loading + error fallback -->
+  <lt-image src="cover.jpg" alt="Album cover" loading="lazy" @lt-error="onCoverError">
+    <div slot="fallback">No cover available</div>
+  </lt-image>
 </template>`}
   />
 

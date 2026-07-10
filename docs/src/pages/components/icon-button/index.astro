@@ -36,7 +36,11 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 <lt-icon-button icon="nav-arrow-left" label="Previous" appearance="outlined"></lt-icon-button>
 
 <!-- Round shape -->
-<lt-icon-button icon="heart" label="Like" variant="error" appearance="filled" round></lt-icon-button>`}
+<lt-icon-button icon="heart" label="Like" variant="error" appearance="filled" round></lt-icon-button>
+
+<!-- ARIA forwarding — aria-pressed/-expanded/-haspopup/-controls/-current set on the
+     host are mirrored onto the internal native button -->
+<lt-icon-button icon="user" label="Open user menu" aria-haspopup="menu" aria-expanded="false"></lt-icon-button>`}
     react={`import { IconButton } from '@latty-ds/react';
 
 // Ghost (default) — for close/dismiss buttons
@@ -49,7 +53,10 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 <IconButton icon="nav-arrow-left" label="Previous" appearance="outlined" />
 
 // Round shape
-<IconButton icon="heart" label="Like" variant="error" appearance="filled" round />`}
+<IconButton icon="heart" label="Like" variant="error" appearance="filled" round />
+
+// ARIA forwarding — aria-* set on the host reaches the internal native button
+<IconButton icon="user" label="Open user menu" aria-haspopup="menu" aria-expanded={open} />`}
     vue={`<template>
   <!-- Ghost (default) — for close/dismiss buttons -->
   <lt-icon-button icon="xmark" label="Close" />
@@ -62,6 +69,9 @@ import ApiTable from '../../../components/ApiTable/index.astro';
 
   <!-- Round shape -->
   <lt-icon-button icon="heart" label="Like" variant="error" appearance="filled" round />
+
+  <!-- ARIA forwarding — aria-* set on the host reaches the internal native button -->
+  <lt-icon-button icon="user" label="Open user menu" aria-haspopup="menu" :aria-expanded="String(open)" />
 </template>`}
   />
 
