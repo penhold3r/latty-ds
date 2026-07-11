@@ -1,22 +1,26 @@
 import type { Config } from '../types/';
-import type { LattyConfig } from '../types/public-types';
+import type { BorderWidth, LattyConfig } from '../types/public-types';
 
-import { DEFAULT_BORDER_RADIUS, DEFAULT_FONT_FAMILY } from '../constants/';
+import { BORDER_WIDTH_PRESETS, DEFAULT_BORDER_RADIUS, DEFAULT_BORDER_WIDTH, DEFAULT_FONT_FAMILY } from '../constants/';
 import { buildTokens, tokensToCss, semanticTokensToCss } from '../core/';
 import { buildSemanticTokens } from '../semantic/';
 import tokensConfig from '../../tokens.config.json';
 
-export type { LattyConfig };
+export type { BorderWidth, LattyConfig };
 
 const DEFAULTS: Required<Omit<LattyConfig, 'theme'>> = {
   colors: tokensConfig.color,
   font: { family: DEFAULT_FONT_FAMILY },
-  border: { radius: DEFAULT_BORDER_RADIUS }
+  border: { radius: DEFAULT_BORDER_RADIUS, width: DEFAULT_BORDER_WIDTH }
 };
 
 const toInternalConfig = (userConfig: LattyConfig): Config => ({
   color: { ...DEFAULTS.colors, ...userConfig.colors }
 });
+
+/** Maps the named presets (thin/medium/thick) to px; any other CSS length passes through. */
+const resolveBorderWidth = (width: BorderWidth): string =>
+  BORDER_WIDTH_PRESETS[width as keyof typeof BORDER_WIDTH_PRESETS] ?? width;
 
 /**
  * Generates a complete CSS stylesheet string (primitive + semantic tokens)
@@ -32,6 +36,9 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
   }
   if (userConfig.border?.radius) {
     tokens = { ...tokens, border: { ...tokens.border, radius: userConfig.border.radius } };
+  }
+  if (userConfig.border?.width) {
+    tokens = { ...tokens, border: { ...tokens.border, width: resolveBorderWidth(userConfig.border.width) } };
   }
 
   const primitives = tokensToCss(tokens);
@@ -74,7 +81,7 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
  *       configure({
  *         colors: { primary: '#6366f1', secondary: '#f59e0b' },
  *         font:   { family: 'Inter, sans-serif' },
- *         border: { radius: '0.375rem' },
+ *         border: { radius: '0.375rem', width: 'medium' },
  *       });
  *     </script>
  *   </head>

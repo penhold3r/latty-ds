@@ -40,6 +40,7 @@ export type Tokens = {
   spacing: SpacingTokens;
   border: {
     radius: string;
+    width: string;
   };
   typography: {
     fontFamily: string;
@@ -49,6 +50,13 @@ export type Tokens = {
 
 export type { Config, TokenColorName } from './';
 
+/**
+ * Border width applied to control chrome (outlined buttons, inputs, chips, surfaces).
+ * Named presets: `thin` = 1px (default), `medium` = 2px, `thick` = 4px.
+ * Any other CSS length (e.g. `'1.5px'`) passes through unchanged.
+ */
+export type BorderWidth = 'thin' | 'medium' | 'thick' | (string & {});
+
 export interface LattyConfig {
   /** Built-in names: primary, secondary, success, warning, error, info. Any additional name generates a new palette. */
   colors?: Record<string, string>;
@@ -57,6 +65,7 @@ export interface LattyConfig {
   };
   border?: {
     radius?: string;
+    width?: BorderWidth;
   };
   /**
    * Controls which semantic token layer is emitted.

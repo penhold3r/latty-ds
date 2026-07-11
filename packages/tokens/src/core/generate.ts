@@ -2,7 +2,7 @@ import type { Config, PaletteFlat } from '../types/';
 import type { Tokens } from '../types/public-types';
 import type { SemanticTokenMap } from '../semantic/';
 
-import { DEFAULT_BORDER_RADIUS, DEFAULT_FONT_FAMILY } from '../constants/';
+import { DEFAULT_BORDER_RADIUS, DEFAULT_BORDER_WIDTH, DEFAULT_FONT_FAMILY } from '../constants/';
 import { buildSpacing } from '../spacing/';
 import { buildElevation } from '../elevation/';
 import { addSystemColors, buildColorTokens } from '../build/colors';
@@ -12,7 +12,7 @@ export const buildTokens = (cfg: Config): Tokens => {
   color = addSystemColors(color);
 
   const spacing = buildSpacing();
-  const border = { radius: DEFAULT_BORDER_RADIUS };
+  const border = { radius: DEFAULT_BORDER_RADIUS, width: DEFAULT_BORDER_WIDTH };
   const typography = { fontFamily: DEFAULT_FONT_FAMILY };
   const elevation = buildElevation(color.neutral as PaletteFlat);
 

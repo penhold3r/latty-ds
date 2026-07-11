@@ -34,6 +34,31 @@ describe('createStyleSheet', () => {
     expect(css).toContain('--lt-border-radius: 0.25rem');
   });
 
+  it('emits the default border width when not configured', () => {
+    const css = createStyleSheet();
+    expect(css).toContain('--lt-border-width: 1px');
+  });
+
+  it.each([
+    ['thin', '1px'],
+    ['medium', '2px'],
+    ['thick', '4px']
+  ] as const)('resolves border width preset %s to %s', (preset, px) => {
+    const css = createStyleSheet({ border: { width: preset } });
+    expect(css).toContain(`--lt-border-width: ${px}`);
+  });
+
+  it('passes a raw CSS length border width through unchanged', () => {
+    const css = createStyleSheet({ border: { width: '1.5px' } });
+    expect(css).toContain('--lt-border-width: 1.5px');
+  });
+
+  it('applies border width and radius independently', () => {
+    const css = createStyleSheet({ border: { radius: '0.25rem', width: 'thick' } });
+    expect(css).toContain('--lt-border-radius: 0.25rem');
+    expect(css).toContain('--lt-border-width: 4px');
+  });
+
   it('generates a full palette for an arbitrary custom color name', () => {
     const css = createStyleSheet({ colors: { tertiary: '#a855f7' } });
     expect(css).toContain('--lt-color-tertiary-500');
