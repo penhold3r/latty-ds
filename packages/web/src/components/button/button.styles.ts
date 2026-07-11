@@ -26,7 +26,7 @@ export const buttonStyles = css`
     align-items: center;
     background: var(--lt-button-bg, var(--_bg));
     border-radius: var(--lt-border-radius);
-    border: 1px solid var(--lt-button-border-color, var(--_border-color));
+    border: var(--lt-border-width, 1px) solid var(--lt-button-border-color, var(--_border-color));
     box-sizing: border-box;
     color: var(--lt-button-color, var(--_color));
     cursor: pointer;

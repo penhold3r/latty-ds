@@ -26,7 +26,7 @@ export const datepickerStyles = css`
   input {
     background: var(--lt-bg-surface);
     border-radius: var(--lt-border-radius);
-    border: 1px solid var(--lt-border-default);
+    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
     color: var(--lt-text-default);
     font-family: inherit;
     font-size: 0.9375rem;

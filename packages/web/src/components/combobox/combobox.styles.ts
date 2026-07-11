@@ -29,7 +29,7 @@ export const comboboxStyles = [
       align-items: center;
       background: var(--lt-bg-surface);
       border-radius: var(--lt-border-radius);
-      border: 1px solid var(--lt-border-default);
+      border: var(--lt-border-width, 1px) solid var(--lt-border-default);
       cursor: text;
       display: flex;
       gap: var(--lt-spacing-2);
@@ -124,7 +124,7 @@ export const comboboxStyles = [
     .dropdown {
       background: var(--lt-bg-surface);
       border-radius: var(--lt-border-radius);
-      border: 1px solid var(--lt-border-default);
+      border: var(--lt-border-width, 1px) solid var(--lt-border-default);
       box-shadow: var(--lt-shadow-md);
       max-height: 240px;
       overflow-y: auto;

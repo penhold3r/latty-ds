@@ -11,7 +11,11 @@ export const chipStyles = css`
     align-items: center;
     background: var(--lt-chip-bg);
     border-radius: 999px;
-    border: 1px solid var(--lt-chip-border-color, transparent);
+    /* Chips are small pills (as short as 20px tall at size="sm") — a "thick"
+       (4px) themed border eats too much of that height and reads as
+       compressed/squished, so cap what the chip actually renders at "medium"
+       (2px) regardless of the theme's configured border width. */
+    border: min(var(--lt-border-width, 1px), 2px) solid var(--lt-chip-border-color, transparent);
     color: var(--lt-chip-color);
     box-sizing: border-box;
     display: inline-flex;

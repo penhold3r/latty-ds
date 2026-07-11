@@ -73,14 +73,14 @@ export const alertStyles = css`
   :host([appearance='filled']) .inner,
   :host(:not([appearance])) .inner {
     background: var(--_bg-subtle);
-    border: 1px solid var(--_border);
+    border: var(--lt-border-width, 1px) solid var(--_border);
     color: var(--_color);
   }
 
   /* outlined — white bg + colored border */
   :host([appearance='outlined']) .inner {
     background: var(--lt-bg-default);
-    border: 1px solid var(--_border);
+    border: var(--lt-border-width, 1px) solid var(--_border);
     color: var(--_color);
   }
 

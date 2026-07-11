@@ -88,7 +88,7 @@ export const accordionStyles = css`
   /* Variant: default */
   :host([appearance='default']) details {
     background: var(--lt-bg-subtle);
-    border: 1px solid var(--lt-border-default);
+    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
   }
 
   :host([appearance='default']) details:hover {
@@ -108,7 +108,7 @@ export const accordionStyles = css`
   /* Variant: outlined */
   :host([appearance='outlined']) details {
     background: transparent;
-    border: 1px solid var(--lt-border-default);
+    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
   }
 
   :host([appearance='outlined']) details:hover {

@@ -9,7 +9,7 @@ export const calendarStyles = css`
   .calendar {
     background: var(--lt-bg-default);
     border-radius: var(--lt-border-radius);
-    border: 1px solid var(--lt-border-default);
+    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
     display: flex;
     flex-direction: column;
     gap: var(--lt-spacing-2);
@@ -352,7 +352,7 @@ export const calendarStyles = css`
   .today-btn {
     background: transparent;
     border-radius: var(--lt-border-radius);
-    border: 1px solid var(--lt-border-default);
+    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
     color: var(--lt-text-subtle);
     cursor: pointer;
     font-family: inherit;

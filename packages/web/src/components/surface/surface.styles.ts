@@ -42,7 +42,7 @@ export const surfaceStyles = css`
 
   :host([appearance='outlined']) .surface {
     background: var(--lt-surface-bg, transparent);
-    border: 1px solid var(--lt-border-default);
+    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
   }
 
   :host([appearance='outlined']:hover) .surface {

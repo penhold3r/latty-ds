@@ -164,7 +164,7 @@ export const tableStyles = css`
 
   /* Border styling */
   :host([bordered]) table {
-    border: 1px solid var(--lt-border-default);
+    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
   }
 
   :host([bordered]) th,
@@ -220,7 +220,7 @@ export const tableStyles = css`
     :host([responsive-mode='stack']) tr {
       background: var(--lt-bg-subtle);
       border-radius: var(--lt-border-radius);
-      border: 1px solid var(--lt-border-default);
+      border: var(--lt-border-width, 1px) solid var(--lt-border-default);
       margin-bottom: var(--lt-spacing-3);
       padding: var(--lt-spacing-4);
     }

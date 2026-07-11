@@ -17,7 +17,7 @@ export const iconButtonStyles = css`
     align-items: center;
     background: var(--lt-icon-button-bg, var(--_bg));
     border-radius: var(--lt-border-radius);
-    border: 1px solid var(--lt-icon-button-border-color, var(--_border-color));
+    border: var(--lt-border-width, 1px) solid var(--lt-icon-button-border-color, var(--_border-color));
     box-sizing: border-box;
     color: var(--lt-icon-button-color, var(--_color));
     cursor: pointer;

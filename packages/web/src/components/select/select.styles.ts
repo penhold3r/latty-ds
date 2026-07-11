@@ -35,7 +35,7 @@ export const selectStyles = [
       align-items: center;
       background: var(--lt-bg-subtle);
       border-radius: var(--lt-border-radius);
-      border: 1px solid var(--lt-border-default);
+      border: var(--lt-border-width, 1px) solid var(--lt-border-default);
       box-sizing: border-box;
       cursor: pointer;
       display: flex;

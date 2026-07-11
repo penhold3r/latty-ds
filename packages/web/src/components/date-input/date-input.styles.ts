@@ -35,7 +35,7 @@ export const dateInputStyles = [
       align-items: center;
       background: var(--lt-bg-surface);
       border-radius: var(--lt-border-radius);
-      border: 1px solid var(--lt-border-default);
+      border: var(--lt-border-width, 1px) solid var(--lt-border-default);
       color: var(--lt-text-default);
       cursor: pointer;
       display: flex;

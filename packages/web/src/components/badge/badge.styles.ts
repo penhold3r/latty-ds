@@ -11,7 +11,11 @@ export const badgeStyles = css`
     align-items: center;
     background: var(--lt-badge-bg);
     border-radius: 999px;
-    border: 1px solid var(--lt-badge-border-color, transparent);
+    /* Badges are even smaller than chips (as short as 18px at size="sm") — a
+       "thick" (4px) themed border reads as compressed, so cap what the badge
+       actually renders at "medium" (2px) regardless of the theme's configured
+       border width. */
+    border: min(var(--lt-border-width, 1px), 2px) solid var(--lt-badge-border-color, transparent);
     color: var(--lt-badge-color);
     box-sizing: border-box;
     display: inline-flex;
