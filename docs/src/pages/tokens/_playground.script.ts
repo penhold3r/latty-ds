@@ -5,7 +5,8 @@ type ThemeValue = 'system' | 'light' | 'dark';
 
 type SelectOption = { value: string; label: string };
 type SelectEl = HTMLElement & { options: SelectOption[]; value: string };
-type ColorInputEl = HTMLElement & { value: string };
+// lt-color-input and lt-textfield both just expose a plain string .value.
+type ValueEl = HTMLElement & { value: string };
 type SliderEl = HTMLElement & { value: number };
 
 interface PlaygroundState {
@@ -24,13 +25,6 @@ interface PlaygroundState {
 // global.css and would otherwise win the cascade against anything injected at
 // runtime (configure() itself only ever targets :root).
 const SCOPE = '.playground-stage';
-
-const FONT_OPTIONS: SelectOption[] = [
-  { value: '"Hanken Grotesk", sans-serif', label: 'Default (Hanken Grotesk)' },
-  { value: 'Georgia, serif', label: 'Serif (Georgia)' },
-  { value: 'ui-monospace, monospace', label: 'Monospace' },
-  { value: 'system-ui, sans-serif', label: 'System UI' }
-];
 
 const WIDTH_OPTIONS: SelectOption[] = [
   { value: 'thin', label: 'Thin (1px)' },
@@ -53,7 +47,7 @@ const DEFAULTS: PlaygroundState = {
   secondary: '#5252c5',
   radius: 8,
   width: 'thin',
-  font: FONT_OPTIONS[0].value,
+  font: '"Hanken Grotesk", sans-serif',
   theme: 'system'
 };
 
@@ -95,21 +89,32 @@ const init = async (): Promise<void> => {
   await Promise.all([
     customElements.whenDefined('lt-select'),
     customElements.whenDefined('lt-color-input'),
-    customElements.whenDefined('lt-slider')
+    customElements.whenDefined('lt-slider'),
+    customElements.whenDefined('lt-textfield')
   ]);
 
-  const primaryEl = document.getElementById('ctrl-primary') as ColorInputEl;
-  const secondaryEl = document.getElementById('ctrl-secondary') as ColorInputEl;
+  const primaryEl = document.getElementById('ctrl-primary') as ValueEl;
+  const secondaryEl = document.getElementById('ctrl-secondary') as ValueEl;
   const radiusEl = document.getElementById('ctrl-radius') as SliderEl;
   const widthEl = document.getElementById('ctrl-width') as SelectEl;
-  const fontEl = document.getElementById('ctrl-font') as SelectEl;
+  const fontEl = document.getElementById('ctrl-font') as ValueEl;
   const themeEl = document.getElementById('ctrl-theme') as SelectEl;
   const resetBtn = document.getElementById('ctrl-reset')!;
 
   widthEl.options = WIDTH_OPTIONS;
-  fontEl.options = FONT_OPTIONS;
   themeEl.options = THEME_OPTIONS;
-  fontEl.value = DEFAULTS.font;
+
+  // Browsers restore previously-typed values into named native inputs (color
+  // pickers, text fields, sliders) on reload, independently of our own state —
+  // so the DOM can already disagree with `state`'s DEFAULTS-seeded values
+  // before a single event has fired. Read the live DOM back into `state` here
+  // so the first updateTheme() call reflects what the controls actually show.
+  state.primary = primaryEl.value;
+  state.secondary = secondaryEl.value;
+  state.radius = radiusEl.value;
+  state.width = widthEl.value as BorderWidth;
+  state.font = fontEl.value;
+  state.theme = themeEl.value as ThemeValue;
 
   primaryEl.addEventListener('change', (e) => {
     state.primary = (e as CustomEvent<{ value: string }>).detail.value;
@@ -127,7 +132,7 @@ const init = async (): Promise<void> => {
     state.width = (e as CustomEvent<{ value: string }>).detail.value as BorderWidth;
     updateTheme();
   });
-  fontEl.addEventListener('change', (e) => {
+  fontEl.addEventListener('input', (e) => {
     state.font = (e as CustomEvent<{ value: string }>).detail.value;
     updateTheme();
   });

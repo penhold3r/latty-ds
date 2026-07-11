@@ -16,23 +16,36 @@ import BaseLayout from '../../layouts/BaseLayout/index.astro';
         <lt-text variant="h4">Controls</lt-text>
 
         <div class="control-row">
-          <lt-color-input id="ctrl-primary" label="Primary color" value="#ff8200"></lt-color-input>
+          <lt-color-input id="ctrl-primary" name="primary-color" label="Primary color" value="#ff8200"></lt-color-input>
         </div>
         <div class="control-row">
-          <lt-color-input id="ctrl-secondary" label="Secondary color" value="#5252c5"></lt-color-input>
+          <lt-color-input id="ctrl-secondary" name="secondary-color" label="Secondary color" value="#5252c5"
+          ></lt-color-input>
         </div>
         <div class="control-row control-row--slider">
-          <lt-slider id="ctrl-radius" label="Border radius (px)" min="0" max="24" step="1" value="8" tooltip
-          ></lt-slider>
+          <lt-slider
+            id="ctrl-radius"
+            name="border-radius"
+            label="Border radius (px)"
+            min="0"
+            max="24"
+            step="1"
+            value="8"
+            tooltip></lt-slider>
         </div>
         <div class="control-row">
-          <lt-select id="ctrl-width" label="Border width" value="thin"></lt-select>
+          <lt-select id="ctrl-width" name="border-width" label="Border width" value="thin"></lt-select>
         </div>
         <div class="control-row">
-          <lt-select id="ctrl-font" label="Font family"></lt-select>
+          <lt-textfield
+            id="ctrl-font"
+            name="font-family"
+            label="Font family"
+            value='"https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap"'
+            placeholder="Font stack or Google Fonts URL"></lt-textfield>
         </div>
         <div class="control-row">
-          <lt-select id="ctrl-theme" label="Theme" value="system"></lt-select>
+          <lt-select id="ctrl-theme" name="theme" label="Theme" value="system"></lt-select>
         </div>
 
         <lt-button id="ctrl-reset" variant="neutral" appearance="ghost" size="sm">Reset to defaults</lt-button>
@@ -71,7 +84,7 @@ import BaseLayout from '../../layouts/BaseLayout/index.astro';
             </div>
           </div>
 
-          <lt-textfield type="email" label="Email address" icon-start="mail" placeholder="you@example.com"
+          <lt-textfield type="email" name="email" label="Email address" icon-start="mail" placeholder="you@example.com"
           ></lt-textfield>
 
           <div class="subscribe-actions">
