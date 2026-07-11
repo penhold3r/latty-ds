@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const textfieldStyles = css`
   :host {
     display: inline-block;
-    font-family: 'Hanken Grotesk', sans-serif;
+    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
     width: 100%;
   }
 

@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const checkboxStyles = css`
   :host {
     display: inline-block;
-    font-family: 'Hanken Grotesk', sans-serif;
+    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
   }
 
   .checkbox-wrapper {

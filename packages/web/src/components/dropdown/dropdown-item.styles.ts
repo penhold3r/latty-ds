@@ -13,7 +13,7 @@ export const dropdownItemStyles = css`
     color: var(--lt-text-default);
     cursor: pointer;
     display: flex;
-    font-family: 'Hanken Grotesk', sans-serif;
+    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
     font-size: 0.875rem;
     gap: var(--lt-spacing-2);
     padding: var(--lt-spacing-2) var(--lt-spacing-4);

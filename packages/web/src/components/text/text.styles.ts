@@ -16,7 +16,7 @@ export const textStyles = css`
   [part='base'] {
     margin: 0;
     color: inherit;
-    font-family: var(--lt-typography-fontfamily);
+    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
   }
 
   /* ── Display ─────────────────────────────────────────────────────────── */

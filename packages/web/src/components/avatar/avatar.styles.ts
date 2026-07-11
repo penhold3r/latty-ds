@@ -25,7 +25,7 @@ export const avatarStyles = css`
   }
 
   .initials {
-    font-family: 'Hanken Grotesk', sans-serif;
+    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
     font-weight: 600;
     letter-spacing: 0.02em;
     line-height: 1;

@@ -20,7 +20,7 @@ export const breadcrumbItemStyles = css`
   :host {
     align-items: center;
     display: inline-flex;
-    font-family: var(--lt-typography-fontfamily);
+    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
     font-size: 0.875rem;
   }
 

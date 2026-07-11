@@ -6,7 +6,7 @@ export const dropdownStyles = [
   css`
     :host {
       display: inline-block;
-      font-family: 'Hanken Grotesk', sans-serif;
+      font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
     }
 
     .trigger-wrap {
