@@ -132,6 +132,10 @@ export class Switch extends ThemeableElement {
   }
 
   private handleChange(e: Event) {
+    // Stop the native (composed) change event from also bubbling past the
+    // shadow boundary — otherwise it double-fires 'change' on the host after
+    // our own CustomEvent, with the wrong (non-{checked}) detail shape.
+    e.stopPropagation();
     const target = e.target as HTMLInputElement;
     this.checked = target.checked;
 

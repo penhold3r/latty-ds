@@ -19,6 +19,18 @@ describe('<lt-color-input>', () => {
     expect(el.shadowRoot).toBeTruthy();
   });
 
+  it('forwards name to the native color picker', async () => {
+    el.name = 'brand-color';
+    await el.updateComplete;
+    const input = el.shadowRoot!.querySelector('input[type="color"]')!;
+    expect(input.getAttribute('name')).toBe('brand-color');
+  });
+
+  it('omits the name attribute on the native picker when unset', () => {
+    const input = el.shadowRoot!.querySelector('input[type="color"]')!;
+    expect(input.hasAttribute('name')).toBe(false);
+  });
+
   it('reflects size attribute', async () => {
     el.setAttribute('size', 'lg');
     await el.updateComplete;
@@ -37,6 +49,21 @@ describe('<lt-color-input>', () => {
     const picker = el.shadowRoot!.querySelector('.native-picker') as HTMLInputElement;
     picker.value = '#ff0000';
     picker.dispatchEvent(new Event('change'));
+    await el.updateComplete;
+    expect(events).toHaveLength(1);
+    expect(events[0].detail.value).toBe('#ff0000');
+  });
+
+  it('does not double-fire change for consumers listening on the host', async () => {
+    // Real browser change events on the native color picker are composed
+    // (cross the shadow boundary), so without stopPropagation() a consumer
+    // listening on the host would see both our CustomEvent and the original
+    // native event re-arriving — this reproduces that with composed: true.
+    const events: CustomEvent[] = [];
+    el.addEventListener('change', (e) => events.push(e as CustomEvent));
+    const picker = el.shadowRoot!.querySelector('.native-picker') as HTMLInputElement;
+    picker.value = '#ff0000';
+    picker.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
     await el.updateComplete;
     expect(events).toHaveLength(1);
     expect(events[0].detail.value).toBe('#ff0000');

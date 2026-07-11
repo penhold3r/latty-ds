@@ -27,6 +27,26 @@ describe('<lt-textfield>', () => {
     expect(input).toBeTruthy();
   });
 
+  it('forwards name to the native input', async () => {
+    el.name = 'email';
+    await el.updateComplete;
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.getAttribute('name')).toBe('email');
+  });
+
+  it('omits the name attribute on the native input when unset', () => {
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.hasAttribute('name')).toBe(false);
+  });
+
+  it('forwards name to the native textarea for multiline type', async () => {
+    el.type = 'multiline';
+    el.name = 'bio';
+    await el.updateComplete;
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    expect(textarea.getAttribute('name')).toBe('bio');
+  });
+
   it('has default variant of default', () => {
     expect(el.variant).toBe('default');
     expect(el.getAttribute('variant')).toBe('default');
@@ -182,6 +202,36 @@ describe('<lt-textfield>', () => {
     await el.updateComplete;
 
     expect(changeHandler).toHaveBeenCalled();
+    expect(changeHandler.mock.calls[0][0].detail.value).toBe('test');
+  });
+
+  it('does not double-fire input for consumers listening on the host', async () => {
+    // Real browser input/change events on the native <input> are composed
+    // (cross the shadow boundary), so without stopPropagation() a consumer
+    // listening on the host would see both our CustomEvent and the original
+    // native event re-arriving — this reproduces that with composed: true.
+    const inputHandler = vi.fn();
+    el.addEventListener('input', inputHandler);
+
+    const input = el.shadowRoot!.querySelector('input')!;
+    input.value = 'test';
+    input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+    await el.updateComplete;
+
+    expect(inputHandler).toHaveBeenCalledTimes(1);
+    expect(inputHandler.mock.calls[0][0].detail.value).toBe('test');
+  });
+
+  it('does not double-fire change for consumers listening on the host', async () => {
+    const changeHandler = vi.fn();
+    el.addEventListener('change', changeHandler);
+
+    const input = el.shadowRoot!.querySelector('input')!;
+    input.value = 'test';
+    input.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+    await el.updateComplete;
+
+    expect(changeHandler).toHaveBeenCalledTimes(1);
     expect(changeHandler.mock.calls[0][0].detail.value).toBe('test');
   });
 

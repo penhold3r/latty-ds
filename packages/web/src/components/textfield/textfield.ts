@@ -203,6 +203,10 @@ export class Textfield extends ThemeableElement {
   }
 
   private handleInput(e: Event) {
+    // The native input/change event is composed, so it would otherwise keep
+    // bubbling past the shadow boundary after we re-dispatch our own —
+    // double-firing the same event name on the host with the wrong detail shape.
+    e.stopPropagation();
     const input = e.target as HTMLInputElement | HTMLTextAreaElement;
     this.value = input.value;
     if (this._touched) this._autoError = !this._validate();
@@ -223,6 +227,7 @@ export class Textfield extends ThemeableElement {
    * @private
    */
   private handleChange(e: Event) {
+    e.stopPropagation();
     const input = e.target as HTMLInputElement | HTMLTextAreaElement;
     this.value = input.value;
     this.dispatchEvent(
@@ -321,6 +326,7 @@ export class Textfield extends ThemeableElement {
             ? html`
                 <textarea
                   .value=${this.value}
+                  name=${ifDefined(this.name || undefined)}
                   placeholder=${this.placeholder}
                   rows=${this.rows}
                   minlength=${ifDefined(this.min !== null ? this.min : undefined)}
@@ -341,6 +347,7 @@ export class Textfield extends ThemeableElement {
                 <input
                   type=${actualInputType}
                   .value=${this.value}
+                  name=${ifDefined(this.name || undefined)}
                   placeholder=${this.placeholder}
                   min=${ifDefined(isNumber && this.min !== null ? this.min : undefined)}
                   max=${ifDefined(isNumber && this.max !== null ? this.max : undefined)}

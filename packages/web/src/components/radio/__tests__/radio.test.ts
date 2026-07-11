@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { Radio } from '../radio';
 import '../radio';
 
@@ -41,6 +41,22 @@ describe('<lt-radio>', () => {
 
   it('is not disabled by default', () => {
     expect(el.disabled).toBe(false);
+  });
+
+  it('does not double-fire change for consumers listening on the host', async () => {
+    // Real browser change events on the native radio input are composed
+    // (cross the shadow boundary), so without stopPropagation() a consumer
+    // listening on the host would see both our CustomEvent and the original
+    // native event re-arriving — this reproduces that with an explicit composed dispatch.
+    const handler = vi.fn();
+    el.addEventListener('change', handler);
+
+    const input = el.shadowRoot!.querySelector('input[type="radio"]') as HTMLInputElement;
+    input.checked = true;
+    input.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+    await el.updateComplete;
+
+    expect(handler).toHaveBeenCalledTimes(1);
   });
 
   it('can be checked', async () => {

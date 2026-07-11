@@ -1,4 +1,5 @@
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement, property } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
 import { colorInputStyles } from './color-input.styles';
@@ -176,6 +177,10 @@ export class ColorInput extends ThemeableElement {
   }
 
   private _handleChange(e: Event) {
+    // Stop the native (composed) change event from also bubbling past the
+    // shadow boundary — otherwise it double-fires 'change' on the host after
+    // our own CustomEvent, with the wrong (non-{value}) detail shape.
+    e.stopPropagation();
     const pickerHex = (e.target as HTMLInputElement).value; // always #rrggbb from native picker
     this.value = formatColor(pickerHex, this.format);
     this.dispatchEvent(
@@ -200,6 +205,7 @@ export class ColorInput extends ThemeableElement {
             type="color"
             class="native-picker"
             .value=${hex || '#000000'}
+            name=${ifDefined(this.name || undefined)}
             ?disabled=${this.disabled}
             aria-label=${this.label || this.placeholder}
             @change=${this._handleChange}
