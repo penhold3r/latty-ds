@@ -46,6 +46,28 @@ configure({
 configure({ border: { width: '1.5px' } }); // raw CSS lengths pass through`}
   />
 
+  <lt-text variant="h3">Loading a font from a CDN</lt-text>
+  <lt-text variant="body">
+    <code>font.family</code> also accepts a Google Fonts CSS2 stylesheet URL instead of a plain CSS value —
+    <code>configure()</code>
+    <code>@import</code>s it and derives the family name from the URL's
+    <code>family=</code> query param, so there's no separate <code>&lt;link&gt;</code> tag to add:
+  </lt-text>
+  <CodeSnippet
+    lang="ts"
+    code={`configure({
+  font: {
+    family: 'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap'
+  }
+});`}
+  />
+  <lt-text variant="body">
+    This works with <code>createStyleSheet()</code> too — the <code>@import</code> is written as the first line of the returned
+    string, so it stays valid CSS once dropped into a <code>&lt;style&gt;</code> tag. Auto-detection only covers
+    <code>fonts.googleapis.com</code> URLs; for other font CDNs, load the stylesheet yourself and pass the resulting family
+    name as a plain <code>font.family</code> value instead.
+  </lt-text>
+
   <lt-text variant="h3">Preventing flash of unstyled content</lt-text>
   <lt-text variant="body">
     Because <code>&lt;script type="module"&gt;</code> is deferred, there is a brief window between first paint and when <code
