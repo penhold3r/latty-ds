@@ -38,6 +38,16 @@ export default defineConfig({
       // Allow Vite to serve files from outside the docs directory
       fs: { allow: [root] }
     },
+    optimizeDeps: {
+      // @latty-ds/tokens/configure is dist-based (see the alias comment below),
+      // so `pnpm --filter @latty-ds/tokens build` is required to pick up
+      // source changes — but without this exclude, Vite also pre-bundles it
+      // into node_modules/.vite/deps on first run and won't notice the dist
+      // file changed underneath that cache, silently serving stale JS logic
+      // (not just stale CSS values) until the dev server is restarted with
+      // `--force`. Excluding it means a rebuild alone is enough.
+      exclude: ['@latty-ds/tokens']
+    },
     resolve: {
       alias: [
         // Subpath exports must come before the package root alias
