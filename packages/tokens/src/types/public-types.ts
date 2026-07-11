@@ -61,6 +61,17 @@ export interface LattyConfig {
   /** Built-in names: primary, secondary, success, warning, error, info. Any additional name generates a new palette. */
   colors?: Record<string, string>;
   font?: {
+    /**
+     * A CSS `font-family` value (e.g. `'Inter, sans-serif'`), or a Google
+     * Fonts CSS2 stylesheet URL (e.g.
+     * `'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900&display=swap'`).
+     * URLs get `@import`ed automatically and the family name is derived from
+     * the `family=` query param — no separate `<link>` tag needed. Stylesheet
+     * URLs from providers other than `fonts.googleapis.com` are still loaded,
+     * but since there's no reliable way to guess the family name from an
+     * arbitrary CDN, pass the resulting name as a plain value instead (or
+     * open an issue if there's a provider worth special-casing).
+     */
     family?: string;
   };
   border?: {

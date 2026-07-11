@@ -29,6 +29,27 @@ describe('createStyleSheet', () => {
     expect(css).toContain('Inter, sans-serif');
   });
 
+  it('loads a Google Fonts CSS2 URL and derives the family name', () => {
+    const url = 'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap';
+    const css = createStyleSheet({ font: { family: url } });
+    expect(css.startsWith(`@import url("${url}");\n`)).toBe(true);
+    expect(css).toContain('--lt-typography-fontFamily: "Hanken Grotesk", sans-serif');
+  });
+
+  it('still imports a non-Google-Fonts URL but keeps the default family token', () => {
+    const url = 'https://use.typekit.net/abc123.css';
+    const defaultCss = createStyleSheet();
+    const css = createStyleSheet({ font: { family: url } });
+    expect(css.startsWith(`@import url("${url}");\n`)).toBe(true);
+    expect(css).toContain('--lt-typography-fontFamily: "Hanken Grotesk", sans-serif');
+    expect(css.slice(css.indexOf(':root'))).toEqual(defaultCss.slice(defaultCss.indexOf(':root')));
+  });
+
+  it('does not prepend @import for a plain CSS font family value', () => {
+    const css = createStyleSheet({ font: { family: 'Inter, sans-serif' } });
+    expect(css.startsWith('@import')).toBe(false);
+  });
+
   it('applies custom border radius', () => {
     const css = createStyleSheet({ border: { radius: '0.25rem' } });
     expect(css).toContain('--lt-border-radius: 0.25rem');
@@ -103,5 +124,14 @@ describe('configure', () => {
     configure();
     configure({ colors: { primary: '#ff0000' } });
     expect(document.querySelectorAll('#lt-tokens').length).toBe(1);
+  });
+
+  it('keeps @import as the first rule when font.family is a CDN URL', () => {
+    const url = 'https://fonts.googleapis.com/css2?family=Hanken+Grotesk&display=swap';
+    configure({ font: { family: url } });
+    const css = document.getElementById('lt-tokens')?.textContent ?? '';
+    expect(css.startsWith(`@import url("${url}");\n`)).toBe(true);
+    // FOUC guard must still be present, just after the @import instead of before it.
+    expect(css).toContain('html[data-lt]:not([data-lt-ready]){visibility:hidden}');
   });
 });
