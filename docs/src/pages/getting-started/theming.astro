@@ -22,7 +22,7 @@ import CodeSnippet from '../../components/CodeSnippet/index.astro';
 configure({
   colors: { primary: '#6366f1', secondary: '#f59e0b' },
   font: { family: 'Inter, sans-serif' },
-  border: { radius: '0.375rem' }
+  border: { radius: '0.375rem', width: 'medium' }
 });`}
   />
   <lt-text variant="body">
@@ -30,6 +30,21 @@ configure({
     <code>&lt;style id="lt-tokens"&gt;</code> element into <code>&lt;head&gt;</code>. Calling it again replaces the
     previous values. All options are optional — omit any key to keep the default.
   </lt-text>
+
+  <lt-text variant="h3">Border width</lt-text>
+  <lt-text variant="body">
+    <code>border.width</code> sets the outline weight of control chrome across the system — outlined buttons, inputs, chips,
+    badges, cards, and popover panels. It accepts three named presets — <code>'thin'</code> (1px, default),
+    <code>'medium'</code> (2px), <code>'thick'</code> (4px) — or any CSS length (e.g. <code>'1.5px'</code>). Separators
+    (dividers, table rules), focus outlines, and checkbox/radio borders keep their fixed widths by design. Chips and
+    badges cap at <code>'medium'</code> even when the theme requests <code>'thick'</code> — at their small pill heights, a
+    4px border reads as compressed rather than bold.
+  </lt-text>
+  <CodeSnippet
+    lang="ts"
+    code={`configure({ border: { width: 'thick' } }); // bold, brutalist outlines
+configure({ border: { width: '1.5px' } }); // raw CSS lengths pass through`}
+  />
 
   <lt-text variant="h3">Preventing flash of unstyled content</lt-text>
   <lt-text variant="body">
@@ -79,6 +94,7 @@ const css = createStyleSheet({ colors: { primary: '#6366f1' } });
     lang="css"
     code={`:root {
   --lt-border-radius: 2px;                    /* sharper corners globally */
+  --lt-border-width: 2px;                     /* heavier control outlines */
   --lt-typography-fontFamily: 'Inter', sans-serif; /* swap font */
 }
 
