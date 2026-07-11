@@ -19,6 +19,7 @@ const routes = [
   '/tokens/colors/',
   '/tokens/spacing/',
   '/tokens/semantic-tokens/',
+  '/tokens/playground/',
 
   '/recipes/introduction/',
   '/recipes/login-form/',

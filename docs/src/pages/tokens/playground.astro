@@ -1,0 +1,209 @@
+---
+import BaseLayout from '../../layouts/BaseLayout/index.astro';
+---
+
+<BaseLayout title="Theme Playground" description="Live-tweak Latty's design tokens and watch a real component respond">
+  <lt-text variant="h1">Theme Playground</lt-text>
+  <lt-text variant="body">
+    Drag the controls below and watch the card react instantly — this runs the same token pipeline as <code
+      >configure()</code
+    >. See the <a href="/getting-started/theming">Theming guide</a> for the full API.
+  </lt-text>
+
+  <div class="playground-layout">
+    <lt-surface appearance="outlined" class="playground-controls">
+      <div class="controls-inner">
+        <lt-text variant="h4">Controls</lt-text>
+
+        <div class="control-row">
+          <lt-color-input id="ctrl-primary" label="Primary color" value="#ff8200"></lt-color-input>
+        </div>
+        <div class="control-row">
+          <lt-color-input id="ctrl-secondary" label="Secondary color" value="#5252c5"></lt-color-input>
+        </div>
+        <div class="control-row control-row--slider">
+          <lt-slider id="ctrl-radius" label="Border radius (px)" min="0" max="24" step="1" value="8" tooltip
+          ></lt-slider>
+        </div>
+        <div class="control-row">
+          <lt-select id="ctrl-width" label="Border width" value="thin"></lt-select>
+        </div>
+        <div class="control-row">
+          <lt-select id="ctrl-font" label="Font family"></lt-select>
+        </div>
+        <div class="control-row">
+          <lt-select id="ctrl-theme" label="Theme" value="system"></lt-select>
+        </div>
+
+        <lt-button id="ctrl-reset" variant="neutral" appearance="ghost" size="sm">Reset to defaults</lt-button>
+      </div>
+    </lt-surface>
+
+    <div class="playground-stage" id="playground-stage">
+      <lt-text variant="overline" class="stage-label">Live preview</lt-text>
+
+      <lt-surface appearance="outlined" elevation="2" class="subscribe-card">
+        <div class="card-inner">
+          <div class="subscribe-header">
+            <lt-icon name="bell" size="lg"></lt-icon>
+            <lt-text variant="h4">Stay in the loop</lt-text>
+            <lt-badge variant="primary" size="sm" content="New"></lt-badge>
+          </div>
+
+          <lt-text variant="body">
+            Product updates, design notes, and release announcements — no spam, unsubscribe anytime.
+          </lt-text>
+
+          <div class="subscribe-chips">
+            <lt-chip variant="primary" appearance="outlined" size="md">Design</lt-chip>
+            <lt-chip variant="secondary" appearance="outlined" size="md">Engineering</lt-chip>
+            <lt-chip variant="neutral" appearance="outlined" size="md">Product</lt-chip>
+          </div>
+
+          <div class="subscribe-benefits">
+            <div class="subscribe-benefit">
+              <lt-icon name="check-circle"></lt-icon>
+              <lt-text variant="body-sm">Weekly digest, no fluff</lt-text>
+            </div>
+            <div class="subscribe-benefit">
+              <lt-icon name="check-circle"></lt-icon>
+              <lt-text variant="body-sm">Unsubscribe in one click</lt-text>
+            </div>
+          </div>
+
+          <lt-textfield type="email" label="Email address" icon-start="mail" placeholder="you@example.com"
+          ></lt-textfield>
+
+          <div class="subscribe-actions">
+            <lt-button variant="primary" full-width>Subscribe</lt-button>
+            <lt-button variant="secondary" appearance="outlined" full-width>No thanks</lt-button>
+          </div>
+
+          <lt-text variant="caption">By subscribing you agree to our Privacy Policy.</lt-text>
+        </div>
+      </lt-surface>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .playground-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) 1fr;
+    gap: var(--lt-spacing-6);
+    /* stretch (not start) so both columns share the taller one's height —
+       otherwise the two bordered panels end at different heights. */
+    align-items: stretch;
+    margin-top: var(--lt-spacing-6);
+  }
+
+  @media (max-width: 800px) {
+    .playground-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* lt-surface's shadow template wraps <slot> in its own .surface div, so
+     flex/gap/padding set on the host here only ever sees one shadow child —
+     it can't arrange the slotted light-DOM content. That layout has to live
+     on a plain inner element instead (.controls-inner below). */
+  .controls-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lt-spacing-4);
+    padding: var(--lt-spacing-5);
+  }
+
+  .control-row {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* lt-slider is a thin track with no box chrome, so the same row gap that
+     reads fine after a padded lt-color-input/lt-select looks cramped after
+     it — a bit of extra bottom padding evens out the rhythm. */
+  .control-row--slider {
+    padding-bottom: var(--lt-spacing-2);
+  }
+
+  .playground-stage {
+    border: 1px dashed var(--lt-border-strong);
+    border-radius: var(--lt-border-radius);
+    padding: var(--lt-spacing-8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--lt-spacing-4);
+    background: var(--lt-bg-subtle);
+    /* lt-text sets color: inherit and never re-reads --lt-text-default itself, so
+       without this the stage would keep the ambient (site-level, unscoped) text
+       color instead of the scoped one — invisible on light bg, illegible on dark. */
+    color: var(--lt-text-default);
+    min-height: 480px;
+  }
+
+  .stage-label {
+    color: var(--lt-text-neutral);
+    align-self: flex-start;
+  }
+
+  .subscribe-card {
+    width: 100%;
+    max-width: 360px;
+  }
+
+  /* Same reason as .controls-inner above — lt-surface's shadow slot can't be
+     flexed from the light-DOM host, so the card's own layout lives here. */
+  .card-inner {
+    padding: var(--lt-spacing-5);
+    display: flex;
+    flex-direction: column;
+    /* Gap between distinct sections (header, body copy, chips, benefits list,
+       form, actions, fine print). Related items within a section — e.g. the
+       two benefit rows — use their own tighter gap below. */
+    gap: var(--lt-spacing-4);
+  }
+
+  .subscribe-header {
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-3);
+  }
+
+  .subscribe-header lt-text {
+    margin: 0;
+    flex: 1 1 auto;
+  }
+
+  .subscribe-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--lt-spacing-2);
+  }
+
+  .subscribe-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: var(--lt-spacing-2);
+  }
+
+  .subscribe-benefit {
+    display: flex;
+    align-items: center;
+    gap: var(--lt-spacing-2);
+    color: var(--lt-text-neutral);
+  }
+
+  .subscribe-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--lt-spacing-3);
+  }
+</style>
+
+<script>
+  import '@latty-ds/web';
+  import './_playground.script.ts';
+</script>
