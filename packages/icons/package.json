@@ -25,10 +25,7 @@
     "README.md",
     "LICENSE"
   ],
-  "sideEffects": [
-    "./dist/index.js",
-    "./dist/entries/*.js"
-  ],
+  "sideEffects": true,
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

@@ -62,8 +62,11 @@ pkg.exports = {
   ...perIconExports
 };
 
-// Only entry files and the main index have side effects
-pkg.sideEffects = ['./dist/index.js', './dist/entries/*.js'];
+// Every file in this package registers something globally (a custom element or icon data),
+// so none of it is safe to tree-shake at the module level — see SPINND-DS-FINDINGS.md #10:
+// omitting dist/components/icon.js here let bundlers drop the module that calls
+// customElements.define('lt-icon', ...), since nothing imports the `Icon` export by value.
+pkg.sideEffects = true;
 
 writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n', 'utf8');
 
