@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.1](https://github.com/penhold3r/latty-ds/compare/v0.8.0...v0.8.1) (2026-07-22)
+
+### Bug Fixes
+
+- **icons:** mark entire package as side-effectful so lt-icon survives tree-shaking ([232c961](https://github.com/penhold3r/latty-ds/commit/232c96156b65fa229feb3599983f78c49996a48d))
+
 # [0.8.0](https://github.com/penhold3r/latty-ds/compare/v0.7.0...v0.8.0) (2026-07-22)
 
 ### Bug Fixes
