@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/penhold3r/latty-ds/compare/v0.7.0...v0.8.0) (2026-07-22)
+
+### Features
+
+- **icons:** support fluid sizing via size="inherit" and --lt-icon-size ([3e95aeb](https://github.com/penhold3r/latty-ds/commit/3e95aebc772fb6ce1dc764c2dde891e3d8762bcd))
+
 # [0.7.0](https://github.com/penhold3r/latty-ds/compare/v0.6.0...v0.7.0) (2026-07-01)
 
 **Note:** Version bump only for package @latty-ds/icons

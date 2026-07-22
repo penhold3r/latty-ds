@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/penhold3r/latty-ds/compare/v0.7.0...v0.8.0) (2026-07-22)
+
+### Bug Fixes
+
+- **config:** exclude @latty-ds/tokens from Vite dep pre-bundling ([c275591](https://github.com/penhold3r/latty-ds/commit/c27559164d71786c082614403b66859940b7dc3a))
+- **docs:** fix theme playground font control and init state sync ([aa786b3](https://github.com/penhold3r/latty-ds/commit/aa786b371712e120a0e973edd83ffa72e73a50fb))
+- **web:** make surface background prop write the custom property the styles read ([76909aa](https://github.com/penhold3r/latty-ds/commit/76909aae884e1fb8d41e45c1fb9d466dcf012c75))
+- **web:** stop native change/input events double-firing on the host ([9275899](https://github.com/penhold3r/latty-ds/commit/9275899969a2b8521b99bc780c505e4d07084677))
+- **web:** wire --lt-typography-fontFamily into component styles ([1c19cfa](https://github.com/penhold3r/latty-ds/commit/1c19cfa10e2c6edb316db6548a00dcf66cb89879))
+
+### Features
+
+- **docs:** add live theme playground page ([dca81af](https://github.com/penhold3r/latty-ds/commit/dca81afdd3b1b1594f270d1d0d567598c56ac3e9))
+- **icons:** support fluid sizing via size="inherit" and --lt-icon-size ([3e95aeb](https://github.com/penhold3r/latty-ds/commit/3e95aebc772fb6ce1dc764c2dde891e3d8762bcd))
+- **tokens:** accept a Google Fonts URL for font.family ([c6286d4](https://github.com/penhold3r/latty-ds/commit/c6286d4aeebe8f18d81952e7273c4196ee39e407))
+- **tokens:** add configurable border width to configure() ([eced8e2](https://github.com/penhold3r/latty-ds/commit/eced8e28f6b4281158fa331f28354c9c9d5f3dd2))
+- **web:** add aria forwarding, ghost appearance, and themeable min-width to buttons ([5d3645c](https://github.com/penhold3r/latty-ds/commit/5d3645c62aca128cf33330c097efd6dc72ad2fbc))
+- **web:** add error fallback, load events, and lazy loading to image ([d68a033](https://github.com/penhold3r/latty-ds/commit/d68a033ce50df98fabd94b2fbd8dab5201eb4d5d))
+- **web:** add interactive clickable and href rows to list-item ([50ab265](https://github.com/penhold3r/latty-ds/commit/50ab2651b3ff53145671a98e86c9dd21d5ec359f))
+- **web:** support SPA routers in nav-item via cancelable click and aria-current ([143acc0](https://github.com/penhold3r/latty-ds/commit/143acc0c3f1cb76fd7d751f5b13a341b832cef56))
+- **web:** theme control-chrome border widths via --lt-border-width ([2fbe922](https://github.com/penhold3r/latty-ds/commit/2fbe922d8f487d9b83a12097632ee6b523d987a2))
+
 # [0.7.0](https://github.com/penhold3r/latty-ds/compare/v0.6.0...v0.7.0) (2026-07-01)
 
 ### Bug Fixes
