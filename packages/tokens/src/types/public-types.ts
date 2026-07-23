@@ -25,7 +25,7 @@ import type { ElevationTokens } from '../elevation/';
  *     radius: "0.375rem"
  *   },
  *   typography: {
- *     fontFamily: "Hanken Grotesk, sans-serif"
+ *     fontFamilyPrimary: "Hanken Grotesk, sans-serif"
  *   },
  *   elevation: {
  *     "0": "none",
@@ -43,8 +43,8 @@ export type Tokens = {
     width: string;
   };
   typography: {
-    fontFamily: string;
-  };
+    fontFamilyPrimary: string;
+  } & Record<string, string>;
   elevation: ElevationTokens;
 };
 
@@ -57,22 +57,47 @@ export type { Config, TokenColorName } from './';
  */
 export type BorderWidth = 'thin' | 'medium' | 'thick' | (string & {});
 
+/** Generic CSS font-family keyword used as the safety-net fallback if a CDN font fails to load. */
+export type FontFallback = 'sans-serif' | 'serif' | 'monospace' | 'cursive' | 'fantasy' | 'system-ui';
+
+/**
+ * A single `font.family` entry: a plain CSS value, a Google Fonts CSS2 URL, or
+ * a URL paired with a custom generic fallback (default `'sans-serif'`) for
+ * when the derived family isn't sans-serif — e.g. a serif display font.
+ */
+export type FontFamilyEntry = string | { url: string; fallback?: FontFallback };
+
 export interface LattyConfig {
   /** Built-in names: primary, secondary, success, warning, error, info. Any additional name generates a new palette. */
   colors?: Record<string, string>;
   font?: {
     /**
-     * A CSS `font-family` value (e.g. `'Inter, sans-serif'`), or a Google
-     * Fonts CSS2 stylesheet URL (e.g.
-     * `'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900&display=swap'`).
-     * URLs get `@import`ed automatically and the family name is derived from
-     * the `family=` query param — no separate `<link>` tag needed. Stylesheet
-     * URLs from providers other than `fonts.googleapis.com` are still loaded,
-     * but since there's no reliable way to guess the family name from an
-     * arbitrary CDN, pass the resulting name as a plain value instead (or
-     * open an issue if there's a provider worth special-casing).
+     * A CSS `font-family` value (e.g. `'Inter, sans-serif'`), a Google Fonts
+     * CSS2 stylesheet URL (e.g.
+     * `'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900&display=swap'`),
+     * a `{ url, fallback }` object, or an array of any of these. URLs get
+     * `@import`ed automatically and the family name is derived from the
+     * `family=` query param — no separate `<link>` tag needed. Stylesheet
+     * URLs from providers other than `fonts.googleapis.com` are still
+     * loaded, but since there's no reliable way to guess the family name
+     * from an arbitrary CDN, pass the resulting name as a plain value
+     * instead (or open an issue if there's a provider worth special-casing).
+     *
+     * A bare URL string always falls back to the generic `sans-serif` family
+     * if the font itself fails to load. Use the `{ url, fallback }` object
+     * form to pick a different generic fallback (e.g. `'serif'` for a serif
+     * display font):
+     * ```ts
+     * family: { url: 'https://fonts.googleapis.com/css2?family=Playfair+Display', fallback: 'serif' }
+     * ```
+     *
+     * When an array is passed, each entry maps to its own token in order —
+     * `--lt-typography-fontFamilyPrimary`, `...Secondary`, `...Tertiary`,
+     * etc. — rather than being combined into a single CSS fallback stack, so
+     * multiple fonts (e.g. a heading font and a body font) can each be
+     * referenced independently in your own CSS.
      */
-    family?: string;
+    family?: FontFamilyEntry | FontFamilyEntry[];
   };
   border?: {
     radius?: string;

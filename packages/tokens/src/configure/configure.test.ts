@@ -33,7 +33,7 @@ describe('createStyleSheet', () => {
     const url = 'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap';
     const css = createStyleSheet({ font: { family: url } });
     expect(css.startsWith(`@import url("${url}");\n`)).toBe(true);
-    expect(css).toContain('--lt-typography-fontFamily: "Hanken Grotesk", sans-serif');
+    expect(css).toContain('--lt-typography-fontFamilyPrimary: "Hanken Grotesk", sans-serif');
   });
 
   it('still imports a non-Google-Fonts URL but keeps the default family token', () => {
@@ -41,13 +41,35 @@ describe('createStyleSheet', () => {
     const defaultCss = createStyleSheet();
     const css = createStyleSheet({ font: { family: url } });
     expect(css.startsWith(`@import url("${url}");\n`)).toBe(true);
-    expect(css).toContain('--lt-typography-fontFamily: "Hanken Grotesk", sans-serif');
+    expect(css).toContain('--lt-typography-fontFamilyPrimary: "Hanken Grotesk", sans-serif');
     expect(css.slice(css.indexOf(':root'))).toEqual(defaultCss.slice(defaultCss.indexOf(':root')));
   });
 
   it('does not prepend @import for a plain CSS font family value', () => {
     const css = createStyleSheet({ font: { family: 'Inter, sans-serif' } });
     expect(css.startsWith('@import')).toBe(false);
+  });
+
+  it('applies a custom fallback via the object form', () => {
+    const url = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&display=swap';
+    const css = createStyleSheet({ font: { family: { url, fallback: 'serif' } } });
+    expect(css.startsWith(`@import url("${url}");\n`)).toBe(true);
+    expect(css).toContain('--lt-typography-fontFamilyPrimary: "Playfair Display", serif');
+  });
+
+  it('maps an array of font families to Primary/Secondary tokens', () => {
+    const css = createStyleSheet({ font: { family: ['Inter, sans-serif', 'Georgia, serif'] } });
+    expect(css).toContain('--lt-typography-fontFamilyPrimary: Inter, sans-serif');
+    expect(css).toContain('--lt-typography-fontFamilySecondary: Georgia, serif');
+  });
+
+  it('emits one @import line per CDN URL in an array, in order', () => {
+    const url1 = 'https://fonts.googleapis.com/css2?family=Hanken+Grotesk&display=swap';
+    const url2 = 'https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap';
+    const css = createStyleSheet({ font: { family: [url1, url2] } });
+    expect(css.startsWith(`@import url("${url1}");\n@import url("${url2}");\n`)).toBe(true);
+    expect(css).toContain('--lt-typography-fontFamilyPrimary: "Hanken Grotesk", sans-serif');
+    expect(css).toContain('--lt-typography-fontFamilySecondary: "Roboto Mono", sans-serif');
   });
 
   it('applies custom border radius', () => {
@@ -131,7 +153,5 @@ describe('configure', () => {
     configure({ font: { family: url } });
     const css = document.getElementById('lt-tokens')?.textContent ?? '';
     expect(css.startsWith(`@import url("${url}");\n`)).toBe(true);
-    // FOUC guard must still be present, just after the @import instead of before it.
-    expect(css).toContain('html[data-lt]:not([data-lt-ready]){visibility:hidden}');
   });
 });

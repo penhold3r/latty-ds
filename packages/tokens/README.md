@@ -116,17 +116,17 @@ console.log(tokens.elevation['2']); // "0 4px 6px -1px rgb(…)"
 
 ### Primitive tokens (`tokens.css`)
 
-| Prefix                                  | Example                        | Description                       |
-| --------------------------------------- | ------------------------------ | --------------------------------- |
-| `--lt-color-[name]-[step]`              | `--lt-color-primary-500`       | Color palette steps 50–900        |
-| `--lt-color-[name]-muted-[step]`        | `--lt-color-primary-muted-300` | Desaturated variant of each color |
-| `--lt-color-neutral-[step]`             | `--lt-color-neutral-100`       | Greyscale scale                   |
-| `--lt-color-white` / `--lt-color-black` |                                | System colors                     |
-| `--lt-spacing-[n]`                      | `--lt-spacing-4` → `1rem`      | Spacing scale (rem), n = 0–24     |
-| `--lt-spacing-px-[n]`                   | `--lt-spacing-px-4` → `16px`   | Spacing scale (px)                |
-| `--lt-border-radius`                    | `0.5rem`                       | Global border radius              |
-| `--lt-elevation-[n]`                    | `--lt-elevation-2`             | Box shadows, n = 0–5              |
-| `--lt-typography-fontFamily`            | `"Hanken Grotesk", sans-serif` | Base font family                  |
+| Prefix                                  | Example                        | Description                                                                |
+| --------------------------------------- | ------------------------------ | -------------------------------------------------------------------------- |
+| `--lt-color-[name]-[step]`              | `--lt-color-primary-500`       | Color palette steps 50–900                                                 |
+| `--lt-color-[name]-muted-[step]`        | `--lt-color-primary-muted-300` | Desaturated variant of each color                                          |
+| `--lt-color-neutral-[step]`             | `--lt-color-neutral-100`       | Greyscale scale                                                            |
+| `--lt-color-white` / `--lt-color-black` |                                | System colors                                                              |
+| `--lt-spacing-[n]`                      | `--lt-spacing-4` → `1rem`      | Spacing scale (rem), n = 0–24                                              |
+| `--lt-spacing-px-[n]`                   | `--lt-spacing-px-4` → `16px`   | Spacing scale (px)                                                         |
+| `--lt-border-radius`                    | `0.5rem`                       | Global border radius                                                       |
+| `--lt-elevation-[n]`                    | `--lt-elevation-2`             | Box shadows, n = 0–5                                                       |
+| `--lt-typography-fontFamilyPrimary`     | `"Hanken Grotesk", sans-serif` | Base font family (additional `...Secondary`/`...Tertiary` when configured) |
 
 Color names: `primary`, `secondary`, `success`, `warning`, `error`, `info` (each with a `-muted` variant).
 

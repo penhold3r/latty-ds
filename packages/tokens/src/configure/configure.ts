@@ -4,7 +4,7 @@ import type { BorderWidth, LattyConfig } from '../types/public-types';
 import { BORDER_WIDTH_PRESETS, DEFAULT_BORDER_RADIUS, DEFAULT_BORDER_WIDTH, DEFAULT_FONT_FAMILY } from '../constants/';
 import { buildTokens, tokensToCss, semanticTokensToCss } from '../core/';
 import { buildSemanticTokens } from '../semantic/';
-import { resolveFontFamily } from './font';
+import { resolveFontFamilies, fontFamilySlot } from './font';
 import tokensConfig from '../../tokens.config.json';
 
 export type { BorderWidth, LattyConfig };
@@ -32,16 +32,20 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
   const cfg = toInternalConfig(userConfig);
   let tokens = buildTokens(cfg);
 
-  let fontImportUrl: string | null = null;
+  const importUrls: string[] = [];
   if (userConfig.font?.family) {
-    const resolvedFont = resolveFontFamily(userConfig.font.family);
-    fontImportUrl = resolvedFont.importUrl;
-    // Only override the token when a family name could actually be derived —
-    // a CDN URL we can't parse (non-Google-Fonts host) still gets @import'd
-    // below, but the token itself falls back to the default rather than
-    // being set to an unusable empty string.
-    if (resolvedFont.family) {
-      tokens = { ...tokens, typography: { fontFamily: resolvedFont.family } };
+    const resolvedFonts = resolveFontFamilies(userConfig.font.family);
+    const typographyOverrides: Record<string, string> = {};
+    resolvedFonts.forEach((font, i) => {
+      if (font.importUrl) importUrls.push(font.importUrl);
+      // Only override the slot when a family name could actually be derived —
+      // a CDN URL we can't parse (non-Google-Fonts host) still gets @import'd
+      // below, but the token itself falls back to the default rather than
+      // being set to an unusable empty string.
+      if (font.family) typographyOverrides[fontFamilySlot(i)] = font.family;
+    });
+    if (Object.keys(typographyOverrides).length > 0) {
+      tokens = { ...tokens, typography: { ...tokens.typography, ...typographyOverrides } };
     }
   }
   if (userConfig.border?.radius) {
@@ -75,62 +79,44 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
       semanticTokensToCss(buildSemanticTokens('light', semanticOpts), '[data-theme="light"]');
   }
 
-  // @import must be the first rule of a stylesheet — safe here since it's the
-  // first thing written into the returned string.
-  return fontImportUrl ? `@import url("${fontImportUrl}");\n${body}` : body;
+  // @import must be the first rule(s) of a stylesheet — safe here since
+  // they're the first thing written into the returned string.
+  const importLines = importUrls.map((url) => `@import url("${url}");`).join('\n');
+  return importLines ? `${importLines}\n${body}` : body;
 };
 
 /**
  * Injects design tokens into the document as a `<style>` element.
  * Call once at your app's entry point — before any components render.
  *
- * Add `data-lt` to `<html>` to enable automatic FOUC prevention: configure()
- * hides the document during token injection and reveals it on the next frame.
- * For zero FOUC on initial load, also add this one-liner before your module script:
- * `<style>html[data-lt]:not([data-lt-ready]){visibility:hidden}</style>`
- *
- * `font.family` also accepts a Google Fonts CSS2 stylesheet URL — configure()
- * both `@import`s it and derives the font-family name for you, so no separate
- * `<link>` tag is needed.
+ * `font.family` accepts a single value or an array. Each entry is either a
+ * plain CSS `font-family` value or a Google Fonts CSS2 stylesheet URL (which
+ * configure() `@import`s and derives the family name from automatically — no
+ * separate `<link>` tag needed). Array entries map to their own token in
+ * order — `--lt-typography-fontFamilyPrimary`, `...Secondary`, `...Tertiary`,
+ * etc. — so each font can be referenced independently in your own CSS.
  *
  * @example
  * ```html
- * <html lang="en" data-lt>
- *   <head>
- *     <style>html[data-lt]:not([data-lt-ready]){visibility:hidden}</style>
- *     <script type="module">
- *       import { configure } from '@latty-ds/tokens/configure';
- *       configure({
- *         colors: { primary: '#6366f1', secondary: '#f59e0b' },
- *         font:   { family: 'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap' },
- *         border: { radius: '0.375rem', width: 'medium' },
- *       });
- *     </script>
- *   </head>
- * </html>
+ * <script type="module">
+ *   import { configure } from '@latty-ds/tokens/configure';
+ *   configure({
+ *     colors: { primary: '#6366f1', secondary: '#f59e0b' },
+ *     font:   { family: [
+ *       'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap',
+ *       'Georgia, serif',
+ *     ] },
+ *     border: { radius: '0.375rem', width: 'medium' },
+ *   });
+ * </script>
  * ```
  */
 export const configure = (userConfig: LattyConfig = {}): void => {
-  const root = document.documentElement;
-
-  // Drop the ready flag so the FOUC guard activates while tokens are swapped.
-  root.removeAttribute('data-lt-ready');
-
   let style = document.getElementById('lt-tokens') as HTMLStyleElement | null;
   if (!style) {
     style = document.createElement('style');
     style.id = 'lt-tokens';
     document.head.prepend(style);
   }
-  // Guard rule keeps html[data-lt] hidden until data-lt-ready is stamped.
-  const guard = 'html[data-lt]:not([data-lt-ready]){visibility:hidden}\n';
-  const css = createStyleSheet(userConfig);
-  // createStyleSheet() puts an @import first when font.family is a CDN URL —
-  // @import must stay the stylesheet's first rule, so splice the guard in
-  // after it instead of unconditionally prepending (which would push the
-  // @import to second position and silently disable it).
-  style.textContent = css.startsWith('@import') ? css.replace(/^(@import[^\n]*\n)/, `$1${guard}`) : guard + css;
-
-  // Reveal after the browser has processed the new token styles.
-  requestAnimationFrame(() => root.setAttribute('data-lt-ready', ''));
+  style.textContent = createStyleSheet(userConfig);
 };

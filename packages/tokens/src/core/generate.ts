@@ -13,7 +13,7 @@ export const buildTokens = (cfg: Config): Tokens => {
 
   const spacing = buildSpacing();
   const border = { radius: DEFAULT_BORDER_RADIUS, width: DEFAULT_BORDER_WIDTH };
-  const typography = { fontFamily: DEFAULT_FONT_FAMILY };
+  const typography = { fontFamilyPrimary: DEFAULT_FONT_FAMILY };
   const elevation = buildElevation(color.neutral as PaletteFlat);
 
   return { color, spacing, border, typography, elevation };
