@@ -96,6 +96,22 @@ const css = createStyleSheet({ colors: { primary: '#7c3aed' } });
 // inject as <style> in <head>
 ```
 
+## Working with agents
+
+The [`agents/`](agents) directory is a self-contained context pack for AI coding agents (Claude, Cursor, etc.) building applications **with** Latty. Download or copy it into a consuming project and point your agent's system prompt, rules file, or project instructions at `agents/README.md` — it covers installation, framework-specific usage, theming, the full component catalog, a task-to-component decision guide, and composition patterns, all written for a consumer's perspective rather than a Latty contributor's.
+
+| File                       | Covers                                                       |
+| -------------------------- | ------------------------------------------------------------ |
+| `agents/README.md`         | Entry point — what's in the pack and how to use it           |
+| `agents/installation.md`   | Installing packages and registering components               |
+| `agents/usage.md`          | Vanilla/React/Vue/Svelte usage, slots, events, forms         |
+| `agents/theming.md`        | `configure()`/`createStyleSheet()`, colors, fonts, dark mode |
+| `agents/components.md`     | Full component catalog and shared prop vocabulary            |
+| `agents/decision-guide.md` | Which component fits a given UI task                         |
+| `agents/patterns.md`       | Real multi-component composition recipes                     |
+
+It's deliberately not a full API reference — for exact per-component props/slots/events, agents are pointed at `custom-elements.json`, which ships with the published `@latty-ds/web` package.
+
 ## Development
 
 **Prerequisites:** Node.js ≥ 24, pnpm.

@@ -319,6 +319,21 @@ The docs page must `import '@latty-ds/web'` inside a `<script>` tag to register 
 
 **The docs site is a showcase of the design system.** Every docs page must use Latty components wherever possible — headings, body copy, buttons, badges, tables, alerts, links. Reach for `lt-text`, `lt-button`, `lt-badge`, `lt-alert`, `lt-link`, etc. before writing plain HTML or inline styles. Native HTML elements are only acceptable when no Latty component covers the use case. This rule applies to layout pages, overview pages, recipe pages, and getting-started guides — not just component demo pages.
 
+### Agent Context Pack (`agents/`)
+
+`agents/` at the repo root is a **consumer-facing** deliverable, not contributor guidance (that's this file). It's a downloadable context pack for AI coding agents building apps _with_ Latty — mirrors the docs site's IA (installation, usage, theming, components, decision guide, patterns) but condensed for use as agent context, and is committed to git (unlike `_agent-plans/`). The root `README.md`'s "Working with agents" section links to it.
+
+**Keep it in sync** — whenever a change would make one of these stale, update the corresponding `agents/*.md` file in the same change:
+
+- New component added (`/new-component`) → add a row to `agents/components.md`'s catalog table, and to `agents/decision-guide.md` if it fills a new UI-task category.
+- A shared prop convention changes (e.g. a new `variant`/`appearance`/`size` value used system-wide) → update `agents/components.md`'s prop-vocabulary table.
+- `configure()`/`createStyleSheet()` API changes, or a new themeable option is added → update `agents/theming.md`.
+- Install steps, framework support, or package structure changes → update `agents/installation.md` and/or `agents/usage.md`.
+- A new recipe pattern is added to `docs/src/pages/recipes/` → consider a condensed version for `agents/patterns.md`.
+- Any of the above that changes the file list → update the table in the root `README.md`'s "Working with agents" section too.
+
+Per-component prop/slot/event detail is deliberately **not** duplicated in `agents/` — it's sourced from `custom-elements.json` at runtime by whoever installs the pack, so most day-to-day prop tweaks don't require an `agents/` update at all.
+
 ## Naming Conventions
 
 - **npm scope**: `@latty-ds/*`
