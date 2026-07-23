@@ -67,33 +67,56 @@ configure({ border: { width: '1.5px' } }); // raw CSS lengths pass through`}
     <code>fonts.googleapis.com</code> URLs; for other font CDNs, load the stylesheet yourself and pass the resulting family
     name as a plain <code>font.family</code> value instead.
   </lt-text>
-
-  <lt-text variant="h3">Preventing flash of unstyled content</lt-text>
   <lt-text variant="body">
-    Because <code>&lt;script type="module"&gt;</code> is deferred, there is a brief window between first paint and when <code
-      >configure()</code
-    > runs. Add <code>data-lt</code> to <code>&lt;html&gt;</code> and a tiny synchronous style before your module script:
+    A bare URL string always falls back to the generic <code>sans-serif</code> family if the font itself fails to load. For
+    a font that isn't sans-serif (a serif display font, a monospace font, etc.), pass a <code
+      >&#123; url, fallback &#125;</code
+    >
+    object instead so the safety-net fallback matches:
   </lt-text>
   <CodeSnippet
-    lang="html"
-    code={`<html lang="en" data-lt>
-  <head>
-    <style>
-      html[data-lt]:not([data-lt-ready]) { visibility: hidden; }
-    </style>
-
-    <script type="module">
-      import { configure } from '@latty-ds/tokens/configure';
-      configure({ colors: { primary: '#6366f1' } });
-      <!-- configure() sets data-lt-ready automatically — no reveal needed -->
-    <\/script>
-  </head>
-</html>`}
+    lang="ts"
+    code={`configure({
+  font: {
+    family: {
+      url: 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&display=swap',
+      fallback: 'serif'
+    }
+  }
+});`}
   />
   <lt-text variant="body">
-    <code>configure()</code> removes <code>data-lt-ready</code> before swapping tokens and restores it on the next animation
-    frame, so the browser always paints a fully-styled page.
+    <code>fallback</code> accepts any standard CSS generic family: <code>'sans-serif'</code> (default),
+    <code>'serif'</code>, <code>'monospace'</code>, <code>'cursive'</code>, <code>'fantasy'</code>,
+    <code>'system-ui'</code>.
   </lt-text>
+
+  <lt-text variant="h3">Loading multiple fonts</lt-text>
+  <lt-text variant="body">
+    <code>font.family</code> also accepts an array of entries — each a plain value, a URL string, or a
+    <code>&#123; url, fallback &#125;</code> object — resolved independently and mapped to its own token in order, rather
+    than being combined into one CSS fallback stack:
+    <code>--lt-typography-fontFamilyPrimary</code>, <code>--lt-typography-fontFamilySecondary</code>,
+    <code>--lt-typography-fontFamilyTertiary</code>, and so on. This lets you use a heading font and a body font (or any
+    other combination) independently in your own CSS:
+  </lt-text>
+  <CodeSnippet
+    lang="ts"
+    code={`configure({
+  font: {
+    family: [
+      'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900&display=swap',
+      'Georgia, serif'
+    ]
+  }
+});`}
+  />
+  <CodeSnippet
+    lang="css"
+    code={`h1, h2, h3 {
+  font-family: var(--lt-typography-fontFamilySecondary);
+}`}
+  />
 
   <lt-text variant="h3">SSR</lt-text>
   <lt-text variant="body">
@@ -117,7 +140,7 @@ const css = createStyleSheet({ colors: { primary: '#6366f1' } });
     code={`:root {
   --lt-border-radius: 2px;                    /* sharper corners globally */
   --lt-border-width: 2px;                     /* heavier control outlines */
-  --lt-typography-fontFamily: 'Inter', sans-serif; /* swap font */
+  --lt-typography-fontFamilyPrimary: 'Inter', sans-serif; /* swap font */
 }
 
 /* Scoped to a section of the page */
@@ -213,15 +236,11 @@ document.documentElement.setAttribute('data-theme', 'dark');`}
   <lt-text variant="h2">Framework notes</lt-text>
 
   <lt-text variant="h3">Vanilla JS / Vite / webpack</lt-text>
-  <lt-text variant="body">
-    Call <code>configure()</code> in your entry file. Apply the FOUC guard described above.
-  </lt-text>
+  <lt-text variant="body">Call <code>configure()</code> in your entry file. No other setup is required.</lt-text>
 
   <lt-text variant="h3">React (CSR)</lt-text>
   <lt-text variant="body">
-    Call <code>configure()</code> at the top of <code>main.tsx</code>, before <code>ReactDOM.createRoot</code>. Add <code
-      >data-lt</code
-    > to <code>&lt;html&gt;</code> in <code>index.html</code>:
+    Call <code>configure()</code> at the top of <code>main.tsx</code>, before <code>ReactDOM.createRoot</code>:
   </lt-text>
   <CodeSnippet
     lang="tsx"
@@ -247,7 +266,7 @@ createRoot(document.getElementById('root')!).render(<App />);`}
 export default function RootLayout({ children }) {
   const tokenCss = createStyleSheet({ colors: { primary: '#6366f1' }, theme: 'system' });
   return (
-    <html lang="en" data-lt>
+    <html lang="en">
       <head>
         <style id="lt-tokens" dangerouslySetInnerHTML={{ __html: tokenCss }} />
       </head>
@@ -257,8 +276,8 @@ export default function RootLayout({ children }) {
 }`}
   />
   <lt-text variant="body">
-    Tokens are inlined server-side so there is no flash and the <code>data-lt</code> FOUC guard is not needed. Theme toggling
-    with <code>data-theme</code> still works client-side as described above.
+    Tokens are inlined server-side so there is no flash. Theme toggling with <code>data-theme</code> still works client-side
+    as described above.
   </lt-text>
 
   <lt-text variant="h2">Next steps</lt-text>

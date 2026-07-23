@@ -41,29 +41,43 @@ configure({
 
 This works with `createStyleSheet()` too — the `@import` is written as the first line of the returned string, so it stays valid CSS once dropped into a `<style>` tag. Auto-detection only covers `fonts.googleapis.com` URLs; for other font CDNs, load the stylesheet separately and pass the resulting family name as a plain `font.family` value instead.
 
-### Preventing flash of unstyled content
+A bare URL string always falls back to the generic `sans-serif` family if the font itself fails to load. For a font that isn't sans-serif (a serif display font, a monospace font, etc.), pass a `{ url, fallback }` object instead so the safety-net fallback matches:
 
-Because `<script type="module">` is deferred, there is a brief window between first paint and when `configure()` runs. Add `data-lt` to `<html>` and a tiny synchronous style before the module script:
-
-```html
-<html lang="en" data-lt>
-  <head>
-    <style>
-      html[data-lt]:not([data-lt-ready]) {
-        visibility: hidden;
-      }
-    </style>
-
-    <script type="module">
-      import { configure } from '@latty-ds/tokens/configure';
-      configure({ colors: { primary: '#6366f1' } });
-      <!-- configure() sets data-lt-ready automatically — no reveal needed -->
-    </script>
-  </head>
-</html>
+```ts
+configure({
+  font: {
+    family: {
+      url: 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&display=swap',
+      fallback: 'serif'
+    }
+  }
+});
 ```
 
-`configure()` removes `data-lt-ready` before swapping tokens and restores it on the next animation frame, so the browser always paints a fully-styled page.
+`fallback` accepts any standard CSS generic family: `'sans-serif'` (default), `'serif'`, `'monospace'`, `'cursive'`, `'fantasy'`, `'system-ui'`.
+
+### Loading multiple fonts
+
+`font.family` also accepts an array of entries — each a plain value, a URL string, or a `{ url, fallback }` object — resolved independently and mapped to its own token in order, rather than being combined into one CSS fallback stack: `--lt-typography-fontFamilyPrimary`, `--lt-typography-fontFamilySecondary`, `--lt-typography-fontFamilyTertiary`, and so on. This lets you use a heading font and a body font (or any other combination) independently in your own CSS:
+
+```ts
+configure({
+  font: {
+    family: [
+      'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900&display=swap',
+      'Georgia, serif'
+    ]
+  }
+});
+```
+
+```css
+h1,
+h2,
+h3 {
+  font-family: var(--lt-typography-fontFamilySecondary);
+}
+```
 
 ### SSR
 
@@ -84,7 +98,7 @@ Override individual tokens directly in a stylesheet for one-off adjustments or s
 :root {
   --lt-border-radius: 2px; /* sharper corners globally */
   --lt-border-width: 2px; /* heavier control outlines */
-  --lt-typography-fontFamily: 'Inter', sans-serif; /* swap font */
+  --lt-typography-fontFamilyPrimary: 'Inter', sans-serif; /* swap font */
 }
 
 /* Scoped to a section of the page */
@@ -99,7 +113,7 @@ Override individual tokens directly in a stylesheet for one-off adjustments or s
 }
 ```
 
-`--lt-typography-fontFamily` is case-sensitive — `--lt-typography-fontfamily` silently does nothing.
+`--lt-typography-fontFamilyPrimary` is case-sensitive — `--lt-typography-fontfamilyprimary` silently does nothing.
 
 ## Component-level overrides
 
@@ -170,9 +184,9 @@ Restore the saved theme before first paint by placing a synchronous script at th
 
 ## Framework notes
 
-**Vanilla JS / Vite / webpack** — call `configure()` in the entry file. Apply the FOUC guard described above.
+**Vanilla JS / Vite / webpack** — call `configure()` in the entry file. No other setup is required.
 
-**React (CSR)** — call `configure()` at the top of `main.tsx`, before `ReactDOM.createRoot`. Add `data-lt` to `<html>` in `index.html`:
+**React (CSR)** — call `configure()` at the top of `main.tsx`, before `ReactDOM.createRoot`:
 
 ```tsx
 // main.tsx
@@ -193,7 +207,7 @@ import { createStyleSheet } from '@latty-ds/tokens/configure';
 export default function RootLayout({ children }) {
   const tokenCss = createStyleSheet({ colors: { primary: '#6366f1' }, theme: 'system' });
   return (
-    <html lang="en" data-lt>
+    <html lang="en">
       <head>
         <style id="lt-tokens" dangerouslySetInnerHTML={{ __html: tokenCss }} />
       </head>
@@ -203,4 +217,4 @@ export default function RootLayout({ children }) {
 }
 ```
 
-Tokens are inlined server-side so there is no flash and the `data-lt` FOUC guard is not needed. Theme toggling with `data-theme` still works client-side as described above.
+Tokens are inlined server-side so there is no flash. Theme toggling with `data-theme` still works client-side as described above.

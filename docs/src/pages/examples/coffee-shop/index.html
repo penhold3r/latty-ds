@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-lt>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,23 +7,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://esm.sh" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      html[data-lt]:not([data-lt-ready]) {
-        visibility: hidden;
-      }
-    </style>
     <script type="module">
-      import { configure } from 'https://esm.sh/@latty-ds/tokens@0.5.0/configure?bundle';
-      import 'https://esm.sh/@latty-ds/web@0.5.0?bundle';
+      import { configure } from 'https://esm.sh/@latty-ds/tokens@latest/configure?bundle';
+      import 'https://esm.sh/@latty-ds/web@latest?bundle';
 
       configure({
         theme: 'light',
         colors: { primary: '#b45309' },
-        font: { family: "'Playfair Display', Georgia, serif" },
+        font: {
+          family: {
+            url: 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap',
+            fallback: 'serif'
+          }
+        },
         border: { radius: '0.75rem' }
       });
 

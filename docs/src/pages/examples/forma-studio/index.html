@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-lt>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,23 +11,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://esm.sh" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      html[data-lt]:not([data-lt-ready]) {
-        visibility: hidden;
-      }
-    </style>
     <script type="module">
-      import { configure } from 'https://esm.sh/@latty-ds/tokens@0.5.0/configure?bundle';
-      import 'https://esm.sh/@latty-ds/web@0.5.0?bundle';
+      import { configure } from 'https://esm.sh/@latty-ds/tokens@latest/configure?bundle';
+      import 'https://esm.sh/@latty-ds/web@latest?bundle';
 
       configure({
         theme: 'system',
         colors: { primary: '#0891b2', secondary: '#06b6d4' },
-        font: { family: "'Space Grotesk', system-ui, sans-serif" },
+        font: {
+          family: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap'
+        },
         border: { radius: '0' }
       });
 
@@ -58,7 +51,7 @@
 
       body {
         background: var(--lt-bg-default);
-        font-family: var(--lt-font-family, 'Space Grotesk', system-ui, sans-serif);
+        font-family: var(--lt-typography-fontFamilyPrimary, 'Space Grotesk', system-ui, sans-serif);
         min-height: 100vh;
       }
 
@@ -201,7 +194,7 @@
       }
 
       .project-number {
-        font-family: var(--lt-font-family, 'Space Grotesk', sans-serif);
+        font-family: var(--lt-typography-fontFamilyPrimary, 'Space Grotesk', sans-serif);
         font-size: 3.5rem;
         font-weight: 700;
         color: rgba(255, 255, 255, 0.15);
