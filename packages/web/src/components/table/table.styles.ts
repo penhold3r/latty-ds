@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const tableStyles = css`
   :host {
     display: block;
-    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
+    font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
     overflow: hidden;
     width: 100%;
   }

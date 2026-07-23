@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const badgeStyles = css`
   :host {
     display: inline-flex;
-    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
+    font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
     vertical-align: middle;
   }
 

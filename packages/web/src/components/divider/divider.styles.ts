@@ -51,7 +51,7 @@ export const dividerStyles = css`
 
   [part='label'] {
     color: var(--lt-text-subtle);
-    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
+    font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
     font-size: 0.75rem;
     font-weight: 600;
     padding-inline: var(--lt-spacing-3);

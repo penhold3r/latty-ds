@@ -6,7 +6,7 @@ export const comboboxStyles = [
   css`
     :host {
       display: block;
-      font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
+      font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
       position: relative;
     }
 

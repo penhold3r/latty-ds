@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const buttonStyles = css`
   :host {
     display: inline-block;
-    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
+    font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
 
     /* Internal state props — set per variant/appearance below */
     --_color: var(--lt-text-on-primary);

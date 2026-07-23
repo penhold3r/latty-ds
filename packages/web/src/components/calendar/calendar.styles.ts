@@ -3,7 +3,7 @@ import { css } from 'lit';
 export const calendarStyles = css`
   :host {
     display: inline-block;
-    font-family: var(--lt-typography-fontFamily, 'Hanken Grotesk', sans-serif);
+    font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
   }
 
   .calendar {
