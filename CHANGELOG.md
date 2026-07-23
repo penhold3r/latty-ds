@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/penhold3r/latty-ds/compare/v0.8.1...v0.9.0) (2026-07-23)
+
+- fix(web)!: rename --lt-typography-fontFamily to fontFamilyPrimary in component styles ([4ed93c8](https://github.com/penhold3r/latty-ds/commit/4ed93c8c8c738598a4b52e6b08ceb70a53537a57))
+- feat(tokens)!: support font.family arrays, per-font fallback, and remove the FOUC hack ([8530ea5](https://github.com/penhold3r/latty-ds/commit/8530ea52632b42ea4d89ecf303851aa527b8f21d))
+
+### BREAKING CHANGES
+
+- consumers overriding --lt-typography-fontFamily directly
+  need to switch to --lt-typography-fontFamilyPrimary.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+- --lt-typography-fontFamily is renamed to
+  --lt-typography-fontFamilyPrimary. configure() no longer reads or writes
+  the data-lt attribute or the FOUC guard style rule.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
 ## [0.8.1](https://github.com/penhold3r/latty-ds/compare/v0.8.0...v0.8.1) (2026-07-22)
 
 ### Bug Fixes
