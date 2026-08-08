@@ -23,7 +23,23 @@ export interface SemanticTokenOptions {
   primary500?: string;
   // Resolved primary-400 hex for dark mode (button bg in dark theme).
   primary400?: string;
+  // Shifts which neutral palette step border-default/-strong/-subtle resolve to. Default: 'default'.
+  borderContrast?: 'default' | 'high';
 }
+
+// Neutral palette step per mode + contrast level for the three structural border tokens.
+// Dark mode shifts toward *lighter* steps for 'high' (more contrast against a dark background);
+// light mode shifts toward *darker* steps — opposite directions, both increasing contrast.
+const BORDER_STEPS = {
+  light: {
+    default: { default: '200', strong: '400', subtle: '100' },
+    high: { default: '400', strong: '600', subtle: '300' }
+  },
+  dark: {
+    default: { default: '700', strong: '500', subtle: '800' },
+    high: { default: '500', strong: '300', subtle: '600' }
+  }
+} as const;
 
 const buildLightSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticTokenMap => {
   const map: SemanticTokenMap = {};
@@ -58,9 +74,10 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToke
   }
 
   // Border
-  map['border-default'] = 'color-neutral-200';
-  map['border-strong'] = 'color-neutral-400';
-  map['border-subtle'] = 'color-neutral-100';
+  const lightBorderSteps = BORDER_STEPS.light[opts.borderContrast ?? 'default'];
+  map['border-default'] = `color-neutral-${lightBorderSteps.default}`;
+  map['border-strong'] = `color-neutral-${lightBorderSteps.strong}`;
+  map['border-subtle'] = `color-neutral-${lightBorderSteps.subtle}`;
   map['border-focus'] = 'color-primary-200';
 
   for (const v of VARIANTS) {
@@ -111,9 +128,10 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToken
   }
 
   // Border
-  map['border-default'] = 'color-neutral-700';
-  map['border-strong'] = 'color-neutral-500';
-  map['border-subtle'] = 'color-neutral-800';
+  const darkBorderSteps = BORDER_STEPS.dark[opts.borderContrast ?? 'default'];
+  map['border-default'] = `color-neutral-${darkBorderSteps.default}`;
+  map['border-strong'] = `color-neutral-${darkBorderSteps.strong}`;
+  map['border-subtle'] = `color-neutral-${darkBorderSteps.subtle}`;
   map['border-focus'] = 'color-primary-400';
 
   for (const v of VARIANTS) {

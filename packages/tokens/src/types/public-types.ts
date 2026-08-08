@@ -98,11 +98,32 @@ export interface LattyConfig {
      * referenced independently in your own CSS.
      */
     family?: FontFamilyEntry | FontFamilyEntry[];
+    /**
+     * A single dedicated heading font, resolved to `--lt-typography-fontFamilyHeading`.
+     * `lt-text`'s heading/display variants (`h1`–`h6`, `display-*`) read this
+     * token automatically, falling back to `fontFamilyPrimary` when unset —
+     * the built-in way to do a two-typeface identity without manually
+     * rerouting `--lt-typography-fontFamilySecondary` via hand-written CSS.
+     */
+    heading?: FontFamilyEntry;
   };
   border?: {
     radius?: string;
     width?: BorderWidth;
+    /**
+     * Shifts which neutral palette step `--lt-border-default`/`--lt-border-strong`/
+     * `--lt-border-subtle` resolve to. `'high'` moves them toward a bolder,
+     * higher-contrast step (darker in light mode, lighter in dark mode) without
+     * touching theme-switching machinery.
+     * @default 'default'
+     */
+    contrast?: 'default' | 'high';
   };
+  /**
+   * Set to `'none'` to flatten every `--lt-elevation-N` token (box-shadow) to
+   * `none` in one call, instead of overriding each level individually.
+   */
+  elevation?: 'none';
   /**
    * Controls which semantic token layer is emitted.
    * - `'light'` (default) — light tokens only; ignores OS preference

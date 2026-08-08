@@ -16,6 +16,14 @@ describe('createStyleSheet', () => {
     expect(css.length).toBeGreaterThan(1000);
   });
 
+  it.each(['light', 'dark', 'system'] as const)(
+    'applies the configured font to plain body elements regardless of theme (%s)',
+    (theme) => {
+      const css = createStyleSheet({ theme });
+      expect(css).toContain('body { font-family: var(--lt-typography-fontFamilyPrimary); }');
+    }
+  );
+
   it('applies custom primary color', () => {
     const defaultCss = createStyleSheet();
     const customCss = createStyleSheet({ colors: { primary: '#6366f1' } });
@@ -63,6 +71,24 @@ describe('createStyleSheet', () => {
     expect(css).toContain('--lt-typography-fontFamilySecondary: Georgia, serif');
   });
 
+  it('resolves font.heading to a dedicated fontFamilyHeading token, independent of family', () => {
+    const css = createStyleSheet({ font: { family: 'Inter, sans-serif', heading: 'Georgia, serif' } });
+    expect(css).toContain('--lt-typography-fontFamilyPrimary: Inter, sans-serif');
+    expect(css).toContain('--lt-typography-fontFamilyHeading: Georgia, serif');
+  });
+
+  it('resolves a CDN URL passed to font.heading and imports it', () => {
+    const url = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&display=swap';
+    const css = createStyleSheet({ font: { heading: { url, fallback: 'serif' } } });
+    expect(css.startsWith(`@import url("${url}");\n`)).toBe(true);
+    expect(css).toContain('--lt-typography-fontFamilyHeading: "Playfair Display", serif');
+  });
+
+  it('does not emit a fontFamilyHeading token when font.heading is not configured', () => {
+    const css = createStyleSheet();
+    expect(css).not.toContain('--lt-typography-fontFamilyHeading');
+  });
+
   it('emits one @import line per CDN URL in an array, in order', () => {
     const url1 = 'https://fonts.googleapis.com/css2?family=Hanken+Grotesk&display=swap';
     const url2 = 'https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap';
@@ -102,6 +128,18 @@ describe('createStyleSheet', () => {
     expect(css).toContain('--lt-border-width: 4px');
   });
 
+  it('flattens every elevation level to none when elevation is "none"', () => {
+    const css = createStyleSheet({ elevation: 'none' });
+    for (const level of ['0', '1', '2', '3', '4', '5']) {
+      expect(css).toContain(`--lt-elevation-${level}: none;`);
+    }
+  });
+
+  it('emits real box-shadow values when elevation is not configured', () => {
+    const css = createStyleSheet();
+    expect(css).not.toContain('--lt-elevation-1: none;');
+  });
+
   it('generates a full palette for an arbitrary custom color name', () => {
     const css = createStyleSheet({ colors: { tertiary: '#a855f7' } });
     expect(css).toContain('--lt-color-tertiary-500');
@@ -120,6 +158,33 @@ describe('createStyleSheet', () => {
     expect(semanticSection).toBeDefined();
     expect(semanticSection).toContain('var(--lt-color-');
     expect(semanticSection).not.toMatch(/--lt-text-[^:]+:\s*#/);
+  });
+
+  it('emits default border-contrast neutral steps when not configured', () => {
+    const css = createStyleSheet({ theme: 'light' });
+    expect(css).toContain('--lt-border-default: var(--lt-color-neutral-200)');
+    expect(css).toContain('--lt-border-strong: var(--lt-color-neutral-400)');
+    expect(css).toContain('--lt-border-subtle: var(--lt-color-neutral-100)');
+  });
+
+  it('shifts border tokens to bolder neutral steps in light mode when contrast is high', () => {
+    const css = createStyleSheet({ theme: 'light', border: { contrast: 'high' } });
+    expect(css).toContain('--lt-border-default: var(--lt-color-neutral-400)');
+    expect(css).toContain('--lt-border-strong: var(--lt-color-neutral-600)');
+    expect(css).toContain('--lt-border-subtle: var(--lt-color-neutral-300)');
+  });
+
+  it('shifts border tokens toward lighter neutral steps in dark mode when contrast is high', () => {
+    const css = createStyleSheet({ theme: 'dark', border: { contrast: 'high' } });
+    expect(css).toContain('--lt-border-default: var(--lt-color-neutral-500)');
+    expect(css).toContain('--lt-border-strong: var(--lt-color-neutral-300)');
+    expect(css).toContain('--lt-border-subtle: var(--lt-color-neutral-600)');
+  });
+
+  it('applies high border-contrast to both light and dark layers in system theme', () => {
+    const css = createStyleSheet({ theme: 'system', border: { contrast: 'high' } });
+    expect(css).toContain('--lt-border-default: var(--lt-color-neutral-400)'); // light, :root
+    expect(css).toContain('--lt-border-default: var(--lt-color-neutral-500)'); // dark, media/data-theme
   });
 });
 

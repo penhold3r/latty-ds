@@ -1,5 +1,5 @@
 import type { Config } from '../types/';
-import type { BorderWidth, LattyConfig } from '../types/public-types';
+import type { BorderWidth, LattyConfig, Tokens } from '../types/public-types';
 
 import { BORDER_WIDTH_PRESETS, DEFAULT_BORDER_RADIUS, DEFAULT_BORDER_WIDTH, DEFAULT_FONT_FAMILY } from '../constants/';
 import { buildTokens, tokensToCss, semanticTokensToCss } from '../core/';
@@ -9,7 +9,7 @@ import tokensConfig from '../../tokens.config.json';
 
 export type { BorderWidth, LattyConfig };
 
-const DEFAULTS: Required<Omit<LattyConfig, 'theme'>> = {
+const DEFAULTS: Required<Omit<LattyConfig, 'theme' | 'elevation'>> = {
   colors: tokensConfig.color,
   font: { family: DEFAULT_FONT_FAMILY },
   border: { radius: DEFAULT_BORDER_RADIUS, width: DEFAULT_BORDER_WIDTH }
@@ -48,17 +48,34 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
       tokens = { ...tokens, typography: { ...tokens.typography, ...typographyOverrides } };
     }
   }
+  if (userConfig.font?.heading) {
+    const [resolvedHeading] = resolveFontFamilies(userConfig.font.heading);
+    if (resolvedHeading.importUrl) importUrls.push(resolvedHeading.importUrl);
+    if (resolvedHeading.family) {
+      tokens = { ...tokens, typography: { ...tokens.typography, fontFamilyHeading: resolvedHeading.family } };
+    }
+  }
   if (userConfig.border?.radius) {
     tokens = { ...tokens, border: { ...tokens.border, radius: userConfig.border.radius } };
   }
   if (userConfig.border?.width) {
     tokens = { ...tokens, border: { ...tokens.border, width: resolveBorderWidth(userConfig.border.width) } };
   }
+  if (userConfig.elevation === 'none') {
+    const flatElevation = Object.fromEntries(
+      Object.keys(tokens.elevation).map((level) => [level, 'none'])
+    ) as Tokens['elevation'];
+    tokens = { ...tokens, elevation: flatElevation };
+  }
 
   const primitives = tokensToCss(tokens);
   const theme = userConfig.theme ?? 'light';
   const primary = tokens.color.primary as Record<string, string>;
-  const semanticOpts = { primary500: primary['500'], primary400: primary['400'] };
+  const semanticOpts = {
+    primary500: primary['500'],
+    primary400: primary['400'],
+    borderContrast: userConfig.border?.contrast
+  };
 
   let body: string;
   if (theme === 'dark') {
@@ -78,6 +95,11 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
       '\n' +
       semanticTokensToCss(buildSemanticTokens('light', semanticOpts), '[data-theme="light"]');
   }
+
+  // Every lt-* component sets its own font-family on :host, but plain HTML
+  // outside any component's shadow DOM never gets one otherwise — this is
+  // theme-independent, so it's appended once regardless of which branch ran.
+  body += '\nbody { font-family: var(--lt-typography-fontFamilyPrimary); }\n';
 
   // @import must be the first rule(s) of a stylesheet — safe here since
   // they're the first thing written into the returned string.
