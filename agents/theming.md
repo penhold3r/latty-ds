@@ -27,6 +27,14 @@ configure({ border: { width: 'thick' } }); // bold, brutalist outlines
 configure({ border: { width: '1.5px' } }); // raw CSS lengths pass through
 ```
 
+### Border contrast
+
+`border.contrast` shifts which neutral palette step `--lt-border-default`/`--lt-border-strong`/`--lt-border-subtle` resolve to, for a bolder, higher-contrast structural border look without touching theme-switching machinery. Accepts `'default'` (the default) or `'high'` — `'high'` moves each token toward a darker step in light mode and a lighter step in dark mode (both directions increase contrast against their respective background):
+
+```ts
+configure({ border: { contrast: 'high' } });
+```
+
 ### Loading a font from a CDN
 
 `font.family` also accepts a Google Fonts CSS2 stylesheet URL instead of a plain CSS value — `configure()` `@import`s it and derives the family name from the URL's `family=` query param, so there's no separate `<link>` tag to add:
@@ -70,6 +78,21 @@ configure({
   }
 });
 ```
+
+### Two-typeface identity (dedicated heading font)
+
+For the common case of "one font for headings, one for body," `font.heading` is more direct than routing a `family` array entry yourself — `lt-text`'s heading/display variants (`h1`–`h6`, `display-*`) read `--lt-typography-fontFamilyHeading` automatically, falling back to `fontFamilyPrimary` if unset:
+
+```ts
+configure({
+  font: {
+    family: 'Inter, sans-serif',
+    heading: { url: 'https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap', fallback: 'serif' }
+  }
+});
+```
+
+No manual CSS selectors needed — every heading automatically picks up the heading font, body text stays on `family`.
 
 ```css
 h1,

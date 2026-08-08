@@ -46,6 +46,16 @@ configure({
 configure({ border: { width: '1.5px' } }); // raw CSS lengths pass through`}
   />
 
+  <lt-text variant="h3">Border contrast</lt-text>
+  <lt-text variant="body">
+    <code>border.contrast</code> shifts which neutral palette step
+    <code>--lt-border-default</code>/<code>--lt-border-strong</code>/<code>--lt-border-subtle</code> resolve to, for a bolder,
+    higher-contrast structural border look without touching theme-switching machinery. Accepts <code>'default'</code> (the
+    default) or <code>'high'</code> — <code>'high'</code> moves each token toward a darker step in light mode and a lighter
+    step in dark mode (both directions increase contrast against their respective background):
+  </lt-text>
+  <CodeSnippet lang="ts" code={`configure({ border: { contrast: 'high' } });`} />
+
   <lt-text variant="h3">Loading a font from a CDN</lt-text>
   <lt-text variant="body">
     <code>font.family</code> also accepts a Google Fonts CSS2 stylesheet URL instead of a plain CSS value —
@@ -117,6 +127,28 @@ configure({ border: { width: '1.5px' } }); // raw CSS lengths pass through`}
   font-family: var(--lt-typography-fontFamilySecondary);
 }`}
   />
+
+  <lt-text variant="h3">Two-typeface identity (dedicated heading font)</lt-text>
+  <lt-text variant="body">
+    For the common case of "one font for headings, one for body," <code>font.heading</code> is more direct than routing a
+    <code>family</code> array entry yourself — <code>lt-text</code>'s heading/display variants (<code>h1</code>–<code
+      >h6</code
+    >, <code>display-*</code>) read <code>--lt-typography-fontFamilyHeading</code> automatically, falling back to
+    <code>fontFamilyPrimary</code> if unset:
+  </lt-text>
+  <CodeSnippet
+    lang="ts"
+    code={`configure({
+  font: {
+    family: 'Inter, sans-serif',
+    heading: { url: 'https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap', fallback: 'serif' }
+  }
+});`}
+  />
+  <lt-text variant="body">
+    No manual CSS selectors needed — every heading automatically picks up the heading font, body text stays on
+    <code>family</code>.
+  </lt-text>
 
   <lt-text variant="h3">SSR</lt-text>
   <lt-text variant="body">
