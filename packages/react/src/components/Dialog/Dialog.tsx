@@ -10,6 +10,8 @@ export type DialogProps = HTMLAttributes<DialogEl> & {
   closeOnEscape?: boolean;
   uppercase?: boolean;
   backdropBlur?: boolean;
+  elevation?: DialogEl['elevation'];
+  appearance?: DialogEl['appearance'];
   onDialogOpen?: () => void;
   onClose?: () => void;
   onDialogClose?: () => void;

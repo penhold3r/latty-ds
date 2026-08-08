@@ -8,6 +8,8 @@ export type SnackbarProps = HTMLAttributes<SnackbarEl> & {
   closable?: boolean;
   actionLabel?: string;
   icon?: LattyIconName;
+  elevation?: SnackbarEl['elevation'];
+  appearance?: SnackbarEl['appearance'];
   onShow?: () => void;
   onHide?: () => void;
   onAction?: () => void;

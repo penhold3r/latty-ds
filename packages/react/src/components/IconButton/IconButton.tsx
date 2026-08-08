@@ -6,6 +6,7 @@ export type IconButtonProps = HTMLAttributes<IconButtonEl> & {
   label?: string;
   variant?: IconButtonEl['variant'];
   appearance?: IconButtonEl['appearance'];
+  bordered?: boolean;
   size?: IconButtonEl['size'];
   disabled?: boolean;
   href?: string;

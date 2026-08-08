@@ -5,6 +5,7 @@ export type ButtonProps = HTMLAttributes<ButtonEl> & {
   formAssociated?: boolean;
   variant?: ButtonEl['variant'];
   appearance?: ButtonEl['appearance'];
+  bordered?: boolean;
   size?: ButtonEl['size'];
   disabled?: boolean;
   loading?: boolean;
