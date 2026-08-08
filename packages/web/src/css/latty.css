@@ -17,7 +17,7 @@ body {
   margin: 0;
   color: var(--lt-text-default);
   background: var(--lt-bg-default);
-  font-family: sans-serif;
+  font-family: var(--lt-typography-fontFamilyPrimary, sans-serif);
 }
 
 /* Media defaults */
