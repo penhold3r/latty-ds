@@ -5,6 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { dialogStyles } from './dialog.styles';
 import { backdropFeatureStyles } from '../shared/backdrop.styles';
 import { DialogSize } from './dialog.types';
+import type { SurfaceElevation, SurfaceAppearance } from '../surface/surface.types';
 
 import '../icon-button/icon-button';
 import '../surface/surface';
@@ -104,6 +105,18 @@ export class Dialog extends ThemeableElement {
    * @default false
    */
   @property({ type: Boolean, reflect: true, attribute: 'backdrop-blur' }) backdropBlur = false;
+
+  /**
+   * Elevation level of the internal surface, matching `lt-surface`'s scale.
+   * @default '4'
+   */
+  @property({ reflect: true }) elevation: SurfaceElevation = '4';
+
+  /**
+   * Visual appearance of the internal surface, matching `lt-surface`'s vocabulary.
+   * @default 'filled'
+   */
+  @property({ reflect: true }) appearance: SurfaceAppearance = 'filled';
 
   @query('lt-surface') private dialogElement?: HTMLElement;
   private previouslyFocusedElement?: HTMLElement;
@@ -208,7 +221,8 @@ export class Dialog extends ThemeableElement {
     return html`
       <div class="backdrop" ?inert=${!this.open} @click=${this.handleBackdropClick} part="backdrop">
         <lt-surface
-          elevation="4"
+          elevation=${this.elevation}
+          appearance=${this.appearance}
           role="dialog"
           aria-modal="true"
           aria-labelledby="dialog-title"

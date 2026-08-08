@@ -40,6 +40,32 @@ describe('<lt-dialog>', () => {
     expect(el.open).toBe(false);
   });
 
+  it('has default elevation of 4', () => {
+    expect(el.elevation).toBe('4');
+    const surface = el.shadowRoot!.querySelector('lt-surface');
+    expect(surface?.getAttribute('elevation')).toBe('4');
+  });
+
+  it('has default appearance of filled', () => {
+    expect(el.appearance).toBe('filled');
+    const surface = el.shadowRoot!.querySelector('lt-surface');
+    expect(surface?.getAttribute('appearance')).toBe('filled');
+  });
+
+  it.each(['0', '1', '2', '3', '4', '5'] as const)('forwards elevation %s to the internal surface', async (level) => {
+    el.elevation = level;
+    await el.updateComplete;
+    const surface = el.shadowRoot!.querySelector('lt-surface');
+    expect(surface?.getAttribute('elevation')).toBe(level);
+  });
+
+  it('forwards appearance to the internal surface', async () => {
+    el.appearance = 'outlined';
+    await el.updateComplete;
+    const surface = el.shadowRoot!.querySelector('lt-surface');
+    expect(surface?.getAttribute('appearance')).toBe('outlined');
+  });
+
   it('can change size', async () => {
     el.size = 'lg';
     await el.updateComplete;

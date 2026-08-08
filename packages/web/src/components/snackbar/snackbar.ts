@@ -4,6 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { snackbarStyles } from './snackbar.styles';
 import type { SnackbarVariant } from './snackbar.types';
+import type { SurfaceElevation, SurfaceAppearance } from '../surface/surface.types';
 import { dispatch } from '../../utils';
 
 import '@latty-ds/icons';
@@ -59,6 +60,18 @@ export class Snackbar extends ThemeableElement {
    * set to `"none"` to suppress, or pass any icon name to override.
    */
   @property({ reflect: true }) icon = '';
+
+  /**
+   * Elevation level of the internal surface, matching `lt-surface`'s scale.
+   * @default '5'
+   */
+  @property({ reflect: true }) elevation: SurfaceElevation = '5';
+
+  /**
+   * Visual appearance of the internal surface, matching `lt-surface`'s vocabulary.
+   * @default 'filled'
+   */
+  @property({ reflect: true }) appearance: SurfaceAppearance = 'filled';
 
   private _timer?: ReturnType<typeof setTimeout>;
 
@@ -137,7 +150,7 @@ export class Snackbar extends ThemeableElement {
   render() {
     const iconName = this._resolvedIcon;
     return html`
-      <lt-surface elevation="5" background=${Snackbar._bgMap[this.variant]}>
+      <lt-surface elevation=${this.elevation} appearance=${this.appearance} background=${Snackbar._bgMap[this.variant]}>
         <div class="inner" role="status" aria-live="polite" part="base">
           ${iconName ? html`<lt-icon class="variant-icon" name=${iconName} part="icon"></lt-icon>` : ''}
           <span class="message" part="message">

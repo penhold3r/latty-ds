@@ -21,6 +21,8 @@ import '../text/text';
  * @part header - The header bar (contains label and close button)
  * @part close-button - The close button inside the header
  * @part body - The scrollable content area wrapping the default slot
+ *
+ * @cssprop [--lt-sidepanel-shadow] - Overrides the panel's box-shadow, for all anchor positions.
  */
 @customElement('lt-sidepanel')
 export class SidePanel extends ThemeableElement {

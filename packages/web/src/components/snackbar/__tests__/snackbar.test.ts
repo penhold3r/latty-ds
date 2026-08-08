@@ -33,6 +33,23 @@ describe('<lt-snackbar>', () => {
     expect(el.getAttribute('variant')).toBe('success');
   });
 
+  it('has default elevation of 5 and appearance of filled, forwarded to the internal surface', () => {
+    expect(el.elevation).toBe('5');
+    expect(el.appearance).toBe('filled');
+    const surface = el.shadowRoot!.querySelector('lt-surface');
+    expect(surface?.getAttribute('elevation')).toBe('5');
+    expect(surface?.getAttribute('appearance')).toBe('filled');
+  });
+
+  it('forwards elevation and appearance changes to the internal surface', async () => {
+    el.elevation = '2';
+    el.appearance = 'outlined';
+    await el.updateComplete;
+    const surface = el.shadowRoot!.querySelector('lt-surface');
+    expect(surface?.getAttribute('elevation')).toBe('2');
+    expect(surface?.getAttribute('appearance')).toBe('outlined');
+  });
+
   it('show() sets open to true', async () => {
     el.show();
     await el.updateComplete;

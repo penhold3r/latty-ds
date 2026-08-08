@@ -217,6 +217,30 @@ export const iconButtonStyles = css`
     --_active-bg: var(--lt-bg-info-subtle);
   }
 
+  /* bordered — adds a border on top of whatever appearance is active; a no-op on
+     outlined, which already sets the same border color. */
+  :host([bordered][variant='primary']) {
+    --_border-color: var(--lt-border-primary-strong);
+  }
+  :host([bordered][variant='secondary']) {
+    --_border-color: var(--lt-border-secondary-strong);
+  }
+  :host([bordered][variant='neutral']) {
+    --_border-color: var(--lt-border-strong);
+  }
+  :host([bordered][variant='success']) {
+    --_border-color: var(--lt-border-success-strong);
+  }
+  :host([bordered][variant='warning']) {
+    --_border-color: var(--lt-border-warning-strong);
+  }
+  :host([bordered][variant='error']) {
+    --_border-color: var(--lt-border-error-strong);
+  }
+  :host([bordered][variant='info']) {
+    --_border-color: var(--lt-border-info-strong);
+  }
+
   /* round shape */
   :host([round]) [part='base'] {
     border-radius: 50%;

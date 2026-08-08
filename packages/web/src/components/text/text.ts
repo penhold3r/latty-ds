@@ -36,6 +36,7 @@ const VARIANT_TAG: Record<TextVariant, TextTag> = {
  *
  * @element lt-text
  * @cssprop [--lt-text-weight] - Overrides the default font-weight for the variant.
+ * @cssprop [--lt-text-tracking] - Overrides the default letter-spacing for the variant.
  *
  * @example
  * ```html

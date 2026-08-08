@@ -43,6 +43,21 @@ describe('<lt-button>', () => {
     expect(el.getAttribute('appearance')).toBe('filled');
   });
 
+  it('is not bordered by default', () => {
+    expect(el.bordered).toBe(false);
+    expect(el.hasAttribute('bordered')).toBe(false);
+  });
+
+  it.each(['primary', 'secondary', 'neutral', 'success', 'warning', 'error', 'info'] as const)(
+    'reflects bordered to attribute for %s variant',
+    async (variant) => {
+      el.variant = variant;
+      el.bordered = true;
+      await el.updateComplete;
+      expect(el.hasAttribute('bordered')).toBe(true);
+    }
+  );
+
   it('is not disabled by default', () => {
     const btn = el.shadowRoot!.querySelector('button')!;
     expect(el.disabled).toBe(false);

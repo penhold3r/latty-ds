@@ -36,28 +36,28 @@ export const sidepanelStyles = css`
     inset-block: 0;
     left: 0;
     transform: translateX(-100%);
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--lt-sidepanel-shadow, 4px 0 24px rgba(0, 0, 0, 0.12));
   }
 
   :host([anchor='right']) [part='panel'] {
     inset-block: 0;
     right: 0;
     transform: translateX(100%);
-    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--lt-sidepanel-shadow, -4px 0 24px rgba(0, 0, 0, 0.12));
   }
 
   :host([anchor='top']) [part='panel'] {
     inset-inline: 0;
     top: 0;
     transform: translateY(-100%);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--lt-sidepanel-shadow, 0 4px 24px rgba(0, 0, 0, 0.12));
   }
 
   :host([anchor='bottom']) [part='panel'] {
     inset-inline: 0;
     bottom: 0;
     transform: translateY(100%);
-    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--lt-sidepanel-shadow, 0 -4px 24px rgba(0, 0, 0, 0.12));
   }
 
   /* ── Open state — must come after anchors to win the cascade ────────────── */
@@ -98,6 +98,7 @@ export const sidepanelStyles = css`
   .body {
     flex: 1;
     overflow-y: auto;
+    padding: var(--lt-spacing-5);
   }
 
   /* ── Reduced motion ─────────────────────────────────────────────────────── */

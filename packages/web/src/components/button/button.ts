@@ -74,6 +74,13 @@ export class Button extends ThemeableElement {
   @property({ reflect: true }) appearance: ButtonAppearance = 'filled';
 
   /**
+   * Adds a variant-colored border on top of the current appearance. A no-op on
+   * `outlined` (which already has one); adds a border to `filled`/`ghost`.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) bordered = false;
+
+  /**
    * Size of the button (affects height, font size, and padding).
    * @default 'md'
    */

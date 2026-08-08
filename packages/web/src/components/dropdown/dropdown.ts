@@ -17,6 +17,8 @@ import { openFloating, closeFloating } from '../shared/floating';
  * @slot - Menu items (lt-dropdown-item elements)
  * @fires {CustomEvent} open - Fired when the menu opens
  * @fires {CustomEvent} close - Fired when the menu closes
+ *
+ * @cssprop [--lt-dropdown-menu-padding] - Overrides the menu surface's default vertical padding.
  */
 @customElement('lt-dropdown')
 export class Dropdown extends ThemeableElement {

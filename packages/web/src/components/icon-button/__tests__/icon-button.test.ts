@@ -41,6 +41,17 @@ describe('<lt-icon-button>', () => {
     expect(el.getAttribute('size')).toBe(size);
   });
 
+  it('is not bordered by default', () => {
+    expect(el.bordered).toBe(false);
+    expect(el.hasAttribute('bordered')).toBe(false);
+  });
+
+  it('reflects bordered to attribute', async () => {
+    el.bordered = true;
+    await el.updateComplete;
+    expect(el.hasAttribute('bordered')).toBe(true);
+  });
+
   it('sets aria-label from label attribute', async () => {
     el.label = 'Close dialog';
     await el.updateComplete;

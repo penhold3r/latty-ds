@@ -91,6 +91,19 @@ describe('<lt-select>', () => {
     expect(options.length).toBe(mockOptions.length);
   });
 
+  it('exposes the listbox surface via part="listbox" and defaults it to an outlined appearance', () => {
+    const listbox = el.shadowRoot!.querySelector('lt-surface.dropdown');
+    expect(listbox?.getAttribute('part')).toBe('listbox');
+    expect(listbox?.getAttribute('appearance')).toBe('outlined');
+  });
+
+  it('keeps an opaque background on the outlined listbox surface', () => {
+    // outlined appearance resets Surface's background to transparent unless a
+    // background prop is set explicitly — without this the popover would be see-through.
+    const listbox = el.shadowRoot!.querySelector('lt-surface.dropdown');
+    expect(listbox?.getAttribute('background')).toBe('--lt-bg-default');
+  });
+
   it('shows placeholder when no value is selected', () => {
     const valueSpan = el.shadowRoot!.querySelector('.select-value');
     expect(valueSpan?.classList.contains('placeholder')).toBe(true);

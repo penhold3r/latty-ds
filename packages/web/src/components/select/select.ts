@@ -293,7 +293,15 @@ export class Select extends ThemeableElement {
             </span>
             <lt-icon class="icon-end" name="caret-down"></lt-icon>
           </div>
-          <lt-surface class="dropdown" popover="manual" elevation="2" role="listbox">
+          <lt-surface
+            class="dropdown"
+            popover="manual"
+            elevation="2"
+            appearance="outlined"
+            background="--lt-bg-default"
+            role="listbox"
+            part="listbox"
+          >
             <div class="options-container">
               ${this.options.map(
                 (option) => html`

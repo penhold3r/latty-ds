@@ -21,6 +21,7 @@ export const dropdownStyles = [
 
     lt-surface.menu::part(surface) {
       overflow: hidden;
+      padding-block: var(--lt-dropdown-menu-padding, var(--lt-spacing-2));
     }
   `
 ];
