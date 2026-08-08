@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/penhold3r/latty-ds/compare/v0.9.0...v0.10.0) (2026-08-08)
+
+### Features
+
+- **tokens:** add font.heading, elevation flat-mode, and border.contrast config options ([67584ad](https://github.com/penhold3r/latty-ds/commit/67584ad47698f61528326b245d570c5869fbecff)), closes [#12](https://github.com/penhold3r/latty-ds/issues/12) [#13](https://github.com/penhold3r/latty-ds/issues/13) [#15](https://github.com/penhold3r/latty-ds/issues/15) [#21](https://github.com/penhold3r/latty-ds/issues/21)
+
 # [0.9.0](https://github.com/penhold3r/latty-ds/compare/v0.8.1...v0.9.0) (2026-07-23)
 
 - feat(tokens)!: support font.family arrays, per-font fallback, and remove the FOUC hack ([8530ea5](https://github.com/penhold3r/latty-ds/commit/8530ea52632b42ea4d89ecf303851aa527b8f21d))

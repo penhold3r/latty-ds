@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/penhold3r/latty-ds/compare/v0.9.0...v0.10.0) (2026-08-08)
+
+### Features
+
+- **tokens:** add font.heading, elevation flat-mode, and border.contrast config options ([67584ad](https://github.com/penhold3r/latty-ds/commit/67584ad47698f61528326b245d570c5869fbecff)), closes [#12](https://github.com/penhold3r/latty-ds/issues/12) [#13](https://github.com/penhold3r/latty-ds/issues/13) [#15](https://github.com/penhold3r/latty-ds/issues/15) [#21](https://github.com/penhold3r/latty-ds/issues/21)
+- **web:** add elevation/appearance/bordered props and CSS override hooks ([f4219c8](https://github.com/penhold3r/latty-ds/commit/f4219c82b4a21aa0d1e4d7bfdefcb988112d7d08))
+
 # [0.9.0](https://github.com/penhold3r/latty-ds/compare/v0.8.1...v0.9.0) (2026-07-23)
 
 - fix(web)!: rename --lt-typography-fontFamily to fontFamilyPrimary in component styles ([4ed93c8](https://github.com/penhold3r/latty-ds/commit/4ed93c8c8c738598a4b52e6b08ceb70a53537a57))

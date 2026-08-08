@@ -1,6 +1,6 @@
 {
   "name": "@latty-ds/icons",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Icon components for the Latty design system — pluggable icon registry with Iconoir as the default provider",
   "license": "MIT",
   "repository": {
