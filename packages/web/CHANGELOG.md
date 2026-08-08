@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.1](https://github.com/penhold3r/latty-ds/compare/v0.10.0...v0.10.1) (2026-08-08)
+
+### Bug Fixes
+
+- **web:** route latty.css's baseline body font-family through the token ([0579e73](https://github.com/penhold3r/latty-ds/commit/0579e737602d41c98000281a0db064a28e5525b8)), closes [#12](https://github.com/penhold3r/latty-ds/issues/12) [#22](https://github.com/penhold3r/latty-ds/issues/22)
+
 # [0.10.0](https://github.com/penhold3r/latty-ds/compare/v0.9.0...v0.10.0) (2026-08-08)
 
 ### Features
