@@ -1,0 +1,7 @@
+/* Ported from docs/src/pages/tokens/spacing.astro's inline <style>. */
+.spacing-table {
+  border: 1px solid var(--lt-border-default);
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  margin: var(--lt-spacing-6) 0;
+}

@@ -1,0 +1,52 @@
+---
+title: Breadcrumb
+description: A navigation trail that shows the user's location in the app hierarchy.
+slug: /components/breadcrumb
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Breadcrumb
+
+A secondary navigation that shows the path from the root to the current page. The last item is marked as <code>current</code> and rendered as non-linked text.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-breadcrumb"
+  subTags={['lt-breadcrumb-item']}
+  content={`<lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
+<lt-breadcrumb-item href="/components">Components</lt-breadcrumb-item>
+<lt-breadcrumb-item current>Breadcrumb</lt-breadcrumb-item>`}
+/>
+
+## Usage
+
+  <FrameworkTabs
+    html={`<lt-breadcrumb>
+  <lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
+  <lt-breadcrumb-item href="/components">Components</lt-breadcrumb-item>
+  <lt-breadcrumb-item current>Breadcrumb</lt-breadcrumb-item>
+</lt-breadcrumb>`}
+    react={`import { Breadcrumb, BreadcrumbItem } from '@latty-ds/react';
+
+<Breadcrumb>
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/components">Components</BreadcrumbItem>
+  <BreadcrumbItem current>Breadcrumb</BreadcrumbItem>
+</Breadcrumb>`}
+    vue={`<template>
+  <lt-breadcrumb>
+    <lt-breadcrumb-item href="/">Home</lt-breadcrumb-item>
+    <lt-breadcrumb-item href="/components">Components</lt-breadcrumb-item>
+    <lt-breadcrumb-item current>Breadcrumb</lt-breadcrumb-item>
+  </lt-breadcrumb>
+</template>`}
+  />
+
+## API
+
+<ApiTable tag="lt-breadcrumb" />
+<ApiTable tag="lt-breadcrumb-item" />

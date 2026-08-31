@@ -1,0 +1,52 @@
+---
+title: Progress
+description: A horizontal bar that shows how far along a process is.
+slug: /components/progress
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Progress
+
+A progress bar for showing completion of a task or process. Supports determinate values (0–100), color variants,
+three sizes, and an indeterminate animation for unknown durations.
+
+## Playground
+
+<ComponentPlayground tag="lt-progress" previewHeight="80px" defaults={{ value: 50 }} stretch />
+
+## Usage
+
+  <FrameworkTabs
+    html={`<!-- Determinate -->
+<lt-progress value="40"></lt-progress>
+<lt-progress value="75" variant="success"></lt-progress>
+<lt-progress value="60" variant="warning"></lt-progress>
+<lt-progress value="30" variant="error"></lt-progress>
+
+<!-- Sizes -->
+
+<lt-progress value="50" size="sm"></lt-progress>
+<lt-progress value="50" size="md"></lt-progress>
+<lt-progress value="50" size="lg"></lt-progress>
+
+<!-- Indeterminate -->
+
+<lt-progress indeterminate></lt-progress>`}
+    react={`import { Progress } from '@latty-ds/react';
+
+<Progress value={40} />
+<Progress value={75} variant="success" />
+<Progress indeterminate />`}
+    vue={`<template>
+  <lt-progress :value="40"></lt-progress>
+  <lt-progress :value="75" variant="success"></lt-progress>
+  <lt-progress indeterminate></lt-progress>
+</template>`}
+  />
+
+## API
+
+<ApiTable tag="lt-progress" />

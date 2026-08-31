@@ -1,0 +1,11 @@
+/* Ported from docs/src/pages/tokens/semantic-tokens.astro's inline <style>. */
+.token-section {
+  margin-top: var(--lt-spacing-10);
+}
+
+.token-table {
+  border: 1px solid var(--lt-color-neutral-200);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}

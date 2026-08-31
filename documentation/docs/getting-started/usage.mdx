@@ -1,0 +1,310 @@
+---
+title: Usage
+description: Start using Latty components in your project
+sidebar_label: Usage
+sidebar_position: 3
+slug: /getting-started/usage
+---
+
+import CodeBlock from '@theme/CodeBlock';
+
+# Usage
+
+## Vanilla HTML
+
+No build tool required:
+
+<CodeBlock language="html">{`<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="node_modules/@latty-ds/tokens/dist/tokens.css" />
+    <link rel="stylesheet" href="node_modules/@latty-ds/tokens/dist/semantic.css" />
+  </head>
+  <body>
+    <lt-button variant="primary" icon-start="save">Save changes</lt-button>
+
+    <script type="module">
+      import '@latty-ds/web';
+    </script>
+
+  </body>
+</html>`}</CodeBlock>
+
+## With a bundler (Vite, webpack, etc.)
+
+<CodeBlock language="js" title="entry.js">{`import '@latty-ds/tokens/tokens.css';
+import '@latty-ds/tokens/semantic.css';
+import '@latty-ds/web';`}</CodeBlock>
+
+<CodeBlock language="html">{`<lt-button variant="primary">Click me</lt-button>
+
+<lt-textfield
+label="Email address"
+type="email"
+required
+helper-text="We'll never share your email"
+
+> </lt-textfield>`}</CodeBlock>
+
+## React
+
+Use the <code>@latty-ds/react</code> wrapper package for typed props and idiomatic React event names:
+
+<CodeBlock language="tsx">{`import { Button, Textfield } from '@latty-ds/react';
+
+export function Example() {
+  return (
+    <Button variant="primary" iconStart="save" onClick={() => console.log('saved')}>
+      Save changes
+    </Button>
+  );
+}`}</CodeBlock>
+
+### Without the React wrapper
+
+If you use <code>lt-\*</code> elements directly in React without <code>@latty-ds/react</code>, attach event listeners via <code>ref</code> — React's synthetic event system does not handle custom DOM events:
+
+<CodeBlock language="tsx">{`import { useRef, useEffect } from 'react';
+
+function EmailField() {
+const ref = useRef<HTMLElement>(null);
+
+useEffect(() => {
+const el = ref.current;
+if (!el) return;
+const handler = (e: Event) => console.log((e as CustomEvent).detail.value);
+el.addEventListener('change', handler);
+return () => el.removeEventListener('change', handler);
+}, []);
+
+return <lt-textfield ref={ref} label="Email" type="email" />;
+}`}</CodeBlock>
+
+### React Server Components
+
+Custom elements run in the browser — they cannot be used inside React Server Components. In Next.js App Router, any file that renders Latty components must be marked <code>'use client'</code>:
+
+<CodeBlock language="tsx">{`'use client';
+
+import { Button, Dialog } from '@latty-ds/react';
+
+export function ConfirmDialog({ onConfirm }: { onConfirm: () => void }) {
+  return (
+    <Dialog title="Are you sure?">
+      <Button slot="footer" variant="danger" onClick={onConfirm}>Delete</Button>
+    </Dialog>
+  );
+}`}</CodeBlock>
+
+## Vue
+
+Vue 3 supports Web Components natively. Add one-time config in your app entry:
+
+<CodeBlock language="ts" title="main.ts">{`import { createApp } from 'vue';
+import '@latty-ds/tokens/tokens.css';
+import '@latty-ds/tokens/semantic.css';
+import '@latty-ds/web';
+import App from './App.vue';
+
+const app = createApp(App);
+app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('lt-');
+app.mount('#app');`}</CodeBlock>
+
+Use <code>@event</code> for listeners and <code>:prop</code> for reactive bindings in templates:
+
+<CodeBlock language="vue">{`<script setup lang="ts">
+function save() { /* ... */ }
+function onEmail(e: Event) {
+  console.log((e as CustomEvent).detail.value);
+}
+</script>
+
+<template>
+  <lt-button variant="primary" @click="save">Save changes</lt-button>
+  <lt-textfield label="Email" type="email" @change="onEmail"></lt-textfield>
+</template>`}</CodeBlock>
+
+## Svelte
+
+Web Components work natively in Svelte. Import tokens and components in your root layout:
+
+<CodeBlock language="svelte" title="+layout.svelte">{`<script>
+  import '@latty-ds/tokens/tokens.css';
+  import '@latty-ds/tokens/semantic.css';
+  import '@latty-ds/web';
+</script>
+
+<slot />`}</CodeBlock>
+
+<CodeBlock language="svelte">{`<script>
+  let value = '';
+</script>
+
+<lt-textfield label="Name" bind:value></lt-textfield>
+<lt-button variant="primary" on:click={() => console.log(value)}>Submit</lt-button>`}</CodeBlock>
+
+## Slots
+
+Components use standard HTML slots to accept content. Content placed directly inside an element goes into its default slot. Content with a <code>slot="name"</code> attribute targets a specific named region.
+
+The most common named slot is <code>trigger</code> on <code>lt-dropdown</code> — any element placed there becomes the anchor that opens the menu:
+
+<CodeBlock language="html">{`<lt-dropdown>
+  <lt-icon-button slot="trigger" name="more-horiz" label="Options"></lt-icon-button>
+  <lt-dropdown-item>Edit</lt-dropdown-item>
+  <lt-dropdown-item>Delete</lt-dropdown-item>
+</lt-dropdown>`}</CodeBlock>
+
+<code>lt-dialog</code> uses named slots to place content in distinct regions of the overlay:
+
+<CodeBlock language="html">{`<lt-dialog id="confirm-dialog" title="Delete item">
+  Are you sure you want to permanently delete this item?
+  <div slot="footer">
+    <lt-button appearance="outlined" id="cancel-btn">Cancel</lt-button>
+    <lt-button variant="danger" id="confirm-btn">Delete</lt-button>
+  </div>
+</lt-dialog>`}</CodeBlock>
+
+Components that expose slots list them in their API table. Omitting a named slot usually hides that region entirely — for example, omitting <code>slot="footer"</code> on a dialog removes the footer bar.
+
+## Compound components
+
+Some components are designed as parent/child pairs. The parent manages shared state; child elements are slotted in as its content.
+
+### Tabs
+
+<code>lt-tab-group</code> owns the active tab state via its <code>value</code> prop. Each <code>lt-tab</code> declares
+its own value, and panel content is slotted with a matching <code>data-value</code>:
+
+<CodeBlock language="html">{`<lt-tab-group value="profile">
+  <lt-tab label="Profile" value="profile" icon-start="user"></lt-tab>
+  <lt-tab label="Settings" value="settings" icon-start="settings"></lt-tab>
+  <lt-tab label="Billing" value="billing" icon-start="credit-card"></lt-tab>
+
+  <div slot="panel" data-value="profile">Profile content here</div>
+  <div slot="panel" data-value="settings">Settings content here</div>
+  <div slot="panel" data-value="billing">Billing content here</div>
+</lt-tab-group>
+
+<script type="module">
+  document.querySelector('lt-tab-group').addEventListener('change', (e) => {
+    console.log('active tab:', e.detail.value);
+  });
+</script>`}</CodeBlock>
+
+### Navigation
+
+<code>lt-nav-item</code> elements can be nested to create collapsible groups. In vertical mode they expand inline; in
+horizontal mode they open as a dropdown panel:
+
+<CodeBlock language="html">{`<lt-nav>
+  <lt-nav-item href="/dashboard" label="Dashboard" icon-start="home" active></lt-nav-item>
+  <lt-nav-item label="Settings" icon-start="settings">
+    <lt-nav-item href="/settings/profile" label="Profile"></lt-nav-item>
+    <lt-nav-item href="/settings/security" label="Security"></lt-nav-item>
+  </lt-nav-item>
+</lt-nav>`}</CodeBlock>
+
+## Events
+
+Components dispatch standard DOM events — no custom prefix. Interactive components carry data in <code>e.detail</code>:
+
+<CodeBlock language="js">{`// Text inputs — e.detail.value is the current string value
+document.querySelector('lt-textfield').addEventListener('change', (e) => {
+  console.log(e.detail.value);      // string
+});
+
+// Select — e.detail.value is the selected option's value
+document.querySelector('lt-select').addEventListener('change', (e) => {
+console.log(e.detail.value); // string
+});
+
+// Checkbox — e.detail.checked is the boolean state
+document.querySelector('lt-checkbox').addEventListener('change', (e) => {
+console.log(e.detail.checked); // boolean
+});
+
+// Tab group — e.detail.value is the newly active tab's value
+document.querySelector('lt-tab-group').addEventListener('change', (e) => {
+console.log(e.detail.value); // string
+});
+
+// Dropdown — e.detail.item is the selected lt-dropdown-item element
+document.querySelector('lt-dropdown').addEventListener('select', (e) => {
+console.log(e.detail.item.textContent);
+});
+
+// Overlays — open and close carry no detail
+document.querySelector('lt-dialog').addEventListener('open', () => {});
+document.querySelector('lt-dialog').addEventListener('close', () => {});`}</CodeBlock>
+
+## Attributes vs properties
+
+HTML attributes are always strings — they can represent text, boolean presence, and simple enumerations. For anything richer (arrays, objects, render functions), set the JavaScript property directly:
+
+<CodeBlock language="html" title="Attributes — strings and booleans">{`<!-- String values -->
+<lt-button variant="primary" size="md">Save</lt-button>
+
+<!-- Boolean: presence = true, absence = false -->
+
+<lt-button disabled>Can't click</lt-button>
+<lt-textfield required label="Email"></lt-textfield>`}</CodeBlock>
+
+<CodeBlock language="js" title="Properties — rich data">{`const table = document.querySelector('lt-table');
+
+// Arrays and objects must be set as JS properties, not attributes
+table.columns = [
+{ key: 'name', label: 'Name' },
+{ key: 'role', label: 'Role', render: (v) => {
+const badge = document.createElement('lt-badge');
+badge.textContent = v;
+return badge;
+}}
+];
+table.data = [
+{ name: 'Alice', role: 'Admin' },
+{ name: 'Bob', role: 'Member' }
+];`}</CodeBlock>
+
+A common gotcha: setting <code>element.setAttribute('disabled', false)</code> does not disable the boolean — the attribute is still present. Use <code>element.removeAttribute('disabled')</code> to clear it, or set the property: <code>element.disabled = false</code>.
+
+## Forms
+
+<code>lt-button</code> participates in native HTML form submission — a button with <code>type="submit"</code> inside a
+<code>&lt;form&gt;</code> triggers the form's submit event as expected. Input components (<code>lt-textfield</code>,
+<code>lt-select</code>, <code>lt-checkbox</code>, etc.) do not submit their values natively. Read them via events or the
+element's <code>value</code> property on submit:
+
+<CodeBlock language="html">{`<form id="signup-form">
+  <lt-textfield name="email" label="Email" type="email" required></lt-textfield>
+  <lt-select id="role-select" label="Role"></lt-select>
+  <lt-button type="submit" variant="primary">Sign up</lt-button>
+</form>
+
+<script type="module">
+  import '@latty-ds/web';
+
+  const roleSelect = document.getElementById('role-select');
+  roleSelect.options = [
+    { value: 'admin', label: 'Admin' },
+    { value: 'member', label: 'Member' }
+  ];
+
+  document.getElementById('signup-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.querySelector('lt-textfield[name="email"]').value;
+    const role = roleSelect.value;
+    console.log({ email, role });
+  });
+</script>`}</CodeBlock>
+
+## Next steps
+
+<lt-list>
+  <lt-list-item>
+    <a href="/getting-started/theming">Theming</a> — customize tokens to match your brand
+  </lt-list-item>
+  <lt-list-item>
+    <a href="/components/introduction">Components</a> — explore the full component catalog
+  </lt-list-item>
+</lt-list>

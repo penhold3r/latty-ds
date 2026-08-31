@@ -1,0 +1,47 @@
+---
+title: Spinner
+description: Loading indicator component
+slug: /components/spinner
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Spinner
+
+A simple animated loading indicator. Use it to signal that content or an action is in progress.
+
+## Playground
+
+<ComponentPlayground tag="lt-spinner" />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-spinner size="md" variant="primary"></lt-spinner>
+
+<div style="color: var(--lt-color-success-500);">
+  <lt-spinner variant="current"></lt-spinner>
+</div>
+    `}
+    react={`
+import { Spinner } from '@latty-ds/react';
+
+<Spinner size="md" variant="primary" />
+    `}
+    vue={`
+<template>
+  <lt-spinner size="md" variant="primary"></lt-spinner>
+
+  <div style="color: var(--lt-color-success-500);">
+    <lt-spinner variant="current"></lt-spinner>
+  </div>
+</template>
+    `}
+  />
+
+## API
+
+<ApiTable tag="lt-spinner" />

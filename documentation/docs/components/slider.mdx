@@ -1,0 +1,94 @@
+---
+title: Slider
+description: A range input for selecting a numeric value within a bounded range
+slug: /components/slider
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Slider
+
+A styled range input for selecting a numeric value between a minimum and maximum. Supports size variants, labels,
+and exposes <code>input</code> (fires continuously while dragging) and <code>change</code> (fires once on release) events,
+both carrying the current numeric value in <code>event.detail.value</code>.
+
+## Playground
+
+<ComponentPlayground tag="lt-slider" stretch={true} previewHeight="auto" defaults={{ label: 'Volume', value: 40 }} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-slider label="Volume" value="40" min="0" max="100" step="1"></lt-slider>
+
+<!-- Sizes -->
+
+<lt-slider size="sm" label="Small" value="50"></lt-slider>
+<lt-slider size="md" label="Medium" value="50"></lt-slider>
+<lt-slider size="lg" label="Large" value="50"></lt-slider>
+
+<!-- Show value tooltip -->
+
+<lt-slider label="Volume" value="40" tooltip></lt-slider>
+
+<!-- Disabled -->
+
+<lt-slider label="Disabled" value="60" disabled></lt-slider>
+
+<!-- Listen for events -->
+
+<lt-slider id="vol" label="Volume" value="0"></lt-slider>
+
+<script>
+  const vol = document.getElementById('vol');
+  vol.addEventListener('input', (e) => {
+    console.log('dragging:', e.detail.value);
+  });
+  vol.addEventListener('change', (e) => {
+    console.log('committed:', e.detail.value);
+  });
+</script>
+
+    `}
+    react={`
+
+import { Slider } from '@latty-ds/react';
+
+function VolumeControl() {
+const [volume, setVolume] = useState(40);
+
+return (
+
+<Slider
+label="Volume"
+value={volume}
+min={0}
+max={100}
+step={1}
+onInput={(e) => setVolume(e.detail.value)}
+/>
+);
+}
+`}
+    vue={`
+
+<script setup>import {ref} from 'vue' const volume = ref(40)</script>
+
+<template>
+  <lt-slider
+    label="Volume"
+    :value="volume"
+    :min="0"
+    :max="100"
+    :step="1"
+    @input="volume = $event.detail.value"></lt-slider>
+</template>
+    `}
+  />
+
+## API
+
+<ApiTable tag="lt-slider" />

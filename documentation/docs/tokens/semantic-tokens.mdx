@@ -1,0 +1,65 @@
+---
+title: Semantic Tokens
+description: Intent-based tokens that reference the primitive palette
+sidebar_label: Semantic Tokens
+sidebar_position: 4
+slug: /tokens/semantic-tokens
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import SemanticTokenTable from '@site/src/components/SemanticTokenTable';
+import tokens from '@latty-ds/tokens/tokens.json';
+
+export const semantic = tokens.semantic;
+
+export const groups = (() => {
+  const g = { text: [], bg: [], border: [], interactive: [] };
+  for (const entry of Object.entries(semantic).sort(([a], [b]) => a.localeCompare(b))) {
+    const [key] = entry;
+    if (key.startsWith('text-')) g.text.push(entry);
+    else if (key.startsWith('bg-')) g.bg.push(entry);
+    else if (key.startsWith('border-')) g.border.push(entry);
+    else g.interactive.push(entry);
+  }
+  return g;
+})();
+
+export const groupMeta = {
+  text: {
+    label: 'Text',
+    description: 'Foreground / text colors. Use these instead of raw color steps for typography.'
+  },
+  bg: { label: 'Background', description: 'Surface and fill colors for layouts, cards, and status regions.' },
+  border: { label: 'Border', description: 'Stroke colors for inputs, dividers, and focus rings.' },
+  interactive: {
+    label: 'Interactive',
+    description: 'Hover and active state backgrounds for buttons and clickable elements.'
+  }
+};
+
+# Semantic Tokens
+
+Semantic tokens express <strong>intent</strong> rather than raw values. They reference primitive tokens via <code>var()</code>, so theming only requires redefining this layer — not touching component code.
+
+Import in your stylesheet:
+
+<CodeBlock language="css">{`@import '@latty-ds/tokens/semantic.css';`}</CodeBlock>
+
+Or generate them at runtime with your own color palette:
+
+<CodeBlock language="js">{`import { configure } from '@latty-ds/tokens/configure';
+
+configure({ colors: { primary: '#6366f1' } });`}</CodeBlock>
+
+{Object.entries(groups).map(([groupKey, entries]) => {
+const meta = groupMeta[groupKey];
+const rows = entries.map(([tok, ref]) => ({tok, ref}));
+return (
+
+<section key={groupKey} className="token-section">
+<lt-text variant="h2">{meta.label}</lt-text>
+<lt-text variant="body">{meta.description}</lt-text>
+<SemanticTokenTable rows={rows} />
+</section>
+);
+})}

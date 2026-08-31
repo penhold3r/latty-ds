@@ -1,0 +1,54 @@
+---
+title: Skeleton
+description: A loading placeholder that mimics the shape of content.
+slug: /components/skeleton
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Skeleton
+
+A shimmering placeholder used while content is loading. Matches the shape of the real content to reduce layout shift
+and signal progress to the user.
+
+## Playground
+
+<ComponentPlayground tag="lt-skeleton" defaults={{ shape: 'rect', width: '100%', height: '80px' }} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`<!-- Default rect -->
+<lt-skeleton></lt-skeleton>
+<lt-skeleton height="200px"></lt-skeleton>
+
+<!-- Text line -->
+
+<lt-skeleton shape="text" width="60%"></lt-skeleton>
+
+<!-- Avatar circle -->
+
+<lt-skeleton shape="circle" width="48px" height="48px"></lt-skeleton>
+
+<!-- Disable shimmer -->
+
+<lt-skeleton animated="false"></lt-skeleton>`}
+    react={`import { Skeleton } from '@latty-ds/react';
+
+<Skeleton />
+<Skeleton height="200px" />
+<Skeleton shape="text" width="60%" />
+<Skeleton shape="circle" width="48px" height="48px" />`}
+    vue={`<template>
+  <lt-skeleton></lt-skeleton>
+  <lt-skeleton height="200px"></lt-skeleton>
+  <lt-skeleton shape="text" width="60%"></lt-skeleton>
+  <lt-skeleton shape="circle" width="48px" height="48px"></lt-skeleton>
+</template>`}
+  />
+
+## API
+
+<ApiTable tag="lt-skeleton" />

@@ -1,0 +1,88 @@
+---
+title: Combobox
+description: Searchable single-select dropdown
+slug: /components/combobox
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Combobox
+
+A searchable single-select field. The user types to filter options; selecting one sets the value. Keyboard
+navigation (Arrow, Enter, Escape) is fully supported. Use <code>lt-select</code> when no filtering is needed.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-combobox"
+  defaults={{ label: 'Country', placeholder: 'Search countries…' }}
+  seedData={{
+    options: [
+      { value: 'us', label: 'United States' },
+      { value: 'ca', label: 'Canada' },
+      { value: 'gb', label: 'United Kingdom' },
+      { value: 'de', label: 'Germany' },
+      { value: 'fr', label: 'France' },
+      { value: 'jp', label: 'Japan' },
+      { value: 'br', label: 'Brazil' }
+    ]
+  }}
+/>
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-combobox
+  id="country-picker"
+  label="Country"
+  placeholder="Search countries…"
+  required></lt-combobox>
+
+<script type="module">
+  const cb = document.getElementById('country-picker');
+  cb.options = [
+    { value: 'us', label: 'United States' },
+    { value: 'ca', label: 'Canada' },
+    { value: 'gb', label: 'United Kingdom' },
+    { value: 'de', label: 'Germany' },
+    { value: 'fr', label: 'France' }
+  ];
+  cb.addEventListener('change', (e) => {
+    console.log('selected', e.detail.value, e.detail.label);
+  });
+<\/script>
+    `}
+    react={`
+import { Combobox } from '@latty-ds/react';
+
+const countries = [
+  { value: 'us', label: 'United States' },
+  { value: 'ca', label: 'Canada' },
+  { value: 'gb', label: 'United Kingdom' }
+];
+
+<Combobox
+  label="Country"
+  placeholder="Search countries…"
+  options={countries}
+  onChange={(value, label) => console.log(value, label)}
+  required
+/>
+    `}
+    vue={`
+<template>
+  <lt-combobox
+    label="Country"
+    placeholder="Search countries…"
+    :options="countries"
+    @change="(e) => selected = e.detail.value"
+  />
+</template>
+    `}
+  />
+
+  ## API
+  <ApiTable tag="lt-combobox" />

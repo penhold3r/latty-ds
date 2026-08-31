@@ -1,0 +1,68 @@
+---
+title: Installation
+description: Add Latty to your project
+sidebar_label: Installation
+sidebar_position: 2
+slug: /getting-started/installation
+---
+
+import CodeBlock from '@theme/CodeBlock';
+
+# Installation
+
+## Install packages
+
+<CodeBlock language="bash" title="pnpm">{`pnpm add @latty-ds/tokens @latty-ds/web`}</CodeBlock>
+<CodeBlock language="bash" title="npm">{`npm install @latty-ds/tokens @latty-ds/web`}</CodeBlock>
+<CodeBlock language="bash" title="yarn">{`yarn add @latty-ds/tokens @latty-ds/web`}</CodeBlock>
+
+## Load the tokens
+
+Both CSS files must be loaded before any components render — import them once at your app's entry point.
+
+<CodeBlock language="js" title="JS / bundler">{`import '@latty-ds/tokens/tokens.css';
+import '@latty-ds/tokens/semantic.css';`}</CodeBlock>
+
+<CodeBlock language="css" title="CSS @import">{`@import '@latty-ds/tokens/tokens.css';
+@import '@latty-ds/tokens/semantic.css';`}</CodeBlock>
+
+<CodeBlock
+  language="html"
+  title="Plain HTML"
+>{`<link rel="stylesheet" href="node_modules/@latty-ds/tokens/dist/tokens.css" />
+<link rel="stylesheet" href="node_modules/@latty-ds/tokens/dist/semantic.css" />`}</CodeBlock>
+
+## Register components
+
+<CodeBlock language="js">{`// All components at once
+import '@latty-ds/web';
+
+// Or cherry-pick to keep bundles small
+import '@latty-ds/web/button';
+import '@latty-ds/web/textfield';
+import '@latty-ds/web/dialog';`}</CodeBlock>
+
+Components are self-registering custom elements. Once imported, use them anywhere in your HTML.
+
+## React wrappers (optional)
+
+For typed props and idiomatic React event names, install the React wrapper package:
+
+<CodeBlock language="bash">{`pnpm add @latty-ds/react`}</CodeBlock>
+
+Vue and Svelte users don't need a wrapper — <code>lt-\*</code> elements work natively in both. See the <a href="/getting-started/usage">Usage guide</a> for framework-specific setup.
+
+## TypeScript
+
+All packages ship with <code>.d.ts</code> files — no extra setup needed.
+
+## Next steps
+
+<lt-list>
+  <lt-list-item>
+    <a href="/getting-started/usage">Usage</a> — start using components
+  </lt-list-item>
+  <lt-list-item>
+    <a href="/getting-started/theming">Theming</a> — customize the look and feel
+  </lt-list-item>
+</lt-list>

@@ -1,0 +1,38 @@
+---
+title: Color Input
+description: A read-only textfield that opens the native color picker and displays the selected hex value.
+slug: /components/color-input
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Color Input
+
+A read-only textfield that opens the browser's native color picker on click. Displays the selected hex value
+alongside a live color swatch preview.
+
+## Playground
+
+<ComponentPlayground tag="lt-color-input" defaults={{ label: 'Brand color', value: '#7c3aed' }} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`<lt-color-input label="Brand color" value="#7c3aed"></lt-color-input>`}
+    react={`
+import { ColorInput } from '@latty-ds/react';
+
+<ColorInput label="Brand color" value="#7c3aed" onChange={(e) => console.log(e.detail.value)} />
+    `}
+    vue={`
+<template>
+  <lt-color-input label="Brand color" value="#7c3aed" @change="onColorChange"></lt-color-input>
+</template>
+    `}
+  />
+
+## API
+
+<ApiTable tag="lt-color-input" />

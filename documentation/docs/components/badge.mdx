@@ -1,0 +1,63 @@
+---
+title: Badge
+description: Compact status labels for categories, counts, and states
+slug: /components/badge
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+import VariantPresets from '@site/src/components/VariantPresets';
+
+# Badge
+
+Compact pill-shaped labels for statuses, categories, and counts. Unlike chips, badges are non-interactive — use them
+for display only. When no content is provided the badge collapses to a circle indicator.
+
+## Playground
+
+<VariantPresets tag="lt-badge" slotContent="" prop="variant" />
+<ComponentPlayground tag="lt-badge" defaults={{ content: 'Badge' }} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-badge variant="success" content="Active" />
+<lt-badge variant="error" appearance="solid" content="Failed" />
+<lt-badge variant="warning" appearance="outlined" content="Pending" />
+<lt-badge variant="primary" content="New" dot />
+
+<lt-badge variant="success" />
+<lt-badge variant="error" />
+<lt-badge variant="warning" />
+		`}
+    react={`
+import { Badge } from '@latty-ds/react';
+
+<Badge variant="success" content="Active" />
+<Badge variant="error" appearance="solid" content="Failed" />
+<Badge variant="warning" appearance="outlined" content="Pending" />
+<Badge variant="primary" content="New" dot />
+
+<Badge variant="success" />
+<Badge variant="error" />
+<Badge variant="warning" />
+		`}
+    vue={`
+<template>
+  <lt-badge variant="success" content="Active" />
+  <lt-badge variant="error" appearance="solid" content="Failed" />
+  <lt-badge variant="warning" appearance="outlined" content="Pending" />
+  <lt-badge variant="primary" content="New" dot />
+
+  <lt-badge variant="success" />
+  <lt-badge variant="error" />
+  <lt-badge variant="warning" />
+</template>
+		`}
+  />
+
+## API
+
+<ApiTable tag="lt-badge" />

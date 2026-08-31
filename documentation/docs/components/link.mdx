@@ -1,0 +1,41 @@
+---
+title: Link
+description: A styled anchor element with primary color and optional external-link behaviour.
+slug: /components/link
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Link
+
+A styled anchor element. Uses the primary color by default with an underline on hover. Set <code>external</code> to open
+in a new tab and display a trailing external-link icon.
+
+## Playground
+
+<ComponentPlayground tag="lt-link" content="Visit site" defaults={{ href: 'https://example.com' }} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`<lt-link href="https://example.com">Visit site</lt-link>
+<lt-link href="https://example.com" external>Open in new tab</lt-link>`}
+    react={`
+import { Link } from '@latty-ds/react';
+
+<Link href="https://example.com">Visit site</Link>
+<Link href="https://example.com" external>Open in new tab</Link>
+    `}
+    vue={`
+<template>
+  <lt-link href="https://example.com">Visit site</lt-link>
+  <lt-link href="https://example.com" external>Open in new tab</lt-link>
+</template>
+    `}
+  />
+
+## API
+
+<ApiTable tag="lt-link" />

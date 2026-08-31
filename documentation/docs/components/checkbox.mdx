@@ -1,0 +1,70 @@
+---
+title: Checkbox
+description: Checkbox input component
+slug: /components/checkbox
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Checkbox
+
+A checkbox input with support for checked, indeterminate, and disabled states across multiple variants.
+
+## Playground
+
+<ComponentPlayground tag="lt-checkbox" defaults={{ label: 'Accept terms' }} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-checkbox label="Accept terms and conditions"></lt-checkbox>
+<lt-checkbox label="Enable notifications" variant="success" checked></lt-checkbox>
+<lt-checkbox label="Unavailable option" disabled></lt-checkbox>
+
+<lt-checkbox id="terms" label="Accept terms and conditions"></lt-checkbox>
+
+<script>
+  document.getElementById('terms').addEventListener('change', (e) => {
+    console.log('checked:', e.detail.checked);
+  });
+</script>
+
+    `}
+    react={`
+
+import { Checkbox } from '@latty-ds/react';
+
+<Checkbox label="Accept terms and conditions" />
+<Checkbox label="Enable notifications" variant="success" checked />
+<Checkbox label="Unavailable option" disabled />
+
+<Checkbox
+  label="Accept terms and conditions"
+  onChange={(e) => console.log('checked:', e.detail.checked)}
+/>
+    `}
+    vue={`
+<script setup>
+import { ref } from 'vue'
+const accepted = ref(false)
+</script>
+
+<template>
+  <lt-checkbox label="Accept terms and conditions"></lt-checkbox>
+  <lt-checkbox label="Enable notifications" variant="success" checked></lt-checkbox>
+  <lt-checkbox label="Unavailable option" disabled></lt-checkbox>
+
+<lt-checkbox
+label="Accept terms and conditions"
+@change="(e) => accepted = e.detail.checked"></lt-checkbox>
+
+</template>
+    `}
+  />
+
+## API
+
+<ApiTable tag="lt-checkbox" />

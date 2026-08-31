@@ -1,0 +1,74 @@
+---
+title: Text
+description: Renders text with a predefined typographic style. Covers display sizes, headings, body copy, captions, and overlines.
+slug: /components/text
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+import ApiTable from '@site/src/components/ApiTable';
+import TypeScale from '@site/src/components/TypeScale';
+
+# Text
+
+Renders text with a predefined typographic style. The rendered HTML tag matches the variant by default and can be overridden with the <code>as</code> attribute when the visual style should not affect the document outline.
+
+## Playground
+
+<ComponentPlayground tag="lt-text" content="The quick brown fox jumps over the lazy dog" />
+
+## Usage
+
+<FrameworkTabs
+  html={`<!-- Display -->
+<lt-text variant="display-2xl">Display 2XL</lt-text>
+<lt-text variant="display-xl">Display XL</lt-text>
+<lt-text variant="display-lg">Display LG</lt-text>
+
+<!-- Headings -->
+
+<lt-text variant="h1">Heading 1</lt-text>
+<lt-text variant="h2">Heading 2</lt-text>
+<lt-text variant="h3">Heading 3</lt-text>
+
+<!-- Body -->
+
+<lt-text variant="lead">Lead paragraph copy.</lt-text>
+<lt-text variant="body">Regular body text.</lt-text>
+<lt-text variant="body-sm">Small body text.</lt-text>
+
+<!-- Inline -->
+
+<lt-text variant="caption">Caption text</lt-text>
+<lt-text variant="overline">Overline label</lt-text>
+
+<!-- Override tag without changing style -->
+
+<lt-text variant="h1" as="h2">Visually h1, semantically h2</lt-text>`}
+  react={`
+import { Text } from '@latty-ds/react';
+
+<Text variant="h1">Heading 1</Text>
+<Text variant="lead">Lead paragraph copy.</Text>
+<Text variant="body">Regular body text.</Text>
+<Text variant="overline">Category</Text>
+<Text variant="h1" as="h2">Visually h1, semantically h2</Text>
+  `}
+  vue={`
+<template>
+  <lt-text variant="h1">Heading 1</lt-text>
+  <lt-text variant="lead">Lead paragraph copy.</lt-text>
+  <lt-text variant="body">Regular body text.</lt-text>
+  <lt-text variant="overline">Category</lt-text>
+  <lt-text variant="h1" as="h2">Visually h1, semantically h2</lt-text>
+</template>
+  `}
+/>
+
+## Type scale
+
+<TypeScale />
+
+## API
+
+<ApiTable tag="lt-text" />

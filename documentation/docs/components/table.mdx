@@ -1,0 +1,99 @@
+---
+title: Table
+description: Data table with sorting and responsive design
+slug: /components/table
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Table
+
+A data table with sortable columns, density options, and striped rows. Columns and data are set via JavaScript
+properties.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-table"
+  previewHeight="auto"
+  stretch={true}
+  defaults={{ hoverable: true }}
+  seedData={{
+    columns: [
+      { key: 'name', label: 'Name', sortable: true },
+      { key: 'email', label: 'Email' },
+      { key: 'role', label: 'Role', sortable: true },
+      { key: 'status', label: 'Status' }
+    ],
+    data: [
+      { name: 'Alice Martin', email: 'alice@example.com', role: 'Engineer', status: 'Active' },
+      { name: 'Bob Chen', email: 'bob@example.com', role: 'Designer', status: 'Active' },
+      { name: 'Carol Williams', email: 'carol@example.com', role: 'Manager', status: 'Away' },
+      { name: 'David Kim', email: 'david@example.com', role: 'Engineer', status: 'Active' }
+    ]
+  }}
+/>
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-table id="my-table" hoverable striped></lt-table>
+
+<script type="module">
+  const table = document.getElementById('my-table');
+  table.columns = [
+    { key: 'name',   label: 'Name',   sortable: true },
+    { key: 'role',   label: 'Role' },
+    { key: 'status', label: 'Status' },
+  ];
+  table.data = [
+    { name: 'Alice',   role: 'Engineer', status: 'Active' },
+    { name: 'Bob',     role: 'Designer', status: 'Active' },
+    { name: 'Charlie', role: 'Manager',  status: 'Away' },
+  ];
+<\/script>
+    `}
+    react={`
+import { Table } from '@latty-ds/react';
+
+const columns = [
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'role', label: 'Role' },
+  { key: 'status', label: 'Status' },
+];
+
+const data = [
+  { name: 'Alice', role: 'Engineer', status: 'Active' },
+  { name: 'Bob', role: 'Designer', status: 'Active' },
+  { name: 'Charlie', role: 'Manager', status: 'Away' },
+];
+
+<Table columns={columns} data={data} hoverable striped />
+    `}
+    vue={`
+<script setup lang="ts">
+const columns = [
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'role', label: 'Role' },
+  { key: 'status', label: 'Status' },
+]
+
+const data = [
+  { name: 'Alice', role: 'Engineer', status: 'Active' },
+  { name: 'Bob', role: 'Designer', status: 'Active' },
+  { name: 'Charlie', role: 'Manager', status: 'Away' },
+]
+</script>
+
+<template>
+  <lt-table :columns="columns" :data="data" hoverable striped></lt-table>
+</template>
+    `}
+  />
+
+## API
+
+<ApiTable tag="lt-table" />

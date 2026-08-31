@@ -1,0 +1,101 @@
+---
+title: SidePanel
+description: A slide-in panel anchored to any edge of the viewport, with a backdrop overlay.
+slug: /components/sidepanel
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# SidePanel
+
+A slide-in panel that overlays the page from any edge. Use it for navigation drawers, filter panels, detail views,
+or any contextual content that shouldn't interrupt the main flow.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-sidepanel"
+  previewTrigger="Open panel"
+  defaults={{ label: 'Panel title', anchor: 'left', size: '320px' }}
+  content={`<div style="padding: var(--lt-spacing-5);">
+  <lt-text variant="body-sm" style="color: var(--lt-color-neutral-600);">
+    Panel content goes here — navigation links, filters, a detail view, or a form.
+  </lt-text>
+</div>`}
+/>
+
+## Usage
+
+  <FrameworkTabs
+    html={`<lt-button onclick="document.getElementById('panel').open = true">Open</lt-button>
+
+<lt-sidepanel id="panel" label="Settings" anchor="left" size="320px">
+  <div style="padding: var(--lt-spacing-5);">
+    <p>Panel content goes here.</p>
+  </div>
+</lt-sidepanel>
+
+<script>
+  document.getElementById('panel').addEventListener('close', () => {
+    document.getElementById('panel').open = false;
+  });
+</script>
+
+<!-- Hide the built-in close button -->
+
+<lt-sidepanel label="No close btn" no-close-button>...</lt-sidepanel>`}
+    react={`import { useState } from 'react';
+import { SidePanel, Button } from '@latty-ds/react';
+
+export default function Example() {
+  const [open, setOpen] = useState(false);
+
+return (
+
+<>
+<Button variant="primary" onClick={() => setOpen(true)}>Open panel</Button>
+
+      <SidePanel
+        open={open}
+        label="Settings"
+        anchor="left"
+        size="320px"
+        onClose={() => setOpen(false)}
+      >
+        <div style={{ padding: 'var(--lt-spacing-5)' }}>
+          <p>Panel content goes here.</p>
+        </div>
+      </SidePanel>
+    </>
+
+);
+}`}
+    vue={`<script setup>
+import { ref } from 'vue'
+const open = ref(false)
+
+</script>
+
+<template>
+  <lt-button variant="primary" @click="open = true">Open panel</lt-button>
+
+<lt-sidepanel
+:open="open"
+label="Settings"
+anchor="left"
+size="320px"
+@close="open = false">
+
+<div style="padding: var(--lt-spacing-5);">
+<p>Panel content goes here.</p>
+</div>
+</lt-sidepanel>
+
+</template>`}
+  />
+
+## API
+
+<ApiTable tag="lt-sidepanel" />

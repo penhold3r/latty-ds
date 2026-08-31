@@ -1,0 +1,10 @@
+.framework-tabs {
+  margin: var(--lt-spacing-4) 0;
+}
+
+/* This file is a plain global stylesheet here (not a CSS module, unlike the
+   Astro site's scoped <style> it was ported from), so the original's
+   `:global()` escape-hatch pseudo-class doesn't apply/isn't needed. */
+.framework-tabs [slot='panel'] .snippet {
+  margin: 0;
+}

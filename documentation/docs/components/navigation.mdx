@@ -1,0 +1,142 @@
+---
+title: Navigation
+description: Horizontal and vertical nav with nested collapsible items
+slug: /components/navigation
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Navigation
+
+The <code>&lt;lt-nav&gt;</code> component renders a list of links either horizontally or vertically. Nest
+
+<code>&lt;lt-nav-item&gt;</code> elements to create collapsible groups — in vertical mode they expand inline; in
+horizontal mode they drop down as a panel.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-nav"
+  content={`<lt-nav-item href="#" label="Dashboard" icon-start="home" active></lt-nav-item>
+<lt-nav-item label="Settings" icon-start="settings">
+  <lt-nav-item href="#" label="Profile"></lt-nav-item>
+  <lt-nav-item href="#" label="Security"></lt-nav-item>
+</lt-nav-item>
+<lt-nav-item href="#" label="Help" icon-start="question-circle"></lt-nav-item>`}
+  subTags={['lt-nav-item']}
+/>
+
+## Usage
+
+  <FrameworkTabs
+    html={`import '@latty-ds/web';
+
+<!-- Vertical navigation (default) -->
+
+<lt-nav>
+  <lt-nav-item href="/dashboard" label="Dashboard" icon-start="home" active></lt-nav-item>
+  <lt-nav-item label="Settings" icon-start="settings">
+    <lt-nav-item href="/settings/profile" label="Profile"></lt-nav-item>
+    <lt-nav-item href="/settings/security" label="Security"></lt-nav-item>
+  </lt-nav-item>
+  <lt-nav-item href="/help" label="Help" icon-start="question-circle"></lt-nav-item>
+</lt-nav>
+
+<!-- Horizontal navigation with dropdown groups -->
+
+<lt-nav orientation="horizontal">
+  <lt-nav-item href="/" label="Home"></lt-nav-item>
+  <lt-nav-item label="Products">
+    <lt-nav-item href="/products/a" label="Product A"></lt-nav-item>
+    <lt-nav-item href="/products/b" label="Product B"></lt-nav-item>
+  </lt-nav-item>
+  <lt-nav-item href="/about" label="About"></lt-nav-item>
+</lt-nav>`}
+    react={`import { Nav, NavItem } from '@latty-ds/react';
+
+{/* Vertical navigation (default) */}
+
+<Nav>
+  <NavItem href="/dashboard" label="Dashboard" iconStart="home" active />
+  <NavItem label="Settings" iconStart="settings">
+    <NavItem href="/settings/profile" label="Profile" />
+    <NavItem href="/settings/security" label="Security" />
+  </NavItem>
+  <NavItem href="/help" label="Help" iconStart="question-circle" />
+</Nav>
+
+{/* Horizontal navigation with dropdown groups */}
+
+<Nav orientation="horizontal">
+  <NavItem href="/" label="Home" />
+  <NavItem label="Products">
+    <NavItem href="/products/a" label="Product A" />
+    <NavItem href="/products/b" label="Product B" />
+  </NavItem>
+  <NavItem href="/about" label="About" />
+</Nav>`}
+  />
+
+### SPA router integration
+
+  <code>nav-item-click</code> is cancelable: call <code>preventDefault()</code> to stop the anchor's full-page navigation
+    and hand the URL to your router. Drive the highlighted item with the <code>active</code> property — it also sets <code>aria-current="page"</code> on the internal trigger.
+  <FrameworkTabs
+    html={`<lt-nav id="app-nav">
+  <lt-nav-item href="/dashboard" label="Dashboard" icon-start="home"></lt-nav-item>
+  <lt-nav-item href="/reviews" label="Reviews" icon-start="star"></lt-nav-item>
+</lt-nav>
+<script type="module">
+  import '@latty-ds/web';
+  const nav = document.getElementById('app-nav');
+  nav.addEventListener('nav-item-click', (e) => {
+    e.preventDefault(); // stop the full-page navigation
+    router.navigate(e.detail.href); // your SPA router
+    nav.querySelectorAll('lt-nav-item').forEach((item) => {
+      item.active = item.href === e.detail.href;
+    });
+  });
+</script>`}
+    react={`import { Nav, NavItem } from '@latty-ds/react';
+import { useLocation, useNavigate } from 'react-router';
+
+function AppNav() {
+const navigate = useNavigate();
+const { pathname } = useLocation();
+
+function handleNavClick(e) {
+e.preventDefault(); // stop the full-page navigation
+navigate(e.detail.href);
+}
+
+return (
+
+<Nav>
+<NavItem
+href="/dashboard"
+label="Dashboard"
+iconStart="home"
+active={pathname === '/dashboard'}
+onNavItemClick={handleNavClick}
+/>
+<NavItem
+href="/reviews"
+label="Reviews"
+iconStart="star"
+active={pathname === '/reviews'}
+onNavItemClick={handleNavClick}
+/>
+</Nav>
+);
+}`}
+/>
+
+## API — lt-nav
+
+<ApiTable tag="lt-nav" />
+
+## API — lt-nav-item
+
+<ApiTable tag="lt-nav-item" />

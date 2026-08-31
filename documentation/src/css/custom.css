@@ -1,0 +1,137 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+@import './font-face.css';
+@import '@latty-ds/tokens/tokens.css';
+@import '@latty-ds/tokens/semantic.css';
+
+/* Infima's own color variables, mapped to Latty's actual primary palette
+   (rather than the scaffold's default green) so Docusaurus's native chrome —
+   links, active nav state, hero buttons — matches the design system it's
+   documenting.
+
+   `--ifm-color-primary` is what Infima uses for *text* (nav links, active
+   sidebar items) — found via `pnpm a11y` (documentation/a11y/a11y.spec.ts)
+   that mapping it to the raw `--lt-color-primary-500` swatch (#ff8200)
+   fails WCAG AA badly (2.48:1 against white, needs 4.5:1): that swatch is
+   designed for backgrounds/large fills, not text. Latty's own semantic
+   layer already solves exactly this — `--lt-text-primary` resolves to the
+   contrast-checked step per theme (primary-700 in light, primary-300 in
+   dark, see packages/tokens/dist/semantic.css) — so referencing it directly
+   makes this theme-aware for free, with no separate `[data-theme='dark']`
+   override block needed here. */
+:root {
+  --ifm-color-primary: var(--lt-text-primary);
+  --ifm-color-primary-dark: var(--lt-color-primary-600);
+  --ifm-color-primary-darker: var(--lt-color-primary-700);
+  --ifm-color-primary-darkest: var(--lt-color-primary-800);
+  --ifm-color-primary-light: var(--lt-color-primary-400);
+  --ifm-color-primary-lighter: var(--lt-color-primary-300);
+  --ifm-color-primary-lightest: var(--lt-color-primary-100);
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Native markdown headings/paragraphs styled to match `lt-text`'s typography
+   tokens exactly (same font-family/size/weight/line-height as
+   packages/web/src/components/text/text.styles.ts), instead of rewriting
+   them to the `<lt-text>` custom element. Deliberately NOT doing the tag
+   swap here: Docusaurus's own heading-id/table-of-contents/anchor-link
+   system requires real `<h1>`-`<h6>` elements — the Astro site never had to
+   navigate this since it doesn't have a per-page TOC feature at all. See
+   the "MDX authoring layer" note in _agent-plans/DOCUSAURUS-MIGRATION-PLAN.md. */
+.markdown h1 {
+  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
+  font-size: clamp(1.75rem, 2.5vw + 0.75rem, 2.5rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.markdown h2 {
+  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
+  font-size: clamp(1.5rem, 2vw + 0.5rem, 2rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.markdown h3 {
+  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
+  font-size: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.markdown h4 {
+  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.markdown h5 {
+  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.markdown h6 {
+  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.markdown p {
+  font-family: var(--lt-typography-fontFamilyPrimary);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Ported from the Astro site's `.prose a { text-decoration: underline }` —
+   found missing via `pnpm a11y`: axe's `link-in-text-block` rule flagged
+   inline prose links (e.g. the "Next steps" lists) for relying on color
+   alone to distinguish them from surrounding text (WCAG 1.4.1). Infima's
+   own default doesn't underline inline links; this restores the Astro
+   site's original, correct behavior rather than something new. */
+.markdown a {
+  text-decoration: underline;
+}
+
+/* Ported from docs/src/styles/global.css (the Astro site) — real design
+   decisions, not generic CSS resets (which Infima already provides), so
+   these two survive independent of the heading-tag-swap reversal above:
+   they apply to raw `<lt-text>` usage inside custom components (recipes,
+   ColorPalette, SemanticTokenTable, ThemePlayground, etc.), not to
+   markdown-authored headings. */
+lt-text[variant='display-2xl'],
+lt-text[variant='display-xl'],
+lt-text[variant='display-lg'],
+lt-text[variant='h1'],
+lt-text[variant='h2'],
+lt-text[variant='h3'],
+lt-text[variant='h4'],
+lt-text[variant='h5'],
+lt-text[variant='h6'] {
+  color: var(--lt-text-secondary);
+}
+
+lt-text[variant='lead'] {
+  color: var(--lt-text-subtle);
+}
+
+/* Muted secondary text (captions, role subtitles, stat labels). Use instead of
+   inline color overrides so the subtle tone has a single source of truth. */
+.text-muted {
+  color: var(--lt-text-subtle);
+}

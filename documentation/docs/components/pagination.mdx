@@ -1,0 +1,59 @@
+---
+title: Pagination
+description: Page navigation for paged data sets
+slug: /components/pagination
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Pagination
+
+Page navigation control for paged data sets. Renders first, previous, numbered pages, next, and last buttons. Large
+page counts collapse to an ellipsis window around the current page.
+
+## Playground
+
+<ComponentPlayground tag="lt-pagination" defaults={{ page: 5, 'total-pages': 20 }} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-pagination page="1" total-pages="10"></lt-pagination>
+
+<!-- Small size -->
+
+<lt-pagination size="sm" page="3" total-pages="20"></lt-pagination>
+
+<!-- Disabled -->
+
+<lt-pagination page="5" total-pages="10" disabled></lt-pagination>
+
+<script type="module">
+  document.querySelector('lt-pagination').addEventListener('change', (e) => {
+    console.log('navigated to page', e.detail.page);
+  });
+<\/script>
+    `}
+    react={`
+import { Pagination } from '@latty-ds/react';
+
+<Pagination page={1} totalPages={10} onChange={(page) => console.log('page', page)} />
+
+<Pagination size="sm" page={3} totalPages={20} onChange={(page) => setPage(page)} />
+    `}
+    vue={`
+<template>
+  <lt-pagination
+    :page="currentPage"
+    :total-pages="totalPages"
+    @change="(e) => currentPage = e.detail.page"
+  />
+</template>
+    `}
+  />
+
+  ## API
+  <ApiTable tag="lt-pagination" />

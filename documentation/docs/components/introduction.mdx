@@ -1,0 +1,47 @@
+---
+title: Components overview
+description: Philosophy, prop naming conventions, and a directory of every component
+sidebar_label: Introduction
+sidebar_position: 0
+slug: /components/introduction
+---
+
+import PropConventionsTable from '@site/src/components/PropConventionsTable';
+import ComponentGrid from '@site/src/components/ComponentGrid';
+
+# Components
+
+Latty components are Lit-based Web Components that consume <code>--lt-\*</code> design tokens. They work natively in HTML, Vue, and Svelte, and ship with thin React wrappers in <code>@latty-ds/react</code>. Every component follows the same prop naming rules so you never have to guess — if you know one component you know them all.
+
+## Prop naming conventions
+
+Each prop name has exactly one meaning across the entire system. The table below is the canonical reference.
+
+<PropConventionsTable />
+
+## Boolean prop conventions
+
+A boolean attribute is <code>true</code> when present and <code>false</code> when absent — consistent with how HTML boolean attributes work (<code>disabled</code>, <code>required</code>, etc.).
+
+<lt-list>
+  <lt-list-item>
+    <strong>Positive adjective or noun</strong> — use when the feature is off by default and the attribute enables it:
+    <code>disabled</code>, <code>loading</code>, <code>closable</code>, <code>striped</code>, <code>bordered</code>,
+    <code>tooltip</code>.
+  </lt-list-item>
+  <lt-list-item>
+    <strong>
+      <code>no-</code> prefix
+    </strong>{' '}
+    — use when the feature is <em>on</em> by default and the attribute suppresses it: <code>no-close-button</code>,{' '}
+    <code>no-marker</code>.
+  </lt-list-item>
+  <lt-list-item>
+    <strong>Never verb phrases</strong> — <code>hideCloseButton</code>, <code>showTooltip</code>, <code>withIcon</code>{' '}
+    are banned. They force the reader to reason about polarity instead of just checking presence.
+  </lt-list-item>
+</lt-list>
+
+## All components
+
+<ComponentGrid />

@@ -1,0 +1,49 @@
+---
+title: Avatar
+description: User avatar with image, initials, and icon fallbacks
+slug: /components/avatar
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Avatar
+
+Displays a user avatar. Falls back to initials derived from <code>name</code>, then to a generic person icon if
+neither is available.
+
+## Playground
+
+<ComponentPlayground tag="lt-avatar" defaults={{ name: 'Jane Doe' }} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-avatar src="https://i.pravatar.cc/150" name="Jane Doe"></lt-avatar>
+<lt-avatar name="Jane Doe" size="lg"></lt-avatar>
+<lt-avatar name="Jane Doe" shape="square"></lt-avatar>
+<lt-avatar size="md"></lt-avatar>
+    `}
+    react={`
+import { Avatar } from '@latty-ds/react';
+
+<Avatar src="https://i.pravatar.cc/150" name="Jane Doe" />
+<Avatar name="Jane Doe" size="lg" />
+<Avatar name="Jane Doe" shape="square" />
+<Avatar size="md" />
+    `}
+    vue={`
+<template>
+  <lt-avatar src="https://i.pravatar.cc/150" name="Jane Doe"></lt-avatar>
+  <lt-avatar name="Jane Doe" size="lg"></lt-avatar>
+  <lt-avatar name="Jane Doe" shape="square"></lt-avatar>
+  <lt-avatar size="md"></lt-avatar>
+</template>
+    `}
+  />
+
+## API
+
+<ApiTable tag="lt-avatar" />

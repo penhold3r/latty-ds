@@ -1,0 +1,58 @@
+---
+title: Surface
+description: Container with elevation and surface styling
+slug: /components/surface
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Surface
+
+A container that applies elevation shadows and surface background variants. Use it to build cards, panels, and
+layered layouts.
+
+## Playground
+
+<ComponentPlayground tag="lt-surface" content={`Surface content goes here`} previewHeight="120px" />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-surface elevation="2">
+  <p>Card content</p>
+</lt-surface>
+
+<lt-surface elevation="3" appearance="outlined">
+  <p>Outlined panel</p>
+</lt-surface>
+    `}
+    react={`
+import { Surface } from '@latty-ds/react';
+
+<Surface elevation="2">
+  <p>Card content</p>
+</Surface>
+
+<Surface elevation="3" appearance="outlined">
+  <p>Outlined panel</p>
+</Surface>
+    `}
+    vue={`
+<template>
+  <lt-surface elevation="2">
+    <p>Card content</p>
+  </lt-surface>
+
+  <lt-surface elevation="3" appearance="outlined">
+    <p>Outlined panel</p>
+  </lt-surface>
+</template>
+    `}
+  />
+
+## API
+
+<ApiTable tag="lt-surface" />

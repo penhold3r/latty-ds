@@ -1,0 +1,249 @@
+---
+title: Theming
+description: Customize Latty's look and feel with design tokens
+sidebar_label: Theming
+sidebar_position: 4
+slug: /getting-started/theming
+---
+
+import CodeBlock from '@theme/CodeBlock';
+
+# Theming
+
+Latty's theme engine generates a full color palette from a single base color, giving you consistent light and dark modes without hand-crafting every shade.
+
+## Changing the brand color
+
+Use <code>configure()</code> from <code>@latty-ds/tokens/configure</code> to apply a custom theme. Call it once at your app's entry point, before any components render:
+
+<CodeBlock language="ts">{`import { configure } from '@latty-ds/tokens/configure';
+
+configure({
+colors: { primary: '#6366f1', secondary: '#f59e0b' },
+font: { family: 'Inter, sans-serif' },
+border: { radius: '0.375rem', width: 'medium' }
+});`}</CodeBlock>
+
+<code>configure()</code> generates the full token palette from your base colors and injects them as a
+<code>&lt;style id="lt-tokens"&gt;</code> element into <code>&lt;head&gt;</code>. Calling it again replaces the previous
+values. All options are optional — omit any key to keep the default.
+
+### Border width
+
+<code>border.width</code> sets the outline weight of control chrome across the system — outlined buttons, inputs, chips,
+badges, cards, and popover panels. It accepts three named presets — <code>'thin'</code> (1px, default),
+<code>'medium'</code> (2px), <code>'thick'</code> (4px) — or any CSS length (e.g. <code>'1.5px'</code>). Separators
+(dividers, table rules), focus outlines, and checkbox/radio borders keep their fixed widths by design. Chips and badges
+cap at <code>'medium'</code> even when the theme requests <code>'thick'</code> — at their small pill heights, a 4px
+border reads as compressed rather than bold.
+
+<CodeBlock language="ts">{`configure({ border: { width: 'thick' } }); // bold, brutalist outlines
+configure({ border: { width: '1.5px' } }); // raw CSS lengths pass through`}</CodeBlock>
+
+### Border contrast
+
+<code>border.contrast</code> shifts which neutral palette step <code>--lt-border-default</code>/
+<code>--lt-border-strong</code>/<code>--lt-border-subtle</code> resolve to, for a bolder, higher-contrast structural
+border look without touching theme-switching machinery. Accepts <code>'default'</code> (the default) or
+<code>'high'</code> — <code>'high'</code> moves each token toward a darker step in light mode and a lighter step in dark
+mode (both directions increase contrast against their respective background):
+
+<CodeBlock language="ts">{`configure({ border: { contrast: 'high' } });`}</CodeBlock>
+
+### Loading a font from a CDN
+
+<code>font.family</code> also accepts a Google Fonts CSS2 stylesheet URL instead of a plain CSS value —
+<code>configure()</code> <code>@import</code>s it and derives the family name from the URL's <code>family=</code> query
+param, so there's no separate <code>&lt;link&gt;</code> tag to add:
+
+<CodeBlock language="ts">{`configure({
+  font: {
+    family: 'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap'
+  }
+});`}</CodeBlock>
+
+This works with <code>createStyleSheet()</code> too — the <code>@import</code> is written as the first line of the returned string, so it stays valid CSS once dropped into a <code>&lt;style&gt;</code> tag. Auto-detection only covers <code>fonts.googleapis.com</code> URLs; for other font CDNs, load the stylesheet yourself and pass the resulting family name as a plain <code>font.family</code> value instead.
+
+A bare URL string always falls back to the generic <code>sans-serif</code> family if the font itself fails to load. For a font that isn't sans-serif (a serif display font, a monospace font, etc.), pass a <code>&#123; url, fallback &#125;</code> object instead so the safety-net fallback matches:
+
+<CodeBlock language="ts">{`configure({
+  font: {
+    family: {
+      url: 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&display=swap',
+      fallback: 'serif'
+    }
+  }
+});`}</CodeBlock>
+
+<code>fallback</code> accepts any standard CSS generic family: <code>'sans-serif'</code> (default), <code>'serif'</code>
+, <code>'monospace'</code>, <code>'cursive'</code>, <code>'fantasy'</code>, <code>'system-ui'</code>.
+
+### Loading multiple fonts
+
+<code>font.family</code> also accepts an array of entries — each a plain value, a URL string, or a
+<code>&#123; url, fallback &#125;</code> object — resolved independently and mapped to its own token in order, rather
+than being combined into one CSS fallback stack: <code>--lt-typography-fontFamilyPrimary</code>,
+<code>--lt-typography-fontFamilySecondary</code>, <code>--lt-typography-fontFamilyTertiary</code>, and so on. This lets
+you use a heading font and a body font (or any other combination) independently in your own CSS:
+
+<CodeBlock language="ts">{`configure({
+  font: {
+    family: [
+      'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900&display=swap',
+      'Georgia, serif'
+    ]
+  }
+});`}</CodeBlock>
+
+<CodeBlock language="css">{`h1, h2, h3 {
+  font-family: var(--lt-typography-fontFamilySecondary);
+}`}</CodeBlock>
+
+### Two-typeface identity (dedicated heading font)
+
+For the common case of "one font for headings, one for body," <code>font.heading</code> is more direct than routing a <code>family</code> array entry yourself — <code>lt-text</code>'s heading/display variants (<code>h1</code>–<code>h6</code>, <code>display-\*</code>) read <code>--lt-typography-fontFamilyHeading</code> automatically, falling back to <code>fontFamilyPrimary</code> if unset:
+
+<CodeBlock language="ts">{`configure({
+  font: {
+    family: 'Inter, sans-serif',
+    heading: { url: 'https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap', fallback: 'serif' }
+  }
+});`}</CodeBlock>
+
+No manual CSS selectors needed — every heading automatically picks up the heading font, body text stays on <code>family</code>.
+
+### SSR
+
+For server-side rendering use <code>createStyleSheet()</code>, which returns the CSS string instead of touching the DOM:
+
+<CodeBlock language="ts">{`import { createStyleSheet } from '@latty-ds/tokens/configure';
+
+const css = createStyleSheet({ colors: { primary: '#6366f1' } });
+// inject \`css\` into a <style> tag in your server-rendered HTML`}</CodeBlock>
+
+## CSS overrides
+
+Override individual tokens directly in your stylesheet for one-off adjustments or scoped changes:
+
+<CodeBlock language="css">{`:root {
+  --lt-border-radius: 2px;                    /* sharper corners globally */
+  --lt-border-width: 2px;                     /* heavier control outlines */
+  --lt-typography-fontFamilyPrimary: 'Inter', sans-serif; /* swap font */
+}
+
+/_ Scoped to a section of the page _/
+.sidebar {
+--lt-color-neutral-50: #f8f8ff;
+--lt-color-neutral-100: #f0f0f8;
+}
+
+/_ Spacing tokens — only overridable this way, not via configure() _/
+:root {
+--lt-spacing-4: 1.25rem; /_ default: 1rem _/
+}`}</CodeBlock>
+
+## Component-level overrides
+
+Every component exposes CSS custom properties — named <code>--lt-[component]-[property]</code> — that let you adapt it to a specific context. Set them on the element or any ancestor:
+
+<CodeBlock language="css">{`/* All icon buttons in the header get a light colour */
+.site-header {
+  --lt-icon-button-color: white;
+  --lt-icon-button-hover-bg: rgba(255, 255, 255, 0.15);
+}
+
+/_ A single progress bar with a custom fill colour _/
+.upload-progress {
+--lt-progress-color: #8b5cf6;
+--lt-progress-track-color: #ede9fe;
+}`}</CodeBlock>
+
+Because CSS custom properties inherit through shadow DOM, this works with a plain class name — no <code>::part()</code> selector needed. The full list of props for each component is in its API table.
+
+## Theme switching
+
+Pass <code>theme: 'system'</code> to <code>configure()</code> to generate light, dark, and <code>prefers-color-scheme</code> layers in one call:
+
+<CodeBlock language="ts">{`configure({
+  theme: 'system',
+  colors: { primary: '#6366f1' }
+});`}</CodeBlock>
+
+With that in place, toggling themes at runtime requires no further calls to <code>configure()</code> — just set a <code>data-theme</code> attribute on <code>&lt;html&gt;</code>:
+
+<CodeBlock language="ts">{`// Follow the OS preference (remove any previous override)
+document.documentElement.removeAttribute('data-theme');
+
+// Force light
+document.documentElement.setAttribute('data-theme', 'light');
+
+// Force dark
+document.documentElement.setAttribute('data-theme', 'dark');`}</CodeBlock>
+
+### Persisting the user's choice
+
+<CodeBlock language="ts">{`function setTheme(theme: 'light' | 'dark' | 'system') {
+  if (theme === 'system') {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.removeItem('lt-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('lt-theme', theme);
+  }
+}`}</CodeBlock>
+
+Restore the saved theme before first paint by placing a synchronous script at the top of <code>&lt;head&gt;</code>:
+
+<CodeBlock language="html">{`<script>
+  const saved = localStorage.getItem('lt-theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+</script>`}</CodeBlock>
+
+## Framework notes
+
+### Vanilla JS / Vite / webpack
+
+Call <code>configure()</code> in your entry file. No other setup is required.
+
+### React (CSR)
+
+Call <code>configure()</code> at the top of <code>main.tsx</code>, before <code>ReactDOM.createRoot</code>:
+
+<CodeBlock language="tsx" title="main.tsx">{`import { configure } from '@latty-ds/tokens/configure';
+configure({ colors: { primary: '#6366f1' }, theme: 'system' });
+
+import { createRoot } from 'react-dom/client';
+import App from './App';
+createRoot(document.getElementById('root')!).render(<App />);`}</CodeBlock>
+
+### React SSR (Next.js App Router, Remix)
+
+<code>configure()</code> touches <code>document</code> and must not run on the server. Use
+<code>createStyleSheet()</code> in your root layout to inject tokens at render time:
+
+<CodeBlock language="tsx" title="app/layout.tsx">{`import { createStyleSheet } from '@latty-ds/tokens/configure';
+
+export default function RootLayout({ children }) {
+  const tokenCss = createStyleSheet({ colors: { primary: '#6366f1' }, theme: 'system' });
+  return (
+    <html lang="en">
+      <head>
+        <style id="lt-tokens" dangerouslySetInnerHTML={{ __html: tokenCss }} />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}`}</CodeBlock>
+
+Tokens are inlined server-side so there is no flash. Theme toggling with <code>data-theme</code> still works client-side as described above.
+
+## Next steps
+
+<lt-list>
+  <lt-list-item>
+    <a href="/tokens/introduction">Tokens overview</a> — browse all available tokens
+  </lt-list-item>
+  <lt-list-item>
+    <a href="/tokens/colors">Colors</a> — see the full generated palettes
+  </lt-list-item>
+</lt-list>

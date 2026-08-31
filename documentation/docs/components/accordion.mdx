@@ -1,0 +1,63 @@
+---
+title: Accordion
+description: Collapsible content sections
+slug: /components/accordion
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Accordion
+
+A collapsible section built on the native <code>&lt;details&gt;/&lt;summary&gt;</code> elements. Content placed in the
+default slot is shown when open.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-accordion"
+  content="This is the collapsible content inside the accordion."
+  previewHeight="80px"
+  defaults={{ label: 'Section Title' }}
+/>
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-accordion label="What is Latty?">
+  Latty is a framework-agnostic design system built on design tokens and Web Components.
+</lt-accordion>
+
+<lt-accordion label="Installation" icon-start="download" open>
+  Install with: pnpm add @latty-ds/tokens @latty-ds/web
+</lt-accordion>
+    `}
+    react={`
+import { Accordion } from '@latty-ds/react';
+
+<Accordion label="What is Latty?">
+  Latty is a framework-agnostic design system built on design tokens and Web Components.
+</Accordion>
+
+<Accordion label="Installation" iconStart="download" open>
+  Install with: pnpm add @latty-ds/tokens @latty-ds/web
+</Accordion>
+    `}
+    vue={`
+<template>
+  <lt-accordion label="What is Latty?">
+    Latty is a framework-agnostic design system built on design tokens and Web Components.
+  </lt-accordion>
+
+  <lt-accordion label="Installation" icon-start="download" open>
+    Install with: pnpm add @latty-ds/tokens @latty-ds/web
+  </lt-accordion>
+</template>
+    `}
+  />
+
+## API
+
+<ApiTable tag="lt-accordion" />

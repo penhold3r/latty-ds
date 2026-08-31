@@ -1,0 +1,89 @@
+---
+title: Icon Button
+description: Accessible icon-only button for actions like close, delete, and navigation.
+slug: /components/icon-button
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Icon Button
+
+A compact, accessible button that displays a single icon. Because there is no visible label, a <lt-text variant="code" tag="code">label</lt-text> attribute is required to describe the action for screen readers.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-icon-button"
+  defaults={{ icon: 'plus', label: 'Add item', variant: 'neutral', appearance: 'ghost', size: 'md' }}
+/>
+
+## Usage
+
+  <FrameworkTabs
+    html={`<!-- Ghost (default) — for close/dismiss buttons -->
+<lt-icon-button icon="xmark" label="Close"></lt-icon-button>
+
+<!-- Filled primary — for prominent actions -->
+
+<lt-icon-button icon="plus" label="Add item" variant="primary" appearance="filled"></lt-icon-button>
+
+<!-- Outlined neutral — for toolbar and nav buttons -->
+
+<lt-icon-button icon="nav-arrow-left" label="Previous" appearance="outlined"></lt-icon-button>
+
+<!-- Round shape -->
+
+<lt-icon-button icon="heart" label="Like" variant="error" appearance="filled" round></lt-icon-button>
+
+<!-- ARIA forwarding — aria-pressed/-expanded/-haspopup/-controls/-current set on the
+     host are mirrored onto the internal native button -->
+
+<lt-icon-button icon="user" label="Open user menu" aria-haspopup="menu" aria-expanded="false"></lt-icon-button>`}
+    react={`import { IconButton } from '@latty-ds/react';
+
+// Ghost (default) — for close/dismiss buttons
+
+<IconButton icon="xmark" label="Close" />
+
+// Filled primary — for prominent actions
+
+<IconButton icon="plus" label="Add item" variant="primary" appearance="filled" />
+
+// Outlined neutral — for toolbar and nav buttons
+
+<IconButton icon="nav-arrow-left" label="Previous" appearance="outlined" />
+
+// Round shape
+
+<IconButton icon="heart" label="Like" variant="error" appearance="filled" round />
+
+// ARIA forwarding — aria-\* set on the host reaches the internal native button
+
+<IconButton icon="user" label="Open user menu" aria-haspopup="menu" aria-expanded={open} />`}
+    vue={`<template>
+  <!-- Ghost (default) — for close/dismiss buttons -->
+  <lt-icon-button icon="xmark" label="Close" />
+
+  <!-- Filled primary — for prominent actions -->
+
+<lt-icon-button icon="plus" label="Add item" variant="primary" appearance="filled" />
+
+  <!-- Outlined neutral — for toolbar and nav buttons -->
+
+<lt-icon-button icon="nav-arrow-left" label="Previous" appearance="outlined" />
+
+  <!-- Round shape -->
+
+<lt-icon-button icon="heart" label="Like" variant="error" appearance="filled" round />
+
+  <!-- ARIA forwarding — aria-* set on the host reaches the internal native button -->
+
+  <lt-icon-button icon="user" label="Open user menu" aria-haspopup="menu" :aria-expanded="String(open)" />
+</template>`}
+  />
+
+## API
+
+<ApiTable tag="lt-icon-button" />

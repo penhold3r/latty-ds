@@ -1,0 +1,58 @@
+---
+title: Divider
+description: A visual separator between content sections.
+slug: /components/divider
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Divider
+
+A thin line that separates content. Supports horizontal and vertical orientations, dashed and dotted styles, and an
+optional centered label.
+
+## Playground
+
+<ComponentPlayground tag="lt-divider" previewHeight="160px" stretch={true} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`<!-- Horizontal (default) -->
+<lt-divider></lt-divider>
+
+<!-- With label -->
+
+<lt-divider label="or"></lt-divider>
+
+<!-- Line styles -->
+
+<lt-divider appearance="dashed"></lt-divider>
+<lt-divider appearance="dotted"></lt-divider>
+
+<!-- Vertical -->
+
+<div style="display:flex;height:48px;align-items:stretch;">
+  <span>Left</span>
+  <lt-divider orientation="vertical"></lt-divider>
+  <span>Right</span>
+</div>`}
+    react={`import { Divider } from '@latty-ds/react';
+
+<Divider />
+<Divider label="or" />
+<Divider appearance="dashed" />
+<Divider orientation="vertical" />`}
+    vue={`<template>
+  <lt-divider></lt-divider>
+  <lt-divider label="or"></lt-divider>
+  <lt-divider appearance="dashed"></lt-divider>
+  <lt-divider orientation="vertical"></lt-divider>
+</template>`}
+  />
+
+## API
+
+<ApiTable tag="lt-divider" />

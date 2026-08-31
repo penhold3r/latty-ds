@@ -1,0 +1,119 @@
+---
+title: Snackbar
+description: Brief notification that appears temporarily at the bottom of the viewport
+slug: /components/snackbar
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Snackbar
+
+A brief, non-blocking notification anchored to the bottom of the viewport. Snackbars auto-dismiss after a
+configurable delay and can optionally include an action button. Use them for short feedback messages —
+confirmations, undo prompts, or transient alerts.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-snackbar"
+  previewTrigger="Show snackbar"
+  defaults={{ variant: 'default', duration: 4000, closable: true }}
+  content="Changes saved successfully"
+/>
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-snackbar id="sb">Changes saved</lt-snackbar>
+<lt-button onclick="document.getElementById('sb').show()">Save</lt-button>
+
+<lt-snackbar variant="success">Upload complete</lt-snackbar>
+<lt-snackbar variant="warning">Low disk space</lt-snackbar>
+<lt-snackbar variant="error">Request failed</lt-snackbar>
+<lt-snackbar variant="info">Update available</lt-snackbar>
+
+<lt-snackbar action-label="Undo">Message deleted</lt-snackbar>
+
+<lt-snackbar duration="0" variant="warning">You are offline</lt-snackbar>
+`}
+    react={`
+import { useRef } from 'react';
+import { Snackbar, Button } from '@latty-ds/react';
+import type { Snackbar as SnackbarEl } from '@latty-ds/web';
+
+function Example() {
+const ref = useRef<SnackbarEl>(null);
+return (
+
+<>
+<Button variant="primary" onClick={() => ref.current?.show()}>Save</Button>
+<Snackbar ref={ref} variant="success" actionLabel="Undo">
+Changes saved
+</Snackbar>
+</>
+);
+}
+`}
+    vue={`
+
+<script setup>import {ref} from 'vue' const snackbar = ref(null)</script>
+
+<template>
+  <lt-button variant="primary" @click="snackbar?.show()">Save</lt-button>
+  <lt-snackbar ref="snackbar" variant="success" action-label="Undo">
+    Changes saved
+  </lt-snackbar>
+</template>
+    `}
+  />
+
+## Snackbar vs. Alert
+
+Both communicate feedback to the user, but they serve different moments:
+
+<table className="compare-table" aria-label="Snackbar vs. Alert comparison">
+  <thead>
+    <tr>
+      <th scope="col" aria-label="Property"></th>
+      <th>Snackbar</th>
+      <th>Alert</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Position</strong>
+      </td>
+      <td>Fixed overlay, bottom of viewport</td>
+      <td>Inline, within page flow</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Lifetime</strong>
+      </td>
+      <td>Transient — auto-dismisses after a configurable delay</td>
+      <td>Persistent — stays until dismissed or condition resolves</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Use when</strong>
+      </td>
+      <td>Confirming the result of an action the user just took (saved, deleted, copied)</td>
+      <td>The message is tied to a specific location on the page (a form, a section, a card)</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Avoid when</strong>
+      </td>
+      <td>The user needs to read and act on the message before continuing</td>
+      <td>The message is a response to a one-off action and doesn't need to persist</td>
+    </tr>
+  </tbody>
+</table>
+
+## API
+
+<ApiTable tag="lt-snackbar" />

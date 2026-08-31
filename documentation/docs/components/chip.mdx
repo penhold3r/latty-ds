@@ -1,0 +1,47 @@
+---
+title: Chip
+description: Compact label for tags, filters, and attributes
+slug: /components/chip
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+import VariantPresets from '@site/src/components/VariantPresets';
+
+# Chip
+
+Compact pill-shaped labels for tags, filters, status indicators, and attributes.
+
+## Playground
+
+<VariantPresets tag="lt-chip" slotContent="Design System" />
+<ComponentPlayground tag="lt-chip" content="Design System" />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-chip variant="primary">Design</lt-chip>
+<lt-chip variant="success" appearance="outlined">Active</lt-chip>
+<lt-chip variant="error" deletable>Urgent</lt-chip>
+    `}
+    react={`
+import { Chip } from '@latty-ds/react';
+
+<Chip variant="primary">Design</Chip>
+<Chip variant="success" appearance="outlined">Active</Chip>
+<Chip variant="error" deletable>Urgent</Chip>
+    `}
+    vue={`
+<template>
+  <lt-chip variant="primary">Design</lt-chip>
+  <lt-chip variant="success" appearance="outlined">Active</lt-chip>
+  <lt-chip variant="error" deletable>Urgent</lt-chip>
+</template>
+    `}
+  />
+
+## API
+
+<ApiTable tag="lt-chip" />

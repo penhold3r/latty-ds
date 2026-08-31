@@ -1,0 +1,116 @@
+---
+title: Alert
+description: Inline notification for persistent contextual feedback
+slug: /components/alert
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+import VariantPresets from '@site/src/components/VariantPresets';
+
+# Alert
+
+An inline notification that stays visible until the user dismisses it or the condition resolves. Use alerts for
+persistent feedback — validation errors, warnings, or status messages that need to remain on screen. For transient
+confirmations, use
+<lt-link href="/components/snackbar">Snackbar</lt-link> instead.
+
+## Playground
+
+<VariantPresets tag="lt-alert" slotContent="Your changes have been saved." />
+<ComponentPlayground tag="lt-alert" content="Your changes have been saved to the server." />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-alert variant="success">Changes saved successfully</lt-alert>
+<lt-alert variant="warning">Your session expires in 5 minutes</lt-alert>
+<lt-alert variant="error">Failed to submit — please try again</lt-alert>
+<lt-alert variant="info">A new version is available</lt-alert>
+
+<lt-alert variant="error" title="Payment failed" closable>
+  Your card was declined. Please update your billing details.
+</lt-alert>
+
+<lt-alert variant="info" closable>This banner can be dismissed</lt-alert>
+`}
+    react={`
+import { Alert } from '@latty-ds/react';
+
+<Alert variant="success">Changes saved successfully</Alert>
+<Alert variant="warning">Your session expires in 5 minutes</Alert>
+<Alert variant="error">Failed to submit — please try again</Alert>
+<Alert variant="info">A new version is available</Alert>
+
+<Alert variant="error" title="Payment failed" closable>
+  Your card was declined. Please update your billing details.
+</Alert>
+
+<Alert variant="info" closable>This banner can be dismissed</Alert>
+    `}
+    vue={`
+<template>
+  <lt-alert variant="success">Changes saved successfully</lt-alert>
+  <lt-alert variant="warning">Your session expires in 5 minutes</lt-alert>
+  <lt-alert variant="error">Failed to submit — please try again</lt-alert>
+  <lt-alert variant="info">A new version is available</lt-alert>
+
+<lt-alert variant="error" title="Payment failed" closable>
+  Your card was declined. Please update your billing details.
+</lt-alert>
+
+<lt-alert variant="info" closable>This banner can be dismissed</lt-alert>
+
+</template>
+    `}
+  />
+
+## Alert vs. Snackbar
+
+Both communicate feedback to the user, but they serve different moments:
+
+<table className="compare-table" aria-label="Alert vs. Snackbar comparison">
+  <thead>
+    <tr>
+      <th scope="col" aria-label="Property"></th>
+      <th>Alert</th>
+      <th>Snackbar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <strong>Position</strong>
+      </td>
+      <td>Inline, within page flow</td>
+      <td>Fixed overlay, bottom of viewport</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Lifetime</strong>
+      </td>
+      <td>Persistent — stays until dismissed or condition resolves</td>
+      <td>Transient — auto-dismisses after a configurable delay</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Use when</strong>
+      </td>
+      <td>The message is tied to a specific location on the page (a form field, a section, a card)</td>
+      <td>Confirming the result of an action the user just took (saved, deleted, copied)</td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Avoid when</strong>
+      </td>
+      <td>The message is a response to a one-off action and doesn't need to persist</td>
+      <td>The user needs to read and act on the message before continuing</td>
+    </tr>
+  </tbody>
+</table>
+
+## API
+
+<ApiTable tag="lt-alert" />

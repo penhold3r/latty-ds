@@ -1,0 +1,69 @@
+---
+title: Tab
+description: Tab and tab group components
+slug: /components/tab
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Tab
+
+Tabbed navigation built from <code>lt-tab-group</code> (container) and <code>lt-tab</code> (individual tab). The active
+tab is controlled by <code>value</code> on the group.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-tab-group"
+  defaults={{ value: 'overview' }}
+  content={`<lt-tab label="Overview" value="overview" icon-start="home"></lt-tab>
+<lt-tab label="Components" value="components" icon-start="cube"></lt-tab>
+<lt-tab label="Settings" value="settings" icon-start="settings"></lt-tab>
+<lt-tab label="Disabled" value="disabled" disabled></lt-tab>`}
+  subTags={['lt-tab']}
+/>
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-tab-group value="tab1">
+  <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
+  <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
+  <lt-tab label="Disabled" value="tab3" disabled></lt-tab>
+</lt-tab-group>
+
+<script type="module">
+  document.querySelector('lt-tab-group').addEventListener('change', (e) => {
+    console.log('active tab:', e.detail.value);
+  });
+<\/script>
+    `}
+    react={`
+import { TabGroup, Tab } from '@latty-ds/react';
+
+<TabGroup value="tab1" onChange={(e) => console.log('active tab:', e.detail.value)}>
+  <Tab label="Overview" value="tab1" iconStart="home" />
+  <Tab label="Settings" value="tab2" iconStart="settings" />
+  <Tab label="Disabled" value="tab3" disabled />
+</TabGroup>
+    `}
+    vue={`
+<template>
+  <lt-tab-group value="tab1"
+    @change="(e) => console.log('active tab:', e.detail.value)">
+    <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
+    <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
+    <lt-tab label="Disabled" value="tab3" disabled></lt-tab>
+  </lt-tab-group>
+</template>
+    `}
+  />
+
+  ## API — lt-tab-group
+  <ApiTable tag="lt-tab-group" />
+
+  ## API — lt-tab
+  <ApiTable tag="lt-tab" />

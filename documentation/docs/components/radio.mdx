@@ -1,0 +1,63 @@
+---
+title: Radio
+description: Radio button and radio group components
+slug: /components/radio
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Radio
+
+Radio buttons for single-selection within a group. Use <code>lt-radio-group</code> to manage a named group with a shared
+label, value, and validation state.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-radio-group"
+  defaults={{ label: 'Preferred contact', name: 'contact', value: 'email' }}
+  content={
+    '<lt-radio label="Email" value="email"></lt-radio><lt-radio label="Phone" value="phone"></lt-radio><lt-radio label="Post" value="post"></lt-radio>'
+  }
+  subTags={['lt-radio']}
+/>
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-radio-group label="Preferred contact" name="contact" value="email">
+  <lt-radio label="Email" value="email"></lt-radio>
+  <lt-radio label="Phone" value="phone"></lt-radio>
+  <lt-radio label="Post" value="post" disabled></lt-radio>
+</lt-radio-group>
+    `}
+    react={`
+import { RadioGroup, Radio } from '@latty-ds/react';
+
+<RadioGroup label="Preferred contact" name="contact" value="email">
+  <Radio label="Email" value="email" />
+  <Radio label="Phone" value="phone" />
+  <Radio label="Post" value="post" disabled />
+</RadioGroup>
+    `}
+    vue={`
+<template>
+  <lt-radio-group label="Preferred contact" name="contact" value="email">
+    <lt-radio label="Email" value="email"></lt-radio>
+    <lt-radio label="Phone" value="phone"></lt-radio>
+    <lt-radio label="Post" value="post" disabled></lt-radio>
+  </lt-radio-group>
+</template>
+    `}
+  />
+
+## API — lt-radio
+
+<ApiTable tag="lt-radio" />
+
+## API — lt-radio-group
+
+<ApiTable tag="lt-radio-group" />

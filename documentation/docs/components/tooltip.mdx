@@ -1,0 +1,74 @@
+---
+title: Tooltip
+description: Floating label that appears on hover or focus of a trigger element
+slug: /components/tooltip
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Tooltip
+
+A non-interactive floating label anchored to a trigger element. Tooltips appear on hover and keyboard focus, and
+disappear when the user moves away. Use them to describe controls whose purpose isn't fully obvious from their
+visible label.
+
+## Playground
+
+<ComponentPlayground tag="lt-tooltip" content="Hover me" defaults={{ content: 'This is a tooltip' }} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<lt-tooltip content="Above" placement="top"><button>Top</button></lt-tooltip>
+<lt-tooltip content="Below" placement="bottom"><button>Bottom</button></lt-tooltip>
+<lt-tooltip content="Left side" placement="left"><button>Left</button></lt-tooltip>
+<lt-tooltip content="Right side" placement="right"><button>Right</button></lt-tooltip>
+
+<lt-tooltip content="Primary" background="--lt-color-primary-600" color="#fff">
+  <button>Token bg</button>
+</lt-tooltip>
+
+<lt-tooltip content="You can't do that" disabled>
+  <button disabled>Locked</button>
+</lt-tooltip>
+		`}
+    react={`
+import { Tooltip } from '@latty-ds/react';
+
+<Tooltip content="Above" placement="top">
+  <button>Top</button>
+</Tooltip>
+<Tooltip content="Below" placement="bottom">
+  <button>Bottom</button>
+</Tooltip>
+<Tooltip content="Left side" placement="left">
+  <button>Left</button>
+</Tooltip>
+<Tooltip content="Right side" placement="right">
+  <button>Right</button>
+</Tooltip>
+
+<Tooltip content="Primary" background="--lt-color-primary-600" color="#fff">
+  <button>Token bg</button>
+</Tooltip>
+		`}
+    vue={`
+<template>
+  <lt-tooltip content="Above" placement="top"><button>Top</button></lt-tooltip>
+  <lt-tooltip content="Below" placement="bottom"><button>Bottom</button></lt-tooltip>
+  <lt-tooltip content="Left side" placement="left"><button>Left</button></lt-tooltip>
+  <lt-tooltip content="Right side" placement="right"><button>Right</button></lt-tooltip>
+
+  <lt-tooltip content="Primary" background="--lt-color-primary-600" color="#fff">
+    <button>Token bg</button>
+  </lt-tooltip>
+</template>
+		`}
+  />
+
+## API
+
+<ApiTable tag="lt-tooltip" />

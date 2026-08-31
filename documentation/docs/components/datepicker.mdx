@@ -1,0 +1,95 @@
+---
+title: Datepicker
+description: Date, time, and datetime-local input with design-system styling
+slug: /components/datepicker
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Datepicker
+
+A styled wrapper around the browser's native date and time input. Inherits full platform picker support (keyboard
+navigation, screen-reader announcements, locale formatting) without a custom implementation.
+
+<lt-alert variant="info">
+  <strong>Datepicker vs Date Input</strong> — Use <code>lt-datepicker</code> when you need the browser's native
+  date/time UI: it supports <code>type="time"</code> and <code>type="datetime-local"</code>, integrates with native form
+  validation, and works without any JavaScript. Choose
+  <lt-link href="/components/date-input">lt-date-input</lt-link> instead when you need a consistent cross-browser look,
+  locale-aware formatting, or the visual calendar grid.
+</lt-alert>
+
+## Playground
+
+<ComponentPlayground tag="lt-datepicker" defaults={{ label: 'Start date', type: 'date' }} />
+
+## Usage
+
+  <FrameworkTabs
+    html={`
+<!-- Date picker -->
+<lt-datepicker label="Start date" type="date"></lt-datepicker>
+
+<!-- Time picker -->
+
+<lt-datepicker label="Meeting time" type="time"></lt-datepicker>
+
+<!-- Date and time -->
+
+<lt-datepicker label="Appointment" type="datetime-local" required></lt-datepicker>
+
+<!-- With min/max constraints -->
+
+<lt-datepicker
+  label="Delivery date"
+  type="date"
+  min="2025-01-01"
+  max="2025-12-31"></lt-datepicker>
+
+<!-- Error state -->
+
+<lt-datepicker
+  label="Event date"
+  type="date"
+  variant="error"
+  helper-text="Please select a valid date"></lt-datepicker>
+
+<script type="module">
+  document.querySelector('lt-datepicker').addEventListener('change', (e) => {
+    console.log('selected:', e.detail.value);
+  });
+<\/script>
+    `}
+    react={`
+import { Datepicker } from '@latty-ds/react';
+
+<Datepicker label="Start date" type="date" onChange={(v) => console.log(v)} />
+
+<Datepicker
+  label="Appointment"
+  type="datetime-local"
+  required
+  onChange={(v) => setDateTime(v)}
+/>
+
+<Datepicker
+  label="Event date"
+  variant="error"
+  helperText="Please select a valid date"
+/>
+    `}
+    vue={`
+<template>
+  <lt-datepicker
+    label="Start date"
+    type="date"
+    @change="(e) => date = e.detail.value"
+  />
+</template>
+    `}
+  />
+
+  ## API
+  <ApiTable tag="lt-datepicker" />

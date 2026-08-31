@@ -1,0 +1,53 @@
+/* Prefixed `recipe-hero*` (not the Astro source's plain `.hero*`) — Infima
+   ships its own global `.hero` utility class (`display: flex`, used by
+   Docusaurus's default homepage), which silently collided with this page's
+   preview layout when using the unprefixed name. */
+.recipe-hero-wrap {
+  width: 100%;
+}
+
+.recipe-hero {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.52)),
+    url('https://picsum.photos/seed/hero-banner/1200/500') center / cover no-repeat;
+  border-radius: 12px;
+  padding: var(--lt-spacing-12) var(--lt-spacing-10);
+  text-align: center;
+}
+
+.recipe-hero-badge {
+  display: inline-block;
+  margin-bottom: var(--lt-spacing-4);
+}
+
+/* Descendant-scoped (`.recipe-hero .recipe-hero-title`, not just
+   `.recipe-hero-title`) so the `color` here reliably beats custom.css's
+   global `lt-text[variant='display-lg']{ color: ... }` rule — that
+   selector's element+attribute specificity (0,0,1,1) otherwise wins over a
+   single class (0,0,1,0); two classes (0,0,2,0) wins outright. */
+.recipe-hero .recipe-hero-title {
+  color: #fff;
+  margin-bottom: var(--lt-spacing-4);
+}
+
+.recipe-hero .recipe-hero-sub {
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--lt-spacing-8);
+}
+
+.recipe-hero-actions {
+  display: flex;
+  gap: var(--lt-spacing-3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.recipe-hero-outline::part(base) {
+  border-color: rgba(255, 255, 255, 0.7);
+  color: #fff;
+}
+
+.recipe-hero-outline::part(base):hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+}

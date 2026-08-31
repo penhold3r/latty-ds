@@ -1,0 +1,14 @@
+/* Ported from docs/src/components/RecipePreview (the Astro site). */
+.recipe-preview {
+  align-items: center;
+  background: var(--lt-bg-subtle);
+  border-radius: 10px;
+  border: 1px solid var(--lt-border-default);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lt-spacing-6);
+  justify-content: center;
+  margin: var(--lt-spacing-6) 0;
+  overflow: hidden;
+  padding: var(--lt-spacing-10) var(--lt-spacing-8);
+}
