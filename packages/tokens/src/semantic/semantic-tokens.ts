@@ -47,7 +47,13 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToke
   // Text
   map['text-default'] = 'color-neutral-900';
   map['text-subtle'] = 'color-neutral-600';
-  map['text-muted'] = 'color-neutral-400';
+  // neutral-400 (the previous value) is only 2.2:1 against --lt-bg-subtle —
+  // fails WCAG AA (4.5:1) for normal text. neutral-600 is the next step that
+  // clears it (5.26:1); at this palette's granularity that puts text-muted
+  // at the same step as text-subtle in light mode (dark mode keeps them
+  // distinct — see below). Found via the Docusaurus migration's a11y suite
+  // (documentation/a11y/a11y.spec.ts) flagging lt-select's placeholder text.
+  map['text-muted'] = 'color-neutral-600';
   map['text-disabled'] = 'color-neutral-400';
   map['text-inverse'] = 'color-white';
   map['text-neutral'] = 'color-neutral-700';
@@ -101,7 +107,11 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToken
   // Text
   map['text-default'] = 'color-neutral-100';
   map['text-subtle'] = 'color-neutral-300';
-  map['text-muted'] = 'color-neutral-500';
+  // neutral-500 (the previous value) is only 3.47:1 against --lt-bg-subtle —
+  // fails WCAG AA (4.5:1). neutral-400 clears it (5.5:1) and stays distinct
+  // from text-subtle above. Found via the Docusaurus migration's a11y suite
+  // flagging lt-select's placeholder text in dark theme.
+  map['text-muted'] = 'color-neutral-400';
   map['text-disabled'] = 'color-neutral-600';
   map['text-inverse'] = 'color-neutral-900';
   map['text-neutral'] = 'color-neutral-200';
