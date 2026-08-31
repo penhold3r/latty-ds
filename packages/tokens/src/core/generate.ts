@@ -56,6 +56,14 @@ export const semanticTokensToCss = (map: SemanticTokenMap, wrapper?: string): st
     const indented = lines.map((l) => '  ' + l);
     return `${wrapper} {\n  :root {\n${indented.join('\n')}\n  }\n}\n`;
   }
-  // CSS selector — apply directly (higher specificity overrides :root + @media)
-  return `${wrapper} {\n${lines.join('\n')}\n}\n`;
+  // Attribute selector (e.g. `[data-theme="dark"]`) — prefix `:root` so the
+  // compound selector's specificity (0,2,0) actually beats plain `:root` and
+  // the media-query block above (both 0,1,0), regardless of source order.
+  // A bare `[data-theme="light"]` has the *same* specificity as `:root`, so
+  // an explicit light choice would lose to an OS dark preference whenever a
+  // minifier reorders identical-body rules (e.g. cssnano's `mergeRules`
+  // hoisting a byte-identical `[data-theme="light"]` up next to `:root`,
+  // ahead of the `@media (prefers-color-scheme: dark)` block that should
+  // lose to it) — found migrating the docs site to a webpack-based build.
+  return `:root${wrapper} {\n${lines.join('\n')}\n}\n`;
 };
