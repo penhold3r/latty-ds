@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.2](https://github.com/penhold3r/latty-ds/compare/v0.10.1...v0.10.2) (2026-09-11)
+
+### Bug Fixes
+
+- **docs:** swizzle Docusaurus navbar to match the Astro site's header ([43314da](https://github.com/penhold3r/latty-ds/commit/43314dadbefa623161b976c7ff290d77e40bbd5e))
+- **tokens:** fix text-muted contrast against subtle backgrounds ([5fb6e23](https://github.com/penhold3r/latty-ds/commit/5fb6e23124ca0bd703372798b62be029b911e9a0))
+- **tokens:** raise specificity of explicit theme-attribute selectors ([7992006](https://github.com/penhold3r/latty-ds/commit/7992006aade270f038726b1f8891394fae09d50e))
+- **tokens:** restore per-component data-theme override in generated CSS ([e2ab9ad](https://github.com/penhold3r/latty-ds/commit/e2ab9ad82c61e4241767e8fd4681a9f61b26aff9))
+
+### Features
+
+- **docs:** scaffold Docusaurus migration as a parallel documentation site ([37f3953](https://github.com/penhold3r/latty-ds/commit/37f39535593248ce05e0068ee3c658a6008fcb01))
+
 ## [0.10.1](https://github.com/penhold3r/latty-ds/compare/v0.10.0...v0.10.1) (2026-08-08)
 
 ### Bug Fixes
