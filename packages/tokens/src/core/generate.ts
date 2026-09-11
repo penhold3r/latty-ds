@@ -56,14 +56,27 @@ export const semanticTokensToCss = (map: SemanticTokenMap, wrapper?: string): st
     const indented = lines.map((l) => '  ' + l);
     return `${wrapper} {\n  :root {\n${indented.join('\n')}\n  }\n}\n`;
   }
-  // Attribute selector (e.g. `[data-theme="dark"]`) — prefix `:root` so the
-  // compound selector's specificity (0,2,0) actually beats plain `:root` and
-  // the media-query block above (both 0,1,0), regardless of source order.
-  // A bare `[data-theme="light"]` has the *same* specificity as `:root`, so
-  // an explicit light choice would lose to an OS dark preference whenever a
-  // minifier reorders identical-body rules (e.g. cssnano's `mergeRules`
-  // hoisting a byte-identical `[data-theme="light"]` up next to `:root`,
-  // ahead of the `@media (prefers-color-scheme: dark)` block that should
-  // lose to it) — found migrating the docs site to a webpack-based build.
-  return `:root${wrapper} {\n${lines.join('\n')}\n}\n`;
+  // Attribute selector (e.g. `[data-theme="dark"]`) — emit it twice, once
+  // prefixed with `:root` and once bare.
+  //
+  // The `:root`-prefixed copy exists so that, when `data-theme` sits on the
+  // page root, the compound selector's specificity (0,2,0) beats plain
+  // `:root` and the media-query block above (both 0,1,0) regardless of
+  // source order. A bare `[data-theme="light"]` alone has the *same*
+  // specificity as `:root`, so an explicit page-wide light choice would lose
+  // to an OS dark preference whenever a minifier reorders identical-body
+  // rules (e.g. cssnano's `mergeRules` hoisting a byte-identical
+  // `[data-theme="light"]` up next to `:root`, ahead of the
+  // `@media (prefers-color-scheme: dark)` block that should lose to it) —
+  // found migrating the docs site to a webpack-based build.
+  //
+  // The bare copy is what makes `ThemeableElement`'s `theme` prop
+  // (packages/web/src/base/themeable-element.ts) work: it sets
+  // `data-theme` on a *component's own host element* to force that one
+  // component into a theme regardless of the page's — e.g.
+  // `<lt-surface theme="dark">` on an otherwise light page. That only
+  // resolves if some rule matches `[data-theme="dark"]` on a non-root
+  // element too; `:root[data-theme="dark"]` alone never does, since `:root`
+  // only ever matches the document root.
+  return `:root${wrapper} {\n${lines.join('\n')}\n}\n${wrapper} {\n${lines.join('\n')}\n}\n`;
 };
