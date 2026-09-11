@@ -1,3 +1,4 @@
+import React from 'react';
 import './ExampleGrid.styles.css';
 
 const EXAMPLES = [
@@ -34,26 +35,20 @@ export default function ExampleGrid(): JSX.Element {
     <div className="example-grid">
       {EXAMPLES.map((ex, i) => (
         <a key={ex.href} className="example-card" href={ex.href}>
-          {/* @ts-expect-error -- lt-surface is a custom element, not a typed JSX intrinsic */}
           <lt-surface elevation="1">
             <div className={`example-swatch ${ex.swatch}`} />
             <div className="example-card-body">
               <div className="example-card-title-row">
-                {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
                 <lt-text variant="label">{ex.name}</lt-text>
-                {/* @ts-expect-error -- lt-badge is a custom element, not a typed JSX intrinsic */}
                 <lt-badge content={`Site ${i + 1}`} variant="neutral" size="sm" />
               </div>
-              {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
               <lt-text variant="caption">{ex.desc}</lt-text>
               <div className="example-card-meta">
-                {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
                 <lt-text variant="caption" tag="span" class="text-muted">
                   {ex.meta}
                 </lt-text>
               </div>
             </div>
-            {/* @ts-expect-error -- lt-surface is a custom element, not a typed JSX intrinsic */}
           </lt-surface>
         </a>
       ))}

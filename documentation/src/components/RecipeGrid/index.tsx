@@ -1,3 +1,4 @@
+import React from 'react';
 import Link from '@docusaurus/Link';
 import './RecipeGrid.styles.css';
 
@@ -41,13 +42,9 @@ export default function RecipeGrid(): JSX.Element {
     <div className="recipe-grid">
       {RECIPES.map((r) => (
         <Link key={r.href} className="recipe-card" to={r.href}>
-          {/* @ts-expect-error -- lt-surface is a custom element, not a typed JSX intrinsic */}
           <lt-surface elevation="1">
-            {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
             <lt-text variant="label">{r.label}</lt-text>
-            {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
             <lt-text variant="caption">{r.desc}</lt-text>
-            {/* @ts-expect-error -- lt-surface is a custom element, not a typed JSX intrinsic */}
           </lt-surface>
         </Link>
       ))}

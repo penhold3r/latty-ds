@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface ColDef {
   key: string;
@@ -36,6 +36,5 @@ export default function StaticTable({ columns, rows }: Props): JSX.Element {
     ref.current.data = rows;
   }, [columns, rows]);
 
-  // @ts-expect-error -- lt-table is a custom element, not a typed JSX intrinsic
   return <lt-table ref={ref} hoverable></lt-table>;
 }

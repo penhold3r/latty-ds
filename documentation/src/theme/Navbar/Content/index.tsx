@@ -32,9 +32,7 @@ export default function NavbarContent(): JSX.Element {
         <NavbarLogo />
       </div>
       <div className={clsx(ThemeClassNames.layout.navbar.containerRight, 'navbar__items navbar__items--right')}>
-        {/* @ts-expect-error -- lt-badge is a custom element, not a typed JSX intrinsic */}
         <lt-badge class="navbar__version-badge" content={version} variant="neutral" appearance="subtle" size="sm" />
-        {/* @ts-expect-error -- lt-icon-button is a custom element, not a typed JSX intrinsic */}
         <lt-icon-button
           class="navbar__header-btn"
           label="Toggle theme"
@@ -43,7 +41,6 @@ export default function NavbarContent(): JSX.Element {
           round
           onClick={() => setColorMode(colorMode === 'dark' ? 'light' : 'dark')}
         />
-        {/* @ts-expect-error -- lt-icon-button is a custom element, not a typed JSX intrinsic */}
         <lt-icon-button
           class="navbar__header-btn"
           label="View on GitHub"

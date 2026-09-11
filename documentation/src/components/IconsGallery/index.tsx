@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { iconGroups, sizes } from '../../data/icons';
 import './IconsGallery.styles.css';
 
@@ -15,7 +15,7 @@ import './IconsGallery.styles.css';
 export default function IconsGallery(): JSX.Element {
   const [activeSize, setActiveSize] = useState('md');
   const [toast, setToast] = useState<{ text: string; visible: boolean }>({ text: '', visible: false });
-  const toastTimer = useRef<ReturnType<typeof setTimeout>>();
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const copyIcon = async (name: string) => {
     const snippet = `<lt-icon name="${name}" />`;
@@ -43,7 +43,6 @@ export default function IconsGallery(): JSX.Element {
 
       {iconGroups.map((group) => (
         <div key={group.label} className="icon-group">
-          {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
           <lt-text variant="overline">{group.label}</lt-text>
           <div className="icon-grid">
             {group.icons.map((name) => (
@@ -55,7 +54,6 @@ export default function IconsGallery(): JSX.Element {
                 onClick={() => copyIcon(name)}
               >
                 <span className="icon-wrapper">
-                  {/* @ts-expect-error -- lt-icon is a custom element, not a typed JSX intrinsic */}
                   <lt-icon name={name} size={activeSize} class="icon-preview" />
                 </span>
                 <span className="icon-name">{name}</span>

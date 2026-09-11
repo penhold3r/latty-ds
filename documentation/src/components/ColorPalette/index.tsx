@@ -1,3 +1,4 @@
+import React from 'react';
 import tokens from '@latty-ds/tokens/tokens.json';
 import './ColorPalette.styles.css';
 
@@ -34,18 +35,15 @@ export default function ColorPalette(): JSX.Element {
     <>
       {SEMANTIC_PALETTES.map((palette) => (
         <section key={palette} className="palette-section">
-          {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
           <lt-text variant="h4" className="palette-name">
             {palette}
           </lt-text>
 
-          {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
           <lt-text variant="body">Default</lt-text>
           <Swatches palette={palette} />
 
           {color[`${palette}-muted`] && (
             <>
-              {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
               <lt-text variant="body">Muted</lt-text>
               <Swatches palette={`${palette}-muted`} />
             </>

@@ -1,3 +1,4 @@
+import React from 'react';
 import manifest from '@latty-ds/web/manifest.json';
 import './VariantPresets.styles.css';
 

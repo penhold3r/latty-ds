@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './SemanticTokenTable.styles.css';
 
 interface Props {
@@ -38,6 +38,5 @@ export default function SemanticTokenTable({ rows }: Props): JSX.Element {
     ref.current.data = rows;
   }, [rows]);
 
-  // @ts-expect-error -- lt-table is a custom element, not a typed JSX intrinsic
   return <lt-table ref={ref} class="token-table" density="compact"></lt-table>;
 }

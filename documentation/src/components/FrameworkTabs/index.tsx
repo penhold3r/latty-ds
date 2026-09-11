@@ -1,3 +1,4 @@
+import React from 'react';
 import CodeBlock from '@theme/CodeBlock';
 import './FrameworkTabs.styles.css';
 
@@ -16,13 +17,9 @@ interface Props {
 export default function FrameworkTabs({ html, react, vue }: Props): JSX.Element {
   return (
     <div className="framework-tabs">
-      {/* @ts-expect-error -- lt-tab-group is a custom element, not a typed JSX intrinsic */}
       <lt-tab-group value="html">
-        {/* @ts-expect-error -- lt-tab is a custom element, not a typed JSX intrinsic */}
         <lt-tab value="html" label="Web Component" />
-        {/* @ts-expect-error -- lt-tab is a custom element, not a typed JSX intrinsic */}
         <lt-tab value="react" label="React" />
-        {/* @ts-expect-error -- lt-tab is a custom element, not a typed JSX intrinsic */}
         {vue && <lt-tab value="vue" label="Vue" />}
 
         <div slot="panel" data-value="html">
@@ -36,7 +33,6 @@ export default function FrameworkTabs({ html, react, vue }: Props): JSX.Element 
             <CodeBlock language="vue">{vue.trim()}</CodeBlock>
           </div>
         )}
-        {/* @ts-expect-error -- lt-tab-group is a custom element, not a typed JSX intrinsic */}
       </lt-tab-group>
     </div>
   );

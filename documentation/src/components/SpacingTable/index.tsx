@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import tokens from '@latty-ds/tokens/tokens.json';
 import './SpacingTable.styles.css';
 
@@ -74,6 +74,5 @@ export default function SpacingTable(): JSX.Element {
     ref.current.data = rows;
   }, []);
 
-  // @ts-expect-error -- lt-table is a custom element, not a typed JSX intrinsic
   return <lt-table ref={ref} class="spacing-table" density="compact" hoverable></lt-table>;
 }

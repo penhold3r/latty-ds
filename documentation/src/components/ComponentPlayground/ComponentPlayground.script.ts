@@ -147,7 +147,7 @@ export const initPlayground = async (playground: Element): Promise<void> => {
   for (const stData of subTagsData) {
     el.querySelectorAll(stData.tag).forEach((childEl) => {
       const templateAttrs: Record<string, string> = {};
-      for (const attr of childEl.attributes) templateAttrs[attr.name] = attr.value;
+      for (const attr of Array.from(childEl.attributes)) templateAttrs[attr.name] = attr.value;
       childItems.push({ el: childEl, tag: stData.tag, templateAttrs });
     });
   }

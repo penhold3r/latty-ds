@@ -1,3 +1,4 @@
+import React from 'react';
 import Link from '@docusaurus/Link';
 import { components } from '../../data/components';
 import './ComponentGrid.styles.css';
@@ -13,19 +14,14 @@ export default function ComponentGrid(): JSX.Element {
     <div className="component-grid">
       {components.map((c) => (
         <Link key={c.href} className="component-card" to={c.href}>
-          {/* @ts-expect-error -- lt-surface is a custom element, not a typed JSX intrinsic */}
           <lt-surface appearance="outlined" elevation="0">
             <div className="card-body">
-              {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
               <lt-text variant="label">{c.name}</lt-text>
-              {/* @ts-expect-error -- lt-chip is a custom element, not a typed JSX intrinsic */}
               <lt-chip appearance="outlined" variant="neutral" size="sm">
                 {c.tag}
               </lt-chip>
-              {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
               <lt-text variant="body-sm">{c.desc}</lt-text>
             </div>
-            {/* @ts-expect-error -- lt-surface is a custom element, not a typed JSX intrinsic */}
           </lt-surface>
         </Link>
       ))}

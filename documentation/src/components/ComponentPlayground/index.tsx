@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from 'react';
+import React, { useEffect, useId, useRef } from 'react';
 import manifest from '@latty-ds/web/manifest.json';
 import { defaultValue, toLabel, buildSubTagsData } from './ComponentPlayground.ssr';
 import { initPlayground } from './ComponentPlayground.script';
@@ -99,7 +99,6 @@ export default function ComponentPlayground({
         </div>
         <div className="preview-stage" id={`${id}-stage`}>
           {previewTrigger && (
-            // @ts-expect-error -- lt-button is a custom element, not a typed JSX intrinsic
             <lt-button variant="primary" id={`${id}-trigger`}>
               {previewTrigger}
             </lt-button>
@@ -136,7 +135,6 @@ export default function ComponentPlayground({
                     <label className="control-label" htmlFor={ctrlId}>
                       {label}
                     </label>
-                    {/* @ts-expect-error -- lt-switch is a custom element, not a typed JSX intrinsic */}
                     <lt-switch
                       id={ctrlId}
                       size="sm"
@@ -154,7 +152,6 @@ export default function ComponentPlayground({
                     <label className="control-label" htmlFor={ctrlId}>
                       {label}
                     </label>
-                    {/* @ts-expect-error -- lt-select is a custom element, not a typed JSX intrinsic */}
                     <lt-select
                       id={ctrlId}
                       size="sm"
@@ -178,7 +175,6 @@ export default function ComponentPlayground({
                     <label className="control-label" htmlFor={ctrlId}>
                       {label}
                     </label>
-                    {/* @ts-expect-error -- lt-combobox is a custom element, not a typed JSX intrinsic */}
                     <lt-combobox
                       id={ctrlId}
                       size="sm"
@@ -213,7 +209,6 @@ export default function ComponentPlayground({
                   <label className="control-label" htmlFor={ctrlId}>
                     {label}
                   </label>
-                  {/* @ts-expect-error -- lt-textfield is a custom element, not a typed JSX intrinsic */}
                   <lt-textfield
                     id={ctrlId}
                     size="sm"
@@ -232,20 +227,15 @@ export default function ComponentPlayground({
 
         <div className="code-panel">
           <div className="code-header">
-            {/* @ts-expect-error -- lt-tab-group is a custom element, not a typed JSX intrinsic */}
             <lt-tab-group value="html" class="code-tabs" id={`${id}-tabs`} theme="dark">
-              {/* @ts-expect-error -- lt-tab is a custom element, not a typed JSX intrinsic */}
               <lt-tab label="HTML" value="html">
                 HTML
               </lt-tab>
-              {/* @ts-expect-error -- lt-tab is a custom element, not a typed JSX intrinsic */}
               <lt-tab label="React" value="react">
                 React
               </lt-tab>
-              {/* @ts-expect-error -- lt-tab-group is a custom element, not a typed JSX intrinsic */}
             </lt-tab-group>
             <div className="code-header-actions">
-              {/* @ts-expect-error -- lt-button is a custom element, not a typed JSX intrinsic */}
               <lt-button
                 size="sm"
                 variant="neutral"
@@ -257,7 +247,6 @@ export default function ComponentPlayground({
               >
                 Share
               </lt-button>
-              {/* @ts-expect-error -- lt-button is a custom element, not a typed JSX intrinsic */}
               <lt-button
                 size="sm"
                 variant="neutral"

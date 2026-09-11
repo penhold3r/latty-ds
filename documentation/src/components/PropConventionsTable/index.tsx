@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { propConventions, type PropConvention } from '../../data/components';
 
 function codeEl(text: string): HTMLElement {
@@ -36,6 +36,5 @@ export default function PropConventionsTable(): JSX.Element {
     ref.current.data = propConventions;
   }, []);
 
-  // @ts-expect-error -- lt-table is a custom element, not a typed JSX intrinsic
   return <lt-table ref={ref} hoverable responsive-mode="scroll"></lt-table>;
 }

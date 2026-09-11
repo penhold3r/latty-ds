@@ -1,3 +1,4 @@
+import React from 'react';
 import './TypeScale.styles.css';
 
 interface VariantMeta {
@@ -37,7 +38,6 @@ export default function TypeScale(): JSX.Element {
             {meta.size} / {meta.weight}
             {meta.extra ? ` / ${meta.extra}` : ''}
           </span>
-          {/* @ts-expect-error -- lt-text is a custom element, not a typed JSX intrinsic */}
           <lt-text variant={variant}>{meta.label}</lt-text>
         </div>
       ))}

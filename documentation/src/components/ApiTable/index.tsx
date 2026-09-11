@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import manifest from '@latty-ds/web/manifest.json';
 
 interface Member {
@@ -66,6 +66,5 @@ export default function ApiTable({ tag }: Props): JSX.Element {
     ref.current.data = rows;
   }, [tag]);
 
-  // @ts-expect-error -- lt-table is a custom element, not a typed JSX intrinsic
   return <lt-table ref={ref} class="api-table" hoverable></lt-table>;
 }
