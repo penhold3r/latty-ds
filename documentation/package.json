@@ -17,6 +17,7 @@
   "dependencies": {
     "@docusaurus/core": "3.10.2",
     "@docusaurus/preset-classic": "3.10.2",
+    "@docusaurus/theme-common": "3.10.2",
     "@latty-ds/icons": "workspace:*",
     "@latty-ds/tokens": "workspace:*",
     "@latty-ds/web": "workspace:*",

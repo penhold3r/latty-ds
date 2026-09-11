@@ -90,21 +90,21 @@ const config: Config = {
     colorMode: {
       respectPrefersColorScheme: true
     },
+    // `style: 'primary'` colors the bar with --ifm-color-primary (mapped to
+    // Latty's --lt-text-primary in custom.css), matching the Astro site's
+    // always-colored `lt-header background="primary"`. `logo`-only, no
+    // `title`, matches the Astro wordmark (image only, no separate text).
+    // The actual left/right content (mobile toggle, logo, version badge,
+    // theme toggle, GitHub) is rendered by the swizzled
+    // src/theme/Navbar/Content, not by `items` here — see that file for why
+    // it doesn't use the generic items/logo config below for the right side.
     navbar: {
-      title: 'Latty',
-      items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'docsSidebar',
-          position: 'left',
-          label: 'Docs'
-        },
-        {
-          href: 'https://github.com/penhold3r/latty-ds',
-          label: 'GitHub',
-          position: 'right'
-        }
-      ]
+      style: 'primary',
+      logo: {
+        alt: 'Latty',
+        src: 'img/latty-logo-white.png',
+        href: '/'
+      }
     },
     footer: {
       style: 'dark',

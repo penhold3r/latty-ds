@@ -39,6 +39,48 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
+/* The Astro site's header (`lt-header background="primary"`) colors itself from
+   `--lt-bg-primary` — the same vivid orange in both themes (see
+   packages/tokens/src/semantic/semantic-tokens.ts). `navbar.style: 'primary'`
+   (docusaurus.config.ts) applies Infima's `.navbar--primary` class for its
+   companion link/hover-color adjustments, but its background wires to
+   `--ifm-color-primary` (i.e. `--lt-text-primary`), which comes out as a muted
+   brown rather than the vivid header orange. Re-pointing just the background
+   variable here keeps those companion overrides while matching the actual
+   header token.
+
+   Text/icon color is pinned to the raw, theme-invariant `--lt-color-white`
+   rather than a semantic token like `--lt-text-inverse` — the bar itself never
+   changes color between themes, so nothing sitting on it should either. This
+   is deliberately scoped to this doc's own navbar chrome, not a change to any
+   `@latty-ds/web` component. */
+.navbar--primary {
+  --ifm-navbar-background-color: var(--lt-bg-primary);
+  color: var(--lt-color-white);
+}
+
+/* lt-badge/lt-icon-button both expose CSS custom-property hooks precisely for
+   this kind of consumer-side override (`--lt-badge-color`,
+   `--lt-icon-button-color`/`-hover-bg`/`-hover-color`) — used here instead of
+   picking a different variant/appearance, since none of those are pinned to a
+   fixed color independent of the page theme either. `::part(base)` covers
+   lt-icon-button's color directly: its internal `a[part='base']` rule (used
+   when `href` is set, as for the GitHub link) sets `color: inherit`, which
+   otherwise wins over the `--lt-icon-button-color`-driven rule by specificity
+   for anchor-rendered buttons specifically. */
+.navbar__header-btn {
+  --lt-icon-button-hover-bg: color-mix(in srgb, white 15%, transparent);
+  --lt-icon-button-hover-color: var(--lt-color-neutral-50);
+}
+
+.navbar__header-btn::part(base) {
+  color: var(--lt-color-white);
+}
+
+.navbar__version-badge {
+  --lt-badge-color: var(--lt-color-white);
+}
+
 /* Native markdown headings/paragraphs styled to match `lt-text`'s typography
    tokens exactly (same font-family/size/weight/line-height as
    packages/web/src/components/text/text.styles.ts), instead of rewriting
