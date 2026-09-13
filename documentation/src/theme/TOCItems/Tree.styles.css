@@ -1,0 +1,7 @@
+/* Nested lt-list (h3-under-h2) gets a small indent back — no-marker zeroes
+   padding-left on every level, so without this the tree would render fully
+   flat regardless of heading depth. ::part(list) targets lt-list's own
+   internal <ul>, the supported way to reach past its shadow root. */
+.table-of-contents lt-list lt-list::part(list) {
+  padding-left: var(--lt-spacing-4);
+}
