@@ -45,9 +45,9 @@ export class Breadcrumb extends ThemeableElement {
   render() {
     return html`
       <nav aria-label="breadcrumb">
-        <ol part="list">
+        <div part="list" role="list">
           <slot></slot>
-        </ol>
+        </div>
       </nav>
     `;
   }
@@ -81,12 +81,17 @@ export class BreadcrumbItem extends ThemeableElement {
    */
   @property() separator = '';
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.setAttribute('role', 'listitem');
+  }
+
   render() {
     // Only apply local override if separator is explicitly provided and not nullish/empty
     const hasSeparatorOverride = this.separator !== null && this.separator !== undefined && this.separator !== '';
 
     return html`
-      <li part="item">
+      <div part="item">
         ${this.current || !this.href
           ? html`<span part="text" aria-current=${this.current ? 'page' : 'false'}><slot></slot></span>`
           : html`<a part="link" href=${this.href}><slot></slot></a>`}
@@ -95,7 +100,7 @@ export class BreadcrumbItem extends ThemeableElement {
           aria-hidden="true"
           style=${hasSeparatorOverride ? `--lt-breadcrumb-separator: "${this.separator}"` : ''}
         ></span>
-      </li>
+      </div>
     `;
   }
 }

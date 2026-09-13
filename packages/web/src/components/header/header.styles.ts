@@ -11,7 +11,7 @@ export const headerStyles = css`
 
   :host([background='primary']) {
     background: var(--lt-bg-primary);
-    color: var(--lt-text-inverse);
+    color: var(--lt-text-on-primary);
   }
 
   :host([background='surface']) {

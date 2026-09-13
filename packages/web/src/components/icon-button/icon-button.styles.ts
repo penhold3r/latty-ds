@@ -58,7 +58,6 @@ export const iconButtonStyles = css`
 
   a[part='base'] {
     text-decoration: none;
-    color: inherit;
   }
 
   /* sizes */

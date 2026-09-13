@@ -25,9 +25,10 @@ describe('<lt-breadcrumb>', () => {
     expect(nav!.getAttribute('aria-label')).toBe('breadcrumb');
   });
 
-  it('renders an ol list part', () => {
+  it('renders a list part with role="list"', () => {
     const list = el.shadowRoot!.querySelector('[part="list"]');
-    expect(list?.tagName).toBe('OL');
+    expect(list?.tagName).toBe('DIV');
+    expect(list?.getAttribute('role')).toBe('list');
   });
 
   it('sets --lt-breadcrumb-separator when separator property changes', async () => {
@@ -70,6 +71,10 @@ describe('<lt-breadcrumb-item>', () => {
 
   it('renders in shadow DOM', () => {
     expect(el.shadowRoot).toBeTruthy();
+  });
+
+  it('sets role="listitem" on the host', () => {
+    expect(el.getAttribute('role')).toBe('listitem');
   });
 
   it('renders as link when href is set', async () => {

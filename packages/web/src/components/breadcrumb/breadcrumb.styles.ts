@@ -10,7 +10,6 @@ export const breadcrumbStyles = css`
     display: flex;
     flex-wrap: wrap;
     gap: 0;
-    list-style: none;
     margin: 0;
     padding: 0;
   }
