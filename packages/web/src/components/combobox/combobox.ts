@@ -198,7 +198,7 @@ export class Combobox extends ThemeableElement {
           @input=${this.handleInput}
           @keydown=${this.handleKeydown}
         />
-        <lt-icon class="chevron" name="nav-arrow-down" size="sm"></lt-icon>
+        <lt-icon class="chevron" name="caret-down" size="sm"></lt-icon>
       </div>
     `;
 

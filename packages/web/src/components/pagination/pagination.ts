@@ -75,14 +75,14 @@ export class Pagination extends ThemeableElement {
     return html`
       <nav aria-label="Pagination">
         <button aria-label="First page" ?disabled=${atFirst || this.disabled} @click=${() => this._go(1)}>
-          <lt-icon name="double-nav-arrow-left" size="sm"></lt-icon>
+          <lt-icon name="double-caret-left" size="sm"></lt-icon>
         </button>
         <button
           aria-label="Previous page"
           ?disabled=${atFirst || this.disabled}
           @click=${() => this._go(this.page - 1)}
         >
-          <lt-icon name="nav-arrow-left" size="sm"></lt-icon>
+          <lt-icon name="caret-left" size="sm"></lt-icon>
         </button>
 
         ${pages.map((p) =>
@@ -99,10 +99,10 @@ export class Pagination extends ThemeableElement {
         )}
 
         <button aria-label="Next page" ?disabled=${atLast || this.disabled} @click=${() => this._go(this.page + 1)}>
-          <lt-icon name="nav-arrow-right" size="sm"></lt-icon>
+          <lt-icon name="caret-right" size="sm"></lt-icon>
         </button>
         <button aria-label="Last page" ?disabled=${atLast || this.disabled} @click=${() => this._go(this.totalPages)}>
-          <lt-icon name="double-nav-arrow-right" size="sm"></lt-icon>
+          <lt-icon name="double-caret-right" size="sm"></lt-icon>
         </button>
       </nav>
     `;
