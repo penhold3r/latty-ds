@@ -35,7 +35,7 @@ CATEGORY_DIR="${ICONS_DIR}/${CATEGORY}"
 CATEGORY_INDEX="${CATEGORY_DIR}/index.ts"
 ICON_FILE="${CATEGORY_DIR}/${ICON_NAME}.ts"
 TOP_INDEX="${ICONS_DIR}/index.ts"
-ICONS_PAGE="${REPO_ROOT}/docs/src/pages/icons/index.astro"
+ICONS_PAGE="${REPO_ROOT}/docs/src/pages/icons/_icons.data.ts"
 
 # ── Derive camelCase export variable name ─────────────────────────────────────
 # arrow-left → arrowLeftSvg
@@ -151,11 +151,15 @@ node -e "
     imports[m[2]] = m[1];
   }
 
-  // Parse existing record entries: 'icon-name': varName
-  const entryRe = /'([^']+)':\s*(\w+),?/g;
+  // Parse existing record entries: 'icon-name': varName OR the unquoted
+  // shorthand form (bareword: varName) that single-word icon names use —
+  // matching only the quoted form here previously meant every unquoted
+  // entry silently vanished from the rebuilt object on the next run.
+  const entryRe = /(?:'([^']+)'|([A-Za-z_\$][\w\$]*))\s*:\s*(\w+),?/g;
   const entries = {};
   while ((m = entryRe.exec(src)) !== null) {
-    entries[m[1]] = m[2];
+    const key = m[1] !== undefined ? m[1] : m[2];
+    entries[key] = m[3];
   }
 
   // Detect const name — works for both 'export const X = {' and 'export const X: Record...'
