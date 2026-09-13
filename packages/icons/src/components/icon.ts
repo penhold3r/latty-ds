@@ -2,7 +2,24 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { iconRegistry } from '../registry/icon-registry';
+import { lattyIcons } from '../icons';
 import type { IconSize } from '../types/icons.types';
+
+// Registering here, before the class declaration below, matters: this is a
+// genuine top-level statement (not an import), so it runs strictly in
+// source order relative to `@customElement('lt-icon')` — unlike moving this
+// same call around in index.ts, which has no effect, since ES modules fully
+// evaluate every `import`/`export ... from` declaration in a file (this one
+// re-exports `Icon` from here) before that file's own top-level statements
+// run, regardless of where they're written. `customElements.define()`
+// synchronously upgrades any `<lt-icon>` already in the DOM (e.g. from
+// prerendered/SSR'd HTML) the instant it's called, which calls
+// `connectedCallback` → `loadIcon()` immediately — if that runs before the
+// registry has data, every such icon logs a spurious "not found in
+// registry" warning on first paint, even though it self-heals a moment
+// later via the registry's own `subscribe` mechanism. Registering the data
+// first, in the same module that defines the element, closes that race.
+iconRegistry.registerIcons(lattyIcons);
 
 /**
  * Icon component for displaying SVG icons from the icon registry.
