@@ -139,6 +139,12 @@
     "./discord": {
       "default": "./dist/entries/discord.js"
     },
+    "./double-caret-left": {
+      "default": "./dist/entries/double-caret-left.js"
+    },
+    "./double-caret-right": {
+      "default": "./dist/entries/double-caret-right.js"
+    },
     "./double-circle": {
       "default": "./dist/entries/double-circle.js"
     },

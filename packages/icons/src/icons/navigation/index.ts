@@ -7,6 +7,8 @@ import { caretLeftSvg } from './caret-left';
 import { caretRightSvg } from './caret-right';
 import { caretUpSvg } from './caret-up';
 import { compassSvg } from './compass';
+import { doubleCaretLeftSvg } from './double-caret-left';
+import { doubleCaretRightSvg } from './double-caret-right';
 import { externalSvg } from './external';
 import { globeSvg } from './globe';
 import { locationSvg } from './location';
@@ -26,14 +28,16 @@ export const navigationIcons = {
   'caret-left': caretLeftSvg,
   'caret-right': caretRightSvg,
   'caret-up': caretUpSvg,
-  external: externalSvg,
-  location: locationSvg,
-  return: returnSvg,
+  'double-caret-left': doubleCaretLeftSvg,
+  'double-caret-right': doubleCaretRightSvg,
   compass: compassSvg,
-  map: mapSvg,
+  external: externalSvg,
   globe: globeSvg,
-  send: sendSvg,
+  location: locationSvg,
+  map: mapSvg,
   'more-horizontal': moreHorizontalSvg,
   'more-vertical': moreVerticalSvg,
-  route: routeSvg
+  return: returnSvg,
+  route: routeSvg,
+  send: sendSvg
 } as const;
