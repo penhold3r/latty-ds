@@ -10,6 +10,8 @@ export const iconGroups = [
       'caret-right',
       'caret-up',
       'caret-down',
+      'double-caret-left',
+      'double-caret-right',
       'external',
       'location',
       'return',
