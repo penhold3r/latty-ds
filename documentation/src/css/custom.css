@@ -154,6 +154,22 @@ lt-text[variant='lead'] {
   color: var(--lt-text-subtle);
 }
 
+/* Native h1-h6 come with UA-stylesheet default margins; lt-text has none of
+   its own (a design-system component shouldn't impose page-layout spacing),
+   so every markdown/MDX heading rendered through the swizzled Heading
+   (h1-h6 only, not the display-* variants above — those are used in custom
+   recipe/hero layouts that already manage their own spacing) looked
+   squished against surrounding text after the tag swap. Restores that
+   breathing room as page-layout styling, not a component-level concern. */
+lt-text[variant='h1'],
+lt-text[variant='h2'],
+lt-text[variant='h3'],
+lt-text[variant='h4'],
+lt-text[variant='h5'],
+lt-text[variant='h6'] {
+  margin: 1rem 0;
+}
+
 /* Muted secondary text (captions, role subtitles, stat labels). Use instead of
    inline color overrides so the subtle tone has a single source of truth. */
 .text-muted {
