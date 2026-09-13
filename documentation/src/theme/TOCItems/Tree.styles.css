@@ -1,7 +1,11 @@
-/* Nested lt-list (h3-under-h2) gets a small indent back — no-marker zeroes
-   padding-left on every level, so without this the tree would render fully
-   flat regardless of heading depth. ::part(list) targets lt-list's own
-   internal <ul>, the supported way to reach past its shadow root. */
-.table-of-contents lt-list lt-list::part(list) {
+/* The tree is flattened into one <lt-list> (see Tree.tsx for why nesting
+   <lt-list> through <li> isn't parser-safe) — depth-based indent replaces
+   what nested <ul>s used to do visually. no-marker zeroes padding-left on
+   every item, so this is the only thing giving h3-under-h2 hierarchy back. */
+.table-of-contents li[data-toc-depth='1'] {
   padding-left: var(--lt-spacing-4);
+}
+
+.table-of-contents li[data-toc-depth='2'] {
+  padding-left: calc(var(--lt-spacing-4) * 2);
 }
