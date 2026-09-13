@@ -8,6 +8,23 @@
 @import '@latty-ds/tokens/tokens.css';
 @import '@latty-ds/tokens/semantic.css';
 
+/* Standard visually-hidden pattern (content stays in the accessibility tree,
+   removed from visual layout without `display: none`, which would also pull
+   it out of the accessible name computation). Used where a link/button's
+   only visible content is a decorative icon — see src/theme/DocBreadcrumbs. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  /* clip-path, not the legacy `clip: rect(...)` — same effect, current baseline property */
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Infima's own color variables, mapped to Latty's actual primary palette
    (rather than the scaffold's default green) so Docusaurus's native chrome —
    links, active nav state, hero buttons — matches the design system it's
@@ -77,62 +94,25 @@
   color: var(--lt-color-white);
 }
 
+/* White text directly on --lt-bg-primary's orange (#ff8200) only contrasts
+   2.48:1 — axe's `pnpm a11y` flagged it as a WCAG 2 AA (1.4.3) failure,
+   needing 4.5:1. The Astro reference has the same underlying color choice
+   (also white-on-orange via `--lt-text-inverse` in light mode), but this
+   package has its own passing a11y suite to answer to, so this one
+   deliberately isn't kept at parity. Giving the badge a solid, theme-
+   invariant dark pill background instead of a transparent one fixes it
+   outright: white on `--lt-color-neutral-900` (#1b1b1b) is ~17:1. */
 .navbar__version-badge {
   --lt-badge-color: var(--lt-color-white);
+  --lt-badge-bg: var(--lt-color-neutral-900);
 }
 
-/* Native markdown headings/paragraphs styled to match `lt-text`'s typography
-   tokens exactly (same font-family/size/weight/line-height as
-   packages/web/src/components/text/text.styles.ts), instead of rewriting
-   them to the `<lt-text>` custom element. Deliberately NOT doing the tag
-   swap here: Docusaurus's own heading-id/table-of-contents/anchor-link
-   system requires real `<h1>`-`<h6>` elements — the Astro site never had to
-   navigate this since it doesn't have a per-page TOC feature at all. See
-   the "MDX authoring layer" note in _agent-plans/DOCUSAURUS-MIGRATION-PLAN.md. */
-.markdown h1 {
-  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
-  font-size: clamp(1.75rem, 2.5vw + 0.75rem, 2.5rem);
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-
-.markdown h2 {
-  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
-  font-size: clamp(1.5rem, 2vw + 0.5rem, 2rem);
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-}
-
-.markdown h3 {
-  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
-  font-size: clamp(1.25rem, 1.5vw + 0.5rem, 1.5rem);
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.markdown h4 {
-  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.35;
-}
-
-.markdown h5 {
-  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.markdown h6 {
-  font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
+/* Headings no longer need a hand-duplicated typography shadow here — every
+   markdown/MDX heading renders through the swizzled src/theme/Heading, which
+   uses real `<lt-text variant="h1..h6" as="h1..h6">` (TOC/anchor machinery
+   preserved, see that file's comment for why this doesn't hit the same wall
+   the old rehype-lt-text AST plugin did). `.markdown p` below still applies:
+   plain paragraphs aren't part of that swizzle and stay native. */
 .markdown p {
   font-family: var(--lt-typography-fontFamilyPrimary);
   font-size: 1rem;
@@ -148,6 +128,21 @@
    site's original, correct behavior rather than something new. */
 .markdown a {
   text-decoration: underline;
+}
+
+/* The underline above is for links *inside a run of text* (WCAG 1.4.1's
+   actual target) — it shouldn't apply to whole-card link patterns, where the
+   entire card is the click target and there's no surrounding non-link text
+   to distinguish it from. `.recipe-card`/`.component-card`/`.example-card`
+   (RecipeGrid, ComponentGrid, ExampleGrid) wrap a whole `lt-surface` card in
+   a single `<Link>`/`<a>`; without this, the underline inherits into every
+   slotted `lt-text`/`lt-chip` title and description inside, underlining an
+   entire grid of cards. Needs the added class for specificity (0,2,1) to
+   beat `.markdown a` (0,1,1). */
+.markdown a.recipe-card,
+.markdown a.component-card,
+.markdown a.example-card {
+  text-decoration: none;
 }
 
 /* Ported from docs/src/styles/global.css (the Astro site) — real design
@@ -176,4 +171,44 @@ lt-text[variant='lead'] {
    inline color overrides so the subtle tone has a single source of truth. */
 .text-muted {
   color: var(--lt-text-subtle);
+}
+
+/* MDX/remark wraps a slotted element's text content in a <p> whenever that text
+   sits on its own line between the opening and closing tags (standard MDX
+   behavior: multi-line JSX children get parsed as block/paragraph content,
+   single-line children as inline text — see any MDX "why do I have extra <p>
+   tags" explainer). The browser's default <p> margin then breaks vertical
+   centering wherever these components lay out their slotted content in a flex
+   row — most visibly on `lt-button` (icon + label side by side: the label
+   would render outside the button's border). Reset it for every component in
+   `docs/` actually written this way; if a future page hits the same issue with
+   a different tag, add it here rather than reformatting call sites, since
+   Prettier is free to re-wrap a single-line fix back onto multiple lines the
+   next time the line is edited and no longer fits `printWidth`. */
+lt-text > p,
+lt-button > p,
+lt-link > p,
+lt-alert > p,
+lt-accordion > p,
+lt-list-item > p,
+lt-snackbar > p {
+  margin: 0;
+}
+
+/* The same MDX <p>-wrapping also breaks `lt-text` specifically, and worse
+   than a margin: the `.markdown p` rule above sets explicit font-size/weight/
+   line-height/family, which — since the slotted <p> is still structurally
+   inside `.markdown` — override the *inherited* size `lt-text` would
+   otherwise pass down from its shadow-internal, variant-styled heading
+   element (h1-h6/p/span, sized via `:host([variant='...']) [part='base']`
+   in packages/web/src/components/text/text.styles.ts). The practical result:
+   every heading/lead/display `lt-text` whose content got MDX-wrapped renders
+   at plain-paragraph size instead of its variant's size — collapsing all text
+   hierarchy on a page to one visual size. `.markdown p` has specificity
+   (0,1,1); this needs to be at least that specific to actually win, hence
+   the `.markdown` prefix rather than a bare `lt-text > p`. `inherit` (not a
+   fixed value) is required — it's what lets the <p> fall through to
+   whatever variant its `lt-text` ancestor was actually given. */
+.markdown lt-text > p {
+  font: inherit;
 }

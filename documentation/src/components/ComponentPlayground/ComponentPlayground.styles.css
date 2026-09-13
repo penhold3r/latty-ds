@@ -83,13 +83,12 @@
   background: var(--lt-bg-subtle);
 }
 
+/* Typography (font-size/weight/letter-spacing/text-transform) lives on
+   lt-text[variant='overline'] now, not duplicated here — only the section
+   header's layout/chrome stays. */
 .section-label {
   display: block;
   padding: var(--lt-spacing-2) var(--lt-spacing-4);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--lt-text-neutral);
   border-bottom: 1px solid var(--lt-border-default);
   background: var(--lt-bg-default);

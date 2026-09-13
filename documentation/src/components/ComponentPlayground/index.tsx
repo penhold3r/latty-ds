@@ -117,7 +117,9 @@ export default function ComponentPlayground({
               ))}
             </div>
           ) : (
-            <div className="section-label">Controls</div>
+            <div className="section-label">
+              <lt-text variant="overline">Controls</lt-text>
+            </div>
           )}
 
           {allCtrlGroups.map(({ tag: ctrlTag, members: ctrlMembers, defaults: ctrlDefaults }, groupIdx) =>
