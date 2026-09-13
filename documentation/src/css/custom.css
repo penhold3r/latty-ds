@@ -66,45 +66,32 @@
    variable here keeps those companion overrides while matching the actual
    header token.
 
-   Text/icon color is pinned to the raw, theme-invariant `--lt-color-white`
-   rather than a semantic token like `--lt-text-inverse` — the bar itself never
-   changes color between themes, so nothing sitting on it should either. This
-   is deliberately scoped to this doc's own navbar chrome, not a change to any
-   `@latty-ds/web` component. */
+   Text/icon color uses `--lt-text-on-primary` — computed against the actual
+   configured primary color (`accessibleTextOn()` in
+   packages/tokens/src/semantic/semantic-tokens.ts), not flipped by page
+   theme like `--lt-text-inverse` is. `--lt-bg-primary` doesn't change
+   between light/dark, but it's still a consumer-configurable brand color
+   (could be a light yellow, not just this repo's orange) — pinning to a
+   hardcoded white would silently break contrast for a lighter primary.
+   This is deliberately scoped to this doc's own navbar chrome, not a change
+   to any `@latty-ds/web` component. */
 .navbar--primary {
   --ifm-navbar-background-color: var(--lt-bg-primary);
-  color: var(--lt-color-white);
+  color: var(--lt-text-on-primary);
 }
 
-/* lt-badge/lt-icon-button both expose CSS custom-property hooks precisely for
-   this kind of consumer-side override (`--lt-badge-color`,
-   `--lt-icon-button-color`/`-hover-bg`/`-hover-color`) — used here instead of
-   picking a different variant/appearance, since none of those are pinned to a
-   fixed color independent of the page theme either. `::part(base)` covers
-   lt-icon-button's color directly: its internal `a[part='base']` rule (used
-   when `href` is set, as for the GitHub link) sets `color: inherit`, which
-   otherwise wins over the `--lt-icon-button-color`-driven rule by specificity
-   for anchor-rendered buttons specifically. */
+/* lt-icon-button's anchor-mode color bug (`a[part='base'] { color: inherit }`
+   winning over the `--lt-icon-button-color`-driven rule by specificity) is
+   fixed at the source now — see packages/web/src/components/icon-button.
+   Still need the custom-property hooks here since neither built-in
+   appearance/variant is pinned to a color independent of the page theme,
+   and this bar's background never changes between themes. Uses
+   `--lt-text-on-primary` for the same reason as `.navbar--primary` above —
+   computed against the actual primary color, not hardcoded. */
 .navbar__header-btn {
-  --lt-icon-button-hover-bg: color-mix(in srgb, white 15%, transparent);
-  --lt-icon-button-hover-color: var(--lt-color-neutral-50);
-}
-
-.navbar__header-btn::part(base) {
-  color: var(--lt-color-white);
-}
-
-/* White text directly on --lt-bg-primary's orange (#ff8200) only contrasts
-   2.48:1 — axe's `pnpm a11y` flagged it as a WCAG 2 AA (1.4.3) failure,
-   needing 4.5:1. The Astro reference has the same underlying color choice
-   (also white-on-orange via `--lt-text-inverse` in light mode), but this
-   package has its own passing a11y suite to answer to, so this one
-   deliberately isn't kept at parity. Giving the badge a solid, theme-
-   invariant dark pill background instead of a transparent one fixes it
-   outright: white on `--lt-color-neutral-900` (#1b1b1b) is ~17:1. */
-.navbar__version-badge {
-  --lt-badge-color: var(--lt-color-white);
-  --lt-badge-bg: var(--lt-color-neutral-900);
+  --lt-icon-button-color: var(--lt-text-on-primary);
+  --lt-icon-button-hover-bg: color-mix(in srgb, var(--lt-text-on-primary) 15%, transparent);
+  --lt-icon-button-hover-color: var(--lt-text-on-primary);
 }
 
 /* Headings no longer need a hand-duplicated typography shadow here — every

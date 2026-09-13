@@ -32,7 +32,7 @@ export default function NavbarContent(): JSX.Element {
         <NavbarLogo />
       </div>
       <div className={clsx(ThemeClassNames.layout.navbar.containerRight, 'navbar__items navbar__items--right')}>
-        <lt-badge class="navbar__version-badge" content={version} variant="neutral" appearance="subtle" size="sm" />
+        <lt-badge class="navbar__version-badge" content={version} variant="neutral" appearance="filled" size="sm" />
         <lt-icon-button
           class="navbar__header-btn"
           label="Toggle theme"
