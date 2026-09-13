@@ -8,11 +8,16 @@ import { listItemStyles } from './list-item.styles';
 import '@latty-ds/icons';
 
 /**
- * A list item component that renders a `<li>` element in shadow DOM.
+ * A list item that behaves like a native `<li>` without literally being one.
+ * The host sets `display: list-item` and `role="listitem"` on itself (a
+ * custom element's tag can never actually be `<li>`), so it still renders a
+ * native marker/counter via inherited `list-style-type`/`-position` and
+ * reads correctly to assistive tech, inside `lt-list`'s `<div role="list">`.
  *
- * This component solves the HTML parser issue where nested `<lt-list>` components
- * cannot contain plain `<li>` elements due to browser parsing rules. By wrapping
- * the `<li>` in a custom element's shadow DOM, we can properly nest lists.
+ * This also solves the HTML parser issue where nesting a real `<li>` through
+ * a `<lt-list>` boundary auto-closes a still-open ancestor `<li>` (see
+ * `lt-list`'s own tests) — `<lt-list-item>` isn't `<li>` at the raw-HTML-tag
+ * level, so it never triggers that parser behavior in the first place.
  *
  * Items can also be interactive: set `clickable` to render the row as a native
  * `<button>` (picker rows, settings rows), or `href` to render it as an `<a>`.

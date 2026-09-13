@@ -15,7 +15,14 @@ import './list-item';
  *
  * @slot - Default slot for list items (`<li>` elements)
  *
- * @csspart list - The underlying `<ul>` or `<ol>` element
+ * @csspart list - The underlying list container. Renders as a `<div
+ *   role="list">` rather than a real `<ul>`/`<ol>` — a custom element like
+ *   `<lt-list-item>` can never itself be a valid `<li>`, so a real
+ *   `<ul>`/`<ol>` around one fails HTML's list content model (only
+ *   `<li>`/`<script>`/`<template>` may be direct children). `list-style-type`
+ *   is still set here and inherited down, so real `<li>` children (and
+ *   `<lt-list-item>`, which sets `display: list-item` on itself) render
+ *   their native marker/counter exactly as they would inside a real list.
  *
  * @cssprop --list-marker-color - Color of the bullet points or numbers (default: neutral-500)
  *
@@ -96,15 +103,12 @@ export class List extends ThemeableElement {
   @property({ type: Boolean, attribute: 'no-marker', reflect: true }) noMarker = false;
 
   render() {
-    const isOrdered = this.type === 'ordered';
     const styles = this.markerColor ? { '--list-marker-color': this.markerColor } : {};
 
-    return isOrdered
-      ? html`<ol part="list" style=${styleMap(styles)}>
-          <slot></slot>
-        </ol>`
-      : html`<ul part="list" style=${styleMap(styles)}>
-          <slot></slot>
-        </ul>`;
+    return html`
+      <div part="list" role="list" style=${styleMap(styles)}>
+        <slot></slot>
+      </div>
+    `;
   }
 }

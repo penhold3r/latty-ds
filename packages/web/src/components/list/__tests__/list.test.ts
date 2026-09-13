@@ -20,14 +20,10 @@ describe('<lt-list>', () => {
     el.remove();
   });
 
-  it('renders a ul element in shadow DOM by default', () => {
-    const ul = el.shadowRoot!.querySelector('ul');
-    expect(ul).toBeTruthy();
-  });
-
-  it('does not render ol when type is unordered', () => {
-    const ol = el.shadowRoot!.querySelector('ol');
-    expect(ol).toBeFalsy();
+  it('renders a div with role="list" in shadow DOM', () => {
+    const list = el.shadowRoot!.querySelector('[part="list"]');
+    expect(list?.tagName).toBe('DIV');
+    expect(list?.getAttribute('role')).toBe('list');
   });
 
   it('has default type of unordered', () => {
@@ -38,15 +34,6 @@ describe('<lt-list>', () => {
   it('has default size of md', () => {
     expect(el.size).toBe('md');
     expect(el.getAttribute('size')).toBe('md');
-  });
-
-  it('renders ol when type is ordered', async () => {
-    el.type = 'ordered';
-    await el.updateComplete;
-    const ol = el.shadowRoot!.querySelector('ol');
-    const ul = el.shadowRoot!.querySelector('ul');
-    expect(ol).toBeTruthy();
-    expect(ul).toBeFalsy();
   });
 
   it('can change type to ordered', async () => {
@@ -89,52 +76,30 @@ describe('<lt-list>', () => {
     expect(items[2].textContent?.trim()).toBe('Item 3');
   });
 
-  it('has default marker color CSS variable', () => {
-    const ul = el.shadowRoot!.querySelector('ul');
-    expect(ul).toBeTruthy();
-  });
-
   it('applies custom marker color via style', async () => {
     el.markerColor = 'red';
     await el.updateComplete;
-    const ul = el.shadowRoot!.querySelector('ul') as HTMLElement;
-    expect(ul.style.getPropertyValue('--list-marker-color')).toBe('red');
+    const list = el.shadowRoot!.querySelector('[part="list"]') as HTMLElement;
+    expect(list.style.getPropertyValue('--list-marker-color')).toBe('red');
   });
 
   it('applies custom marker color with CSS variable', async () => {
     el.markerColor = 'var(--lt-color-primary-500)';
     await el.updateComplete;
-    const ul = el.shadowRoot!.querySelector('ul') as HTMLElement;
-    expect(ul.style.getPropertyValue('--list-marker-color')).toBe('var(--lt-color-primary-500)');
+    const list = el.shadowRoot!.querySelector('[part="list"]') as HTMLElement;
+    expect(list.style.getPropertyValue('--list-marker-color')).toBe('var(--lt-color-primary-500)');
   });
 
   it('does not apply style when marker color is empty', async () => {
     el.markerColor = '';
     await el.updateComplete;
-    const ul = el.shadowRoot!.querySelector('ul') as HTMLElement;
-    expect(ul.style.getPropertyValue('--list-marker-color')).toBe('');
+    const list = el.shadowRoot!.querySelector('[part="list"]') as HTMLElement;
+    expect(list.style.getPropertyValue('--list-marker-color')).toBe('');
   });
 
   it('exposes list part for styling', () => {
-    const ul = el.shadowRoot!.querySelector('[part="list"]');
-    expect(ul).toBeTruthy();
-  });
-
-  it('switches between ul and ol when type changes', async () => {
-    expect(el.shadowRoot!.querySelector('ul')).toBeTruthy();
-    expect(el.shadowRoot!.querySelector('ol')).toBeFalsy();
-
-    el.type = 'ordered';
-    await el.updateComplete;
-
-    expect(el.shadowRoot!.querySelector('ul')).toBeFalsy();
-    expect(el.shadowRoot!.querySelector('ol')).toBeTruthy();
-
-    el.type = 'unordered';
-    await el.updateComplete;
-
-    expect(el.shadowRoot!.querySelector('ul')).toBeTruthy();
-    expect(el.shadowRoot!.querySelector('ol')).toBeFalsy();
+    const list = el.shadowRoot!.querySelector('[part="list"]');
+    expect(list).toBeTruthy();
   });
 
   it('demonstrates HTML parser issue with nested lists (use lt-list-item instead)', async () => {
@@ -158,20 +123,21 @@ describe('<lt-list>', () => {
     // Wait for nested list to be ready
     await nestedList.updateComplete;
 
-    // Check parent has ul in shadow DOM
-    expect(parentList.shadowRoot!.querySelector('ul')).toBeTruthy();
-
-    // Check nested list has ol in shadow DOM
-    expect(nestedList.shadowRoot!.querySelector('ol')).toBeTruthy();
+    // Check parent and nested list both rendered their container
+    expect(parentList.shadowRoot!.querySelector('[part="list"]')).toBeTruthy();
+    expect(nestedList.shadowRoot!.querySelector('[part="list"]')).toBeTruthy();
 
     // ISSUE: The HTML parser moves <li> elements out of <lt-list>
     // because it doesn't recognize custom elements as valid list containers.
     // When an <li> is encountered while already inside another <li>, the parser
     // auto-closes the parent <li> and makes the nested <li> a sibling instead.
+    // This is independent of what lt-list renders internally (a real <ul>/<ol>
+    // or the current div+role="list") — the light DOM is already malformed by
+    // the time either would matter.
     //
     // SOLUTION: Use <lt-list-item> instead of <li> for nested lists.
-    // The <lt-list-item> component renders <li> in its shadow DOM, which
-    // avoids the HTML parser issue.
+    // A <lt-list-item> tag isn't <li> at the raw-HTML-token level, so it never
+    // triggers the parser's li-auto-close behavior in the first place.
     // This demonstrates the bug - nested list has 0 li items
     const nestedItems = nestedList.querySelectorAll('li');
     expect(nestedItems.length).toBe(0); // This is why we created lt-list-item!

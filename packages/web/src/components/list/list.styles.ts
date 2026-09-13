@@ -7,20 +7,16 @@ export const listStyles = css`
     --list-marker-color: var(--lt-color-neutral-500);
   }
 
-  ul,
-  ol {
+  [part='list'] {
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 var(--lt-spacing-5);
     list-style-position: outside;
+    list-style-type: disc;
     color: var(--lt-text-default);
   }
 
-  ul {
-    padding-left: var(--lt-spacing-5);
-  }
-
-  ol {
-    padding-left: var(--lt-spacing-5);
+  :host([type='ordered']) [part='list'] {
+    list-style-type: decimal;
   }
 
   ::slotted(li),
@@ -42,8 +38,7 @@ export const listStyles = css`
   }
 
   /* No marker */
-  :host([no-marker]) ul,
-  :host([no-marker]) ol {
+  :host([no-marker]) [part='list'] {
     list-style: none;
     padding-left: 0;
   }
@@ -67,17 +62,12 @@ export const listStyles = css`
     margin-bottom: 0;
   }
 
-  ul ::slotted(li)::marker {
-    color: var(--list-marker-color);
-  }
-
-  ol ::slotted(li)::marker {
+  [part='list'] ::slotted(li)::marker {
     color: var(--list-marker-color);
   }
 
   /* Size variants */
-  :host([size='sm']) ul,
-  :host([size='sm']) ol {
+  :host([size='sm']) [part='list'] {
     font-size: 0.875rem;
     line-height: 1.5;
   }
@@ -87,8 +77,7 @@ export const listStyles = css`
     margin-bottom: var(--lt-spacing-1);
   }
 
-  :host([size='md']) ul,
-  :host([size='md']) ol {
+  :host([size='md']) [part='list'] {
     font-size: 1rem;
     line-height: 1.6;
   }
@@ -98,8 +87,7 @@ export const listStyles = css`
     margin-bottom: var(--lt-spacing-2);
   }
 
-  :host([size='lg']) ul,
-  :host([size='lg']) ol {
+  :host([size='lg']) [part='list'] {
     font-size: 1.125rem;
     line-height: 1.7;
   }
