@@ -11,28 +11,28 @@ Latty is a framework-agnostic design system built on design tokens and Web Compo
 ### Development
 
 ```bash
-pnpm dev                    # Rebuild tokens + manifest, then start Astro dev server
-pnpm docs:dev               # Start Astro dev server only (skips pre-builds)
+pnpm dev                    # Rebuild tokens + manifest, then start the Docusaurus dev server
+pnpm docs:dev               # Start the Docusaurus dev server only (skips pre-builds)
 ```
 
 **What updates live vs. what needs a restart:**
 
-| What changed                                                    | What to do                                                     |
-| --------------------------------------------------------------- | -------------------------------------------------------------- |
-| Component logic / styles (`*.ts`, `*.styles.ts`)                | Nothing — Vite picks it up via source alias                    |
-| Docs page (`.astro`)                                            | Nothing — Astro watches `docs/src/**` automatically            |
-| Component prop added / renamed (affects playground + API table) | Restart `pnpm dev` — it rebuilds `manifest.json` on start      |
-| Token values (`tokens.config.json`)                             | Restart `pnpm dev` — it rebuilds `@latty-ds/tokens` on start   |
-| Stale browser after restart                                     | Hard-refresh (`Cmd+Shift+R`) or run `pnpm docs:dev -- --force` |
+| What changed                                                    | What to do                                                      |
+| --------------------------------------------------------------- | --------------------------------------------------------------- |
+| Component logic / styles (`*.ts`, `*.styles.ts`)                | Nothing — Vite picks it up via source alias                     |
+| Docs page (`.mdx`)                                              | Nothing — Docusaurus's dev server watches `docs/docs/**`        |
+| Component prop added / renamed (affects playground + API table) | Restart `pnpm dev` — it rebuilds `manifest.json` on start       |
+| Token values (`tokens.config.json`)                             | Restart `pnpm dev` — it rebuilds `@latty-ds/tokens` on start    |
+| Stale webpack cache after restart                               | Run `pnpm --filter @latty-ds/docs clear`, then `pnpm dev` again |
 
 The `manifest.json` (`packages/web/dist/manifest.json`) is the only genuinely dist-based artifact the dev server reads at SSR time. `ComponentPlayground` and `ApiTable` both use it to render controls and prop tables — it must be rebuilt whenever a component's public API changes.
 
 ### Documentation
 
 ```bash
-pnpm docs:dev               # Start Astro dev server (http://localhost:4321)
+pnpm docs:dev               # Start the Docusaurus dev server (http://localhost:3000)
 pnpm docs:build             # Build documentation site (builds tokens + web first)
-pnpm docs:preview           # Preview built documentation
+pnpm docs:preview           # Preview the built documentation site
 ```
 
 ### Building
@@ -56,17 +56,15 @@ pnpm vitest run <filepath>  # Run a single test file
 ### Linting
 
 ```bash
-pnpm lint                   # Run ESLint on packages/ only
-pnpm eslint docs/src        # Run ESLint on docs (pnpm lint does NOT cover docs)
+pnpm lint                   # Run ESLint on packages/ and docs/
 pnpm format:check           # Prettier check (full repo — fix with: pnpm prettier --write .)
 pnpm typecheck              # Type-check all packages (tsc --noEmit)
 pnpm check:boundaries       # Detect cross-package relative imports
-pnpm lint:markup            # markuplint HTML/a11y checks on docs pages
-pnpm a11y                   # Playwright + axe-core WCAG2AA checks in light + dark mode (auto-starts dev server)
+pnpm a11y                   # Playwright + axe-core WCAG2AA checks against the production build, light + dark mode
 pnpm a11y:report            # Open the HTML report from the last a11y run (playwright-a11y-report/, gitignored)
 ```
 
-**Important**: `pnpm typecheck` and `pnpm check:boundaries` read built `dist/` directories — always run `pnpm build` first after a `pnpm clean`. The correct full-monorepo check order is: build → test → lint (packages + docs) → format:check → typecheck → check:boundaries → lint:markup → a11y.
+**Important**: `pnpm typecheck` and `pnpm check:boundaries` read built `dist/` directories — always run `pnpm build` first after a `pnpm clean`. The correct full-monorepo check order is: build → test → lint → format:check → typecheck → check:boundaries → a11y.
 
 ### Cleaning
 
@@ -99,7 +97,7 @@ Slash command scripts live in `.claude/commands/` (e.g. `new-component.sh`, `new
 /new-component <ComponentName> [--variants v1,v2] [--sizes sm,md,lg] [--disabled] [--events e1,e2]
 ```
 
-Creates all boilerplate in one shot: web component files, Vitest test, docs page, and sidebar entry. Use PascalCase (e.g. `Badge`, `DatePicker`). After running, fill in the logic, styles, types, and docs — everything else is wired up.
+Creates all boilerplate in one shot: web component files, Vitest test, and docs page (dropped into `docs/docs/components/`, where Docusaurus's autogenerated sidebar picks it up automatically — no separate sidebar entry to wire). Use PascalCase (e.g. `Badge`, `DatePicker`). After running, fill in the logic, styles, types, and docs — everything else is wired up.
 
 ```bash
 /new-token color <name> <hex>
@@ -160,7 +158,7 @@ This is a pnpm workspace monorepo with the following packages:
 - **@latty-ds/tokens** - Design tokens system that generates CSS variables, JSON, and JavaScript exports from `tokens.config.json`
 - **@latty-ds/web** - Web Components built with Lit (uses `lt-` prefix for custom elements)
 - **@latty-ds/icons** - Icon components using Iconoir library with pluggable provider system
-- **@latty-ds/docs** - Astro-based documentation site with MDX support and live component demos (lives at `docs/` in repo root, not `packages/`)
+- **@latty-ds/docs** - Docusaurus-based documentation site with MDX support and live component demos (lives at `docs/` in repo root, not `packages/`)
 - **@latty-ds/react** - React wrappers for web components (auto-generated from `custom-elements.json`)
 - **@latty-ds/utils** - Shared utilities
 
@@ -203,7 +201,7 @@ components/
 
 All custom elements use the `lt-` prefix (e.g., `lt-button`, `lt-spinner`). Components consume design tokens via CSS custom properties with the `--lt-` prefix.
 
-**Adding a new component**: always use the `/new-component <Name>` slash command — it creates the 5 web package files, registers the export in `packages/web/src/index.ts`, creates the docs page, and adds the sidebar entry alphabetically. Never create these manually. After scaffolding, run `pnpm codegen:wrappers` to regenerate the React wrappers.
+**Adding a new component**: always use the `/new-component <Name>` slash command — it creates the 5 web package files, registers the export in `packages/web/src/index.ts`, and creates the docs page (Docusaurus's sidebar autogenerates from the folder, so a correctly-named file is all that's needed there). Never create these manually. After scaffolding, run `pnpm codegen:wrappers` to regenerate the React wrappers.
 
 **Custom Elements Manifest**: `pnpm build` in `@latty-ds/web` runs `cem analyze` (via `cem.config.mjs`) to generate `custom-elements.json` at the package root. This manifest is what `pnpm codegen:wrappers` reads to produce React wrappers — always rebuild the web package before running codegen after changing component APIs.
 
@@ -215,58 +213,46 @@ All custom elements use the `lt-` prefix (e.g., `lt-button`, `lt-spinner`). Comp
 
 ### Documentation Site
 
-The `@latty-ds/docs` package uses Astro with MDX for documentation:
+The `@latty-ds/docs` package uses Docusaurus 3 with MDX for documentation:
 
 ```text
 docs/
+  docs/                 # MDX content (auto-routed, one file per page)
+    getting-started/    # Getting started guides
+    tokens/             # Design tokens documentation
+    components/         # Component documentation
+    icons/               # Icon gallery
+    recipes/             # Multi-component recipes
+    examples/            # Full example apps
   src/
-    pages/              # Documentation pages (auto-routed)
-      index.mdx         # Homepage
-      getting-started/  # Getting started guides
-      tokens/           # Design tokens documentation
-      components/       # Component documentation
-      frameworks/       # Framework-specific guides
-    layouts/            # Astro layouts
-      BaseLayout/       # Main page layout
-        index.astro
-        BaseLayout.script.ts
-        BaseLayout.styles.css
-    components/         # Astro components — each in its own directory
-      Sidebar/          # Collapsible nav (script updates this automatically)
-        index.astro
-        Sidebar.styles.css
-      ApiTable/         # Reads component metadata and renders prop/attr table
-        index.astro
-        ApiTable.script.ts
-        ApiTable.styles.css
+    theme/              # Swizzled Docusaurus theme components (overrides
+                         # default rendering to use Latty components instead
+                         # of Infima's own — Heading, DocBreadcrumbs,
+                         # Admonition, DocPaginator, Footer/Copyright,
+                         # TOCItems, Navbar/Content)
+    components/         # React components used inside MDX content
+      ApiTable/          # Reads component metadata and renders prop/attr table
       ComponentPlayground/  # Interactive attribute playground
-        index.astro
-        ComponentPlayground.script.ts
-        ComponentPlayground.styles.css
-        ComponentPlayground.types.ts
-        ComponentPlayground.ssr.ts
-      CodeSnippet/      # Syntax-highlighted code block
-        index.astro
-        CodeSnippet.script.ts
-        CodeSnippet.styles.css
-    styles/             # Global styles
-      global.css        # Base styles + token imports
+      FrameworkTabs/     # HTML/React/Vue usage-snippet tabs
+    data/                # Hand-maintained gallery data (components.ts,
+                         # icons.ts) consumed by ComponentGrid/IconsGallery
+    css/
+      custom.css         # Global styles + Latty token integration
+    clientModules/
+      registerLatty.ts   # Registers all lt-* custom elements + icons once,
+                         # globally, before any page renders
+  sidebars.ts            # Autogenerated from docs/docs/** + each folder's
+                         # _category_.json (no hand-curated sidebar array)
+  docusaurus.config.ts
 ```
 
-**Docs file naming convention**: every component and layout lives in its own directory (`Name/`). Co-located files follow `Name.script.ts`, `Name.styles.css`, `Name.types.ts`, `Name.ssr.ts` — never generic `script.ts` or `style.css`. Pages that need client `.ts` or data `.ts` files prefix them with `_` (e.g. `_icons.script.ts`, `_icons.data.ts`) because any `.ts` file in `src/pages/` without a `_` prefix is treated as an API route by Astro.
-
-**CSS nesting**: Astro/Vite uses Lightning CSS which supports `& .child` and `&:hover` nesting, but **BEM modifier nesting (`&--modifier`) is invalid native CSS** — esbuild warns during minification. Write BEM modifiers as standalone rules: `.block--modifier {}` instead of `&--modifier {}` inside `.block {}`.
-
-**`is:global` scoping**: dynamically created DOM elements (e.g. elements appended by `ComponentPlayground.script.ts`) are not targeted by Astro's scoped CSS. Use `<style is:global>@import './Name.styles.css';</style>` for components that create DOM dynamically.
-
-**a11y and shadow DOM**: `pnpm a11y` uses Playwright + `@axe-core/playwright`. axe-core pierces shadow DOM, so it can audit the internals of `lt-button`, `lt-chip`, `lt-link`, and all other custom elements — no false positives from shadow boundary. Tests live in `a11y/a11y.spec.ts` and run against `playwright.a11y.config.ts`.
+**a11y and shadow DOM**: `pnpm a11y` uses Playwright + `@axe-core/playwright`, running against a real production build (`docs/playwright.a11y.config.ts`'s `webServer` runs `pnpm build && pnpm serve` — several real bugs during the Docusaurus migration only reproduced against prerendered/production HTML, never the dev server). axe-core pierces shadow DOM, so it can audit the internals of `lt-button`, `lt-chip`, `lt-link`, and all other custom elements — no false positives from shadow boundary. Tests live in `docs/a11y/a11y.spec.ts`.
 
 Documentation pages can:
 
-- Use MDX for rich content
-- Import and render live Web Components
-- Include interactive examples with `<script>` tags
-- Import Astro components for reusable patterns
+- Use MDX for rich content, with real markdown headings (rendered through the swizzled `@theme/Heading` as `lt-text`, not plain `<h1>`-`<h6>`)
+- Import and render live Web Components directly (no per-page registration needed — `registerLatty.ts` handles it globally)
+- Import React components from `@site/src/components/...` for reusable patterns (`ComponentPlayground`, `ApiTable`, `FrameworkTabs`, etc.)
 
 ### Package Boundaries
 
@@ -288,15 +274,17 @@ Vitest resolves imports at test time via `vite-tsconfig-paths` (no aliases neede
 
 ### Creating Documentation
 
-**Always use the scaffold script** — it generates the docs page automatically. For manual edits, component pages live at `docs/src/pages/components/<name>/index.astro` and use `.astro` (not `.mdx`) so they can include `<script>` blocks for live demos.
+**Always use the scaffold script** — it generates the docs page automatically. For manual edits, component pages live at `docs/docs/components/<name>.mdx` with YAML frontmatter (`title`, `description`, `slug`) and `@site/src/components/...` imports — no wrapper layout component needed, and no sidebar file to touch (Docusaurus autogenerates it from the folder).
 
 Use **`ComponentPlayground`** for all component pages. It reads attributes automatically and supports JS-only properties and trigger buttons:
 
-```astro
+```mdx
 {/* Simple component */}
+
 <ComponentPlayground tag="lt-button" content="Click me" />
 
 {/* JS-only properties (options, columns, data) — set after element creation */}
+
 <ComponentPlayground
   tag="lt-select"
   seedData={{
@@ -308,6 +296,7 @@ Use **`ComponentPlayground`** for all component pages. It reads attributes autom
 />
 
 {/* Components that start hidden and need a trigger (dialog, drawer) */}
+
 <ComponentPlayground
   tag="lt-dialog"
   previewTrigger="Open Dialog"
@@ -315,9 +304,9 @@ Use **`ComponentPlayground`** for all component pages. It reads attributes autom
 />
 ```
 
-The docs page must `import '@latty-ds/web'` inside a `<script>` tag to register the custom elements in the browser.
+No per-page registration is needed — `src/clientModules/registerLatty.ts` registers every `lt-*` custom element and icon globally once, before any page renders.
 
-**The docs site is a showcase of the design system.** Every docs page must use Latty components wherever possible — headings, body copy, buttons, badges, tables, alerts, links. Reach for `lt-text`, `lt-button`, `lt-badge`, `lt-alert`, `lt-link`, etc. before writing plain HTML or inline styles. Native HTML elements are only acceptable when no Latty component covers the use case. This rule applies to layout pages, overview pages, recipe pages, and getting-started guides — not just component demo pages.
+**The docs site is a showcase of the design system.** Every docs page must use Latty components wherever possible — headings, body copy, buttons, badges, tables, alerts, links. Reach for `lt-text`, `lt-button`, `lt-badge`, `lt-alert`, `lt-link`, etc. before writing plain HTML or inline styles. Native HTML elements are only acceptable when no Latty component covers the use case. This rule applies to layout pages, overview pages, recipe pages, and getting-started guides — not just component demo pages. This extends to Docusaurus's own chrome, not just page content: headings, breadcrumbs, admonitions, pagination, the footer, and the table of contents all render through swizzled `@theme/*` overrides (`docs/src/theme/`) that use Latty components instead of Infima's defaults — the left sidebar and code blocks are the deliberate exceptions, left as Docusaurus's own.
 
 ### Agent Context Pack (`agents/`)
 
@@ -329,7 +318,7 @@ The docs page must `import '@latty-ds/web'` inside a `<script>` tag to register 
 - A shared prop convention changes (e.g. a new `variant`/`appearance`/`size` value used system-wide) → update `agents/components.md`'s prop-vocabulary table.
 - `configure()`/`createStyleSheet()` API changes, or a new themeable option is added → update `agents/theming.md`.
 - Install steps, framework support, or package structure changes → update `agents/installation.md` and/or `agents/usage.md`.
-- A new recipe pattern is added to `docs/src/pages/recipes/` → consider a condensed version for `agents/patterns.md`.
+- A new recipe pattern is added to `docs/docs/recipes/` → consider a condensed version for `agents/patterns.md`.
 - Any of the above that changes the file list → update the table in the root `README.md`'s "Working with agents" section too.
 
 Per-component prop/slot/event detail is deliberately **not** duplicated in `agents/` — it's sourced from `custom-elements.json` at runtime by whoever installs the pack, so most day-to-day prop tweaks don't require an `agents/` update at all.
@@ -354,9 +343,9 @@ Tests use Vitest with jsdom environment. Test files are located at `packages/**/
 
 ## Tooling
 
-**ESLint**: Uses v9 flat config (`eslint.config.mts`) with Astro, JSON, CSS, and Markdown support. CSS rules allow unknown `--lt-*` custom properties (`allowUnknownVariables: true`) since they are resolved at runtime by `@latty-ds/tokens`. `no-console` is an error — use the `logger` utility from `@latty-ds/utils` in scripts instead. Never use `any` or suppress linting warnings unless explicitly instructed.
+**ESLint**: Uses v9 flat config (`eslint.config.mts`) with JSON, CSS, and Markdown support. CSS rules allow unknown `--lt-*` custom properties (`allowUnknownVariables: true`) since they are resolved at runtime by `@latty-ds/tokens`. `no-console` is an error — use the `logger` utility from `@latty-ds/utils` in scripts instead. Never use `any` or suppress linting warnings unless explicitly instructed.
 
-**Prettier**: `printWidth: 120`, `singleQuote: true`, `trailingComma: "none"`. Includes `prettier-plugin-astro` for `.astro` file formatting.
+**Prettier**: `printWidth: 120`, `singleQuote: true`, `trailingComma: "none"`.
 
 ## Agent Documents
 
@@ -371,8 +360,8 @@ Planning documents, design decisions, audits, and research produced during a ses
 
 Three workflows in `.github/workflows/`:
 
-- **`ci.yml`** — on every push to `main` and every PR: builds all packages, then runs `pnpm lint`, `pnpm lint:markup`, `pnpm typecheck`, and `pnpm test`; a second job builds the docs site and runs the full `pnpm a11y` suite against a preview server.
-- **`deploy-docs.yml`** — deploys the docs site to GitHub Pages on every push to `main` (installs with `--frozen-lockfile`, runs `pnpm docs:build`). No manual deploy step is needed.
+- **`ci.yml`** — on every push to `main` and every PR: builds all packages, then runs `pnpm lint`, `pnpm typecheck`, and `pnpm test`; a second job builds the packages and runs `pnpm a11y`, which builds and serves the docs site itself via its own Playwright `webServer` config.
+- **`deploy-docs.yml`** — deploys the docs site to GitHub Pages on every push to `main` (installs with `--frozen-lockfile`, runs `pnpm docs:build`, uploads `docs/build`). No manual deploy step is needed.
 - **`publish.yml`** — publishes the public packages to npm on `v*` tags (see Releasing above).
 
 ## Node Version

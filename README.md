@@ -118,11 +118,11 @@ It's deliberately not a full API reference — for exact per-component props/slo
 
 ```bash
 pnpm install          # install all workspace dependencies
-pnpm dev              # build tokens + manifest, then start docs at localhost:4321
+pnpm dev              # build tokens + manifest, then start docs at localhost:3000
 pnpm test             # run the full test suite (Vitest)
 pnpm build            # build all packages
 pnpm typecheck        # TypeScript type-check across the monorepo
-pnpm lint             # ESLint (packages only — run pnpm eslint docs/src for docs)
+pnpm lint             # ESLint across packages and docs
 ```
 
 Additional tools:
@@ -130,8 +130,7 @@ Additional tools:
 ```bash
 pnpm codegen:wrappers # regenerate React wrappers after changing web components
 pnpm bundle-size      # print per-component gzip sizes vs baseline
-pnpm lint:markup      # markuplint accessibility checks on the docs site
-pnpm a11y             # pa11y-ci full-page accessibility audit (requires live server)
+pnpm a11y             # Playwright + axe-core accessibility audit against the production docs build
 ```
 
 ## Architecture
@@ -143,7 +142,7 @@ packages/
   icons/    # Iconoir-based icons with pluggable provider
   react/    # React wrappers (auto-generated from custom-elements.json)
   utils/    # shared utilities — no external deps
-docs/       # Astro documentation site with live component demos
+docs/       # Docusaurus documentation site with live component demos
 scripts/    # codegen, bundle analysis, boundary checks
 ```
 
@@ -158,7 +157,7 @@ Package boundary rule: within a package use relative imports; across packages us
 5. Commit following [Conventional Commits](https://www.conventionalcommits.org/) (`feat`, `fix`, `docs`, etc.) — a commit-msg hook enforces this.
 6. Open a pull request.
 
-To scaffold a new component: `/new-component <Name>` (via Claude Code) — generates the web component, tests, docs page, and sidebar entry in one step.
+To scaffold a new component: `/new-component <Name>` (via Claude Code) — generates the web component, tests, and docs page in one step.
 
 ## License
 
