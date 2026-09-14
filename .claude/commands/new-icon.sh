@@ -35,7 +35,7 @@ CATEGORY_DIR="${ICONS_DIR}/${CATEGORY}"
 CATEGORY_INDEX="${CATEGORY_DIR}/index.ts"
 ICON_FILE="${CATEGORY_DIR}/${ICON_NAME}.ts"
 TOP_INDEX="${ICONS_DIR}/index.ts"
-ICONS_PAGE="${REPO_ROOT}/docs/src/pages/icons/_icons.data.ts"
+ICONS_PAGE="${REPO_ROOT}/docs/src/data/icons.ts"
 
 # ── Derive camelCase export variable name ─────────────────────────────────────
 # arrow-left → arrowLeftSvg
