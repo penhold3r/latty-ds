@@ -16,16 +16,16 @@
   border-radius: 10px 10px 0 0;
   transition: background 200ms ease;
   overflow-x: auto;
+}
 
-  &[data-preview-theme='dark'] {
-    background: var(--lt-color-neutral-900);
-    border-bottom-color: var(--lt-color-neutral-700);
-  }
+.preview[data-preview-theme='dark'] {
+  background: var(--lt-color-neutral-900);
+  border-bottom-color: var(--lt-color-neutral-700);
+}
 
-  &[data-preview-theme='light'] {
-    background: var(--lt-color-neutral-50);
-    border-bottom-color: var(--lt-color-neutral-200);
-  }
+.preview[data-preview-theme='light'] {
+  background: var(--lt-color-neutral-50);
+  border-bottom-color: var(--lt-color-neutral-200);
 }
 
 .preview-toolbar {
@@ -49,17 +49,17 @@
     color 150ms ease,
     background 150ms ease,
     border-color 150ms ease;
+}
 
-  &:hover {
-    background: var(--lt-bg-subtle);
-    color: var(--lt-text-default);
-  }
+.bp-btn:hover {
+  background: var(--lt-bg-subtle);
+  color: var(--lt-text-default);
+}
 
-  &.is-active {
-    background: var(--lt-color-primary-50);
-    border-color: var(--lt-color-primary-300);
-    color: var(--lt-color-primary-700);
-  }
+.bp-btn.is-active {
+  background: var(--lt-color-primary-50);
+  border-color: var(--lt-color-primary-300);
+  color: var(--lt-color-primary-700);
 }
 
 .preview-stage {
@@ -83,13 +83,12 @@
   background: var(--lt-bg-subtle);
 }
 
+/* Typography (font-size/weight/letter-spacing/text-transform) lives on
+   lt-text[variant='overline'] now, not duplicated here — only the section
+   header's layout/chrome stays. */
 .section-label {
   display: block;
   padding: var(--lt-spacing-2) var(--lt-spacing-4);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--lt-text-neutral);
   border-bottom: 1px solid var(--lt-border-default);
   background: var(--lt-bg-default);
@@ -116,18 +115,20 @@
   transition:
     color 150ms ease,
     background 150ms ease;
+}
 
-  &:last-child {
-    border-right: none;
-  }
-  &:hover {
-    background: var(--lt-bg-subtle);
-    color: var(--lt-text-default);
-  }
-  &.is-active {
-    color: var(--lt-color-primary-600);
-    box-shadow: inset 0 -2px 0 var(--lt-color-primary-500);
-  }
+.ctrl-tab-btn:last-child {
+  border-right: none;
+}
+
+.ctrl-tab-btn:hover {
+  background: var(--lt-bg-subtle);
+  color: var(--lt-text-default);
+}
+
+.ctrl-tab-btn.is-active {
+  color: var(--lt-color-primary-600);
+  box-shadow: inset 0 -2px 0 var(--lt-color-primary-500);
 }
 
 .control-row {
@@ -137,30 +138,30 @@
   padding: var(--lt-spacing-2) var(--lt-spacing-4);
   gap: var(--lt-spacing-3);
   border-bottom: 1px solid var(--lt-border-subtle);
+}
 
-  &:last-child {
-    border-bottom: none;
-  }
+.control-row:last-child {
+  border-bottom: none;
+}
 
-  lt-select,
-  lt-textfield {
-    max-width: 130px;
-    width: 100%;
-  }
+.control-row lt-select,
+.control-row lt-textfield {
+  max-width: 130px;
+  width: 100%;
+}
 
-  lt-switch {
-    flex-shrink: 0;
-  }
+.control-row lt-switch {
+  flex-shrink: 0;
 }
 
 .control-row--stacked {
   flex-direction: column;
   align-items: stretch;
   gap: var(--lt-spacing-1);
+}
 
-  lt-combobox {
-    width: 100%;
-  }
+.control-row--stacked lt-combobox {
+  width: 100%;
 }
 
 .control-label {
@@ -180,11 +181,11 @@
   padding: 2px;
   cursor: pointer;
   flex-shrink: 0;
+}
 
-  &:focus {
-    outline: 2px solid var(--lt-color-primary-400);
-    outline-offset: 1px;
-  }
+.control-color:focus {
+  outline: 2px solid var(--lt-color-primary-400);
+  outline-offset: 1px;
 }
 
 .code-panel {
@@ -212,10 +213,10 @@
 .code-tabs {
   display: flex;
   align-items: stretch;
+}
 
-  &::part(panels-container) {
-    display: none;
-  }
+.code-tabs::part(panels-container) {
+  display: none;
 }
 
 .code-pre {
@@ -240,10 +241,10 @@
   border-radius: 0 0 10px 10px;
   background: var(--lt-bg-default);
   overflow: hidden;
+}
 
-  &.is-open .event-log-chevron {
-    transform: rotate(180deg);
-  }
+.event-log.is-open .event-log-chevron {
+  transform: rotate(180deg);
 }
 
 .event-log-header {
@@ -263,11 +264,11 @@
   transition:
     color 150ms ease,
     background 150ms ease;
+}
 
-  &:hover {
-    background: var(--lt-bg-subtle);
-    color: var(--lt-text-default);
-  }
+.event-log-header:hover {
+  background: var(--lt-bg-subtle);
+  color: var(--lt-text-default);
 }
 
 .event-log-chevron {
@@ -288,10 +289,10 @@
   padding: var(--lt-spacing-1) var(--lt-spacing-4);
   border-bottom: 1px solid var(--lt-border-subtle);
   align-items: baseline;
+}
 
-  &:last-child {
-    border-bottom: none;
-  }
+.event-log-row:last-child {
+  border-bottom: none;
 }
 
 .event-log-time {

@@ -1,4 +1,4 @@
-import type { PlaygroundMember, PlaygroundGroup } from './ComponentPlayground.types.ts';
+import type { PlaygroundMember, PlaygroundGroup } from './ComponentPlayground.types';
 
 export const defaultValue = (member: PlaygroundMember, overrides: Record<string, unknown> = {}): unknown => {
   if (member.name in overrides) return overrides[member.name];

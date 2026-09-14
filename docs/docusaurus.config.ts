@@ -74,7 +74,7 @@ const config: Config = {
           path: 'docs',
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/penhold3r/latty-ds/tree/main/documentation/'
+          editUrl: 'https://github.com/penhold3r/latty-ds/tree/main/docs/'
         },
         // The Astro site never had a blog — dropped rather than ported.
         blog: false,

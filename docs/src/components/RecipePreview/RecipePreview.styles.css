@@ -1,3 +1,4 @@
+/* Ported from docs/src/components/RecipePreview (the Astro site). */
 .recipe-preview {
   align-items: center;
   background: var(--lt-bg-subtle);

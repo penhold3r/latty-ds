@@ -1,5 +1,29 @@
-import '@latty-ds/web';
-import type { PlaygroundMember, PlaygroundGroup, ChildItem } from './ComponentPlayground.types.ts';
+// Ported near-verbatim from docs/src/components/ComponentPlayground/ComponentPlayground.script.ts
+// (the Astro site). Only change: the Astro version auto-ran
+// `document.querySelectorAll('.playground').forEach(initPlayground)` once at
+// module load (fine for Astro's per-page-load script model). Docusaurus is a
+// long-lived SPA, so `initPlayground` is exported instead and called once per
+// mount from index.tsx's `useEffect` — everything else (DOM manipulation,
+// state, code generation) is identical and needed no rewrite for React/SSR,
+// since it only ever runs client-side inside that effect.
+import type { PlaygroundMember, PlaygroundGroup, ChildItem } from './ComponentPlayground.types';
+
+// The previewed element is created from a runtime tag string (`document.createElement(tag)`),
+// so its actual custom-element shape (show/hide/open, arbitrary seed-data properties) isn't
+// known at compile time — these two helper types stand in for `any` across this file.
+type PreviewedElement = HTMLElement & {
+  show?: () => void;
+  hide?: () => void;
+  open?: boolean;
+  [key: string]: unknown;
+};
+
+type ControlElement = HTMLElement & {
+  options?: { value: string; label: string }[];
+  value?: string;
+  checked?: boolean;
+  dataset: DOMStringMap;
+};
 
 const encodeState = (s: Record<string, unknown>) => btoa(unescape(encodeURIComponent(JSON.stringify(s))));
 
@@ -43,7 +67,7 @@ const formatTime = (d: Date): string =>
     fractionalSecondDigits: 3
   } as Intl.DateTimeFormatOptions);
 
-const initPlayground = async (playground: Element): Promise<void> => {
+export const initPlayground = async (playground: Element): Promise<void> => {
   const ds = (playground as HTMLElement).dataset;
   const id = playground.id;
   const tag = ds.tag!;
@@ -105,16 +129,17 @@ const initPlayground = async (playground: Element): Promise<void> => {
   if (ds.stretch === 'true') el.style.width = '100%';
   stage.appendChild(el);
 
-  for (const [k, v] of Object.entries(seedData)) (el as any)[k] = v;
+  const previewedEl = el as PreviewedElement;
+  for (const [k, v] of Object.entries(seedData)) previewedEl[k] = v;
 
-  const openEl = () => (typeof (el as any).show === 'function' ? (el as any).show() : ((el as any).open = true));
-  const closeEl = () => (typeof (el as any).hide === 'function' ? (el as any).hide() : ((el as any).open = false));
+  const openEl = () => (typeof previewedEl.show === 'function' ? previewedEl.show() : (previewedEl.open = true));
+  const closeEl = () => (typeof previewedEl.hide === 'function' ? previewedEl.hide() : (previewedEl.open = false));
 
   if (previewTrigger) {
     document.getElementById(`${id}-trigger`)?.addEventListener('click', openEl);
     el.addEventListener('close', closeEl);
   }
-  el.querySelectorAll('[data-action="close"]').forEach((btn: any) => {
+  el.querySelectorAll('[data-action="close"]').forEach((btn) => {
     btn.addEventListener('click', closeEl);
   });
 
@@ -122,7 +147,7 @@ const initPlayground = async (playground: Element): Promise<void> => {
   for (const stData of subTagsData) {
     el.querySelectorAll(stData.tag).forEach((childEl) => {
       const templateAttrs: Record<string, string> = {};
-      for (const attr of childEl.attributes) templateAttrs[attr.name] = attr.value;
+      for (const attr of Array.from(childEl.attributes)) templateAttrs[attr.name] = attr.value;
       childItems.push({ el: childEl, tag: stData.tag, templateAttrs });
     });
   }
@@ -267,16 +292,18 @@ const initPlayground = async (playground: Element): Promise<void> => {
     }
   };
 
-  playground.querySelectorAll('lt-select[data-prop]').forEach((ctrl: any) => {
+  playground.querySelectorAll('lt-select[data-prop]').forEach((el) => {
+    const ctrl = el as ControlElement;
     const rawOptions: string[] = JSON.parse(ctrl.dataset.options ?? '[]');
     ctrl.options = rawOptions.map((v: string) => ({ value: v, label: v === '' ? '— default —' : v }));
   });
-  playground.querySelectorAll('lt-combobox[data-type="icon"]').forEach((ctrl: any) => {
-    ctrl.options = iconNames.map((n: string) => ({ value: n, label: n }));
+  playground.querySelectorAll('lt-combobox[data-type="icon"]').forEach((el) => {
+    (el as ControlElement).options = iconNames.map((n: string) => ({ value: n, label: n }));
   });
 
-  playground.querySelectorAll('[data-prop]').forEach((ctrl: any) => {
-    const val = stateMap[ctrl.dataset.ctrlTag ?? tag]?.[ctrl.dataset.prop];
+  playground.querySelectorAll('[data-prop]').forEach((el) => {
+    const ctrl = el as ControlElement;
+    const val = stateMap[ctrl.dataset.ctrlTag ?? tag]?.[ctrl.dataset.prop!];
     if ('checked' in ctrl) ctrl.checked = val === true;
     else ctrl.value = String(val ?? '');
   });
@@ -285,7 +312,7 @@ const initPlayground = async (playground: Element): Promise<void> => {
   updateCode();
 
   playground.querySelectorAll('[data-prop]').forEach((control) => {
-    const ctrl = control as HTMLElement & any;
+    const ctrl = control as ControlElement;
     const propName = ctrl.dataset.prop!;
     const type = ctrl.dataset.type!;
     const ctrlTag = ctrl.dataset.ctrlTag ?? tag;
@@ -297,10 +324,12 @@ const initPlayground = async (playground: Element): Promise<void> => {
       syncUrl();
     };
 
-    if (type === 'boolean') ctrl.addEventListener('change', (e: any) => onChange(e.detail.checked));
-    else if (type === 'select') ctrl.addEventListener('change', (e: any) => onChange(e.detail.value));
-    else if (type === 'text' || type === 'number') ctrl.addEventListener('input', (e: any) => onChange(e.detail.value));
-    else if (type === 'icon') ctrl.addEventListener('change', (e: any) => onChange(e.detail.value));
+    if (type === 'boolean')
+      ctrl.addEventListener('change', (e) => onChange((e as CustomEvent<{ checked: boolean }>).detail.checked));
+    else if (type === 'select' || type === 'icon')
+      ctrl.addEventListener('change', (e) => onChange((e as CustomEvent<{ value: string }>).detail.value));
+    else if (type === 'text' || type === 'number')
+      ctrl.addEventListener('input', (e) => onChange((e as CustomEvent<{ value: string }>).detail.value));
     else if (type === 'color')
       ctrl.addEventListener('input', (e: Event) => onChange((e.target as HTMLInputElement).value));
   });
@@ -312,7 +341,7 @@ const initPlayground = async (playground: Element): Promise<void> => {
         const ctrlTag = (btn as HTMLElement).dataset.ctrlTag!;
         ctrlTabBtns.forEach((b) => b.classList.remove('is-active'));
         btn.classList.add('is-active');
-        playground.querySelectorAll('[data-ctrl-group]').forEach((row: any) => {
+        playground.querySelectorAll<HTMLElement>('[data-ctrl-group]').forEach((row) => {
           row.style.display = row.dataset.ctrlGroup === ctrlTag ? '' : 'none';
         });
       });
@@ -344,9 +373,9 @@ const initPlayground = async (playground: Element): Promise<void> => {
     url.searchParams.set('s', encodeState(stateMap));
     history.replaceState(null, '', url.toString());
     await navigator.clipboard.writeText(url.toString());
-    (shareBtn as any).textContent = 'Copied!';
+    shareBtn.textContent = 'Copied!';
     setTimeout(() => {
-      (shareBtn as any).textContent = 'Share';
+      shareBtn.textContent = 'Share';
     }, 1500);
   });
 
@@ -372,7 +401,7 @@ const initPlayground = async (playground: Element): Promise<void> => {
   LOG_EVENTS.forEach((evtName) => {
     el.addEventListener(
       evtName,
-      (e: any) => {
+      (e: Event) => {
         eventCount++;
         if (!logOpen) {
           logOpen = true;
@@ -382,7 +411,8 @@ const initPlayground = async (playground: Element): Promise<void> => {
         eventLogLabel.textContent = `Events (${eventCount})`;
         const row = document.createElement('div');
         row.className = 'event-log-row';
-        const detailStr = e.detail != null ? JSON.stringify(e.detail).replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+        const detail = (e as CustomEvent).detail;
+        const detailStr = detail != null ? JSON.stringify(detail).replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
         row.innerHTML = `<span class="event-log-time">${formatTime(new Date())}</span><span class="event-log-name">${evtName}</span><span class="event-log-detail">${detailStr}</span>`;
         eventLogRows.prepend(row);
         while (eventLogRows.children.length > 20) eventLogRows.removeChild(eventLogRows.lastChild!);
@@ -402,5 +432,3 @@ const initPlayground = async (playground: Element): Promise<void> => {
     }
   });
 };
-
-document.querySelectorAll('.playground').forEach(initPlayground);

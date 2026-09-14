@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+// Pure Node + JSZip, framework-agnostic — packages every icon SVG into a
+// downloadable zip at build time, served as a static asset by Docusaurus.
 
 import { readFileSync, readdirSync, mkdirSync, writeFileSync } from 'fs';
 import { resolve, dirname } from 'path';
@@ -6,9 +8,9 @@ import { fileURLToPath } from 'url';
 import JSZip from 'jszip';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = resolve(__dirname, '../..');
-const iconsDir = resolve(root, 'packages/icons/src/icons');
-const outDir = resolve(root, 'docs/public/assets');
+const root = resolve(__dirname, '..');
+const iconsDir = resolve(root, '../packages/icons/src/icons');
+const outDir = resolve(root, 'static/assets');
 
 mkdirSync(outDir, { recursive: true });
 
