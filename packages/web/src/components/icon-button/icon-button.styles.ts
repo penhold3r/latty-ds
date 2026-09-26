@@ -130,11 +130,11 @@ export const iconButtonStyles = css`
     --_active-bg: var(--lt-interactive-secondary-bg-active);
   }
   :host([appearance='filled'][variant='neutral']) {
-    --_bg: var(--lt-color-neutral-500);
+    --_bg: var(--lt-interactive-neutral-bg);
     --_color: var(--lt-color-neutral-50);
-    --_hover-bg: var(--lt-color-neutral-700);
+    --_hover-bg: var(--lt-interactive-neutral-bg-hover);
     --_hover-color: var(--lt-color-neutral-50);
-    --_active-bg: var(--lt-color-neutral-800);
+    --_active-bg: var(--lt-interactive-neutral-bg-active);
   }
   :host([appearance='filled'][variant='success']) {
     --_bg: var(--lt-interactive-success-bg);

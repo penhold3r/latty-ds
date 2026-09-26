@@ -191,7 +191,7 @@ export const badgeStyles = css`
   }
 
   :host([appearance='solid'][variant='neutral']) span[part='base'] {
-    background: var(--lt-color-neutral-500);
+    background: var(--lt-interactive-neutral-bg);
     border-color: transparent;
     color: var(--lt-color-white);
   }

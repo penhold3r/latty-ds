@@ -194,10 +194,10 @@ export const calendarStyles = css`
     background: var(--lt-interactive-primary-bg-hover);
   }
 
-  /* Outside days */
+  /* Outside days — dimmed by the muted text color alone. They're enabled, clickable buttons, and a 0.5
+     opacity on top of muted text took them to ~2:1 (WCAG AA needs 4.5:1). */
   .day--outside {
     color: var(--lt-text-muted);
-    opacity: 0.5;
   }
 
   /* Empty filler cell */

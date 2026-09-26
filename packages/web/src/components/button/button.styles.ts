@@ -99,10 +99,10 @@ export const buttonStyles = css`
     --_active-bg: var(--lt-interactive-secondary-bg-active);
   }
   :host([variant='neutral']) {
-    --_bg: var(--lt-color-neutral-500);
+    --_bg: var(--lt-interactive-neutral-bg);
     --_color: var(--lt-color-neutral-50);
-    --_hover-bg: var(--lt-color-neutral-700);
-    --_active-bg: var(--lt-color-neutral-800);
+    --_hover-bg: var(--lt-interactive-neutral-bg-hover);
+    --_active-bg: var(--lt-interactive-neutral-bg-active);
   }
   :host([variant='success']) {
     --_bg: var(--lt-interactive-success-bg);
