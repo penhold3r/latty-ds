@@ -1,4 +1,13 @@
+import { Prism } from 'prism-react-renderer';
 import type { PrismTheme } from 'prism-react-renderer';
+
+/**
+ * Highlights `code` with the Prism instance Docusaurus's own code blocks use, so no second highlighter
+ * ships. The output is HTML-escaped, which matters for the playgrounds: their snippets embed user-typed
+ * values. Colors come from {@link prismThemeToCss}.
+ */
+export const highlight = (code: string, language: 'markup' | 'tsx'): string =>
+  Prism.highlight(code, Prism.languages[language], language);
 
 const toKebab = (prop: string) => prop.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 

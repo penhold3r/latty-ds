@@ -1,11 +1,11 @@
 /* Ported from docs/src/pages/tokens/playground.astro's inline <style>. */
 .playground-layout {
   display: grid;
-  grid-template-columns: minmax(260px, 320px) 1fr;
+  grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
   gap: var(--lt-spacing-6);
-  /* stretch (not start) so both columns share the taller one's height —
-     otherwise the two bordered panels end at different heights. */
-  align-items: stretch;
+  /* start (not stretch): the controls column is sticky, which only works when it
+     isn't stretched to the (much taller) stage's height. */
+  align-items: start;
   margin-top: var(--lt-spacing-6);
 }
 
@@ -15,6 +15,26 @@
   }
 }
 
+/* Keeps the controls in view while the stage (palettes, type scale, card) scrolls past. */
+.playground-controls-wrap {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + var(--lt-spacing-4));
+}
+
+@media (max-width: 800px) {
+  .playground-controls-wrap {
+    position: static;
+  }
+}
+
+.playground-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lt-spacing-6);
+  /* grid items default to min-width: auto, which lets the code snippet's long lines widen the column */
+  min-width: 0;
+}
+
 /* lt-surface's shadow template wraps <slot> in its own .surface div, so
    flex/gap/padding set on the host here only ever sees one shadow child —
    it can't arrange the slotted light-DOM content. That layout has to live
@@ -22,8 +42,29 @@
 .theme-controls-inner {
   display: flex;
   flex-direction: column;
-  gap: var(--lt-spacing-4);
-  padding: var(--lt-spacing-5);
+  gap: var(--lt-spacing-3);
+  padding: var(--lt-spacing-4);
+  /* Long control lists scroll inside the sticky column instead of running off the viewport. */
+  max-height: calc(100vh - var(--ifm-navbar-height) - var(--lt-spacing-8));
+  overflow-y: auto;
+}
+
+.controls-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lt-spacing-2);
+}
+
+/* The docs site's global 1rem block margin on lt-text headings would balloon this column. */
+.theme-controls-inner > lt-text,
+.controls-header lt-text {
+  margin: 0;
+}
+
+.theme-controls-inner > .control-group-label {
+  color: var(--lt-text-neutral);
+  margin-top: var(--lt-spacing-1);
 }
 
 .theme-control-row {
@@ -41,28 +82,195 @@
 .playground-stage {
   border: 1px dashed var(--lt-border-strong);
   border-radius: var(--lt-border-radius);
-  padding: var(--lt-spacing-8);
+  padding: var(--lt-spacing-6);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--lt-spacing-4);
+  gap: var(--lt-spacing-8);
   background: var(--lt-bg-subtle);
   /* lt-text sets color: inherit and never re-reads --lt-text-default itself, so
      without this the stage would keep the ambient (site-level, unscoped) text
      color instead of the scoped one — invisible on light bg, illegible on dark. */
   color: var(--lt-text-default);
-  min-height: 480px;
 }
 
-.stage-label {
-  color: var(--lt-text-neutral);
-  align-self: flex-start;
+.stage-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lt-spacing-4);
 }
+
+/* The docs site gives every lt-text heading a 1rem block margin; inside the stage the section's
+   own gap handles the spacing. */
+.stage-section > lt-text {
+  margin: 0;
+}
+
+/* ── Color palettes ─────────────────────────────────────────────────── */
+
+.pg-palette {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lt-spacing-2);
+  container-type: inline-size;
+}
+
+/* All ten steps on one row, so the scale reads as a ramp; two even rows when the stage is narrow. */
+.pg-swatches {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: var(--lt-spacing-1);
+}
+
+@container (max-width: 34rem) {
+  .pg-swatches {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.pg-swatch {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  min-height: 4.5rem;
+  padding: var(--lt-spacing-2) var(--lt-spacing-1) var(--lt-spacing-2) var(--lt-spacing-2);
+  border-radius: calc(var(--lt-border-radius) / 2);
+  background: var(--pg-swatch);
+  /* Palette steps don't flip with light/dark, so the label color is picked per swatch from its
+     luminance (data-tone, set by the script) — white on dark steps, black on light ones. Pure black,
+     not neutral-900: at the ~0.18 luminance crossover only black keeps 4.5:1 against either side. */
+  color: var(--lt-color-white);
+  font-size: 0.6875rem;
+  line-height: 1.2;
+}
+
+.pg-swatch[data-tone='light'] {
+  color: var(--lt-color-black);
+}
+
+.pg-swatch-shade {
+  font-weight: 600;
+}
+
+.pg-swatch-hex {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.625rem;
+  opacity: 0.85;
+  overflow-wrap: anywhere;
+}
+
+.pg-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lt-spacing-2);
+}
+
+.pg-role {
+  padding: var(--lt-spacing-1) var(--lt-spacing-3);
+  border: var(--lt-border-width) solid var(--pg-role-border);
+  border-radius: var(--lt-border-radius);
+  background: var(--pg-role-bg);
+  color: var(--pg-role-fg);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* ── Typography ─────────────────────────────────────────────────────── */
+
+.pg-fonts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--lt-spacing-3);
+}
+
+.pg-font {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lt-spacing-2);
+  padding: var(--lt-spacing-4);
+  border: var(--lt-border-width) solid var(--lt-border-default);
+  border-radius: var(--lt-border-radius);
+  background: var(--lt-bg-default);
+  min-width: 0;
+}
+
+.pg-font[data-role='primary'] {
+  --pg-font-family: var(--lt-typography-fontFamilyPrimary);
+}
+
+/* Unset secondary/heading tokens are undefined, so these fall back to primary exactly as lt-text does. */
+.pg-font[data-role='secondary'] {
+  --pg-font-family: var(--lt-typography-fontFamilySecondary, var(--lt-typography-fontFamilyPrimary));
+}
+
+.pg-font[data-role='heading'] {
+  --pg-font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
+}
+
+.pg-font-aa {
+  font-family: var(--pg-font-family), sans-serif;
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--lt-text-primary);
+}
+
+.pg-font-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.pg-font[data-unset] .pg-font-name {
+  color: var(--lt-text-muted);
+  font-weight: 400;
+}
+
+.pg-font-sample,
+.pg-font-weights {
+  font-family: var(--pg-font-family), sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.pg-font-weights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lt-spacing-3);
+}
+
+.pg-weight-regular {
+  font-weight: 400;
+}
+
+.pg-weight-medium {
+  font-weight: 500;
+}
+
+.pg-weight-bold {
+  font-weight: 700;
+}
+
+.pg-font-note {
+  color: var(--lt-text-neutral);
+}
+
+/* The type scale table's own outer margin and 14rem meta column are sized for the full-width Text page. */
+.stage-section .type-scale {
+  margin: 0;
+}
+
+.stage-section .scale-meta {
+  width: 9rem;
+  /* "0.6875rem / 600 / uppercase" is longer than the column; wrap instead of running into the sample. */
+  white-space: normal;
+}
+
+/* ── In context ─────────────────────────────────────────────────────── */
 
 .subscribe-card {
   width: 100%;
   max-width: 360px;
+  align-self: center;
 }
 
 /* Same reason as .theme-controls-inner above — lt-surface's shadow slot can't be
@@ -112,4 +320,41 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--lt-spacing-3);
+}
+
+/* ── Export snippet ─────────────────────────────────────────────────── */
+
+/* --prism-* are set inline by index.tsx from the site's Prism theme, exactly as Docusaurus does for
+   its own code blocks, so the snippet matches them and switches with light/dark. */
+.export-panel {
+  background: var(--prism-background-color);
+  color: var(--prism-color);
+  border: 1px solid var(--lt-border-default);
+  border-radius: var(--lt-border-radius);
+  min-width: 0;
+}
+
+.export-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--lt-spacing-2) var(--lt-spacing-2) var(--lt-spacing-2) var(--lt-spacing-4);
+  border-bottom: 1px solid var(--lt-border-default);
+}
+
+.export-pre {
+  margin: 0;
+  padding: var(--lt-spacing-4);
+  background: transparent;
+  overflow-x: auto;
+}
+
+.export-code {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: var(--ifm-code-font-size);
+  line-height: var(--ifm-pre-line-height);
+  color: var(--prism-color);
+  background: none;
+  padding: 0;
+  white-space: pre;
 }
