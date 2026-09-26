@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.4](https://github.com/penhold3r/latty-ds/compare/v0.10.3...v0.10.4) (2026-09-26)
+
+### Bug Fixes
+
+- **config:** make tsconfigs and event casts valid on both TypeScript 5.x and 6.x ([65f18fe](https://github.com/penhold3r/latty-ds/commit/65f18fecd3abedddb24284f3e649c22c2f76808c))
+- **config:** restore baseUrl in docs/tsconfig.json; Playwright can't load a null one ([606c51d](https://github.com/penhold3r/latty-ds/commit/606c51d0b4d65452f607580ce887fa7bb44e26f0))
+- **docs:** stop the a11y suite hiding contrast failures, and fix the ones it was hiding ([23c5cf7](https://github.com/penhold3r/latty-ds/commit/23c5cf78033f58b0786d319da742c5715ac635d6))
+- **docs:** stop ThemePlayground's classes overriding the component playground controls ([11a02f9](https://github.com/penhold3r/latty-ds/commit/11a02f94c593add716d6df847cdd12b98edd8575))
+- **tokens:** add contrast-safe --lt-interactive-neutral-\* semantic tokens ([c7d8e65](https://github.com/penhold3r/latty-ds/commit/c7d8e65d1dfcc23a888e6ae4fd47f52cf1849300))
+- **web:** meet WCAG AA contrast for neutral buttons, solid neutral badges and calendar outside days ([d4b3f4b](https://github.com/penhold3r/latty-ds/commit/d4b3f4b316f3e7357fd3cc645e8d1eb20c0da21f))
+
+### Features
+
+- **docs:** show palettes, fonts, type scale and a configure() snippet in the theme playground ([3bc81c5](https://github.com/penhold3r/latty-ds/commit/3bc81c53d55f8ee07cd874698de4c294aa3b9900))
+- **docs:** syntax-highlight the playground code sample with the site's Prism theme ([f3ab4f3](https://github.com/penhold3r/latty-ds/commit/f3ab4f39bf0615e12afa8446cb02f075efcdb45d))
+- **docs:** theme playground presets, share links, contrast badges, component sheet and split view ([06ecc09](https://github.com/penhold3r/latty-ds/commit/06ecc092eba0c45b71d1874b6c90dbc2ec7b219a))
+
 ## [0.10.3](https://github.com/penhold3r/latty-ds/compare/v0.10.2...v0.10.3) (2026-09-26)
 
 ### Bug Fixes

@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.4](https://github.com/penhold3r/latty-ds/compare/v0.10.3...v0.10.4) (2026-09-26)
+
+### Bug Fixes
+
+- **config:** make tsconfigs and event casts valid on both TypeScript 5.x and 6.x ([65f18fe](https://github.com/penhold3r/latty-ds/commit/65f18fecd3abedddb24284f3e649c22c2f76808c))
+- **tokens:** add contrast-safe --lt-interactive-neutral-\* semantic tokens ([c7d8e65](https://github.com/penhold3r/latty-ds/commit/c7d8e65d1dfcc23a888e6ae4fd47f52cf1849300))
+
 ## [0.10.2](https://github.com/penhold3r/latty-ds/compare/v0.10.1...v0.10.2) (2026-09-11)
 
 ### Bug Fixes
