@@ -70,10 +70,8 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
 
   const primitives = tokensToCss(tokens);
   const theme = userConfig.theme ?? 'light';
-  const primary = tokens.color.primary as Record<string, string>;
   const semanticOpts = {
-    primary500: primary['500'],
-    primary400: primary['400'],
+    palettes: tokens.color,
     borderContrast: userConfig.border?.contrast
   };
 

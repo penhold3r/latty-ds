@@ -24,8 +24,7 @@ logger.info('Building tokens...');
 
 const tokens = buildTokens(config);
 const css = tokensToCss(tokens);
-const primary = tokens.color.primary as Record<string, string>;
-const semanticOpts = { primary500: primary['500'], primary400: primary['400'] };
+const semanticOpts = { palettes: tokens.color };
 const lightSemanticMap = buildSemanticTokens('light', semanticOpts);
 const darkSemanticMap = buildSemanticTokens('dark', semanticOpts);
 const lightSemanticCss = semanticTokensToCss(lightSemanticMap);

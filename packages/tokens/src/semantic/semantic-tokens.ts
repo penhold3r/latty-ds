@@ -1,22 +1,8 @@
+import { resolveVariantColors, type ColorPalettes, type ThemeMode } from './contrast';
+
 export type SemanticTokenMap = Record<string, string>;
 
 const VARIANTS = ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const;
-
-const relativeLuminance = (hex: string): number => {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
-  const lin = (c: number) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
-  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-};
-
-// Returns the token name that achieves higher WCAG contrast against the given background hex.
-const accessibleTextOn = (bgHex: string): 'color-white' | 'color-neutral-900' => {
-  const L = relativeLuminance(bgHex);
-  const whiteContrast = 1.05 / (L + 0.05);
-  const darkContrast = (L + 0.05) / 0.059; // neutral-900 ≈ L 0.009
-  return whiteContrast >= darkContrast ? 'color-white' : 'color-neutral-900';
-};
 
 // Neutral isn't one of VARIANTS (its ramp has no on-color/text steps of its own), so its interactive
 // tokens are explicit. The generic rule would give neutral-500, which is only 3.5:1 against the
@@ -30,10 +16,9 @@ const addNeutralInteractive = (map: SemanticTokenMap): void => {
 };
 
 export interface SemanticTokenOptions {
-  // Resolved primary-500 hex for light mode (button bg). Used to pick accessible text-on-primary.
-  primary500?: string;
-  // Resolved primary-400 hex for dark mode (button bg in dark theme).
-  primary400?: string;
+  // The generated colour ramps (`tokens.color`). The interactive fills and the text on them are picked from these by
+  // contrast (see contrast.ts), so they adapt to whatever base colours the consumer configured.
+  palettes: ColorPalettes;
   // Shifts which neutral palette step border-default/-strong/-subtle resolve to. Default: 'default'.
   borderContrast?: 'default' | 'high';
 }
@@ -52,7 +37,21 @@ const BORDER_STEPS = {
   }
 } as const;
 
-const buildLightSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticTokenMap => {
+// Interactive fills and the text on them, for every variant. Picked from the real generated ramps rather than
+// hard-coded (white on the 500 step failed AA for success/error/info in light and for most variants in dark, and
+// primary's pressed state too), so text reaches WCAG AA on the resting, hover and pressed fills in both themes.
+const addInteractive = (map: SemanticTokenMap, mode: ThemeMode, palettes: ColorPalettes): void => {
+  for (const v of VARIANTS) {
+    const colors = resolveVariantColors(v, palettes, mode);
+    map[`text-on-${v}`] = colors.onText;
+    map[`interactive-${v}-bg`] = colors.bg;
+    map[`interactive-${v}-bg-hover`] = colors.hover;
+    map[`interactive-${v}-bg-active`] = colors.active;
+  }
+  addNeutralInteractive(map);
+};
+
+const buildLightSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap => {
   const map: SemanticTokenMap = {};
 
   // Text
@@ -69,13 +68,7 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToke
   map['text-inverse'] = 'color-white';
   map['text-neutral'] = 'color-neutral-700';
 
-  for (const v of VARIANTS) {
-    map[`text-${v}`] = `color-${v}-700`;
-    map[`text-on-${v}`] = 'color-white';
-  }
-  // Warning ramps are light amber in every theme — white text fails contrast, so force dark text.
-  map['text-on-warning'] = 'color-warning-800';
-  if (opts.primary500) map['text-on-primary'] = accessibleTextOn(opts.primary500);
+  for (const v of VARIANTS) map[`text-${v}`] = `color-${v}-700`;
 
   // Background
   map['bg-default'] = 'color-white';
@@ -102,18 +95,13 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToke
     map[`border-${v}-strong`] = `color-${v}-500`;
   }
 
-  // Interactive
-  for (const v of VARIANTS) {
-    map[`interactive-${v}-bg`] = `color-${v}-500`;
-    map[`interactive-${v}-bg-hover`] = `color-${v}-600`;
-    map[`interactive-${v}-bg-active`] = `color-${v}-700`;
-  }
-  addNeutralInteractive(map);
+  // Interactive (fills + the text on them)
+  addInteractive(map, 'light', opts.palettes);
 
   return map;
 };
 
-const buildDarkSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticTokenMap => {
+const buildDarkSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap => {
   const map: SemanticTokenMap = {};
 
   // Text
@@ -128,13 +116,7 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToken
   map['text-inverse'] = 'color-neutral-900';
   map['text-neutral'] = 'color-neutral-200';
 
-  for (const v of VARIANTS) {
-    map[`text-${v}`] = `color-${v}-300`;
-    map[`text-on-${v}`] = 'color-white';
-  }
-  // Warning ramps are light amber in every theme — white text fails contrast, so force dark text.
-  map['text-on-warning'] = 'color-warning-800';
-  if (opts.primary400) map['text-on-primary'] = accessibleTextOn(opts.primary400);
+  for (const v of VARIANTS) map[`text-${v}`] = `color-${v}-300`;
 
   // Background
   map['bg-default'] = 'color-neutral-900';
@@ -161,18 +143,11 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToken
     map[`border-${v}-strong`] = `color-${v}-500`;
   }
 
-  // Interactive (lighter steps for visibility on dark surfaces)
-  for (const v of VARIANTS) {
-    map[`interactive-${v}-bg`] = `color-${v}-400`;
-    map[`interactive-${v}-bg-hover`] = `color-${v}-300`;
-    map[`interactive-${v}-bg-active`] = `color-${v}-500`;
-  }
-  addNeutralInteractive(map);
+  // Interactive (fills start lighter for visibility on dark surfaces, and the text on them is picked to match)
+  addInteractive(map, 'dark', opts.palettes);
 
   return map;
 };
 
-export const buildSemanticTokens = (
-  mode: 'light' | 'dark' = 'light',
-  opts: SemanticTokenOptions = {}
-): SemanticTokenMap => (mode === 'dark' ? buildDarkSemanticTokens(opts) : buildLightSemanticTokens(opts));
+export const buildSemanticTokens = (mode: ThemeMode, opts: SemanticTokenOptions): SemanticTokenMap =>
+  mode === 'dark' ? buildDarkSemanticTokens(opts) : buildLightSemanticTokens(opts);
