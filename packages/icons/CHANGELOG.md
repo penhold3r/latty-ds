@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.3](https://github.com/penhold3r/latty-ds/compare/v0.10.2...v0.10.3) (2026-09-26)
+
+### Bug Fixes
+
+- **icons:** add double-caret-left/right, restore dropped navigation icons ([44f65cf](https://github.com/penhold3r/latty-ds/commit/44f65cf5881f0fb41e622e43c6822a9a9bfe6879))
+- **icons:** register icon data before defining lt-icon (registry race) ([3643846](https://github.com/penhold3r/latty-ds/commit/36438467bd4eeeb3777711fe953610b6ec962dbe))
+
 # [0.10.0](https://github.com/penhold3r/latty-ds/compare/v0.9.0...v0.10.0) (2026-08-08)
 
 **Note:** Version bump only for package @latty-ds/icons

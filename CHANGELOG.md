@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.3](https://github.com/penhold3r/latty-ds/compare/v0.10.2...v0.10.3) (2026-09-26)
+
+### Bug Fixes
+
+- **docs:** add double-caret-left/right to the icon gallery ([86c1d97](https://github.com/penhold3r/latty-ds/commit/86c1d9783dfb1ca099a446eaa18e5bd524a240ba))
+- **docs:** drop navbar workarounds now that the underlying web bugs are fixed ([ce30e80](https://github.com/penhold3r/latty-ds/commit/ce30e80f4fbafc07f37fa3d4051bac5e7e03b44d))
+- **docs:** fix pnpm typecheck across the documentation package ([5720f72](https://github.com/penhold3r/latty-ds/commit/5720f72723a6619cab9582152562926d4a0b37bd))
+- **docs:** fix two nonexistent icon names in component demo content ([e24166b](https://github.com/penhold3r/latty-ds/commit/e24166be2bcf9927c7b8ef903de425212fda1c95))
+- **docs:** flatten the TOC tree to avoid an li/custom-element parsing hazard ([5d33d1b](https://github.com/penhold3r/latty-ds/commit/5d33d1bd9bb50cea597bac341ec7183e9a454e80))
+- **docs:** re-skin the TOC widget's list markup with lt-list ([a5c8c8a](https://github.com/penhold3r/latty-ds/commit/a5c8c8a85ebc5c8258805eb6a15e8db2c16db24a))
+- **docs:** rename the Getting Started category from "Introduction" ([c297b37](https://github.com/penhold3r/latty-ds/commit/c297b378cb4b22570970863c033adeee1fb7201c))
+- **docs:** replace Docusaurus's own chrome with Latty components ([3078aab](https://github.com/penhold3r/latty-ds/commit/3078aabde80c74bc139813e11fa6a5626019529e))
+- **docs:** restore heading margin lost in the lt-text swap ([f2f536f](https://github.com/penhold3r/latty-ds/commit/f2f536f153c6ab4e2530023c7f8c6927a03faf91))
+- **docs:** restore TOC scroll-spy broken by the lt-text Heading swizzle ([b5a88bb](https://github.com/penhold3r/latty-ds/commit/b5a88bb597fd3f468530b733b9584e790de02cca))
+- **docs:** swizzle doc pagination to use lt-surface/lt-text/lt-icon ([17b0c86](https://github.com/penhold3r/latty-ds/commit/17b0c8695b407f551774757cfa1e7ee3bfea8907))
+- **docs:** swizzle footer copyright to render via lt-text ([a03d147](https://github.com/penhold3r/latty-ds/commit/a03d1478b6a0c710e6a3dedc9331dc98f51af3f4))
+- **icons:** add double-caret-left/right, restore dropped navigation icons ([44f65cf](https://github.com/penhold3r/latty-ds/commit/44f65cf5881f0fb41e622e43c6822a9a9bfe6879))
+- **icons:** register icon data before defining lt-icon (registry race) ([3643846](https://github.com/penhold3r/latty-ds/commit/36438467bd4eeeb3777711fe953610b6ec962dbe))
+- **scripts:** fix /new-icon silently dropping unquoted category entries ([2f991c2](https://github.com/penhold3r/latty-ds/commit/2f991c26e57ea61ee41b7087b23c88513b7b1580))
+- **scripts:** retarget /new-component and /new-icon at the Docusaurus docs site ([fdfb2ec](https://github.com/penhold3r/latty-ds/commit/fdfb2ec141ade03f3077f87ef119700adf3a0cc3))
+- **web:** fix breadcrumb list semantics, icon-button anchor color, header on-primary text ([2478767](https://github.com/penhold3r/latty-ds/commit/2478767dd262a8fc5bfde82a0d2425a0d4e648f2))
+- **web:** fix lt-list's <ul>/<ol> not validly containing lt-list-item (a11y) ([db3f06d](https://github.com/penhold3r/latty-ds/commit/db3f06dd9adb4ce8ad632b435478cb072b3b8dfb))
+- **web:** fix nonexistent icon names in lt-combobox and lt-pagination ([26257fb](https://github.com/penhold3r/latty-ds/commit/26257fbc4475b5028b24d10b304d6dd923074647))
+
 ## [0.10.2](https://github.com/penhold3r/latty-ds/compare/v0.10.1...v0.10.2) (2026-09-11)
 
 ### Bug Fixes
