@@ -4,15 +4,14 @@
 {
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
-    // @docusaurus/tsconfig sets baseUrl: ".", which TypeScript 6 (bundled with
-    // recent VS Code) reports as deprecated (TS5101) — and no single
-    // ignoreDeprecations value is valid on both TS 5.x and 6.x. Unset it and
-    // declare the @site/* alias ourselves; without baseUrl, paths resolve
-    // relative to this file, which is what we want.
-    "baseUrl": null,
-    "paths": {
-      "@site/*": ["./*"]
-    },
+    // baseUrl has to be repeated here: the copy inherited from
+    // @docusaurus/tsconfig resolves relative to that package, not this site.
+    // TypeScript 6 reports it as deprecated (TS5101), so silence that with
+    // "6.0" (TS 5.x would reject the value — the workspace is on TS 6+).
+    // Don't "unset" it with null instead: Playwright's own tsconfig loader
+    // (used by the a11y suite) can't handle a null baseUrl.
+    "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "strict": true
   },
   "exclude": [".docusaurus", "build"]

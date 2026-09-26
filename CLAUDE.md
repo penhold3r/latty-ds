@@ -349,7 +349,7 @@ Tests use Vitest with jsdom environment. Test files are located at `packages/**/
 
 **TypeScript 6**: the workspace runs TypeScript 6 (matching the compiler bundled with VS Code, so the editor and CI agree). Three things differ from 5.x and will bite a new package:
 
-- Packages built with `tsup` and `dts: true` need `"ignoreDeprecations": "6.0"` in their tsconfig — tsup's declaration step injects a deprecated `baseUrl` (TS5101), and `"6.0"` is the only value that silences it.
+- Packages built with `tsup` and `dts: true` need `"ignoreDeprecations": "6.0"` in their tsconfig — tsup's declaration step injects a deprecated `baseUrl` (TS5101), and `"6.0"` is the only value that silences it. The same applies to `docs/tsconfig.json`, which inherits a `baseUrl` from `@docusaurus/tsconfig` — don't "unset" it with `null` instead, Playwright's tsconfig loader (used by the a11y suite) crashes on it.
 - Any tsconfig that emits files must set `rootDir` explicitly. TS 6 defaults it to the tsconfig's own folder instead of the inferred source root, so `packages/react` would emit `dist/src/index.d.ts` and break its `"types": "./dist/index.d.ts"` entry.
 - `@types/node` is no longer auto-included — add `"types": ["node"]` wherever Node globals (`process`, `node:fs`) are used.
 
