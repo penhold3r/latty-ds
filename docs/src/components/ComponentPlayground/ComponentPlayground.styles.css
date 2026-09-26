@@ -127,7 +127,8 @@
 }
 
 .ctrl-tab-btn.is-active {
-  color: var(--lt-color-primary-600);
+  /* --lt-text-primary (not the static primary-600 primitive): it's the theme-aware step that holds AA at this size. */
+  color: var(--lt-text-primary);
   box-shadow: inset 0 -2px 0 var(--lt-color-primary-500);
 }
 
@@ -308,7 +309,7 @@
 .event-log-name {
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.75rem;
-  color: var(--lt-color-primary-600);
+  color: var(--lt-text-primary);
   font-weight: 600;
 }
 

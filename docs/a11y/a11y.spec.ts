@@ -76,14 +76,18 @@ for (const route of routes) {
 
       const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
 
+      // Exclusions are applied per node, not per violation: axe groups every failing element of a rule into
+      // one violation, so dropping the whole `color-contrast` violation whenever ONE node was excluded (as
+      // this used to) let real failures ride along with a known-limitation node — e.g. a Prism token in the
+      // same page hid a genuinely low-contrast button in light mode only.
       const filtered = {
         ...results,
-        violations: results.violations.filter((v) => {
-          if (v.id !== 'color-contrast') return true;
-          return !v.nodes.some((n) => {
+        violations: results.violations.flatMap((v) => {
+          if (v.id !== 'color-contrast') return [v];
+          const nodes = v.nodes.filter((n) => {
             // Elements inside primary-background containers (e.g. lt-header) —
             // pre-existing exclusion, ported from the root a11y spec.
-            if (nodeMatches(n, 'background="primary"')) return true;
+            if (nodeMatches(n, 'background="primary"')) return false;
             // Prism/prism-react-renderer's built-in "github"/"dracula" themes
             // have known WCAG-AA contrast gaps in their own token colors
             // (comments, punctuation, some values) — independent of Latty's
@@ -91,9 +95,10 @@ for (const route of routes) {
             // unchanged. Tracked as a known limitation rather than blocking
             // this suite; see _agent-plans/DOCUSAURUS-MIGRATION-PLAN.md,
             // Phase 4, for the full list of affected token colors.
-            if (isPrismNode(n)) return true;
-            return false;
+            if (isPrismNode(n)) return false;
+            return true;
           });
+          return nodes.length > 0 ? [{ ...v, nodes }] : [];
         })
       };
 
