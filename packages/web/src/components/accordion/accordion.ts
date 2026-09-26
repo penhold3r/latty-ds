@@ -138,7 +138,10 @@ export class Accordion extends ThemeableElement {
    * Handles the end of the transition to clear inline styles.
    * @private
    */
-  private handleTransitionEnd() {
+  private handleTransitionEnd(e: TransitionEvent) {
+    // `transitionend` bubbles, so a transition inside the slotted content (a button hover, say) would otherwise end
+    // this animation early and snap the height to `auto`.
+    if (e.target !== this._content || e.propertyName !== 'height') return;
     this._animating = false;
 
     if (this.open) {

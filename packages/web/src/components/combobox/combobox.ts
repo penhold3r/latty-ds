@@ -84,7 +84,9 @@ export class Combobox extends ThemeableElement {
   }
 
   private async openDropdown() {
-    if (this.disabled) return;
+    // A click on the field fires both `focus` and `click`; a second call would start a second floating autoUpdate
+    // and overwrite the first one's cleanup, leaking a scroll/resize listener pair on every open.
+    if (this.disabled || this.open) return;
     this.open = true;
     this.setAttribute('open', '');
     this.query = '';

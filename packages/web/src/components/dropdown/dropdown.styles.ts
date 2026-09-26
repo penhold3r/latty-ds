@@ -20,7 +20,9 @@ export const dropdownStyles = [
     }
 
     lt-surface.menu::part(surface) {
-      overflow: hidden;
+      max-height: var(--lt-dropdown-max-height, min(24rem, 60vh));
+      overflow-x: hidden;
+      overflow-y: auto;
       padding-block: var(--lt-dropdown-menu-padding, var(--lt-spacing-2));
     }
   `

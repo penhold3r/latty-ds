@@ -53,7 +53,7 @@ export class Progress extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) indeterminate = false;
 
   render() {
-    const pct = Math.min(100, Math.max(0, this.value));
+    const pct = Number.isFinite(this.value) ? Math.min(100, Math.max(0, this.value)) : 0;
     return html`
       <div
         part="track"

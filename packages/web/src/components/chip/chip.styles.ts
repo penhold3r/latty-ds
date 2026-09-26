@@ -42,11 +42,20 @@ export const chipStyles = css`
     display: inline-flex;
     flex-shrink: 0;
     justify-content: center;
+    /* WCAG 2.5.8: a 24px target. The negative margin gives the extra size back, so the chip layout is unchanged. */
+    margin: -6px;
+    min-height: 24px;
+    min-width: 24px;
     opacity: 0.6;
     padding: 0;
     transition:
       opacity 120ms ease,
       background-color 120ms ease;
+  }
+
+  /* The large chip's icon is 16px rather than 12px, so it needs less negative margin to keep the same layout. */
+  :host([size='lg']) .delete {
+    margin: -4px;
   }
 
   .delete:hover:not(:disabled) {

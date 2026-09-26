@@ -99,6 +99,13 @@ export class NavItem extends ThemeableElement {
     });
 
     this.requestUpdate();
+    // A group that starts `open` renders its children container only now (after this first slotchange), so
+    // `updated()` never got to size it for the `open` it was created with, and it stayed collapsed at height 0.
+    void this.updateComplete.then(() => this._syncInitialHeight());
+  }
+
+  private _syncInitialHeight() {
+    if (this.open && this.orientation === 'vertical' && this._childrenEl) this._childrenEl.style.height = 'auto';
   }
 
   protected updated(changed: Map<string, unknown>) {
@@ -123,7 +130,11 @@ export class NavItem extends ThemeableElement {
   }
 
   private _handleTriggerClick(e: MouseEvent) {
-    if (this.disabled) return;
+    // A disabled link must not navigate (an <a> has no native `disabled`), whether clicked or activated with Enter.
+    if (this.disabled) {
+      e.preventDefault();
+      return;
+    }
 
     if (this._hasChildren) {
       e.preventDefault();
@@ -154,6 +165,8 @@ export class NavItem extends ThemeableElement {
         class="item-trigger"
         href=${this.href}
         aria-current=${ariaCurrent}
+        aria-disabled=${this.disabled ? 'true' : nothing}
+        tabindex=${this.disabled ? '-1' : nothing}
         @click=${this._handleTriggerClick}
         >${inner}</a
       >`;

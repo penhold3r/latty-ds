@@ -1,4 +1,5 @@
 import { html, PropertyValues } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -339,8 +340,7 @@ export class Textfield extends ThemeableElement {
                   @blur=${this._onBlur}
                   aria-label=${this.label || this.placeholder}
                   aria-invalid=${isInvalid ? 'true' : 'false'}
-                  class=${hasStartIcon ? 'has-start-icon' : ''}
-                  ${hasEndIcon ? 'has-end-icon' : ''}
+                  class=${classMap({ 'has-start-icon': hasStartIcon, 'has-end-icon': hasEndIcon })}
                 ></textarea>
               `
             : html`
@@ -361,8 +361,7 @@ export class Textfield extends ThemeableElement {
                   @blur=${this._onBlur}
                   aria-label=${this.label || this.placeholder}
                   aria-invalid=${isInvalid ? 'true' : 'false'}
-                  class=${hasStartIcon ? 'has-start-icon' : ''}
-                  ${hasEndIcon ? 'has-end-icon' : ''}
+                  class=${classMap({ 'has-start-icon': hasStartIcon, 'has-end-icon': hasEndIcon })}
                 />
               `}
           ${hasEndIcon

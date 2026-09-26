@@ -113,4 +113,40 @@ describe('<lt-pagination>', () => {
     const pageButtons = el.shadowRoot!.querySelectorAll('button[aria-label^="Page"]');
     expect(pageButtons.length).toBe(5);
   });
+
+  describe('out-of-range input', () => {
+    const current = () => el.shadowRoot!.querySelector('button[aria-current="page"]')?.textContent?.trim();
+
+    it('treats a page past the end as the last page', async () => {
+      el.totalPages = 10;
+      el.page = 99;
+      await el.updateComplete;
+      expect(current()).toBe('10');
+    });
+
+    it('treats a page before the start as the first page', async () => {
+      el.totalPages = 10;
+      el.page = -5;
+      await el.updateComplete;
+      expect(current()).toBe('1');
+    });
+
+    it.each([0, -3, NaN])('collapses total-pages %s to a single page', async (total) => {
+      el.totalPages = total;
+      el.page = 4;
+      await el.updateComplete;
+      expect(current()).toBe('1');
+      expect(el.shadowRoot!.querySelectorAll('button[aria-label^="Page"]')).toHaveLength(1);
+    });
+
+    it('does not emit change for a click that lands on the already-current (clamped) page', async () => {
+      el.totalPages = 3;
+      el.page = 50;
+      await el.updateComplete;
+      const events: unknown[] = [];
+      el.addEventListener('change', (e) => events.push((e as CustomEvent).detail));
+      el.shadowRoot!.querySelector<HTMLElement>('button[aria-label="Page 3"]')!.click();
+      expect(events).toEqual([]);
+    });
+  });
 });

@@ -59,4 +59,40 @@ describe('<lt-text>', () => {
   it('exposes a part="base" on the inner element', async () => {
     expect(el.shadowRoot!.querySelector('[part="base"]')).toBeTruthy();
   });
+
+  describe('the as attribute', () => {
+    it.each(['h1', 'h3', 'p', 'span', 'div', 'label', 'strong', 'em'] as const)(
+      'renders <%s> when asked for it',
+      async (tag) => {
+        const t = document.createElement('lt-text') as Text;
+        t.as = tag;
+        document.body.appendChild(t);
+        await t.updateComplete;
+        expect(t.shadowRoot!.querySelector('[part="base"]')!.tagName.toLowerCase()).toBe(tag);
+        t.remove();
+      }
+    );
+
+    it.each([
+      'p><img src=x onerror="window.__pwned=1"><p',
+      'script',
+      'iframe',
+      'img',
+      'a href=javascript:1',
+      'H1 ',
+      ''
+    ])("ignores %j and keeps the variant's own tag, injecting nothing", async (as) => {
+      (window as unknown as { __pwned?: number }).__pwned = 0;
+      const t = document.createElement('lt-text') as Text;
+      t.variant = 'h2';
+      t.as = as as never;
+      document.body.appendChild(t);
+      await t.updateComplete;
+      const root = t.shadowRoot!;
+      expect(root.querySelector('[part="base"]')!.tagName.toLowerCase()).toBe('h2');
+      expect(root.querySelector('img, script, iframe, a')).toBeNull();
+      expect((window as unknown as { __pwned?: number }).__pwned).toBe(0);
+      t.remove();
+    });
+  });
 });

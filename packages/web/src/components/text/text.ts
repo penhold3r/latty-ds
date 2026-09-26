@@ -5,6 +5,23 @@ import { html, unsafeStatic } from 'lit/static-html.js';
 import { textStyles } from './text.styles';
 import type { TextVariant, TextTag } from './text.types';
 
+// `as` reaches the template through unsafeStatic, so anything not on this list (an attribute can hold any string,
+// including markup) must never get there.
+const ALLOWED_TAGS: ReadonlySet<string> = new Set<TextTag>([
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'p',
+  'span',
+  'div',
+  'label',
+  'strong',
+  'em'
+]);
+
 const VARIANT_TAG: Record<TextVariant, TextTag> = {
   'display-2xl': 'p',
   'display-xl': 'p',
@@ -53,11 +70,12 @@ export class Text extends ThemeableElement {
   /** Typographic style to apply. */
   @property({ reflect: true }) variant: TextVariant = 'body';
 
-  /** HTML tag to render. Defaults to the semantic tag for the chosen variant. */
+  /** HTML tag to render. Defaults to the semantic tag for the chosen variant; anything outside `TextTag` is ignored. */
   @property({ reflect: true }) as: TextTag | '' = '';
 
   render() {
-    const tag = unsafeStatic(this.as || VARIANT_TAG[this.variant] || 'p');
+    const requested = this.as && ALLOWED_TAGS.has(this.as) ? this.as : '';
+    const tag = unsafeStatic(requested || VARIANT_TAG[this.variant] || 'p');
     return html`<${tag} part="base"><slot></slot></${tag}>`;
   }
 }

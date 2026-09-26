@@ -296,4 +296,38 @@ describe('<lt-date-input>', () => {
     expect(cal.getAttribute('locale')).toBe('fr-FR');
     expect(cal.getAttribute('week-start')).toBe('1');
   });
+
+  // ── Values that aren't a plain ISO date ────────────────────────────────────
+
+  it.each(['abc', '2026-06-15T10:00', '2026-02-31', '2026-13-01', '15/06/2026', ' 2026-06-15'])(
+    'renders the placeholder instead of throwing for the value %j',
+    async (value) => {
+      el.value = value;
+      await el.updateComplete;
+      const display = el.shadowRoot!.querySelector('.display-value')!;
+      expect(display.textContent?.trim()).toBe('Select a date');
+      expect(display.classList.contains('display-value--placeholder')).toBe(true);
+    }
+  );
+
+  it('still formats a valid date', async () => {
+    el.value = '2026-06-15';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.display-value')!.textContent).toContain('2026');
+  });
+
+  it('falls back to the default locale when the locale is not valid BCP 47', async () => {
+    el.value = '2026-06-15';
+    el.locale = 'not a locale!';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.display-value')!.textContent).toContain('2026');
+  });
+
+  it('re-renders when disabledDates changes, because it is a reactive property', async () => {
+    const before = el.disabledDates;
+    el.disabledDates = [new Date(2026, 5, 15)];
+    await el.updateComplete;
+    expect(el.disabledDates).not.toBe(before);
+    expect(el.hasAttribute('disableddates')).toBe(false);
+  });
 });

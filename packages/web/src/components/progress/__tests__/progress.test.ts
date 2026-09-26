@@ -77,4 +77,12 @@ describe('<lt-progress>', () => {
     await el.updateComplete;
     expect(el.getAttribute('size')).toBe(size);
   });
+
+  it.each([NaN, Infinity, -Infinity])('shows an empty bar rather than a NaN width for the value %s', async (value) => {
+    el.value = value;
+    await el.updateComplete;
+    const fill = el.shadowRoot!.querySelector<HTMLElement>('[part="fill"]')!;
+    expect(fill.style.width).not.toContain('NaN');
+    expect(el.shadowRoot!.querySelector('[role="progressbar"]')!.getAttribute('aria-valuenow')).toBe('0');
+  });
 });

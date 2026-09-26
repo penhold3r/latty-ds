@@ -97,6 +97,8 @@ export const snackbarStyles = css`
     display: flex;
     flex-shrink: 0;
     justify-content: center;
+    min-height: 24px; /* WCAG 2.5.8 */
+    min-width: 24px;
     opacity: 0.7;
     padding: 0;
   }

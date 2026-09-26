@@ -700,4 +700,36 @@ describe('<lt-textfield>', () => {
       expect(icon?.getAttribute('name')).toBe('check-circle');
     });
   });
+
+  describe('end icon', () => {
+    const input = () => el.shadowRoot!.querySelector('input')!;
+
+    it('gets room for the password toggle so typed text cannot run under it', async () => {
+      el.type = 'password';
+      await el.updateComplete;
+      expect(input().classList.contains('has-end-icon')).toBe(true);
+    });
+
+    it.each(['success', 'warning', 'error'] as const)('gets room for the %s status icon', async (variant) => {
+      el.variant = variant;
+      await el.updateComplete;
+      expect(input().classList.contains('has-end-icon')).toBe(true);
+    });
+
+    it('has no end-icon padding when there is no end icon', async () => {
+      expect(input().classList.contains('has-end-icon')).toBe(false);
+    });
+
+    it('marks both sides when there is a start icon and an end icon, and the textarea too', async () => {
+      el.iconStart = 'search';
+      el.variant = 'error';
+      await el.updateComplete;
+      expect([...input().classList].sort()).toEqual(['has-end-icon', 'has-start-icon']);
+
+      el.type = 'multiline';
+      await el.updateComplete;
+      const area = el.shadowRoot!.querySelector('textarea')!;
+      expect([...area.classList].sort()).toEqual(['has-end-icon', 'has-start-icon']);
+    });
+  });
 });

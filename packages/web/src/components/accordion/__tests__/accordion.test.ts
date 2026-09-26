@@ -135,4 +135,30 @@ describe('<lt-accordion>', () => {
     await el.updateComplete;
     expect(details.open).toBe(false);
   });
+
+  describe('transitionend', () => {
+    const end = (target: Element, propertyName: string) => {
+      const event = new Event('transitionend', { bubbles: true, composed: true });
+      Object.defineProperty(event, 'propertyName', { value: propertyName });
+      target.dispatchEvent(event);
+    };
+
+    it('ends the animation only for the content height transition', async () => {
+      el.label = 'Title';
+      el.innerHTML = '<button id="inner">inner</button>';
+      await el.updateComplete;
+      const content = el.shadowRoot!.querySelector<HTMLElement>('.content')!;
+      const internals = el as unknown as { _animating: boolean };
+
+      internals._animating = true;
+      end(content, 'opacity');
+      expect(internals._animating).toBe(true);
+
+      end(el.querySelector('#inner')!, 'height'); // bubbles from slotted content, not the content box itself
+      expect(internals._animating).toBe(true);
+
+      end(content, 'height');
+      expect(internals._animating).toBe(false);
+    });
+  });
 });

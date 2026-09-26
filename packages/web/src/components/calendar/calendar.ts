@@ -68,8 +68,8 @@ export class Calendar extends ThemeableElement {
   /** Number of month panels to display side-by-side. */
   @property({ type: Number, reflect: true }) months = 1;
 
-  /** Specific dates to disable, as an array of Date objects. Not reflected as an attribute. */
-  disabledDates: Date[] = [];
+  /** Specific dates to disable, as an array of Date objects. Set as a JS property (`.disabledDates`). */
+  @property({ attribute: false }) disabledDates: Date[] = [];
 
   @state() private _viewYear = new Date().getFullYear();
   @state() private _viewMonth = new Date().getMonth();

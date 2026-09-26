@@ -40,15 +40,27 @@ export class Pagination extends ThemeableElement {
   /** Disable all controls. */
   @property({ type: Boolean, reflect: true }) disabled = false;
 
+  /** `total-pages` as a whole number >= 1: NaN, zero and negatives collapse to a single page. */
+  private get _total(): number {
+    const total = Math.floor(Number(this.totalPages));
+    return Number.isFinite(total) && total >= 1 ? total : 1;
+  }
+
+  /** `page` clamped into 1.._total, so `page="99"` on a 10-page set is the last page, not "no page selected". */
+  private get _current(): number {
+    const page = Math.floor(Number(this.page));
+    return Number.isFinite(page) ? Math.min(Math.max(page, 1), this._total) : 1;
+  }
+
   private _go(page: number) {
-    if (this.disabled || page < 1 || page > this.totalPages || page === this.page) return;
+    if (this.disabled || page < 1 || page > this._total || page === this._current) return;
     this.page = page;
     dispatch(this, 'change', { page });
   }
 
   private _pages(): (number | '…')[] {
-    const total = this.totalPages;
-    const current = this.page;
+    const total = this._total;
+    const current = this._current;
 
     if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
 
@@ -69,8 +81,8 @@ export class Pagination extends ThemeableElement {
 
   render() {
     const pages = this._pages();
-    const atFirst = this.page <= 1;
-    const atLast = this.page >= this.totalPages;
+    const atFirst = this._current <= 1;
+    const atLast = this._current >= this._total;
 
     return html`
       <nav aria-label="Pagination">
@@ -80,7 +92,7 @@ export class Pagination extends ThemeableElement {
         <button
           aria-label="Previous page"
           ?disabled=${atFirst || this.disabled}
-          @click=${() => this._go(this.page - 1)}
+          @click=${() => this._go(this._current - 1)}
         >
           <lt-icon name="caret-left" size="sm"></lt-icon>
         </button>
@@ -90,7 +102,7 @@ export class Pagination extends ThemeableElement {
             ? html`<button class="ellipsis" aria-hidden="true" tabindex="-1">…</button>`
             : html`<button
                 aria-label="Page ${p}"
-                aria-current=${p === this.page ? 'page' : nothing}
+                aria-current=${p === this._current ? 'page' : nothing}
                 ?disabled=${this.disabled}
                 @click=${() => this._go(p as number)}
               >
@@ -98,10 +110,10 @@ export class Pagination extends ThemeableElement {
               </button>`
         )}
 
-        <button aria-label="Next page" ?disabled=${atLast || this.disabled} @click=${() => this._go(this.page + 1)}>
+        <button aria-label="Next page" ?disabled=${atLast || this.disabled} @click=${() => this._go(this._current + 1)}>
           <lt-icon name="caret-right" size="sm"></lt-icon>
         </button>
-        <button aria-label="Last page" ?disabled=${atLast || this.disabled} @click=${() => this._go(this.totalPages)}>
+        <button aria-label="Last page" ?disabled=${atLast || this.disabled} @click=${() => this._go(this._total)}>
           <lt-icon name="double-caret-right" size="sm"></lt-icon>
         </button>
       </nav>

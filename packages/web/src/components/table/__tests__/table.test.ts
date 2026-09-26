@@ -440,4 +440,74 @@ describe('<lt-table>', () => {
       ssrEl.remove();
     });
   });
+
+  describe('default sorting', () => {
+    const cells = (col: number) =>
+      [...el.shadowRoot!.querySelectorAll(`tbody tr td:nth-child(${col})`)].map((td) => td.textContent!.trim());
+
+    const sortBy = async (rows: Record<string, unknown>[], key: string, direction: 'asc' | 'desc' = 'asc') => {
+      const t = el as unknown as Table<Record<string, unknown>>;
+      t.columns = [{ key, label: key, sortable: true }];
+      t.data = rows;
+      t.sort = { key, direction };
+      await t.updateComplete;
+    };
+
+    it('sorts Date values by time, not by their string form', async () => {
+      await sortBy([{ d: new Date(2026, 0, 30) }, { d: new Date(2026, 0, 2) }, { d: new Date(2026, 0, 5) }], 'd');
+      expect(cells(1).map((text) => text.slice(4, 10))).toEqual(['Jan 02', 'Jan 05', 'Jan 30']);
+    });
+
+    it('sorts numeric strings naturally, so "2" comes before "10"', async () => {
+      await sortBy([{ n: '10' }, { n: '2' }, { n: '1' }, { n: '20' }], 'n');
+      expect(cells(1)).toEqual(['1', '2', '10', '20']);
+    });
+
+    it('sorts text with embedded numbers naturally', async () => {
+      await sortBy([{ f: 'file10' }, { f: 'file2' }, { f: 'file1' }], 'f');
+      expect(cells(1)).toEqual(['file1', 'file2', 'file10']);
+    });
+
+    it('reverses for descending', async () => {
+      await sortBy([{ n: 2 }, { n: 10 }, { n: 1 }], 'n', 'desc');
+      expect(cells(1)).toEqual(['10', '2', '1']);
+    });
+  });
+
+  describe('rows without a row-key', () => {
+    it('renders circular row data without throwing', async () => {
+      const circular: Record<string, unknown> = { name: 'loop' };
+      circular.self = circular;
+      const t = el as unknown as Table<Record<string, unknown>>;
+      t.columns = [{ key: 'name', label: 'Name' }];
+      t.data = [circular];
+      await t.updateComplete;
+      expect(el.shadowRoot!.querySelectorAll('tbody tr')).toHaveLength(1);
+    });
+
+    it('renders identical rows as separate rows', async () => {
+      const t = el as unknown as Table<Record<string, unknown>>;
+      t.columns = [{ key: 'a', label: 'A' }];
+      t.data = [{ a: 'x' }, { a: 'x' }, { a: 'x' }];
+      await t.updateComplete;
+      expect(el.shadowRoot!.querySelectorAll('tbody tr')).toHaveLength(3);
+    });
+
+    it('still keys rows by row-key when one is given', async () => {
+      const t = el as unknown as Table<Record<string, unknown>>;
+      t.rowKey = 'id';
+      t.columns = [{ key: 'id', label: 'ID' }];
+      t.data = [{ id: 1 }, { id: 2 }];
+      await t.updateComplete;
+      expect(el.shadowRoot!.querySelectorAll('tbody tr')).toHaveLength(2);
+    });
+
+    it('gives the empty-state cell a valid colspan even with no columns', async () => {
+      const t = el as unknown as Table<Record<string, unknown>>;
+      t.columns = [];
+      t.data = [];
+      await t.updateComplete;
+      expect(el.shadowRoot!.querySelector('td.empty-state')!.getAttribute('colspan')).toBe('1');
+    });
+  });
 });

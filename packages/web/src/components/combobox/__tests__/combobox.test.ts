@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { Combobox } from '../combobox';
 import '../combobox';
+import { autoUpdate } from '@floating-ui/dom';
 
 vi.mock('@floating-ui/dom', () => ({
   computePosition: vi.fn().mockResolvedValue({ x: 0, y: 0 }),
@@ -123,5 +124,33 @@ describe('<lt-combobox>', () => {
     input.dispatchEvent(new FocusEvent('focus'));
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('.dropdown')).toBeNull();
+  });
+
+  describe('opening', () => {
+    it('starts one floating autoUpdate when the field is focused and clicked in the same gesture', async () => {
+      vi.mocked(autoUpdate).mockClear();
+      const input = el.shadowRoot!.querySelector('input')!;
+
+      // A real click on the field fires focus, then click — both call openDropdown.
+      input.dispatchEvent(new FocusEvent('focus'));
+      el.shadowRoot!.querySelector<HTMLElement>('.input-wrap')!.click();
+      await new Promise((r) => setTimeout(r, 30));
+      await el.updateComplete;
+
+      expect(autoUpdate).toHaveBeenCalledTimes(1);
+    });
+
+    it('opens again after it has been closed', async () => {
+      vi.mocked(autoUpdate).mockClear();
+      const input = el.shadowRoot!.querySelector('input')!;
+      input.dispatchEvent(new FocusEvent('focus'));
+      await new Promise((r) => setTimeout(r, 30));
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      await el.updateComplete;
+      el.shadowRoot!.querySelector<HTMLElement>('.input-wrap')!.click();
+      await new Promise((r) => setTimeout(r, 30));
+
+      expect(autoUpdate).toHaveBeenCalledTimes(2);
+    });
   });
 });

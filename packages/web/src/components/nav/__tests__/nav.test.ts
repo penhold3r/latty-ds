@@ -203,3 +203,48 @@ describe('<lt-nav-item>', () => {
     expect(el.open).toBe(false);
   });
 });
+
+describe('<lt-nav-item> group state and disabled links', () => {
+  const group = async (attrs: Record<string, string> = {}) => {
+    const el = document.createElement('lt-nav-item') as NavItem;
+    el.setAttribute('label', 'Group');
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+    const child = document.createElement('lt-nav-item') as NavItem;
+    child.setAttribute('label', 'Child');
+    el.appendChild(child);
+    document.body.appendChild(el);
+    await el.updateComplete;
+    await new Promise((r) => setTimeout(r, 50));
+    await el.updateComplete;
+    return el;
+  };
+
+  it('renders a group that starts open expanded, not collapsed at height 0', async () => {
+    const el = await group({ open: '' });
+    expect(el.shadowRoot!.querySelector<HTMLElement>('.children')!.style.height).toBe('auto');
+    el.remove();
+  });
+
+  it('leaves a group that starts closed alone', async () => {
+    const el = await group();
+    expect(el.shadowRoot!.querySelector<HTMLElement>('.children')!.style.height).toBe('');
+    el.remove();
+  });
+
+  it('does not navigate, and is not focusable, when a link item is disabled', async () => {
+    const el = document.createElement('lt-nav-item') as NavItem;
+    el.setAttribute('label', 'Locked');
+    el.setAttribute('href', '/locked');
+    el.setAttribute('disabled', '');
+    document.body.appendChild(el);
+    await el.updateComplete;
+
+    const anchor = el.shadowRoot!.querySelector<HTMLAnchorElement>('a.item-trigger')!;
+    expect(anchor.getAttribute('aria-disabled')).toBe('true');
+    expect(anchor.getAttribute('tabindex')).toBe('-1');
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true, composed: true });
+    anchor.dispatchEvent(click);
+    expect(click.defaultPrevented).toBe(true);
+    el.remove();
+  });
+});

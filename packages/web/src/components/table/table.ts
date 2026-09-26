@@ -8,6 +8,17 @@ import { repeat } from 'lit/directives/repeat.js';
 import { tableStyles } from './table.styles';
 import { TableColumn, TableDensity, TableResponsiveMode, SortState, SortChangeDetail } from './table.types';
 
+/**
+ * Default sort comparison. Dates compare by time (their string form sorts "Fri Jan 02" before "Mon Jan 05" but after
+ * "Fri Jan 30"), numbers numerically, and everything else as text with natural ordering so "2" precedes "10".
+ */
+const compareValues = (a: unknown, b: unknown): number => {
+  if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
+  if (typeof a === 'number' && typeof b === 'number') return a - b;
+  if (typeof a === 'bigint' && typeof b === 'bigint') return a < b ? -1 : a > b ? 1 : 0;
+  return String(a).localeCompare(String(b), undefined, { numeric: true });
+};
+
 const jsonArrayConverter = {
   fromAttribute(value: string | null): unknown[] {
     if (value === null) return [];
@@ -205,13 +216,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
       if (aValue == null) return 1;
       if (bValue == null) return -1;
 
-      // Compare values
-      let comparison = 0;
-      if (typeof aValue === 'number' && typeof bValue === 'number') {
-        comparison = aValue - bValue;
-      } else {
-        comparison = String(aValue).localeCompare(String(bValue));
-      }
+      const comparison = compareValues(aValue, bValue);
 
       return this.currentSort!.direction === 'asc' ? comparison : -comparison;
     });
@@ -354,40 +359,45 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
       return html`
         <tbody>
           <tr>
-            <td colspan=${columns.length} class="empty-state">${this.emptyMessage}</td>
+            <td colspan=${Math.max(columns.length, 1)} class="empty-state">${this.emptyMessage}</td>
           </tr>
         </tbody>
       `;
     }
 
-    return html`
-      <tbody>
-        ${repeat(
-          this.sortedData,
-          (row) => (this.rowKey ? (row as Record<string, unknown>)[this.rowKey] : JSON.stringify(row)),
-          (row, index) => html`
-            <tr>
-              ${columns.map(
-                (column) => html`
-                  <td
-                    class=${classMap({
-                      sticky: !!column.sticky,
-                      'hide-on-mobile': !!column.hideOnMobile
-                    })}
-                    data-align=${column.align || 'left'}
-                    data-label=${column.label}
-                    style=${styleMap({
-                      ...(column.width ? { width: column.width } : {}),
-                      ...(column.minWidth ? { minWidth: column.minWidth } : {})
-                    })}
-                  >
-                    ${this.renderCell(column, row, index)}
-                  </td>
-                `
-              )}
-            </tr>
+    const renderRow = (row: T, index: number) => html`
+      <tr>
+        ${columns.map(
+          (column) => html`
+            <td
+              class=${classMap({
+                sticky: !!column.sticky,
+                'hide-on-mobile': !!column.hideOnMobile
+              })}
+              data-align=${column.align || 'left'}
+              data-label=${column.label}
+              style=${styleMap({
+                ...(column.width ? { width: column.width } : {}),
+                ...(column.minWidth ? { minWidth: column.minWidth } : {})
+              })}
+            >
+              ${this.renderCell(column, row, index)}
+            </td>
           `
         )}
+      </tr>
+    `;
+
+    // Keyed rendering only makes sense with a real key. Without `row-key` the old fallback (JSON.stringify(row)) was
+    // O(n) per render, threw on circular data and BigInt, and gave identical rows identical keys; index-based
+    // rendering has none of those problems.
+    const rows = this.rowKey
+      ? repeat(this.sortedData, (row) => (row as Record<string, unknown>)[this.rowKey], renderRow)
+      : this.sortedData.map(renderRow);
+
+    return html`
+      <tbody>
+        ${rows}
       </tbody>
     `;
   }

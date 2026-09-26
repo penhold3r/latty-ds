@@ -11,6 +11,21 @@ import type { Calendar } from '../calendar/calendar';
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import { openFloating, closeFloating } from '../shared/floating';
 
+const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+/**
+ * Parses a plain `YYYY-MM-DD` string into a local date, or `null` when it isn't one — including real-looking
+ * but impossible dates such as `2026-02-31`. A value like `2026-06-15T10:00` (a datetime from an API) is not
+ * a plain date either; showing the placeholder is safer than guessing.
+ */
+const parseIsoDate = (value: string): Date | null => {
+  const match = ISO_DATE.exec(value);
+  if (!match) return null;
+  const [year, month, day] = [Number(match[1]), Number(match[2]), Number(match[3])];
+  const date = new Date(year, month - 1, day);
+  return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day ? date : null;
+};
+
 /**
  * A text field that opens an `lt-calendar` popover for visual date selection.
  *
@@ -79,11 +94,11 @@ export class DateInput extends ThemeableElement {
   /** Whether the field is required. */
   @property({ type: Boolean, reflect: true }) required = false;
 
-  /** Name used in form submission via a hidden input. */
+  /** Name used in form submission (through `ElementInternals`, so no hidden input is rendered). */
   @property({ reflect: true }) name = '';
 
-  /** Individual dates to disable in the calendar, as Date objects. */
-  disabledDates: Calendar['disabledDates'] = [];
+  /** Individual dates to disable in the calendar, as Date objects. Set as a JS property (`.disabledDates`). */
+  @property({ attribute: false }) disabledDates: Calendar['disabledDates'] = [];
 
   @state() private _open = false;
 
@@ -91,10 +106,14 @@ export class DateInput extends ThemeableElement {
   private _floatingCleanup: (() => void) | null = null;
 
   private get _displayValue(): string {
-    if (!this.value) return '';
-    const [y, m, d] = this.value.split('-').map(Number);
-    const date = new Date(y, m - 1, d);
-    return new Intl.DateTimeFormat(this.locale, { dateStyle: this.format }).format(date);
+    const date = parseIsoDate(this.value);
+    if (!date) return '';
+    try {
+      return new Intl.DateTimeFormat(this.locale, { dateStyle: this.format }).format(date);
+    } catch {
+      // An unknown BCP 47 locale throws a RangeError; fall back to the runtime default rather than fail to render.
+      return new Intl.DateTimeFormat(undefined, { dateStyle: this.format }).format(date);
+    }
   }
 
   private async _openDropdown() {
