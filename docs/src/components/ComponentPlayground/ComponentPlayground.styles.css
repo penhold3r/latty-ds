@@ -191,7 +191,10 @@
 .code-panel {
   display: flex;
   flex-direction: column;
-  background: var(--lt-color-neutral-900);
+  /* --prism-* are set inline by index.tsx from the site's Prism theme, exactly as
+     Docusaurus does for its own code blocks, so the panel switches with light/dark. */
+  background: var(--prism-background-color);
+  color: var(--prism-color);
   min-width: 0;
 }
 
@@ -200,7 +203,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0;
-  border-bottom: 1px solid var(--lt-color-neutral-700);
+  border-bottom: 1px solid var(--lt-border-default);
 }
 
 .code-header-actions {
@@ -228,9 +231,10 @@
 }
 
 .code-output {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 0.8125rem;
-  color: var(--lt-color-neutral-200);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: var(--ifm-code-font-size);
+  line-height: var(--ifm-pre-line-height);
+  color: var(--prism-color);
   background: none;
   padding: 0;
   white-space: pre;

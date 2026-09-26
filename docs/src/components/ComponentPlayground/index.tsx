@@ -1,7 +1,10 @@
 import React, { useEffect, useId, useRef } from 'react';
+import { usePrismTheme } from '@docusaurus/theme-common';
+import { getPrismCssVariables } from '@docusaurus/theme-common/internal';
 import manifest from '@latty-ds/web/manifest.json';
 import { defaultValue, toLabel, buildSubTagsData } from './ComponentPlayground.ssr';
 import { initPlayground } from './ComponentPlayground.script';
+import { prismThemeToCss } from './ComponentPlayground.prism';
 import type { PlaygroundMember, PlaygroundGroup } from './ComponentPlayground.types';
 import './ComponentPlayground.styles.css';
 
@@ -69,6 +72,9 @@ export default function ComponentPlayground({
   useEffect(() => {
     if (rootRef.current) void initPlayground(rootRef.current);
   }, []);
+
+  // Same Prism theme (and light/dark switching) as the site's code blocks.
+  const prismTheme = usePrismTheme();
 
   return (
     <div
@@ -227,9 +233,10 @@ export default function ComponentPlayground({
           )}
         </div>
 
-        <div className="code-panel">
+        <div className="code-panel" style={getPrismCssVariables(prismTheme)}>
+          <style>{prismThemeToCss(prismTheme, '.code-panel')}</style>
           <div className="code-header">
-            <lt-tab-group value="html" class="code-tabs" id={`${id}-tabs`} theme="dark">
+            <lt-tab-group value="html" class="code-tabs" id={`${id}-tabs`}>
               <lt-tab label="HTML" value="html">
                 HTML
               </lt-tab>
@@ -245,7 +252,6 @@ export default function ComponentPlayground({
                 id={`${id}-share`}
                 icon-end="share"
                 aria-label="Share"
-                theme="dark"
               >
                 Share
               </lt-button>
@@ -256,7 +262,6 @@ export default function ComponentPlayground({
                 id={`${id}-copy`}
                 icon-end="copy"
                 aria-label="Copy code"
-                theme="dark"
               >
                 Copy
               </lt-button>

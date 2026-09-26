@@ -6,6 +6,7 @@
 // mount from index.tsx's `useEffect` — everything else (DOM manipulation,
 // state, code generation) is identical and needed no rewrite for React/SSR,
 // since it only ever runs client-side inside that effect.
+import { Prism } from 'prism-react-renderer';
 import type { PlaygroundMember, PlaygroundGroup, ChildItem } from './ComponentPlayground.types';
 
 // The previewed element is created from a runtime tag string (`document.createElement(tag)`),
@@ -24,6 +25,11 @@ type ControlElement = HTMLElement & {
   checked?: boolean;
   dataset: DOMStringMap;
 };
+
+// Same Prism instance Docusaurus's own code blocks use, so no second highlighter ships. It HTML-escapes
+// its input, which matters here: the generated snippets embed user-typed control values.
+const highlight = (code: string, language: 'markup' | 'tsx') =>
+  Prism.highlight(code, Prism.languages[language], language);
 
 const encodeState = (s: Record<string, unknown>) => btoa(unescape(encodeURIComponent(JSON.stringify(s))));
 
@@ -253,8 +259,9 @@ export const initPlayground = async (playground: Element): Promise<void> => {
   };
 
   const updateCode = () => {
-    htmlCode.textContent = generateHTML();
-    reactCode.textContent = generateReact();
+    // innerHTML, not textContent: the Copy handler reads textContent back, which strips the token spans.
+    htmlCode.innerHTML = highlight(generateHTML(), 'markup');
+    reactCode.innerHTML = highlight(generateReact(), 'tsx');
   };
 
   const applyState = () => {
