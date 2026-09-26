@@ -3,7 +3,11 @@
   "compilerOptions": {
     "rootDir": "./src",
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    // tsup's declaration build (dts: true) injects its own baseUrl, which
+    // TypeScript 6 reports as deprecated (TS5101). "6.0" is the only value
+    // that silences it there; TS 5.x rejects it, so this pins us to TS 6+.
+    "ignoreDeprecations": "6.0"
   },
   "include": ["src"]
 }

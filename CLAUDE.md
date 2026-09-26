@@ -347,6 +347,14 @@ Tests use Vitest with jsdom environment. Test files are located at `packages/**/
 
 **Prettier**: `printWidth: 120`, `singleQuote: true`, `trailingComma: "none"`.
 
+**TypeScript 6**: the workspace runs TypeScript 6 (matching the compiler bundled with VS Code, so the editor and CI agree). Three things differ from 5.x and will bite a new package:
+
+- Packages built with `tsup` and `dts: true` need `"ignoreDeprecations": "6.0"` in their tsconfig — tsup's declaration step injects a deprecated `baseUrl` (TS5101), and `"6.0"` is the only value that silences it.
+- Any tsconfig that emits files must set `rootDir` explicitly. TS 6 defaults it to the tsconfig's own folder instead of the inferred source root, so `packages/react` would emit `dist/src/index.d.ts` and break its `"types": "./dist/index.d.ts"` entry.
+- `@types/node` is no longer auto-included — add `"types": ["node"]` wherever Node globals (`process`, `node:fs`) are used.
+
+TypeScript 7 (the native port) is out but not usable yet: it has no JS API, `typescript-eslint` only supports `<6.1.0`, and `ignoreDeprecations: "6.0"` stops working there — re-evaluate once those catch up.
+
 ## Agent Documents
 
 Planning documents, design decisions, audits, and research produced during a session belong in `_agent-plans/` at the repo root. This directory is **gitignored** — it is for local development only and is never committed.

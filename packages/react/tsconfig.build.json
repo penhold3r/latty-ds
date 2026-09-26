@@ -1,6 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    // TypeScript 6 defaults rootDir to the tsconfig's own folder instead of
+    // the inferred common source root, which would emit dist/src/index.d.ts
+    // and break package.json's "types": "./dist/index.d.ts".
+    "rootDir": "./src",
     "types": [],
     "declaration": true,
     "emitDeclarationOnly": true,

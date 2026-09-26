@@ -3,7 +3,9 @@
   "include": ["src"],
   "compilerOptions": {
     "jsx": "react-jsx",
-    "ignoreDeprecations": "5.0",
+    // tsup's declaration build injects its own baseUrl, which TypeScript 6
+    // reports as deprecated (TS5101) — "6.0" silences it (see utils/tsconfig).
+    "ignoreDeprecations": "6.0",
     "resolveJsonModule": true,
     "types": ["node"]
   }
