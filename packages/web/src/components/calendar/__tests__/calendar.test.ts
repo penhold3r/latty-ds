@@ -90,7 +90,7 @@ describe('<lt-calendar>', () => {
     await el.updateComplete;
 
     let monthChangeDetail: { year: number; month: number } | undefined;
-    el.addEventListener('month-change', (e) => {
+    el.addEventListener('monthchange', (e) => {
       monthChangeDetail = (e as CustomEvent<{ year: number; month: number }>).detail;
     });
 
@@ -358,13 +358,13 @@ describe('<lt-calendar> month/year picker', () => {
     expect(label.textContent?.trim()).toContain('2026');
   });
 
-  it('picking a month fires lt-month-change', async () => {
+  it('picking a month fires monthchange', async () => {
     const openBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('.month-label-btn')!;
     openBtn.click();
     await el.updateComplete;
 
     let detail: { year: number; month: number } | undefined;
-    el.addEventListener('month-change', (e) => {
+    el.addEventListener('monthchange', (e) => {
       detail = (e as CustomEvent<{ year: number; month: number }>).detail;
     });
 

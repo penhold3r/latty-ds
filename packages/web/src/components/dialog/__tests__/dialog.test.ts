@@ -166,9 +166,9 @@ describe('<lt-dialog>', () => {
     expect(el.open).toBe(false);
   });
 
-  it('dispatches lt-dialog-open event when opened', async () => {
+  it('dispatches open event when opened', async () => {
     const handler = vi.fn();
-    el.addEventListener('dialog-open', handler);
+    el.addEventListener('open', handler);
 
     el.open = true;
     await el.updateComplete;
@@ -176,9 +176,9 @@ describe('<lt-dialog>', () => {
     expect(handler).toHaveBeenCalledTimes(1);
   });
 
-  it('dispatches lt-dialog-close event when closed', async () => {
+  it('dispatches close event when closed', async () => {
     const handler = vi.fn();
-    el.addEventListener('dialog-close', handler);
+    el.addEventListener('close', handler);
 
     el.open = true;
     await el.updateComplete;

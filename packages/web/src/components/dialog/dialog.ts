@@ -24,7 +24,7 @@ import '../text/text';
  * - Scrollable body content
  * - Optional footer for actions
  * - Focus trap and restoration
- * - Custom open/close events
+ * - `open` / `close` events
  * - Accessible with aria-modal and role="dialog"
  *
  * @slot - Dialog body content
@@ -33,8 +33,6 @@ import '../text/text';
  *
  * @fires open - Fired when dialog opens
  * @fires close - Fired when dialog closes
- * @fires dialog-open - Fired when dialog opens (deprecated, use `open`)
- * @fires dialog-close - Fired when dialog closes (deprecated, use `close`)
  *
  * @example
  * ```html
@@ -175,10 +173,7 @@ export class Dialog extends ThemeableElement {
       this.dialogElement?.focus();
     });
 
-    // Dispatch open events (dialog-open kept for backward compat)
-    const openEvent = new CustomEvent('open', { bubbles: true, composed: true });
-    this.dispatchEvent(openEvent);
-    this.dispatchEvent(new CustomEvent('dialog-open', { bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('open', { bubbles: true, composed: true }));
   }
 
   private handleClose() {
@@ -188,9 +183,7 @@ export class Dialog extends ThemeableElement {
     // Restore focus to previously focused element
     this.restoreFocus();
 
-    // Dispatch close events (dialog-close kept for backward compat)
     this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
-    this.dispatchEvent(new CustomEvent('dialog-close', { bubbles: true, composed: true }));
   }
 
   private restoreFocus() {

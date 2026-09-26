@@ -1679,9 +1679,9 @@
           "events": [
             {
               "type": {
-                "text": "CustomEvent<{valueStart: string, valueEnd: string}>"
+                "text": "CustomEvent<{value: string} | {valueStart: string, valueEnd: string}>"
               },
-              "description": "Fired when a full range is selected (mode=\"range\").",
+              "description": "Fired when a date is selected (mode=\"single\", detail `{ value }`) or when a full range is selected (mode=\"range\", detail `{ valueStart, valueEnd }`).",
               "name": "change"
             },
             {
@@ -1689,7 +1689,7 @@
                 "text": "CustomEvent<{year: number, month: number}>"
               },
               "description": "Fired when the viewed month changes.",
-              "name": "month-change"
+              "name": "monthchange"
             }
           ],
           "superclass": {
@@ -3614,11 +3614,11 @@
           ],
           "events": [
             {
-              "name": "dialog-open",
+              "name": "open",
               "type": {
                 "text": "CustomEvent"
               },
-              "description": "Fired when dialog opens (deprecated, use `open`)"
+              "description": "Fired when dialog opens"
             },
             {
               "name": "close",
@@ -3626,17 +3626,6 @@
                 "text": "CustomEvent"
               },
               "description": "Fired when dialog closes"
-            },
-            {
-              "name": "dialog-close",
-              "type": {
-                "text": "CustomEvent"
-              },
-              "description": "Fired when dialog closes (deprecated, use `close`)"
-            },
-            {
-              "description": "Fired when dialog opens",
-              "name": "open"
             }
           ],
           "superclass": {
@@ -4443,7 +4432,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A thin wrapper around `<img>` with rounded corners, responsive fill support,\nnative lazy loading, and an error fallback mechanism.\n\nNative `load`/`error` events don't cross the shadow boundary, so they are\nre-dispatched as composed `lt-load`/`lt-error` custom events. When a load\nfails, the `fallback` slot is shown in place of the broken image; setting a\nnew `src` retries.",
+          "description": "A thin wrapper around `<img>` with rounded corners, responsive fill support,\nnative lazy loading, and an error fallback mechanism.\n\nThe inner `<img>`'s `load`/`error` events don't leave the shadow root, so they\nare re-dispatched on the host under the same native names, with the `src` in\n`detail`. Like the native ones they don't bubble, so listen on `<lt-image>`\nitself. When a load fails, the `fallback` slot is shown in place of the broken\nimage; setting a new `src` retries.",
           "name": "Image",
           "cssParts": [
             {
@@ -4542,19 +4531,6 @@
             },
             {
               "kind": "method",
-              "name": "_dispatch",
-              "privacy": "private",
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": {
-                    "text": "'lt-load' | 'lt-error'"
-                  }
-                }
-              ]
-            },
-            {
-              "kind": "method",
               "name": "_handleLoad",
               "privacy": "private"
             },
@@ -4570,24 +4546,18 @@
           ],
           "events": [
             {
-              "name": "name",
-              "type": {
-                "text": "CustomEvent"
-              }
-            },
-            {
+              "name": "load",
               "type": {
                 "text": "CustomEvent<{ src: string }>"
               },
-              "description": "Fired when the image loads successfully",
-              "name": "lt-load"
+              "description": "Fired when the image loads successfully"
             },
             {
+              "name": "error",
               "type": {
                 "text": "CustomEvent<{ src: string }>"
               },
-              "description": "Fired when the image fails to load",
-              "name": "lt-error"
+              "description": "Fired when the image fails to load"
             }
           ],
           "superclass": {
@@ -5051,7 +5021,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A single navigation item. Can render as an anchor link or a collapsible group header\nwhen children are slotted.\n\nWhen slotted inside `<lt-nav orientation=\"horizontal\">`, top-level items lay out in a row\nand nested children appear as a dropdown panel. In vertical mode, nested children\ncollapse/expand inline.\n\nSPA router integration: `nav-item-click` is cancelable — call `event.preventDefault()`\nto stop the anchor's native navigation, navigate programmatically, and drive the\nhighlighted item via the `active` property (which also sets `aria-current=\"page\"`).",
+          "description": "A single navigation item. Can render as an anchor link or a collapsible group header\nwhen children are slotted.\n\nWhen slotted inside `<lt-nav orientation=\"horizontal\">`, top-level items lay out in a row\nand nested children appear as a dropdown panel. In vertical mode, nested children\ncollapse/expand inline.\n\nSPA router integration: items use the native `click` — listen for it on the `<lt-nav>` (or the item),\ncall `event.preventDefault()` to stop the anchor's native navigation, and read the item from\n`event.target.closest('lt-nav-item')` (its `href` and `label`). Modifier keys (`event.metaKey`, …) come\nthrough as on any link. Drive the highlighted item via the `active` property (which also sets\n`aria-current=\"page\"`).",
           "name": "NavItem",
           "slots": [
             {
@@ -5210,18 +5180,11 @@
           ],
           "events": [
             {
-              "name": "nav-item-click",
-              "type": {
-                "text": "CustomEvent<{ href: string; label: string }>"
-              },
-              "description": "Fired when the item is clicked (even when it has no href). Cancelable: `preventDefault()` stops the native anchor navigation so an SPA router can handle it."
-            },
-            {
-              "name": "nav-collapse",
+              "name": "toggle",
               "type": {
                 "text": "CustomEvent<{ open: boolean }>"
               },
-              "description": "Fired when a collapsible item is opened or closed."
+              "description": "Fired when a collapsible item is opened or closed, like the native `toggle` of `<details>`."
             }
           ],
           "superclass": {
@@ -8384,11 +8347,6 @@
             },
             {
               "kind": "field",
-              "name": "_handleHostClick",
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
               "name": "_handleHostKeydown",
               "privacy": "private"
             },
@@ -8772,7 +8730,7 @@
           ],
           "events": [
             {
-              "name": "sort-change",
+              "name": "sortchange",
               "type": {
                 "text": "CustomEvent"
               },

@@ -140,9 +140,9 @@ describe('<lt-table>', () => {
     expect(firstRowName.textContent?.trim()).toBe('Charlie');
   });
 
-  it('dispatches lt-sort-change event when sorting', async () => {
+  it('dispatches sortchange event when sorting', async () => {
     const handler = vi.fn();
-    el.addEventListener('sort-change', handler);
+    el.addEventListener('sortchange', handler);
 
     const nameHeader = el.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
     nameHeader.click();
@@ -214,7 +214,7 @@ describe('<lt-table>', () => {
 
   it('supports keyboard navigation on sortable headers', async () => {
     const handler = vi.fn();
-    el.addEventListener('sort-change', handler);
+    el.addEventListener('sortchange', handler);
 
     const nameHeader = el.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
     const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
@@ -226,7 +226,7 @@ describe('<lt-table>', () => {
 
   it('supports space key for sorting', async () => {
     const handler = vi.fn();
-    el.addEventListener('sort-change', handler);
+    el.addEventListener('sortchange', handler);
 
     const nameHeader = el.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
     const spaceEvent = new KeyboardEvent('keydown', { key: ' ', bubbles: true });

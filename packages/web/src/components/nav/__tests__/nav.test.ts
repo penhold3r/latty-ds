@@ -82,20 +82,24 @@ describe('<lt-nav-item>', () => {
     expect(el.open).toBe(true);
   });
 
-  it('fires lt-nav-item-click on trigger click', async () => {
+  it('lets a native click reach listeners outside, with the item as the target', async () => {
     el = document.createElement('lt-nav-item') as NavItem;
     el.setAttribute('label', 'Home');
     el.setAttribute('href', '/');
     document.body.appendChild(el);
     await el.updateComplete;
 
-    let fired = false;
-    el.addEventListener('nav-item-click', () => (fired = true));
+    const targets: EventTarget[] = [];
+    const onClick = (e: Event) => targets.push(e.target!);
+    document.addEventListener('click', onClick);
     el.shadowRoot!.querySelector<HTMLElement>('.item-trigger')!.click();
-    expect(fired).toBe(true);
+    document.removeEventListener('click', onClick);
+
+    // The anchor lives in the shadow root, so the click is retargeted to the lt-nav-item host.
+    expect(targets).toEqual([el]);
   });
 
-  it('fires lt-nav-collapse when a group is toggled', async () => {
+  it('fires toggle with the new open state when a group is toggled', async () => {
     el = document.createElement('lt-nav-item') as NavItem;
     el.setAttribute('label', 'Group');
     const child = document.createElement('lt-nav-item') as NavItem;
@@ -107,7 +111,7 @@ describe('<lt-nav-item>', () => {
     await el.updateComplete;
 
     let detail: { open: boolean } | null = null;
-    el.addEventListener('nav-collapse', (e) => (detail = (e as CustomEvent).detail));
+    el.addEventListener('toggle', ((e: CustomEvent) => (detail = e.detail)) as EventListener);
     el.shadowRoot!.querySelector<HTMLElement>('.item-trigger')!.click();
     await el.updateComplete;
 
@@ -147,23 +151,24 @@ describe('<lt-nav-item>', () => {
     expect(el.shadowRoot!.querySelector('.item-trigger')!.hasAttribute('aria-current')).toBe(false);
   });
 
-  it('prevents native navigation when nav-item-click is canceled', async () => {
+  it('prevents native navigation when a click listener cancels the click', async () => {
     el = document.createElement('lt-nav-item') as NavItem;
     el.setAttribute('label', 'Home');
     el.setAttribute('href', '/somewhere');
     document.body.appendChild(el);
     await el.updateComplete;
 
-    el.addEventListener('nav-item-click', (e) => e.preventDefault());
+    el.addEventListener('click', (e) => e.preventDefault());
 
     const anchor = el.shadowRoot!.querySelector<HTMLAnchorElement>('a.item-trigger')!;
-    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true });
+    // A real click is composed, so it leaves the shadow root and reaches listeners on the host.
+    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true, composed: true });
     anchor.dispatchEvent(clickEvent);
 
     expect(clickEvent.defaultPrevented).toBe(true);
   });
 
-  it('does not prevent navigation when nav-item-click is not canceled', async () => {
+  it('does not prevent navigation on its own', async () => {
     el = document.createElement('lt-nav-item') as NavItem;
     el.setAttribute('label', 'Home');
     el.setAttribute('href', '/somewhere');
@@ -177,16 +182,24 @@ describe('<lt-nav-item>', () => {
     expect(clickEvent.defaultPrevented).toBe(false);
   });
 
-  it('does not respond to clicks when disabled', async () => {
+  it('does not toggle a group when disabled', async () => {
     el = document.createElement('lt-nav-item') as NavItem;
-    el.setAttribute('label', 'Locked');
+    el.setAttribute('label', 'Locked group');
     el.setAttribute('disabled', '');
+    const child = document.createElement('lt-nav-item') as NavItem;
+    child.setAttribute('label', 'Child');
+    el.appendChild(child);
     document.body.appendChild(el);
+    await el.updateComplete;
+    await new Promise((r) => setTimeout(r, 50));
     await el.updateComplete;
 
     let fired = false;
-    el.addEventListener('nav-item-click', () => (fired = true));
+    el.addEventListener('toggle', () => (fired = true));
     el.shadowRoot!.querySelector<HTMLElement>('.item-trigger')!.click();
+    await el.updateComplete;
+
     expect(fired).toBe(false);
+    expect(el.open).toBe(false);
   });
 });

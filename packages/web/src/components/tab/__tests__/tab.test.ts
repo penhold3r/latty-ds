@@ -77,34 +77,35 @@ describe('<lt-tab>', () => {
     expect(icon).toBeFalsy();
   });
 
-  it('dispatches tab-click event when host is clicked', async () => {
-    let eventFired = false;
-    let eventValue = '';
+  it.each(['Enter', ' '] as const)('activates with a native click on the host when %j is pressed', async (key) => {
+    let clicks = 0;
+    el.addEventListener('click', () => clicks++);
 
-    el.addEventListener('tab-click', ((e: CustomEvent) => {
-      eventFired = true;
-      eventValue = e.detail.value;
-    }) as EventListener);
-
-    el.click();
+    el.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
     await el.updateComplete;
 
-    expect(eventFired).toBe(true);
-    expect(eventValue).toBe('test');
+    expect(clicks).toBe(1);
   });
 
-  it('does not dispatch event when disabled and clicked', async () => {
+  it('ignores other keys', async () => {
+    let clicks = 0;
+    el.addEventListener('click', () => clicks++);
+
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true, cancelable: true }));
+    await el.updateComplete;
+
+    expect(clicks).toBe(0);
+  });
+
+  it('does not activate from the keyboard when disabled', async () => {
     el.disabled = true;
     await el.updateComplete;
 
-    let eventFired = false;
-    el.addEventListener('tab-click', () => {
-      eventFired = true;
-    });
-
-    el.click();
+    let clicks = 0;
+    el.addEventListener('click', () => clicks++);
+    el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
     await el.updateComplete;
 
-    expect(eventFired).toBe(false);
+    expect(clicks).toBe(0);
   });
 });

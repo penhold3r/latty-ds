@@ -15,17 +15,16 @@ import '@latty-ds/icons';
  * and nested children appear as a dropdown panel. In vertical mode, nested children
  * collapse/expand inline.
  *
- * SPA router integration: `nav-item-click` is cancelable — call `event.preventDefault()`
- * to stop the anchor's native navigation, navigate programmatically, and drive the
- * highlighted item via the `active` property (which also sets `aria-current="page"`).
+ * SPA router integration: items use the native `click` — listen for it on the `<lt-nav>` (or the item),
+ * call `event.preventDefault()` to stop the anchor's native navigation, and read the item from
+ * `event.target.closest('lt-nav-item')` (its `href` and `label`). Modifier keys (`event.metaKey`, …) come
+ * through as on any link. Drive the highlighted item via the `active` property (which also sets
+ * `aria-current="page"`).
  *
  * @element lt-nav-item
  *
- * @fires {CustomEvent<{ href: string; label: string }>} nav-item-click - Fired when the item
- *   is clicked (even when it has no href). Cancelable: `preventDefault()` stops the native
- *   anchor navigation so an SPA router can handle it.
- * @fires {CustomEvent<{ open: boolean }>} nav-collapse - Fired when a collapsible item
- *   is opened or closed.
+ * @fires {CustomEvent<{ open: boolean }>} toggle - Fired when a collapsible item is opened or
+ *   closed, like the native `toggle` of `<details>`.
  *
  * @slot - Nested `<lt-nav-item>` children (makes this item a collapsible group)
  *
@@ -126,21 +125,11 @@ export class NavItem extends ThemeableElement {
   private _handleTriggerClick(e: MouseEvent) {
     if (this.disabled) return;
 
-    const proceed = this.dispatchEvent(
-      new CustomEvent('nav-item-click', {
-        detail: { href: this.href, label: this.label },
-        bubbles: true,
-        composed: true,
-        cancelable: true
-      })
-    );
-    if (!proceed) e.preventDefault();
-
     if (this._hasChildren) {
       e.preventDefault();
       this.open = !this.open;
       this.dispatchEvent(
-        new CustomEvent('nav-collapse', {
+        new CustomEvent('toggle', {
           detail: { open: this.open },
           bubbles: true,
           composed: true

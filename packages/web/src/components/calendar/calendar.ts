@@ -12,9 +12,9 @@ import { dispatch } from '../../utils';
  *
  * @element lt-calendar
  *
- * @fires {CustomEvent<{value: string}>} change - Fired when a single date is selected (mode="single").
- * @fires {CustomEvent<{valueStart: string, valueEnd: string}>} change - Fired when a full range is selected (mode="range").
- * @fires {CustomEvent<{year: number, month: number}>} month-change - Fired when the viewed month changes.
+ * @fires {CustomEvent<{value: string} | {valueStart: string, valueEnd: string}>} change - Fired when a date is selected
+ *   (mode="single", detail `{ value }`) or when a full range is selected (mode="range", detail `{ valueStart, valueEnd }`).
+ * @fires {CustomEvent<{year: number, month: number}>} monthchange - Fired when the viewed month changes.
  *
  * @example
  * ```html
@@ -246,7 +246,7 @@ export class Calendar extends ThemeableElement {
     this._viewMonth = month;
     this._viewYear = year;
     this._focusedDate = null;
-    dispatch(this, 'month-change', { year: this._viewYear, month: this._viewMonth });
+    dispatch(this, 'monthchange', { year: this._viewYear, month: this._viewMonth });
   }
 
   private _openPicker() {
@@ -263,7 +263,7 @@ export class Calendar extends ThemeableElement {
     this._viewMonth = month;
     this._pickingMonthYear = false;
     this._focusedDate = null;
-    dispatch(this, 'month-change', { year: this._viewYear, month: this._viewMonth });
+    dispatch(this, 'monthchange', { year: this._viewYear, month: this._viewMonth });
   }
 
   private _selectDay(day: CalendarDay) {

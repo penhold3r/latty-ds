@@ -10,18 +10,19 @@ import type { ImageLoading } from './image.types';
  * A thin wrapper around `<img>` with rounded corners, responsive fill support,
  * native lazy loading, and an error fallback mechanism.
  *
- * Native `load`/`error` events don't cross the shadow boundary, so they are
- * re-dispatched as composed `lt-load`/`lt-error` custom events. When a load
- * fails, the `fallback` slot is shown in place of the broken image; setting a
- * new `src` retries.
+ * The inner `<img>`'s `load`/`error` events don't leave the shadow root, so they
+ * are re-dispatched on the host under the same native names, with the `src` in
+ * `detail`. Like the native ones they don't bubble, so listen on `<lt-image>`
+ * itself. When a load fails, the `fallback` slot is shown in place of the broken
+ * image; setting a new `src` retries.
  *
  * @element lt-image
  * @part image - The underlying `<img>` element
  *
  * @slot fallback - Content shown in place of the image when loading fails
  *
- * @fires {CustomEvent<{ src: string }>} lt-load - Fired when the image loads successfully
- * @fires {CustomEvent<{ src: string }>} lt-error - Fired when the image fails to load
+ * @fires {CustomEvent<{ src: string }>} load - Fired when the image loads successfully
+ * @fires {CustomEvent<{ src: string }>} error - Fired when the image fails to load
  *
  * @example
  * ```html
@@ -70,23 +71,17 @@ export class Image extends ThemeableElement {
     if (changed.has('src')) this._errored = false;
   }
 
-  private _dispatch(name: 'lt-load' | 'lt-error') {
-    this.dispatchEvent(
-      new CustomEvent(name, {
-        detail: { src: this.src },
-        bubbles: true,
-        composed: true
-      })
-    );
-  }
-
+  // Literal event names (not a shared helper taking `name`): the manifest analyzer reads names from
+  // `new CustomEvent('…')` call sites, and a variable there produced a bogus event called "name".
+  // Non-bubbling and non-composed, exactly like the native <img> events they mirror — a bubbling
+  // `error` would also reach window-level error handlers (Sentry and friends) as a spurious error.
   private _handleLoad() {
-    this._dispatch('lt-load');
+    this.dispatchEvent(new CustomEvent('load', { detail: { src: this.src } }));
   }
 
   private _handleError() {
     this._errored = true;
-    this._dispatch('lt-error');
+    this.dispatchEvent(new CustomEvent('error', { detail: { src: this.src } }));
   }
 
   render() {

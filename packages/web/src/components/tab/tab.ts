@@ -68,13 +68,11 @@ export class Tab extends ThemeableElement {
     super.connectedCallback();
     this.setAttribute('role', 'tab');
     this.tabIndex = 0;
-    this.addEventListener('click', this._handleHostClick);
     this.addEventListener('keydown', this._handleHostKeydown);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('click', this._handleHostClick);
     this.removeEventListener('keydown', this._handleHostKeydown);
   }
 
@@ -88,22 +86,13 @@ export class Tab extends ThemeableElement {
     }
   }
 
-  private _handleHostClick = () => {
-    if (this.disabled) return;
-    this.dispatchEvent(
-      new CustomEvent('tab-click', {
-        detail: { value: this.value },
-        bubbles: true,
-        composed: true
-      })
-    );
-  };
-
+  // Enter/Space activate the tab exactly like a mouse click: a native `click` on the host, which
+  // `lt-tab-group` (or any consumer) listens for. There is no separate tab event.
   private _handleHostKeydown = (e: KeyboardEvent) => {
     if (this.disabled) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      this._handleHostClick();
+      this.click();
     }
   };
 

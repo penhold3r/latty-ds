@@ -72,33 +72,35 @@ describe('<lt-image>', () => {
   });
 
   describe('load / error events', () => {
-    it('re-dispatches a composed lt-load event when the img loads', async () => {
+    it('re-dispatches a native-style load event (with src) when the img loads', async () => {
       el.src = 'image.png';
       await el.updateComplete;
       const onLoad = vi.fn();
-      el.addEventListener('lt-load', onLoad);
+      el.addEventListener('load', onLoad);
 
       el.shadowRoot!.querySelector('img')!.dispatchEvent(new Event('load'));
 
       expect(onLoad).toHaveBeenCalledOnce();
       const event = onLoad.mock.calls[0][0] as CustomEvent<{ src: string }>;
       expect(event.detail.src).toBe('image.png');
-      expect(event.composed).toBe(true);
-      expect(event.bubbles).toBe(true);
+      // Same as the native <img> event: doesn't bubble or cross shadow roots.
+      expect(event.bubbles).toBe(false);
+      expect(event.composed).toBe(false);
     });
 
-    it('re-dispatches a composed lt-error event when the img fails', async () => {
+    it('re-dispatches a native-style error event (with src) when the img fails', async () => {
       el.src = 'broken.png';
       await el.updateComplete;
       const onError = vi.fn();
-      el.addEventListener('lt-error', onError);
+      el.addEventListener('error', onError);
 
       el.shadowRoot!.querySelector('img')!.dispatchEvent(new Event('error'));
 
       expect(onError).toHaveBeenCalledOnce();
       const event = onError.mock.calls[0][0] as CustomEvent<{ src: string }>;
       expect(event.detail.src).toBe('broken.png');
-      expect(event.composed).toBe(true);
+      expect(event.bubbles).toBe(false);
+      expect(event.composed).toBe(false);
     });
   });
 

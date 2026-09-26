@@ -109,7 +109,7 @@ export class TabGroup extends ThemeableElement {
       }
 
       // Listen for tab clicks
-      tab.addEventListener('tab-click', this.handleTabClick as EventListener);
+      tab.addEventListener('click', this.handleTabClick);
     });
   }
 
@@ -134,8 +134,8 @@ export class TabGroup extends ThemeableElement {
    * Handles click events from tabs.
    * @private
    */
-  private handleTabClick = (e: CustomEvent) => {
-    const tab = e.target as Tab;
+  private handleTabClick = (e: Event) => {
+    const tab = e.currentTarget as Tab;
 
     if (tab.disabled) return;
 
@@ -168,7 +168,7 @@ export class TabGroup extends ThemeableElement {
     super.disconnectedCallback();
     if (this.tabs) {
       this.tabs.forEach((tab) => {
-        tab.removeEventListener('tab-click', this.handleTabClick as EventListener);
+        tab.removeEventListener('click', this.handleTabClick);
       });
     }
   }
