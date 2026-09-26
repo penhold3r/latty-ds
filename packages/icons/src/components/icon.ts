@@ -131,7 +131,8 @@ export class Icon extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this._unsubscribeRegistry = iconRegistry.subscribe(() => this.loadIcon());
-    this.loadIcon();
+    // The first render loads it in willUpdate; only a re-attached element (already rendered) needs this.
+    if (this.hasUpdated) this.loadIcon();
   }
 
   disconnectedCallback() {

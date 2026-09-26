@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { Icon } from '../icon';
 import { iconRegistry } from '../../registry/icon-registry';
 import '../../index'; // Import to trigger auto-registration
@@ -105,5 +105,17 @@ describe('<lt-icon>', () => {
 
     const svg = el.shadowRoot!.querySelector('svg');
     expect(svg).toBeTruthy();
+  });
+
+  it('warns once, not twice, when the icon it first renders is missing', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const missing = document.createElement('lt-icon') as Icon;
+    missing.name = 'definitely-not-registered';
+    document.body.appendChild(missing);
+    await missing.updateComplete;
+
+    expect(warn).toHaveBeenCalledTimes(1);
+    missing.remove();
+    warn.mockRestore();
   });
 });
