@@ -1,4 +1,35 @@
 /* Ported from docs/src/pages/tokens/playground.astro's inline <style>. */
+.playground-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lt-spacing-2);
+  margin-top: var(--lt-spacing-6);
+}
+
+.playground-presets-label {
+  color: var(--lt-text-neutral);
+  margin-right: var(--lt-spacing-2);
+}
+
+.preset-dots {
+  display: inline-flex;
+  margin-right: var(--lt-spacing-2);
+}
+
+/* Each preset's two brand colors, overlapped like a Venn pair. */
+.preset-dot {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: var(--dot);
+  border: 1px solid var(--lt-border-default);
+}
+
+.preset-dot + .preset-dot {
+  margin-left: -0.3rem;
+}
+
 .playground-layout {
   display: grid;
   grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
@@ -6,7 +37,7 @@
   /* start (not stretch): the controls column is sticky, which only works when it
      isn't stretched to the (much taller) stage's height. */
   align-items: start;
-  margin-top: var(--lt-spacing-6);
+  margin-top: var(--lt-spacing-4);
 }
 
 @media (max-width: 800px) {
@@ -77,6 +108,35 @@
    it — a bit of extra bottom padding evens out the rhythm. */
 .theme-control-row--slider {
   padding-bottom: var(--lt-spacing-2);
+}
+
+.playground-stages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lt-spacing-6);
+}
+
+/* Side by side: the second stage (pinned to dark by the script) appears next to the light one. */
+.playground-stages[data-split] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .playground-stages[data-split] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.playground-stages:not([data-split]) .playground-stage[data-stage='b'],
+.playground-stages:not([data-split]) .stage-mode-label {
+  display: none;
+}
+
+.stage-mode-label {
+  color: var(--lt-text-neutral);
+  margin: 0;
 }
 
 .playground-stage {
@@ -165,9 +225,20 @@
   gap: var(--lt-spacing-2);
 }
 
+.pg-role-item {
+  display: flex;
+  align-items: center;
+  gap: var(--lt-spacing-2);
+}
+
+/* Filled in by the script; nothing to show until it has a rating. */
+.pg-contrast:not([content]) {
+  display: none;
+}
+
 .pg-role {
   padding: var(--lt-spacing-1) var(--lt-spacing-3);
-  border: var(--lt-border-width) solid var(--pg-role-border);
+  border: var(--lt-border-width) solid var(--pg-role-border, transparent);
   border-radius: var(--lt-border-radius);
   background: var(--pg-role-bg);
   color: var(--pg-role-fg);
@@ -194,17 +265,11 @@
   min-width: 0;
 }
 
-.pg-font[data-role='primary'] {
-  --pg-font-family: var(--lt-typography-fontFamilyPrimary);
-}
-
-/* Unset secondary/heading tokens are undefined, so these fall back to primary exactly as lt-text does. */
-.pg-font[data-role='secondary'] {
-  --pg-font-family: var(--lt-typography-fontFamilySecondary, var(--lt-typography-fontFamilyPrimary));
-}
-
-.pg-font[data-role='heading'] {
-  --pg-font-family: var(--lt-typography-fontFamilyHeading, var(--lt-typography-fontFamilyPrimary));
+.pg-font-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lt-spacing-2);
 }
 
 .pg-font-aa {
@@ -219,9 +284,11 @@
   overflow-wrap: anywhere;
 }
 
-.pg-font[data-unset] .pg-font-name {
+.pg-font-token {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.6875rem;
   color: var(--lt-text-muted);
-  font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .pg-font-sample,
@@ -259,10 +326,55 @@
   margin: 0;
 }
 
+/* The table is its own container (not the stage: container-type would make the stage a containing block
+   for fixed-position dropdowns inside it). In the side-by-side view it's narrow enough that a 9rem meta
+   column leaves the display sizes wrapping mid-word, so the rows stack instead. */
+.stage-section .type-scale {
+  container-type: inline-size;
+}
+
+@container (max-width: 30rem) {
+  .stage-section .scale-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .stage-section .scale-meta {
+    width: auto;
+  }
+}
+
 .stage-section .scale-meta {
   width: 9rem;
   /* "0.6875rem / 600 / uppercase" is longer than the column; wrap instead of running into the sample. */
   white-space: normal;
+}
+
+/* ── Components ─────────────────────────────────────────────────────── */
+
+.pg-demos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--lt-spacing-3);
+}
+
+.pg-demo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lt-spacing-3);
+  padding: var(--lt-spacing-4);
+  border: var(--lt-border-width) solid var(--lt-border-default);
+  border-radius: var(--lt-border-radius);
+  background: var(--lt-bg-default);
+  min-width: 0;
+}
+
+.pg-demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lt-spacing-2) var(--lt-spacing-3);
 }
 
 /* ── In context ─────────────────────────────────────────────────────── */
@@ -340,6 +452,12 @@
   justify-content: space-between;
   padding: var(--lt-spacing-2) var(--lt-spacing-2) var(--lt-spacing-2) var(--lt-spacing-4);
   border-bottom: 1px solid var(--lt-border-default);
+}
+
+.export-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--lt-spacing-2);
 }
 
 .export-pre {
