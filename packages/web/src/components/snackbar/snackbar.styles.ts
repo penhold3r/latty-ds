@@ -76,13 +76,14 @@ export const snackbarStyles = css`
     font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.05em;
-    opacity: 0.85;
     padding: 0 var(--lt-spacing-1);
     text-transform: uppercase;
   }
 
+  /* Text on a coloured fill is never dimmed with opacity (that blends it into the fill and lowers its contrast
+     below whatever the on-colour was picked for), so hover is shown with an underline instead. */
   .action:hover {
-    opacity: 1;
+    text-decoration: underline;
   }
 
   /* ── Close button ────────────────────────────────────────── */

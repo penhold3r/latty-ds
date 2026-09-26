@@ -27,7 +27,7 @@ export const alertStyles = css`
 
   :host([variant='success']) {
     --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-success-subtle));
-    --_bg-solid: var(--lt-alert-bg, var(--lt-bg-success));
+    --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-success-bg));
     --_border: var(--lt-alert-border-color, var(--lt-border-success-strong));
     --_color: var(--lt-alert-color, var(--lt-text-success));
     --_color-solid: var(--lt-alert-color, var(--lt-text-on-success));
@@ -35,7 +35,7 @@ export const alertStyles = css`
 
   :host([variant='warning']) {
     --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-warning-subtle));
-    --_bg-solid: var(--lt-alert-bg, var(--lt-bg-warning));
+    --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-warning-bg));
     --_border: var(--lt-alert-border-color, var(--lt-border-warning-strong));
     --_color: var(--lt-alert-color, var(--lt-text-warning));
     --_color-solid: var(--lt-alert-color, var(--lt-text-on-warning));
@@ -43,7 +43,7 @@ export const alertStyles = css`
 
   :host([variant='error']) {
     --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-error-subtle));
-    --_bg-solid: var(--lt-alert-bg, var(--lt-bg-error));
+    --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-error-bg));
     --_border: var(--lt-alert-border-color, var(--lt-border-error-strong));
     --_color: var(--lt-alert-color, var(--lt-text-error));
     --_color-solid: var(--lt-alert-color, var(--lt-text-on-error));
@@ -51,7 +51,7 @@ export const alertStyles = css`
 
   :host([variant='info']) {
     --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-info-subtle));
-    --_bg-solid: var(--lt-alert-bg, var(--lt-bg-info));
+    --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-info-bg));
     --_border: var(--lt-alert-border-color, var(--lt-border-info-strong));
     --_color: var(--lt-alert-color, var(--lt-text-info));
     --_color-solid: var(--lt-alert-color, var(--lt-text-on-info));
@@ -84,7 +84,8 @@ export const alertStyles = css`
     color: var(--_color);
   }
 
-  /* solid — solid color bg, no border */
+  /* solid — solid color bg, no border. Fills come from the interactive tokens, the same ones the on-colour is
+     picked against, so the text holds AA; body text is never dimmed with opacity, which would only lower it. */
   :host([appearance='solid']) .inner {
     background: var(--_bg-solid);
     border: none;
@@ -113,10 +114,6 @@ export const alertStyles = css`
   .content {
     font-size: 0.875rem;
     line-height: 1.5;
-  }
-
-  .title + .content {
-    opacity: 0.8;
   }
 
   /* ── Close button ────────────────────────────────────────── */
