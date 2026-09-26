@@ -18,6 +18,17 @@ const accessibleTextOn = (bgHex: string): 'color-white' | 'color-neutral-900' =>
   return whiteContrast >= darkContrast ? 'color-white' : 'color-neutral-900';
 };
 
+// Neutral isn't one of VARIANTS (its ramp has no on-color/text steps of its own), so its interactive
+// tokens are explicit. The generic rule would give neutral-500, which is only 3.5:1 against the
+// near-white text that sits on it (button, solid badge) — neutral-600 is 5.3:1, and the hover/active
+// steps only get darker. Same steps in both themes: the on-text is fixed near-white either way, so
+// the "lighter steps for dark surfaces" rule doesn't apply.
+const addNeutralInteractive = (map: SemanticTokenMap): void => {
+  map['interactive-neutral-bg'] = 'color-neutral-600';
+  map['interactive-neutral-bg-hover'] = 'color-neutral-700';
+  map['interactive-neutral-bg-active'] = 'color-neutral-800';
+};
+
 export interface SemanticTokenOptions {
   // Resolved primary-500 hex for light mode (button bg). Used to pick accessible text-on-primary.
   primary500?: string;
@@ -97,6 +108,7 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToke
     map[`interactive-${v}-bg-hover`] = `color-${v}-600`;
     map[`interactive-${v}-bg-active`] = `color-${v}-700`;
   }
+  addNeutralInteractive(map);
 
   return map;
 };
@@ -155,6 +167,7 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions = {}): SemanticToken
     map[`interactive-${v}-bg-hover`] = `color-${v}-300`;
     map[`interactive-${v}-bg-active`] = `color-${v}-500`;
   }
+  addNeutralInteractive(map);
 
   return map;
 };

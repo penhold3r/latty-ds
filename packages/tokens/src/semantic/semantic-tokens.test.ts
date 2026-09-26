@@ -54,3 +54,21 @@ describe('semantic tokens — on-color contrast', () => {
     expect(ratio).toBeGreaterThanOrEqual(4.5);
   });
 });
+
+describe('semantic tokens — neutral interactive contrast', () => {
+  // Neutral has no on-color token; components put near-white text on it (button: neutral-50, solid badge:
+  // white). Regression guard for the filled neutral button, which used neutral-500 (3.48:1).
+  it.each([
+    ['light', 'interactive-neutral-bg'],
+    ['light', 'interactive-neutral-bg-hover'],
+    ['light', 'interactive-neutral-bg-active'],
+    ['dark', 'interactive-neutral-bg'],
+    ['dark', 'interactive-neutral-bg-hover'],
+    ['dark', 'interactive-neutral-bg-active']
+  ] as const)('near-white text meets AA on %s %s', (mode, token) => {
+    const map = buildSemanticTokens(mode, opts);
+    const bg = resolveHex(map[token]);
+    expect(contrast(resolveHex('color-neutral-50'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(resolveHex('color-white'), bg)).toBeGreaterThanOrEqual(4.5);
+  });
+});
