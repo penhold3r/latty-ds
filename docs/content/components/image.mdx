@@ -63,7 +63,7 @@ A lightweight wrapper around <code>&lt;img&gt;</code> that adds rounded corners 
   <Image src="photo.jpg" alt="A scenic view" responsive rounded />
 </div>
 
-// Lazy loading + error fallback (lt-error also fires as onLtError)
+// Lazy loading + error fallback (error also fires as onError)
 
 <Image src="cover.jpg" alt="Album cover" loading="lazy">
   <div slot="fallback">No cover available</div>
@@ -85,7 +85,7 @@ A lightweight wrapper around <code>&lt;img&gt;</code> that adds rounded corners 
 
   <!-- Lazy loading + error fallback -->
 
-<lt-image src="cover.jpg" alt="Album cover" loading="lazy" @lt-error="onCoverError">
+<lt-image src="cover.jpg" alt="Album cover" loading="lazy" @error="onCoverError">
 
 <div slot="fallback">No cover available</div>
 </lt-image>

@@ -68,7 +68,7 @@ const countries = [
   label="Country"
   placeholder="Search countries…"
   options={countries}
-  onChange={(value, label) => console.log(value, label)}
+  onChange={(e) => console.log(e.detail.value)}
   required
 />
     `}

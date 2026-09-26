@@ -252,6 +252,34 @@ document.querySelector('lt-dialog').addEventListener('open', () => {});
 document.querySelector('lt-dialog').addEventListener('close', () => {});
 ```
 
+### Composing events
+
+These are real DOM events. Like native ones (`click`, `input`) they bubble and cross shadow roots, so what happens next is the consumer's to compose: a listener on a container also hears events from components nested inside it (an `lt-dialog`'s `close` listener hears the `close` of an `lt-alert` inside it). Check `event.target` to see which component fired, or call `event.stopPropagation()` in the inner handler, exactly as with any native event. `preventDefault()` works where an event is cancelable (`lt-alert`'s `close`).
+
+```js
+// An alert inside a dialog: keep its close from reaching the dialog's own listener
+alert.addEventListener('close', (e) => e.stopPropagation());
+
+// ...or let it bubble and ignore anything that isn't the dialog itself
+dialog.addEventListener('close', (e) => {
+  if (e.target !== dialog) return;
+});
+```
+
+With `@latty-ds/react`, every handler receives the event itself, typed with its payload on `e.detail` (`onChange={(e) => e.detail.value}`), so the same calls work:
+
+```tsx
+<Dialog
+  onClose={(e) => {
+    if (e.target === e.currentTarget) setOpen(false);
+  }}
+>
+  <Alert closable onClose={(e) => e.stopPropagation()}>
+    Saved
+  </Alert>
+</Dialog>
+```
+
 ## Attributes vs properties
 
 HTML attributes are always strings — they can represent text, boolean presence, and simple enumerations. For anything richer (arrays, objects, render functions), set the JavaScript property directly:

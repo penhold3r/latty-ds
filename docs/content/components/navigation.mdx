@@ -81,8 +81,8 @@ horizontal mode they drop down as a panel.
 
 ### SPA router integration
 
-  <code>nav-item-click</code> is cancelable: call <code>preventDefault()</code> to stop the anchor's full-page navigation
-    and hand the URL to your router. Drive the highlighted item with the <code>active</code> property — it also sets <code>aria-current="page"</code> on the internal trigger.
+Items use the native <code>click</code>. Listen for it on the nav, call <code>preventDefault()</code> to stop the anchor's full-page navigation and hand the URL to your router — <code>event.target</code> is the <code>lt-nav-item</code>, so its <code>href</code> and <code>label</code> are right there, and modifier keys (<code>event.metaKey</code>…) work as on any link. Drive the highlighted item with the <code>active</code> property — it also sets <code>aria-current="page"</code> on the internal trigger. A group that opens or closes fires the native-style <code>toggle</code> event with <code>detail.open</code>.
+
   <FrameworkTabs
     html={`<lt-nav id="app-nav">
   <lt-nav-item href="/dashboard" label="Dashboard" icon-start="home"></lt-nav-item>
@@ -91,11 +91,13 @@ horizontal mode they drop down as a panel.
 <script type="module">
   import '@latty-ds/web';
   const nav = document.getElementById('app-nav');
-  nav.addEventListener('nav-item-click', (e) => {
+  nav.addEventListener('click', (e) => {
+    const link = e.target.closest('lt-nav-item');
+    if (!link?.href || link.disabled) return; // group headers and disabled items
     e.preventDefault(); // stop the full-page navigation
-    router.navigate(e.detail.href); // your SPA router
+    router.navigate(link.href); // your SPA router
     nav.querySelectorAll('lt-nav-item').forEach((item) => {
-      item.active = item.href === e.detail.href;
+      item.active = item.href === link.href;
     });
   });
 </script>`}
@@ -106,10 +108,10 @@ function AppNav() {
 const navigate = useNavigate();
 const { pathname } = useLocation();
 
-function handleNavClick(e) {
+const go = (to) => (e) => {
 e.preventDefault(); // stop the full-page navigation
-navigate(e.detail.href);
-}
+navigate(to);
+};
 
 return (
 
@@ -119,14 +121,14 @@ href="/dashboard"
 label="Dashboard"
 iconStart="home"
 active={pathname === '/dashboard'}
-onNavItemClick={handleNavClick}
+onClick={go('/dashboard')}
 />
 <NavItem
 href="/reviews"
 label="Reviews"
 iconStart="star"
 active={pathname === '/reviews'}
-onNavItemClick={handleNavClick}
+onClick={go('/reviews')}
 />
 </Nav>
 );

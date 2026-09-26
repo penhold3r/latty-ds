@@ -238,6 +238,25 @@ console.log(e.detail.item.textContent);
 document.querySelector('lt-dialog').addEventListener('open', () => {});
 document.querySelector('lt-dialog').addEventListener('close', () => {});`}</CodeBlock>
 
+### Composing events
+
+These are real DOM events, and like native ones (<code>click</code>, <code>input</code>) they bubble and cross shadow roots — so what happens next is yours to compose. A listener on a container also hears events from components nested inside it (an <code>lt-dialog</code>'s <code>close</code> listener hears the <code>close</code> of an <code>lt-alert</code> inside it). Check <code>event.target</code> to see which component fired, or call <code>event.stopPropagation()</code> in the inner handler, exactly as you would for any native event. <code>preventDefault()</code> works where an event is cancelable (<code>lt-alert</code>'s <code>close</code>).
+
+<CodeBlock language="js">{`// An alert inside a dialog: keep its close from reaching the dialog's own listener
+alert.addEventListener('close', (e) => e.stopPropagation());
+
+// ...or let it bubble and ignore anything that isn't the dialog itself
+dialog.addEventListener('close', (e) => {
+if (e.target !== dialog) return;
+// the dialog's own close
+});`}</CodeBlock>
+
+With <code>@latty-ds/react</code>, every handler receives the event itself, typed with its payload on <code>e.detail</code> (<code>onChange={'{'}(e) =&gt; e.detail.value{'}'}</code>), so the same calls work:
+
+<CodeBlock language="tsx">{`<Dialog onClose={(e) => { if (e.target === e.currentTarget) setOpen(false); }}>
+  <Alert closable onClose={(e) => e.stopPropagation()}>Saved</Alert>
+</Dialog>`}</CodeBlock>
+
 ## Attributes vs properties
 
 HTML attributes are always strings — they can represent text, boolean presence, and simple enumerations. For anything richer (arrays, objects, render functions), set the JavaScript property directly:
