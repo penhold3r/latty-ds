@@ -18,15 +18,15 @@
 /* lt-surface's shadow template wraps <slot> in its own .surface div, so
    flex/gap/padding set on the host here only ever sees one shadow child —
    it can't arrange the slotted light-DOM content. That layout has to live
-   on a plain inner element instead (.controls-inner below). */
-.controls-inner {
+   on a plain inner element instead (.theme-controls-inner below). */
+.theme-controls-inner {
   display: flex;
   flex-direction: column;
   gap: var(--lt-spacing-4);
   padding: var(--lt-spacing-5);
 }
 
-.control-row {
+.theme-control-row {
   display: flex;
   flex-direction: column;
 }
@@ -34,7 +34,7 @@
 /* lt-slider is a thin track with no box chrome, so the same row gap that
    reads fine after a padded lt-color-input/lt-select looks cramped after
    it — a bit of extra bottom padding evens out the rhythm. */
-.control-row--slider {
+.theme-control-row--slider {
   padding-bottom: var(--lt-spacing-2);
 }
 
@@ -65,7 +65,7 @@
   max-width: 360px;
 }
 
-/* Same reason as .controls-inner above — lt-surface's shadow slot can't be
+/* Same reason as .theme-controls-inner above — lt-surface's shadow slot can't be
    flexed from the light-DOM host, so the card's own layout lives here. */
 .card-inner {
   padding: var(--lt-spacing-5);

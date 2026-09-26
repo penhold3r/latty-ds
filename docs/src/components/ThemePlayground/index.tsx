@@ -13,16 +13,16 @@ export default function ThemePlayground(): JSX.Element {
   return (
     <div className="playground-layout">
       <lt-surface appearance="outlined" class="playground-controls">
-        <div className="controls-inner">
+        <div className="theme-controls-inner">
           <lt-text variant="h4">Controls</lt-text>
 
-          <div className="control-row">
+          <div className="theme-control-row">
             <lt-color-input id="ctrl-primary" name="primary-color" label="Primary color" value="#ff8200" />
           </div>
-          <div className="control-row">
+          <div className="theme-control-row">
             <lt-color-input id="ctrl-secondary" name="secondary-color" label="Secondary color" value="#5252c5" />
           </div>
-          <div className="control-row control-row--slider">
+          <div className="theme-control-row theme-control-row--slider">
             <lt-slider
               id="ctrl-radius"
               name="border-radius"
@@ -34,10 +34,10 @@ export default function ThemePlayground(): JSX.Element {
               tooltip
             />
           </div>
-          <div className="control-row">
+          <div className="theme-control-row">
             <lt-select id="ctrl-width" name="border-width" label="Border width" value="thin" />
           </div>
-          <div className="control-row">
+          <div className="theme-control-row">
             <lt-textfield
               id="ctrl-font"
               name="font-family"
@@ -46,7 +46,7 @@ export default function ThemePlayground(): JSX.Element {
               placeholder="Font stack or Google Fonts URL"
             />
           </div>
-          <div className="control-row">
+          <div className="theme-control-row">
             <lt-select id="ctrl-theme" name="theme" label="Theme" value="system" />
           </div>
 
