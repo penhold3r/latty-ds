@@ -8,6 +8,7 @@
     "composite": false,
     "jsx": "react-jsx",
     "experimentalDecorators": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "types": ["node"]
   }
 }

@@ -128,7 +128,7 @@ export const init = async (): Promise<void> => {
     state.secondary = (e as CustomEvent<{ value: string }>).detail.value;
     updateTheme();
   });
-  radiusEl.addEventListener('input', (e) => {
+  radiusEl.addEventListener('input', (e: Event) => {
     state.radius = (e as CustomEvent<{ value: number }>).detail.value;
     updateTheme();
   });
@@ -136,7 +136,7 @@ export const init = async (): Promise<void> => {
     state.width = (e as CustomEvent<{ value: string }>).detail.value as BorderWidth;
     updateTheme();
   });
-  fontEl.addEventListener('input', (e) => {
+  fontEl.addEventListener('input', (e: Event) => {
     state.font = (e as CustomEvent<{ value: string }>).detail.value;
     updateTheme();
   });

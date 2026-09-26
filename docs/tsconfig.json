@@ -4,8 +4,15 @@
 {
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
-    "baseUrl": ".",
-    "ignoreDeprecations": "5.0",
+    // @docusaurus/tsconfig sets baseUrl: ".", which TypeScript 6 (bundled with
+    // recent VS Code) reports as deprecated (TS5101) — and no single
+    // ignoreDeprecations value is valid on both TS 5.x and 6.x. Unset it and
+    // declare the @site/* alias ourselves; without baseUrl, paths resolve
+    // relative to this file, which is what we want.
+    "baseUrl": null,
+    "paths": {
+      "@site/*": ["./*"]
+    },
     "strict": true
   },
   "exclude": [".docusaurus", "build"]

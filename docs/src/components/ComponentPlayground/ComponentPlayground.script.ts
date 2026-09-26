@@ -329,7 +329,7 @@ export const initPlayground = async (playground: Element): Promise<void> => {
     else if (type === 'select' || type === 'icon')
       ctrl.addEventListener('change', (e) => onChange((e as CustomEvent<{ value: string }>).detail.value));
     else if (type === 'text' || type === 'number')
-      ctrl.addEventListener('input', (e) => onChange((e as CustomEvent<{ value: string }>).detail.value));
+      ctrl.addEventListener('input', (e: Event) => onChange((e as CustomEvent<{ value: string }>).detail.value));
     else if (type === 'color')
       ctrl.addEventListener('input', (e: Event) => onChange((e.target as HTMLInputElement).value));
   });
