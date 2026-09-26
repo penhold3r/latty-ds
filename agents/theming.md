@@ -18,6 +18,17 @@ configure({
 
 `configure()` generates the full token palette from the base colors and injects them as a `<style id="lt-tokens">` element into `<head>`. Calling it again replaces the previous values. All options are optional — omit any key to keep the default.
 
+### Readable text on your colors
+
+Filled surfaces (buttons, badges, alerts, snackbars…) never need a hand-picked label color. Text and the hover/pressed fills are picked from each variant's generated palette by contrast: white, then the color's own lightest tint, then its own deepest shade, then near-black, then pure black — the first that reaches WCAG AA (4.5:1) on the fill wins, in light and dark themes. A saturated brand color gets white text; a bright one gets a dark shade of itself, and its hover/pressed fills lighten instead of darken to keep the contrast. For your own filled surfaces use `--lt-interactive-<variant>-bg` (`-hover`, `-active`) with `--lt-text-on-<variant>`:
+
+```css
+.promo-banner {
+  background: var(--lt-interactive-primary-bg);
+  color: var(--lt-text-on-primary); /* readable on any configured primary */
+}
+```
+
 ### Border width
 
 `border.width` sets the outline weight of control chrome across the system — outlined buttons, inputs, chips, badges, cards, and popover panels. Accepts three named presets — `'thin'` (1px, default), `'medium'` (2px), `'thick'` (4px) — or any CSS length (e.g. `'1.5px'`). Separators (dividers, table rules), focus outlines, and checkbox/radio borders keep their fixed widths by design. Chips and badges cap at `'medium'` even when the theme requests `'thick'` — at their small pill heights, a 4px border reads as compressed rather than bold.

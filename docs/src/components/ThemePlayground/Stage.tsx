@@ -17,7 +17,7 @@ const cssVars = (vars: Record<string, string>): CSSProperties => vars as CSSProp
 const roles = (name: string): { label: string; vars: Record<string, string> }[] => [
   {
     label: 'Filled · on-color text',
-    vars: { '--pg-role-bg': `var(--lt-bg-${name})`, '--pg-role-fg': `var(--lt-text-on-${name})` }
+    vars: { '--pg-role-bg': `var(--lt-interactive-${name}-bg)`, '--pg-role-fg': `var(--lt-text-on-${name})` }
   },
   {
     label: 'Subtle',
