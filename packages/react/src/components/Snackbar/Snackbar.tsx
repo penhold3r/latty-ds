@@ -10,9 +10,9 @@ export type SnackbarProps = HTMLAttributes<SnackbarEl> & {
   icon?: LattyIconName;
   elevation?: SnackbarEl['elevation'];
   appearance?: SnackbarEl['appearance'];
-  onShow?: () => void;
-  onHide?: () => void;
-  onAction?: () => void;
+  onShow?: (event: CustomEvent) => void;
+  onHide?: (event: CustomEvent) => void;
+  onAction?: (event: CustomEvent) => void;
 };
 
 export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(
@@ -26,21 +26,21 @@ export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onShow) return;
-    const h = () => onShow!();
+    const h = (ev: Event) => onShow!(ev as CustomEvent);
     el.addEventListener('show', h);
     return () => el.removeEventListener('show', h);
   }, [onShow]);
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onHide) return;
-    const h = () => onHide!();
+    const h = (ev: Event) => onHide!(ev as CustomEvent);
     el.addEventListener('hide', h);
     return () => el.removeEventListener('hide', h);
   }, [onHide]);
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onAction) return;
-    const h = () => onAction!();
+    const h = (ev: Event) => onAction!(ev as CustomEvent);
     el.addEventListener('action', h);
     return () => el.removeEventListener('action', h);
   }, [onAction]);

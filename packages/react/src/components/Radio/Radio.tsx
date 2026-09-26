@@ -12,7 +12,7 @@ export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
   labelPosition?: RadioEl['labelPosition'];
   name?: string;
   value?: string;
-  onChange?: (detail: { value: string; checked: boolean }) => void;
+  onChange?: (event: CustomEvent<{ value: string; checked: boolean }>) => void;
 };
 
 export const Radio = forwardRef<RadioEl, RadioProps>(function Radio({ onChange, children, ...props }, forwardedRef) {
@@ -23,7 +23,7 @@ export const Radio = forwardRef<RadioEl, RadioProps>(function Radio({ onChange, 
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
+    const h = (ev: Event) => onChange!(ev as CustomEvent<{ value: string; checked: boolean }>);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);

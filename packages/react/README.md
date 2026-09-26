@@ -45,12 +45,13 @@ function App() {
 
 ### Events
 
-React wrappers map custom events to `onEventName` props:
+React wrappers map custom events to `onEventName` props. Like any native handler they receive the event itself, typed with its payload on `e.detail`, so `stopPropagation()`, `preventDefault()` and `target` all work:
 
 ```tsx
 <Button onClick={handleClick}>Click me</Button>
-<Switch onChange={handleChange} />
-<Textfield onInput={handleInput} />
+<Switch onChange={(e) => setOn(e.detail.checked)} />
+<Textfield onInput={(e) => setQuery(e.detail.value)} />
+<Alert closable onClose={(e) => e.stopPropagation()}>Saved</Alert>
 ```
 
 ### All components

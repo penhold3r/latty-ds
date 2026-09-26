@@ -1,11 +1,11 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { DropdownItem as DropdownItemEl } from '@latty-ds/web';
 
-export type DropdownItemProps = HTMLAttributes<DropdownItemEl> & {
+export type DropdownItemProps = Omit<HTMLAttributes<DropdownItemEl>, 'onSelect'> & {
   disabled?: boolean;
   selected?: boolean;
   href?: string;
-  onSelect?: () => void;
+  onSelect?: (event: CustomEvent) => void;
 };
 
 export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(function DropdownItem(
@@ -19,7 +19,7 @@ export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(functi
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onSelect) return;
-    const h = () => onSelect!();
+    const h = (ev: Event) => onSelect!(ev as CustomEvent);
     el.addEventListener('select', h);
     return () => el.removeEventListener('select', h);
   }, [onSelect]);

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { createRef } from 'react';
 import { Tab } from './Tab';
 
@@ -29,19 +29,10 @@ describe('Tab', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-tab');
   });
 
-  it('calls onTabClick when tab-click event fires', () => {
-    const onTabClick = vi.fn();
-    const { container } = render(<Tab onTabClick={onTabClick} />);
-    container.querySelector('lt-tab')!.dispatchEvent(new CustomEvent('tab-click'));
-    expect(onTabClick).toHaveBeenCalledOnce();
-  });
-
-  it('removes tab-click listener on unmount', () => {
-    const onTabClick = vi.fn();
-    const { container, unmount } = render(<Tab onTabClick={onTabClick} />);
-    const el = container.querySelector('lt-tab')!;
-    unmount();
-    el.dispatchEvent(new CustomEvent('tab-click'));
-    expect(onTabClick).not.toHaveBeenCalled();
+  it('lets React onClick handle the native click (a tab has no custom event)', () => {
+    const onClick = vi.fn();
+    const { container } = render(<Tab onClick={onClick} />);
+    fireEvent.click(container.querySelector('lt-tab')!);
+    expect(onClick).toHaveBeenCalledOnce();
   });
 });

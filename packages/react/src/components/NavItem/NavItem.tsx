@@ -2,7 +2,7 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { NavItem as NavItemEl, LattyIconName } from '@latty-ds/web';
 
-export type NavItemProps = HTMLAttributes<NavItemEl> & {
+export type NavItemProps = Omit<HTMLAttributes<NavItemEl>, 'onToggle'> & {
   href?: string;
   label?: string;
   iconStart?: LattyIconName;
@@ -10,12 +10,11 @@ export type NavItemProps = HTMLAttributes<NavItemEl> & {
   disabled?: boolean;
   open?: boolean;
   orientation?: NavItemEl['orientation'];
-  onNavItemClick?: (event: CustomEvent) => void;
-  onNavCollapse?: (event: CustomEvent) => void;
+  onToggle?: (event: CustomEvent<{ open: boolean }>) => void;
 };
 
 export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
-  { onNavItemClick, onNavCollapse, iconStart, children, ...props },
+  { onToggle, iconStart, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<NavItemEl>(null);
@@ -24,18 +23,11 @@ export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onNavItemClick) return;
-    const h = (ev: Event) => onNavItemClick!(ev as CustomEvent);
-    el.addEventListener('nav-item-click', h);
-    return () => el.removeEventListener('nav-item-click', h);
-  }, [onNavItemClick]);
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el || !onNavCollapse) return;
-    const h = (ev: Event) => onNavCollapse!(ev as CustomEvent);
-    el.addEventListener('nav-collapse', h);
-    return () => el.removeEventListener('nav-collapse', h);
-  }, [onNavCollapse]);
+    if (!el || !onToggle) return;
+    const h = (ev: Event) => onToggle!(ev as CustomEvent<{ open: boolean }>);
+    el.addEventListener('toggle', h);
+    return () => el.removeEventListener('toggle', h);
+  }, [onToggle]);
   // React 18 lowercases camelCase props on custom elements — set as attribute directly
   useEffect(() => {
     const el = innerRef.current;

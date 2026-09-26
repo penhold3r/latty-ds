@@ -18,7 +18,7 @@ export type DateInputProps = Omit<HTMLAttributes<DateInputEl>, 'onChange'> & {
   required?: boolean;
   name?: string;
   disabledDates?: DateInputEl['disabledDates'];
-  onChange?: (detail: { value: string }) => void;
+  onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateInput(
@@ -32,7 +32,7 @@ export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateIn
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
+    const h = (ev: Event) => onChange!(ev as CustomEvent<{ value: string }>);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);

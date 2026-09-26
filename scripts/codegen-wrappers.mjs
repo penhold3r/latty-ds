@@ -30,7 +30,14 @@ const ICON_FIELDS = new Set(['icon', 'iconEnd', 'iconStart']);
 // Native DOM event names that React already exposes as typed handlers in HTMLAttributes.
 // When a Latty component fires one of these, its custom handler type conflicts with the
 // React type, so we Omit the React version and re-declare with (event: CustomEvent).
-const NATIVE_TO_REACT_HANDLER = { change: 'onChange', input: 'onInput', toggle: 'onToggle' };
+const NATIVE_TO_REACT_HANDLER = {
+  change: 'onChange',
+  input: 'onInput',
+  toggle: 'onToggle',
+  load: 'onLoad',
+  error: 'onError',
+  select: 'onSelect'
+};
 
 // ── Read CEM ──────────────────────────────────────────────────────────────────
 const cem = JSON.parse(readFileSync(CEM_PATH, 'utf8'));
@@ -58,10 +65,14 @@ for (const mod of cem.modules) {
       });
 
     const events = (decl.events ?? []).map((e) => {
-      // Strip the "lt-" vendor prefix, then convert "lt-close" → "onClose"
-      const stripped = e.name.replace(/^lt-/, '');
+      // Latty events use native names with no vendor prefix and no hyphens ("change", "close", "monthchange"),
+      // exactly like the platform's own ("volumechange", "slotchange"). React spells those compound names
+      // with a capital: "monthchange" → "onMonthChange", like its own "onVolumeChange".
+      const stripped = e.name;
+      const words =
+        /^[a-z]+change$/.test(stripped) && stripped !== 'change' ? stripped.replace(/change$/, '-change') : stripped;
       const handlerName =
-        'on' + stripped.replace(/[-:](.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, (c) => c.toUpperCase());
+        'on' + words.replace(/[-:](.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, (c) => c.toUpperCase());
       // Extract inner type from CustomEvent<DetailType> if present
       const typeText = e.type?.text ?? '';
       const detailMatch = typeText.match(/^CustomEvent<(.+)>$/s);
@@ -85,9 +96,11 @@ for (const { name, tagName, fields, events } of components) {
   const hasIconFields = fields.some((f) => f.displayType === 'LattyIconName');
   const fieldProps = fields.map((f) => `  ${f.name}?: ${f.displayType};`);
 
-  const eventProps = events.map((e) =>
-    e.detailType ? `  ${e.handlerName}?: (detail: ${e.detailType}) => void;` : `  ${e.handlerName}?: () => void;`
-  );
+  // Every handler receives the event itself — like a native event handler — typed with its payload when the
+  // manifest declares one: `onChange={(e) => e.detail.value}`. That keeps stopPropagation(), preventDefault(),
+  // target and currentTarget available to the consumer, who composes the events (they bubble like native ones).
+  const eventType = (e) => (e.detailType ? `CustomEvent<${e.detailType}>` : 'CustomEvent');
+  const eventProps = events.map((e) => `  ${e.handlerName}?: (event: ${eventType(e)}) => void;`);
 
   // Destructured event handler names
   const handlerNames = events.map((e) => e.handlerName);
@@ -101,7 +114,7 @@ for (const { name, tagName, fields, events } of components) {
     useEffect(() => {
       const el = innerRef.current;
       if (!el || !${e.handlerName}) return;
-      const h = ${e.detailType ? `(ev: Event) => ${e.handlerName}!((ev as CustomEvent).detail)` : `() => ${e.handlerName}!()`};
+      const h = (ev: Event) => ${e.handlerName}!(ev as ${eventType(e)});
       el.addEventListener('${e.name}', h);
       return () => el.removeEventListener('${e.name}', h);
     }, [${e.handlerName}]);`

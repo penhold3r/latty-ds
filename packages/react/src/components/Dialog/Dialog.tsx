@@ -12,14 +12,12 @@ export type DialogProps = HTMLAttributes<DialogEl> & {
   backdropBlur?: boolean;
   elevation?: DialogEl['elevation'];
   appearance?: DialogEl['appearance'];
-  onDialogOpen?: () => void;
-  onClose?: () => void;
-  onDialogClose?: () => void;
-  onOpen?: () => void;
+  onOpen?: (event: CustomEvent) => void;
+  onClose?: (event: CustomEvent) => void;
 };
 
 export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(
-  { onDialogOpen, onClose, onDialogClose, onOpen, children, ...props },
+  { onOpen, onClose, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DialogEl>(null);
@@ -28,32 +26,18 @@ export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(
 
   useEffect(() => {
     const el = innerRef.current;
-    if (!el || !onDialogOpen) return;
-    const h = () => onDialogOpen!();
-    el.addEventListener('dialog-open', h);
-    return () => el.removeEventListener('dialog-open', h);
-  }, [onDialogOpen]);
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el || !onClose) return;
-    const h = () => onClose!();
-    el.addEventListener('close', h);
-    return () => el.removeEventListener('close', h);
-  }, [onClose]);
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el || !onDialogClose) return;
-    const h = () => onDialogClose!();
-    el.addEventListener('dialog-close', h);
-    return () => el.removeEventListener('dialog-close', h);
-  }, [onDialogClose]);
-  useEffect(() => {
-    const el = innerRef.current;
     if (!el || !onOpen) return;
-    const h = () => onOpen!();
+    const h = (ev: Event) => onOpen!(ev as CustomEvent);
     el.addEventListener('open', h);
     return () => el.removeEventListener('open', h);
   }, [onOpen]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onClose) return;
+    const h = (ev: Event) => onClose!(ev as CustomEvent);
+    el.addEventListener('close', h);
+    return () => el.removeEventListener('close', h);
+  }, [onClose]);
 
   return (
     <lt-dialog ref={innerRef} {...(props as Record<string, unknown>)}>

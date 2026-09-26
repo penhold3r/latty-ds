@@ -44,4 +44,16 @@ describe('Alert', () => {
     el.dispatchEvent(new CustomEvent('close'));
     expect(onClose).not.toHaveBeenCalled();
   });
+
+  it('passes the event to onClose, so a cancelable close can be cancelled from React', () => {
+    const onClose = vi.fn((e: CustomEvent) => e.preventDefault());
+    const { container } = render(<Alert onClose={onClose}>Body</Alert>);
+    const notCancelled = container
+      .querySelector('lt-alert')!
+      .dispatchEvent(new CustomEvent('close', { cancelable: true }));
+
+    expect(onClose).toHaveBeenCalledOnce();
+    expect(onClose.mock.calls[0][0]).toBeInstanceOf(CustomEvent);
+    expect(notCancelled).toBe(false);
+  });
 });

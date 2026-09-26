@@ -6,7 +6,7 @@ export type PaginationProps = Omit<HTMLAttributes<PaginationEl>, 'onChange'> & {
   totalPages?: number;
   size?: PaginationEl['size'];
   disabled?: boolean;
-  onChange?: (detail: { page: number }) => void;
+  onChange?: (event: CustomEvent<{ page: number }>) => void;
 };
 
 export const Pagination = forwardRef<PaginationEl, PaginationProps>(function Pagination(
@@ -20,7 +20,7 @@ export const Pagination = forwardRef<PaginationEl, PaginationProps>(function Pag
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
+    const h = (ev: Event) => onChange!(ev as CustomEvent<{ page: number }>);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);

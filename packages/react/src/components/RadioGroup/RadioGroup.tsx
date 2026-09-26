@@ -9,7 +9,7 @@ export type RadioGroupProps = Omit<HTMLAttributes<RadioGroupEl>, 'onChange'> & {
   helperText?: string;
   error?: boolean;
   required?: boolean;
-  onChange?: (detail: { value: string }) => void;
+  onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const RadioGroup = forwardRef<RadioGroupEl, RadioGroupProps>(function RadioGroup(
@@ -23,7 +23,7 @@ export const RadioGroup = forwardRef<RadioGroupEl, RadioGroupProps>(function Rad
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
+    const h = (ev: Event) => onChange!(ev as CustomEvent<{ value: string }>);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);

@@ -11,7 +11,7 @@ export type ColorInputProps = Omit<HTMLAttributes<ColorInputEl>, 'onChange'> & {
   required?: boolean;
   name?: string;
   size?: ColorInputEl['size'];
-  onChange?: (detail: { value: string }) => void;
+  onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const ColorInput = forwardRef<ColorInputEl, ColorInputProps>(function ColorInput(
@@ -25,7 +25,7 @@ export const ColorInput = forwardRef<ColorInputEl, ColorInputProps>(function Col
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
+    const h = (ev: Event) => onChange!(ev as CustomEvent<{ value: string }>);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);

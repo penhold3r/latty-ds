@@ -1,5 +1,4 @@
-// codegen:manual — extended to wire tab-click event (not in CEM; dispatched manually by lt-tab)
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Tab as TabEl, LattyIconName } from '@latty-ds/web';
 
 export type TabProps = HTMLAttributes<TabEl> & {
@@ -9,21 +8,12 @@ export type TabProps = HTMLAttributes<TabEl> & {
   active?: boolean;
   disabled?: boolean;
   size?: TabEl['size'];
-  onTabClick?: (event: CustomEvent) => void;
 };
 
-export const Tab = forwardRef<TabEl, TabProps>(function Tab({ onTabClick, children, ...props }, forwardedRef) {
+export const Tab = forwardRef<TabEl, TabProps>(function Tab({ children, ...props }, forwardedRef) {
   const innerRef = useRef<TabEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
-
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el || !onTabClick) return;
-    const h = (ev: Event) => onTabClick!(ev as CustomEvent);
-    el.addEventListener('tab-click', h);
-    return () => el.removeEventListener('tab-click', h);
-  }, [onTabClick]);
 
   return (
     <lt-tab ref={innerRef} {...(props as Record<string, unknown>)}>

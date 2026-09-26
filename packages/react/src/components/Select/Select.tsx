@@ -13,7 +13,7 @@ export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
   disabled?: boolean;
   required?: boolean;
   options?: SelectEl['options'];
-  onChange?: (detail: { value: string }) => void;
+  onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const Select = forwardRef<SelectEl, SelectProps>(function Select(
@@ -27,7 +27,7 @@ export const Select = forwardRef<SelectEl, SelectProps>(function Select(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!((ev as CustomEvent).detail);
+    const h = (ev: Event) => onChange!(ev as CustomEvent<{ value: string }>);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);

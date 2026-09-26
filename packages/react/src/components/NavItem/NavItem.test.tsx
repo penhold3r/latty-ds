@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { createRef } from 'react';
 import { NavItem } from './NavItem';
 
@@ -44,19 +44,19 @@ describe('NavItem', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-nav-item');
   });
 
-  it('wires onNavItemClick event handler', () => {
+  it('wires onToggle with the open state from the toggle event', () => {
     const handler = vi.fn();
-    const { container } = render(<NavItem onNavItemClick={handler} />);
+    const { container } = render(<NavItem onToggle={handler} />);
     const el = container.querySelector('lt-nav-item')!;
-    el.dispatchEvent(new CustomEvent('nav-item-click', { bubbles: true }));
+    el.dispatchEvent(new CustomEvent('toggle', { detail: { open: true }, bubbles: true }));
     expect(handler).toHaveBeenCalledOnce();
+    expect(handler.mock.calls[0][0].detail).toEqual({ open: true });
   });
 
-  it('wires onNavCollapse event handler', () => {
+  it('lets React onClick handle the native click (no custom nav click event)', () => {
     const handler = vi.fn();
-    const { container } = render(<NavItem onNavCollapse={handler} />);
-    const el = container.querySelector('lt-nav-item')!;
-    el.dispatchEvent(new CustomEvent('nav-collapse', { bubbles: true }));
+    const { container } = render(<NavItem onClick={handler} />);
+    fireEvent.click(container.querySelector('lt-nav-item')!);
     expect(handler).toHaveBeenCalledOnce();
   });
 });

@@ -29,19 +29,19 @@ describe('Table', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-table');
   });
 
-  it('calls onSortChange when sort-change event fires', () => {
+  it('calls onSortChange when sortchange event fires', () => {
     const onSortChange = vi.fn();
     const { container } = render(<Table onSortChange={onSortChange} />);
-    container.querySelector('lt-table')!.dispatchEvent(new CustomEvent('sort-change'));
+    container.querySelector('lt-table')!.dispatchEvent(new CustomEvent('sortchange'));
     expect(onSortChange).toHaveBeenCalledOnce();
   });
 
-  it('removes sort-change listener on unmount', () => {
+  it('removes sortchange listener on unmount', () => {
     const onSortChange = vi.fn();
     const { container, unmount } = render(<Table onSortChange={onSortChange} />);
     const el = container.querySelector('lt-table')!;
     unmount();
-    el.dispatchEvent(new CustomEvent('sort-change'));
+    el.dispatchEvent(new CustomEvent('sortchange'));
     expect(onSortChange).not.toHaveBeenCalled();
   });
 });
