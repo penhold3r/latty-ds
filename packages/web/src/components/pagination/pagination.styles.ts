@@ -60,7 +60,7 @@ export const paginationStyles = css`
   button[aria-current='page'] {
     background: var(--lt-bg-primary-subtle);
     border-color: var(--lt-border-primary);
-    color: var(--lt-color-primary-700);
+    color: var(--lt-text-primary);
     font-weight: 600;
   }
 
@@ -70,12 +70,12 @@ export const paginationStyles = css`
   }
 
   button:disabled {
-    color: var(--lt-color-neutral-400);
+    color: var(--lt-text-disabled);
     cursor: not-allowed;
   }
 
   :host([disabled]) button {
-    color: var(--lt-color-neutral-400);
+    color: var(--lt-text-disabled);
     cursor: not-allowed;
     pointer-events: none;
   }

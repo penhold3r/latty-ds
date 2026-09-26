@@ -9,6 +9,8 @@ export const tableStyles = css`
   }
 
   .table-container {
+    /* The loading overlay is absolutely positioned, so it needs this as its containing block. */
+    position: relative;
     overflow-x: auto;
     width: 100%;
   }
@@ -187,7 +189,7 @@ export const tableStyles = css`
   /* Loading state */
   .loading-overlay {
     align-items: center;
-    background: rgba(255, 255, 255, 0.8);
+    background: color-mix(in srgb, var(--lt-bg-default) 80%, transparent);
     display: flex;
     height: 100%;
     justify-content: center;

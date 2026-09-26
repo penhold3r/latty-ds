@@ -43,7 +43,7 @@ export const tabStyles = css`
   }
 
   :host([disabled]) .tab {
-    color: var(--lt-color-neutral-300);
+    color: var(--lt-text-disabled);
     cursor: not-allowed;
     opacity: 0.5;
   }

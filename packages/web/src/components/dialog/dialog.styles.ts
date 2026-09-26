@@ -105,7 +105,7 @@ export const dialogStyles = css`
 
   /* Body */
   .body {
-    color: var(--lt-color-neutral-700);
+    color: var(--lt-text-neutral);
     flex: 1;
     overflow-y: auto;
     padding: var(--lt-spacing-5);

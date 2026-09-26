@@ -22,11 +22,11 @@ export const progressStyles = css`
     --_fill-color: var(--lt-interactive-error-bg);
   }
   :host([variant='neutral']) {
-    --_fill-color: var(--lt-color-neutral-600);
+    --_fill-color: var(--lt-interactive-neutral-bg);
   }
 
   [part='track'] {
-    background: var(--lt-progress-track-color, var(--lt-color-neutral-200));
+    background: var(--lt-progress-track-color, var(--lt-bg-overlay));
     border-radius: 999px;
     overflow: hidden;
     width: 100%;

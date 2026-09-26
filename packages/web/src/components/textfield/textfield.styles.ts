@@ -232,7 +232,7 @@ export const textfieldStyles = css`
   }
 
   .required-indicator {
-    color: var(--lt-color-error-500);
+    color: var(--lt-text-error);
   }
 
   :host([uppercase]) label lt-text::part(base) {

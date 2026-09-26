@@ -18,7 +18,7 @@ export const radioGroupStyles = css`
   }
 
   .required-indicator {
-    color: var(--lt-color-error-500);
+    color: var(--lt-text-error);
     margin-left: var(--lt-spacing-1);
   }
 

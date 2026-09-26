@@ -21,7 +21,7 @@ export const dateInputStyles = [
     }
 
     .required-indicator {
-      color: var(--lt-color-error-500);
+      color: var(--lt-text-error);
       margin-left: 2px;
     }
 
@@ -118,7 +118,7 @@ export const dateInputStyles = [
     }
 
     :host([variant='error']) .field-btn {
-      border-color: var(--lt-color-error-500);
+      border-color: var(--lt-text-error);
     }
 
     :host([variant='error']) .field-btn:focus-visible {
@@ -141,15 +141,15 @@ export const dateInputStyles = [
     }
 
     :host([variant='error']) .helper-text {
-      color: var(--lt-color-error-600);
+      color: var(--lt-text-error);
     }
 
     :host([variant='success']) .helper-text {
-      color: var(--lt-color-success-600);
+      color: var(--lt-text-success);
     }
 
     :host([variant='warning']) .helper-text {
-      color: var(--lt-color-warning-700);
+      color: var(--lt-text-warning);
     }
   `
 ];

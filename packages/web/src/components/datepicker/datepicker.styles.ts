@@ -20,7 +20,7 @@ export const datepickerStyles = css`
   }
 
   .required-indicator {
-    color: var(--lt-color-error-500);
+    color: var(--lt-text-error);
   }
 
   input {
@@ -81,7 +81,7 @@ export const datepickerStyles = css`
     box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle);
   }
   :host([variant='error']) input {
-    border-color: var(--lt-color-error-500);
+    border-color: var(--lt-text-error);
   }
   :host([variant='error']) input:focus {
     box-shadow: 0 0 0 3px var(--lt-bg-error-subtle);
@@ -93,12 +93,12 @@ export const datepickerStyles = css`
   }
 
   :host([variant='error']) .helper-text {
-    color: var(--lt-color-error-600);
+    color: var(--lt-text-error);
   }
   :host([variant='success']) .helper-text {
-    color: var(--lt-color-success-600);
+    color: var(--lt-text-success);
   }
   :host([variant='warning']) .helper-text {
-    color: var(--lt-color-warning-700);
+    color: var(--lt-text-warning);
   }
 `;

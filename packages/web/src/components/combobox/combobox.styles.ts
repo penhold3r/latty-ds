@@ -21,7 +21,7 @@ export const comboboxStyles = [
     }
 
     .required-indicator {
-      color: var(--lt-color-error-500);
+      color: var(--lt-text-error);
       margin-left: 2px;
     }
 
@@ -47,7 +47,7 @@ export const comboboxStyles = [
     }
 
     :host([variant='error']) .input-wrap {
-      border-color: var(--lt-color-error-500);
+      border-color: var(--lt-text-error);
     }
     :host([variant='error'][open]) .input-wrap,
     :host([variant='error']) .input-wrap:focus-within {
@@ -150,7 +150,7 @@ export const comboboxStyles = [
     }
     .option[aria-selected='true'] {
       background: var(--lt-bg-primary-subtle);
-      color: var(--lt-color-primary-700);
+      color: var(--lt-text-primary);
       font-weight: 500;
     }
     .option[disabled] {
@@ -172,13 +172,13 @@ export const comboboxStyles = [
     }
 
     :host([variant='error']) .helper-text {
-      color: var(--lt-color-error-600);
+      color: var(--lt-text-error);
     }
     :host([variant='success']) .helper-text {
-      color: var(--lt-color-success-600);
+      color: var(--lt-text-success);
     }
     :host([variant='warning']) .helper-text {
-      color: var(--lt-color-warning-700);
+      color: var(--lt-text-warning);
     }
   `
 ];

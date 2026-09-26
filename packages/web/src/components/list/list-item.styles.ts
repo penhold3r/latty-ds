@@ -23,7 +23,7 @@ export const listItemStyles = css`
 
   lt-icon {
     flex-shrink: 0;
-    color: var(--lt-color-neutral-500);
+    color: var(--lt-text-muted);
     font-size: inherit;
   }
 

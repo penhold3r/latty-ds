@@ -6,7 +6,7 @@ export const skeletonStyles = css`
   }
 
   [part='base'] {
-    background: var(--lt-color-neutral-200);
+    background: var(--lt-bg-overlay);
     border-radius: var(--lt-border-radius);
     height: 1.25rem;
     overflow: hidden;
@@ -26,12 +26,7 @@ export const skeletonStyles = css`
 
   :host([animated]) [part='base'] {
     animation: shimmer 1.5s ease-in-out infinite;
-    background: linear-gradient(
-      90deg,
-      var(--lt-color-neutral-100) 25%,
-      var(--lt-color-neutral-200) 50%,
-      var(--lt-color-neutral-100) 75%
-    );
+    background: linear-gradient(90deg, var(--lt-bg-surface) 25%, var(--lt-bg-overlay) 50%, var(--lt-bg-surface) 75%);
     background-size: 200% 100%;
   }
 
@@ -47,7 +42,7 @@ export const skeletonStyles = css`
   @media (prefers-reduced-motion: reduce) {
     :host([animated]) [part='base'] {
       animation: none;
-      background: var(--lt-color-neutral-200);
+      background: var(--lt-bg-overlay);
     }
   }
 `;
