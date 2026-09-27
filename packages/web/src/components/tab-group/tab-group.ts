@@ -9,6 +9,8 @@ import type { Tab } from '../tab/tab';
 import '../tab/tab';
 import '../tab/tab-panel';
 
+let groupCount = 0;
+
 /**
  * A container component that manages a group of tabs.
  *
@@ -79,6 +81,20 @@ export class TabGroup extends ThemeableElement {
   @queryAssignedElements({ slot: 'panel' })
   private panels!: HTMLElement[];
 
+  // Scopes generated tab/panel ids to this instance, so two groups on the same page whose tabs happen to share a
+  // `value` (e.g. two groups each with a "settings" tab) don't collide.
+  private readonly _uid = `lt-tab-group-${groupCount++}`;
+
+  // Reacts to a slotted tab's `disabled` attribute changing after the fact (e.g. a consumer disabling a tab
+  // dynamically, with no accompanying change to this group's own value/size/appearance), so the roving tabindex
+  // and keyboard navigation immediately stop landing on it.
+  private readonly _tabObserver = new MutationObserver(() => this.updateTabs());
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._tabObserver.observe(this, { attributes: true, attributeFilter: ['disabled'], subtree: true });
+  }
+
   /**
    * Lifecycle: Called after the element's DOM has been updated.
    */
@@ -88,11 +104,17 @@ export class TabGroup extends ThemeableElement {
   }
 
   /**
-   * Updates all tabs with the correct active state and size.
+   * Updates all tabs with the correct active/roving-tabindex state, size, and ARIA wiring.
    * @private
    */
   private updateTabs() {
     if (!this.tabs) return;
+
+    // Roving tabindex (WAI-ARIA Tabs pattern): only one tab is ever a Tab stop. It's the active tab, or — if
+    // none is active, or the active one is disabled — the first enabled tab, so the tablist is still reachable
+    // in one Tab press.
+    const enabled = this.tabs.filter((t) => !t.disabled);
+    const rovingTarget = enabled.find((t) => t.value === this.value) ?? enabled[0];
 
     this.tabs.forEach((tab) => {
       // Set size
@@ -101,6 +123,10 @@ export class TabGroup extends ThemeableElement {
       // Set active state
       tab.active = tab.value === this.value;
 
+      tab.tabIndex = tab === rovingTarget ? 0 : -1;
+      if (!tab.id) tab.id = `${this._uid}-tab-${tab.value}`;
+      tab.setAttribute('aria-controls', `${this._uid}-panel-${tab.value}`);
+
       // Set variant attribute for styling
       if (this.appearance === 'pills') {
         tab.setAttribute('data-variant', 'pills');
@@ -108,13 +134,16 @@ export class TabGroup extends ThemeableElement {
         tab.removeAttribute('data-variant');
       }
 
-      // Listen for tab clicks
+      // Listen for tab clicks and arrow/Home/End key navigation. Re-adding the same bound function reference is
+      // a no-op per addEventListener's own de-duplication, so calling this repeatedly (slotchange, value/size/
+      // appearance changes) never stacks up duplicate listeners.
       tab.addEventListener('click', this.handleTabClick);
+      tab.addEventListener('keydown', this.handleTabKeydown);
     });
   }
 
   /**
-   * Updates panel visibility based on selected value.
+   * Updates panel visibility and ARIA wiring based on selected value.
    * @private
    */
   private updatePanels() {
@@ -127,17 +156,19 @@ export class TabGroup extends ThemeableElement {
       } else {
         panel.removeAttribute('active');
       }
+      if (!panel.id) panel.id = `${this._uid}-panel-${panelValue}`;
+      panel.setAttribute('role', 'tabpanel');
+      panel.setAttribute('aria-labelledby', `${this._uid}-tab-${panelValue}`);
+      if (!panel.hasAttribute('tabindex')) panel.setAttribute('tabindex', '0');
     });
   }
 
   /**
-   * Handles click events from tabs.
+   * Selects a tab (used by both the click and keyboard-navigation handlers below).
    * @private
    */
-  private handleTabClick = (e: Event) => {
-    const tab = e.currentTarget as Tab;
-
-    if (tab.disabled) return;
+  private _select(tab: Tab) {
+    if (tab.disabled || tab.value === this.value) return;
 
     this.value = tab.value;
     this.updateTabs();
@@ -150,6 +181,47 @@ export class TabGroup extends ThemeableElement {
         composed: true
       })
     );
+  }
+
+  /**
+   * Handles click events from tabs.
+   * @private
+   */
+  private handleTabClick = (e: Event) => {
+    this._select(e.currentTarget as Tab);
+  };
+
+  /**
+   * ArrowLeft/Right move the roving tab stop (and, per the automatic-activation model, select the tab); Home/End
+   * jump to the first/last enabled tab. Disabled tabs are skipped entirely, matching the radiogroup/listbox
+   * patterns elsewhere in the DS.
+   * @private
+   */
+  private handleTabKeydown = (e: KeyboardEvent) => {
+    const enabled = (this.tabs ?? []).filter((t) => !t.disabled);
+    if (enabled.length === 0) return;
+
+    const index = enabled.indexOf(e.currentTarget as Tab);
+    let next: Tab | undefined;
+    switch (e.key) {
+      case 'ArrowRight':
+        next = enabled[(Math.max(index, 0) + 1) % enabled.length];
+        break;
+      case 'ArrowLeft':
+        next = enabled[(Math.max(index, 0) - 1 + enabled.length) % enabled.length];
+        break;
+      case 'Home':
+        next = enabled[0];
+        break;
+      case 'End':
+        next = enabled[enabled.length - 1];
+        break;
+    }
+    if (!next) return;
+
+    e.preventDefault();
+    this._select(next);
+    next.focus();
   };
 
   /**
@@ -166,9 +238,11 @@ export class TabGroup extends ThemeableElement {
    */
   disconnectedCallback() {
     super.disconnectedCallback();
+    this._tabObserver.disconnect();
     if (this.tabs) {
       this.tabs.forEach((tab) => {
         tab.removeEventListener('click', this.handleTabClick);
+        tab.removeEventListener('keydown', this.handleTabKeydown);
       });
     }
   }

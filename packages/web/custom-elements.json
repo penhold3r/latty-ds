@@ -8172,6 +8172,20 @@
               "description": "Reference to all slotted panel elements."
             },
             {
+              "kind": "field",
+              "name": "_uid",
+              "privacy": "private",
+              "readonly": true,
+              "default": "`lt-tab-group-${groupCount++}`"
+            },
+            {
+              "kind": "field",
+              "name": "_tabObserver",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new MutationObserver(() => this.updateTabs())"
+            },
+            {
               "kind": "method",
               "name": "firstUpdated",
               "description": "Lifecycle: Called after the element's DOM has been updated."
@@ -8180,19 +8194,39 @@
               "kind": "method",
               "name": "updateTabs",
               "privacy": "private",
-              "description": "Updates all tabs with the correct active state and size."
+              "description": "Updates all tabs with the correct active/roving-tabindex state, size, and ARIA wiring."
             },
             {
               "kind": "method",
               "name": "updatePanels",
               "privacy": "private",
-              "description": "Updates panel visibility based on selected value."
+              "description": "Updates panel visibility and ARIA wiring based on selected value."
+            },
+            {
+              "kind": "method",
+              "name": "_select",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "tab",
+                  "type": {
+                    "text": "Tab"
+                  }
+                }
+              ],
+              "description": "Selects a tab (used by both the click and keyboard-navigation handlers below)."
             },
             {
               "kind": "field",
               "name": "handleTabClick",
               "privacy": "private",
               "description": "Handles click events from tabs."
+            },
+            {
+              "kind": "field",
+              "name": "handleTabKeydown",
+              "privacy": "private",
+              "description": "ArrowLeft/Right move the roving tab stop (and, per the automatic-activation model, select the tab); Home/End\njump to the first/last enabled tab. Disabled tabs are skipped entirely, matching the radiogroup/listbox\npatterns elsewhere in the DS."
             },
             {
               "kind": "method",
@@ -8221,11 +8255,11 @@
           ],
           "events": [
             {
+              "name": "change",
               "type": {
                 "text": "CustomEvent<{value: string}>"
               },
-              "description": "Dispatched when a tab is selected",
-              "name": "change"
+              "description": "Dispatched when a tab is selected"
             }
           ],
           "superclass": {
