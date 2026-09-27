@@ -175,6 +175,8 @@ export class NavItem extends ThemeableElement {
     return html`<button
       class="item-trigger"
       aria-current=${ariaCurrent}
+      aria-expanded=${showChevron ? this.open : nothing}
+      aria-controls=${showChevron ? 'children' : nothing}
       @click=${this._handleTriggerClick}
       ?disabled=${this.disabled}
     >
@@ -188,7 +190,7 @@ export class NavItem extends ThemeableElement {
         ${this._renderTrigger()}
         ${this._hasChildren
           ? html`
-              <div class="children" @transitionend=${this._handleTransitionEnd}>
+              <div id="children" class="children" @transitionend=${this._handleTransitionEnd}>
                 <div class="children-inner">
                   <slot @slotchange=${this._onSlotChange}></slot>
                 </div>

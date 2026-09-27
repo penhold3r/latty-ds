@@ -231,6 +231,32 @@ describe('<lt-nav-item> group state and disabled links', () => {
     el.remove();
   });
 
+  it('exposes open/closed state on the group trigger via aria-expanded and aria-controls (NAV-1)', async () => {
+    const el = await group();
+    const button = el.shadowRoot!.querySelector<HTMLButtonElement>('button.item-trigger')!;
+    const children = el.shadowRoot!.querySelector<HTMLElement>('.children')!;
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+    expect(button.getAttribute('aria-controls')).toBe(children.id);
+
+    el.open = true;
+    await el.updateComplete;
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+    el.remove();
+  });
+
+  it('omits aria-expanded/aria-controls on a plain link (no children)', async () => {
+    const el = document.createElement('lt-nav-item') as NavItem;
+    el.setAttribute('label', 'Plain');
+    el.setAttribute('href', '/plain');
+    document.body.appendChild(el);
+    await el.updateComplete;
+
+    const anchor = el.shadowRoot!.querySelector<HTMLAnchorElement>('a.item-trigger')!;
+    expect(anchor.hasAttribute('aria-expanded')).toBe(false);
+    expect(anchor.hasAttribute('aria-controls')).toBe(false);
+    el.remove();
+  });
+
   it('does not navigate, and is not focusable, when a link item is disabled', async () => {
     const el = document.createElement('lt-nav-item') as NavItem;
     el.setAttribute('label', 'Locked');
