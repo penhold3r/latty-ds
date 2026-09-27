@@ -239,7 +239,7 @@
         {
           "kind": "variable",
           "name": "alertStyles",
-          "default": "css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens — public props override first, then variant defaults */ --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-neutral-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-inverse)); --_border: var(--lt-alert-border-color, var(--lt-border-strong)); --_color: var(--lt-alert-color, var(--lt-text-default)); --_color-solid: var(--lt-alert-color, var(--lt-text-inverse)); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-success-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-success-bg)); --_border: var(--lt-alert-border-color, var(--lt-border-success-strong)); --_color: var(--lt-alert-color, var(--lt-text-success)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-success)); } :host([variant='warning']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-warning-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-warning-bg)); --_border: var(--lt-alert-border-color, var(--lt-border-warning-strong)); --_color: var(--lt-alert-color, var(--lt-text-warning)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-warning)); } :host([variant='error']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-error-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-error-bg)); --_border: var(--lt-alert-border-color, var(--lt-border-error-strong)); --_color: var(--lt-alert-color, var(--lt-text-error)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-error)); } :host([variant='info']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-info-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-info-bg)); --_border: var(--lt-alert-border-color, var(--lt-border-info-strong)); --_color: var(--lt-alert-color, var(--lt-text-info)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-info)); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: var(--lt-border-width, 1px) solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: var(--lt-border-width, 1px) solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border. Fills come from the interactive tokens, the same ones the on-colour is picked against, so the text holds AA; body text is never dimmed with opacity, which would only lower it. */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
+          "default": "css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); opacity: 1; transform: translateY(0); transition: opacity 200ms ease, transform 200ms ease; /* Default variant tokens — public props override first, then variant defaults */ --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-neutral-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-bg-inverse)); --_border: var(--lt-alert-border-color, var(--lt-border-strong)); --_color: var(--lt-alert-color, var(--lt-text-default)); --_color-solid: var(--lt-alert-color, var(--lt-text-inverse)); } :host([dismissed]) { opacity: 0; transform: translateY(-4px); } /* Hidden once the fade above finishes. Not removed from the DOM — see the open property's doc comment. */ :host(:not([open])) { display: none; } /* ── Per-variant tokens ──────────────────────────────────── */ :host([variant='success']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-success-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-success-bg)); --_border: var(--lt-alert-border-color, var(--lt-border-success-strong)); --_color: var(--lt-alert-color, var(--lt-text-success)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-success)); } :host([variant='warning']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-warning-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-warning-bg)); --_border: var(--lt-alert-border-color, var(--lt-border-warning-strong)); --_color: var(--lt-alert-color, var(--lt-text-warning)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-warning)); } :host([variant='error']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-error-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-error-bg)); --_border: var(--lt-alert-border-color, var(--lt-border-error-strong)); --_color: var(--lt-alert-color, var(--lt-text-error)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-error)); } :host([variant='info']) { --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-info-subtle)); --_bg-solid: var(--lt-alert-bg, var(--lt-interactive-info-bg)); --_border: var(--lt-alert-border-color, var(--lt-border-info-strong)); --_color: var(--lt-alert-color, var(--lt-text-info)); --_color-solid: var(--lt-alert-color, var(--lt-text-on-info)); } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: flex-start; border-radius: var(--lt-border-radius); display: flex; gap: var(--lt-spacing-3); padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Appearances ─────────────────────────────────────────── */ /* filled (default) — subtle tinted bg + full border */ :host([appearance='filled']) .inner, :host(:not([appearance])) .inner { background: var(--_bg-subtle); border: var(--lt-border-width, 1px) solid var(--_border); color: var(--_color); } /* outlined — white bg + colored border */ :host([appearance='outlined']) .inner { background: var(--lt-bg-default); border: var(--lt-border-width, 1px) solid var(--_border); color: var(--_color); } /* solid — solid color bg, no border. Fills come from the interactive tokens, the same ones the on-colour is picked against, so the text holds AA; body text is never dimmed with opacity, which would only lower it. */ :host([appearance='solid']) .inner { background: var(--_bg-solid); border: none; color: var(--_color-solid); } /* ── Icon ────────────────────────────────────────────────── */ .icon { flex-shrink: 0; font-size: 1.125rem; margin-top: 1px; } /* ── Body ────────────────────────────────────────────────── */ .body { flex: 1; min-width: 0; } .title { margin: 0 0 var(--lt-spacing-1); } .content { font-size: 0.875rem; line-height: 1.5; } /* ── Close button ────────────────────────────────────────── */ .close { flex-shrink: 0; margin-top: 1px; opacity: 0.7; } .close:hover { opacity: 1; } :host([uppercase]) .title::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } `"
         }
       ],
       "exports": [
@@ -317,7 +317,16 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Show a dismiss button. Clicking it fires lt-close and removes the element."
+              "description": "Show a dismiss button. Clicking it fires `close` and hides the element (sets `open` to false)."
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether the alert is visible. Defaults to true, so existing markup with no attribute keeps showing.\nDismissing (or setting this to false directly) hides the alert but does not remove it from the DOM —\nthat choice is left to the consumer, since a framework that owns this node would otherwise fight the\nalert over removing it out from under its own reconciliation."
             },
             {
               "kind": "field",
@@ -354,6 +363,27 @@
               "privacy": "private"
             },
             {
+              "kind": "method",
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_role",
+              "type": {
+                "text": "'alert' | 'status'"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
               "kind": "field",
               "name": "_resolvedIcon",
               "type": {
@@ -369,7 +399,7 @@
           ],
           "events": [
             {
-              "description": "Fired when the dismiss button is clicked, just before the element is removed.",
+              "description": "Fired when the dismiss button is clicked, just before the element is hidden. Cancelable.",
               "name": "close"
             }
           ],
@@ -5627,6 +5657,24 @@
             },
             {
               "kind": "field",
+              "name": "max",
+              "type": {
+                "text": "number"
+              },
+              "default": "100",
+              "description": "The value `value` is measured against (0–100 becomes 0–max). Ignored when `indeterminate` is true."
+            },
+            {
+              "kind": "field",
+              "name": "valueText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Overrides the spoken value with a custom string (e.g. \"3 of 5 steps\") for scales a bare percentage\ndoesn't describe well. Leave unset to let `aria-valuenow`/`aria-valuemax` speak for themselves."
+            },
+            {
+              "kind": "field",
               "name": "indeterminate",
               "type": {
                 "text": "boolean"
@@ -8502,7 +8550,7 @@
         {
           "kind": "variable",
           "name": "tableStyles",
-          "default": "css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); overflow: hidden; width: 100%; } .table-container { /* The loading overlay is absolutely positioned, so it needs this as its containing block. */ position: relative; overflow-x: auto; width: 100%; } :host([responsive-mode='scroll']) .table-container { -webkit-overflow-scrolling: touch; } table { border-collapse: collapse; width: 100%; } /* Header */ thead { background: var(--lt-bg-surface); border-bottom: 2px solid var(--lt-border-default); } th { color: var(--lt-text-default); font-weight: 600; text-align: left; white-space: nowrap; } th[data-align='center'] { text-align: center; } th[data-align='right'] { text-align: right; } /* Sortable headers */ th.sortable { cursor: pointer; user-select: none; transition: background-color 120ms ease; } th.sortable:hover { background: var(--lt-bg-overlay); } th.sortable .header-content { align-items: center; display: flex; gap: var(--lt-spacing-2); } th[data-align='center'] .header-content { justify-content: center; } th[data-align='right'] .header-content { justify-content: flex-end; } .sort-icon { color: var(--lt-text-muted); display: inline-flex; flex-shrink: 0; font-size: 0.875rem; opacity: 0; transition: opacity 120ms ease; } th.sortable:hover .sort-icon, th.sorted .sort-icon { opacity: 1; } th.sorted .sort-icon { color: var(--lt-interactive-primary-bg); } /* Body */ tbody tr { border-bottom: 1px solid var(--lt-border-default); transition: background-color 120ms ease; } tbody tr:last-child { border-bottom: none; } :host([hoverable]) tbody tr:hover { background: var(--lt-bg-surface); } :host([striped]) tbody tr:nth-child(even) { background: var(--lt-bg-surface); } :host([striped][hoverable]) tbody tr:nth-child(even):hover { background: var(--lt-bg-overlay); } td { color: var(--lt-text-default); } td[data-align='center'] { text-align: center; } td[data-align='right'] { text-align: right; } /* Density variants */ :host([density='compact']) th, :host([density='compact']) td { padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([density='normal']) th, :host([density='normal']) td { padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([density='comfortable']) th, :host([density='comfortable']) td { padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* Sticky columns */ th.sticky { background: var(--lt-bg-surface); box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05); left: 0; position: sticky; z-index: 2; } td.sticky { background: var(--lt-bg-default); box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05); left: 0; position: sticky; z-index: 1; } :host([striped]) tbody tr:nth-child(even) td.sticky { background: var(--lt-bg-surface); } :host([hoverable]) tbody tr:hover td.sticky { background: var(--lt-bg-surface); } :host([striped][hoverable]) tbody tr:nth-child(even):hover td.sticky { background: var(--lt-bg-overlay); } /* Border styling */ :host([bordered]) table { border: var(--lt-border-width, 1px) solid var(--lt-border-default); } :host([bordered]) th, :host([bordered]) td { border-right: 1px solid var(--lt-border-default); } :host([bordered]) th:last-child, :host([bordered]) td:last-child { border-right: none; } /* Empty state */ .empty-state { color: var(--lt-text-subtle); padding: var(--lt-spacing-8); text-align: center; } /* Loading state */ .loading-overlay { align-items: center; background: color-mix(in srgb, var(--lt-bg-default) 80%, transparent); display: flex; height: 100%; justify-content: center; left: 0; position: absolute; top: 0; width: 100%; z-index: 10; } /* Stack mode for mobile */ @media (max-width: 768px) { :host([responsive-mode='stack']) .table-container { overflow-x: visible; } :host([responsive-mode='stack']) table, :host([responsive-mode='stack']) thead, :host([responsive-mode='stack']) tbody, :host([responsive-mode='stack']) th, :host([responsive-mode='stack']) td, :host([responsive-mode='stack']) tr { display: block; } :host([responsive-mode='stack']) thead { display: none; } :host([responsive-mode='stack']) tr { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); margin-bottom: var(--lt-spacing-3); padding: var(--lt-spacing-4); } :host([responsive-mode='stack']) td { border: none; display: grid; gap: var(--lt-spacing-2); grid-template-columns: 120px 1fr; padding: var(--lt-spacing-2) 0; text-align: left; } :host([responsive-mode='stack']) td::before { content: attr(data-label); color: var(--lt-text-default); font-weight: 600; } :host([responsive-mode='stack']) td:last-child { padding-bottom: 0; } } @media (max-width: 768px) { .hide-on-mobile { display: none; } } th.sortable:focus-visible { outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } `"
+          "default": "css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); overflow: hidden; width: 100%; } .table-container { /* The loading overlay is absolutely positioned, so it needs this as its containing block. */ position: relative; overflow-x: auto; width: 100%; } :host([responsive-mode='scroll']) .table-container { -webkit-overflow-scrolling: touch; } table { border-collapse: collapse; width: 100%; } /* Header */ thead { background: var(--lt-bg-surface); border-bottom: 2px solid var(--lt-border-default); } th { color: var(--lt-text-default); font-weight: 600; text-align: left; white-space: nowrap; } th[data-align='center'] { text-align: center; } th[data-align='right'] { text-align: right; } /* Sortable headers */ th.sortable { cursor: pointer; padding: 0; user-select: none; } th.sortable:hover { background: var(--lt-bg-overlay); } /* The button (not the th) carries the density padding, so it — not just a slice of it — is the click target. */ th.sortable .header-content { align-items: center; background: none; border: none; color: inherit; cursor: pointer; display: flex; font: inherit; gap: var(--lt-spacing-2); transition: background-color 120ms ease; width: 100%; } th[data-align='center'] .header-content { justify-content: center; } th[data-align='right'] .header-content { justify-content: flex-end; } .sort-icon { color: var(--lt-text-muted); display: inline-flex; flex-shrink: 0; font-size: 0.875rem; opacity: 0; transition: opacity 120ms ease; } th.sortable:hover .sort-icon, th.sorted .sort-icon { opacity: 1; } th.sorted .sort-icon { color: var(--lt-interactive-primary-bg); } /* Body */ tbody tr { border-bottom: 1px solid var(--lt-border-default); transition: background-color 120ms ease; } tbody tr:last-child { border-bottom: none; } :host([hoverable]) tbody tr:hover { background: var(--lt-bg-surface); } :host([striped]) tbody tr:nth-child(even) { background: var(--lt-bg-surface); } :host([striped][hoverable]) tbody tr:nth-child(even):hover { background: var(--lt-bg-overlay); } td { color: var(--lt-text-default); } td[data-align='center'] { text-align: center; } td[data-align='right'] { text-align: right; } /* Density variants */ :host([density='compact']) th, :host([density='compact']) td { padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([density='normal']) th, :host([density='normal']) td { padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([density='comfortable']) th, :host([density='comfortable']) td { padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* A sortable th's own padding moves onto its button (below), so the whole visible cell — not just the area inside the th's padding — is the click target. Matches the density rules above in specificity and comes after them in source order, so it wins the cascade regardless of selector order elsewhere in this file. */ :host th.sortable { padding: 0; } :host([density='compact']) th.sortable .header-content { padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([density='normal']) th.sortable .header-content { padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([density='comfortable']) th.sortable .header-content { padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* Sticky columns */ th.sticky { background: var(--lt-bg-surface); box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05); left: 0; position: sticky; z-index: 2; } td.sticky { background: var(--lt-bg-default); box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05); left: 0; position: sticky; z-index: 1; } :host([striped]) tbody tr:nth-child(even) td.sticky { background: var(--lt-bg-surface); } :host([hoverable]) tbody tr:hover td.sticky { background: var(--lt-bg-surface); } :host([striped][hoverable]) tbody tr:nth-child(even):hover td.sticky { background: var(--lt-bg-overlay); } /* Border styling */ :host([bordered]) table { border: var(--lt-border-width, 1px) solid var(--lt-border-default); } :host([bordered]) th, :host([bordered]) td { border-right: 1px solid var(--lt-border-default); } :host([bordered]) th:last-child, :host([bordered]) td:last-child { border-right: none; } /* Empty state */ .empty-state { color: var(--lt-text-subtle); padding: var(--lt-spacing-8); text-align: center; } /* Loading state */ .loading-overlay { align-items: center; background: color-mix(in srgb, var(--lt-bg-default) 80%, transparent); display: flex; height: 100%; justify-content: center; left: 0; position: absolute; top: 0; width: 100%; z-index: 10; } /* Stack mode for mobile */ @media (max-width: 768px) { :host([responsive-mode='stack']) .table-container { overflow-x: visible; } :host([responsive-mode='stack']) table, :host([responsive-mode='stack']) thead, :host([responsive-mode='stack']) tbody, :host([responsive-mode='stack']) th, :host([responsive-mode='stack']) td, :host([responsive-mode='stack']) tr { display: block; } :host([responsive-mode='stack']) thead { display: none; } :host([responsive-mode='stack']) tr { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); margin-bottom: var(--lt-spacing-3); padding: var(--lt-spacing-4); } :host([responsive-mode='stack']) td { border: none; display: grid; gap: var(--lt-spacing-2); grid-template-columns: 120px 1fr; padding: var(--lt-spacing-2) 0; text-align: left; } :host([responsive-mode='stack']) td::before { content: attr(data-label); color: var(--lt-text-default); font-weight: 600; } :host([responsive-mode='stack']) td:last-child { padding-bottom: 0; } } @media (max-width: 768px) { .hide-on-mobile { display: none; } } th.sortable .header-content:focus-visible { outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } `"
         }
       ],
       "exports": [
@@ -8611,6 +8659,15 @@
               },
               "default": "'No data available'",
               "description": "Message to display when there is no data."
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Accessible name for the table. Required when a page has more than one table, since column labels alone\ndon't tell assistive tech which table it's in."
             },
             {
               "kind": "field",

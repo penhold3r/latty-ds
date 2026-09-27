@@ -114,7 +114,7 @@ describe('<lt-table>', () => {
   });
 
   it('sorts data when header is clicked', async () => {
-    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
+    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1].querySelector('button') as HTMLElement;
     nameHeader.click();
     await el.updateComplete;
 
@@ -122,8 +122,23 @@ describe('<lt-table>', () => {
     expect(firstRowName.textContent?.trim()).toBe('Alice');
   });
 
+  it('renders a button inside a sortable th, per the APG pattern', () => {
+    const th = el.shadowRoot!.querySelectorAll('th')[1];
+    expect(th.querySelector('button')?.getAttribute('type')).toBe('button');
+  });
+
+  it('gives the table an accessible name from the label property', async () => {
+    el.label = 'Team roster';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('table')!.getAttribute('aria-label')).toBe('Team roster');
+  });
+
+  it('omits aria-label when no label is set', () => {
+    expect(el.shadowRoot!.querySelector('table')!.hasAttribute('aria-label')).toBe(false);
+  });
+
   it('toggles sort direction on subsequent clicks', async () => {
-    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
+    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1].querySelector('button') as HTMLElement;
 
     // First click: asc
     nameHeader.click();
@@ -144,7 +159,7 @@ describe('<lt-table>', () => {
     const handler = vi.fn();
     el.addEventListener('sortchange', handler);
 
-    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
+    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1].querySelector('button') as HTMLElement;
     nameHeader.click();
     await el.updateComplete;
 
@@ -155,7 +170,7 @@ describe('<lt-table>', () => {
   });
 
   it('sorts numeric values correctly', async () => {
-    const ageHeader = el.shadowRoot!.querySelectorAll('th')[2] as HTMLElement;
+    const ageHeader = el.shadowRoot!.querySelectorAll('th')[2].querySelector('button') as HTMLElement;
     ageHeader.click();
     await el.updateComplete;
     await el.updateComplete; // Need second update for sorted data
@@ -216,7 +231,7 @@ describe('<lt-table>', () => {
     const handler = vi.fn();
     el.addEventListener('sortchange', handler);
 
-    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
+    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1].querySelector('button') as HTMLElement;
     const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true });
     nameHeader.dispatchEvent(enterEvent);
     await el.updateComplete;
@@ -228,7 +243,7 @@ describe('<lt-table>', () => {
     const handler = vi.fn();
     el.addEventListener('sortchange', handler);
 
-    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
+    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1].querySelector('button') as HTMLElement;
     const spaceEvent = new KeyboardEvent('keydown', { key: ' ', bubbles: true });
     nameHeader.dispatchEvent(spaceEvent);
     await el.updateComplete;
@@ -311,7 +326,7 @@ describe('<lt-table>', () => {
     await el.updateComplete;
     await el.updateComplete; // Need second update for columns change
 
-    const nameHeader = el.shadowRoot!.querySelector('th') as HTMLElement;
+    const nameHeader = el.shadowRoot!.querySelector('th button') as HTMLElement;
     nameHeader.click();
     await el.updateComplete;
     await el.updateComplete; // Need second update for sorted data
@@ -328,7 +343,7 @@ describe('<lt-table>', () => {
     ];
     await el.updateComplete;
 
-    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
+    const nameHeader = el.shadowRoot!.querySelectorAll('th')[1].querySelector('button') as HTMLElement;
     nameHeader.click();
     await el.updateComplete;
 
@@ -430,7 +445,7 @@ describe('<lt-table>', () => {
       document.body.appendChild(ssrEl);
       await ssrEl.updateComplete;
 
-      const nameHeader = ssrEl.shadowRoot!.querySelectorAll('th')[1] as HTMLElement;
+      const nameHeader = ssrEl.shadowRoot!.querySelectorAll('th')[1].querySelector('button') as HTMLElement;
       nameHeader.click();
       await ssrEl.updateComplete;
       await ssrEl.updateComplete;

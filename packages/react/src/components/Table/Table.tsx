@@ -11,6 +11,7 @@ export type TableProps = HTMLAttributes<TableEl> & {
   bordered?: boolean;
   loading?: boolean;
   emptyMessage?: string;
+  label?: string;
   rowKey?: string;
   sort?: TableEl['sort'];
   onSortChange?: (event: CustomEvent) => void;

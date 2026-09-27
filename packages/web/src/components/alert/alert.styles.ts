@@ -23,6 +23,11 @@ export const alertStyles = css`
     transform: translateY(-4px);
   }
 
+  /* Hidden once the fade above finishes. Not removed from the DOM — see the open property's doc comment. */
+  :host(:not([open])) {
+    display: none;
+  }
+
   /* ── Per-variant tokens ──────────────────────────────────── */
 
   :host([variant='success']) {

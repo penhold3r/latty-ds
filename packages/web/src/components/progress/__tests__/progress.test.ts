@@ -85,4 +85,42 @@ describe('<lt-progress>', () => {
     expect(fill.style.width).not.toContain('NaN');
     expect(el.shadowRoot!.querySelector('[role="progressbar"]')!.getAttribute('aria-valuenow')).toBe('0');
   });
+
+  it('defaults to max 100', () => {
+    expect(el.max).toBe(100);
+  });
+
+  it('reports value and max on their own scale instead of renormalizing to a percentage', async () => {
+    el.max = 5;
+    el.value = 3;
+    await el.updateComplete;
+    const track = el.shadowRoot!.querySelector('[role="progressbar"]')!;
+    expect(track.getAttribute('aria-valuenow')).toBe('3');
+    expect(track.getAttribute('aria-valuemax')).toBe('5');
+    const fill = el.shadowRoot!.querySelector<HTMLElement>('[part="fill"]')!;
+    expect(fill.style.width).toBe('60%');
+  });
+
+  it.each([NaN, 0, -5])('falls back to a max of 100 for an invalid max %s', async (max) => {
+    el.max = max;
+    el.value = 50;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('[role="progressbar"]')!.getAttribute('aria-valuemax')).toBe('100');
+  });
+
+  it('omits aria-valuetext by default and sets it from valueText when given', async () => {
+    const track = () => el.shadowRoot!.querySelector('[role="progressbar"]')!;
+    expect(track().hasAttribute('aria-valuetext')).toBe(false);
+
+    el.valueText = 'Step 3 of 5';
+    await el.updateComplete;
+    expect(track().getAttribute('aria-valuetext')).toBe('Step 3 of 5');
+  });
+
+  it('omits aria-valuetext when indeterminate, even with valueText set', async () => {
+    el.valueText = 'Step 3 of 5';
+    el.indeterminate = true;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('[role="progressbar"]')!.hasAttribute('aria-valuetext')).toBe(false);
+  });
 });

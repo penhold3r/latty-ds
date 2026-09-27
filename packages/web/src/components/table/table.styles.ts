@@ -47,18 +47,26 @@ export const tableStyles = css`
   /* Sortable headers */
   th.sortable {
     cursor: pointer;
+    padding: 0;
     user-select: none;
-    transition: background-color 120ms ease;
   }
 
   th.sortable:hover {
     background: var(--lt-bg-overlay);
   }
 
+  /* The button (not the th) carries the density padding, so it — not just a slice of it — is the click target. */
   th.sortable .header-content {
     align-items: center;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
     display: flex;
+    font: inherit;
     gap: var(--lt-spacing-2);
+    transition: background-color 120ms ease;
+    width: 100%;
   }
 
   th[data-align='center'] .header-content {
@@ -132,6 +140,25 @@ export const tableStyles = css`
 
   :host([density='comfortable']) th,
   :host([density='comfortable']) td {
+    padding: var(--lt-spacing-4) var(--lt-spacing-5);
+  }
+
+  /* A sortable th's own padding moves onto its button (below), so the whole visible cell — not just the area
+     inside the th's padding — is the click target. Matches the density rules above in specificity and comes
+     after them in source order, so it wins the cascade regardless of selector order elsewhere in this file. */
+  :host th.sortable {
+    padding: 0;
+  }
+
+  :host([density='compact']) th.sortable .header-content {
+    padding: var(--lt-spacing-2) var(--lt-spacing-3);
+  }
+
+  :host([density='normal']) th.sortable .header-content {
+    padding: var(--lt-spacing-3) var(--lt-spacing-4);
+  }
+
+  :host([density='comfortable']) th.sortable .header-content {
     padding: var(--lt-spacing-4) var(--lt-spacing-5);
   }
 
@@ -253,7 +280,7 @@ export const tableStyles = css`
     }
   }
 
-  th.sortable:focus-visible {
+  th.sortable .header-content:focus-visible {
     outline: 2px solid var(--lt-interactive-primary-bg);
     outline-offset: -2px;
   }

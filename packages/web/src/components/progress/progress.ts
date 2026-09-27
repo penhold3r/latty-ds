@@ -47,23 +47,40 @@ export class Progress extends ThemeableElement {
   @property({ reflect: true }) label = '';
 
   /**
+   * The value `value` is measured against (0–100 becomes 0–max). Ignored when `indeterminate` is true.
+   * @default 100
+   */
+  @property({ type: Number }) max = 100;
+
+  /**
+   * Overrides the spoken value with a custom string (e.g. "3 of 5 steps") for scales a bare percentage
+   * doesn't describe well. Leave unset to let `aria-valuenow`/`aria-valuemax` speak for themselves.
+   * @default ''
+   */
+  @property({ attribute: 'value-text' }) valueText = '';
+
+  /**
    * When true the bar animates continuously without a set value.
    * @default false
    */
   @property({ type: Boolean, reflect: true }) indeterminate = false;
 
   render() {
-    const pct = Number.isFinite(this.value) ? Math.min(100, Math.max(0, this.value)) : 0;
+    // A non-finite or non-positive max falls back to 100 rather than dividing by zero/NaN.
+    const max = Number.isFinite(this.max) && this.max > 0 ? this.max : 100;
+    const value = Number.isFinite(this.value) ? Math.min(max, Math.max(0, this.value)) : 0;
+    const fillPct = (value / max) * 100;
     return html`
       <div
         part="track"
         role="progressbar"
         aria-label=${this.label || nothing}
-        aria-valuenow=${this.indeterminate ? nothing : pct}
+        aria-valuenow=${this.indeterminate ? nothing : value}
         aria-valuemin="0"
-        aria-valuemax="100"
+        aria-valuemax=${max}
+        aria-valuetext=${this.indeterminate || !this.valueText ? nothing : this.valueText}
       >
-        <div part="fill" style=${this.indeterminate ? nothing : `width:${pct}%`}></div>
+        <div part="fill" style=${this.indeterminate ? nothing : `width:${fillPct}%`}></div>
       </div>
     `;
   }

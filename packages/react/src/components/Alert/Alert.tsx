@@ -7,6 +7,7 @@ export type AlertProps = HTMLAttributes<AlertEl> & {
   title?: string;
   icon?: LattyIconName;
   closable?: boolean;
+  open?: boolean;
   background?: string;
   uppercase?: boolean;
   onClose?: (event: CustomEvent) => void;

@@ -147,6 +147,13 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   @property({ attribute: 'empty-message' }) emptyMessage = 'No data available';
 
   /**
+   * Accessible name for the table. Required when a page has more than one table, since column labels alone
+   * don't tell assistive tech which table it's in.
+   * @default ''
+   */
+  @property({ reflect: true }) label = '';
+
+  /**
    * Field name to use as a stable row identity key for efficient DOM reuse during sorts/updates.
    * When omitted, falls back to the row's JSON representation.
    * @default ''
@@ -314,14 +321,6 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
                   'hide-on-mobile': !!column.hideOnMobile
                 })}
                 data-align=${column.align || 'left'}
-                @click=${() => this.handleHeaderClick(column)}
-                @keydown=${(e: KeyboardEvent) => {
-                  if (column.sortable && (e.key === 'Enter' || e.key === ' ')) {
-                    e.preventDefault();
-                    this.handleHeaderClick(column);
-                  }
-                }}
-                tabindex=${column.sortable ? '0' : '-1'}
                 aria-sort=${column.sortable
                   ? this.currentSort?.key === column.key
                     ? this.currentSort.direction === 'asc'
@@ -336,10 +335,20 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
               >
                 ${column.sortable
                   ? html`
-                      <div class="header-content">
+                      <button
+                        type="button"
+                        class="header-content"
+                        @click=${() => this.handleHeaderClick(column)}
+                        @keydown=${(e: KeyboardEvent) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            this.handleHeaderClick(column);
+                          }
+                        }}
+                      >
                         <span>${column.label}</span>
                         ${this.renderSortIcon(column)}
-                      </div>
+                      </button>
                     `
                   : column.label}
               </th>
@@ -405,7 +414,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   render() {
     return html`
       <div class="table-container">
-        <table>
+        <table aria-label=${this.label || nothing}>
           ${this.renderHeader()} ${this.renderBody()}
         </table>
         ${this.loading

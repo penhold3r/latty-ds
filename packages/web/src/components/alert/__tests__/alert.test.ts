@@ -21,12 +21,25 @@ describe('<lt-alert>', () => {
     expect(el.shadowRoot).toBeTruthy();
   });
 
-  it('defaults: variant=default, appearance=filled, icon="", closable=false, title=""', () => {
+  it('defaults: variant=default, appearance=filled, icon="", closable=false, title="", open=true', () => {
     expect(el.variant).toBe('default');
     expect(el.appearance).toBe('filled');
     expect(el.icon).toBe('');
     expect(el.closable).toBe(false);
     expect(el.title).toBe('');
+    expect(el.open).toBe(true);
+  });
+
+  it.each([
+    ['default', 'status'],
+    ['success', 'status'],
+    ['info', 'status'],
+    ['warning', 'alert'],
+    ['error', 'alert']
+  ] as const)('uses role=%s -> %s so error/warning interrupt and the rest announce politely', async (variant, role) => {
+    el.variant = variant;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.inner')!.getAttribute('role')).toBe(role);
   });
 
   it('defaults: appearance=filled', () => {
@@ -111,24 +124,44 @@ describe('<lt-alert>', () => {
     expect(handler).toHaveBeenCalledOnce();
   });
 
-  it('removes itself after close with animation delay', async () => {
+  it('hides via `open` after close with animation delay, without removing itself from the DOM', async () => {
     vi.useFakeTimers();
     el.closable = true;
     await el.updateComplete;
     (el.shadowRoot!.querySelector('.close') as HTMLElement).click();
-    expect(document.body.contains(el)).toBe(true);
+    expect(el.open).toBe(true);
     vi.advanceTimersByTime(200);
-    expect(document.body.contains(el)).toBe(false);
+    expect(el.open).toBe(false);
+    expect(document.body.contains(el)).toBe(true);
   });
 
-  it('does not remove when lt-close is cancelled via preventDefault', async () => {
+  it('does not hide when lt-close is cancelled via preventDefault', async () => {
     vi.useFakeTimers();
     el.closable = true;
     await el.updateComplete;
     el.addEventListener('close', (e) => e.preventDefault());
     (el.shadowRoot!.querySelector('.close') as HTMLElement).click();
     vi.advanceTimersByTime(200);
-    expect(document.body.contains(el)).toBe(true);
+    expect(el.open).toBe(true);
+  });
+
+  it('moves focus to the host when dismissed, instead of losing it to <body>', async () => {
+    vi.useFakeTimers();
+    el.closable = true;
+    await el.updateComplete;
+    (el.shadowRoot!.querySelector('.close') as HTMLElement).click();
+    expect(document.activeElement).toBe(el);
+  });
+
+  it('clears the exit animation when reopened', async () => {
+    vi.useFakeTimers();
+    el.closable = true;
+    await el.updateComplete;
+    (el.shadowRoot!.querySelector('.close') as HTMLElement).click();
+    vi.advanceTimersByTime(200);
+    el.open = true;
+    await el.updateComplete;
+    expect(el.hasAttribute('dismissed')).toBe(false);
   });
 
   it('has no axe violations', async () => {

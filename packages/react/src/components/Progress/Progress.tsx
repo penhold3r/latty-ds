@@ -6,6 +6,8 @@ export type ProgressProps = HTMLAttributes<ProgressEl> & {
   variant?: ProgressEl['variant'];
   size?: ProgressEl['size'];
   label?: string;
+  max?: number;
+  valueText?: string;
   indeterminate?: boolean;
 };
 
