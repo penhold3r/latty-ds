@@ -6644,9 +6644,9 @@
           "kind": "variable",
           "name": "FORWARDED_ARIA_ATTRIBUTES",
           "type": {
-            "text": "[\n  'aria-pressed',\n  'aria-expanded',\n  'aria-haspopup',\n  'aria-controls',\n  'aria-current'\n]"
+            "text": "[\n  'aria-pressed',\n  'aria-expanded',\n  'aria-haspopup',\n  'aria-controls',\n  'aria-current',\n  'aria-description'\n]"
           },
-          "default": "[ 'aria-pressed', 'aria-expanded', 'aria-haspopup', 'aria-controls', 'aria-current' ]",
+          "default": "[ 'aria-pressed', 'aria-expanded', 'aria-haspopup', 'aria-controls', 'aria-current', 'aria-description' ]",
           "description": "Host `aria-*` attributes forwarded onto the internal native control.\n\nInteractive components render their semantics on a native element inside the\nshadow DOM, so ARIA attributes set on the host (`<lt-button aria-pressed=\"true\">`)\nnever reach the element screen readers actually interact with. Components that\ninstall an AriaForwardingController mirror this documented subset onto\ntheir internal control and keep it in sync as the host attributes change.\n\nNote: `aria-controls` contains an idref — it can only resolve when the referenced\nelement lives in the same tree as the internal control, so cross-shadow references\nare forwarded but may be ignored by assistive technology."
         },
         {
@@ -9695,8 +9695,26 @@
             },
             {
               "kind": "method",
+              "name": "_describeTrigger",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
               "name": "firstUpdated",
               "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",

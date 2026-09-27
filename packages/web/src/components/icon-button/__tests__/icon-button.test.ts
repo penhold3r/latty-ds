@@ -124,6 +124,13 @@ describe('<lt-icon-button>', () => {
       }
     );
 
+    it('forwards aria-description onto the internal button (e.g. set by a wrapping lt-tooltip)', async () => {
+      el.setAttribute('aria-description', 'Extra context');
+      await tick();
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('button')!.getAttribute('aria-description')).toBe('Extra context');
+    });
+
     it('removes the forwarded attribute when it is removed from the host', async () => {
       el.setAttribute('aria-expanded', 'true');
       await tick();

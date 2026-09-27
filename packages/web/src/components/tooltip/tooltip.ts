@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -55,11 +55,22 @@ export class Tooltip extends ThemeableElement {
   /** Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50). */
   @property({ reflect: true }) color = '';
 
-  protected firstUpdated() {
+  // aria-describedby's id lookup only works within one tree: the tooltip bubble lives in this element's own
+  // shadow root, but the trigger the id is set on is the slotted (light DOM) element — an id reference can't
+  // cross that boundary, so no AT ever actually announces it (verified: resolves to nothing in the accessibility
+  // tree). aria-description carries the text itself, so there's no id, and nothing to fail to resolve.
+  private _describeTrigger() {
     const trigger = this._slot?.assignedElements()[0];
-    if (trigger) {
-      trigger.setAttribute('aria-describedby', this._tooltipId);
-    }
+    trigger?.setAttribute('aria-description', this.content);
+  }
+
+  protected firstUpdated() {
+    this._describeTrigger();
+  }
+
+  protected updated(changed: PropertyValues<this>) {
+    super.updated(changed);
+    if (changed.has('content')) this._describeTrigger();
   }
 
   render() {

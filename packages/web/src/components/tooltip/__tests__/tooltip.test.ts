@@ -53,17 +53,35 @@ describe('<lt-tooltip>', () => {
     expect(el.hasAttribute('disabled')).toBe(true);
   });
 
-  it('links trigger to tooltip via aria-describedby', async () => {
-    const wrapper = document.createElement('lt-tooltip') as Tooltip;
-    wrapper.content = 'Tip';
-    const btn = document.createElement('button');
-    btn.textContent = 'Trigger';
-    wrapper.appendChild(btn);
-    document.body.appendChild(wrapper);
-    await wrapper.updateComplete;
+  describe('describing the trigger (TTP-1)', () => {
+    let wrapper: Tooltip;
+    let btn: HTMLButtonElement;
 
-    const tooltipId = wrapper.shadowRoot!.querySelector('[role="tooltip"]')!.id;
-    expect(btn.getAttribute('aria-describedby')).toBe(tooltipId);
-    wrapper.remove();
+    beforeEach(async () => {
+      wrapper = document.createElement('lt-tooltip') as Tooltip;
+      wrapper.content = 'Tip';
+      btn = document.createElement('button');
+      btn.textContent = 'Trigger';
+      wrapper.appendChild(btn);
+      document.body.appendChild(wrapper);
+      await wrapper.updateComplete;
+    });
+
+    afterEach(() => {
+      wrapper.remove();
+    });
+
+    it('sets aria-description on the trigger with the tooltip text', () => {
+      // Not aria-describedby: its id lookup can't cross from the trigger (light DOM) into the tooltip bubble
+      // (this element's own shadow root), so no AT ever actually resolves it — verified: it announces nothing.
+      expect(btn.getAttribute('aria-description')).toBe('Tip');
+      expect(btn.hasAttribute('aria-describedby')).toBe(false);
+    });
+
+    it('keeps the trigger in sync when content changes later', async () => {
+      wrapper.content = 'Updated tip';
+      await wrapper.updateComplete;
+      expect(btn.getAttribute('aria-description')).toBe('Updated tip');
+    });
   });
 });

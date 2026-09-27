@@ -18,7 +18,8 @@ export const FORWARDED_ARIA_ATTRIBUTES = [
   'aria-expanded',
   'aria-haspopup',
   'aria-controls',
-  'aria-current'
+  'aria-current',
+  'aria-description'
 ] as const;
 
 type AriaForwardingHost = ReactiveControllerHost & Element;

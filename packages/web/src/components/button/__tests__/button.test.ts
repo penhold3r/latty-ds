@@ -279,6 +279,13 @@ describe('<lt-button>', () => {
       }
     );
 
+    it('forwards aria-description onto the internal button (e.g. set by a wrapping lt-tooltip)', async () => {
+      el.setAttribute('aria-description', 'Extra context');
+      await tick();
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('button')!.getAttribute('aria-description')).toBe('Extra context');
+    });
+
     it('re-forwards when the host attribute changes', async () => {
       el.setAttribute('aria-pressed', 'true');
       await tick();
