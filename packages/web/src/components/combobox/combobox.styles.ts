@@ -148,6 +148,11 @@ export const comboboxStyles = [
     .option:hover {
       background: var(--lt-bg-neutral-subtle);
     }
+    .option[data-active='true'] {
+      background: var(--lt-bg-neutral-subtle);
+      outline: 2px solid var(--lt-interactive-primary-bg);
+      outline-offset: -2px;
+    }
     .option[aria-selected='true'] {
       background: var(--lt-bg-primary-subtle);
       color: var(--lt-text-primary);

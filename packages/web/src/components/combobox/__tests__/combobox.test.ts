@@ -153,4 +153,75 @@ describe('<lt-combobox>', () => {
       expect(autoUpdate).toHaveBeenCalledTimes(2);
     });
   });
+
+  describe('keyboard navigation and ARIA (CMB-1, CMB-2)', () => {
+    // A disabled option in the middle is what actually exposes CMB-2: activeIndex counted positions in the
+    // enabled-only list, but the render compared it against the unfiltered one, so the two only ever agreed
+    // when nothing disabled came before the active option.
+    const withMiddleDisabled = [
+      { value: 'a', label: 'Alpha' },
+      { value: 'b', label: 'Beta', disabled: true },
+      { value: 'c', label: 'Gamma' }
+    ];
+
+    const open = async () => {
+      el.shadowRoot!.querySelector<HTMLElement>('.input-wrap')!.click();
+      await el.updateComplete;
+    };
+
+    const arrow = async (key: string) => {
+      el.shadowRoot!.querySelector('input')!.dispatchEvent(new KeyboardEvent('keydown', { key, cancelable: true }));
+      await el.updateComplete;
+    };
+
+    beforeEach(async () => {
+      el.options = withMiddleDisabled;
+      await open();
+    });
+
+    it('ArrowDown skips the disabled option and highlights the one after it', async () => {
+      await arrow('ArrowDown'); // Alpha
+      await arrow('ArrowDown'); // skips Beta (disabled), lands on Gamma
+      const active = el.shadowRoot!.querySelector('[data-active="true"]')!;
+      expect(active.textContent?.trim()).toBe('Gamma');
+    });
+
+    it('Enter selects the same option that is highlighted', async () => {
+      await arrow('ArrowDown');
+      await arrow('ArrowDown');
+      await arrow('Enter');
+      expect(el.value).toBe('c');
+    });
+
+    it('gives the highlighted option a stable id and points aria-activedescendant at it', async () => {
+      await arrow('ArrowDown');
+      const active = el.shadowRoot!.querySelector('[data-active="true"]')!;
+      const input = el.shadowRoot!.querySelector('input')!;
+      expect(active.id).toBeTruthy();
+      expect(input.getAttribute('aria-activedescendant')).toBe(active.id);
+    });
+
+    it('every option has a distinct id, disabled ones included', () => {
+      const ids = [...el.shadowRoot!.querySelectorAll('.option')].map((o) => o.id);
+      expect(ids).toHaveLength(3);
+      expect(new Set(ids).size).toBe(3);
+      expect(ids.every(Boolean)).toBe(true);
+    });
+
+    it('sets aria-controls on the input pointing at the listbox', () => {
+      const input = el.shadowRoot!.querySelector('input')!;
+      const listbox = el.shadowRoot!.querySelector('[role="listbox"]')!;
+      expect(input.getAttribute('aria-controls')).toBe(listbox.id);
+    });
+
+    it('omits aria-activedescendant when nothing is highlighted', () => {
+      const input = el.shadowRoot!.querySelector('input')!;
+      expect(input.hasAttribute('aria-activedescendant')).toBe(false);
+    });
+
+    it('options are not in the tab order (aria-activedescendant keeps focus on the input)', () => {
+      const options = [...el.shadowRoot!.querySelectorAll('.option')] as HTMLButtonElement[];
+      expect(options.every((o) => o.tabIndex === -1)).toBe(true);
+    });
+  });
 });

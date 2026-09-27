@@ -114,7 +114,7 @@ export const selectStyles = [
       background: var(--lt-bg-surface);
     }
 
-    .option:focus-visible {
+    .option[data-active='true'] {
       background: var(--lt-bg-surface);
       outline: 2px solid var(--lt-interactive-primary-bg);
       outline-offset: -2px;

@@ -243,4 +243,76 @@ describe('<lt-select>', () => {
 
     expect(el.hasAttribute('open')).toBe(false);
   });
+
+  describe('keyboard navigation without moving focus off the trigger (SEL-1, SEL-2, SEL-3)', () => {
+    let trigger: HTMLElement;
+
+    const arrow = async (key: string) => {
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key, cancelable: true, bubbles: true }));
+      await el.updateComplete;
+    };
+
+    beforeEach(async () => {
+      trigger = el.shadowRoot!.querySelector('.select-trigger') as HTMLElement;
+      trigger.click();
+      await el.updateComplete;
+      trigger.focus();
+    });
+
+    it('ArrowDown highlights the next option without moving DOM focus', async () => {
+      await arrow('ArrowDown');
+      expect(document.activeElement).toBe(el);
+      expect(el.shadowRoot!.activeElement).toBe(trigger);
+      const active = el.shadowRoot!.querySelector('[data-active="true"]')!;
+      expect(active.textContent?.trim()).toBe('Apple');
+    });
+
+    it('ArrowDown skips a disabled option', async () => {
+      el.options = [
+        { value: 'a', label: 'Alpha' },
+        { value: 'b', label: 'Beta', disabled: true },
+        { value: 'c', label: 'Gamma' }
+      ];
+      await el.updateComplete;
+      await arrow('ArrowDown'); // Alpha
+      await arrow('ArrowDown'); // skips Beta, lands on Gamma
+      const active = el.shadowRoot!.querySelector('[data-active="true"]')!;
+      expect(active.textContent?.trim()).toBe('Gamma');
+    });
+
+    it('wraps at both ends', async () => {
+      // 3 enabled options (grape is disabled): Apple, Banana, Orange.
+      await arrow('ArrowUp'); // wraps from nothing-active to the last enabled one
+      expect(el.shadowRoot!.querySelector('[data-active="true"]')!.textContent?.trim()).toBe('Orange');
+      await arrow('ArrowDown'); // wraps back to the first
+      expect(el.shadowRoot!.querySelector('[data-active="true"]')!.textContent?.trim()).toBe('Apple');
+    });
+
+    it('Enter selects the highlighted option and keeps focus on the trigger, not <body>', async () => {
+      await arrow('ArrowDown');
+      await arrow('ArrowDown');
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', cancelable: true, bubbles: true }));
+      await el.updateComplete;
+
+      expect(el.value).toBe('banana');
+      expect(document.activeElement).toBe(el);
+      expect(el.shadowRoot!.activeElement).toBe(trigger);
+    });
+
+    it('gives the highlighted option a stable id and points aria-activedescendant at it', async () => {
+      await arrow('ArrowDown');
+      const active = el.shadowRoot!.querySelector('[data-active="true"]')!;
+      expect(active.id).toBeTruthy();
+      expect(trigger.getAttribute('aria-activedescendant')).toBe(active.id);
+    });
+
+    it('omits aria-activedescendant when nothing is highlighted yet', () => {
+      expect(trigger.hasAttribute('aria-activedescendant')).toBe(false);
+    });
+
+    it('options are not in the tab order', () => {
+      const options = [...el.shadowRoot!.querySelectorAll('.option')] as HTMLButtonElement[];
+      expect(options.every((o) => o.tabIndex === -1)).toBe(true);
+    });
+  });
 });

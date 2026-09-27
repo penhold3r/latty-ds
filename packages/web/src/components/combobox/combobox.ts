@@ -9,6 +9,8 @@ import '@latty-ds/icons';
 import '../text/text';
 import { openFloating, closeFloating } from '../shared/floating';
 
+let comboboxCount = 0;
+
 /**
  * Searchable single-select combobox. The user types to filter options; selecting an option sets the value.
  *
@@ -31,6 +33,9 @@ export class Combobox extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+
+  // Scopes generated option/listbox ids to this instance, so two comboboxes on the same page don't collide.
+  private readonly _uid = `lt-combobox-${comboboxCount++}`;
 
   constructor() {
     super();
@@ -83,6 +88,27 @@ export class Combobox extends ThemeableElement {
     return this.options.filter((o) => o.label.toLowerCase().includes(q));
   }
 
+  // `activeIndex` counts positions in this list (enabled options only) — using the same list here and in
+  // handleKeydown for both is what keeps the highlighted option and the one Enter selects in agreement (they
+  // used to disagree once any option was disabled: the index came from this list, but the id/highlight below
+  // used to come from the unfiltered one).
+  private get enabledOpts(): ComboboxOption[] {
+    return this.filtered.filter((o) => !o.disabled);
+  }
+
+  // Ids are derived from position in the unfiltered (but query-filtered) list, since that's what's actually
+  // rendered — every option, enabled or not, gets one.
+  private _idFor(opt: ComboboxOption): string {
+    return `${this._uid}-option-${this.filtered.indexOf(opt)}`;
+  }
+
+  // Clicking an option button would otherwise focus it first (the default mousedown action) — a button that
+  // momentarily takes focus, then vanishes as the dropdown closes, drops focus off the input. Suppressing just
+  // that default action leaves the click itself (and selectOption) untouched, and the input stays focused.
+  private _preventFocusSteal(e: MouseEvent) {
+    e.preventDefault();
+  }
+
   private async openDropdown() {
     // A click on the field fires both `focus` and `click`; a second call would start a second floating autoUpdate
     // and overwrite the first one's cleanup, leaking a scroll/resize listener pair on every open.
@@ -128,7 +154,7 @@ export class Combobox extends ThemeableElement {
   }
 
   private handleKeydown(e: KeyboardEvent) {
-    const opts = this.filtered.filter((o) => !o.disabled);
+    const opts = this.enabledOpts;
     if (e.key === 'Escape') {
       this.closeDropdown();
       return;
@@ -182,6 +208,7 @@ export class Combobox extends ThemeableElement {
 
   render() {
     const opts = this.filtered;
+    const activeOption = this.enabledOpts[this.activeIndex];
     const displayValue = this.open ? this.query : this.selectedLabel;
 
     const inputRow = html`
@@ -192,6 +219,8 @@ export class Combobox extends ThemeableElement {
           aria-expanded=${this.open}
           aria-autocomplete="list"
           aria-required=${this.required}
+          aria-controls=${this.open ? `${this._uid}-listbox` : nothing}
+          aria-activedescendant=${this.open && activeOption ? this._idFor(activeOption) : nothing}
           autocomplete="off"
           placeholder=${this.open ? this.placeholder : this.selectedLabel || this.placeholder}
           .value=${displayValue}
@@ -215,16 +244,19 @@ export class Combobox extends ThemeableElement {
         ${inputRow}
         ${this.open
           ? html`
-              <div class="dropdown" popover="manual" role="listbox">
+              <div class="dropdown" id=${`${this._uid}-listbox`} popover="manual" role="listbox">
                 ${opts.length > 0
                   ? opts.map(
-                      (opt, i) => html`
+                      (opt) => html`
                         <button
+                          id=${this._idFor(opt)}
                           class="option"
                           role="option"
+                          tabindex="-1"
                           aria-selected=${opt.value === this.value}
                           ?disabled=${opt.disabled}
-                          data-active=${i === this.activeIndex}
+                          data-active=${opt === activeOption}
+                          @mousedown=${this._preventFocusSteal}
                           @click=${() => this.selectOption(opt)}
                         >
                           ${opt.label}

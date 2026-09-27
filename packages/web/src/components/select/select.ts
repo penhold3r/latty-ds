@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
@@ -9,6 +9,8 @@ import '@latty-ds/icons';
 import '../surface/';
 import '../text/text';
 import { openFloating, closeFloating } from '../shared/floating';
+
+let selectCount = 0;
 
 /**
  * A customizable select dropdown component with support for multiple variants and sizes.
@@ -47,6 +49,9 @@ export class Select extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+
+  // Scopes generated option/listbox ids to this instance, so two selects on the same page don't collide.
+  private readonly _uid = `lt-select-${selectCount++}`;
 
   constructor() {
     super();
@@ -119,8 +124,35 @@ export class Select extends ThemeableElement {
    */
   @state() private isOpen = false;
 
+  /**
+   * Index of the highlighted option, into `enabledOptions` below (not `options`) — the same list the render
+   * and the keyboard handler both use, so they can never disagree about which option is highlighted (they used
+   * to: the index came from the enabled-only list, but the previous focus-based highlight came from whichever
+   * option actually held DOM focus, decided independently).
+   * @private
+   */
+  @state() private activeIndex = -1;
+
   private _cleanupClickOutside: (() => void) | null = null;
   private _floatingCleanup: (() => void) | null = null;
+
+  private get enabledOptions(): SelectOption[] {
+    return this.options.filter((o) => !o.disabled);
+  }
+
+  // Ids are derived from position in the full option list (disabled options included), since that's what's
+  // actually rendered.
+  private _idFor(option: SelectOption): string {
+    return `${this._uid}-option-${this.options.indexOf(option)}`;
+  }
+
+  // Clicking an option button would otherwise focus it first (the default mousedown action) — a button that
+  // momentarily takes focus, then vanishes as the dropdown closes, drops focus to nothing sensible. Suppressing
+  // just that default action leaves the click itself (and selectOption) untouched, and the trigger — which
+  // never lost focus to begin with — stays the active element throughout.
+  private _preventFocusSteal(e: MouseEvent) {
+    e.preventDefault();
+  }
 
   /**
    * Toggles the dropdown open/closed state.
@@ -168,35 +200,33 @@ export class Select extends ThemeableElement {
 
     const { key } = e;
 
-    if (!this.isOpen && (key === 'Enter' || key === ' ' || key === 'ArrowDown' || key === 'ArrowUp')) {
-      e.preventDefault();
-      this.isOpen = true;
+    if (!this.isOpen) {
+      if (key === 'Enter' || key === ' ' || key === 'ArrowDown' || key === 'ArrowUp') {
+        e.preventDefault();
+        this.isOpen = true;
+      }
       return;
     }
 
-    if (this.isOpen) {
-      if (key === 'Escape') {
+    const enabled = this.enabledOptions;
+    switch (key) {
+      case 'Escape':
         e.preventDefault();
         this.closeDropdown();
-        return;
-      }
-
-      if (key === 'ArrowDown' || key === 'ArrowUp') {
+        break;
+      case 'ArrowDown':
         e.preventDefault();
-        const options = this.shadowRoot?.querySelectorAll('.option:not([disabled])') as NodeListOf<HTMLButtonElement>;
-        if (!options || options.length === 0) return;
-
-        const currentIndex = Array.from(options).findIndex((opt) => opt === this.shadowRoot?.activeElement);
-        let nextIndex = currentIndex;
-
-        if (key === 'ArrowDown') {
-          nextIndex = currentIndex < options.length - 1 ? currentIndex + 1 : 0;
-        } else {
-          nextIndex = currentIndex > 0 ? currentIndex - 1 : options.length - 1;
-        }
-
-        options[nextIndex]?.focus();
-      }
+        if (enabled.length > 0) this.activeIndex = this.activeIndex < enabled.length - 1 ? this.activeIndex + 1 : 0;
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        if (enabled.length > 0) this.activeIndex = this.activeIndex > 0 ? this.activeIndex - 1 : enabled.length - 1;
+        break;
+      case 'Enter':
+      case ' ':
+        e.preventDefault();
+        if (enabled[this.activeIndex]) this.selectOption(enabled[this.activeIndex]);
+        break;
     }
   }
 
@@ -233,6 +263,7 @@ export class Select extends ThemeableElement {
 
     if (!changedProperties.has('isOpen')) return;
     if (this.isOpen) {
+      this.activeIndex = -1;
       this.setAttribute('open', '');
       const selectTrigger = this.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!;
       const listbox = this.shadowRoot!.querySelector<HTMLElement>('lt-surface.dropdown')!;
@@ -265,6 +296,8 @@ export class Select extends ThemeableElement {
   render() {
     const selectedLabel = this.getSelectedLabel();
     const hasValue = Boolean(this.value && selectedLabel);
+    const activeOption = this.enabledOptions[this.activeIndex];
+    const listboxId = `${this._uid}-listbox`;
 
     return html`
       <div class="wrapper">
@@ -284,6 +317,8 @@ export class Select extends ThemeableElement {
             aria-expanded=${this.isOpen}
             aria-disabled=${this.disabled}
             aria-label=${this.label || this.placeholder}
+            aria-controls=${this.isOpen ? listboxId : nothing}
+            aria-activedescendant=${this.isOpen && activeOption ? this._idFor(activeOption) : nothing}
             tabindex=${this.disabled ? '-1' : '0'}
             @click=${this.toggleDropdown}
             @keydown=${this.handleKeydown}
@@ -294,6 +329,7 @@ export class Select extends ThemeableElement {
             <lt-icon class="icon-end" name="caret-down"></lt-icon>
           </div>
           <lt-surface
+            id=${listboxId}
             class="dropdown"
             popover="manual"
             elevation="2"
@@ -306,17 +342,15 @@ export class Select extends ThemeableElement {
               ${this.options.map(
                 (option) => html`
                   <button
+                    id=${this._idFor(option)}
                     class="option"
                     role="option"
+                    tabindex="-1"
                     aria-selected=${option.value === this.value}
                     ?disabled=${option.disabled}
+                    data-active=${option === activeOption}
+                    @mousedown=${this._preventFocusSteal}
                     @click=${() => this.selectOption(option)}
-                    @keydown=${(e: KeyboardEvent) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        this.selectOption(option);
-                      }
-                    }}
                   >
                     ${option.label}
                   </button>
