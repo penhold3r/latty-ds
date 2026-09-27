@@ -1,4 +1,4 @@
-import { html, type PropertyValues } from 'lit';
+import { html, nothing, type PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
 import '@latty-ds/icons';
@@ -358,11 +358,11 @@ export class Calendar extends ThemeableElement {
   };
 
   private _handleKeyDown = (e: KeyboardEvent) => {
-    const today = new Date();
-    const focusedDate =
-      this._focusedDate ??
-      this._parseDate(this.value) ??
-      new Date(this._viewYear, this._viewMonth, today.getDate() || 1);
+    // The event's own target — the cell that's actually focused — not re-derived state, which can point
+    // somewhere else entirely (e.g. today's date, while the cell that's really focused, and rendered as the
+    // roving tab stop, is the 1st of whatever month is in view).
+    const currentIso = (e.currentTarget as HTMLElement).dataset.date ?? '';
+    const focusedDate = this._parseDate(currentIso) ?? new Date(this._viewYear, this._viewMonth, 1);
     const next = new Date(focusedDate);
     const weekStart = Number(this.weekStart);
 
@@ -453,7 +453,7 @@ export class Calendar extends ThemeableElement {
         role="gridcell"
         class=${classes}
         data-date=${iso}
-        ?disabled=${day.isDisabled}
+        aria-disabled=${day.isDisabled ? 'true' : nothing}
         aria-selected=${isSelected ? 'true' : 'false'}
         aria-label=${this._dayAriaLabel(day.date)}
         tabindex=${this._isSameDay(day.date, rovingDate) ? 0 : -1}
@@ -491,11 +491,23 @@ export class Calendar extends ThemeableElement {
     const today = new Date();
     const isMulti = this.months > 1;
 
+    // A candidate for the roving tab stop only counts if it actually falls in one of the visible months —
+    // otherwise no rendered cell matches it and nothing ends up as a Tab stop at all (e.g. the selected date's
+    // month has been paged away from).
+    const isInView = (date: Date): boolean => {
+      if (!isMulti) return date.getFullYear() === this._viewYear && date.getMonth() === this._viewMonth;
+      for (let i = 0; i < this.months; i++) {
+        const { year, month } = this._monthAtOffset(i);
+        if (date.getFullYear() === year && date.getMonth() === month) return true;
+      }
+      return false;
+    };
+
     // Roving tabindex anchor — shared across all panels
     const rovingAnchor = this._parseDate(this.mode === 'range' ? this.valueStart : this.value);
     const rovingDate =
-      this._focusedDate ??
-      rovingAnchor ??
+      (this._focusedDate && isInView(this._focusedDate) ? this._focusedDate : null) ??
+      (rovingAnchor && isInView(rovingAnchor) ? rovingAnchor : null) ??
       (today.getFullYear() === this._viewYear && today.getMonth() === this._viewMonth ? today : null) ??
       new Date(this._viewYear, this._viewMonth, 1);
 
@@ -566,6 +578,9 @@ export class Calendar extends ThemeableElement {
     );
     const prevLabel = this._pickingMonthYear ? 'Previous year' : 'Previous month';
     const nextLabel = this._pickingMonthYear ? 'Next year' : 'Next month';
+    // WCAG 2.5.3 Label in Name: the visible text (a live-updating month/year) has to be part of the accessible
+    // name, not replaced by it — otherwise a speech-input user saying what they see on the button can't match it.
+    const monthYearVisibleText = this._pickingMonthYear ? String(this._pickerYear) : monthLabel;
 
     const header = html`
       <div class="header">
@@ -575,11 +590,11 @@ export class Calendar extends ThemeableElement {
         <button
           class="month-label-btn ${this._pickingMonthYear ? 'month-label-btn--open' : ''}"
           aria-expanded=${this._pickingMonthYear ? 'true' : 'false'}
-          aria-label="Choose month and year"
+          aria-label="${monthYearVisibleText}, choose month and year"
           ?disabled=${this.disabled}
           @click=${() => (this._pickingMonthYear ? this._closePicker() : this._openPicker())}
         >
-          <span aria-live="polite" aria-atomic="true">${this._pickingMonthYear ? this._pickerYear : monthLabel}</span>
+          <span aria-live="polite" aria-atomic="true">${monthYearVisibleText}</span>
           <lt-icon name="arrow-down" size="sm" class="picker-chevron"></lt-icon>
         </button>
         <button class="nav-btn" aria-label=${nextLabel} ?disabled=${this.disabled} @click=${() => this._navigate(1)}>

@@ -136,10 +136,10 @@ describe('<lt-calendar>', () => {
     await el.updateComplete;
 
     const day10 = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-10"]');
-    expect(day10?.disabled).toBe(true);
+    expect(day10?.getAttribute('aria-disabled')).toBe('true');
 
     const day20 = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-20"]');
-    expect(day20?.disabled).toBe(false);
+    expect(day20?.hasAttribute('aria-disabled')).toBe(false);
   });
 
   it('disables days after max', async () => {
@@ -148,10 +148,10 @@ describe('<lt-calendar>', () => {
     await el.updateComplete;
 
     const day15 = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-15"]');
-    expect(day15?.disabled).toBe(true);
+    expect(day15?.getAttribute('aria-disabled')).toBe('true');
 
     const day5 = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-05"]');
-    expect(day5?.disabled).toBe(false);
+    expect(day5?.hasAttribute('aria-disabled')).toBe(false);
   });
 
   it('disables specific dates via disabledDates property', async () => {
@@ -162,7 +162,7 @@ describe('<lt-calendar>', () => {
     await el.updateComplete;
 
     const day12 = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-12"]');
-    expect(day12?.disabled).toBe(true);
+    expect(day12?.getAttribute('aria-disabled')).toBe('true');
   });
 
   it('renders Mon–Sun headers when week-start="1"', async () => {
@@ -269,6 +269,20 @@ describe('<lt-calendar> month/year picker', () => {
     const btn = el.shadowRoot!.querySelector<HTMLButtonElement>('.month-label-btn')!;
     expect(btn.tagName.toLowerCase()).toBe('button');
     expect(btn.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('includes the visible month/year text in its own accessible name (CAL-3, WCAG 2.5.3)', () => {
+    const btn = el.shadowRoot!.querySelector<HTMLButtonElement>('.month-label-btn')!;
+    const visibleText = btn.textContent!.trim();
+    expect(visibleText).toBeTruthy();
+    expect(btn.getAttribute('aria-label')).toContain(visibleText);
+  });
+
+  it('keeps the visible year in its accessible name once the picker is open', async () => {
+    const btn = el.shadowRoot!.querySelector<HTMLButtonElement>('.month-label-btn')!;
+    btn.click();
+    await el.updateComplete;
+    expect(btn.getAttribute('aria-label')).toContain(String(new Date('2026-05-01T00:00:00').getFullYear()));
   });
 
   it('clicking month label opens picker and hides day grid', async () => {
@@ -625,5 +639,93 @@ describe('<lt-calendar mode="range">', () => {
 
     const label = el.shadowRoot!.querySelector('.month-label-btn')!;
     expect(label.textContent?.trim()).toContain('August');
+  });
+});
+
+describe('<lt-calendar> roving tabindex and keyboard nav after paging (CAL-1, CAL-2)', () => {
+  let el: Calendar;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-calendar') as Calendar;
+    el.value = '2026-05-19';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  const rovingCell = () => el.shadowRoot!.querySelector<HTMLButtonElement>('[role="gridcell"][tabindex="0"]');
+
+  it('always has exactly one cell with tabindex=0, even after paging away from the selected month', async () => {
+    const navNext = el.shadowRoot!.querySelector<HTMLButtonElement>('.nav-btn[aria-label="Next month"]')!;
+    navNext.click();
+    navNext.click();
+    await el.updateComplete;
+
+    expect(el.shadowRoot!.querySelectorAll('[role="gridcell"][tabindex="0"]')).toHaveLength(1);
+    // May 19 isn't rendered in July, so the roving stop must have fallen back to something that is.
+    expect(rovingCell()!.dataset.date?.startsWith('2026-07')).toBe(true);
+  });
+
+  it('ArrowRight from the fallback cell moves by one day, not by re-deriving a different date', async () => {
+    const navNext = el.shadowRoot!.querySelector<HTMLButtonElement>('.nav-btn[aria-label="Next month"]')!;
+    navNext.click();
+    navNext.click();
+    await el.updateComplete;
+
+    const cell = rovingCell()!;
+    const startIso = cell.dataset.date!;
+    cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true, bubbles: true }));
+    await el.updateComplete;
+    await new Promise((r) => setTimeout(r, 0)); // _focusCell resolves via updateComplete internally
+
+    const expectedNextDay = new Date(startIso + 'T00:00:00');
+    expectedNextDay.setDate(expectedNextDay.getDate() + 1);
+    const expectedIso = expectedNextDay.toISOString().slice(0, 10);
+    expect(document.activeElement).toBe(el);
+    expect(el.shadowRoot!.activeElement?.getAttribute('data-date')).toBe(expectedIso);
+  });
+});
+
+describe('<lt-calendar> disabled days stay focusable (CAL-5)', () => {
+  let el: Calendar;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-calendar') as Calendar;
+    el.min = '2026-05-20';
+    el.value = '2026-05-20';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('marks a disabled day with aria-disabled, not the disabled attribute', () => {
+    const day10 = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-10"]')!;
+    expect(day10.getAttribute('aria-disabled')).toBe('true');
+    expect(day10.disabled).toBe(false);
+  });
+
+  it('can still receive focus and move the roving stop onto it', async () => {
+    const day20 = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-20"]')!;
+    day20.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', cancelable: true, bubbles: true }));
+    await el.updateComplete;
+    await new Promise((r) => setTimeout(r, 0));
+
+    const day19 = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-19"]')!;
+    expect(day19.getAttribute('aria-disabled')).toBe('true'); // before min (2026-05-20)
+    expect(document.activeElement).toBe(el);
+    expect(el.shadowRoot!.activeElement).toBe(day19);
+  });
+
+  it('does not select a disabled day activated via keyboard', async () => {
+    const day10 = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-10"]')!;
+    day10.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', cancelable: true, bubbles: true }));
+    await el.updateComplete;
+    expect(el.value).toBe('2026-05-20');
   });
 });

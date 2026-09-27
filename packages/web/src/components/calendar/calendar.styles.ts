@@ -144,7 +144,9 @@ export const calendarStyles = css`
     width: 100%;
   }
 
-  .day:disabled {
+  /* aria-disabled, not the disabled attribute — a disabled day stays focusable, so keyboard users can arrow
+     through it instead of the roving tabindex skipping straight over it (it just can't be selected). */
+  .day[aria-disabled='true'] {
     cursor: not-allowed;
   }
 
@@ -167,7 +169,7 @@ export const calendarStyles = css`
     width: 2.25rem;
   }
 
-  .day:hover:not(:disabled) .day__inner {
+  .day:hover:not([aria-disabled='true']) .day__inner {
     background: var(--lt-bg-neutral-subtle);
   }
 
@@ -190,7 +192,7 @@ export const calendarStyles = css`
     font-weight: 600;
   }
 
-  .day--selected:hover:not(:disabled) .day__inner {
+  .day--selected:hover:not([aria-disabled='true']) .day__inner {
     background: var(--lt-interactive-primary-bg-hover);
   }
 
@@ -208,7 +210,7 @@ export const calendarStyles = css`
     pointer-events: none;
   }
 
-  .day:disabled .day__inner {
+  .day[aria-disabled='true'] .day__inner {
     color: var(--lt-text-disabled);
     opacity: 0.4;
   }
@@ -235,7 +237,7 @@ export const calendarStyles = css`
     background: var(--lt-bg-primary-subtle);
   }
 
-  .day--in-range:hover:not(:disabled) .day__inner {
+  .day--in-range:hover:not([aria-disabled='true']) .day__inner {
     background: var(--lt-bg-neutral-subtle);
   }
 
@@ -253,7 +255,7 @@ export const calendarStyles = css`
     font-weight: 600;
   }
 
-  .day--range-confirmed:hover:not(:disabled) .day__inner {
+  .day--range-confirmed:hover:not([aria-disabled='true']) .day__inner {
     background: var(--lt-interactive-primary-bg-hover);
   }
 
