@@ -93,6 +93,11 @@ export class TabGroup extends ThemeableElement {
   connectedCallback() {
     super.connectedCallback();
     this._tabObserver.observe(this, { attributes: true, attributeFilter: ['disabled'], subtree: true });
+    // Re-attaches listeners after a reconnect (moving the group in the DOM disconnects and reconnects it
+    // without re-running firstUpdated, which only ever fires once). Harmless before the first render too —
+    // updateTabs/updatePanels no-op when `this.tabs`/`this.panels` aren't populated yet.
+    this.updateTabs();
+    this.updatePanels();
   }
 
   /**

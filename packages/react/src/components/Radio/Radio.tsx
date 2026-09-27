@@ -12,6 +12,7 @@ export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
   labelPosition?: RadioEl['labelPosition'];
   name?: string;
   value?: string;
+  tabbable?: boolean;
   onChange?: (event: CustomEvent<{ value: string; checked: boolean }>) => void;
 };
 

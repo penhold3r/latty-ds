@@ -93,8 +93,14 @@ export class RadioGroup extends ThemeableElement {
   @queryAssignedElements({ selector: 'lt-radio' })
   private radios!: Radio[];
 
+  // Reacts to a slotted radio's `disabled` attribute changing after the fact (e.g. a consumer disabling one
+  // dynamically, with no accompanying change to this group's own value/name), so the roving tabindex and
+  // keyboard navigation immediately stop landing on it.
+  private readonly _radioObserver = new MutationObserver(() => this._syncRadios());
+
   connectedCallback() {
     super.connectedCallback();
+    this._radioObserver.observe(this, { attributes: true, attributeFilter: ['disabled'], subtree: true });
     // Re-attaches listeners after a reconnect (moving the group in the DOM disconnects and reconnects it
     // without re-running firstUpdated, which only ever fires once). Harmless to call before the first render
     // too — _syncRadios no-ops when `this.radios` isn't populated yet.
@@ -112,26 +118,52 @@ export class RadioGroup extends ThemeableElement {
   }
 
   /**
-   * Wires each radio's `name` and listeners, and drives `checked` from this group's `value` — the direction a
-   * consumer setting `group.value = '…'` needs, since that's a plain property assignment on the group, not a
-   * native input event any individual radio would otherwise react to.
+   * Wires each radio's `name`, roving tabindex, and listeners, and drives `checked` from this group's `value` —
+   * the direction a consumer setting `group.value = '…'` needs, since that's a plain property assignment on the
+   * group, not a native input event any individual radio would otherwise react to.
    * @private
    */
   private _syncRadios() {
     if (!this.radios) return;
+
+    // Roving tabindex (native radiogroup behavior): only one radio is ever a Tab stop. It's the checked one,
+    // or — if none is checked, or the checked one is disabled — the first enabled radio, so the group is still
+    // reachable in one Tab press.
+    const enabled = this.radios.filter((r) => !r.disabled);
+    const rovingTarget = enabled.find((r) => r.value === this.value) ?? enabled[0];
+
     this.radios.forEach((radio) => {
       if (this.name) radio.name = this.name;
       radio.checked = radio.value === this.value;
+      radio.tabbable = radio === rovingTarget;
       // Re-adding the same bound function reference is a no-op per addEventListener's own de-duplication, so
       // calling this on every sync (slotchange, value/name changes, a reconnect) never stacks up listeners —
       // and, unlike a "have I seen this one before" set, it also re-attaches one a disconnect actually removed.
       radio.addEventListener('change', this.handleRadioChange as EventListener);
+      radio.addEventListener('keydown', this.handleRadioKeydown as EventListener);
     });
   }
 
   /**
+   * Selects a radio (used by both the native-change and keyboard-navigation handlers below).
+   * @private
+   */
+  private _select(radio: Radio) {
+    if (radio.disabled || radio.value === this.value) return;
+
+    this.value = radio.value;
+
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: { value: this.value },
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
+
+  /**
    * Handles change events from individual radio buttons.
-   * Updates the group value and ensures only one radio is checked.
    *
    * @param e - The change event from a radio button
    * @private
@@ -144,16 +176,37 @@ export class RadioGroup extends ThemeableElement {
     // exclusion) — stop its event here rather than let it also reach whatever's outside this group, which
     // would otherwise double-fire 'change' with two different detail shapes for one selection.
     e.stopPropagation();
+    this._select(radio);
+  };
 
-    this.value = radio.value;
+  /**
+   * Arrow keys move the roving tab stop and, per the native radiogroup's automatic-activation model, select the
+   * radio moved to — matching a real `<input type="radio">` group, where arrowing both moves focus and checks
+   * the newly-focused button. All four directions move (Right/Down forward, Left/Up back), disabled radios are
+   * skipped entirely, and it wraps at both ends.
+   * @private
+   */
+  private handleRadioKeydown = (e: KeyboardEvent) => {
+    const enabled = (this.radios ?? []).filter((r) => !r.disabled);
+    if (enabled.length === 0) return;
 
-    this.dispatchEvent(
-      new CustomEvent('change', {
-        detail: { value: this.value },
-        bubbles: true,
-        composed: true
-      })
-    );
+    const index = enabled.indexOf(e.currentTarget as Radio);
+    let next: Radio | undefined;
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        next = enabled[(Math.max(index, 0) + 1) % enabled.length];
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        next = enabled[(Math.max(index, 0) - 1 + enabled.length) % enabled.length];
+        break;
+    }
+    if (!next) return;
+
+    e.preventDefault();
+    this._select(next);
+    next.focus();
   };
 
   /**
@@ -178,9 +231,11 @@ export class RadioGroup extends ThemeableElement {
    */
   disconnectedCallback() {
     super.disconnectedCallback();
+    this._radioObserver.disconnect();
     if (this.radios) {
       this.radios.forEach((radio) => {
         radio.removeEventListener('change', this.handleRadioChange as EventListener);
+        radio.removeEventListener('keydown', this.handleRadioKeydown as EventListener);
       });
     }
   }

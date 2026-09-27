@@ -1,4 +1,4 @@
-import { html, type PropertyValues } from 'lit';
+import { html, LitElement, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
@@ -70,6 +70,10 @@ const radioGroupFor = (radio: Radio): Set<Radio> | null => {
 export class Radio extends ThemeableElement {
   static styles = radioStyles;
   static formAssociated = true;
+  // Makes host.focus() move focus into the shadow root (the inner <input>) — lt-radio-group needs this to move
+  // focus programmatically for arrow-key navigation (RAD-2), the same way lt-button's delegatesFocus (BTN-4)
+  // lets lt-dropdown do the same for its trigger.
+  static override shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
 
   private _internals!: ElementInternals;
   private _group: Set<Radio> | null = null;
@@ -158,6 +162,14 @@ export class Radio extends ThemeableElement {
    */
   @property({ reflect: true }) value = '';
 
+  /**
+   * Whether this radio is reachable with Tab. Defaults to true for a standalone radio; `lt-radio-group` drives
+   * this itself for its managed radios — a roving tabindex (only the checked radio, or the first enabled one,
+   * is a Tab stop), matching the native radiogroup pattern.
+   * @default true
+   */
+  @property({ type: Boolean }) tabbable = true;
+
   updated() {
     this._internals.setFormValue(this.checked ? this.value : null);
     const input = this.shadowRoot?.querySelector<HTMLElement>('input');
@@ -223,6 +235,7 @@ export class Radio extends ThemeableElement {
             ?required=${this.required}
             name=${this.name}
             value=${this.value}
+            tabindex=${this.tabbable ? '0' : '-1'}
             @change=${this.handleChange}
             aria-label=${this.label || 'radio'}
           />

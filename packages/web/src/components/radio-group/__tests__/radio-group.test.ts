@@ -157,4 +157,83 @@ describe('<lt-radio-group>', () => {
     expect(el.value).toBe('option3');
     otherParent.remove();
   });
+
+  describe('roving tabindex and arrow-key navigation (RAD-2)', () => {
+    const input = (radio: Radio) => radio.shadowRoot!.querySelector('input') as HTMLInputElement;
+    const arrow = (radio: Radio, key: string) =>
+      radio.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+
+    it('only the checked radio is a Tab stop', () => {
+      const [radio1, radio2, radio3] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+      expect(input(radio1).tabIndex).toBe(-1);
+      expect(input(radio2).tabIndex).toBe(0); // checked in the fixture
+      expect(input(radio3).tabIndex).toBe(-1);
+    });
+
+    it('moves the tab stop when the group value changes', async () => {
+      const [radio1, radio2] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+      el.value = 'option1';
+      await el.updateComplete;
+      expect(input(radio1).tabIndex).toBe(0);
+      expect(input(radio2).tabIndex).toBe(-1);
+    });
+
+    it('falls back to the first enabled radio when nothing is checked', async () => {
+      el.value = 'no-such-option';
+      await el.updateComplete;
+      const [radio1] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+      expect(input(radio1).tabIndex).toBe(0);
+    });
+
+    it('ArrowDown moves the tab stop and selects the next radio', async () => {
+      const [, radio2, radio3] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+      arrow(radio2, 'ArrowDown');
+      expect(el.value).toBe('option3');
+      await el.updateComplete;
+      await radio3.updateComplete;
+      expect(input(radio3).tabIndex).toBe(0);
+    });
+
+    it('ArrowRight/ArrowLeft also move (native radiogroup convention)', () => {
+      const [, radio2, radio3] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+      arrow(radio2, 'ArrowRight');
+      expect(el.value).toBe('option3');
+      arrow(radio3, 'ArrowLeft');
+      expect(el.value).toBe('option2');
+    });
+
+    it('wraps at both ends', () => {
+      const [radio1, , radio3] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+      arrow(radio3, 'ArrowDown');
+      expect(el.value).toBe('option1');
+      arrow(radio1, 'ArrowUp');
+      expect(el.value).toBe('option3');
+    });
+
+    it('dispatches change when arrow keys move selection', () => {
+      const handler = vi.fn();
+      el.addEventListener('change', handler);
+      const [, radio2] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+      arrow(radio2, 'ArrowDown');
+      expect(handler).toHaveBeenCalledOnce();
+      expect((handler.mock.calls[0][0] as CustomEvent).detail).toEqual({ value: 'option3' });
+    });
+
+    it('skips a disabled radio when navigating', async () => {
+      const [, radio2, radio3] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+      radio3.disabled = true;
+      await el.updateComplete;
+      arrow(radio2, 'ArrowDown');
+      expect(el.value).toBe('option1'); // wraps past the disabled radio3
+    });
+
+    it('reacts to a radio being disabled after the fact, moving the roving stop off it', async () => {
+      const [, radio2] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+      radio2.disabled = true;
+      // Attribute reflection + the MutationObserver reacting to it are both async.
+      await radio2.updateComplete;
+      await Promise.resolve();
+      expect(input(radio2).tabIndex).toBe(-1);
+    });
+  });
 });

@@ -41,19 +41,41 @@ export class Dropdown extends ThemeableElement {
     super.connectedCallback();
     this.addEventListener('keydown', this._onKeydown);
     this.addEventListener('select', this.hide);
+    this.addEventListener('focusout', this._onFocusOut);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('keydown', this._onKeydown);
     this.removeEventListener('select', this.hide);
+    this.removeEventListener('focusout', this._onFocusOut);
     this._cleanupClickOutside?.();
     this._cleanupClickOutside = null;
     this._floatingCleanup?.();
     this._floatingCleanup = null;
   }
 
+  // The slotted trigger otherwise has no indication it opens a menu, or whether that menu is currently open.
+  private _syncTriggerAria() {
+    const trigger = this._triggerEl();
+    if (!trigger) return;
+    trigger.setAttribute('aria-haspopup', 'menu');
+    trigger.setAttribute('aria-expanded', this.open ? 'true' : 'false');
+  }
+
+  // Tab away from the trigger/menu (as opposed to Escape, or a click outside, which are already handled) left
+  // the menu open — nothing closed it once focus moved on. relatedTarget is the element focus is moving *to*;
+  // if that's still somewhere inside this dropdown (the trigger, or an item — both light DOM children of this
+  // element), there's nothing to do.
+  private _onFocusOut = (e: FocusEvent) => {
+    if (!this.open) return;
+    const next = e.relatedTarget as Node | null;
+    if (next && this.contains(next)) return;
+    this.hide();
+  };
+
   updated(changed: Map<string, unknown>) {
+    this._syncTriggerAria();
     if (!changed.has('open')) return;
     if (this._skipNextOpenChange) {
       this._skipNextOpenChange = false;
@@ -140,7 +162,7 @@ export class Dropdown extends ThemeableElement {
   render() {
     return html`
       <div class="trigger-wrap" @click=${this.toggle}>
-        <slot name="trigger"></slot>
+        <slot name="trigger" @slotchange=${this._syncTriggerAria}></slot>
       </div>
       <lt-surface
         class="menu"

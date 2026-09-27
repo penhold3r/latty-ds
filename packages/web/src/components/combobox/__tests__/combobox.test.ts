@@ -154,6 +154,48 @@ describe('<lt-combobox>', () => {
     });
   });
 
+  describe('reopening and closing (CMB-4)', () => {
+    const input = () => el.shadowRoot!.querySelector('input')!;
+    const keydown = (key: string) => input().dispatchEvent(new KeyboardEvent('keydown', { key, cancelable: true }));
+
+    it('ArrowDown reopens after Escape closed it', async () => {
+      input().focus();
+      await el.updateComplete;
+      keydown('Escape');
+      await el.updateComplete;
+      expect(el.hasAttribute('open')).toBe(false);
+
+      keydown('ArrowDown');
+      await el.updateComplete;
+      expect(el.hasAttribute('open')).toBe(true);
+    });
+
+    it('ArrowUp also reopens after Escape closed it', async () => {
+      input().focus();
+      await el.updateComplete;
+      keydown('Escape');
+      await el.updateComplete;
+
+      keydown('ArrowUp');
+      await el.updateComplete;
+      expect(el.hasAttribute('open')).toBe(true);
+    });
+
+    it('closes when focus moves away from the input', async () => {
+      input().focus();
+      await el.updateComplete;
+      expect(el.hasAttribute('open')).toBe(true);
+
+      const outside = document.createElement('button');
+      document.body.appendChild(outside);
+      outside.focus();
+      await el.updateComplete;
+
+      expect(el.hasAttribute('open')).toBe(false);
+      outside.remove();
+    });
+  });
+
   describe('keyboard navigation and ARIA (CMB-1, CMB-2)', () => {
     // A disabled option in the middle is what actually exposes CMB-2: activeIndex counted positions in the
     // enabled-only list, but the render compared it against the unfiltered one, so the two only ever agreed

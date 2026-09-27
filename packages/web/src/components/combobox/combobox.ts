@@ -154,11 +154,21 @@ export class Combobox extends ThemeableElement {
   }
 
   private handleKeydown(e: KeyboardEvent) {
-    const opts = this.enabledOpts;
     if (e.key === 'Escape') {
       this.closeDropdown();
       return;
     }
+    // Closed, arrow keys only ever reopen it — the list itself only opened on focus/click/typing, so once
+    // Escape closed it, arrowing (a natural first instinct) silently did nothing.
+    if (!this.open) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        this.openDropdown();
+      }
+      return;
+    }
+
+    const opts = this.enabledOpts;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       this.activeIndex = Math.min(this.activeIndex + 1, opts.length - 1);
@@ -171,13 +181,22 @@ export class Combobox extends ThemeableElement {
     }
   }
 
+  // Now that options are tabindex="-1" (see SEL-3/CMB-1), the input is the only focusable thing in this
+  // component's shadow root — so any focusout while open means focus is leaving the combobox entirely, unlike
+  // lt-dropdown, which has to check where focus actually went.
+  private _onFocusOut = () => {
+    if (this.open) this.closeDropdown();
+  };
+
   connectedCallback() {
     super.connectedCallback();
     this._cleanupClickOutside = createClickOutsideHandler(this, () => this.closeDropdown(), { event: 'click' });
+    this.addEventListener('focusout', this._onFocusOut);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    this.removeEventListener('focusout', this._onFocusOut);
     this._cleanupClickOutside?.();
     this._cleanupClickOutside = null;
     this._floatingCleanup?.();

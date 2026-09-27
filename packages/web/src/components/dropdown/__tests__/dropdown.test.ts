@@ -153,4 +153,71 @@ describe('<lt-dropdown>', () => {
   it('renders lt-surface as the menu panel', () => {
     expect(el.shadowRoot!.querySelector('lt-surface.menu')).toBeTruthy();
   });
+
+  describe('trigger ARIA and focusout (DDN-2)', () => {
+    let fresh: Dropdown;
+    let trigger: HTMLButtonElement;
+    let item: HTMLElement;
+
+    beforeEach(async () => {
+      fresh = document.createElement('lt-dropdown') as Dropdown;
+      fresh.innerHTML = '<button slot="trigger">Menu</button><lt-dropdown-item>One</lt-dropdown-item>';
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      trigger = fresh.querySelector('button')!;
+      item = fresh.querySelector('lt-dropdown-item')!;
+    });
+
+    afterEach(() => {
+      fresh.remove();
+    });
+
+    it('marks the trigger as a menu button', () => {
+      expect(trigger.getAttribute('aria-haspopup')).toBe('menu');
+      expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('reflects aria-expanded when the menu opens and closes', async () => {
+      fresh.open = true;
+      await fresh.updateComplete;
+      expect(trigger.getAttribute('aria-expanded')).toBe('true');
+
+      fresh.open = false;
+      await fresh.updateComplete;
+      expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('closes when focus moves to something outside the dropdown', async () => {
+      const outside = document.createElement('button');
+      document.body.appendChild(outside);
+      fresh.open = true;
+      await fresh.updateComplete;
+
+      item.dispatchEvent(new FocusEvent('focusout', { relatedTarget: outside, bubbles: true, composed: true }));
+      await fresh.updateComplete;
+
+      expect(fresh.open).toBe(false);
+      outside.remove();
+    });
+
+    it('stays open when focus moves between the trigger and an item', async () => {
+      fresh.open = true;
+      await fresh.updateComplete;
+
+      trigger.dispatchEvent(new FocusEvent('focusout', { relatedTarget: item, bubbles: true, composed: true }));
+      await fresh.updateComplete;
+
+      expect(fresh.open).toBe(true);
+    });
+
+    it('closes when relatedTarget is null (e.g. Tab past the last focusable element on the page)', async () => {
+      fresh.open = true;
+      await fresh.updateComplete;
+
+      item.dispatchEvent(new FocusEvent('focusout', { relatedTarget: null, bubbles: true, composed: true }));
+      await fresh.updateComplete;
+
+      expect(fresh.open).toBe(false);
+    });
+  });
 });

@@ -2752,6 +2752,11 @@
               ]
             },
             {
+              "kind": "field",
+              "name": "_onFocusOut",
+              "privacy": "private"
+            },
+            {
               "kind": "method",
               "name": "updated"
             },
@@ -4114,6 +4119,16 @@
               },
               "privacy": "private",
               "default": "true"
+            },
+            {
+              "kind": "method",
+              "name": "_syncTriggerAria",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_onFocusOut",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -5919,6 +5934,13 @@
               "description": "Reference to all slotted radio elements."
             },
             {
+              "kind": "field",
+              "name": "_radioObserver",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new MutationObserver(() => this._syncRadios())"
+            },
+            {
               "kind": "method",
               "name": "firstUpdated"
             },
@@ -5926,19 +5948,39 @@
               "kind": "method",
               "name": "_syncRadios",
               "privacy": "private",
-              "description": "Wires each radio's `name` and listeners, and drives `checked` from this group's `value` — the direction a\nconsumer setting `group.value = '…'` needs, since that's a plain property assignment on the group, not a\nnative input event any individual radio would otherwise react to."
+              "description": "Wires each radio's `name`, roving tabindex, and listeners, and drives `checked` from this group's `value` —\nthe direction a consumer setting `group.value = '…'` needs, since that's a plain property assignment on the\ngroup, not a native input event any individual radio would otherwise react to."
+            },
+            {
+              "kind": "method",
+              "name": "_select",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "radio",
+                  "type": {
+                    "text": "Radio"
+                  }
+                }
+              ],
+              "description": "Selects a radio (used by both the native-change and keyboard-navigation handlers below)."
             },
             {
               "kind": "field",
               "name": "handleRadioChange",
               "privacy": "private",
-              "description": "Handles change events from individual radio buttons.\nUpdates the group value and ensures only one radio is checked.",
+              "description": "Handles change events from individual radio buttons.",
               "parameters": [
                 {
                   "description": "The change event from a radio button",
                   "name": "e"
                 }
               ]
+            },
+            {
+              "kind": "field",
+              "name": "handleRadioKeydown",
+              "privacy": "private",
+              "description": "Arrow keys move the roving tab stop and, per the native radiogroup's automatic-activation model, select the\nradio moved to — matching a real `<input type=\"radio\">` group, where arrowing both moves focus and checks\nthe newly-focused button. All four directions move (Right/Down forward, Left/Up back), disabled radios are\nskipped entirely, and it wraps at both ends."
             },
             {
               "kind": "method",
@@ -5967,11 +6009,11 @@
           ],
           "events": [
             {
+              "name": "change",
               "type": {
                 "text": "CustomEvent<{value: string}>"
               },
-              "description": "Dispatched when a radio in the group is selected",
-              "name": "change"
+              "description": "Dispatched when a radio in the group is selected"
             }
           ],
           "superclass": {
@@ -6076,6 +6118,15 @@
               },
               "static": true,
               "default": "true"
+            },
+            {
+              "kind": "field",
+              "name": "shadowRootOptions",
+              "type": {
+                "text": "object"
+              },
+              "static": true,
+              "default": "{ ...LitElement.shadowRootOptions, delegatesFocus: true }"
             },
             {
               "kind": "field",
@@ -6191,6 +6242,15 @@
               },
               "default": "''",
               "description": "Value attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "tabbable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "true",
+              "description": "Whether this radio is reachable with Tab. Defaults to true for a standalone radio; `lt-radio-group` drives\nthis itself for its managed radios — a roving tabindex (only the checked radio, or the first enabled one,\nis a Tab stop), matching the native radiogroup pattern."
             },
             {
               "kind": "method",

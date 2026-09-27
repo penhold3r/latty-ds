@@ -82,6 +82,18 @@ describe('<lt-tab-group>', () => {
     expect(el.value).toBe('tab2');
   });
 
+  it('keeps working after being moved in the DOM (reconnected) (TGP-2)', async () => {
+    const otherParent = document.createElement('div');
+    document.body.appendChild(otherParent);
+    otherParent.appendChild(el); // disconnects then reconnects `el`
+    await el.updateComplete;
+
+    const [, tab2] = el.querySelectorAll('lt-tab');
+    (tab2 as HTMLElement).click();
+    expect(el.value).toBe('tab2');
+    otherParent.remove();
+  });
+
   it('dispatches change with the new value on click', () => {
     const handler = vi.fn();
     el.addEventListener('change', handler);
