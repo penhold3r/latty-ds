@@ -294,32 +294,52 @@ describe('<lt-textfield>', () => {
     expect(input?.value).toBe('initial value');
   });
 
-  describe('password visibility toggle', () => {
+  describe('password visibility toggle (TFD-5)', () => {
+    // A real <button>, not a bare <lt-icon>: the icon itself only carries the visual name now.
+    const toggle = () => el.shadowRoot!.querySelector<HTMLButtonElement>('.password-toggle')!;
+    const toggleIconName = () => toggle().querySelector('lt-icon')!.getAttribute('name');
+
+    it('is a real button, reachable by Tab and operable with the keyboard', async () => {
+      el.type = 'password';
+      await el.updateComplete;
+      expect(toggle().tagName).toBe('BUTTON');
+      expect(toggle().type).toBe('button');
+    });
+
     it('shows eye icon for password fields', async () => {
       el.type = 'password';
       await el.updateComplete;
-      const icon = el.shadowRoot!.querySelector('.icon-end');
-      expect(icon?.getAttribute('name')).toBe('eye');
+      expect(toggleIconName()).toBe('eye');
+    });
+
+    it('has an accessible name that reflects the current state', async () => {
+      el.type = 'password';
+      await el.updateComplete;
+      expect(toggle().getAttribute('aria-label')).toBe('Show password');
+      expect(toggle().getAttribute('aria-pressed')).toBe('false');
+
+      toggle().click();
+      await el.updateComplete;
+      expect(toggle().getAttribute('aria-label')).toBe('Hide password');
+      expect(toggle().getAttribute('aria-pressed')).toBe('true');
     });
 
     it('toggles to eye-off icon when clicked', async () => {
       el.type = 'password';
       await el.updateComplete;
-      const icon = el.shadowRoot!.querySelector('.icon-end') as HTMLElement;
-      icon.click();
+      toggle().click();
       await el.updateComplete;
-      expect(icon.getAttribute('name')).toBe('eye-off');
+      expect(toggleIconName()).toBe('eye-off');
     });
 
     it('changes input type to text when password is visible', async () => {
       el.type = 'password';
       await el.updateComplete;
-      const icon = el.shadowRoot!.querySelector('.icon-end') as HTMLElement;
       const input = el.shadowRoot!.querySelector('input');
 
       expect(input?.type).toBe('password');
 
-      icon.click();
+      toggle().click();
       await el.updateComplete;
 
       expect(input?.type).toBe('text');
@@ -328,24 +348,33 @@ describe('<lt-textfield>', () => {
     it('toggles back to password type when eye-off is clicked', async () => {
       el.type = 'password';
       await el.updateComplete;
-      const icon = el.shadowRoot!.querySelector('.icon-end') as HTMLElement;
       const input = el.shadowRoot!.querySelector('input');
 
-      icon.click();
+      toggle().click();
       await el.updateComplete;
       expect(input?.type).toBe('text');
 
-      icon.click();
+      toggle().click();
       await el.updateComplete;
       expect(input?.type).toBe('password');
-      expect(icon.getAttribute('name')).toBe('eye');
+      expect(toggleIconName()).toBe('eye');
     });
 
-    it('has password-toggle class on icon', async () => {
+    it('has password-toggle class alongside icon-end', async () => {
       el.type = 'password';
       await el.updateComplete;
-      const icon = el.shadowRoot!.querySelector('.icon-end');
-      expect(icon?.classList.contains('password-toggle')).toBe(true);
+      expect(toggle().classList.contains('icon-end')).toBe(true);
+    });
+
+    // jsdom doesn't implement the browser default action this guards against (a real .click() there never
+    // moves focus to begin with, unlike real browsers), so this only confirms the guard is wired up; the actual
+    // behavior — the input keeps focus through a real mouse click on the toggle — is verified in Chromium.
+    it('suppresses the mousedown default action that would otherwise steal focus', async () => {
+      el.type = 'password';
+      await el.updateComplete;
+      const event = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+      toggle().dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(true);
     });
   });
 

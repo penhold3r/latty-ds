@@ -250,6 +250,13 @@ export class Textfield extends ThemeableElement {
     this.isPasswordVisible = !this.isPasswordVisible;
   }
 
+  // Clicking the toggle would otherwise focus the button first (the default mousedown action), moving the
+  // caret out of the field. Suppressing just that default action leaves the click itself untouched, and the
+  // input stays focused throughout.
+  private _preventFocusSteal(e: MouseEvent) {
+    e.preventDefault();
+  }
+
   /**
    * Determines the appropriate end icon based on input type and variant.
    *
@@ -365,13 +372,20 @@ export class Textfield extends ThemeableElement {
                 />
               `}
           ${hasEndIcon
-            ? html`
-                <lt-icon
-                  class="icon-end ${isPasswordField ? 'password-toggle' : 'variant-icon'}"
-                  name=${endIconName}
-                  @click=${isPasswordField ? this.togglePasswordVisibility : null}
-                ></lt-icon>
-              `
+            ? isPasswordField
+              ? html`
+                  <button
+                    type="button"
+                    class="icon-end password-toggle"
+                    aria-label=${this.isPasswordVisible ? 'Hide password' : 'Show password'}
+                    aria-pressed=${this.isPasswordVisible ? 'true' : 'false'}
+                    @mousedown=${this._preventFocusSteal}
+                    @click=${this.togglePasswordVisibility}
+                  >
+                    <lt-icon name=${endIconName}></lt-icon>
+                  </button>
+                `
+              : html`<lt-icon class="icon-end variant-icon" name=${endIconName}></lt-icon>`
             : ''}
         </div>
         ${resolvedHelperText

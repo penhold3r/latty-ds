@@ -42,14 +42,28 @@ export const textfieldStyles = css`
     right: var(--lt-spacing-3);
   }
 
+  /* Unlike .variant-icon (a decorative lt-icon), the password toggle is a real <button> — reset the native
+     chrome so it reads as an inline icon, and re-declare align-items since it's no longer a plain absolutely-
+     positioned element inheriting the .icon-start/.icon-end flex-adjacent layout by accident. */
   .password-toggle {
-    pointer-events: auto;
+    align-items: center;
+    background: none;
+    border: none;
     cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    padding: 0;
+    pointer-events: auto;
     transition: color 120ms ease;
   }
 
   .password-toggle:hover {
     color: var(--lt-text-default);
+  }
+
+  .password-toggle:focus-visible {
+    outline: 2px solid var(--lt-border-focus);
+    outline-offset: 2px;
   }
 
   .variant-icon {
