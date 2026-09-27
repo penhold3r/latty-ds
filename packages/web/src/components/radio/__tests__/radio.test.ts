@@ -156,6 +156,77 @@ describe('<lt-radio>', () => {
     expect(input.required).toBe(true);
   });
 
+  describe('grouping without lt-radio-group', () => {
+    // Each <lt-radio> renders its own native <input> in its own separate shadow root, so the browser's native
+    // radio grouping (which only ever sees one input per shadow tree) can never do this by itself — these
+    // radios coordinate directly, without any wrapping <lt-radio-group>.
+    let a: Radio;
+    let b: Radio;
+
+    beforeEach(async () => {
+      a = document.createElement('lt-radio') as Radio;
+      a.name = 'bare-group';
+      a.value = 'a';
+      b = document.createElement('lt-radio') as Radio;
+      b.name = 'bare-group';
+      b.value = 'b';
+      document.body.append(a, b);
+      await Promise.all([a.updateComplete, b.updateComplete]);
+    });
+
+    afterEach(() => {
+      a.remove();
+      b.remove();
+    });
+
+    it('checking one unchecks the other', async () => {
+      const inputA = a.shadowRoot!.querySelector('input') as HTMLInputElement;
+      const inputB = b.shadowRoot!.querySelector('input') as HTMLInputElement;
+      inputA.checked = true;
+      inputA.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+      await a.updateComplete;
+      expect(a.checked).toBe(true);
+      expect(b.checked).toBe(false);
+
+      inputB.checked = true;
+      inputB.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+      await b.updateComplete;
+      expect(a.checked).toBe(false);
+      expect(b.checked).toBe(true);
+    });
+
+    it('does not affect a radio with a different name', async () => {
+      const c = document.createElement('lt-radio') as Radio;
+      c.name = 'a-different-group';
+      c.value = 'c';
+      c.checked = true;
+      document.body.appendChild(c);
+      await c.updateComplete;
+
+      const inputA = a.shadowRoot!.querySelector('input') as HTMLInputElement;
+      inputA.checked = true;
+      inputA.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+      await a.updateComplete;
+
+      expect(c.checked).toBe(true);
+      c.remove();
+    });
+
+    it('stops excluding its old group once renamed out of it', async () => {
+      b.checked = true;
+      await b.updateComplete;
+      b.name = 'a-different-group';
+      await b.updateComplete;
+
+      // b left the group, so checking a must not reach into (and uncheck) it anymore.
+      const inputA = a.shadowRoot!.querySelector('input') as HTMLInputElement;
+      inputA.checked = true;
+      inputA.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+      await a.updateComplete;
+      expect(b.checked).toBe(true);
+    });
+  });
+
   it('renders dot when checked', async () => {
     el.checked = true;
     await el.updateComplete;

@@ -5872,19 +5872,14 @@
               "description": "Reference to all slotted radio elements."
             },
             {
-              "kind": "field",
-              "name": "_attached",
-              "privacy": "private",
-              "default": "new WeakSet<Radio>()"
-            },
-            {
               "kind": "method",
               "name": "firstUpdated"
             },
             {
               "kind": "method",
               "name": "_syncRadios",
-              "privacy": "private"
+              "privacy": "private",
+              "description": "Wires each radio's `name` and listeners, and drives `checked` from this group's `value` — the direction a\nconsumer setting `group.value = '…'` needs, since that's a plain property assignment on the group, not a\nnative input event any individual radio would otherwise react to."
             },
             {
               "kind": "field",
@@ -5903,6 +5898,20 @@
               "name": "handleSlotChange",
               "privacy": "private",
               "description": "Handles slot changes to update radios when content changes."
+            },
+            {
+              "kind": "method",
+              "name": "updated",
+              "privacy": "protected",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ],
+              "description": "A group `value` set by the consumer (`group.value = '…'`) is a plain property assignment — it doesn't pass\nthrough any radio's own change handling, so this is what drives `checked` on the radios to match it."
             },
             {
               "kind": "method",
@@ -6027,6 +6036,32 @@
               "type": {
                 "text": "ElementInternals"
               },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_group",
+              "type": {
+                "text": "Set<Radio> | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "method",
+              "name": "willUpdate",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_joinGroup",
               "privacy": "private"
             },
             {

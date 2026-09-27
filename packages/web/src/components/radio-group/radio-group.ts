@@ -93,24 +93,39 @@ export class RadioGroup extends ThemeableElement {
   @queryAssignedElements({ selector: 'lt-radio' })
   private radios!: Radio[];
 
-  private _attached = new WeakSet<Radio>();
-
-  firstUpdated() {
+  connectedCallback() {
+    super.connectedCallback();
+    // Re-attaches listeners after a reconnect (moving the group in the DOM disconnects and reconnects it
+    // without re-running firstUpdated, which only ever fires once). Harmless to call before the first render
+    // too — _syncRadios no-ops when `this.radios` isn't populated yet.
     this._syncRadios();
-    const checkedRadio = this.radios?.find((r) => r.checked);
-    if (checkedRadio && !this.value) {
-      this.value = checkedRadio.value;
-    }
   }
 
+  firstUpdated() {
+    // Seed `value` from markup (a radio with `checked` and no explicit group `value`) before the first sync,
+    // so that sync doesn't see an empty `value`, match it against no radio, and uncheck the one that should stay.
+    if (!this.value) {
+      const checkedRadio = this.radios?.find((r) => r.checked);
+      if (checkedRadio) this.value = checkedRadio.value;
+    }
+    this._syncRadios();
+  }
+
+  /**
+   * Wires each radio's `name` and listeners, and drives `checked` from this group's `value` — the direction a
+   * consumer setting `group.value = '…'` needs, since that's a plain property assignment on the group, not a
+   * native input event any individual radio would otherwise react to.
+   * @private
+   */
   private _syncRadios() {
     if (!this.radios) return;
     this.radios.forEach((radio) => {
       if (this.name) radio.name = this.name;
-      if (!this._attached.has(radio)) {
-        radio.addEventListener('change', this.handleRadioChange as EventListener);
-        this._attached.add(radio);
-      }
+      radio.checked = radio.value === this.value;
+      // Re-adding the same bound function reference is a no-op per addEventListener's own de-duplication, so
+      // calling this on every sync (slotchange, value/name changes, a reconnect) never stacks up listeners —
+      // and, unlike a "have I seen this one before" set, it also re-attaches one a disconnect actually removed.
+      radio.addEventListener('change', this.handleRadioChange as EventListener);
     });
   }
 
@@ -123,26 +138,22 @@ export class RadioGroup extends ThemeableElement {
    */
   private handleRadioChange = (e: CustomEvent) => {
     const radio = e.target as Radio;
+    if (!radio.checked) return;
 
-    if (radio.checked) {
-      this.value = radio.value;
+    // The radio already excluded the rest of the group itself (see lt-radio's own registry-based mutual
+    // exclusion) — stop its event here rather than let it also reach whatever's outside this group, which
+    // would otherwise double-fire 'change' with two different detail shapes for one selection.
+    e.stopPropagation();
 
-      // Uncheck all other radios
-      this.radios.forEach((r) => {
-        if (r !== radio) {
-          r.checked = false;
-        }
-      });
+    this.value = radio.value;
 
-      // Dispatch group-level change event
-      this.dispatchEvent(
-        new CustomEvent('change', {
-          detail: { value: this.value },
-          bubbles: true,
-          composed: true
-        })
-      );
-    }
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: { value: this.value },
+        bubbles: true,
+        composed: true
+      })
+    );
   };
 
   /**
@@ -151,6 +162,15 @@ export class RadioGroup extends ThemeableElement {
    */
   private handleSlotChange() {
     this._syncRadios();
+  }
+
+  /**
+   * A group `value` set by the consumer (`group.value = '…'`) is a plain property assignment — it doesn't pass
+   * through any radio's own change handling, so this is what drives `checked` on the radios to match it.
+   */
+  protected updated(changed: Map<string, unknown>) {
+    super.updated(changed);
+    if (changed.has('value') || changed.has('name')) this._syncRadios();
   }
 
   /**

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { RadioGroup } from '../radio-group';
 import type { Radio } from '../../radio/radio';
 import '../radio-group';
@@ -107,5 +107,54 @@ describe('<lt-radio-group>', () => {
     el.error = true;
     await el.updateComplete;
     expect(el.hasAttribute('error')).toBe(true);
+  });
+
+  it('unchecks a previously-checked radio when another is selected by click', async () => {
+    const [radio1, , radio3] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+    const input3 = radio3.shadowRoot!.querySelector('input') as HTMLInputElement;
+    input3.checked = true;
+    input3.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+    await el.updateComplete;
+    expect(el.value).toBe('option3');
+    expect(radio1.checked).toBe(false);
+    expect(radio3.checked).toBe(true);
+  });
+
+  it('fires exactly one change event, shaped {value}, when a radio is selected', async () => {
+    const handler = vi.fn();
+    el.addEventListener('change', handler);
+    const [, , radio3] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+    const input3 = radio3.shadowRoot!.querySelector('input') as HTMLInputElement;
+    input3.checked = true;
+    input3.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+    await el.updateComplete;
+
+    expect(handler).toHaveBeenCalledOnce();
+    expect((handler.mock.calls[0][0] as CustomEvent).detail).toEqual({ value: 'option3' });
+  });
+
+  it('syncs checked state to the radios when value is set programmatically', async () => {
+    el.value = 'option3';
+    await el.updateComplete;
+    const [radio1, radio2, radio3] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+    expect(radio1.checked).toBe(false);
+    expect(radio2.checked).toBe(false);
+    expect(radio3.checked).toBe(true);
+  });
+
+  it('keeps working after being moved in the DOM (reconnected)', async () => {
+    const otherParent = document.createElement('div');
+    document.body.appendChild(otherParent);
+    otherParent.appendChild(el); // disconnects then reconnects `el`
+    await el.updateComplete;
+
+    const [, , radio3] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+    const input3 = radio3.shadowRoot!.querySelector('input') as HTMLInputElement;
+    input3.checked = true;
+    input3.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+    await el.updateComplete;
+
+    expect(el.value).toBe('option3');
+    otherParent.remove();
   });
 });

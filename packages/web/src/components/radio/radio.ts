@@ -1,9 +1,34 @@
-import { html } from 'lit';
+import { html, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { radioStyles } from './radio.styles';
 import { RadioSize, RadioVariant, RadioLabelPosition } from './radio.types';
+
+/**
+ * Groups radios that share a `name`, scoped to the nearest form (or else the containing root — a document or
+ * shadow root), matching how native `<input type="radio">` groups are scoped. This is what lets a bare
+ * `<lt-radio name="…">` — one with no `lt-radio-group` wrapping it — exclude its siblings correctly: each
+ * instance renders its own `<input>` in its own separate shadow root, so the browser's native grouping (which
+ * only ever sees one radio input per shadow tree) can never do this on its own.
+ */
+const radioRegistries = new WeakMap<Node, Map<string, Set<Radio>>>();
+
+const radioGroupFor = (radio: Radio): Set<Radio> | null => {
+  if (!radio.name) return null;
+  const scope: Node = radio.closest('form') ?? radio.getRootNode();
+  let byName = radioRegistries.get(scope);
+  if (!byName) {
+    byName = new Map();
+    radioRegistries.set(scope, byName);
+  }
+  let group = byName.get(radio.name);
+  if (!group) {
+    group = new Set();
+    byName.set(radio.name, group);
+  }
+  return group;
+};
 
 /**
  * A customizable radio button component with support for multiple variants and sizes.
@@ -47,10 +72,35 @@ export class Radio extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+  private _group: Set<Radio> | null = null;
 
   constructor() {
     super();
     this._internals = this.attachInternals();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._joinGroup();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._group?.delete(this);
+    this._group = null;
+  }
+
+  override willUpdate(changed: PropertyValues<this>) {
+    super.willUpdate(changed);
+    // A renamed radio (e.g. lt-radio-group re-assigning `name`) needs to leave its old group and join the new
+    // one — otherwise it would keep excluding radios it no longer shares a name with.
+    if (changed.has('name')) this._joinGroup();
+  }
+
+  private _joinGroup() {
+    this._group?.delete(this);
+    this._group = radioGroupFor(this);
+    this._group?.add(this);
   }
 
   /**
@@ -144,6 +194,14 @@ export class Radio extends ThemeableElement {
     e.stopPropagation();
     const target = e.target as HTMLInputElement;
     this.checked = target.checked;
+
+    // Exclude the rest of the group directly — native <input> grouping can't do this itself, since each
+    // instance's input lives in its own separate shadow root (see radioGroupFor's doc comment).
+    if (this.checked) {
+      this._group?.forEach((other) => {
+        if (other !== this) other.checked = false;
+      });
+    }
 
     this.dispatchEvent(
       new CustomEvent('change', {
