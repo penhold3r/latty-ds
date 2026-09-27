@@ -1,7 +1,8 @@
-import { html, nothing } from 'lit';
+import { html, nothing, LitElement } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { classMap } from 'lit/directives/class-map.js';
 
 import { buttonStyles } from './button.styles';
 import { ButtonAppearance, ButtonSize, ButtonType, ButtonVariant } from './button.types';
@@ -51,6 +52,10 @@ import '@latty-ds/icons';
 export class Button extends ThemeableElement {
   static styles = buttonStyles;
   static formAssociated = true;
+  // Makes host.focus() move focus into the shadow root (the inner <button>/<a>) instead of being a no-op —
+  // without it, activeElement never leaves <body>, silently breaking autofocus and any focus restore that calls
+  // .focus() on this element (a closed dialog/dropdown returning focus to its trigger, for example).
+  static override shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
 
   private _internals: ElementInternals;
 
@@ -60,6 +65,28 @@ export class Button extends ThemeableElement {
     super();
     this._internals = this.attachInternals();
   }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Capture phase, so it runs before the event reaches anything — including a consumer's own listener on this
+    // element. Needed because the native disabled attribute on the inner button doesn't reliably stop every click
+    // from reaching the host: content it renders while busy (the spinner, or an icon) can end up as the browser's
+    // actual click target instead of the disabled <button> itself, slipping past the native block (verified in
+    // Chromium: a loading button's host listener still fires once per click). This closes that gap unconditionally.
+    this.addEventListener('click', this._blockClickWhileBusy, { capture: true });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('click', this._blockClickWhileBusy, { capture: true });
+  }
+
+  private _blockClickWhileBusy = (e: Event) => {
+    if (this.disabled || this.loading) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  };
 
   /**
    * Visual variant that determines the button's color scheme.
@@ -157,13 +184,17 @@ export class Button extends ThemeableElement {
 
   render() {
     const isDisabled = this.disabled || this.loading;
-    const inner = this.loading
-      ? html`<lt-spinner></lt-spinner>`
-      : html`
-          ${this.iconStart ? html`<lt-icon class="icon-start" name=${this.iconStart}></lt-icon>` : ''}
-          <slot></slot>
-          ${this.iconEnd ? html`<lt-icon class="icon-end" name=${this.iconEnd}></lt-icon>` : ''}
-        `;
+    // The label stays in the DOM (and in the accessibility tree) while loading, just visually hidden with
+    // opacity — not removed — so the button keeps its accessible name instead of reading as an unnamed busy
+    // control, and keeps its width instead of shrinking to fit only the spinner.
+    const inner = html`
+      <span class=${classMap({ label: true, 'is-loading': this.loading })} part="label">
+        ${this.iconStart ? html`<lt-icon class="icon-start" name=${this.iconStart}></lt-icon>` : ''}
+        <slot></slot>
+        ${this.iconEnd ? html`<lt-icon class="icon-end" name=${this.iconEnd}></lt-icon>` : ''}
+      </span>
+      ${this.loading ? html`<lt-spinner class="spinner" part="spinner"></lt-spinner>` : ''}
+    `;
 
     if (this.href) {
       const rel = this.rel || (this.target === '_blank' ? 'noopener noreferrer' : undefined);

@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { axe } from 'vitest-axe';
-import type { Button } from '../button';
-import '../button';
+import { Button } from '../button';
 
 describe('<lt-button>', () => {
   let el: Button;
@@ -71,6 +70,23 @@ describe('<lt-button>', () => {
     expect(btn.hasAttribute('disabled')).toBe(true);
   });
 
+  it('blocks a click that reaches the host while disabled', async () => {
+    el.disabled = true;
+    await el.updateComplete;
+    const handler = vi.fn();
+    el.addEventListener('click', handler);
+    el.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, cancelable: true }));
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  // jsdom doesn't implement delegatesFocus (shadowRoot.delegatesFocus itself is undefined, not just false), so
+  // this only confirms the option was requested; the actual focus-moves-in behavior is verified in a real
+  // browser (Chromium), where host.focus() correctly moves document.activeElement onto the inner <button>.
+  it('requests a focus-delegating shadow root', () => {
+    expect(el.shadowRoot!.mode).toBe('open');
+    expect(Button.shadowRootOptions.delegatesFocus).toBe(true);
+  });
+
   it('is not loading by default', () => {
     expect(el.loading).toBe(false);
   });
@@ -90,11 +106,50 @@ describe('<lt-button>', () => {
     expect(btn.getAttribute('aria-busy')).toBe('true');
   });
 
-  it('hides slot content when loading', async () => {
+  it('keeps the label (and its slot) in the DOM while loading, only visually hidden', async () => {
     el.loading = true;
     await el.updateComplete;
-    const slot = el.shadowRoot!.querySelector('slot');
-    expect(slot).toBeFalsy();
+    const label = el.shadowRoot!.querySelector('.label')!;
+    expect(label.querySelector('slot')).toBeTruthy();
+    expect(label.classList.contains('is-loading')).toBe(true);
+  });
+
+  it('stops removing the label from the DOM once loading ends', async () => {
+    el.loading = true;
+    await el.updateComplete;
+    el.loading = false;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.label')!.classList.contains('is-loading')).toBe(false);
+  });
+
+  it('blocks a click that reaches the host while loading, even one a consumer listener would otherwise see', async () => {
+    el.loading = true;
+    await el.updateComplete;
+    const handler = vi.fn();
+    el.addEventListener('click', handler);
+    el.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, cancelable: true }));
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it('blocks a click composed out of nested shadow content (the spinner) while loading', async () => {
+    el.loading = true;
+    await el.updateComplete;
+    const handler = vi.fn();
+    el.addEventListener('click', handler);
+    const spinner = el.shadowRoot!.querySelector('lt-spinner')!.shadowRoot!.querySelector('.spinner')!;
+    spinner.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, cancelable: true }));
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it('does not block a click once loading ends', async () => {
+    el.loading = true;
+    await el.updateComplete;
+    el.loading = false;
+    await el.updateComplete;
+    const handler = vi.fn();
+    el.addEventListener('click', handler);
+    el.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, cancelable: true }));
+    expect(handler).toHaveBeenCalledOnce();
   });
 
   it.each(['primary', 'secondary', 'neutral', 'success', 'warning', 'error', 'info'] as const)(

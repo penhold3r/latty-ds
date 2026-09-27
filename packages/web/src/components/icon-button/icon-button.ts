@@ -67,6 +67,28 @@ export class IconButton extends ThemeableElement {
   /** Whether the button is disabled. */
   @property({ type: Boolean, reflect: true }) disabled = false;
 
+  connectedCallback() {
+    super.connectedCallback();
+    // Capture phase, so it runs before the event reaches anything else — including a consumer's own listener on
+    // this element. The native disabled attribute on the inner button doesn't reliably stop every click from
+    // reaching the host: the icon it renders (its own shadow host) can end up as the browser's actual click
+    // target instead of the disabled <button> itself, slipping past the native block (verified in Chromium: a
+    // disabled icon button's host listener still fires once per click). This closes that gap unconditionally.
+    this.addEventListener('click', this._blockClickWhileDisabled, { capture: true });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('click', this._blockClickWhileDisabled, { capture: true });
+  }
+
+  private _blockClickWhileDisabled = (e: Event) => {
+    if (this.disabled) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  };
+
   /** When set, renders an `<a>` tag instead of `<button>`. */
   @property() href = '';
 

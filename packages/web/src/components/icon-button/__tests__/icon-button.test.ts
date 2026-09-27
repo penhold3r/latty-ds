@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { IconButton } from '../icon-button';
 import '../icon-button';
 
@@ -71,6 +71,37 @@ describe('<lt-icon-button>', () => {
     await el.updateComplete;
     const btn = el.shadowRoot!.querySelector('button[part="base"]') as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
+  });
+
+  it('blocks a click that reaches the host while disabled', async () => {
+    el.disabled = true;
+    await el.updateComplete;
+    const handler = vi.fn();
+    el.addEventListener('click', handler);
+    el.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, cancelable: true }));
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it('blocks a click composed out of the icon (its own shadow host) while disabled', async () => {
+    el.icon = 'xmark';
+    el.disabled = true;
+    await el.updateComplete;
+    const handler = vi.fn();
+    el.addEventListener('click', handler);
+    const icon = el.shadowRoot!.querySelector('lt-icon')!;
+    icon.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, cancelable: true }));
+    expect(handler).not.toHaveBeenCalled();
+  });
+
+  it('does not block a click once no longer disabled', async () => {
+    el.disabled = true;
+    await el.updateComplete;
+    el.disabled = false;
+    await el.updateComplete;
+    const handler = vi.fn();
+    el.addEventListener('click', handler);
+    el.dispatchEvent(new MouseEvent('click', { bubbles: true, composed: true, cancelable: true }));
+    expect(handler).toHaveBeenCalledOnce();
   });
 
   it('reflects round attribute', async () => {

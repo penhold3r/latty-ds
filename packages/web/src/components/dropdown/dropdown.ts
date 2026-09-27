@@ -30,6 +30,12 @@ export class Dropdown extends ThemeableElement {
 
   private _cleanupClickOutside: (() => void) | null = null;
   private _floatingCleanup: (() => void) | null = null;
+  // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
+  // ever opened. Without this, mounting a closed dropdown fired `close` and moved focus to the trigger on page
+  // load (verified: activeElement jumped to a native <button> trigger). Ships with lt-button's `delegatesFocus`
+  // (BTN-4) — before that, the same first-update run was a no-op for an `lt-button` trigger anyway, since its
+  // `.focus()` did nothing.
+  private _skipNextOpenChange = true;
 
   connectedCallback() {
     super.connectedCallback();
@@ -49,6 +55,10 @@ export class Dropdown extends ThemeableElement {
 
   updated(changed: Map<string, unknown>) {
     if (!changed.has('open')) return;
+    if (this._skipNextOpenChange) {
+      this._skipNextOpenChange = false;
+      return;
+    }
     if (this.open) {
       this._cleanupClickOutside = createClickOutsideHandler(this, () => this.hide(), { event: 'click', capture: true });
       const triggerEl = this._triggerEl() ?? this;

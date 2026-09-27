@@ -37,11 +37,31 @@ export const buttonStyles = css`
     justify-content: center;
     line-height: 1;
     min-width: var(--lt-button-min-width, 88px);
+    position: relative;
     user-select: none;
     transition:
       background-color 120ms ease,
       border-color 120ms ease,
       transform 50ms ease;
+  }
+
+  /* Wraps the icons/slot so it can be hidden (opacity, not display/visibility — that would drop it from the
+     accessibility tree too) while loading without collapsing the button's width or its accessible name. */
+  .label {
+    align-items: center;
+    display: inline-flex;
+    gap: inherit;
+  }
+
+  .label.is-loading {
+    opacity: 0;
+  }
+
+  /* Centered over the (invisible but still laid-out) label, not laid out alongside it. */
+  .spinner {
+    inset: 0;
+    margin: auto;
+    position: absolute;
   }
 
   [part='base']:active {

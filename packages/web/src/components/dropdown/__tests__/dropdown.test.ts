@@ -71,6 +71,18 @@ describe('<lt-dropdown>', () => {
     expect(el.open).toBe(false);
   });
 
+  it('does not dispatch close or move focus on first render, since it never opened', async () => {
+    const fresh = document.createElement('lt-dropdown') as Dropdown;
+    fresh.innerHTML = '<button slot="trigger">Menu</button>';
+    const spy = vi.fn();
+    fresh.addEventListener('close', spy);
+    document.body.appendChild(fresh);
+    await fresh.updateComplete;
+    expect(spy).not.toHaveBeenCalled();
+    expect(document.activeElement).not.toBe(fresh.querySelector('button'));
+    fresh.remove();
+  });
+
   it('dispatches lt-open when opened', async () => {
     const spy = vi.fn();
     el.addEventListener('open', spy);
