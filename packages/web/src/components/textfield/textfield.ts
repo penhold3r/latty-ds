@@ -7,6 +7,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { textfieldStyles } from './textfield.styles';
 import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant } from './textfield.types';
 import { FormDefaultController } from '../shared/form-default';
+import { FormDisabledController } from '../shared/form-disabled';
 import '@latty-ds/icons';
 import '../text/text';
 
@@ -56,6 +57,7 @@ export class Textfield extends ThemeableElement {
 
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
+  private _fieldsetDisabled = new FormDisabledController(this);
 
   constructor() {
     super();
@@ -306,6 +308,15 @@ export class Textfield extends ThemeableElement {
     this._autoError = false;
   }
 
+  formDisabledCallback(disabled: boolean) {
+    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  }
+
+  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
+  private get _isDisabled(): boolean {
+    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
+  }
+
   checkValidity() {
     return this._internals.checkValidity();
   }
@@ -346,7 +357,7 @@ export class Textfield extends ThemeableElement {
                   rows=${this.rows}
                   minlength=${ifDefined(this.min !== null ? this.min : undefined)}
                   maxlength=${ifDefined(this.max !== null ? this.max : undefined)}
-                  ?disabled=${this.disabled}
+                  ?disabled=${this._isDisabled}
                   ?required=${this.required}
                   ?readonly=${this.readonly}
                   @input=${this.handleInput}
@@ -367,7 +378,7 @@ export class Textfield extends ThemeableElement {
                   max=${ifDefined(isNumber && this.max !== null ? this.max : undefined)}
                   minlength=${ifDefined(!isNumber && this.min !== null ? this.min : undefined)}
                   maxlength=${ifDefined(!isNumber && this.max !== null ? this.max : undefined)}
-                  ?disabled=${this.disabled}
+                  ?disabled=${this._isDisabled}
                   ?required=${this.required}
                   ?readonly=${this.readonly}
                   @input=${this.handleInput}
@@ -384,6 +395,7 @@ export class Textfield extends ThemeableElement {
                   <button
                     type="button"
                     class="icon-end password-toggle"
+                    ?disabled=${this._isDisabled}
                     aria-label=${this.isPasswordVisible ? 'Hide password' : 'Show password'}
                     aria-pressed=${this.isPasswordVisible ? 'true' : 'false'}
                     @mousedown=${this._preventFocusSteal}

@@ -256,6 +256,53 @@ describe('<lt-button>', () => {
     });
   });
 
+  describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
+    it('disables the inner button without touching the disabled property/attribute', async () => {
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
+      expect(button.disabled).toBe(true);
+      expect(el.disabled).toBe(false);
+      expect(el.hasAttribute('disabled')).toBe(false);
+    });
+
+    it('re-enables once the fieldset is enabled again', async () => {
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      el.formDisabledCallback(false);
+      await el.updateComplete;
+      const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
+      expect(button.disabled).toBe(false);
+    });
+
+    it('does not re-enable if it was also explicitly disabled', async () => {
+      el.disabled = true;
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      el.formDisabledCallback(false);
+      await el.updateComplete;
+      const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;
+      expect(button.disabled).toBe(true);
+    });
+
+    it('blocks form submission while fieldset-disabled', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+
+      const requestSubmit = vi.fn();
+      vi.spyOn(form, 'requestSubmit').mockImplementation(requestSubmit);
+
+      el.type = 'submit';
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(requestSubmit).not.toHaveBeenCalled();
+      form.remove();
+    });
+  });
+
   describe('aria forwarding', () => {
     // MutationObserver callbacks are async — flush them before asserting
     const tick = () => new Promise((resolve) => setTimeout(resolve, 0));

@@ -60,7 +60,10 @@ export const comboboxStyles = [
       border-color: var(--lt-color-warning-500);
     }
 
-    :host([disabled]) .input-wrap {
+    /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a
+       disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */
+    :host([disabled]) .input-wrap,
+    :host(:disabled) .input-wrap {
       background: var(--lt-bg-neutral-subtle);
       cursor: not-allowed;
       pointer-events: none;
@@ -80,7 +83,8 @@ export const comboboxStyles = [
       color: var(--lt-text-placeholder, var(--lt-color-neutral-400));
     }
 
-    :host([disabled]) input {
+    :host([disabled]) input,
+    :host(:disabled) input {
       color: var(--lt-text-subtle);
       cursor: not-allowed;
     }

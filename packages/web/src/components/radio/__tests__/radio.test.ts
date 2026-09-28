@@ -261,4 +261,34 @@ describe('<lt-radio>', () => {
       fresh.remove();
     });
   });
+
+  describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
+    it('disables the inner input without touching the disabled property/attribute', async () => {
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      const input = el.shadowRoot!.querySelector('input[type="radio"]') as HTMLInputElement;
+      expect(input.disabled).toBe(true);
+      expect(el.disabled).toBe(false);
+      expect(el.hasAttribute('disabled')).toBe(false);
+    });
+
+    it('re-enables once the fieldset is enabled again', async () => {
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      el.formDisabledCallback(false);
+      await el.updateComplete;
+      const input = el.shadowRoot!.querySelector('input[type="radio"]') as HTMLInputElement;
+      expect(input.disabled).toBe(false);
+    });
+
+    it('does not re-enable if it was also explicitly disabled', async () => {
+      el.disabled = true;
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      el.formDisabledCallback(false);
+      await el.updateComplete;
+      const input = el.shadowRoot!.querySelector('input[type="radio"]') as HTMLInputElement;
+      expect(input.disabled).toBe(true);
+    });
+  });
 });

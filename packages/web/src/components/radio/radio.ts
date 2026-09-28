@@ -5,6 +5,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { radioStyles } from './radio.styles';
 import { RadioSize, RadioVariant, RadioLabelPosition } from './radio.types';
 import { FormDefaultController } from '../shared/form-default';
+import { FormDisabledController } from '../shared/form-disabled';
 
 /**
  * Groups radios that share a `name`, scoped to the nearest form (or else the containing root — a document or
@@ -79,6 +80,7 @@ export class Radio extends ThemeableElement {
   private _internals!: ElementInternals;
   private _group: Set<Radio> | null = null;
   private _default = new FormDefaultController(this, () => this.checked);
+  private _fieldsetDisabled = new FormDisabledController(this);
 
   constructor() {
     super();
@@ -189,6 +191,15 @@ export class Radio extends ThemeableElement {
     this.checked = this._default.value;
   }
 
+  formDisabledCallback(disabled: boolean) {
+    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  }
+
+  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
+  private get _isDisabled(): boolean {
+    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
+  }
+
   checkValidity() {
     return this._internals.checkValidity();
   }
@@ -236,7 +247,7 @@ export class Radio extends ThemeableElement {
           <input
             type="radio"
             .checked=${this.checked}
-            ?disabled=${this.disabled}
+            ?disabled=${this._isDisabled}
             ?required=${this.required}
             name=${this.name}
             value=${this.value}

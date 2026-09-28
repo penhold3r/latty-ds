@@ -5,6 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { checkboxStyles } from './checkbox.styles';
 import { CheckboxSize, CheckboxVariant, CheckboxLabelPosition } from './checkbox.types';
 import { FormDefaultController } from '../shared/form-default';
+import { FormDisabledController } from '../shared/form-disabled';
 
 import '@latty-ds/icons';
 
@@ -45,6 +46,7 @@ export class Checkbox extends ThemeableElement {
 
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.checked);
+  private _fieldsetDisabled = new FormDisabledController(this);
 
   constructor() {
     super();
@@ -137,6 +139,15 @@ export class Checkbox extends ThemeableElement {
     this.checked = this._default.value;
   }
 
+  formDisabledCallback(disabled: boolean) {
+    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  }
+
+  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
+  private get _isDisabled(): boolean {
+    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
+  }
+
   checkValidity() {
     return this._internals.checkValidity();
   }
@@ -193,7 +204,7 @@ export class Checkbox extends ThemeableElement {
           <input
             type="checkbox"
             .checked=${this.checked}
-            ?disabled=${this.disabled}
+            ?disabled=${this._isDisabled}
             ?required=${this.required}
             name=${this.name}
             value=${this.value}

@@ -157,6 +157,41 @@ describe('<lt-textfield>', () => {
     expect(input?.hasAttribute('disabled')).toBe(true);
   });
 
+  describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
+    it('disables the inner input without touching the disabled property/attribute', async () => {
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('input')!.hasAttribute('disabled')).toBe(true);
+      expect(el.disabled).toBe(false);
+      expect(el.hasAttribute('disabled')).toBe(false);
+    });
+
+    it('re-enables the inner input once the fieldset is enabled again', async () => {
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      el.formDisabledCallback(false);
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('input')!.hasAttribute('disabled')).toBe(false);
+    });
+
+    it('does not re-enable the input if it was also explicitly disabled', async () => {
+      el.disabled = true;
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      el.formDisabledCallback(false); // fieldset re-enabled, but el.disabled is still true
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('input')!.hasAttribute('disabled')).toBe(true);
+    });
+
+    it('disables the password toggle too', async () => {
+      el.type = 'password';
+      await el.updateComplete;
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.password-toggle')!.hasAttribute('disabled')).toBe(true);
+    });
+  });
+
   it('can be readonly', async () => {
     el.readonly = true;
     await el.updateComplete;

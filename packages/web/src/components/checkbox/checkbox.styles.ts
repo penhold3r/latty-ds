@@ -23,7 +23,10 @@ export const checkboxStyles = css`
     flex-direction: row-reverse;
   }
 
-  :host([disabled]) .checkbox-wrapper {
+  /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a
+     disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */
+  :host([disabled]) .checkbox-wrapper,
+  :host(:disabled) .checkbox-wrapper {
     cursor: not-allowed;
     opacity: 0.6;
   }

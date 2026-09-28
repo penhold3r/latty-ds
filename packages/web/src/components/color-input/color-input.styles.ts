@@ -15,7 +15,10 @@ export const colorInputStyles = css`
     cursor: pointer;
   }
 
-  :host([disabled]) .wrapper {
+  /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled
+     <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */
+  :host([disabled]) .wrapper,
+  :host(:disabled) .wrapper {
     cursor: not-allowed;
   }
 
@@ -48,7 +51,8 @@ export const colorInputStyles = css`
     outline: none;
   }
 
-  :host([disabled]) .input-container {
+  :host([disabled]) .input-container,
+  :host(:disabled) .input-container {
     background: var(--lt-bg-surface);
   }
 
@@ -79,7 +83,8 @@ export const colorInputStyles = css`
     color: var(--lt-text-muted);
   }
 
-  :host([disabled]) .display-value {
+  :host([disabled]) .display-value,
+  :host(:disabled) .display-value {
     color: var(--lt-text-muted);
   }
 

@@ -74,6 +74,42 @@ describe('<lt-select>', () => {
     expect(trigger.getAttribute('aria-disabled')).toBe('true');
   });
 
+  describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
+    it('marks the trigger disabled without touching the disabled property/attribute', async () => {
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      const trigger = el.shadowRoot!.querySelector('.select-trigger')!;
+      expect(trigger.getAttribute('aria-disabled')).toBe('true');
+      expect(trigger.getAttribute('tabindex')).toBe('-1');
+      expect(el.disabled).toBe(false);
+    });
+
+    it('re-enables once the fieldset is enabled again', async () => {
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      el.formDisabledCallback(false);
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.select-trigger')!.getAttribute('aria-disabled')).toBe('false');
+    });
+
+    it('does not re-enable if it was also explicitly disabled', async () => {
+      el.disabled = true;
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      el.formDisabledCallback(false);
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.select-trigger')!.getAttribute('aria-disabled')).toBe('true');
+    });
+
+    it('stops the dropdown from opening while fieldset-disabled', async () => {
+      el.formDisabledCallback(true);
+      await el.updateComplete;
+      el.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!.click();
+      await el.updateComplete;
+      expect(el.hasAttribute('open')).toBe(false);
+    });
+  });
+
   it('is not required by default', () => {
     expect(el.required).toBe(false);
   });

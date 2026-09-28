@@ -10,6 +10,7 @@ import '../surface/';
 import '../text/text';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
+import { FormDisabledController } from '../shared/form-disabled';
 
 let selectCount = 0;
 
@@ -51,6 +52,7 @@ export class Select extends ThemeableElement {
 
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
+  private _fieldsetDisabled = new FormDisabledController(this);
 
   // Scopes generated option/listbox ids to this instance, so two selects on the same page don't collide.
   private readonly _uid = `lt-select-${selectCount++}`;
@@ -163,7 +165,7 @@ export class Select extends ThemeableElement {
    * @private
    */
   private toggleDropdown() {
-    if (!this.disabled) {
+    if (!this._isDisabled) {
       this.isOpen = !this.isOpen;
     }
   }
@@ -200,7 +202,7 @@ export class Select extends ThemeableElement {
    * @private
    */
   private handleKeydown(e: KeyboardEvent) {
-    if (this.disabled) return;
+    if (this._isDisabled) return;
 
     const { key } = e;
 
@@ -289,6 +291,15 @@ export class Select extends ThemeableElement {
     this.value = this._default.value;
   }
 
+  formDisabledCallback(disabled: boolean) {
+    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  }
+
+  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
+  private get _isDisabled(): boolean {
+    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
+  }
+
   checkValidity() {
     return this._internals.checkValidity();
   }
@@ -319,11 +330,11 @@ export class Select extends ThemeableElement {
             role="combobox"
             aria-haspopup="listbox"
             aria-expanded=${this.isOpen}
-            aria-disabled=${this.disabled}
+            aria-disabled=${this._isDisabled}
             aria-label=${this.label || this.placeholder}
             aria-controls=${this.isOpen ? listboxId : nothing}
             aria-activedescendant=${this.isOpen && activeOption ? this._idFor(activeOption) : nothing}
-            tabindex=${this.disabled ? '-1' : '0'}
+            tabindex=${this._isDisabled ? '-1' : '0'}
             @click=${this.toggleDropdown}
             @keydown=${this.handleKeydown}
           >

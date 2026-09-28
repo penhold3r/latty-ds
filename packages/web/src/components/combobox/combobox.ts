@@ -9,6 +9,7 @@ import '@latty-ds/icons';
 import '../text/text';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
+import { FormDisabledController } from '../shared/form-disabled';
 
 let comboboxCount = 0;
 
@@ -35,6 +36,7 @@ export class Combobox extends ThemeableElement {
 
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
+  private _fieldsetDisabled = new FormDisabledController(this);
 
   // Scopes generated option/listbox ids to this instance, so two comboboxes on the same page don't collide.
   private readonly _uid = `lt-combobox-${comboboxCount++}`;
@@ -116,7 +118,7 @@ export class Combobox extends ThemeableElement {
   private async openDropdown() {
     // A click on the field fires both `focus` and `click`; a second call would start a second floating autoUpdate
     // and overwrite the first one's cleanup, leaking a scroll/resize listener pair on every open.
-    if (this.disabled || this.open) return;
+    if (this._isDisabled || this.open) return;
     this.open = true;
     this.setAttribute('open', '');
     this.query = '';
@@ -221,6 +223,15 @@ export class Combobox extends ThemeableElement {
     this.value = this._default.value;
   }
 
+  formDisabledCallback(disabled: boolean) {
+    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  }
+
+  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
+  private get _isDisabled(): boolean {
+    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
+  }
+
   checkValidity() {
     return this._internals.checkValidity();
   }
@@ -247,7 +258,7 @@ export class Combobox extends ThemeableElement {
           autocomplete="off"
           placeholder=${this.open ? this.placeholder : this.selectedLabel || this.placeholder}
           .value=${displayValue}
-          ?disabled=${this.disabled}
+          ?disabled=${this._isDisabled}
           @focus=${this.handleFocus}
           @input=${this.handleInput}
           @keydown=${this.handleKeydown}

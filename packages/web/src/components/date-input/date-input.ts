@@ -11,6 +11,7 @@ import type { Calendar } from '../calendar/calendar';
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
+import { FormDisabledController } from '../shared/form-disabled';
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
@@ -51,6 +52,7 @@ export class DateInput extends ThemeableElement {
 
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
+  private _fieldsetDisabled = new FormDisabledController(this);
 
   constructor() {
     super();
@@ -120,7 +122,7 @@ export class DateInput extends ThemeableElement {
   }
 
   private async _openDropdown() {
-    if (this.disabled || this._open) return;
+    if (this._isDisabled || this._open) return;
     this._open = true;
     await this.updateComplete;
     const btn = this.shadowRoot?.querySelector<HTMLElement>('#field-btn');
@@ -182,6 +184,15 @@ export class DateInput extends ThemeableElement {
     this.value = this._default.value;
   }
 
+  formDisabledCallback(disabled: boolean) {
+    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  }
+
+  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
+  private get _isDisabled(): boolean {
+    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
+  }
+
   checkValidity() {
     return this._internals.checkValidity();
   }
@@ -210,7 +221,7 @@ export class DateInput extends ThemeableElement {
             class="field-btn"
             aria-haspopup="dialog"
             aria-expanded=${this._open ? 'true' : 'false'}
-            ?disabled=${this.disabled}
+            ?disabled=${this._isDisabled}
             ?required=${this.required}
             @click=${this._openDropdown}
           >

@@ -61,6 +61,11 @@ export const textfieldStyles = css`
     color: var(--lt-text-default);
   }
 
+  .password-toggle:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
   .password-toggle:focus-visible {
     outline: 2px solid var(--lt-border-focus);
     outline-offset: 2px;

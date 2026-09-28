@@ -123,12 +123,15 @@ export const sliderStyles = css`
     --lt-slider-thumb-size: 22px;
   }
 
-  /* Disabled */
-  :host([disabled]) {
+  /* Disabled. :host(:disabled) — the browser matches this automatically for a form-associated element inside a
+     disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */
+  :host([disabled]),
+  :host(:disabled) {
     opacity: 0.5;
   }
 
-  :host([disabled]) input[type='range'] {
+  :host([disabled]) input[type='range'],
+  :host(:disabled) input[type='range'] {
     cursor: not-allowed;
     pointer-events: none;
   }

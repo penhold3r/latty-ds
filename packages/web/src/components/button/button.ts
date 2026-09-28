@@ -7,6 +7,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { buttonStyles } from './button.styles';
 import { ButtonAppearance, ButtonSize, ButtonType, ButtonVariant } from './button.types';
 import { AriaForwardingController } from '../shared/aria-forwarding';
+import { FormDisabledController } from '../shared/form-disabled';
 
 import '../spinner/';
 import '@latty-ds/icons';
@@ -60,6 +61,7 @@ export class Button extends ThemeableElement {
   private _internals: ElementInternals;
 
   private _ariaForwarding = new AriaForwardingController(this, () => this.shadowRoot?.querySelector('[part="base"]'));
+  private _fieldsetDisabled = new FormDisabledController(this);
 
   constructor() {
     super();
@@ -82,11 +84,15 @@ export class Button extends ThemeableElement {
   }
 
   private _blockClickWhileBusy = (e: Event) => {
-    if (this.disabled || this.loading) {
+    if (this.disabled || this.loading || this._fieldsetDisabled.fieldsetDisabled) {
       e.preventDefault();
       e.stopImmediatePropagation();
     }
   };
+
+  formDisabledCallback(disabled: boolean) {
+    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  }
 
   /**
    * Visual variant that determines the button's color scheme.
@@ -175,7 +181,7 @@ export class Button extends ThemeableElement {
   @property({ reflect: true }) type: ButtonType = 'button';
 
   private _handleClick() {
-    if (this.disabled || this.loading) return;
+    if (this.disabled || this.loading || this._fieldsetDisabled.fieldsetDisabled) return;
     const form = this.closest('form') as HTMLFormElement | null;
     if (!form) return;
     if (this.type === 'submit') form.requestSubmit();
@@ -183,7 +189,7 @@ export class Button extends ThemeableElement {
   }
 
   render() {
-    const isDisabled = this.disabled || this.loading;
+    const isDisabled = this.disabled || this.loading || this._fieldsetDisabled.fieldsetDisabled;
     // The label stays in the DOM (and in the accessibility tree) while loading, just visually hidden with
     // opacity — not removed — so the button keeps its accessible name instead of reading as an unnamed busy
     // control, and keeps its width instead of shrinking to fit only the spinner.

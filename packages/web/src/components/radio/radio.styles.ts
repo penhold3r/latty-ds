@@ -22,7 +22,10 @@ export const radioStyles = css`
     flex-direction: row-reverse;
   }
 
-  :host([disabled]) .radio-wrapper {
+  /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a
+     disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */
+  :host([disabled]) .radio-wrapper,
+  :host(:disabled) .radio-wrapper {
     cursor: not-allowed;
     opacity: 0.6;
   }

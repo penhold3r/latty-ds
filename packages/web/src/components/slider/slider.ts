@@ -5,6 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { sliderStyles } from './slider.styles';
 import type { SliderSize } from './slider.types';
 import { FormDefaultController } from '../shared/form-default';
+import { FormDisabledController } from '../shared/form-disabled';
 import '../tooltip/tooltip';
 import '../text/text';
 
@@ -22,6 +23,7 @@ export class Slider extends ThemeableElement {
 
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
+  private _fieldsetDisabled = new FormDisabledController(this);
 
   constructor() {
     super();
@@ -75,6 +77,15 @@ export class Slider extends ThemeableElement {
     this.value = this._default.value;
   }
 
+  formDisabledCallback(disabled: boolean) {
+    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  }
+
+  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
+  private get _isDisabled(): boolean {
+    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
+  }
+
   checkValidity() {
     return this._internals.checkValidity();
   }
@@ -118,7 +129,7 @@ export class Slider extends ThemeableElement {
         max=${this.max}
         step=${this.step}
         .value=${String(this.value)}
-        ?disabled=${this.disabled}
+        ?disabled=${this._isDisabled}
         name=${this.name}
         aria-label=${this.label || 'slider'}
         aria-valuemin=${this.min}
