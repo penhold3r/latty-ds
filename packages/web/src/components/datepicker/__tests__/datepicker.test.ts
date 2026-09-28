@@ -94,6 +94,31 @@ describe('<lt-datepicker>', () => {
     expect(events).toEqual(['2025-06-15']);
   });
 
+  describe('the native input/change event does not also reach the host (DTP-1)', () => {
+    // A real native <input> event is composed (crosses the shadow boundary) — the earlier tests above dispatch
+    // plain, non-composed events, which never exercise that path. Only exactly one event, our own re-dispatched
+    // CustomEvent with a `detail`, should ever reach a host listener.
+    it('fires input exactly once, with detail, for a composed/bubbling native input event', async () => {
+      const handler = vi.fn();
+      el.addEventListener('input', handler);
+      const input = el.shadowRoot!.querySelector('input')!;
+      input.value = '2025-06-01';
+      input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      expect(handler).toHaveBeenCalledOnce();
+      expect((handler.mock.calls[0][0] as CustomEvent<{ value: string }>).detail.value).toBe('2025-06-01');
+    });
+
+    it('fires change exactly once, with detail, for a composed/bubbling native change event', async () => {
+      const handler = vi.fn();
+      el.addEventListener('change', handler);
+      const input = el.shadowRoot!.querySelector('input')!;
+      input.value = '2025-06-15';
+      input.dispatchEvent(new Event('change', { bubbles: true, composed: true }));
+      expect(handler).toHaveBeenCalledOnce();
+      expect((handler.mock.calls[0][0] as CustomEvent<{ value: string }>).detail.value).toBe('2025-06-15');
+    });
+  });
+
   describe('value is not reflected, and formResetCallback restores the markup default (TFD-1)', () => {
     it('does not reflect value as an attribute', async () => {
       el.value = '2026-05-19';

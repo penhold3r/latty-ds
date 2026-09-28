@@ -116,12 +116,17 @@ export class Datepicker extends ThemeableElement {
     return this._internals.reportValidity();
   }
 
-  private handleChange() {
+  private handleChange(e: Event) {
+    // The native input/change event is composed, so it would otherwise keep bubbling past the shadow boundary
+    // after we re-dispatch our own — double-firing the same event name on the host, the first one with no
+    // `detail` at all (DTP-1: `e.detail.value` throws on it).
+    e.stopPropagation();
     this.value = this.input.value;
     dispatch(this, 'change', { value: this.value });
   }
 
-  private handleInput() {
+  private handleInput(e: Event) {
+    e.stopPropagation();
     this.value = this.input.value;
     dispatch(this, 'input', { value: this.value });
   }
