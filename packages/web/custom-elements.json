@@ -7266,6 +7266,40 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/shared/form-validity.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "toValidityFlags",
+          "return": {
+            "type": {
+              "text": "ValidityStateFlags"
+            }
+          },
+          "parameters": [
+            {
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              }
+            }
+          ],
+          "description": "Copies a live `ValidityState` into a plain object with its own enumerable properties, suitable for passing to\n`ElementInternals.setValidity()`.\n\n`ValidityState`'s flags (`valueMissing`, `typeMismatch`, etc.) are getters on its prototype, not own properties\non the instance — spreading it (`{ ...validity }`) or `Object.keys(validity)` sees none of them. Real browsers'\nWebIDL dictionary conversion reads each named member individually, so passing the live object to `setValidity`\nhappens to work there; jsdom's implementation enumerates instead, so it silently sees an empty flags object and\ntreats the control as always valid. Converting explicitly avoids relying on which enumeration strategy the\nruntime uses, and is correct either way."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "toValidityFlags",
+          "declaration": {
+            "name": "toValidityFlags",
+            "module": "src/components/shared/form-validity.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/sidepanel/index.ts",
       "declarations": [],
       "exports": [

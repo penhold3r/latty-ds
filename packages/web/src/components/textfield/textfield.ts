@@ -8,6 +8,7 @@ import { textfieldStyles } from './textfield.styles';
 import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant } from './textfield.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { toValidityFlags } from '../shared/form-validity';
 import '@latty-ds/icons';
 import '../text/text';
 
@@ -302,10 +303,19 @@ export class Textfield extends ThemeableElement {
     super.updated(changed);
     this.toggleAttribute('data-invalid', this._autoError);
     this._internals.setFormValue(this.value || null);
-    const anchor = (this.shadowRoot!.querySelector('input') ??
-      this.shadowRoot!.querySelector('textarea')) as HTMLElement | null;
-    if (this.required && !this.value && anchor) {
-      this._internals.setValidity({ valueMissing: true }, 'Please fill in this field', anchor);
+    const inner = (this.shadowRoot!.querySelector('input') ?? this.shadowRoot!.querySelector('textarea')) as
+      | HTMLInputElement
+      | HTMLTextAreaElement
+      | null;
+    if (!inner) return;
+    // The native `type`/`min`/`max`/`minlength`/`maxlength`/`required` attributes are already forwarded onto
+    // the inner control (TFD-3), so its own `validity` already covers valueMissing, typeMismatch (email/url),
+    // rangeUnderflow/Overflow (number), and tooShort/tooLong for free — mirror that first. `_validate()`'s extra
+    // rules (currently just the `tel` format, which HTML has no native constraint for) become `customError`.
+    if (!inner.validity.valid) {
+      this._internals.setValidity(toValidityFlags(inner.validity), inner.validationMessage, inner);
+    } else if (!this._validate()) {
+      this._internals.setValidity({ customError: true }, 'Please match the requested format', inner);
     } else {
       this._internals.setValidity({});
     }

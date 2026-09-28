@@ -775,6 +775,70 @@ describe('<lt-textfield>', () => {
         expect(input?.getAttribute('maxlength')).toBe('50');
       });
     });
+
+    // jsdom's ElementInternals is a partial stub (see vitest.setup.ts): setValidity is a no-op and
+    // checkValidity()/reportValidity() are hard-coded to always return true, so el.checkValidity() can't actually
+    // observe anything here. These spy on the calls our component makes to setValidity instead — verified
+    // end-to-end (real checkValidity()/form.checkValidity()) in Chromium.
+    describe('setValidity is called with the native validity + message (TFD-3)', () => {
+      it('required + empty: valueMissing', async () => {
+        const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+        el.required = true;
+        await el.updateComplete;
+        expect(spy.mock.lastCall?.[0]).toMatchObject({ valueMissing: true });
+      });
+
+      it('required + filled: valid (empty flags)', async () => {
+        el.required = true;
+        await el.updateComplete;
+        const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+        await typeOnly('something');
+        expect(spy.mock.lastCall?.[0]).toEqual({});
+      });
+
+      it('invalid email: typeMismatch, even before blur (not just the visible auto-error)', async () => {
+        el.type = 'email';
+        await el.updateComplete;
+        const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+        await typeOnly('not-an-email');
+        // No blur yet — data-invalid (the visual state) is still false, but the form must already see this as invalid.
+        expect(el.hasAttribute('data-invalid')).toBe(false);
+        expect(spy.mock.lastCall?.[0]).toMatchObject({ typeMismatch: true });
+      });
+
+      it('valid email: valid (empty flags)', async () => {
+        el.type = 'email';
+        await el.updateComplete;
+        const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+        await typeOnly('good@example.com');
+        expect(spy.mock.lastCall?.[0]).toEqual({});
+      });
+
+      it('number over max: rangeOverflow, via the native constraint', async () => {
+        el.type = 'number';
+        el.max = 10;
+        await el.updateComplete;
+        const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+        await typeOnly('99');
+        expect(spy.mock.lastCall?.[0]).toMatchObject({ rangeOverflow: true });
+      });
+
+      it('tel with no native constraint: customError (the tel format has no native HTML equivalent)', async () => {
+        el.type = 'tel';
+        await el.updateComplete;
+        const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+        await typeOnly('ab');
+        expect(spy.mock.lastCall?.[0]).toMatchObject({ customError: true });
+      });
+
+      it('passes the inner control as the validation anchor', async () => {
+        el.required = true;
+        const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+        await el.updateComplete;
+        const input = el.shadowRoot!.querySelector('input');
+        expect(spy.mock.lastCall?.[2]).toBe(input);
+      });
+    });
   });
 
   describe('multiline type', () => {
