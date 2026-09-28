@@ -180,12 +180,69 @@ export class Button extends ThemeableElement {
    */
   @property({ reflect: true }) type: ButtonType = 'button';
 
+  /**
+   * Name submitted alongside `value` when this button triggers a form submission (`type="submit"`), matching a
+   * native `<button name value>` — only included in the submitted data for the button that actually triggered
+   * the submission, not every submit button in the form.
+   * @default ''
+   */
+  @property({ reflect: true }) name = '';
+
+  /**
+   * Value submitted alongside `name`. See `name`.
+   * @default ''
+   */
+  @property({ reflect: true }) value = '';
+
+  /**
+   * Overrides the form's own `action` for a submission triggered by this button, matching a native
+   * `<button formaction>`. Only applies when `type="submit"`.
+   * @default ''
+   */
+  @property({ attribute: 'formaction' }) formAction = '';
+
+  // Delegates the actual submission to a hidden native <button>, kept in sync and attached to the resolved form
+  // only for the duration of the submission (BTN-3). Two platform constraints make this necessary rather than
+  // calling form.requestSubmit() directly on the host or passing it as the submitter: a form-associated custom
+  // element can't itself be `requestSubmit()`'s submitter (Chromium: "the specified element is not a submit
+  // button"), and name/value/formaction submitter semantics only apply to the specific button that triggered the
+  // submission — setting this element's own form value unconditionally would submit name/value even when a
+  // *different* button (or an Enter keypress) triggered the submit. This is the same workaround other
+  // form-associated custom element implementations use for the same gap.
+  private _proxySubmitBtn: HTMLButtonElement | null = null;
+
+  private _getProxySubmitBtn(): HTMLButtonElement {
+    if (!this._proxySubmitBtn) {
+      this._proxySubmitBtn = document.createElement('button');
+      this._proxySubmitBtn.type = 'submit';
+      this._proxySubmitBtn.hidden = true;
+    }
+    return this._proxySubmitBtn;
+  }
+
   private _handleClick() {
     if (this.disabled || this.loading || this._fieldsetDisabled.fieldsetDisabled) return;
-    const form = this.closest('form') as HTMLFormElement | null;
+    // this._internals.form (not this.closest('form')) so a button placed outside its form via form="id", or one
+    // whose form is across a shadow root, still works — closest('form') can never resolve either (BTN-3).
+    const form = this._internals.form;
     if (!form) return;
-    if (this.type === 'submit') form.requestSubmit();
-    else if (this.type === 'reset') form.reset();
+
+    if (this.type === 'reset') {
+      form.reset();
+      return;
+    }
+    if (this.type !== 'submit') return;
+
+    const proxy = this._getProxySubmitBtn();
+    if (this.name) proxy.name = this.name;
+    else proxy.removeAttribute('name');
+    if (this.value) proxy.value = this.value;
+    else proxy.removeAttribute('value');
+    if (this.formAction) proxy.formAction = this.formAction;
+    else proxy.removeAttribute('formaction');
+    form.appendChild(proxy);
+    form.requestSubmit(proxy);
+    proxy.remove();
   }
 
   render() {

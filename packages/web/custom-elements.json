@@ -1199,6 +1199,52 @@
               "description": "Form behaviour when the button is inside a `<form>`.\n`submit` triggers form validation and submission; `reset` restores initial values."
             },
             {
+              "kind": "field",
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Name submitted alongside `value` when this button triggers a form submission (`type=\"submit\"`), matching a\nnative `<button name value>` — only included in the submitted data for the button that actually triggered\nthe submission, not every submit button in the form."
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Value submitted alongside `name`. See `name`."
+            },
+            {
+              "kind": "field",
+              "name": "formAction",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Overrides the form's own `action` for a submission triggered by this button, matching a native\n`<button formaction>`. Only applies when `type=\"submit\"`."
+            },
+            {
+              "kind": "field",
+              "name": "_proxySubmitBtn",
+              "type": {
+                "text": "HTMLButtonElement | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "method",
+              "name": "_getProxySubmitBtn",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "HTMLButtonElement"
+                }
+              }
+            },
+            {
               "kind": "method",
               "name": "_handleClick",
               "privacy": "private"

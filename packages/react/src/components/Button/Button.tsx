@@ -17,6 +17,9 @@ export type ButtonProps = HTMLAttributes<ButtonEl> & {
   target?: string;
   rel?: string;
   type?: ButtonEl['type'];
+  name?: string;
+  value?: string;
+  formAction?: string;
 };
 
 export const Button = forwardRef<ButtonEl, ButtonProps>(function Button({ children, ...props }, forwardedRef) {

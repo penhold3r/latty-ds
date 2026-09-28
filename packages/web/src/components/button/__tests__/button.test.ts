@@ -256,6 +256,114 @@ describe('<lt-button>', () => {
     });
   });
 
+  describe('form association via form="id", name/value/formaction submission (BTN-3)', () => {
+    it('submits a form referenced by form="id" even when placed outside it', async () => {
+      const form = document.createElement('form');
+      form.id = 'external-form';
+      document.body.appendChild(form);
+      el.setAttribute('form', 'external-form'); // el is already connected outside the form (see beforeEach)
+
+      const requestSubmit = vi.fn();
+      vi.spyOn(form, 'requestSubmit').mockImplementation(requestSubmit);
+
+      el.type = 'submit';
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(requestSubmit).toHaveBeenCalledOnce();
+      form.remove();
+    });
+
+    it('resets a form referenced by form="id" even when placed outside it', async () => {
+      const form = document.createElement('form');
+      form.id = 'external-form-2';
+      document.body.appendChild(form);
+      el.setAttribute('form', 'external-form-2'); // el is already connected outside the form (see beforeEach)
+
+      const reset = vi.fn();
+      vi.spyOn(form, 'reset').mockImplementation(reset);
+
+      el.type = 'reset';
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(reset).toHaveBeenCalledOnce();
+      form.remove();
+    });
+
+    it('includes name/value in the submitted FormData for the button that was actually clicked', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+
+      let submittedEntries: [string, FormDataEntryValue][] = [];
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submittedEntries = [...new FormData(form, (e as SubmitEvent).submitter ?? undefined).entries()];
+      });
+
+      el.type = 'submit';
+      el.name = 'intent';
+      el.value = 'save';
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(submittedEntries).toEqual([['intent', 'save']]);
+      form.remove();
+    });
+
+    it('does not include name/value when neither is set', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+
+      let submittedEntries: [string, FormDataEntryValue][] = [];
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submittedEntries = [...new FormData(form, (e as SubmitEvent).submitter ?? undefined).entries()];
+      });
+
+      el.type = 'submit';
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(submittedEntries).toEqual([]);
+      form.remove();
+    });
+
+    it('the submitter is a real submit button, not this custom element (a form-associated custom element cannot be requestSubmit()’s submitter)', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+
+      let submitterTag: string | undefined;
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitterTag = (e as SubmitEvent).submitter?.tagName;
+      });
+
+      el.type = 'submit';
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(submitterTag).toBe('BUTTON');
+      form.remove();
+    });
+
+    it('removes the proxy submit button from the form after submitting — no lingering hidden button', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+
+      el.type = 'submit';
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('button')!.click();
+
+      expect(form.querySelectorAll('button').length).toBe(0);
+      form.remove();
+    });
+  });
+
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('disables the inner button without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
