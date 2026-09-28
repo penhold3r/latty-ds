@@ -379,6 +379,85 @@ describe('<lt-textfield>', () => {
     });
   });
 
+  describe('Enter submits the containing form (TFD-2)', () => {
+    it('calls form.requestSubmit() on Enter in the input', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+      const requestSubmit = vi.fn();
+      vi.spyOn(form, 'requestSubmit').mockImplementation(requestSubmit);
+
+      el.shadowRoot!.querySelector('input')!.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })
+      );
+
+      expect(requestSubmit).toHaveBeenCalledOnce();
+      form.remove();
+    });
+
+    it('does not submit on other keys', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+      const requestSubmit = vi.fn();
+      vi.spyOn(form, 'requestSubmit').mockImplementation(requestSubmit);
+
+      el.shadowRoot!.querySelector('input')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'a', bubbles: true }));
+
+      expect(requestSubmit).not.toHaveBeenCalled();
+      form.remove();
+    });
+
+    it('does not submit while composing (IME)', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+      const requestSubmit = vi.fn();
+      vi.spyOn(form, 'requestSubmit').mockImplementation(requestSubmit);
+
+      el.shadowRoot!.querySelector('input')!.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', isComposing: true, bubbles: true })
+      );
+
+      expect(requestSubmit).not.toHaveBeenCalled();
+      form.remove();
+    });
+
+    it('does not submit while disabled', async () => {
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+      const requestSubmit = vi.fn();
+      vi.spyOn(form, 'requestSubmit').mockImplementation(requestSubmit);
+
+      el.disabled = true;
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('input')!.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })
+      );
+
+      expect(requestSubmit).not.toHaveBeenCalled();
+      form.remove();
+    });
+
+    it('does not submit on Enter in the multiline textarea', async () => {
+      el.type = 'multiline';
+      await el.updateComplete;
+      const form = document.createElement('form');
+      form.appendChild(el);
+      document.body.appendChild(form);
+      const requestSubmit = vi.fn();
+      vi.spyOn(form, 'requestSubmit').mockImplementation(requestSubmit);
+
+      el.shadowRoot!.querySelector('textarea')!.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })
+      );
+
+      expect(requestSubmit).not.toHaveBeenCalled();
+      form.remove();
+    });
+  });
+
   describe('password visibility toggle (TFD-5)', () => {
     // A real <button>, not a bare <lt-icon>: the icon itself only carries the visual name now.
     const toggle = () => el.shadowRoot!.querySelector<HTMLButtonElement>('.password-toggle')!;

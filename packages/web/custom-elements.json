@@ -10005,6 +10005,11 @@
               "description": "Handles change events from the native input or textarea element.\nUpdates the component's value property and dispatches a custom change event."
             },
             {
+              "kind": "field",
+              "name": "_onKeydown",
+              "privacy": "private"
+            },
+            {
               "kind": "method",
               "name": "togglePasswordVisibility",
               "privacy": "private",

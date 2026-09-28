@@ -247,6 +247,15 @@ export class Textfield extends ThemeableElement {
     );
   }
 
+  // A native single-line <input> inside a <form> implicitly submits the form on Enter; the inner input here is
+  // in the shadow DOM, so the browser never wires that up on its own (TFD-2). Not on the multiline textarea —
+  // a native <textarea> never implicit-submits on Enter either, since Enter there means "new line".
+  private _onKeydown = (e: KeyboardEvent) => {
+    if (e.key !== 'Enter' || e.isComposing || this._isDisabled) return;
+    const form = this.closest('form') as HTMLFormElement | null;
+    form?.requestSubmit();
+  };
+
   /**
    * Toggles password visibility for password-type inputs.
    * Switches between showing plain text and masked password.
@@ -384,6 +393,7 @@ export class Textfield extends ThemeableElement {
                   @input=${this.handleInput}
                   @change=${this.handleChange}
                   @blur=${this._onBlur}
+                  @keydown=${this._onKeydown}
                   aria-label=${this.label || this.placeholder}
                   aria-invalid=${isInvalid ? 'true' : 'false'}
                   class=${classMap({ 'has-start-icon': hasStartIcon, 'has-end-icon': hasEndIcon })}
