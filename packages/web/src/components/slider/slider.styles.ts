@@ -26,17 +26,20 @@ export const sliderStyles = css`
     width: 100%;
   }
 
-  /* Position the tooltip above the thumb rather than the track center */
+  /* Position the tooltip above the thumb rather than the track center. --_fill is a unitless 0–1 ratio (set from
+     JS on :host) — computed in CSS, not from a JS-read offsetWidth, so it can never drift after a resize or when
+     first shown from display:none (SLD-1). The thumb travels only (100% - thumb size), offset by half the thumb
+     so it's centered on the value, matching a native range input's own thumb geometry. */
   lt-tooltip::part(tooltip) {
-    left: var(--_thumb-left, 50%);
+    left: calc(var(--_fill, 0) * (100% - var(--lt-slider-thumb-size, 18px)) + var(--lt-slider-thumb-size, 18px) / 2);
   }
 
   input[type='range'] {
     appearance: none;
     background: linear-gradient(
       to right,
-      var(--lt-interactive-primary-bg) var(--lt-slider-fill, 0%),
-      var(--lt-border-strong) var(--lt-slider-fill, 0%)
+      var(--lt-interactive-primary-bg) calc(var(--_fill, 0) * 100%),
+      var(--lt-border-strong) calc(var(--_fill, 0) * 100%)
     );
     border-radius: 9999px;
     cursor: pointer;

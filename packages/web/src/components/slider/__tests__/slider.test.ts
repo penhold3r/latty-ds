@@ -167,4 +167,72 @@ describe('<lt-slider>', () => {
       expect(input.disabled).toBe(true);
     });
   });
+
+  describe('value is clamped and stepped (SLD-1)', () => {
+    it('clamps a value above max down to max', async () => {
+      el.max = 100;
+      el.value = 150;
+      await el.updateComplete;
+      expect(el.value).toBe(100);
+    });
+
+    it('clamps a value below min up to min', async () => {
+      el.min = 10;
+      el.value = -5;
+      await el.updateComplete;
+      expect(el.value).toBe(10);
+    });
+
+    it('snaps to the nearest step from min', async () => {
+      el.min = 0;
+      el.step = 10;
+      el.value = 24;
+      await el.updateComplete;
+      expect(el.value).toBe(20);
+    });
+
+    it('re-clamps when max shrinks below the current value', async () => {
+      el.value = 80;
+      await el.updateComplete;
+      el.max = 50;
+      await el.updateComplete;
+      expect(el.value).toBe(50);
+    });
+
+    it('the submitted form value matches the clamped value, not the raw one', async () => {
+      el.max = 100;
+      el.value = 150;
+      await el.updateComplete;
+      expect(el.value).toBe(100);
+      const input = el.shadowRoot!.querySelector('input[type="range"]') as HTMLInputElement;
+      expect(input.value).toBe('100');
+    });
+
+    it('does not throw or produce NaN when min equals max', async () => {
+      el.min = 50;
+      el.max = 50;
+      el.value = 50;
+      await el.updateComplete;
+      expect(el.value).toBe(50);
+      expect(el.style.getPropertyValue('--_fill')).toBe('0');
+    });
+  });
+
+  describe('fill CSS custom property (SLD-1 — track fill and tooltip offset both derive from this)', () => {
+    it('sets --_fill as a unitless 0-1 ratio, not a percentage', async () => {
+      el.min = 0;
+      el.max = 100;
+      el.value = 25;
+      await el.updateComplete;
+      expect(el.style.getPropertyValue('--_fill')).toBe('0.25');
+    });
+
+    it('reflects a mid-range min/max correctly', async () => {
+      el.min = 10;
+      el.max = 20;
+      el.value = 15;
+      await el.updateComplete;
+      expect(el.style.getPropertyValue('--_fill')).toBe('0.5');
+    });
+  });
 });

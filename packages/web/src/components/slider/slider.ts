@@ -1,6 +1,6 @@
-import { html } from 'lit';
+import { html, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
 import { sliderStyles } from './slider.styles';
 import type { SliderSize } from './slider.types';
@@ -47,28 +47,35 @@ export class Slider extends ThemeableElement {
   /** Name attribute for form submission */
   @property({ reflect: true }) name = '';
 
-  @query('input') private input!: HTMLInputElement;
-
-  private get _fillPercent(): number {
-    return ((this.value - this.min) / (this.max - this.min)) * 100;
+  // A unitless 0–1 ratio, not a percentage — CSS derives both the track's fill percentage and the tooltip's
+  // thumb-following offset from it via calc() (SLD-1), so there's only one number to keep in sync.
+  private get _fillRatio(): number {
+    if (this.max === this.min) return 0; // avoid dividing by zero (SLD-1: min === max used to give NaN%)
+    return (this.value - this.min) / (this.max - this.min);
   }
 
-  private _thumbSizePx(): number {
-    return ({ sm: 14, md: 18, lg: 22 } as Record<string, number>)[this.size] ?? 18;
+  /** Clamps to [min, max] and snaps to the nearest step from min, matching how a native <input type="range">
+   * sanitizes its own value — including when `value`/`min`/`max`/`step` are set programmatically, which a native
+   * range input clamps on its own internal value but this component didn't mirror onto its own `value` property
+   * (SLD-1: `value` wasn't clamped/stepped, so e.g. `value=150` with `max=100` produced a 150% fill and
+   * submitted "150" to the form even though the visible thumb was pinned at the end). */
+  private _sanitize(value: number): number {
+    if (this.min === this.max) return this.min;
+    const clamped = Math.min(this.max, Math.max(this.min, value));
+    if (this.step <= 0) return clamped;
+    const steps = Math.round((clamped - this.min) / this.step);
+    return Math.min(this.max, Math.max(this.min, this.min + steps * this.step));
+  }
+
+  override willUpdate(changed: PropertyValues) {
+    if (changed.has('value') || changed.has('min') || changed.has('max') || changed.has('step')) {
+      const sanitized = this._sanitize(this.value);
+      if (sanitized !== this.value) this.value = sanitized;
+    }
   }
 
   updated() {
-    const fill = this._fillPercent;
-    this.style.setProperty('--_fill', `${fill}%`);
-
-    // compute the thumb center as a % of track width so the tooltip follows it
-    const trackW = this.input?.offsetWidth ?? 0;
-    if (trackW) {
-      const thumbPx = this._thumbSizePx();
-      const centerPx = (fill / 100) * (trackW - thumbPx) + thumbPx / 2;
-      this.style.setProperty('--_thumb-left', `${(centerPx / trackW) * 100}%`);
-    }
-
+    this.style.setProperty('--_fill', String(this._fillRatio));
     this._internals.setFormValue(String(this.value));
     this._internals.setValidity({});
   }
