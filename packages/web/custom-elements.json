@@ -8178,6 +8178,15 @@
               "privacy": "private"
             },
             {
+              "kind": "field",
+              "name": "_skipNextOpenChange",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "true"
+            },
+            {
               "kind": "method",
               "name": "show",
               "privacy": "public",

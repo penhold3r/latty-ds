@@ -50,6 +50,39 @@ describe('<lt-snackbar>', () => {
     expect(surface?.getAttribute('appearance')).toBe('outlined');
   });
 
+  describe('does not emit hide on mount (SNK-1)', () => {
+    it('does not dispatch hide just from connecting — it was never shown', async () => {
+      const handler = vi.fn();
+      const fresh = document.createElement('lt-snackbar') as Snackbar;
+      fresh.addEventListener('hide', handler);
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      expect(handler).not.toHaveBeenCalled();
+      fresh.remove();
+    });
+
+    it('still dispatches hide normally on a later, real hide()', async () => {
+      const handler = vi.fn();
+      el.addEventListener('hide', handler);
+      el.show();
+      await el.updateComplete;
+      el.hide();
+      await el.updateComplete;
+      expect(handler).toHaveBeenCalledOnce();
+    });
+
+    it('does not dispatch show just from mounting already open (markup open="")', async () => {
+      const handler = vi.fn();
+      const fresh = document.createElement('lt-snackbar') as Snackbar;
+      fresh.setAttribute('open', '');
+      fresh.addEventListener('show', handler);
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      expect(handler).not.toHaveBeenCalled();
+      fresh.remove();
+    });
+  });
+
   it('show() sets open to true', async () => {
     el.show();
     await el.updateComplete;

@@ -74,6 +74,10 @@ export class Snackbar extends ThemeableElement {
   @property({ reflect: true }) appearance: SurfaceAppearance = 'filled';
 
   private _timer?: ReturnType<typeof setTimeout>;
+  // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
+  // was ever shown — `open` starts false, so the else branch ran, dispatching a `hide` for a snackbar that was
+  // never visible (SNK-1). Same fix and reasoning as lt-dropdown's `_skipNextOpenChange` (DDN-1).
+  private _skipNextOpenChange = true;
 
   /** Shows the snackbar and starts the auto-dismiss timer. */
   public show() {
@@ -87,7 +91,9 @@ export class Snackbar extends ThemeableElement {
 
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('open')) {
-      if (this.open) {
+      if (this._skipNextOpenChange) {
+        this._skipNextOpenChange = false;
+      } else if (this.open) {
         this._startTimer();
         dispatch(this, 'show');
       } else {
