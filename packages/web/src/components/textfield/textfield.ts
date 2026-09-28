@@ -1,4 +1,4 @@
-import { html, PropertyValues } from 'lit';
+import { html, nothing, PropertyValues } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ThemeableElement } from '../../base';
@@ -11,6 +11,8 @@ import { FormDisabledController } from '../shared/form-disabled';
 import { toValidityFlags } from '../shared/form-validity';
 import '@latty-ds/icons';
 import '../text/text';
+
+let textfieldCount = 0;
 
 /**
  * A customizable text input component with support for multiple variants, sizes, and input types.
@@ -59,6 +61,11 @@ export class Textfield extends ThemeableElement {
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
   private _fieldsetDisabled = new FormDisabledController(this);
+  // Stable per-instance ids for `label for` and `aria-describedby` (TFD-4) — not the host's own `id` attribute,
+  // which a consumer may set for their own purposes (or leave unset).
+  private readonly _uid = `lt-textfield-${textfieldCount++}`;
+  private readonly _inputId = `${this._uid}-input`;
+  private readonly _helperId = `${this._uid}-helper`;
 
   constructor() {
     super();
@@ -354,12 +361,16 @@ export class Textfield extends ThemeableElement {
     const actualInputType = isPasswordField && this.isPasswordVisible ? 'text' : this.type;
     const isInvalid = this._autoError || this.variant === 'error';
     const resolvedHelperText = typeof this.helperText === 'function' ? this.helperText(isInvalid) : this.helperText;
+    // A real `<label for>` already gives the input its accessible name — an `aria-label` alongside it would
+    // override that (aria-label always wins accessible-name computation) and hide the visible label text from
+    // screen readers instead (TFD-4). Only fall back to `aria-label` when there's no visible label to associate.
+    const ariaLabel = this.label ? undefined : this.placeholder || undefined;
 
     return html`
       <div class="wrapper">
         ${this.label
           ? html`
-              <label>
+              <label for=${this._inputId}>
                 <lt-text variant="label" as="span">${this.label}</lt-text>
                 ${this.required ? html`<span class="required-indicator">*</span>` : ''}
               </label>
@@ -370,6 +381,7 @@ export class Textfield extends ThemeableElement {
           ${isMultiline
             ? html`
                 <textarea
+                  id=${this._inputId}
                   .value=${this.value}
                   name=${ifDefined(this.name || undefined)}
                   placeholder=${this.placeholder}
@@ -382,13 +394,15 @@ export class Textfield extends ThemeableElement {
                   @input=${this.handleInput}
                   @change=${this.handleChange}
                   @blur=${this._onBlur}
-                  aria-label=${this.label || this.placeholder}
+                  aria-label=${ifDefined(ariaLabel)}
                   aria-invalid=${isInvalid ? 'true' : 'false'}
+                  aria-describedby=${resolvedHelperText ? this._helperId : nothing}
                   class=${classMap({ 'has-start-icon': hasStartIcon, 'has-end-icon': hasEndIcon })}
                 ></textarea>
               `
             : html`
                 <input
+                  id=${this._inputId}
                   type=${actualInputType}
                   .value=${this.value}
                   name=${ifDefined(this.name || undefined)}
@@ -404,8 +418,9 @@ export class Textfield extends ThemeableElement {
                   @change=${this.handleChange}
                   @blur=${this._onBlur}
                   @keydown=${this._onKeydown}
-                  aria-label=${this.label || this.placeholder}
+                  aria-label=${ifDefined(ariaLabel)}
                   aria-invalid=${isInvalid ? 'true' : 'false'}
+                  aria-describedby=${resolvedHelperText ? this._helperId : nothing}
                   class=${classMap({ 'has-start-icon': hasStartIcon, 'has-end-icon': hasEndIcon })}
                 />
               `}
@@ -428,7 +443,9 @@ export class Textfield extends ThemeableElement {
             : ''}
         </div>
         ${resolvedHelperText
-          ? html`<lt-text variant="caption" as="span" class="helper-text">${resolvedHelperText}</lt-text>`
+          ? html`<lt-text id=${this._helperId} variant="caption" as="span" class="helper-text"
+              >${resolvedHelperText}</lt-text
+            >`
           : ''}
       </div>
     `;

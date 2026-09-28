@@ -284,11 +284,75 @@ describe('<lt-textfield>', () => {
     expect(input?.getAttribute('aria-invalid')).toBe('false');
   });
 
-  it('sets aria-label from label or placeholder', async () => {
-    el.label = 'Username';
+  it('falls back to aria-label from the placeholder when there is no visible label', async () => {
+    el.placeholder = 'you@example.com';
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input');
-    expect(input?.getAttribute('aria-label')).toBe('Username');
+    expect(input?.getAttribute('aria-label')).toBe('you@example.com');
+  });
+
+  describe('label is associated with the input via `for` (TFD-4)', () => {
+    it('does not set aria-label when there is a visible label — the native `for` association already names it, and aria-label would override (and hide) the visible text', async () => {
+      el.label = 'Username';
+      await el.updateComplete;
+      const input = el.shadowRoot!.querySelector('input');
+      expect(input?.hasAttribute('aria-label')).toBe(false);
+    });
+
+    it('points label[for] at the input id', async () => {
+      el.label = 'Username';
+      await el.updateComplete;
+      const label = el.shadowRoot!.querySelector('label');
+      const input = el.shadowRoot!.querySelector('input');
+      expect(label?.getAttribute('for')).toBe(input?.id);
+      expect(input?.id).toBeTruthy();
+    });
+
+    it('points label[for] at the textarea id for multiline', async () => {
+      el.label = 'Notes';
+      el.type = 'multiline';
+      await el.updateComplete;
+      const label = el.shadowRoot!.querySelector('label');
+      const textarea = el.shadowRoot!.querySelector('textarea');
+      expect(label?.getAttribute('for')).toBe(textarea?.id);
+    });
+
+    it('gives each instance a distinct input id', async () => {
+      const other = document.createElement('lt-textfield') as Textfield;
+      document.body.appendChild(other);
+      await other.updateComplete;
+      const idA = el.shadowRoot!.querySelector('input')?.id;
+      const idB = other.shadowRoot!.querySelector('input')?.id;
+      expect(idA).not.toBe(idB);
+      other.remove();
+    });
+  });
+
+  describe('helper/error text is wired via aria-describedby (TFD-4)', () => {
+    it('has no aria-describedby when there is no helper text', async () => {
+      const input = el.shadowRoot!.querySelector('input');
+      expect(input?.hasAttribute('aria-describedby')).toBe(false);
+    });
+
+    it('points aria-describedby at the helper text element id', async () => {
+      el.helperText = 'Must be at least 8 characters';
+      await el.updateComplete;
+      const input = el.shadowRoot!.querySelector('input');
+      const helper = el.shadowRoot!.querySelector('.helper-text');
+      expect(input?.getAttribute('aria-describedby')).toBe(helper?.id);
+      expect(helper?.id).toBeTruthy();
+      expect(helper?.textContent).toContain('Must be at least 8 characters');
+    });
+
+    it('updates aria-describedby content when the error variant swaps in error text via a function', async () => {
+      el.helperText = (invalid) => (invalid ? 'Invalid value' : 'Helper text');
+      el.variant = 'error';
+      await el.updateComplete;
+      const input = el.shadowRoot!.querySelector('input');
+      const helper = el.shadowRoot!.querySelector('.helper-text');
+      expect(input?.getAttribute('aria-describedby')).toBe(helper?.id);
+      expect(helper?.textContent).toContain('Invalid value');
+    });
   });
 
   it('supports all variants', async () => {

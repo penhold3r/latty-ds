@@ -9819,6 +9819,27 @@
             },
             {
               "kind": "field",
+              "name": "_uid",
+              "privacy": "private",
+              "readonly": true,
+              "default": "`lt-textfield-${textfieldCount++}`"
+            },
+            {
+              "kind": "field",
+              "name": "_inputId",
+              "privacy": "private",
+              "readonly": true,
+              "default": "`${this._uid}-input`"
+            },
+            {
+              "kind": "field",
+              "name": "_helperId",
+              "privacy": "private",
+              "readonly": true,
+              "default": "`${this._uid}-helper`"
+            },
+            {
+              "kind": "field",
               "name": "variant",
               "type": {
                 "text": "TextfieldVariant"
