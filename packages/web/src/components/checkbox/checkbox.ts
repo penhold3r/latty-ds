@@ -4,6 +4,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 import { checkboxStyles } from './checkbox.styles';
 import { CheckboxSize, CheckboxVariant, CheckboxLabelPosition } from './checkbox.types';
+import { FormDefaultController } from '../shared/form-default';
 
 import '@latty-ds/icons';
 
@@ -43,6 +44,7 @@ export class Checkbox extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+  private _default = new FormDefaultController(this, () => this.checked);
 
   constructor() {
     super();
@@ -62,10 +64,13 @@ export class Checkbox extends ThemeableElement {
   @property({ reflect: true }) size: CheckboxSize = 'md';
 
   /**
-   * Whether the checkbox is checked.
+   * Whether the checkbox is checked. Not reflected as an attribute — a native checkbox's `checked` _content_
+   * attribute stays fixed at the markup default and never tracks interaction (that's what `defaultChecked` is
+   * for); reflecting it live meant `formResetCallback` could no longer tell what the original default was. Read
+   * the property, or the `change` event's `detail.checked`, instead of `[checked]`/`hasAttribute('checked')`.
    * @default false
    */
-  @property({ type: Boolean, reflect: true }) checked = false;
+  @property({ type: Boolean }) checked = false;
 
   /**
    * Whether the checkbox is in indeterminate state.
@@ -129,7 +134,7 @@ export class Checkbox extends ThemeableElement {
   }
 
   formResetCallback() {
-    this.checked = false;
+    this.checked = this._default.value;
   }
 
   checkValidity() {

@@ -4,6 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { radioStyles } from './radio.styles';
 import { RadioSize, RadioVariant, RadioLabelPosition } from './radio.types';
+import { FormDefaultController } from '../shared/form-default';
 
 /**
  * Groups radios that share a `name`, scoped to the nearest form (or else the containing root — a document or
@@ -77,6 +78,7 @@ export class Radio extends ThemeableElement {
 
   private _internals!: ElementInternals;
   private _group: Set<Radio> | null = null;
+  private _default = new FormDefaultController(this, () => this.checked);
 
   constructor() {
     super();
@@ -120,10 +122,13 @@ export class Radio extends ThemeableElement {
   @property({ reflect: true }) size: RadioSize = 'md';
 
   /**
-   * Whether the radio is checked.
+   * Whether the radio is checked. Not reflected as an attribute — a native radio's `checked` _content_
+   * attribute stays fixed at the markup default and never tracks interaction; reflecting it live meant
+   * `formResetCallback` could no longer tell what the original default was. Read the property, or the `change`
+   * event's `detail.checked`, instead of `[checked]`/`hasAttribute('checked')`.
    * @default false
    */
-  @property({ type: Boolean, reflect: true }) checked = false;
+  @property({ type: Boolean }) checked = false;
 
   /**
    * Whether the radio is disabled.
@@ -181,7 +186,7 @@ export class Radio extends ThemeableElement {
   }
 
   formResetCallback() {
-    this.checked = false;
+    this.checked = this._default.value;
   }
 
   checkValidity() {

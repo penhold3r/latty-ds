@@ -8,6 +8,7 @@ import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty-ds/icons';
 import '../text/text';
 import { openFloating, closeFloating } from '../shared/floating';
+import { FormDefaultController } from '../shared/form-default';
 
 let comboboxCount = 0;
 
@@ -33,6 +34,7 @@ export class Combobox extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+  private _default = new FormDefaultController(this, () => this.value);
 
   // Scopes generated option/listbox ids to this instance, so two comboboxes on the same page don't collide.
   private readonly _uid = `lt-combobox-${comboboxCount++}`;
@@ -45,8 +47,10 @@ export class Combobox extends ThemeableElement {
   /** Array of selectable options. Set as a JS property (`.options`). */
   @property({ type: Array }) options: ComboboxOption[] = [];
 
-  /** Currently selected value. */
-  @property({ reflect: true }) value = '';
+  /** Currently selected value. Not reflected as an attribute — read the property, or the `change` event's
+   * `detail.value`, instead of `getAttribute('value')`/`[value]` (consistent with the rest of the form
+   * controls; see `lt-textfield`'s equivalent doc comment for why). */
+  @property() value = '';
 
   /** Field label displayed above the input. */
   @property({ reflect: true }) label = '';
@@ -214,7 +218,7 @@ export class Combobox extends ThemeableElement {
   }
 
   formResetCallback() {
-    this.value = '';
+    this.value = this._default.value;
   }
 
   checkValidity() {

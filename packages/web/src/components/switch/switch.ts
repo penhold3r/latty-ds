@@ -4,6 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { switchStyles } from './switch.styles';
 import { SwitchSize, SwitchVariant, SwitchLabelPosition } from './switch.types';
+import { FormDefaultController } from '../shared/form-default';
 
 /**
  * A toggle switch component with sliding animation.
@@ -42,6 +43,7 @@ export class Switch extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+  private _default = new FormDefaultController(this, () => this.checked);
 
   constructor() {
     super();
@@ -61,10 +63,13 @@ export class Switch extends ThemeableElement {
   @property({ reflect: true }) size: SwitchSize = 'md';
 
   /**
-   * Whether the switch is checked (on).
+   * Whether the switch is checked (on). Not reflected as an attribute — a native checkbox's `checked` _content_
+   * attribute stays fixed at the markup default and never tracks interaction; reflecting it live meant
+   * `formResetCallback` could no longer tell what the original default was. Read the property, or the `change`
+   * event's `detail.checked`, instead of `[checked]`/`hasAttribute('checked')`.
    * @default false
    */
-  @property({ type: Boolean, reflect: true }) checked = false;
+  @property({ type: Boolean }) checked = false;
 
   /**
    * Whether the switch is disabled.
@@ -120,7 +125,7 @@ export class Switch extends ThemeableElement {
   }
 
   formResetCallback() {
-    this.checked = false;
+    this.checked = this._default.value;
   }
 
   checkValidity() {

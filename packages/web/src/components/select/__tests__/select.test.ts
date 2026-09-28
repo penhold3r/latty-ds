@@ -315,4 +315,28 @@ describe('<lt-select>', () => {
       expect(options.every((o) => o.tabIndex === -1)).toBe(true);
     });
   });
+
+  describe('value is not reflected, and formResetCallback restores the markup default (TFD-1)', () => {
+    it('does not reflect value as an attribute', async () => {
+      el.value = 'banana';
+      await el.updateComplete;
+      expect(el.hasAttribute('value')).toBe(false);
+    });
+
+    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+    it('restores the value set in markup, not empty', async () => {
+      const fresh = document.createElement('lt-select') as Select;
+      fresh.options = mockOptions;
+      fresh.setAttribute('value', 'banana');
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+
+      fresh.value = 'orange';
+      await fresh.updateComplete;
+      fresh.formResetCallback();
+      expect(fresh.value).toBe('banana');
+      fresh.remove();
+    });
+  });
 });

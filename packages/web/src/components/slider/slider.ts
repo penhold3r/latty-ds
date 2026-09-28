@@ -4,6 +4,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 import { sliderStyles } from './slider.styles';
 import type { SliderSize } from './slider.types';
+import { FormDefaultController } from '../shared/form-default';
 import '../tooltip/tooltip';
 import '../text/text';
 
@@ -20,6 +21,7 @@ export class Slider extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+  private _default = new FormDefaultController(this, () => this.value);
 
   constructor() {
     super();
@@ -34,7 +36,9 @@ export class Slider extends ThemeableElement {
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 100;
   @property({ type: Number }) step = 1;
-  @property({ type: Number, reflect: true }) value = 0;
+  /** Not reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of
+   * `getAttribute('value')`/`[value]`. */
+  @property({ type: Number }) value = 0;
 
   /** Label displayed above the track */
   @property({ reflect: true }) label = '';
@@ -68,7 +72,7 @@ export class Slider extends ThemeableElement {
   }
 
   formResetCallback() {
-    this.value = this.min;
+    this.value = this._default.value;
   }
 
   checkValidity() {

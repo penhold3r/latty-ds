@@ -236,4 +236,29 @@ describe('<lt-radio>', () => {
     const input = el.shadowRoot!.querySelector('input[type="radio"]') as HTMLInputElement;
     expect(input.checked).toBe(true);
   });
+
+  describe('checked is not reflected, and formResetCallback restores the markup default (TFD-1)', () => {
+    it('does not reflect checked as an attribute', async () => {
+      el.checked = true;
+      await el.updateComplete;
+      expect(el.hasAttribute('checked')).toBe(false);
+    });
+
+    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+    it('restores the checked state set in markup, not false', async () => {
+      const fresh = document.createElement('lt-radio') as Radio;
+      fresh.name = 'reset-test';
+      fresh.value = 'x';
+      fresh.setAttribute('checked', '');
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+
+      fresh.checked = false;
+      await fresh.updateComplete;
+      fresh.formResetCallback();
+      expect(fresh.checked).toBe(true);
+      fresh.remove();
+    });
+  });
 });

@@ -330,4 +330,27 @@ describe('<lt-date-input>', () => {
     expect(el.disabledDates).not.toBe(before);
     expect(el.hasAttribute('disableddates')).toBe(false);
   });
+
+  describe('value is not reflected, and formResetCallback restores the markup default (TFD-1)', () => {
+    it('does not reflect value as an attribute', async () => {
+      el.value = '2026-05-19';
+      await el.updateComplete;
+      expect(el.hasAttribute('value')).toBe(false);
+    });
+
+    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+    it('restores the value set in markup, not empty', async () => {
+      const fresh = document.createElement('lt-date-input') as DateInput;
+      fresh.setAttribute('value', '2026-05-19');
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+
+      fresh.value = '2026-06-01';
+      await fresh.updateComplete;
+      fresh.formResetCallback();
+      expect(fresh.value).toBe('2026-05-19');
+      fresh.remove();
+    });
+  });
 });

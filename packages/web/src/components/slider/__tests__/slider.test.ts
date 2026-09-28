@@ -113,4 +113,28 @@ describe('<lt-slider>', () => {
     expect(spy).toHaveBeenCalledOnce();
     expect(spy.mock.calls[0][0].detail).toEqual({ value: 75 });
   });
+
+  describe('value is not reflected, and formResetCallback restores the markup default (TFD-1)', () => {
+    it('does not reflect value as an attribute', async () => {
+      el.value = 40;
+      await el.updateComplete;
+      expect(el.hasAttribute('value')).toBe(false);
+    });
+
+    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+    // Previously this reset to `min`, not the markup default (verified: value="40" min="0" reset to 0).
+    it('restores the value set in markup, not min', async () => {
+      const fresh = document.createElement('lt-slider') as Slider;
+      fresh.setAttribute('value', '40');
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+
+      fresh.value = 90;
+      await fresh.updateComplete;
+      fresh.formResetCallback();
+      expect(fresh.value).toBe(40);
+      fresh.remove();
+    });
+  });
 });

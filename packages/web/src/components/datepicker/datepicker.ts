@@ -5,6 +5,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import { datepickerStyles } from './datepicker.styles';
 import type { DatepickerType, DatepickerSize, DatepickerVariant } from './datepicker.types';
 import { dispatch } from '../../utils';
+import { FormDefaultController } from '../shared/form-default';
 import '../text/text';
 
 /**
@@ -31,6 +32,7 @@ export class Datepicker extends ThemeableElement {
   static formAssociated = true;
 
   private _internals: ElementInternals;
+  private _default = new FormDefaultController(this, () => this.value);
 
   constructor() {
     super();
@@ -40,8 +42,10 @@ export class Datepicker extends ThemeableElement {
   /** Native input type. */
   @property({ reflect: true }) type: DatepickerType = 'date';
 
-  /** Current value in the format required by the native input (`YYYY-MM-DD`, `HH:MM`, or `YYYY-MM-DDTHH:MM`). */
-  @property({ reflect: true }) value = '';
+  /** Current value in the format required by the native input (`YYYY-MM-DD`, `HH:MM`, or `YYYY-MM-DDTHH:MM`).
+   * Not reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of
+   * `getAttribute('value')`/`[value]`. */
+  @property() value = '';
 
   /** Minimum allowed value. */
   @property({ reflect: true }) min = '';
@@ -87,7 +91,7 @@ export class Datepicker extends ThemeableElement {
   }
 
   formResetCallback() {
-    this.value = '';
+    this.value = this._default.value;
   }
 
   checkValidity() {

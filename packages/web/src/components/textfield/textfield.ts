@@ -6,6 +6,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 import { textfieldStyles } from './textfield.styles';
 import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant } from './textfield.types';
+import { FormDefaultController } from '../shared/form-default';
 import '@latty-ds/icons';
 import '../text/text';
 
@@ -54,6 +55,7 @@ export class Textfield extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+  private _default = new FormDefaultController(this, () => this.value);
 
   constructor() {
     super();
@@ -79,10 +81,13 @@ export class Textfield extends ThemeableElement {
   @property({ reflect: true }) type: TextfieldType = 'text';
 
   /**
-   * Current value of the input.
+   * Current value of the input. Not reflected as an attribute: for `type="password"` that would put whatever
+   * the user types in plain text in the DOM (`outerHTML`, DevTools, session-replay/DOM-mutation recorders) —
+   * visible via `getAttribute('value')`/`[value]` regardless of input type. Read the property, or the
+   * `input`/`change` event's `detail.value`, instead of an attribute selector.
    * @default ''
    */
-  @property({ reflect: true }) value = '';
+  @property() value = '';
 
   /**
    * Placeholder text shown when input is empty.
@@ -296,7 +301,9 @@ export class Textfield extends ThemeableElement {
   }
 
   formResetCallback() {
-    this.value = '';
+    this.value = this._default.value;
+    this._touched = false;
+    this._autoError = false;
   }
 
   checkValidity() {

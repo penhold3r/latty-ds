@@ -266,4 +266,28 @@ describe('<lt-combobox>', () => {
       expect(options.every((o) => o.tabIndex === -1)).toBe(true);
     });
   });
+
+  describe('value is not reflected, and formResetCallback restores the markup default (TFD-1)', () => {
+    it('does not reflect value as an attribute', async () => {
+      el.value = 'ca';
+      await el.updateComplete;
+      expect(el.hasAttribute('value')).toBe(false);
+    });
+
+    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+    it('restores the value set in markup, not empty', async () => {
+      const fresh = document.createElement('lt-combobox') as Combobox;
+      fresh.options = OPTIONS;
+      fresh.setAttribute('value', 'ca');
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+
+      fresh.value = 'us';
+      await fresh.updateComplete;
+      fresh.formResetCallback();
+      expect(fresh.value).toBe('ca');
+      fresh.remove();
+    });
+  });
 });

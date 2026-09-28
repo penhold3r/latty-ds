@@ -4,6 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
 import { colorInputStyles } from './color-input.styles';
 import { ColorInputFormat, ColorInputSize } from './color-input.types';
+import { FormDefaultController } from '../shared/form-default';
 import '@latty-ds/icons';
 import '../text/text';
 
@@ -99,6 +100,7 @@ export class ColorInput extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+  private _default = new FormDefaultController(this, () => this.value);
 
   constructor() {
     super();
@@ -107,10 +109,11 @@ export class ColorInput extends ThemeableElement {
 
   /**
    * The current color value. Accepts hex (`#7c3aed`), rgb (`rgb(124, 58, 237)`),
-   * or hsl (`hsl(263, 70%, 58%)`). Emitted values match the `format` prop.
+   * or hsl (`hsl(263, 70%, 58%)`). Emitted values match the `format` prop. Not reflected as an attribute —
+   * read the property, or the `change` event's `detail.value`, instead of `getAttribute('value')`/`[value]`.
    * @default ''
    */
-  @property({ reflect: true }) value = '';
+  @property() value = '';
 
   /**
    * Output format for the displayed value and emitted `change` events.
@@ -165,7 +168,7 @@ export class ColorInput extends ThemeableElement {
   }
 
   formResetCallback() {
-    this.value = '';
+    this.value = this._default.value;
   }
 
   checkValidity() {

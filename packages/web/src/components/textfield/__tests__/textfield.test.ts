@@ -294,6 +294,56 @@ describe('<lt-textfield>', () => {
     expect(input?.value).toBe('initial value');
   });
 
+  describe('value is not reflected as an attribute (TFD-1)', () => {
+    it('does not put a typed password value in the DOM', async () => {
+      el.type = 'password';
+      el.value = 'hunter2';
+      await el.updateComplete;
+      expect(el.hasAttribute('value')).toBe(false);
+      expect(el.outerHTML).not.toContain('hunter2');
+    });
+
+    it('does not reflect a plain text value either, for consistency', async () => {
+      el.value = 'some text';
+      await el.updateComplete;
+      expect(el.hasAttribute('value')).toBe(false);
+    });
+  });
+
+  // jsdom doesn't implement the form-associated custom element reset lifecycle (verified: form.reset() never
+  // calls formResetCallback at all), so these call it directly — the same thing a real form reset does, per the
+  // HTML spec's "reset the form owner" algorithm. The wiring from a real <form>'s reset button to this callback
+  // is native browser behavior for any formAssociated element, not something this component implements itself.
+  describe('formResetCallback restores the markup default (TFD-1, TFD-7)', () => {
+    beforeEach(async () => {
+      el.remove();
+      el = document.createElement('lt-textfield') as Textfield;
+      el.setAttribute('value', 'initial value');
+      document.body.appendChild(el);
+      await el.updateComplete;
+    });
+
+    it('restores the value set in markup, not empty', async () => {
+      el.value = 'typed by the user';
+      await el.updateComplete;
+      el.formResetCallback();
+      expect(el.value).toBe('initial value');
+    });
+
+    it('clears the touched/auto-error state along with the value', async () => {
+      el.type = 'email';
+      el.value = 'not-an-email';
+      await el.updateComplete;
+      el.shadowRoot!.querySelector('input')!.dispatchEvent(new Event('blur'));
+      await el.updateComplete;
+      expect(el.hasAttribute('data-invalid')).toBe(true);
+
+      el.formResetCallback();
+      await el.updateComplete;
+      expect(el.hasAttribute('data-invalid')).toBe(false);
+    });
+  });
+
   describe('password visibility toggle (TFD-5)', () => {
     // A real <button>, not a bare <lt-icon>: the icon itself only carries the visual name now.
     const toggle = () => el.shadowRoot!.querySelector<HTMLButtonElement>('.password-toggle')!;

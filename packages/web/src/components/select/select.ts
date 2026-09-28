@@ -9,6 +9,7 @@ import '@latty-ds/icons';
 import '../surface/';
 import '../text/text';
 import { openFloating, closeFloating } from '../shared/floating';
+import { FormDefaultController } from '../shared/form-default';
 
 let selectCount = 0;
 
@@ -49,6 +50,7 @@ export class Select extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+  private _default = new FormDefaultController(this, () => this.value);
 
   // Scopes generated option/listbox ids to this instance, so two selects on the same page don't collide.
   private readonly _uid = `lt-select-${selectCount++}`;
@@ -71,10 +73,12 @@ export class Select extends ThemeableElement {
   @property({ reflect: true }) size: SelectSize = 'md';
 
   /**
-   * Current selected value.
+   * Current selected value. Not reflected as an attribute — read the property, or the `change` event's
+   * `detail.value`, instead of `getAttribute('value')`/`[value]` (consistent with the rest of the form controls;
+   * see `lt-textfield`'s equivalent doc comment for why).
    * @default ''
    */
-  @property({ reflect: true }) value = '';
+  @property() value = '';
 
   /**
    * Placeholder text shown when no option is selected.
@@ -282,7 +286,7 @@ export class Select extends ThemeableElement {
   }
 
   formResetCallback() {
-    this.value = '';
+    this.value = this._default.value;
   }
 
   checkValidity() {

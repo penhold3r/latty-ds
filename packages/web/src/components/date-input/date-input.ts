@@ -10,6 +10,7 @@ import type { DateInputSize, DateInputVariant, DateInputFormat } from './date-in
 import type { Calendar } from '../calendar/calendar';
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import { openFloating, closeFloating } from '../shared/floating';
+import { FormDefaultController } from '../shared/form-default';
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
@@ -49,14 +50,16 @@ export class DateInput extends ThemeableElement {
   static formAssociated = true;
 
   private _internals!: ElementInternals;
+  private _default = new FormDefaultController(this, () => this.value);
 
   constructor() {
     super();
     this._internals = this.attachInternals();
   }
 
-  /** Selected date in ISO format (YYYY-MM-DD). */
-  @property({ reflect: true }) value = '';
+  /** Selected date in ISO format (YYYY-MM-DD). Not reflected as an attribute — read the property, or the
+   * `change` event's `detail.value`, instead of `getAttribute('value')`/`[value]`. */
+  @property() value = '';
 
   /** Minimum selectable date (ISO format). Dates before this are disabled. */
   @property({ reflect: true }) min = '';
@@ -176,7 +179,7 @@ export class DateInput extends ThemeableElement {
   }
 
   formResetCallback() {
-    this.value = '';
+    this.value = this._default.value;
   }
 
   checkValidity() {

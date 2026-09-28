@@ -1845,6 +1845,12 @@
             },
             {
               "kind": "field",
+              "name": "_default",
+              "privacy": "private",
+              "default": "new FormDefaultController(this, () => this.checked)"
+            },
+            {
+              "kind": "field",
               "name": "variant",
               "type": {
                 "text": "CheckboxVariant"
@@ -1868,7 +1874,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the checkbox is checked."
+              "description": "Whether the checkbox is checked. Not reflected as an attribute — a native checkbox's `checked` _content_\nattribute stays fixed at the markup default and never tracks interaction (that's what `defaultChecked` is\nfor); reflecting it live meant `formResetCallback` could no longer tell what the original default was. Read\nthe property, or the `change` event's `detail.checked`, instead of `[checked]`/`hasAttribute('checked')`."
             },
             {
               "kind": "field",
@@ -2294,12 +2300,18 @@
             },
             {
               "kind": "field",
+              "name": "_default",
+              "privacy": "private",
+              "default": "new FormDefaultController(this, () => this.value)"
+            },
+            {
+              "kind": "field",
               "name": "value",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "The current color value. Accepts hex (`#7c3aed`), rgb (`rgb(124, 58, 237)`),\nor hsl (`hsl(263, 70%, 58%)`). Emitted values match the `format` prop."
+              "description": "The current color value. Accepts hex (`#7c3aed`), rgb (`rgb(124, 58, 237)`),\nor hsl (`hsl(263, 70%, 58%)`). Emitted values match the `format` prop. Not reflected as an attribute —\nread the property, or the `change` event's `detail.value`, instead of `getAttribute('value')`/`[value]`."
             },
             {
               "kind": "field",
@@ -2499,6 +2511,12 @@
             },
             {
               "kind": "field",
+              "name": "_default",
+              "privacy": "private",
+              "default": "new FormDefaultController(this, () => this.value)"
+            },
+            {
+              "kind": "field",
               "name": "_uid",
               "privacy": "private",
               "readonly": true,
@@ -2520,7 +2538,7 @@
                 "text": "string"
               },
               "default": "''",
-              "description": "Currently selected value."
+              "description": "Currently selected value. Not reflected as an attribute — read the property, or the `change` event's\n`detail.value`, instead of `getAttribute('value')`/`[value]` (consistent with the rest of the form\ncontrols; see `lt-textfield`'s equivalent doc comment for why)."
             },
             {
               "kind": "field",
@@ -2902,12 +2920,18 @@
             },
             {
               "kind": "field",
+              "name": "_default",
+              "privacy": "private",
+              "default": "new FormDefaultController(this, () => this.value)"
+            },
+            {
+              "kind": "field",
               "name": "value",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "Selected date in ISO format (YYYY-MM-DD)."
+              "description": "Selected date in ISO format (YYYY-MM-DD). Not reflected as an attribute — read the property, or the\n`change` event's `detail.value`, instead of `getAttribute('value')`/`[value]`."
             },
             {
               "kind": "field",
@@ -3250,6 +3274,12 @@
             },
             {
               "kind": "field",
+              "name": "_default",
+              "privacy": "private",
+              "default": "new FormDefaultController(this, () => this.value)"
+            },
+            {
+              "kind": "field",
               "name": "type",
               "type": {
                 "text": "DatepickerType"
@@ -3264,7 +3294,7 @@
                 "text": "string"
               },
               "default": "''",
-              "description": "Current value in the format required by the native input (`YYYY-MM-DD`, `HH:MM`, or `YYYY-MM-DDTHH:MM`)."
+              "description": "Current value in the format required by the native input (`YYYY-MM-DD`, `HH:MM`, or `YYYY-MM-DDTHH:MM`).\nNot reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of\n`getAttribute('value')`/`[value]`."
             },
             {
               "kind": "field",
@@ -6146,6 +6176,12 @@
               "default": "null"
             },
             {
+              "kind": "field",
+              "name": "_default",
+              "privacy": "private",
+              "default": "new FormDefaultController(this, () => this.checked)"
+            },
+            {
               "kind": "method",
               "name": "willUpdate",
               "parameters": [
@@ -6187,7 +6223,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the radio is checked."
+              "description": "Whether the radio is checked. Not reflected as an attribute — a native radio's `checked` _content_\nattribute stays fixed at the markup default and never tracks interaction; reflecting it live meant\n`formResetCallback` could no longer tell what the original default was. Read the property, or the `change`\nevent's `detail.checked`, instead of `[checked]`/`hasAttribute('checked')`."
             },
             {
               "kind": "field",
@@ -6413,6 +6449,12 @@
             },
             {
               "kind": "field",
+              "name": "_default",
+              "privacy": "private",
+              "default": "new FormDefaultController(this, () => this.value)"
+            },
+            {
+              "kind": "field",
               "name": "_uid",
               "privacy": "private",
               "readonly": true,
@@ -6443,7 +6485,7 @@
                 "text": "string"
               },
               "default": "''",
-              "description": "Current selected value."
+              "description": "Current selected value. Not reflected as an attribute — read the property, or the `change` event's\n`detail.value`, instead of `getAttribute('value')`/`[value]` (consistent with the rest of the form controls;\nsee `lt-textfield`'s equivalent doc comment for why)."
             },
             {
               "kind": "field",
@@ -6891,6 +6933,59 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/shared/form-default.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Captures a form-associated control's initial value the first time it connects — before any user interaction,\nor the control's own reflection, can overwrite it — so `formResetCallback` can restore what the markup\nactually asked for, the way a native `<input>`/`<select>` resets to its `defaultValue`/`defaultChecked`\ninstead of a hard-coded empty one.\n\nA reconnect (an already-upgraded element moved in the DOM) does not recapture: only the very first connect\ncounts as \"the default\", matching a real form control, which keeps its `defaultValue` fixed for its whole\nlifetime regardless of how many times it's detached and reattached.",
+          "name": "FormDefaultController",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_get",
+              "type": {
+                "text": "() => T"
+              },
+              "privacy": "private",
+              "default": "get"
+            },
+            {
+              "kind": "field",
+              "name": "_captured",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "T"
+              },
+              "description": "The captured default. Only meaningful once the host has connected at least once."
+            },
+            {
+              "kind": "method",
+              "name": "hostConnected"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormDefaultController",
+          "declaration": {
+            "name": "FormDefaultController",
+            "module": "src/components/shared/form-default.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/sidepanel/index.ts",
       "declarations": [],
       "exports": [
@@ -7331,6 +7426,12 @@
             },
             {
               "kind": "field",
+              "name": "_default",
+              "privacy": "private",
+              "default": "new FormDefaultController(this, () => this.value)"
+            },
+            {
+              "kind": "field",
               "name": "size",
               "type": {
                 "text": "SliderSize"
@@ -7384,7 +7485,8 @@
               "type": {
                 "text": "number"
               },
-              "default": "0"
+              "default": "0",
+              "description": "Not reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of\n`getAttribute('value')`/`[value]`."
             },
             {
               "kind": "field",
@@ -8099,6 +8201,12 @@
             },
             {
               "kind": "field",
+              "name": "_default",
+              "privacy": "private",
+              "default": "new FormDefaultController(this, () => this.checked)"
+            },
+            {
+              "kind": "field",
               "name": "variant",
               "type": {
                 "text": "SwitchVariant"
@@ -8122,7 +8230,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Whether the switch is checked (on)."
+              "description": "Whether the switch is checked (on). Not reflected as an attribute — a native checkbox's `checked` _content_\nattribute stays fixed at the markup default and never tracks interaction; reflecting it live meant\n`formResetCallback` could no longer tell what the original default was. Read the property, or the `change`\nevent's `detail.checked`, instead of `[checked]`/`hasAttribute('checked')`."
             },
             {
               "kind": "field",
@@ -9329,6 +9437,12 @@
             },
             {
               "kind": "field",
+              "name": "_default",
+              "privacy": "private",
+              "default": "new FormDefaultController(this, () => this.value)"
+            },
+            {
+              "kind": "field",
               "name": "variant",
               "type": {
                 "text": "TextfieldVariant"
@@ -9361,7 +9475,7 @@
                 "text": "string"
               },
               "default": "''",
-              "description": "Current value of the input."
+              "description": "Current value of the input. Not reflected as an attribute: for `type=\"password\"` that would put whatever\nthe user types in plain text in the DOM (`outerHTML`, DevTools, session-replay/DOM-mutation recorders) —\nvisible via `getAttribute('value')`/`[value]` regardless of input type. Read the property, or the\n`input`/`change` event's `detail.value`, instead of an attribute selector."
             },
             {
               "kind": "field",
