@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { Datepicker } from '../datepicker';
 import '../datepicker';
 
@@ -144,6 +144,54 @@ describe('<lt-datepicker>', () => {
       await el.updateComplete;
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
       expect(input.disabled).toBe(true);
+    });
+  });
+
+  // jsdom's ElementInternals is a partial stub (see vitest.setup.ts): setValidity is a no-op and
+  // checkValidity()/reportValidity() are hard-coded to always return true, so el.checkValidity() can't actually
+  // observe anything here. These spy on the calls our component makes to setValidity instead — verified
+  // end-to-end (real checkValidity()/form.checkValidity()) in Chromium.
+  describe('setValidity is called with the native validity + message (DTP-2)', () => {
+    it('required + empty: valueMissing', async () => {
+      el.required = true;
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[0]).toMatchObject({ valueMissing: true });
+    });
+
+    it('required + filled: valid (empty flags)', async () => {
+      el.required = true;
+      await el.updateComplete;
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.value = '2026-06-15';
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[0]).toEqual({});
+    });
+
+    it('value before min: rangeUnderflow, via the native constraint', async () => {
+      el.min = '2026-01-01';
+      await el.updateComplete;
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.value = '2025-12-31';
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[0]).toMatchObject({ rangeUnderflow: true });
+    });
+
+    it('value after max: rangeOverflow, via the native constraint', async () => {
+      el.max = '2026-01-01';
+      await el.updateComplete;
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.value = '2026-01-02';
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[0]).toMatchObject({ rangeOverflow: true });
+    });
+
+    it('passes the inner input as the validation anchor', async () => {
+      el.required = true;
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      await el.updateComplete;
+      const input = el.shadowRoot!.querySelector('input');
+      expect(spy.mock.lastCall?.[2]).toBe(input);
     });
   });
 });

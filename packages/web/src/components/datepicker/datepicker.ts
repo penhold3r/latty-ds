@@ -7,6 +7,7 @@ import type { DatepickerType, DatepickerSize, DatepickerVariant } from './datepi
 import { dispatch } from '../../utils';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { toValidityFlags } from '../shared/form-validity';
 import '../text/text';
 
 /**
@@ -82,10 +83,12 @@ export class Datepicker extends ThemeableElement {
   @query('input') private input!: HTMLInputElement;
 
   protected updated(changed: PropertyValues) {
-    if (changed.has('value') || changed.has('required')) {
+    if (changed.has('value') || changed.has('required') || changed.has('min') || changed.has('max')) {
       this._internals.setFormValue(this.value || null);
-      if (this.required && !this.value) {
-        this._internals.setValidity({ valueMissing: true }, 'Please select a date', this.input);
+      // `type`/`min`/`max`/`required` are already forwarded onto the inner input, so its own `validity` already
+      // covers valueMissing, rangeUnderflow and rangeOverflow (DTP-2) for free — mirror that directly.
+      if (!this.input.validity.valid) {
+        this._internals.setValidity(toValidityFlags(this.input.validity), this.input.validationMessage, this.input);
       } else {
         this._internals.setValidity({});
       }
