@@ -20,15 +20,15 @@ describe('<lt-dialog>', () => {
     document.body.style.overflow = '';
   });
 
-  it('is always in the DOM, inert when closed', async () => {
-    const backdrop = el.shadowRoot!.querySelector('.backdrop') as HTMLElement;
-    expect(backdrop).toBeTruthy();
-    expect(backdrop.hasAttribute('inert')).toBe(true);
+  it('the native <dialog> is always in the DOM, closed by default (page-behind inert now comes from showModal() itself, not a JS attribute — Chromium-only, see the native-dialog spike)', async () => {
+    const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
+    expect(dialog).toBeTruthy();
+    expect(dialog.open).toBe(false);
 
     el.open = true;
     await el.updateComplete;
 
-    expect(backdrop.hasAttribute('inert')).toBe(false);
+    expect(dialog.open).toBe(true);
   });
 
   it('has default size of md', () => {
@@ -122,13 +122,11 @@ describe('<lt-dialog>', () => {
     expect(await axe(el)).toHaveNoViolations();
   });
 
-  it('has proper accessibility attributes', async () => {
+  it('has proper accessibility attributes (role/aria-modal are now implicit on the native <dialog>, not set explicitly — verified in Chromium via the native-dialog spike, not here)', async () => {
     el.open = true;
     await el.updateComplete;
 
-    const dialog = el.shadowRoot!.querySelector('lt-surface');
-    expect(dialog?.getAttribute('role')).toBe('dialog');
-    expect(dialog?.getAttribute('aria-modal')).toBe('true');
+    const dialog = el.shadowRoot!.querySelector('dialog');
     expect(dialog?.getAttribute('aria-labelledby')).toBe('dialog-title');
   });
 
@@ -205,8 +203,10 @@ describe('<lt-dialog>', () => {
     el.closeOnBackdropClick = true;
     await el.updateComplete;
 
-    const backdrop = el.shadowRoot!.querySelector('.backdrop') as HTMLElement;
-    backdrop.click();
+    // Clicking the native <dialog> element itself (not a descendant) is exactly what a real backdrop click
+    // resolves to (::backdrop isn't a real node and can't be an event target — confirmed in the spike).
+    const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
+    dialog.click();
     await el.updateComplete;
 
     expect(el.open).toBe(false);
@@ -217,8 +217,8 @@ describe('<lt-dialog>', () => {
     el.closeOnBackdropClick = false;
     await el.updateComplete;
 
-    const backdrop = el.shadowRoot!.querySelector('.backdrop') as HTMLElement;
-    backdrop.click();
+    const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
+    dialog.click();
     await el.updateComplete;
 
     expect(el.open).toBe(true);
@@ -235,27 +235,41 @@ describe('<lt-dialog>', () => {
     expect(el.open).toBe(true);
   });
 
-  it('closes on Escape key if closeOnEscape is true', async () => {
+  // A real Escape press is handled entirely by the platform now (the native <dialog>'s own CloseWatcher-driven
+  // cancel->close sequence), not by a keydown listener this component owns — jsdom doesn't implement that
+  // sequence at all, so these dispatch the 'cancel' event directly (what the browser fires first) to exercise
+  // _handleCancel's actual logic, and simulate the browser's own follow-up close() for the "stays open" case
+  // would be wrong to call, matching what really happens when cancel isn't prevented.
+  it('does not prevent the native cancel event if closeOnEscape is true, so a real dialog closes itself', async () => {
     el.open = true;
     el.closeOnEscape = true;
     await el.updateComplete;
 
-    const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true });
-    el.dispatchEvent(event);
+    const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
+    const cancelEvent = new Event('cancel', { cancelable: true });
+    dialog.dispatchEvent(cancelEvent);
+
+    expect(cancelEvent.defaultPrevented).toBe(false);
+
+    // A real dialog closes itself right after an unprevented cancel and fires 'close' — simulate that step,
+    // which jsdom's stub only does when explicitly told to (see vitest.setup.ts).
+    dialog.close();
     await el.updateComplete;
 
     expect(el.open).toBe(false);
   });
 
-  it('does not close on Escape key if closeOnEscape is false', async () => {
+  it('prevents the native cancel event if closeOnEscape is false, so a real dialog stays open', async () => {
     el.open = true;
     el.closeOnEscape = false;
     await el.updateComplete;
 
-    const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true });
-    el.dispatchEvent(event);
+    const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
+    const cancelEvent = new Event('cancel', { cancelable: true });
+    dialog.dispatchEvent(cancelEvent);
     await el.updateComplete;
 
+    expect(cancelEvent.defaultPrevented).toBe(true);
     expect(el.open).toBe(true);
   });
 
@@ -333,6 +347,122 @@ describe('<lt-dialog>', () => {
       expect(fresh.heading).toBe('Real Heading');
       expect(fresh.hasAttribute('title')).toBe(false);
       fresh.remove();
+    });
+  });
+
+  describe('native <dialog>: showModal()/close() and no spurious close on mount (DLG-1, DLG-2)', () => {
+    it('calls showModal() on the native element when opened', async () => {
+      el.open = true;
+      await el.updateComplete;
+      const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
+      expect(dialog.open).toBe(true);
+    });
+
+    it('calls close() on the native element when closed', async () => {
+      el.open = true;
+      await el.updateComplete;
+      el.open = false;
+      await el.updateComplete;
+      const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
+      expect(dialog.open).toBe(false);
+    });
+
+    it('does not fire close, or touch body scroll, just from mounting already open (DLG-2)', async () => {
+      const handler = vi.fn();
+      const fresh = document.createElement('lt-dialog') as Dialog;
+      fresh.setAttribute('open', '');
+      fresh.addEventListener('close', handler);
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+
+      expect(handler).not.toHaveBeenCalled();
+      expect(document.body.style.overflow).toBe('');
+      fresh.remove();
+    });
+
+    it('a real dialog closing itself (e.g. via Escape) is synced back onto the open property', async () => {
+      el.open = true;
+      await el.updateComplete;
+      const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
+
+      // Simulate the native element closing itself, the way a real Escape press would — not via el.hide().
+      dialog.close();
+      await el.updateComplete;
+
+      expect(el.open).toBe(false);
+      expect(el.hasAttribute('open')).toBe(false);
+    });
+
+    it('a native close fires our own close event too (side effects — scroll unlock, focus restore — still run)', async () => {
+      el.open = true;
+      await el.updateComplete;
+      const handler = vi.fn();
+      el.addEventListener('close', handler);
+
+      const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
+      dialog.close();
+      await el.updateComplete;
+
+      expect(handler).toHaveBeenCalledOnce();
+      expect(document.body.style.overflow).toBe('');
+    });
+  });
+
+  describe('scroll lock is ref-counted across multiple open dialogs (DLG-3)', () => {
+    it('stays locked while a second dialog is still open', async () => {
+      const second = document.createElement('lt-dialog') as Dialog;
+      document.body.appendChild(second);
+      await second.updateComplete;
+
+      el.open = true;
+      await el.updateComplete;
+      second.open = true;
+      await second.updateComplete;
+      expect(document.body.style.overflow).toBe('hidden');
+
+      el.open = false;
+      await el.updateComplete;
+      expect(document.body.style.overflow).toBe('hidden'); // second is still open
+
+      second.open = false;
+      await second.updateComplete;
+      expect(document.body.style.overflow).toBe('');
+
+      second.remove();
+    });
+
+    it('releases its lock if removed from the DOM while still open, instead of leaving the page permanently unscrollable', async () => {
+      el.open = true;
+      await el.updateComplete;
+      expect(document.body.style.overflow).toBe('hidden');
+
+      el.remove();
+
+      expect(document.body.style.overflow).toBe('');
+    });
+  });
+
+  describe('focus restoration to a shadow-rooted opener (DLG-4)', () => {
+    // jsdom doesn't implement delegatesFocus at all (confirmed empirically elsewhere this session), so
+    // document.activeElement never actually moves into a shadow-rooted custom element's shadow root here —
+    // that part of DLG-4 (lt-button's own delegatesFocus, BTN-4) is verified in Chromium, not jsdom. What this
+    // checks is dialog.ts's own half: that it captures document.activeElement at open time (whatever it is —
+    // BTN-4 already made that the shadow-rooted host itself, not BODY) and calls .focus() on that exact
+    // reference to restore it, once, on close.
+    it('calls .focus() on whatever was document.activeElement when opened, exactly once, on close', async () => {
+      const opener = document.createElement('button');
+      document.body.appendChild(opener);
+      opener.focus();
+      expect(document.activeElement).toBe(opener);
+      const focusSpy = vi.spyOn(opener, 'focus');
+
+      el.open = true;
+      await el.updateComplete;
+      el.hide();
+      await el.updateComplete;
+
+      expect(focusSpy).toHaveBeenCalledOnce();
+      opener.remove();
     });
   });
 });

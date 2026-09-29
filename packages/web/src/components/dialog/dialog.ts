@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
@@ -6,33 +6,39 @@ import { dialogStyles } from './dialog.styles';
 import { backdropFeatureStyles } from '../shared/backdrop.styles';
 import { DialogSize } from './dialog.types';
 import type { SurfaceElevation, SurfaceAppearance } from '../surface/surface.types';
+import { lockBodyScroll, unlockBodyScroll } from '../shared/scroll-lock';
 
 import '../icon-button/icon-button';
 import '../surface/surface';
 import '../text/text';
 
 /**
- * Dialog component (modal) with backdrop, animations, and accessibility features.
+ * Dialog component (modal) built on the native `<dialog>` element, with a backdrop, animations, and full
+ * accessibility features for free — top-layer stacking, a real focus trap, an inert page background, and
+ * Escape-to-close all come from the platform (`showModal()`), not from anything this component builds itself
+ * (DLG-1). Body scroll locking is the one thing native `<dialog>` doesn't do on its own — this component keeps
+ * its own ref-counted lock for that (DLG-3, see `shared/scroll-lock.ts`).
  *
  * @element lt-dialog
  *
  * Features:
  * - Multiple size options (sm, md, lg, xl, fullscreen)
  * - Backdrop overlay with configurable click-to-close
- * - Close on Escape key
+ * - Close on Escape key (native; `close-on-escape="false"` prevents it)
  * - Header with optional heading and close button
  * - Scrollable body content
  * - Optional footer for actions
- * - Focus trap and restoration
+ * - Native focus trap and restoration
  * - `open` / `close` events
- * - Accessible with aria-modal and role="dialog"
+ * - Accessible via the native `<dialog>` element's own implicit modal semantics
  *
  * @slot - Dialog body content
  * @slot header - Custom header content (overrides heading prop)
  * @slot footer - Footer content (typically for action buttons)
  *
  * @fires open - Fired when dialog opens
- * @fires close - Fired when dialog closes
+ * @fires close - Fired when dialog closes (however it closed — the close button, Escape, a backdrop click, or
+ * setting `open` to `false` directly)
  *
  * @example
  * ```html
@@ -130,8 +136,14 @@ export class Dialog extends ThemeableElement {
    */
   @property({ reflect: true }) appearance: SurfaceAppearance = 'filled';
 
-  @query('lt-surface') private dialogElement?: HTMLElement;
+  @query('dialog') private dialogElement?: HTMLDialogElement;
   private previouslyFocusedElement?: HTMLElement;
+  private _scrollLocked = false;
+  // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
+  // was ever shown — `open` starts false, so the else branch ran, firing a spurious `close` and clobbering
+  // `document.body.style.overflow` on page load (DLG-2). Same fix as lt-dropdown's `_skipNextOpenChange` (DDN-1)
+  // and lt-snackbar's (SNK-1).
+  private _skipNextOpenChange = true;
 
   /**
    * Opens the dialog.
@@ -156,7 +168,6 @@ export class Dialog extends ThemeableElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener('keydown', this.handleKeydown);
     // Markup never goes through the `title` accessor above — the attribute is just present on the node from
     // HTML parsing. `heading` wins if both are somehow given.
     if (this.hasAttribute('title')) {
@@ -167,13 +178,20 @@ export class Dialog extends ThemeableElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.removeEventListener('keydown', this.handleKeydown);
+    // A dialog removed from the DOM while still open (rather than closed first) must still release its lock —
+    // otherwise the page is left permanently unscrollable (DLG-3's other half).
+    if (this._scrollLocked) {
+      unlockBodyScroll();
+      this._scrollLocked = false;
+    }
     this.restoreFocus();
   }
 
-  updated(changedProperties: Map<string, unknown>) {
+  updated(changedProperties: PropertyValues<this>) {
     if (changedProperties.has('open')) {
-      if (this.open) {
+      if (this._skipNextOpenChange) {
+        this._skipNextOpenChange = false;
+      } else if (this.open) {
         this.handleOpen();
       } else {
         this.handleClose();
@@ -182,25 +200,38 @@ export class Dialog extends ThemeableElement {
   }
 
   private handleOpen() {
-    // Store currently focused element to restore later
+    // Store currently focused element to restore later. This is the shadow-rooted host itself when the opener
+    // delegates focus (e.g. lt-button, BTN-4) — its own .focus() now correctly moves focus back into its shadow
+    // root on restore, which is what fixed DLG-4 (no dialog-side change needed for that part).
     this.previouslyFocusedElement = document.activeElement as HTMLElement;
 
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden';
+    if (!this._scrollLocked) {
+      lockBodyScroll();
+      this._scrollLocked = true;
+    }
 
-    // Focus the dialog
-    this.updateComplete.then(() => {
-      this.dialogElement?.focus();
-    });
+    // Guard against calling showModal() on an already-open dialog — throws InvalidStateError (confirmed in
+    // Chromium/Firefox/WebKit, _agent-plans/component-audit-probes/native-dialog-spike.mjs). Shouldn't happen in
+    // practice, since this only runs on a genuine false->true transition of `open`, but costs nothing to guard.
+    if (this.dialogElement && !this.dialogElement.open) {
+      this.dialogElement.showModal();
+    }
 
     this.dispatchEvent(new CustomEvent('open', { bubbles: true, composed: true }));
   }
 
   private handleClose() {
-    // Restore body scroll
-    document.body.style.overflow = '';
+    if (this._scrollLocked) {
+      unlockBodyScroll();
+      this._scrollLocked = false;
+    }
 
-    // Restore focus to previously focused element
+    // The native element may already be closed here (this runs for both "we closed it" and "it closed itself,
+    // e.g. via Escape" — see _handleNativeClose below), so guard against calling close() twice.
+    if (this.dialogElement?.open) {
+      this.dialogElement.close();
+    }
+
     this.restoreFocus();
 
     this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
@@ -213,18 +244,31 @@ export class Dialog extends ThemeableElement {
     }
   }
 
-  private handleKeydown = (event: KeyboardEvent) => {
-    if (this.open && this.closeOnEscape && event.key === 'Escape') {
-      event.preventDefault();
-      this.hide();
+  // Native <dialog> fires 'cancel' (cancelable) on Escape before it closes itself — preventDefault() here is
+  // how close-on-escape="false" is implemented now, instead of an old keydown listener racing the platform's
+  // own handling (confirmed working in the spike across all three engines).
+  private _handleCancel = (e: Event) => {
+    if (!this.closeOnEscape) {
+      e.preventDefault();
     }
   };
 
-  private handleBackdropClick(event: MouseEvent) {
-    if (this.closeOnBackdropClick && event.target === event.currentTarget) {
+  // The native element's own 'close' event fires whenever IT closes, for any reason — our own close() call
+  // above, but also Escape (which closes it directly; nothing else tells us). Sync `open` back so the two never
+  // drift apart. If we're the ones who just called close() (inside handleClose(), above), `open` is already
+  // false and this is a no-op — Lit ignores a property set to its current value.
+  private _handleNativeClose = () => {
+    this.open = false;
+  };
+
+  // The clicked-outside-the-content area of a shown <dialog> resolves e.target to the <dialog> element itself
+  // (::backdrop isn't a real node and can't be an event target) — clicking any actual descendant instead
+  // targets that descendant, so this only ever fires for a genuine backdrop click (confirmed in the spike).
+  private _handleDialogClick = (e: MouseEvent) => {
+    if (this.closeOnBackdropClick && e.target === this.dialogElement) {
       this.hide();
     }
-  }
+  };
 
   private handleCloseClick() {
     this.hide();
@@ -232,16 +276,14 @@ export class Dialog extends ThemeableElement {
 
   render() {
     return html`
-      <div class="backdrop" ?inert=${!this.open} @click=${this.handleBackdropClick} part="backdrop">
-        <lt-surface
-          elevation=${this.elevation}
-          appearance=${this.appearance}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="dialog-title"
-          tabindex="-1"
-          part="dialog"
-        >
+      <dialog
+        part="dialog"
+        aria-labelledby="dialog-title"
+        @cancel=${this._handleCancel}
+        @close=${this._handleNativeClose}
+        @click=${this._handleDialogClick}
+      >
+        <lt-surface elevation=${this.elevation} appearance=${this.appearance} part="surface">
           <div class="header" part="header">
             <div class="header-content">
               <slot name="header">
@@ -276,7 +318,7 @@ export class Dialog extends ThemeableElement {
               `
             : ''}
         </lt-surface>
-      </div>
+      </dialog>
     `;
   }
 

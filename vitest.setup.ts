@@ -46,3 +46,36 @@ if (typeof ElementInternals !== 'undefined') {
     });
   }
 }
+
+// jsdom (27.4, checked) implements none of HTMLDialogElement's own API — no showModal/show/close, no `inert`
+// (confirmed via the native-dialog investigation, _agent-plans/COMPONENT-AUDIT.md §6.1). The behaviors jsdom
+// genuinely can't model (focus trap, page-behind inert, top-layer stacking, real Escape-driven close) are
+// verified in Chromium instead (the investigation's own spike already did, for the general pattern); this stub
+// only needs to make `open` respond correctly and `close()` fire a real `close` event, so lt-dialog's own logic
+// (which listens for that event to sync back) is exercised faithfully in jsdom tests.
+if (typeof HTMLDialogElement !== 'undefined' && typeof HTMLDialogElement.prototype.showModal !== 'function') {
+  const d = HTMLDialogElement.prototype as unknown as {
+    showModal: () => void;
+    show: () => void;
+    close: (returnValue?: string) => void;
+    returnValue: string;
+  };
+  d.returnValue = '';
+  d.showModal = function (this: HTMLDialogElement) {
+    if (this.open)
+      throw new DOMException(
+        "Failed to execute 'showModal': the element already has an 'open' attribute",
+        'InvalidStateError'
+      );
+    this.open = true;
+  };
+  d.show = function (this: HTMLDialogElement) {
+    this.open = true;
+  };
+  d.close = function (this: HTMLDialogElement & { returnValue: string }, returnValue?: string) {
+    if (returnValue !== undefined) this.returnValue = returnValue;
+    if (!this.open) return;
+    this.open = false;
+    this.dispatchEvent(new Event('close'));
+  };
+}

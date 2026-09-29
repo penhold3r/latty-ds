@@ -5,80 +5,83 @@ export const dialogStyles = css`
     font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
   }
 
-  /* Backdrop */
-  .backdrop {
-    align-items: center;
-    background: rgba(0, 0, 0, var(--lt-dialog-overlay-opacity, 0.5));
-    display: flex;
-    height: 100vh;
-    justify-content: center;
-    left: 0;
-    opacity: 0;
-    padding: var(--lt-spacing-4);
-    position: fixed;
-    top: 0;
-    transition: opacity 200ms ease;
-    width: 100vw;
-    z-index: 1000;
+  /* The native <dialog> is the modal surface now — its own showModal()/close() give the top-layer stacking,
+     focus trap and inert background for free (DLG-1). Reset its UA-default border/padding/background (a native
+     <dialog> renders with a visible border and white background by default) so lt-surface, not the browser's
+     own chrome, controls how it looks. Width/height are viewport-relative with a spacing-4 inset on each side
+     (matching the old .backdrop's padding), capped per size variant below. */
+  dialog {
+    background: transparent;
+    border: none;
+    max-height: calc(100vh - var(--lt-spacing-8));
+    overflow: visible;
+    padding: 0;
+    width: calc(100vw - var(--lt-spacing-8));
+    /* display/overlay (top-layer membership) are the only things animated on <dialog> itself — the entrance/exit
+       motion (opacity + translateY) lives on lt-surface below, unaffected by any of this. Without these,
+       close() would remove the dialog (and its ::backdrop) from rendering instantly, cutting that motion off
+       partway through; allow-discrete keeps it rendered for the transition's duration instead, then removes it. */
+    transition:
+      display 220ms allow-discrete,
+      overlay 220ms allow-discrete;
   }
 
-  :host([open]) .backdrop {
-    opacity: 1;
-  }
-
-  :host(:not([open])) .backdrop {
-    pointer-events: none;
-  }
-
-  /* lt-surface host — flex item inside .backdrop, sized per size variant */
-  lt-surface {
-    width: 100%;
-  }
-
-  :host([size='sm']) lt-surface {
+  :host([size='sm']) dialog {
     max-width: 400px;
   }
-  :host([size='md']) lt-surface {
+  :host([size='md']) dialog {
     max-width: 600px;
   }
-  :host([size='lg']) lt-surface {
+  :host([size='lg']) dialog {
     max-width: 800px;
   }
-  :host([size='xl']) lt-surface {
+  :host([size='xl']) dialog {
     max-width: 1000px;
   }
-
-  :host([size='fullscreen']) .backdrop {
-    padding: 0;
-  }
-
-  :host([size='fullscreen']) lt-surface {
+  :host([size='fullscreen']) dialog {
     height: 100vh;
     max-height: 100vh;
     max-width: 100vw;
+    width: 100vw;
   }
 
-  /* lt-surface inner div — layout and animation */
-  lt-surface::part(surface) {
+  /* ::backdrop replaces the old .backdrop div — it's a real paintable box (just not a real DOM node), so its
+     own background-color transition plays independently of lt-surface's. */
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0);
+    transition:
+      background-color 200ms ease,
+      display 220ms allow-discrete,
+      overlay 220ms allow-discrete;
+  }
+
+  dialog[open]::backdrop {
+    background: rgba(0, 0, 0, var(--lt-dialog-overlay-opacity, 0.5));
+  }
+
+  /* lt-surface — fills the <dialog>, sized by it (max-width/height above); the entrance/exit animation */
+  lt-surface {
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - var(--lt-spacing-8));
+    height: 100%;
     opacity: 0;
-    position: relative;
     transform: translateY(16px);
     transition:
       opacity 220ms ease,
       transform 220ms cubic-bezier(0.34, 1.2, 0.64, 1);
+    width: 100%;
   }
 
-  :host([open]) lt-surface::part(surface) {
+  dialog[open] lt-surface {
     opacity: 1;
     transform: translateY(0);
   }
 
-  :host([size='fullscreen']) lt-surface::part(surface) {
-    border-radius: 0;
-    max-height: 100vh;
+  lt-surface::part(surface) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
   }
 
   /* Header */
