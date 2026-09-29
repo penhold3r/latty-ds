@@ -13,16 +13,16 @@ export const sidepanelStyles = css`
     background: var(--lt-bg-default);
     border: none;
     color: var(--lt-text-default);
-    display: flex;
-    flex-direction: column;
     margin: 0;
     max-height: none;
     max-width: none;
     padding: 0;
     position: fixed;
-    /* display/overlay need transition-behavior: allow-discrete so close() doesn't remove the panel (and its
-       ::backdrop) from rendering instantly, cutting the slide-out transform transition off partway through —
-       same reasoning as lt-dialog. */
+    /* display is deliberately NOT set here — a closed dialog must stay display:none (the native default) for
+       SPL-1's fix to actually hold (genuinely non-interactive, out of the accessibility tree); it's set to flex
+       only for the open state, below. display/overlay need transition-behavior: allow-discrete so close()
+       doesn't remove the panel (and its ::backdrop) from rendering instantly, cutting the slide-out transform
+       transition off partway through — same reasoning as lt-dialog. */
     transition:
       transform 250ms cubic-bezier(0.4, 0, 0.2, 1),
       display 250ms allow-discrete,
@@ -41,38 +41,68 @@ export const sidepanelStyles = css`
     background: rgba(0, 0, 0, var(--lt-sidepanel-overlay-opacity, 0.45));
   }
 
-  /* ── Anchors — off-screen positions; dialog[open] (below) is the only thing that moves it on-screen ──────── */
+  /* ── Anchors — off-screen positions; dialog[open] (below) is the only thing that moves it on-screen. Fully
+     explicit left/right/top/bottom (not inset-block/inline shorthand, and not omitting the opposite side to
+     fall back to "auto") and an explicit height/width — a native <dialog>, even position:fixed, does not
+     stretch to fill top:0/bottom:0 the way a plain block box would; confirmed empirically, it needs an
+     explicit dimension on the axis inset alone doesn't constrain. ─────────────────────────────────────────── */
 
   :host([anchor='left']) dialog,
   :host(:not([anchor])) dialog {
-    inset-block: 0;
+    top: 0;
+    right: auto;
+    bottom: auto;
     left: 0;
+    height: 100vh;
     transform: translateX(-100%);
     box-shadow: var(--lt-sidepanel-shadow, 4px 0 24px rgba(0, 0, 0, 0.12));
   }
 
   :host([anchor='right']) dialog {
-    inset-block: 0;
+    top: 0;
     right: 0;
+    bottom: auto;
+    left: auto;
+    height: 100vh;
     transform: translateX(100%);
     box-shadow: var(--lt-sidepanel-shadow, -4px 0 24px rgba(0, 0, 0, 0.12));
   }
 
   :host([anchor='top']) dialog {
-    inset-inline: 0;
     top: 0;
+    right: auto;
+    bottom: auto;
+    left: 0;
+    width: 100vw;
     transform: translateY(-100%);
     box-shadow: var(--lt-sidepanel-shadow, 0 4px 24px rgba(0, 0, 0, 0.12));
   }
 
   :host([anchor='bottom']) dialog {
-    inset-inline: 0;
+    top: auto;
+    right: auto;
     bottom: 0;
+    left: 0;
+    width: 100vw;
     transform: translateY(100%);
     box-shadow: var(--lt-sidepanel-shadow, 0 -4px 24px rgba(0, 0, 0, 0.12));
   }
 
   dialog[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* The transform override has to be scoped per anchor, not a bare dialog[open] — :host([anchor='right'])
+     dialog (above) has HIGHER specificity than a plain dialog[open] (one more attribute selector, from the
+     :host() argument), so a bare "dialog[open] { transform: translate(0,0); }" would lose the cascade to the
+     anchor rule's own closed-position transform regardless of source order, leaving the panel permanently
+     stuck off-screen. Matching each anchor rule's own specificity here guarantees the open state wins. */
+  :host([anchor='left']) dialog[open],
+  :host(:not([anchor])) dialog[open],
+  :host([anchor='right']) dialog[open],
+  :host([anchor='top']) dialog[open],
+  :host([anchor='bottom']) dialog[open] {
     transform: translate(0, 0);
   }
 
