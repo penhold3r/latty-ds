@@ -1,28 +1,42 @@
-import { html, type PropertyValues } from 'lit';
+import { html, nothing, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 
 import { sidepanelStyles } from './sidepanel.styles';
 import { backdropFeatureStyles } from '../shared/backdrop.styles';
 import type { SidePanelAnchor } from './sidepanel.types';
 import { dispatch } from '../../utils';
+import { lockBodyScroll, unlockBodyScroll } from '../shared/scroll-lock';
 
 import '../icon-button/icon-button';
 import '../text/text';
 
 /**
- * A slide-in panel anchored to any edge of the viewport, with a backdrop overlay.
+ * A slide-in panel anchored to any edge of the viewport, built on the native `<dialog>` element — the same
+ * migration `lt-dialog` went through (DLG-1..4), applied here to fix the equivalent gaps (SPL-1/2/3): a closed
+ * panel is no longer just transformed off-screen while staying focusable and exposed to assistive tech
+ * (`display: none` when closed is native, automatic, and absolute); focus trap and restore on close both come
+ * from `showModal()`/`close()` for free — no manual focus-tracking code needed here at all, unlike `lt-dialog`,
+ * which still carries its own from before that component's migration; Escape closes only the panel that was
+ * actually focused, not every open panel on the page (no more `window`-level keydown listener); and `close`
+ * fires consistently from `updated()` whenever `open` becomes `false`, however it happened — not only when
+ * `hide()` was called directly.
  *
  * @element lt-sidepanel
  * @slot - Content rendered inside the panel body
- * @fires close - Fired when the user requests close (backdrop click, Escape key, or close button)
- * @part overlay - The backdrop scrim behind the panel
- * @part panel - The sliding panel container
+ * @fires open - Fired when the panel opens
+ * @fires close - Fired when the panel closes (however it closed — the close button, Escape, a backdrop click,
+ * or setting `open` to `false` directly)
+ * @part overlay - The backdrop scrim behind the panel (the native `<dialog>`'s own `::backdrop`, exposed as a
+ * part so consumers can still target it, even though it's not a real light-DOM-visible element)
+ * @part panel - The sliding panel container (the `<dialog>` element itself)
  * @part header - The header bar (contains label and close button)
  * @part close-button - The close button inside the header
  * @part body - The scrollable content area wrapping the default slot
  *
  * @cssprop [--lt-sidepanel-shadow] - Overrides the panel's box-shadow, for all anchor positions.
+ * @cssprop [--lt-sidepanel-overlay-opacity] - Backdrop darkness. Set via the `overlay-opacity` property/attribute
+ * instead of this custom property directly, unless you're overriding it from outside the component.
  */
 @customElement('lt-sidepanel')
 export class SidePanel extends ThemeableElement {
@@ -49,6 +63,13 @@ export class SidePanel extends ThemeableElement {
   /** Backdrop darkness as an alpha value from 0 (transparent) to 1 (opaque). */
   @property({ type: Number, attribute: 'overlay-opacity' }) overlayOpacity = 0.45;
 
+  @query('dialog') private dialogElement?: HTMLDialogElement;
+  private _scrollLocked = false;
+  // Same first-update guard, for the same reason, as lt-dialog (DLG-2), lt-dropdown (DDN-1) and lt-snackbar
+  // (SNK-1): `updated()` also runs after the very first render, where `changed.has('open')` is true even though
+  // nothing was ever shown.
+  private _skipNextOpenChange = true;
+
   /** Open the panel. */
   public show() {
     this.open = true;
@@ -57,32 +78,36 @@ export class SidePanel extends ThemeableElement {
   /** Close the panel. */
   public hide() {
     this.open = false;
-    dispatch(this, 'close');
   }
 
   /** Toggle the panel open/closed. */
   public toggle() {
-    if (this.open) this.hide();
-    else this.show();
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener('keydown', this._handleKeyDown);
+    this.open = !this.open;
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('keydown', this._handleKeyDown);
+    // A panel removed from the DOM while still open must still release its scroll lock (same reasoning as
+    // lt-dialog, DLG-3's other half).
+    if (this._scrollLocked) {
+      unlockBodyScroll();
+      this._scrollLocked = false;
+    }
   }
 
-  private _handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' && this.open) this.hide();
-  };
+  updated(changed: PropertyValues<this>): void {
+    if (changed.has('open')) {
+      if (this._skipNextOpenChange) {
+        this._skipNextOpenChange = false;
+      } else if (this.open) {
+        this._handleOpen();
+      } else {
+        this._handleClose();
+      }
+    }
 
-  protected updated(changed: PropertyValues): void {
     if (!changed.has('anchor')) return;
-    const panel = this.shadowRoot?.querySelector('[part="panel"]') as HTMLElement | null;
+    const panel = this.dialogElement;
     if (!panel) return;
 
     // Disable transition and snap to the new anchor's off-screen start position.
@@ -99,6 +124,54 @@ export class SidePanel extends ThemeableElement {
     });
   }
 
+  private _handleOpen() {
+    if (!this._scrollLocked) {
+      lockBodyScroll();
+      this._scrollLocked = true;
+    }
+    // Guard against calling showModal() on an already-open dialog — throws InvalidStateError (same as lt-dialog,
+    // DLG-1). Initial focus placement and, on close, focus restoration to whatever had focus beforehand are both
+    // native showModal()/close() behavior — nothing to implement here for either (confirmed in the investigation's
+    // spike: "Focus returns to a shadow-rooted opener on close" works with no manual tracking at all).
+    if (this.dialogElement && !this.dialogElement.open) {
+      this.dialogElement.showModal();
+    }
+    dispatch(this, 'open');
+  }
+
+  private _handleClose() {
+    if (this._scrollLocked) {
+      unlockBodyScroll();
+      this._scrollLocked = false;
+    }
+    // The native element may already be closed here (this runs for both "we closed it" and "it closed itself,
+    // e.g. via Escape" — see _handleNativeClose below), so guard against calling close() twice.
+    if (this.dialogElement?.open) {
+      this.dialogElement.close();
+    }
+    dispatch(this, 'close');
+  }
+
+  // Unlike lt-dialog, this has no close-on-escape toggle, so there's nothing to preventDefault() on 'cancel' —
+  // Escape is left entirely to the native element, now scoped to whichever panel actually has focus, not a
+  // window-level listener that closed every open panel on one keypress regardless of which was focused (SPL-3).
+
+  // The native element's own 'close' event fires whenever IT closes, for any reason — sync `open` back so the
+  // two never drift apart. If we're the ones who just called close() (inside _handleClose(), above), `open` is
+  // already false and this is a no-op.
+  private _handleNativeClose = () => {
+    this.open = false;
+  };
+
+  // The clicked-outside-the-content area of a shown <dialog> resolves e.target to the <dialog> element itself
+  // (::backdrop isn't a real node and can't be an event target) — clicking any actual descendant instead
+  // targets that descendant (same mechanism as lt-dialog's backdrop-click detection, confirmed in the spike).
+  private _handleDialogClick = (e: MouseEvent) => {
+    if (e.target === this.dialogElement) {
+      this.hide();
+    }
+  };
+
   private get _offScreenTransform(): string {
     switch (this.anchor) {
       case 'right':
@@ -113,15 +186,22 @@ export class SidePanel extends ThemeableElement {
   }
 
   private get _panelStyle(): string {
-    return this.anchor === 'left' || this.anchor === 'right' ? `width: ${this.size}` : `height: ${this.size}`;
+    const sizeStyle =
+      this.anchor === 'left' || this.anchor === 'right' ? `width: ${this.size}` : `height: ${this.size}`;
+    return `${sizeStyle}; --lt-sidepanel-overlay-opacity: ${this.overlayOpacity}`;
+  }
+
+  private get _hasLabel(): boolean {
+    return this.label.trim().length > 0;
   }
 
   private _renderHeader() {
-    const hasLabel = this.label.trim().length > 0;
-    if (!hasLabel && this.noCloseButton) return '';
+    if (!this._hasLabel && this.noCloseButton) return '';
     return html`
       <div part="header" class="header">
-        ${hasLabel ? html`<lt-text variant="h6" class="panel-label">${this.label}</lt-text>` : ''}
+        ${this._hasLabel
+          ? html`<lt-text variant="h6" class="panel-label" id="sidepanel-label">${this.label}</lt-text>`
+          : ''}
         ${!this.noCloseButton
           ? html`
               <lt-icon-button
@@ -140,13 +220,18 @@ export class SidePanel extends ThemeableElement {
 
   render() {
     return html`
-      <div part="overlay" style="--_overlay-opacity: ${this.overlayOpacity}" @click=${this.hide}></div>
-      <div part="panel" style=${this._panelStyle} role="dialog" aria-modal="true">
+      <dialog
+        part="panel"
+        style=${this._panelStyle}
+        aria-labelledby=${this._hasLabel ? 'sidepanel-label' : nothing}
+        @close=${this._handleNativeClose}
+        @click=${this._handleDialogClick}
+      >
         ${this._renderHeader()}
         <div part="body" class="body">
           <slot></slot>
         </div>
-      </div>
+      </dialog>
     `;
   }
 }

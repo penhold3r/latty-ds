@@ -5,72 +5,93 @@ export const sidepanelStyles = css`
     display: contents;
   }
 
-  /* ── Overlay ────────────────────────────────────────────────────────────── */
+  /* ── Panel — the native <dialog> itself now provides the overlay too, via ::backdrop; a closed dialog is
+     display:none automatically, so unlike the old transform-only-hidden div, a closed panel is genuinely
+     non-interactive and out of the accessibility tree, with no extra JS needed (SPL-1). ────────────────────── */
 
-  [part='overlay'] {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, var(--lt-sidepanel-overlay-opacity, 0.45));
-    z-index: 400;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 200ms ease;
-  }
-
-  /* ── Panel ──────────────────────────────────────────────────────────────── */
-
-  [part='panel'] {
-    position: fixed;
+  dialog {
     background: var(--lt-bg-default);
+    border: none;
     color: var(--lt-text-default);
     display: flex;
     flex-direction: column;
-    z-index: 401;
-    pointer-events: none;
-    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 0;
+    max-height: none;
+    max-width: none;
+    padding: 0;
+    position: fixed;
+    /* display/overlay need transition-behavior: allow-discrete so close() doesn't remove the panel (and its
+       ::backdrop) from rendering instantly, cutting the slide-out transform transition off partway through —
+       same reasoning as lt-dialog. */
+    transition:
+      transform 250ms cubic-bezier(0.4, 0, 0.2, 1),
+      display 250ms allow-discrete,
+      overlay 250ms allow-discrete;
   }
 
-  /* ── Anchors — initial off-screen positions ─────────────────────────────── */
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0);
+    transition:
+      background-color 200ms ease,
+      display 250ms allow-discrete,
+      overlay 250ms allow-discrete;
+  }
 
-  :host([anchor='left']) [part='panel'],
-  :host(:not([anchor])) [part='panel'] {
+  dialog[open]::backdrop {
+    background: rgba(0, 0, 0, var(--lt-sidepanel-overlay-opacity, 0.45));
+  }
+
+  /* ── Anchors — off-screen positions; dialog[open] (below) is the only thing that moves it on-screen ──────── */
+
+  :host([anchor='left']) dialog,
+  :host(:not([anchor])) dialog {
     inset-block: 0;
     left: 0;
     transform: translateX(-100%);
     box-shadow: var(--lt-sidepanel-shadow, 4px 0 24px rgba(0, 0, 0, 0.12));
   }
 
-  :host([anchor='right']) [part='panel'] {
+  :host([anchor='right']) dialog {
     inset-block: 0;
     right: 0;
     transform: translateX(100%);
     box-shadow: var(--lt-sidepanel-shadow, -4px 0 24px rgba(0, 0, 0, 0.12));
   }
 
-  :host([anchor='top']) [part='panel'] {
+  :host([anchor='top']) dialog {
     inset-inline: 0;
     top: 0;
     transform: translateY(-100%);
     box-shadow: var(--lt-sidepanel-shadow, 0 4px 24px rgba(0, 0, 0, 0.12));
   }
 
-  :host([anchor='bottom']) [part='panel'] {
+  :host([anchor='bottom']) dialog {
     inset-inline: 0;
     bottom: 0;
     transform: translateY(100%);
     box-shadow: var(--lt-sidepanel-shadow, 0 -4px 24px rgba(0, 0, 0, 0.12));
   }
 
-  /* ── Open state — must come after anchors to win the cascade ────────────── */
-
-  :host([open]) [part='overlay'] {
-    opacity: 1;
-    pointer-events: auto;
+  dialog[open] {
+    transform: translate(0, 0);
   }
 
-  :host([open]) [part='panel'] {
-    transform: translate(0, 0);
-    pointer-events: auto;
+  /* A newly-shown dialog has no earlier rendered frame to transition from — @starting-style supplies one,
+     per anchor, so the slide-in actually animates instead of snapping straight to the open position. */
+  @starting-style {
+    :host([anchor='left']) dialog[open],
+    :host(:not([anchor])) dialog[open] {
+      transform: translateX(-100%);
+    }
+    :host([anchor='right']) dialog[open] {
+      transform: translateX(100%);
+    }
+    :host([anchor='top']) dialog[open] {
+      transform: translateY(-100%);
+    }
+    :host([anchor='bottom']) dialog[open] {
+      transform: translateY(100%);
+    }
   }
 
   /* ── Header ─────────────────────────────────────────────────────────────── */
@@ -105,8 +126,8 @@ export const sidepanelStyles = css`
   /* ── Reduced motion ─────────────────────────────────────────────────────── */
 
   @media (prefers-reduced-motion: reduce) {
-    [part='overlay'],
-    [part='panel'] {
+    dialog,
+    dialog::backdrop {
       transition: none;
     }
   }
