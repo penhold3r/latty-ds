@@ -164,6 +164,9 @@ export class DateInput extends ThemeableElement {
 
   private _handleDropdownKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
+      // preventDefault(), not just stopPropagation() — an ancestor <lt-dialog> closes itself on Escape unless
+      // something already prevented the keydown's default, independent of DOM event bubbling.
+      e.preventDefault();
       e.stopPropagation();
       this._closeDropdown();
       this.shadowRoot?.querySelector<HTMLElement>('.field-btn')?.focus();

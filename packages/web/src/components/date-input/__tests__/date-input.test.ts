@@ -249,6 +249,15 @@ describe('<lt-date-input>', () => {
     expect(el.shadowRoot!.querySelector('lt-calendar')).toBeNull();
   });
 
+  it('Escape prevents default (so an ancestor lt-dialog does not also close)', async () => {
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!.click();
+    await el.updateComplete;
+    const event = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true });
+    el.shadowRoot!.querySelector('.dropdown')!.dispatchEvent(event);
+    await el.updateComplete;
+    expect(event.defaultPrevented).toBe(true);
+  });
+
   // ── Disabled ───────────────────────────────────────────────────────────────
 
   it('disabled attribute disables the trigger button', async () => {

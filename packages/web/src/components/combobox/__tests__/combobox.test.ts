@@ -194,6 +194,33 @@ describe('<lt-combobox>', () => {
       expect(el.hasAttribute('open')).toBe(false);
       outside.remove();
     });
+
+    it('Escape prevents default when it has something to close (so an ancestor lt-dialog does not also close)', async () => {
+      input().focus();
+      await el.updateComplete;
+      expect(el.hasAttribute('open')).toBe(true);
+
+      const event = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
+      input().dispatchEvent(event);
+      await el.updateComplete;
+
+      expect(el.hasAttribute('open')).toBe(false);
+      expect(event.defaultPrevented).toBe(true);
+    });
+
+    it('Escape does not prevent default when the dropdown is already closed', async () => {
+      input().focus();
+      await el.updateComplete;
+      keydown('Escape'); // closes it
+      await el.updateComplete;
+      expect(el.hasAttribute('open')).toBe(false);
+
+      const event = new KeyboardEvent('keydown', { key: 'Escape', cancelable: true });
+      input().dispatchEvent(event);
+      await el.updateComplete;
+
+      expect(event.defaultPrevented).toBe(false);
+    });
   });
 
   describe('keyboard navigation and ARIA (CMB-1, CMB-2)', () => {

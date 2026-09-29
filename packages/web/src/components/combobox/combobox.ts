@@ -161,7 +161,13 @@ export class Combobox extends ThemeableElement {
 
   private handleKeydown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
-      this.closeDropdown();
+      // Only claim the keypress if there's actually something here to close — otherwise an ancestor (an open
+      // <lt-dialog>, which closes itself on Escape unless something else already prevented the keydown's
+      // default) should still see it and close on its own.
+      if (this.open) {
+        e.preventDefault();
+        this.closeDropdown();
+      }
       return;
     }
     // Closed, arrow keys only ever reopen it — the list itself only opened on focus/click/typing, so once
