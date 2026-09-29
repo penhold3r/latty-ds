@@ -9,10 +9,16 @@ describe('Dialog', () => {
     expect(container.querySelector('lt-dialog')).toBeTruthy();
   });
 
-  it('passes title as attribute', () => {
-    const { container } = render(<Dialog title="Confirm">Content</Dialog>);
-    expect(container.querySelector('lt-dialog')?.getAttribute('title')).toBe('Confirm');
+  it('passes heading as attribute', () => {
+    const { container } = render(<Dialog heading="Confirm">Content</Dialog>);
+    expect(container.querySelector('lt-dialog')?.getAttribute('heading')).toBe('Confirm');
   });
+
+  // The deprecated `title` alias's actual behavior (forwarding to `heading`, stripping the native attribute so
+  // no tooltip shows) is @latty-ds/web's own runtime logic, not this wrapper's — verified end to end against the
+  // real element in packages/web/src/components/dialog/__tests__/dialog.test.ts (DLG-6), not here. This wrapper
+  // is a thin prop-forwarder; registering the real element in this shared test file would risk leaking its
+  // side effects (e.g. document.body.style.overflow while "open") into sibling tests below.
 
   it('passes open as attribute', () => {
     const { container } = render(<Dialog open>Content</Dialog>);

@@ -63,15 +63,18 @@ export default function Admonition(unprocessedProps: AdmonitionProps): JSX.Eleme
   });
 
   // A custom `:::tip[Custom **Bold** Title]` title can be arbitrary MDX, not
-  // just text — lt-alert's `title` is a plain string attribute, so a rich
-  // title renders inline above the body instead of in the dedicated title
+  // just text — lt-alert's `heading` is a plain string attribute, so a rich
+  // title renders inline above the body instead of in the dedicated heading
   // slot. Plain-string titles (the vast majority: every default title, and
   // most custom ones) go through the real slot and look identical to before.
   const titleText = typeof props.title === 'string' ? props.title : props.title === undefined ? defaultTitle : '';
   const richTitle = typeof props.title === 'string' || props.title === undefined ? null : props.title;
 
   return (
-    <lt-alert variant={config.variant} title={titleText} class={props.className}>
+    // heading, not the deprecated title alias: this renders the raw custom element directly, and React sets a
+    // string prop on an unknown tag via setAttribute — which goes straight to the DOM attribute, bypassing
+    // lt-alert's JS `title` accessor (and its native-tooltip-attribute stripping) entirely.
+    <lt-alert variant={config.variant} heading={titleText} class={props.className}>
       {richTitle && <strong>{richTitle}</strong>}
       {props.children}
     </lt-alert>

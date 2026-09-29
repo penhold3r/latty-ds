@@ -46,7 +46,7 @@ const fixture = `
       ${STATUS.flatMap((v) =>
         ['filled', 'outlined', 'solid'].map(
           (a) =>
-            `<lt-alert variant="${v}" appearance="${a}" title="${v} ${a}" closable>Body text under the title in a ${a} alert.</lt-alert>`
+            `<lt-alert variant="${v}" appearance="${a}" heading="${v} ${a}" closable>Body text under the title in a ${a} alert.</lt-alert>`
         )
       ).join('')}
     </section>
@@ -77,7 +77,7 @@ const surroundings = `
     <lt-nav orientation="horizontal" label="Menu"><lt-nav-item label="Products" open><lt-nav-item href="#a" label="Alpha"></lt-nav-item><lt-nav-item href="#b" label="Beta"></lt-nav-item></lt-nav-item></lt-nav>
     <div style="height:90px"></div>
   </div>
-  <lt-dialog id="dialog" open title="Dialog"><p>Body copy inside an open dialog.</p></lt-dialog>
+  <lt-dialog id="dialog" open heading="Dialog"><p>Body copy inside an open dialog.</p></lt-dialog>
   <lt-sidepanel id="sidepanel" open label="Panel"><p style="margin:0;padding:16px">Content inside an open side panel.</p></lt-sidepanel>
 `;
 

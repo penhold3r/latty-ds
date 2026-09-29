@@ -85,7 +85,7 @@ import { Button, Dialog } from '@latty-ds/react';
 
 export function ConfirmDialog({ onConfirm }: { onConfirm: () => void }) {
   return (
-    <Dialog title="Are you sure?">
+    <Dialog heading="Are you sure?">
       <Button slot="footer" variant="danger" onClick={onConfirm}>
         Delete
       </Button>
@@ -170,7 +170,7 @@ The most common named slot is `trigger` on `lt-dropdown` — any element placed 
 `lt-dialog` uses named slots to place content in distinct regions of the overlay:
 
 ```html
-<lt-dialog id="confirm-dialog" title="Delete item">
+<lt-dialog id="confirm-dialog" heading="Delete item">
   Are you sure you want to permanently delete this item?
   <div slot="footer">
     <lt-button appearance="outlined" id="cancel-btn">Cancel</lt-button>

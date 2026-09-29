@@ -21,12 +21,12 @@ describe('<lt-alert>', () => {
     expect(el.shadowRoot).toBeTruthy();
   });
 
-  it('defaults: variant=default, appearance=filled, icon="", closable=false, title="", open=true', () => {
+  it('defaults: variant=default, appearance=filled, icon="", closable=false, heading="", open=true', () => {
     expect(el.variant).toBe('default');
     expect(el.appearance).toBe('filled');
     expect(el.icon).toBe('');
     expect(el.closable).toBe(false);
-    expect(el.title).toBe('');
+    expect(el.heading).toBe('');
     expect(el.open).toBe(true);
   });
 
@@ -90,13 +90,13 @@ describe('<lt-alert>', () => {
     expect(el.shadowRoot!.querySelector('.icon')).toBeTruthy();
   });
 
-  it('does not render title when title is empty', async () => {
+  it('does not render heading when heading is empty', async () => {
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('.title')).toBeNull();
   });
 
-  it('renders title when title is set', async () => {
-    el.title = 'Heads up';
+  it('renders heading when heading is set', async () => {
+    el.heading = 'Heads up';
     await el.updateComplete;
     const title = el.shadowRoot!.querySelector('.title');
     expect(title).toBeTruthy();
@@ -175,5 +175,49 @@ describe('<lt-alert>', () => {
     await el.updateComplete;
     (el.shadowRoot!.querySelector('.close') as HTMLElement).click();
     expect(el.hasAttribute('dismissed')).toBe(true);
+  });
+
+  describe('heading, and the deprecated title alias (ALR-3)', () => {
+    it('setting heading directly works, and reflects as an attribute', async () => {
+      const fresh = document.createElement('lt-alert') as Alert;
+      fresh.heading = 'Upload complete';
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      expect(fresh.heading).toBe('Upload complete');
+      expect(fresh.getAttribute('heading')).toBe('Upload complete');
+      fresh.remove();
+    });
+
+    it('the title JS property alias forwards to heading and never leaves a title attribute', async () => {
+      const fresh = document.createElement('lt-alert') as Alert;
+      fresh.title = 'Payment failed';
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      expect(fresh.heading).toBe('Payment failed');
+      expect(fresh.title).toBe('Payment failed');
+      expect(fresh.hasAttribute('title')).toBe(false);
+      fresh.remove();
+    });
+
+    it('a title="…" markup attribute is converted to heading, and the native attribute is stripped so no browser tooltip shows', async () => {
+      const fresh = document.createElement('lt-alert') as Alert;
+      fresh.setAttribute('title', 'Payment failed');
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      expect(fresh.heading).toBe('Payment failed');
+      expect(fresh.hasAttribute('title')).toBe(false);
+      fresh.remove();
+    });
+
+    it('heading wins if both heading and the deprecated title attribute are given in markup', async () => {
+      const fresh = document.createElement('lt-alert') as Alert;
+      fresh.setAttribute('heading', 'Real Heading');
+      fresh.setAttribute('title', 'Deprecated Alias');
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      expect(fresh.heading).toBe('Real Heading');
+      expect(fresh.hasAttribute('title')).toBe(false);
+      fresh.remove();
+    });
   });
 });

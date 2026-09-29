@@ -21,7 +21,7 @@ import '../text/text';
  *
  * @example
  * ```html
- * <lt-alert variant="success" title="Upload complete">
+ * <lt-alert variant="success" heading="Upload complete">
  *   Your file has been processed and is ready to download.
  * </lt-alert>
  * ```
@@ -44,7 +44,21 @@ export class Alert extends ThemeableElement {
   @property({ reflect: true }) appearance: AlertAppearance = 'filled';
 
   /** Optional bold heading above the body content. */
-  @property({ reflect: true }) title = '';
+  @property({ reflect: true }) heading = '';
+
+  /**
+   * @deprecated Use `heading` instead. `title` collides with the browser's own native tooltip attribute — every
+   * HTML element has one regardless of custom-element status, so `<lt-alert title="…">` made hovering anywhere
+   * over the alert show a browser tooltip, and assistive tech could read it as a duplicate description (ALR-3).
+   * This alias keeps existing markup/JS working; the native `title` attribute is always stripped as soon as
+   * it's read, so the tooltip never appears.
+   */
+  get title(): string {
+    return this.heading;
+  }
+  set title(value: string) {
+    this.heading = value;
+  }
 
   /**
    * Icon to show before the body. Leave empty for auto (shows variant icon for status variants),
@@ -66,8 +80,18 @@ export class Alert extends ThemeableElement {
   /** Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600). */
   @property({ reflect: true }) background = '';
 
-  /** Renders the title in small caps with wider letter spacing. */
+  /** Renders the heading in small caps with wider letter spacing. */
   @property({ type: Boolean, reflect: true }) uppercase = false;
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Markup never goes through the `title` accessor above — the attribute is just present on the node from
+    // HTML parsing. `heading` wins if both are somehow given.
+    if (this.hasAttribute('title')) {
+      if (!this.heading) this.heading = this.getAttribute('title')!;
+      this.removeAttribute('title');
+    }
+  }
 
   private static readonly _iconMap: Record<AlertVariant, string> = {
     default: 'info-circle',
@@ -117,7 +141,7 @@ export class Alert extends ThemeableElement {
       <div class="inner" part="base" role=${this._role} style=${bgStyle}>
         ${iconName ? html`<lt-icon class="icon" name=${iconName} part="icon"></lt-icon>` : ''}
         <div class="body">
-          ${this.title ? html`<lt-text variant="h6" as="p" class="title" part="title">${this.title}</lt-text>` : ''}
+          ${this.heading ? html`<lt-text variant="h6" as="p" class="title" part="title">${this.heading}</lt-text>` : ''}
           <div class="content" part="content"><slot></slot></div>
         </div>
         ${this.closable

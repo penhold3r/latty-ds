@@ -294,12 +294,20 @@
             },
             {
               "kind": "field",
-              "name": "title",
+              "name": "heading",
               "type": {
                 "text": "string"
               },
               "default": "''",
               "description": "Optional bold heading above the body content."
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "deprecated": "Use `heading` instead. `title` collides with the browser's own native tooltip attribute — every\nHTML element has one regardless of custom-element status, so `<lt-alert title=\"…\">` made hovering anywhere\nover the alert show a browser tooltip, and assistive tech could read it as a duplicate description (ALR-3).\nThis alias keeps existing markup/JS working; the native `title` attribute is always stripped as soon as\nit's read, so the tooltip never appears."
             },
             {
               "kind": "field",
@@ -344,7 +352,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Renders the title in small caps with wider letter spacing."
+              "description": "Renders the heading in small caps with wider letter spacing."
             },
             {
               "kind": "field",
@@ -3763,7 +3771,7 @@
               "name": ""
             },
             {
-              "description": "Custom header content (overrides title prop)",
+              "description": "Custom header content (overrides heading prop)",
               "name": "header"
             },
             {
@@ -3801,12 +3809,20 @@
             },
             {
               "kind": "field",
-              "name": "title",
+              "name": "heading",
               "type": {
                 "text": "string"
               },
               "default": "''",
-              "description": "Dialog title displayed in the header."
+              "description": "Dialog heading displayed in the header."
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "deprecated": "Use `heading` instead. `title` collides with the browser's own native tooltip attribute — every\nHTML element has one regardless of custom-element status, so `<lt-dialog title=\"…\">` made hovering anywhere\nover the dialog show a browser tooltip, and assistive tech could read it as a duplicate description (DLG-6).\nThis alias keeps existing markup/JS working; the native `title` attribute is always stripped as soon as\nit's read, so the tooltip never appears."
             },
             {
               "kind": "field",
@@ -3842,7 +3858,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Renders the dialog title in small caps with wider letter spacing."
+              "description": "Renders the dialog heading in small caps with wider letter spacing."
             },
             {
               "kind": "field",

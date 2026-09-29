@@ -4,6 +4,7 @@ import type { Alert as AlertEl, LattyIconName } from '@latty-ds/web';
 export type AlertProps = HTMLAttributes<AlertEl> & {
   variant?: AlertEl['variant'];
   appearance?: AlertEl['appearance'];
+  heading?: string;
   title?: string;
   icon?: LattyIconName;
   closable?: boolean;

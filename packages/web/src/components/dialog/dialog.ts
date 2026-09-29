@@ -20,7 +20,7 @@ import '../text/text';
  * - Multiple size options (sm, md, lg, xl, fullscreen)
  * - Backdrop overlay with configurable click-to-close
  * - Close on Escape key
- * - Header with optional title and close button
+ * - Header with optional heading and close button
  * - Scrollable body content
  * - Optional footer for actions
  * - Focus trap and restoration
@@ -28,7 +28,7 @@ import '../text/text';
  * - Accessible with aria-modal and role="dialog"
  *
  * @slot - Dialog body content
- * @slot header - Custom header content (overrides title prop)
+ * @slot header - Custom header content (overrides heading prop)
  * @slot footer - Footer content (typically for action buttons)
  *
  * @fires open - Fired when dialog opens
@@ -36,7 +36,7 @@ import '../text/text';
  *
  * @example
  * ```html
- * <lt-dialog open title="Confirm Action">
+ * <lt-dialog open heading="Confirm Action">
  *   <p>Are you sure you want to proceed?</p>
  *   <div slot="footer">
  *     <lt-button variant="neutral">Cancel</lt-button>
@@ -47,7 +47,7 @@ import '../text/text';
  *
  * @example
  * ```html
- * <lt-dialog size="lg" open title="Settings" no-close-button>
+ * <lt-dialog size="lg" open heading="Settings" no-close-button>
  *   <p>Dialog content here...</p>
  * </lt-dialog>
  * ```
@@ -69,10 +69,24 @@ export class Dialog extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) open = false;
 
   /**
-   * Dialog title displayed in the header.
+   * Dialog heading displayed in the header.
    * @default ''
    */
-  @property() title = '';
+  @property() heading = '';
+
+  /**
+   * @deprecated Use `heading` instead. `title` collides with the browser's own native tooltip attribute — every
+   * HTML element has one regardless of custom-element status, so `<lt-dialog title="…">` made hovering anywhere
+   * over the dialog show a browser tooltip, and assistive tech could read it as a duplicate description (DLG-6).
+   * This alias keeps existing markup/JS working; the native `title` attribute is always stripped as soon as
+   * it's read, so the tooltip never appears.
+   */
+  get title(): string {
+    return this.heading;
+  }
+  set title(value: string) {
+    this.heading = value;
+  }
 
   /**
    * Suppress the built-in close button in the header.
@@ -93,7 +107,7 @@ export class Dialog extends ThemeableElement {
   @property({ type: Boolean, attribute: 'close-on-escape' }) closeOnEscape = true;
 
   /**
-   * Renders the dialog title in small caps with wider letter spacing.
+   * Renders the dialog heading in small caps with wider letter spacing.
    * @default false
    */
   @property({ type: Boolean, reflect: true }) uppercase = false;
@@ -143,6 +157,12 @@ export class Dialog extends ThemeableElement {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('keydown', this.handleKeydown);
+    // Markup never goes through the `title` accessor above — the attribute is just present on the node from
+    // HTML parsing. `heading` wins if both are somehow given.
+    if (this.hasAttribute('title')) {
+      if (!this.heading) this.heading = this.getAttribute('title')!;
+      this.removeAttribute('title');
+    }
   }
 
   disconnectedCallback() {
@@ -225,8 +245,8 @@ export class Dialog extends ThemeableElement {
           <div class="header" part="header">
             <div class="header-content">
               <slot name="header">
-                ${this.title
-                  ? html`<lt-text variant="h4" as="h2" id="dialog-title" class="title">${this.title}</lt-text>`
+                ${this.heading
+                  ? html`<lt-text variant="h4" as="h2" id="dialog-title" class="title">${this.heading}</lt-text>`
                   : ''}
               </slot>
             </div>

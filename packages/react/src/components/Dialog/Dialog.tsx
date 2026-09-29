@@ -4,6 +4,7 @@ import type { Dialog as DialogEl } from '@latty-ds/web';
 export type DialogProps = HTMLAttributes<DialogEl> & {
   size?: DialogEl['size'];
   open?: boolean;
+  heading?: string;
   title?: string;
   noCloseButton?: boolean;
   closeOnBackdropClick?: boolean;

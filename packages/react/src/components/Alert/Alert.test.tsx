@@ -13,10 +13,14 @@ describe('Alert', () => {
     expect(container.querySelector('lt-alert')?.getAttribute('variant')).toBe('success');
   });
 
-  it('passes title as attribute', () => {
-    const { container } = render(<Alert title="Heads up">Message</Alert>);
-    expect(container.querySelector('lt-alert')?.getAttribute('title')).toBe('Heads up');
+  it('passes heading as attribute', () => {
+    const { container } = render(<Alert heading="Heads up">Message</Alert>);
+    expect(container.querySelector('lt-alert')?.getAttribute('heading')).toBe('Heads up');
   });
+
+  // The deprecated `title` alias's actual behavior (forwarding to `heading`, stripping the native attribute so
+  // no tooltip shows) is @latty-ds/web's own runtime logic, not this wrapper's — verified end to end against the
+  // real element in packages/web/src/components/alert/__tests__/alert.test.ts (ALR-3), not here.
 
   it('passes closable as attribute', () => {
     const { container } = render(<Alert closable>Message</Alert>);

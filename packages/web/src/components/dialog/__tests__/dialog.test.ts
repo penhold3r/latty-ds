@@ -82,7 +82,7 @@ describe('<lt-dialog>', () => {
     }
   });
 
-  it('renders title in header', async () => {
+  it('renders heading in header (set here via the deprecated title alias — see beforeEach)', async () => {
     el.open = true;
     await el.updateComplete;
 
@@ -289,5 +289,50 @@ describe('<lt-dialog>', () => {
 
   it('has default noCloseButton of false', () => {
     expect(el.noCloseButton).toBe(false);
+  });
+
+  describe('heading, and the deprecated title alias (DLG-6)', () => {
+    it('setting heading directly works', async () => {
+      const fresh = document.createElement('lt-dialog') as Dialog;
+      fresh.heading = 'Settings';
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      expect(fresh.heading).toBe('Settings');
+      const title = fresh.shadowRoot!.querySelector('.title');
+      expect(title?.textContent).toBe('Settings');
+      fresh.remove();
+    });
+
+    it('the title JS property alias forwards to heading and never leaves a title attribute', async () => {
+      const fresh = document.createElement('lt-dialog') as Dialog;
+      fresh.title = 'Confirm Action';
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      expect(fresh.heading).toBe('Confirm Action');
+      expect(fresh.title).toBe('Confirm Action');
+      expect(fresh.hasAttribute('title')).toBe(false);
+      fresh.remove();
+    });
+
+    it('a title="…" markup attribute is converted to heading, and the native attribute is stripped so no browser tooltip shows', async () => {
+      const fresh = document.createElement('lt-dialog') as Dialog;
+      fresh.setAttribute('title', 'Confirm Action');
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      expect(fresh.heading).toBe('Confirm Action');
+      expect(fresh.hasAttribute('title')).toBe(false);
+      fresh.remove();
+    });
+
+    it('heading wins if both heading and the deprecated title attribute are given in markup', async () => {
+      const fresh = document.createElement('lt-dialog') as Dialog;
+      fresh.setAttribute('heading', 'Real Heading');
+      fresh.setAttribute('title', 'Deprecated Alias');
+      document.body.appendChild(fresh);
+      await fresh.updateComplete;
+      expect(fresh.heading).toBe('Real Heading');
+      expect(fresh.hasAttribute('title')).toBe(false);
+      fresh.remove();
+    });
   });
 });

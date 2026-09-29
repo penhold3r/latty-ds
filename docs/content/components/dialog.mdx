@@ -19,7 +19,7 @@ A modal dialog with backdrop, keyboard trap, and focus management. Supports a <c
 <ComponentPlayground
   tag="lt-dialog"
   previewTrigger="Open dialog"
-  defaults={{ title: 'Example dialog', 'close-on-backdrop-click': true, 'close-on-escape': true }}
+  defaults={{ heading: 'Example dialog', 'close-on-backdrop-click': true, 'close-on-escape': true }}
   content={`This is the dialog content. Try changing the controls to see how the dialog behaves.
 <div slot="footer">
   <lt-button variant="neutral" appearance="outlined" data-action="close">Cancel</lt-button>
@@ -33,7 +33,7 @@ A modal dialog with backdrop, keyboard trap, and focus management. Supports a <c
     html={`
 <lt-button variant="primary" id="open-btn">Open dialog</lt-button>
 
-<lt-dialog id="my-dialog" title="Confirm action" size="sm">
+<lt-dialog id="my-dialog" heading="Confirm action" size="sm">
   <lt-text>Are you sure you want to proceed?</lt-text>
   <div slot="footer">
     <lt-button variant="neutral" appearance="outlined" id="cancel-btn">
@@ -62,7 +62,7 @@ function Example() {
       </Button>
       <Dialog
         open={open}
-        title="Confirm action"
+        heading="Confirm action"
         size="sm"
         onClose={() => setOpen(false)}
       >
@@ -86,7 +86,7 @@ const open = ref(false)
 <template>
   <lt-button variant="primary" @click="open = true">Open dialog</lt-button>
 
-<lt-dialog :open="open" title="Confirm action" size="sm"
+<lt-dialog :open="open" heading="Confirm action" size="sm"
 @close="open = false">
 <lt-text>Are you sure you want to proceed?</lt-text>
 
