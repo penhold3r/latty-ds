@@ -44,4 +44,34 @@ describe('Select', () => {
     el.dispatchEvent(new CustomEvent('change'));
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  // React 18 (the version actually installed here, the repo's declared peer floor) stringifies non-primitive
+  // JSX props into DOM attributes for unknown elements instead of setting the property — `options={[...]}`
+  // became `attribute options="[object Object]"`, the real `options` property left undefined (X7).
+  it('sets options as a real property, not a stringified attribute (X7)', () => {
+    const options = [
+      { value: 'us', label: 'United States' },
+      { value: 'ca', label: 'Canada' }
+    ];
+    const { container } = render(<Select options={options} />);
+    const el = container.querySelector('lt-select') as HTMLElement & { options: typeof options };
+    expect(el.options).toBe(options);
+    expect(el.getAttribute('options')).toBeNull();
+  });
+
+  it('updates the options property when the prop changes', () => {
+    const first = [{ value: 'a', label: 'A' }];
+    const second = [{ value: 'b', label: 'B' }];
+    const { container, rerender } = render(<Select options={first} />);
+    const el = container.querySelector('lt-select') as HTMLElement & { options: typeof first };
+    expect(el.options).toBe(first);
+    rerender(<Select options={second} />);
+    expect(el.options).toBe(second);
+  });
+
+  it('does not assign options onto the element at all when the prop is omitted', () => {
+    const { container } = render(<Select />);
+    const el = container.querySelector('lt-select') as HTMLElement & { options?: unknown[] };
+    expect(el.options).toBeUndefined();
+  });
 });

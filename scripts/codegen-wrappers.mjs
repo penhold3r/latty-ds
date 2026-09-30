@@ -55,13 +55,31 @@ for (const mod of cem.modules) {
       )
       .map((f) => {
         let displayType;
+        let isSimple;
         if (ICON_FIELDS.has(f.name)) {
+          // Icon fields are always plain strings at runtime (an icon name) despite the richer `LattyIconName`
+          // display type, so they're as safe as a real `string` field for JSX attribute passing (X7).
           displayType = 'LattyIconName';
+          isSimple = true;
         } else {
           const raw = f.type?.text ?? 'string';
           displayType = SIMPLE_TYPES.has(raw) ? raw : `${decl.name}El['${f.name}']`;
+          // Most non-string/boolean/number fields are still string-literal-union "enum" types at runtime
+          // (ButtonVariant, TextfieldSize, …) and are perfectly safe as JSX attributes — only flag a field as
+          // needing property assignment (X7) when the manifest itself signals a real array or object: the type
+          // text ends in `[]` (`SelectOption[]`, `Date[]`), the default is an array literal (catches
+          // `Calendar['disabledDates']`, a type lookup that doesn't textually end in `[]`), or there's no
+          // default at all where every genuine enum prop always has a quoted-string one (catches `Table.sort:
+          // SortState | undefined`, a real interface — verified against every current non-primitive field, no
+          // false positives: nullable primitives like `Image.rounded: string | null = null` keep a `null`
+          // default, distinct from a field with no default whatsoever).
+          const isArrayType = raw.replace(/\s*\|\s*(undefined|null)$/, '').endsWith('[]');
+          const isArrayDefault = typeof f.default === 'string' && f.default.trim().startsWith('[');
+          const isMissingDefault = f.default === undefined;
+          const isComplex = isArrayType || isArrayDefault || (isMissingDefault && !SIMPLE_TYPES.has(raw));
+          isSimple = !isComplex;
         }
-        return { name: f.name, displayType };
+        return { name: f.name, displayType, isSimple };
       });
 
     const events = (decl.events ?? []).map((e) => {
@@ -96,16 +114,27 @@ for (const { name, tagName, fields, events } of components) {
   const hasIconFields = fields.some((f) => f.displayType === 'LattyIconName');
   const fieldProps = fields.map((f) => `  ${f.name}?: ${f.displayType};`);
 
+  // React 18 (the repo's declared peer floor) stringifies non-primitive JSX props into DOM *attributes* for
+  // unknown elements instead of setting the property — `options={[...]}` becomes `attribute options="[object
+  // Object]"`, property still undefined (X7). Fields whose manifest type isn't string/boolean/number (an array,
+  // an object, or a union that can be a function, like Textfield's `helperText`) are assigned onto the element
+  // imperatively via the ref instead of spread as JSX props, so they always reach the component as a real
+  // property regardless of React version. Icon fields are exempt — their value is always a plain string.
+  const complexFields = fields.filter((f) => !f.isSimple);
+
   // Every handler receives the event itself — like a native event handler — typed with its payload when the
   // manifest declares one: `onChange={(e) => e.detail.value}`. That keeps stopPropagation(), preventDefault(),
   // target and currentTarget available to the consumer, who composes the events (they bubble like native ones).
   const eventType = (e) => (e.detailType ? `CustomEvent<${e.detailType}>` : 'CustomEvent');
   const eventProps = events.map((e) => `  ${e.handlerName}?: (event: ${eventType(e)}) => void;`);
 
-  // Destructured event handler names
+  // Destructured event handler names and complex field names — both pulled out of `props` explicitly so
+  // `...props` (spread as JSX attributes) never contains anything but attribute-safe primitives.
   const handlerNames = events.map((e) => e.handlerName);
+  const complexFieldNames = complexFields.map((f) => f.name);
+  const destructureNames = [...handlerNames, ...complexFieldNames];
   const destructure =
-    handlerNames.length > 0 ? `{ ${handlerNames.join(', ')}, children, ...props }` : '{ children, ...props }';
+    destructureNames.length > 0 ? `{ ${destructureNames.join(', ')}, children, ...props }` : '{ children, ...props }';
 
   // useEffect blocks for each event
   const effectBlocks = events
@@ -121,13 +150,23 @@ for (const { name, tagName, fields, events } of components) {
     )
     .join('');
 
-  const hooks =
-    events.length > 0
-      ? `\n    useImperativeHandle(forwardedRef, () => innerRef.current!);\n${effectBlocks}\n`
-      : '\n    useImperativeHandle(forwardedRef, () => innerRef.current!);\n';
+  // One useLayoutEffect assigns every complex field as a real property, each guarded so an omitted prop
+  // (undefined) leaves the component's own default alone instead of overwriting it.
+  const complexFieldEffect =
+    complexFields.length > 0
+      ? `
+    useLayoutEffect(() => {
+      const el = innerRef.current;
+      if (!el) return;
+${complexFields.map((f) => `      if (${f.name} !== undefined) el.${f.name} = ${f.name};`).join('\n')}
+    }, [${complexFieldNames.join(', ')}]);`
+      : '';
+
+  const hooks = `\n    useImperativeHandle(forwardedRef, () => innerRef.current!);\n${effectBlocks}${complexFieldEffect}\n`;
 
   const reactImports = ['useRef', 'useImperativeHandle', 'forwardRef', 'type HTMLAttributes'];
   if (events.length > 0) reactImports.splice(1, 0, 'useEffect');
+  if (complexFields.length > 0) reactImports.splice(1, 0, 'useLayoutEffect');
 
   // Determine which React HTMLAttributes keys to Omit due to type conflicts with custom events.
   const omitKeys = events

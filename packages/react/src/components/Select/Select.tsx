@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Select as SelectEl } from '@latty-ds/web';
 
 export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
@@ -17,7 +17,7 @@ export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
 };
 
 export const Select = forwardRef<SelectEl, SelectProps>(function Select(
-  { onChange, children, ...props },
+  { onChange, options, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SelectEl>(null);
@@ -31,6 +31,11 @@ export const Select = forwardRef<SelectEl, SelectProps>(function Select(
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (options !== undefined) el.options = options;
+  }, [options]);
 
   return (
     <lt-select ref={innerRef} {...(props as Record<string, unknown>)}>

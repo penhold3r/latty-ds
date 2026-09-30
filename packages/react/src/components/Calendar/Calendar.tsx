@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Calendar as CalendarEl } from '@latty-ds/web';
 
 export type CalendarProps = Omit<HTMLAttributes<CalendarEl>, 'onChange'> & {
@@ -19,7 +19,7 @@ export type CalendarProps = Omit<HTMLAttributes<CalendarEl>, 'onChange'> & {
 };
 
 export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
-  { onChange, onMonthChange, children, ...props },
+  { onChange, onMonthChange, disabledDates, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<CalendarEl>(null);
@@ -40,6 +40,11 @@ export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
     el.addEventListener('monthchange', h);
     return () => el.removeEventListener('monthchange', h);
   }, [onMonthChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (disabledDates !== undefined) el.disabledDates = disabledDates;
+  }, [disabledDates]);
 
   return (
     <lt-calendar ref={innerRef} {...(props as Record<string, unknown>)}>

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Table as TableEl } from '@latty-ds/web';
 
 export type TableProps = HTMLAttributes<TableEl> & {
@@ -18,7 +18,7 @@ export type TableProps = HTMLAttributes<TableEl> & {
 };
 
 export const Table = forwardRef<TableEl, TableProps>(function Table(
-  { onSortChange, children, ...props },
+  { onSortChange, columns, data, sort, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<TableEl>(null);
@@ -32,6 +32,13 @@ export const Table = forwardRef<TableEl, TableProps>(function Table(
     el.addEventListener('sortchange', h);
     return () => el.removeEventListener('sortchange', h);
   }, [onSortChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (columns !== undefined) el.columns = columns;
+    if (data !== undefined) el.data = data;
+    if (sort !== undefined) el.sort = sort;
+  }, [columns, data, sort]);
 
   return (
     <lt-table ref={innerRef} {...(props as Record<string, unknown>)}>

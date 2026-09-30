@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { DateInput as DateInputEl } from '@latty-ds/web';
 
 export type DateInputProps = Omit<HTMLAttributes<DateInputEl>, 'onChange'> & {
@@ -22,7 +22,7 @@ export type DateInputProps = Omit<HTMLAttributes<DateInputEl>, 'onChange'> & {
 };
 
 export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateInput(
-  { onChange, children, ...props },
+  { onChange, disabledDates, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DateInputEl>(null);
@@ -36,6 +36,11 @@ export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateIn
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (disabledDates !== undefined) el.disabledDates = disabledDates;
+  }, [disabledDates]);
 
   return (
     <lt-date-input ref={innerRef} {...(props as Record<string, unknown>)}>
