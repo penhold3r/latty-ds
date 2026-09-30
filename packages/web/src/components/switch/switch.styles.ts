@@ -173,4 +173,32 @@ export const switchStyles = css`
       transition: none;
     }
   }
+
+  /* ── Forced colors (Windows High Contrast) ─────────────────────────────────
+     Under forced-colors, every author background-color here (the unchecked track's neutral fill, every
+     variant's checked fill, and the thumb's plain white) is flattened to Canvas — the track has no border of
+     its own to fall back on, and the thumb disappears into it, leaving neither track nor thumb visible at all.
+     System color keywords are exempt from that flattening; Highlight/HighlightText is the canonical OS
+     "selected state" pairing, unaffected by which variant was selected (forced-colors overrides that anyway).
+     !important matches every variant's own :checked rule in specificity — standard for a forced-colors
+     override, whose entire point is overriding the page's own author styling. ─────────────────────────────── */
+
+  @media (forced-colors: active) {
+    input[type='checkbox'] {
+      border: 1px solid ButtonText;
+    }
+
+    input[type='checkbox']:checked {
+      background: Highlight !important;
+      border-color: Highlight !important;
+    }
+
+    .thumb {
+      background: ButtonText;
+    }
+
+    input[type='checkbox']:checked ~ .thumb {
+      background: HighlightText;
+    }
+  }
 `;

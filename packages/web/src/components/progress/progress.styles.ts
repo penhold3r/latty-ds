@@ -76,4 +76,21 @@ export const progressStyles = css`
       width: 100%;
     }
   }
+
+  /* ── Forced colors (Windows High Contrast) ─────────────────────────────────
+     Under forced-colors, both the track's neutral background and the fill's variant-coloured background are
+     flattened to Canvas, with no border on the track to fall back on — the whole bar disappears. A border on
+     the track (its boundary) plus a Highlight-coloured fill (the OS's own "active/selected" system color,
+     exempt from the flattening) keeps the progress amount legible regardless of which variant was set —
+     forced-colors mode overrides variant branding anyway, by design. ───────────────────────────────────────── */
+
+  @media (forced-colors: active) {
+    [part='track'] {
+      border: 1px solid CanvasText;
+    }
+
+    [part='fill'] {
+      background: Highlight;
+    }
+  }
 `;

@@ -147,4 +147,40 @@ export const sliderStyles = css`
       transition: none;
     }
   }
+
+  /* ── Forced colors (Windows High Contrast) ─────────────────────────────────
+     Under forced-colors, the track's linear-gradient (WebKit/Chromium) and the Firefox ::-moz-range-track/
+     ::-moz-range-progress pair are all flattened to Canvas, with no border to fall back on — the whole track
+     disappears. Restoring a visible track boundary, plus a solid thumb fill, is enough: the thumb's own
+     position already conveys the value (the primary way a slider communicates it visually), matching how
+     native <input type="range"> itself renders under forced-colors in every engine — no attempt to also
+     recreate the fill-amount gradient with system colors, which native sliders don't do either. System color
+     keywords are exempt from the flattening and always resolve to the OS's own guaranteed-contrasting
+     palette. ─────────────────────────────────────────────────────────────────────────────────────────────── */
+
+  @media (forced-colors: active) {
+    input[type='range'] {
+      background: Canvas;
+      border: 1px solid ButtonText;
+    }
+
+    input[type='range']::-webkit-slider-thumb {
+      background: Highlight;
+      border-color: ButtonText;
+    }
+
+    input[type='range']::-moz-range-thumb {
+      background: Highlight;
+      border-color: ButtonText;
+    }
+
+    input[type='range']::-moz-range-track {
+      background: Canvas;
+      border: 1px solid ButtonText;
+    }
+
+    input[type='range']::-moz-range-progress {
+      background: Highlight;
+    }
+  }
 `;

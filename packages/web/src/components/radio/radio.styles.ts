@@ -175,4 +175,27 @@ export const radioStyles = css`
       transition: none;
     }
   }
+
+  /* ── Forced colors (Windows High Contrast) ─────────────────────────────────
+     Under forced-colors, any author background-color (including every variant's token-resolved fill above) is
+     flattened to Canvas — the checked indicator is a plain background:white .dot with no border of its own, so
+     it disappears into the input's own (also-flattened) background, leaving checked and unchecked visually
+     identical. System color keywords are exempt from that flattening and always resolve to the OS's own
+     guaranteed-contrasting palette, regardless of which variant was selected — Highlight/HighlightText is the
+     canonical "selected state" pairing (the same pair the OS uses for native text selection), unaffected by
+     this component's own --lt-* tokens, which forced-colors mode is specifically overriding. !important is
+     needed since a variant rule like :host([variant='primary']) input:checked outranks a bare
+     input[type='radio']:checked in specificity — this is the standard, accepted use of !important for a
+     forced-colors override (overriding the page's own author styling is the entire point). ─────────────────── */
+
+  @media (forced-colors: active) {
+    input[type='radio']:checked {
+      background: Highlight !important;
+      border-color: Highlight !important;
+    }
+
+    .dot {
+      background: HighlightText !important;
+    }
+  }
 `;
