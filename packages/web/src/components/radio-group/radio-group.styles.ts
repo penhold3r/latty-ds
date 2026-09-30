@@ -19,7 +19,7 @@ export const radioGroupStyles = css`
 
   .required-indicator {
     color: var(--lt-text-error);
-    margin-left: var(--lt-spacing-1);
+    margin-inline-start: var(--lt-spacing-1);
   }
 
   .radios-container {

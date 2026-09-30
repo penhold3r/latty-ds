@@ -47,7 +47,7 @@ export const navItemStyles = css`
     font-size: var(--lt-nav-item-font-size, 0.9375rem);
     font-family: inherit;
     text-decoration: none;
-    text-align: left;
+    text-align: start;
     transition: background 120ms;
     white-space: nowrap;
   }
@@ -100,7 +100,7 @@ export const navItemStyles = css`
   }
 
   .children-inner {
-    padding-left: var(--lt-spacing-4);
+    padding-inline-start: var(--lt-spacing-4);
     padding-top: var(--lt-spacing-1);
     padding-bottom: var(--lt-spacing-1);
     display: flex;
@@ -117,7 +117,7 @@ export const navItemStyles = css`
   :host([orientation='horizontal']) .children {
     position: absolute;
     top: 100%;
-    left: 0;
+    inset-inline-start: 0;
     min-width: 160px;
     background: var(--lt-bg-default);
     color: var(--lt-text-neutral);

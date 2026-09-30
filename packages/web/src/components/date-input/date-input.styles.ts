@@ -22,7 +22,7 @@ export const dateInputStyles = [
 
     .required-indicator {
       color: var(--lt-text-error);
-      margin-left: 2px;
+      margin-inline-start: 2px;
     }
 
     /* ── Field ── */
@@ -42,7 +42,7 @@ export const dateInputStyles = [
       font-family: inherit;
       justify-content: space-between;
       outline: none;
-      text-align: left;
+      text-align: start;
       transition:
         border-color 150ms ease,
         box-shadow 150ms ease;
@@ -75,7 +75,7 @@ export const dateInputStyles = [
       color: var(--lt-text-subtle);
       flex-shrink: 0;
       line-height: 0;
-      margin-left: var(--lt-spacing-2);
+      margin-inline-start: var(--lt-spacing-2);
     }
 
     /* ── Sizes ── */

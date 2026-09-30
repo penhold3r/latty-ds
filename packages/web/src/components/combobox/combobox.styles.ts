@@ -22,7 +22,7 @@ export const comboboxStyles = [
 
     .required-indicator {
       color: var(--lt-text-error);
-      margin-left: 2px;
+      margin-inline-start: 2px;
     }
 
     .input-wrap {
@@ -145,7 +145,7 @@ export const comboboxStyles = [
       font-family: inherit;
       font-size: 0.9375rem;
       padding: var(--lt-spacing-2) var(--lt-spacing-3);
-      text-align: left;
+      text-align: start;
       width: 100%;
     }
 

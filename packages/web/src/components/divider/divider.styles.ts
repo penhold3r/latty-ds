@@ -41,8 +41,8 @@ export const dividerStyles = css`
 
   :host([orientation='vertical']) [part='base']::before,
   :host([orientation='vertical']) [part='base']::after {
-    border-left: 1px solid var(--lt-border-default);
-    border-left-style: var(--_divider-style, solid);
+    border-inline-start: 1px solid var(--lt-border-default);
+    border-inline-start-style: var(--_divider-style, solid);
     content: '';
     flex: 1;
   }

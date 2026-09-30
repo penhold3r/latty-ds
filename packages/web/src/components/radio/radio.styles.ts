@@ -82,7 +82,7 @@ export const radioStyles = css`
   :host([size='sm']) .dot {
     height: 8px;
     width: 8px;
-    left: 4px;
+    inset-inline-start: 4px;
     top: 4px;
   }
 
@@ -98,7 +98,7 @@ export const radioStyles = css`
   :host([size='md']) .dot {
     height: 10px;
     width: 10px;
-    left: 5px;
+    inset-inline-start: 5px;
     top: 5px;
   }
 
@@ -114,7 +114,7 @@ export const radioStyles = css`
   :host([size='lg']) .dot {
     height: 12px;
     width: 12px;
-    left: 6px;
+    inset-inline-start: 6px;
     top: 6px;
   }
 

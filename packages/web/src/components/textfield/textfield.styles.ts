@@ -35,11 +35,11 @@ export const textfieldStyles = css`
   }
 
   .icon-start {
-    left: var(--lt-spacing-3);
+    inset-inline-start: var(--lt-spacing-3);
   }
 
   .icon-end {
-    right: var(--lt-spacing-3);
+    inset-inline-end: var(--lt-spacing-3);
   }
 
   /* Unlike .variant-icon (a decorative lt-icon), the password toggle is a real <button> — reset the native
@@ -143,12 +143,12 @@ export const textfieldStyles = css`
 
   :host([size='sm']) input.has-start-icon,
   :host([size='sm']) textarea.has-start-icon {
-    padding-left: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2));
+    padding-inline-start: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2));
   }
 
   :host([size='sm']) input.has-end-icon,
   :host([size='sm']) textarea.has-end-icon {
-    padding-right: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2));
+    padding-inline-end: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2));
   }
 
   :host([size='md']) input,
@@ -160,12 +160,12 @@ export const textfieldStyles = css`
 
   :host([size='md']) input.has-start-icon,
   :host([size='md']) textarea.has-start-icon {
-    padding-left: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2));
+    padding-inline-start: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2));
   }
 
   :host([size='md']) input.has-end-icon,
   :host([size='md']) textarea.has-end-icon {
-    padding-right: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2));
+    padding-inline-end: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2));
   }
 
   :host([size='lg']) input,
@@ -177,12 +177,12 @@ export const textfieldStyles = css`
 
   :host([size='lg']) input.has-start-icon,
   :host([size='lg']) textarea.has-start-icon {
-    padding-left: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2));
+    padding-inline-start: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2));
   }
 
   :host([size='lg']) input.has-end-icon,
   :host([size='lg']) textarea.has-end-icon {
-    padding-right: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2));
+    padding-inline-end: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2));
   }
 
   :host([size='lg']) .icon-start,

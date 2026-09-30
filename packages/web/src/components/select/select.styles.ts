@@ -23,7 +23,7 @@ export const selectStyles = [
 
     .required-indicator {
       color: var(--lt-text-error);
-      margin-left: var(--lt-spacing-1);
+      margin-inline-start: var(--lt-spacing-1);
     }
 
     .select-container {
@@ -105,7 +105,7 @@ export const selectStyles = [
       cursor: pointer;
       display: flex;
       font-family: inherit;
-      text-align: left;
+      text-align: start;
       transition: background-color 80ms ease;
       width: 100%;
     }

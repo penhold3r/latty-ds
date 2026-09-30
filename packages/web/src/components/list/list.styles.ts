@@ -9,7 +9,8 @@ export const listStyles = css`
 
   [part='list'] {
     margin: 0;
-    padding: 0 0 0 var(--lt-spacing-5);
+    padding-block: 0;
+    padding-inline: var(--lt-spacing-5) 0;
     list-style-position: outside;
     list-style-type: disc;
     color: var(--lt-text-default);
@@ -33,14 +34,14 @@ export const listStyles = css`
     display: block;
     margin-top: var(--lt-spacing-2);
     margin-bottom: var(--lt-spacing-2);
-    padding-left: var(--lt-spacing-5);
+    padding-inline-start: var(--lt-spacing-5);
     font-size: 0.9em;
   }
 
   /* No marker */
   :host([no-marker]) [part='list'] {
     list-style: none;
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   /* Divider */

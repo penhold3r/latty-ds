@@ -17,7 +17,7 @@ export const dropdownItemStyles = css`
     font-size: 0.875rem;
     gap: var(--lt-spacing-2);
     padding: var(--lt-spacing-2) var(--lt-spacing-4);
-    text-align: left;
+    text-align: start;
     text-decoration: none;
     width: 100%;
   }

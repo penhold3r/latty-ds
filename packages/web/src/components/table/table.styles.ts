@@ -166,7 +166,7 @@ export const tableStyles = css`
   th.sticky {
     background: var(--lt-bg-surface);
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
-    left: 0;
+    inset-inline-start: 0;
     position: sticky;
     z-index: 2;
   }
@@ -174,7 +174,7 @@ export const tableStyles = css`
   td.sticky {
     background: var(--lt-bg-default);
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
-    left: 0;
+    inset-inline-start: 0;
     position: sticky;
     z-index: 1;
   }
@@ -198,12 +198,12 @@ export const tableStyles = css`
 
   :host([bordered]) th,
   :host([bordered]) td {
-    border-right: 1px solid var(--lt-border-default);
+    border-inline-end: 1px solid var(--lt-border-default);
   }
 
   :host([bordered]) th:last-child,
   :host([bordered]) td:last-child {
-    border-right: none;
+    border-inline-end: none;
   }
 
   /* Empty state */
@@ -220,7 +220,7 @@ export const tableStyles = css`
     display: flex;
     height: 100%;
     justify-content: center;
-    left: 0;
+    inset-inline-start: 0;
     position: absolute;
     top: 0;
     width: 100%;
@@ -260,7 +260,7 @@ export const tableStyles = css`
       gap: var(--lt-spacing-2);
       grid-template-columns: 120px 1fr;
       padding: var(--lt-spacing-2) 0;
-      text-align: left;
+      text-align: start;
     }
 
     :host([responsive-mode='stack']) td::before {
