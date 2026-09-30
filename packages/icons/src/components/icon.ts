@@ -1,9 +1,9 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
-import { iconRegistry } from '../registry/icon-registry';
-import { lattyIcons } from '../icons';
-import type { IconSize } from '../types/icons.types';
+import { iconRegistry } from '../registry/icon-registry.js';
+import { lattyIcons } from '../icons/index.js';
+import type { IconSize } from '../types/icons.types.js';
 
 // Registering here, before the class declaration below, matters: this is a
 // genuine top-level statement (not an import), so it runs strictly in

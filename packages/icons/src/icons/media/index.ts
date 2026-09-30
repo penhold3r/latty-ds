@@ -1,15 +1,15 @@
-import { cameraSvg } from './camera';
-import { filmSvg } from './film';
-import { headphonesSvg } from './headphones';
-import { microphoneSvg } from './microphone';
-import { musicSvg } from './music';
-import { pauseSvg } from './pause';
-import { playSvg } from './play';
-import { recordSvg } from './record';
-import { stopSvg } from './stop';
-import { volumeHighSvg } from './volume-high';
-import { volumeLowSvg } from './volume-low';
-import { volumeOffSvg } from './volume-off';
+import { cameraSvg } from './camera.js';
+import { filmSvg } from './film.js';
+import { headphonesSvg } from './headphones.js';
+import { microphoneSvg } from './microphone.js';
+import { musicSvg } from './music.js';
+import { pauseSvg } from './pause.js';
+import { playSvg } from './play.js';
+import { recordSvg } from './record.js';
+import { stopSvg } from './stop.js';
+import { volumeHighSvg } from './volume-high.js';
+import { volumeLowSvg } from './volume-low.js';
+import { volumeOffSvg } from './volume-off.js';
 
 export const mediaIcons = {
   play: playSvg,

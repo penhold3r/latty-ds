@@ -1,19 +1,19 @@
-import { circleSvg } from './circle';
-import { cloudSvg } from './cloud';
-import { diamondSvg } from './diamond';
-import { doubleCircleSvg } from './double-circle';
-import { heartSvg } from './heart';
-import { hexagonSvg } from './hexagon';
-import { infinitySvg } from './infinity';
-import { leafSvg } from './leaf';
-import { lightningSvg } from './lightning';
-import { moonSvg } from './moon';
-import { spiralSvg } from './spiral';
-import { squareSvg } from './square';
-import { starSvg } from './star';
-import { sunSvg } from './sun';
-import { triangleSvg } from './triangle';
-import { waveSvg } from './wave';
+import { circleSvg } from './circle.js';
+import { cloudSvg } from './cloud.js';
+import { diamondSvg } from './diamond.js';
+import { doubleCircleSvg } from './double-circle.js';
+import { heartSvg } from './heart.js';
+import { hexagonSvg } from './hexagon.js';
+import { infinitySvg } from './infinity.js';
+import { leafSvg } from './leaf.js';
+import { lightningSvg } from './lightning.js';
+import { moonSvg } from './moon.js';
+import { spiralSvg } from './spiral.js';
+import { squareSvg } from './square.js';
+import { starSvg } from './star.js';
+import { sunSvg } from './sun.js';
+import { triangleSvg } from './triangle.js';
+import { waveSvg } from './wave.js';
 
 export const shapeIcons = {
   heart: heartSvg,

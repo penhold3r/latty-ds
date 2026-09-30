@@ -93,7 +93,7 @@ STUB
     const fs = require('fs');
     const src = fs.readFileSync('${TOP_INDEX}', 'utf8');
 
-    const importLine = \"import { ${CAT_CONST} } from './${CATEGORY}';\";
+    const importLine = \"import { ${CAT_CONST} } from './${CATEGORY}/index.js';\";
     const spreadLine = \"  ...${CAT_CONST},\";
 
     let out = src.trimEnd();
@@ -174,7 +174,7 @@ node -e "
   // Rebuild file in as const format
   let out = '';
   for (const [file, varName] of Object.entries(imports).sort()) {
-    out += \`import { \${varName} } from './\${file}';\n\`;
+    out += \`import { \${varName} } from './\${file}.js';\n\`;
   }
   out += '\n';
   out += \`export const \${constName} = {\n\`;

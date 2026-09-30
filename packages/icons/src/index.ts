@@ -1,16 +1,16 @@
 // Components
-export { Icon } from './components/icon';
+export { Icon } from './components/icon.js';
 
 // Registry
-export { iconRegistry } from './registry/icon-registry';
+export { iconRegistry } from './registry/icon-registry.js';
 
 // Types
-export type { IconSize, IconDefinition } from './types/icons.types';
-export type { LattyIconName } from './icons';
+export type { IconSize, IconDefinition } from './types/icons.types.js';
+export type { LattyIconName } from './icons/index.js';
 
 // Full icon map — exported for custom tooling and type inference.
 // Per-icon tree-shaking: import '@latty-ds/icons/<name>' instead of the main entry.
-export { lattyIcons } from './icons';
+export { lattyIcons } from './icons/index.js';
 
 // Registering all built-in icons happens in ./components/icon.ts itself,
 // before its `@customElement('lt-icon')` declaration — not here. See that

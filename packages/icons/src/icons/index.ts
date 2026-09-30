@@ -1,12 +1,12 @@
-import { navigationIcons } from './navigation';
-import { actionIcons } from './actions';
-import { uiIcons } from './ui';
-import { feedbackIcons } from './feedback';
-import { interactionIcons } from './interaction';
-import { shapeIcons } from './shapes';
-import { socialIcons } from './social';
-import { mediaIcons } from './media';
-import { techIcons } from './tech';
+import { navigationIcons } from './navigation/index.js';
+import { actionIcons } from './actions/index.js';
+import { uiIcons } from './ui/index.js';
+import { feedbackIcons } from './feedback/index.js';
+import { interactionIcons } from './interaction/index.js';
+import { shapeIcons } from './shapes/index.js';
+import { socialIcons } from './social/index.js';
+import { mediaIcons } from './media/index.js';
+import { techIcons } from './tech/index.js';
 
 export const lattyIcons = {
   ...navigationIcons,

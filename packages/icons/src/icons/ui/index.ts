@@ -1,24 +1,24 @@
-import { atSignSvg } from './at-sign';
-import { bellSvg } from './bell';
-import { calendarSvg } from './calendar';
-import { chartSvg } from './chart';
-import { clockSvg } from './clock';
-import { colorPaletteSvg } from './color-palette';
-import { columnsSvg } from './columns';
-import { folderSvg } from './folder';
-import { gridSvg } from './grid';
-import { hashSvg } from './hash';
-import { homeSvg } from './home';
-import { imageSvg } from './image';
-import { layersSvg } from './layers';
-import { listViewSvg } from './list-view';
-import { mailSvg } from './mail';
-import { menuSvg } from './menu';
-import { phoneSvg } from './phone';
-import { searchSvg } from './search';
-import { settingsSvg } from './settings';
-import { sidebarSvg } from './sidebar';
-import { userSvg } from './user';
+import { atSignSvg } from './at-sign.js';
+import { bellSvg } from './bell.js';
+import { calendarSvg } from './calendar.js';
+import { chartSvg } from './chart.js';
+import { clockSvg } from './clock.js';
+import { colorPaletteSvg } from './color-palette.js';
+import { columnsSvg } from './columns.js';
+import { folderSvg } from './folder.js';
+import { gridSvg } from './grid.js';
+import { hashSvg } from './hash.js';
+import { homeSvg } from './home.js';
+import { imageSvg } from './image.js';
+import { layersSvg } from './layers.js';
+import { listViewSvg } from './list-view.js';
+import { mailSvg } from './mail.js';
+import { menuSvg } from './menu.js';
+import { phoneSvg } from './phone.js';
+import { searchSvg } from './search.js';
+import { settingsSvg } from './settings.js';
+import { sidebarSvg } from './sidebar.js';
+import { userSvg } from './user.js';
 
 export const uiIcons = {
   'at-sign': atSignSvg,

@@ -60,11 +60,12 @@ pnpm lint                   # Run ESLint on packages/ and docs/
 pnpm format:check           # Prettier check (full repo — fix with: pnpm prettier --write .)
 pnpm typecheck              # Type-check all packages (tsc --noEmit)
 pnpm check:boundaries       # Detect cross-package relative imports
+pnpm check:esm-smoke        # Confirm @latty-ds/{tokens,icons,web,react} load under Node's native ESM resolver, not just a bundler's
 pnpm a11y                   # Playwright + axe-core WCAG2AA checks against the production build, light + dark mode
 pnpm a11y:report            # Open the HTML report from the last a11y run (playwright-a11y-report/, gitignored)
 ```
 
-**Important**: `pnpm typecheck` and `pnpm check:boundaries` read built `dist/` directories — always run `pnpm build` first after a `pnpm clean`. The correct full-monorepo check order is: build → test → lint → format:check → typecheck → check:boundaries → a11y.
+**Important**: `pnpm typecheck`, `pnpm check:boundaries` and `pnpm check:esm-smoke` read built `dist/` directories — always run `pnpm build` first after a `pnpm clean`. The correct full-monorepo check order is: build → test → lint → format:check → typecheck → check:boundaries → check:esm-smoke → a11y.
 
 ### Cleaning
 

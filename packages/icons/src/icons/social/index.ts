@@ -1,17 +1,17 @@
-import { discordSvg } from './discord';
-import { dribbbleSvg } from './dribbble';
-import { facebookSvg } from './facebook';
-import { githubSvg } from './github';
-import { instagramSvg } from './instagram';
-import { linkedinSvg } from './linkedin';
-import { slackSvg } from './slack';
-import { telegramSvg } from './telegram';
-import { tiktokSvg } from './tiktok';
-import { whatsappSvg } from './whatsapp';
-import { whatsappInverseSvg } from './whatsapp-inverse';
-import { xSvg } from './x';
-import { youtubeSvg } from './youtube';
-import { youtubeInverseSvg } from './youtube-inverse';
+import { discordSvg } from './discord.js';
+import { dribbbleSvg } from './dribbble.js';
+import { facebookSvg } from './facebook.js';
+import { githubSvg } from './github.js';
+import { instagramSvg } from './instagram.js';
+import { linkedinSvg } from './linkedin.js';
+import { slackSvg } from './slack.js';
+import { telegramSvg } from './telegram.js';
+import { tiktokSvg } from './tiktok.js';
+import { whatsappSvg } from './whatsapp.js';
+import { whatsappInverseSvg } from './whatsapp-inverse.js';
+import { xSvg } from './x.js';
+import { youtubeSvg } from './youtube.js';
+import { youtubeInverseSvg } from './youtube-inverse.js';
 
 export const socialIcons = {
   x: xSvg,

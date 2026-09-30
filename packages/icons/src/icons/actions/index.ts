@@ -1,23 +1,23 @@
-import { attachSvg } from './attach';
-import { checkSvg } from './check';
-import { copySvg } from './copy';
-import { cropSvg } from './crop';
-import { downloadSvg } from './download';
-import { editSvg } from './edit';
-import { filterSvg } from './filter';
-import { linkSvg } from './link';
-import { minusSvg } from './minus';
-import { pinSvg } from './pin';
-import { plusSvg } from './plus';
-import { printSvg } from './print';
-import { refreshSvg } from './refresh';
-import { saveSvg } from './save';
-import { scissorsSvg } from './scissors';
-import { shareSvg } from './share';
-import { sortSvg } from './sort';
-import { trashSvg } from './trash';
-import { uploadSvg } from './upload';
-import { xmarkSvg } from './xmark';
+import { attachSvg } from './attach.js';
+import { checkSvg } from './check.js';
+import { copySvg } from './copy.js';
+import { cropSvg } from './crop.js';
+import { downloadSvg } from './download.js';
+import { editSvg } from './edit.js';
+import { filterSvg } from './filter.js';
+import { linkSvg } from './link.js';
+import { minusSvg } from './minus.js';
+import { pinSvg } from './pin.js';
+import { plusSvg } from './plus.js';
+import { printSvg } from './print.js';
+import { refreshSvg } from './refresh.js';
+import { saveSvg } from './save.js';
+import { scissorsSvg } from './scissors.js';
+import { shareSvg } from './share.js';
+import { sortSvg } from './sort.js';
+import { trashSvg } from './trash.js';
+import { uploadSvg } from './upload.js';
+import { xmarkSvg } from './xmark.js';
 
 export const actionIcons = {
   check: checkSvg,

@@ -1,23 +1,23 @@
-import { arrowDownSvg } from './arrow-down';
-import { arrowLeftSvg } from './arrow-left';
-import { arrowRightSvg } from './arrow-right';
-import { arrowUpSvg } from './arrow-up';
-import { caretDownSvg } from './caret-down';
-import { caretLeftSvg } from './caret-left';
-import { caretRightSvg } from './caret-right';
-import { caretUpSvg } from './caret-up';
-import { compassSvg } from './compass';
-import { doubleCaretLeftSvg } from './double-caret-left';
-import { doubleCaretRightSvg } from './double-caret-right';
-import { externalSvg } from './external';
-import { globeSvg } from './globe';
-import { locationSvg } from './location';
-import { mapSvg } from './map';
-import { moreHorizontalSvg } from './more-horizontal';
-import { moreVerticalSvg } from './more-vertical';
-import { returnSvg } from './return';
-import { routeSvg } from './route';
-import { sendSvg } from './send';
+import { arrowDownSvg } from './arrow-down.js';
+import { arrowLeftSvg } from './arrow-left.js';
+import { arrowRightSvg } from './arrow-right.js';
+import { arrowUpSvg } from './arrow-up.js';
+import { caretDownSvg } from './caret-down.js';
+import { caretLeftSvg } from './caret-left.js';
+import { caretRightSvg } from './caret-right.js';
+import { caretUpSvg } from './caret-up.js';
+import { compassSvg } from './compass.js';
+import { doubleCaretLeftSvg } from './double-caret-left.js';
+import { doubleCaretRightSvg } from './double-caret-right.js';
+import { externalSvg } from './external.js';
+import { globeSvg } from './globe.js';
+import { locationSvg } from './location.js';
+import { mapSvg } from './map.js';
+import { moreHorizontalSvg } from './more-horizontal.js';
+import { moreVerticalSvg } from './more-vertical.js';
+import { returnSvg } from './return.js';
+import { routeSvg } from './route.js';
+import { sendSvg } from './send.js';
 
 export const navigationIcons = {
   'arrow-down': arrowDownSvg,

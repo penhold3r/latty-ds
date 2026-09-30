@@ -21,6 +21,7 @@ jobs:
       - run: pnpm --filter './packages/**' -r build
       - run: pnpm lint
       - run: pnpm typecheck
+      - run: pnpm check:esm-smoke
       - run: pnpm test
 
   a11y:

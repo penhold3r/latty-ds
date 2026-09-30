@@ -17,6 +17,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check:boundaries": "node scripts/check-boundaries.mjs",
+    "check:esm-smoke": "node scripts/check-esm-smoke.mjs",
     "codegen:wrappers": "node scripts/codegen-wrappers.mjs",
     "bundle-size": "node scripts/bundle-size.mjs",
     "bundle-size:update": "node scripts/bundle-size.mjs --update",

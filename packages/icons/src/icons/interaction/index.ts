@@ -1,21 +1,21 @@
-import { collapseSvg } from './collapse';
-import { cursorSvg } from './cursor';
-import { dragSvg } from './drag';
-import { expandSvg } from './expand';
-import { eyeCloseSvg } from './eye-close';
-import { eyeOpenSvg } from './eye-open';
-import { flipSvg } from './flip';
-import { fullscreenSvg } from './fullscreen';
-import { handSvg } from './hand';
-import { minimizeSvg } from './minimize';
-import { moveSvg } from './move';
-import { redoSvg } from './redo';
-import { rotateCwSvg } from './rotate-cw';
-import { selectSvg } from './select';
-import { switchSvg } from './switch';
-import { undoSvg } from './undo';
-import { zoomInSvg } from './zoom-in';
-import { zoomOutSvg } from './zoom-out';
+import { collapseSvg } from './collapse.js';
+import { cursorSvg } from './cursor.js';
+import { dragSvg } from './drag.js';
+import { expandSvg } from './expand.js';
+import { eyeCloseSvg } from './eye-close.js';
+import { eyeOpenSvg } from './eye-open.js';
+import { flipSvg } from './flip.js';
+import { fullscreenSvg } from './fullscreen.js';
+import { handSvg } from './hand.js';
+import { minimizeSvg } from './minimize.js';
+import { moveSvg } from './move.js';
+import { redoSvg } from './redo.js';
+import { rotateCwSvg } from './rotate-cw.js';
+import { selectSvg } from './select.js';
+import { switchSvg } from './switch.js';
+import { undoSvg } from './undo.js';
+import { zoomInSvg } from './zoom-in.js';
+import { zoomOutSvg } from './zoom-out.js';
 
 export const interactionIcons = {
   eye: eyeOpenSvg,
