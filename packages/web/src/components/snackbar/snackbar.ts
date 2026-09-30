@@ -13,6 +13,16 @@ import '../surface/surface';
 /**
  * Brief notification that appears temporarily at the bottom of the viewport.
  *
+ * Renders as a native "manual" popover on its own host, so it always appears in the top layer — above an open
+ * `lt-dialog`/`lt-sidepanel`, regardless of z-index, since top-layer content always wins over non-top-layer
+ * content no matter how high (SNK-companion to §6.1's `<dialog>` migration). Confirmed live: fully visible and
+ * readable above an open modal. One narrower, unavoidable limitation (confirmed live too, not fixable from this
+ * component's side): a native `showModal()` makes everything **outside the dialog's own subtree** inert,
+ * including a sibling popover — explicitly setting `inert = false` on the snackbar does not override it. A
+ * snackbar shown while a dialog is open is visible but not clickable until the dialog closes; its own
+ * `duration` timer still fires normally regardless (a plain `setTimeout`, unaffected by inertness), so only a
+ * `duration="0"` snackbar with a close/action button would be briefly stuck non-interactive in that scenario.
+ *
  * @element lt-snackbar
  *
  * @slot - Notification content. Accepts any HTML — bold, links, etc.
@@ -76,7 +86,10 @@ export class Snackbar extends ThemeableElement {
   private _timer?: ReturnType<typeof setTimeout>;
   // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
   // was ever shown — `open` starts false, so the else branch ran, dispatching a `hide` for a snackbar that was
-  // never visible (SNK-1). Same fix and reasoning as lt-dropdown's `_skipNextOpenChange` (DDN-1).
+  // never visible (SNK-1). Same fix and reasoning as lt-dropdown's `_skipNextOpenChange` (DDN-1). This guards
+  // only the timer/event side effects, not the popover sync below — a snackbar mounted already open (markup
+  // `open=""`) still needs `showPopover()` called once, or it stays in the native `display: none` state despite
+  // `open` being true.
   private _skipNextOpenChange = true;
 
   /** Shows the snackbar and starts the auto-dismiss timer. */
@@ -89,8 +102,20 @@ export class Snackbar extends ThemeableElement {
     this.open = false;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    // `lt-snackbar` is a "manual" popover on its own host (not a wrapped child, unlike lt-dialog/lt-sidepanel's
+    // inner <dialog>) so it renders in the top layer, above an open modal dialog regardless of z-index — the
+    // whole reason for this migration (§6.1: a snackbar shown while a dialog is open would otherwise be hidden
+    // behind it, since top-layer content always wins). "manual" means nothing native can show or dismiss it —
+    // no light-dismiss on outside click, no Escape — only our own show()/hide() can, matching the existing
+    // behavior (duration timer + explicit close button) exactly.
+    this.setAttribute('popover', 'manual');
+  }
+
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('open')) {
+      this._syncPopoverState();
       if (this._skipNextOpenChange) {
         this._skipNextOpenChange = false;
       } else if (this.open) {
@@ -100,6 +125,14 @@ export class Snackbar extends ThemeableElement {
         this._clearTimer();
         dispatch(this, 'hide');
       }
+    }
+  }
+
+  private _syncPopoverState() {
+    if (this.open) {
+      if (!this.matches(':popover-open')) this.showPopover();
+    } else if (this.matches(':popover-open')) {
+      this.hidePopover();
     }
   }
 

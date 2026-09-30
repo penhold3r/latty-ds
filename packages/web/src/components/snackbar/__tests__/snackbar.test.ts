@@ -165,4 +165,48 @@ describe('<lt-snackbar>', () => {
     await el.updateComplete;
     expect(el.open).toBe(true);
   });
+
+  // §6.1's companion migration: lt-snackbar renders as a "manual" popover on its own host so it stays above an
+  // open lt-dialog/lt-sidepanel regardless of z-index (top-layer content always wins). jsdom has no real Popover
+  // API (vitest.setup.ts stubs it), so these verify the component calls the right methods at the right times,
+  // not the actual top-layer rendering itself (that's a live-Chromium concern).
+  describe('popover (SNK-companion to §6.1)', () => {
+    it('is a manual popover', () => {
+      expect(el.getAttribute('popover')).toBe('manual');
+    });
+
+    it('calls showPopover() on show() and hidePopover() on hide()', async () => {
+      const showSpy = vi.spyOn(el, 'showPopover');
+      const hideSpy = vi.spyOn(el, 'hidePopover');
+      el.show();
+      await el.updateComplete;
+      expect(showSpy).toHaveBeenCalledOnce();
+      expect(hideSpy).not.toHaveBeenCalled();
+
+      el.hide();
+      await el.updateComplete;
+      expect(hideSpy).toHaveBeenCalledOnce();
+    });
+
+    it('calls showPopover() even when mounted already open (skip guard covers only timer/event side effects)', async () => {
+      const fresh = document.createElement('lt-snackbar') as Snackbar;
+      fresh.setAttribute('open', '');
+      document.body.appendChild(fresh);
+      // Lit's first update is deferred to a microtask, so the spy attaches before it runs.
+      const showSpy = vi.spyOn(fresh, 'showPopover');
+      await fresh.updateComplete;
+      expect(showSpy).toHaveBeenCalledOnce();
+      expect(fresh.matches(':popover-open')).toBe(true);
+      fresh.remove();
+    });
+
+    it('stays open and keeps :popover-open matching through a later unrelated property change', async () => {
+      el.show();
+      await el.updateComplete;
+      el.duration = 5000;
+      await el.updateComplete;
+      expect(el.open).toBe(true);
+      expect(el.matches(':popover-open')).toBe(true);
+    });
+  });
 });

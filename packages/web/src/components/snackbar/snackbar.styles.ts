@@ -1,27 +1,50 @@
 import { css } from 'lit';
 
 export const snackbarStyles = css`
+  /* ── Popover ─────────────────────────────────────────────── The host itself is the popover element (no
+     wrapped child, unlike lt-dialog/lt-sidepanel's inner <dialog>) — the browser's own [popover] UA stylesheet
+     sets inset:0, margin:auto, width/height:fit-content, padding, border, and Canvas colors, all of which are
+     reset below in favor of this component's own bottom-center placement. display is deliberately NOT set on
+     the base rule — a closed (not :popover-open) popover must stay display:none (the native default) so it's
+     genuinely non-interactive and out of the accessibility tree; it's set to block only for the open state,
+     below. display/overlay need transition-behavior: allow-discrete so hidePopover() doesn't remove it from
+     rendering instantly, cutting the exit transition off partway through — same reasoning as lt-dialog. ─────── */
+
   :host {
-    display: block;
+    background: transparent;
+    border: none;
     bottom: 24px;
     left: 50%;
+    margin: 0;
     max-width: calc(100vw - 48px);
     opacity: 0;
+    overflow: visible;
+    padding: 0;
     position: fixed;
+    right: auto;
+    top: auto;
     transform: translateX(-50%) translateY(8px);
     transition:
       opacity 200ms ease,
       transform 200ms ease,
-      visibility 200ms ease;
-    visibility: hidden;
+      display 200ms allow-discrete,
+      overlay 200ms allow-discrete;
     width: max-content;
-    z-index: 9000;
   }
 
   :host([open]) {
+    display: block;
     opacity: 1;
     transform: translateX(-50%) translateY(0);
-    visibility: visible;
+  }
+
+  /* A newly-shown popover has no earlier rendered frame to transition from — @starting-style supplies one so
+     the fade/slide-in actually animates instead of snapping straight to the open position. */
+  @starting-style {
+    :host([open]) {
+      opacity: 0;
+      transform: translateX(-50%) translateY(8px);
+    }
   }
 
   /* ── Layout ──────────────────────────────────────────────── */
@@ -105,5 +128,13 @@ export const snackbarStyles = css`
 
   .close:hover {
     opacity: 1;
+  }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      transition: none;
+    }
   }
 `;

@@ -79,3 +79,43 @@ if (typeof HTMLDialogElement !== 'undefined' && typeof HTMLDialogElement.prototy
     this.dispatchEvent(new Event('close'));
   };
 }
+
+// jsdom (27.4, checked) implements none of the Popover API — no showPopover/hidePopover/togglePopover on
+// HTMLElement, and `:popover-open` never matches. lt-snackbar (§6.1's companion migration to the dialog work)
+// uses the host itself as a "manual" popover so it renders in the top layer, above an open <dialog>, no matter
+// what z-index says. This stub tracks open state per-element and patches Element.prototype.matches so
+// `this.matches(':popover-open')` — the guard lt-snackbar's own code uses — behaves correctly in jsdom tests
+// too, instead of diverging between the test and production code paths.
+//
+// Unlike showModal()/close() on <dialog> (which DO throw on redundant calls, confirmed in §6.1's spike),
+// showPopover()/hidePopover() on a redundant call are silent no-ops in real Chrome — confirmed empirically
+// (a manual popover tolerates a second showPopover() or an initial hidePopover() with no exception). This stub
+// is intentionally lenient the same way, including for an element with no `popover` attribute at all (real
+// browsers throw NotSupportedError there; several existing floating.ts call sites rely on a no-op instead,
+// and none of this codebase's real consumers call these methods on a non-popover element anyway).
+if (typeof HTMLElement !== 'undefined' && typeof HTMLElement.prototype.showPopover !== 'function') {
+  const openPopovers = new WeakSet<Element>();
+  const h = HTMLElement.prototype as unknown as {
+    showPopover: () => void;
+    hidePopover: () => void;
+    togglePopover: (force?: boolean) => boolean;
+  };
+  h.showPopover = function (this: HTMLElement) {
+    openPopovers.add(this);
+  };
+  h.hidePopover = function (this: HTMLElement) {
+    openPopovers.delete(this);
+  };
+  h.togglePopover = function (this: HTMLElement, force?: boolean) {
+    const shouldShow = force ?? !openPopovers.has(this);
+    if (shouldShow) openPopovers.add(this);
+    else openPopovers.delete(this);
+    return shouldShow;
+  };
+
+  const originalMatches = Element.prototype.matches;
+  Element.prototype.matches = function (this: Element, selector: string) {
+    if (selector === ':popover-open') return openPopovers.has(this);
+    return originalMatches.call(this, selector);
+  };
+}
