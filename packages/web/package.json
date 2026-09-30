@@ -148,10 +148,6 @@
       "import": "./dist/components/select/index.js",
       "default": "./dist/components/select/index.js"
     },
-    "./shared": {
-      "import": "./dist/components/shared/index.js",
-      "default": "./dist/components/shared/index.js"
-    },
     "./sidepanel": {
       "import": "./dist/components/sidepanel/index.js",
       "default": "./dist/components/sidepanel/index.js"

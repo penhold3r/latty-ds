@@ -155,8 +155,14 @@ writeFileSync(join(root, 'dist/manifest.json'), JSON.stringify({ _meta: { iconNa
 console.log(`manifest.json → ${Object.keys(manifest).length} components, ${iconNames.length} icons`);
 
 // ── Generate per-component exports map in package.json ────────────────────────
+// A directory under dist/components/ doesn't always mean a built entry point (X7): tsc's declaration pass
+// emits a .d.ts for every source file it compiles, including internal-only helpers like shared/*.ts (imported
+// by dialog/sidepanel/dropdown/etc. but never a component of their own, no src/components/shared/index.ts) —
+// so dist/components/shared/ exists with .d.ts files but no index.js, since tsup's own entry list (see
+// tsup.config.ts) correctly excludes it. Requiring an actual index.js keeps the exports map matching what's
+// really importable, instead of advertising a subpath that 404s for every consumer who tries it.
 const componentDirs = readdirSync(join(root, 'dist/components'), { withFileTypes: true })
-  .filter((e) => e.isDirectory())
+  .filter((e) => e.isDirectory() && existsSync(join(root, 'dist/components', e.name, 'index.js')))
   .map((e) => e.name)
   .sort();
 
