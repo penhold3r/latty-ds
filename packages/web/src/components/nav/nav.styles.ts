@@ -138,4 +138,22 @@ export const navItemStyles = css`
   :host([orientation='horizontal']) .children-inner {
     padding: var(--lt-spacing-2);
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    .item-trigger,
+    .chevron {
+      transition: none;
+    }
+
+    /* .children's height transition can't just be removed — nav-item.ts's _handleTransitionEnd() only finalizes
+       the open height to 'auto' (letting it respond to later content changes) once the CSS transition actually
+       completes; transition:none fires no transitionend at all, leaving it stuck at a fixed pixel height
+       forever. A 1ms duration is imperceptible (satisfies the reduced-motion intent) but still fires the event
+       the component depends on — same reasoning as lt-accordion's .content. */
+    .children {
+      transition: height 1ms;
+    }
+  }
 `;

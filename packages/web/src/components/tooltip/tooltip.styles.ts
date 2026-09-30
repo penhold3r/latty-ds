@@ -103,4 +103,12 @@ export const tooltipStyles = css`
     top: 50%;
     transform: translateY(-50%);
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    .tooltip {
+      transition: none;
+    }
+  }
 `;

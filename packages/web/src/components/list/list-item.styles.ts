@@ -67,4 +67,13 @@ export const listItemStyles = css`
     opacity: 0.6;
     pointer-events: none;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    a.inner,
+    button.inner {
+      transition: none;
+    }
+  }
 `;

@@ -138,4 +138,13 @@ export const sliderStyles = css`
     cursor: not-allowed;
     pointer-events: none;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    input[type='range']::-webkit-slider-thumb,
+    input[type='range']::-moz-range-thumb {
+      transition: none;
+    }
+  }
 `;

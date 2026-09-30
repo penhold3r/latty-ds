@@ -48,4 +48,12 @@ export const surfaceStyles = css`
   :host([appearance='outlined']:hover) .surface {
     border-color: var(--lt-border-strong);
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    .surface {
+      transition: none;
+    }
+  }
 `;

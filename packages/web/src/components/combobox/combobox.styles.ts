@@ -189,5 +189,14 @@ export const comboboxStyles = [
     :host([variant='warning']) .helper-text {
       color: var(--lt-text-warning);
     }
+
+    /* ── Reduced motion ───────────────────────────────────────────────────── */
+
+    @media (prefers-reduced-motion: reduce) {
+      .input-wrap,
+      .chevron {
+        transition: none;
+      }
+    }
   `
 ];

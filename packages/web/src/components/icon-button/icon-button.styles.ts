@@ -244,4 +244,12 @@ export const iconButtonStyles = css`
   :host([round]) [part='base'] {
     border-radius: 50%;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    [part='base'] {
+      transition: none;
+    }
+  }
 `;

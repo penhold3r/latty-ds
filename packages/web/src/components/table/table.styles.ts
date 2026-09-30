@@ -284,4 +284,14 @@ export const tableStyles = css`
     outline: 2px solid var(--lt-interactive-primary-bg);
     outline-offset: -2px;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    th.sortable .header-content,
+    .sort-icon,
+    tbody tr {
+      transition: none;
+    }
+  }
 `;

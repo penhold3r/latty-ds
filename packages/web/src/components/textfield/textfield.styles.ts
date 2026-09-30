@@ -259,4 +259,14 @@ export const textfieldStyles = css`
     letter-spacing: 0.05rem;
     text-transform: lowercase;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    .password-toggle,
+    input,
+    textarea {
+      transition: none;
+    }
+  }
 `;

@@ -51,4 +51,12 @@ export const breadcrumbItemStyles = css`
   :host(:last-child) [part='separator'] {
     display: none;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    [part='link'] {
+      transition: none;
+    }
+  }
 `;

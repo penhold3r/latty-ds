@@ -128,4 +128,14 @@ export const dialogStyles = css`
     letter-spacing: 0.05rem;
     text-transform: lowercase;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    dialog,
+    dialog::backdrop,
+    lt-surface {
+      transition: none;
+    }
+  }
 `;

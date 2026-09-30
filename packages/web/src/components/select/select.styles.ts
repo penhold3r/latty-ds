@@ -198,5 +198,15 @@ export const selectStyles = [
     :host([variant='default']) .helper-text {
       color: var(--lt-text-subtle);
     }
+
+    /* ── Reduced motion ───────────────────────────────────────────────────── */
+
+    @media (prefers-reduced-motion: reduce) {
+      .select-trigger,
+      .icon-end,
+      .option {
+        transition: none;
+      }
+    }
   `
 ];

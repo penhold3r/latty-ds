@@ -164,4 +164,13 @@ export const switchStyles = css`
   :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) {
     background: var(--lt-interactive-info-bg-hover);
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    input[type='checkbox'],
+    .thumb {
+      transition: none;
+    }
+  }
 `;

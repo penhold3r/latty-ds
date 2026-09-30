@@ -179,4 +179,13 @@ export const chipStyles = css`
     border-color: var(--lt-border-info-strong);
     color: var(--lt-text-info);
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    span[part='base'],
+    .delete {
+      transition: none;
+    }
+  }
 `;

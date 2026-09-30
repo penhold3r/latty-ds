@@ -86,4 +86,15 @@ export const tabStyles = css`
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
     color: var(--lt-text-primary);
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    /* :host([data-variant='pills']) .tab must be listed explicitly, not just .tab — it outranks a bare .tab in
+       specificity (an extra :host() attribute selector), so it would otherwise keep its own transition. */
+    .tab,
+    :host([data-variant='pills']) .tab {
+      transition: none;
+    }
+  }
 `;

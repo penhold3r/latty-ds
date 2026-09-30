@@ -138,4 +138,12 @@ export const alertStyles = css`
     letter-spacing: 0.05rem;
     text-transform: lowercase;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      transition: none;
+    }
+  }
 `;

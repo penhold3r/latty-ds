@@ -151,5 +151,13 @@ export const dateInputStyles = [
     :host([variant='warning']) .helper-text {
       color: var(--lt-text-warning);
     }
+
+    /* ── Reduced motion ───────────────────────────────────────────────────── */
+
+    @media (prefers-reduced-motion: reduce) {
+      .field-btn {
+        transition: none;
+      }
+    }
   `
 ];

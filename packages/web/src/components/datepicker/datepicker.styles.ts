@@ -101,4 +101,12 @@ export const datepickerStyles = css`
   :host([variant='warning']) .helper-text {
     color: var(--lt-text-warning);
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    input {
+      transition: none;
+    }
+  }
 `;

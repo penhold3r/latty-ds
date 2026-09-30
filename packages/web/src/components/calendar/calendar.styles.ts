@@ -378,4 +378,18 @@ export const calendarStyles = css`
     cursor: not-allowed;
     opacity: 0.5;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    .month-label-btn,
+    .picker-chevron,
+    .nav-btn,
+    .day,
+    .day__inner,
+    .picker-month-btn,
+    .today-btn {
+      transition: none;
+    }
+  }
 `;

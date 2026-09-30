@@ -79,4 +79,12 @@ export const paginationStyles = css`
     cursor: not-allowed;
     pointer-events: none;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    button {
+      transition: none;
+    }
+  }
 `;

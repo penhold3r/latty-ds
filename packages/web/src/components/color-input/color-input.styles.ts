@@ -152,4 +152,12 @@ export const colorInputStyles = css`
     width: 24px;
     height: 24px;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    .input-container {
+      transition: none;
+    }
+  }
 `;

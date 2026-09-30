@@ -159,4 +159,12 @@ export const checkboxStyles = css`
     background: var(--lt-interactive-info-bg-hover);
     border-color: var(--lt-interactive-info-bg-hover);
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    input[type='checkbox'] {
+      transition: none;
+    }
+  }
 `;

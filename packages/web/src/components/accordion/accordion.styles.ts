@@ -132,4 +132,22 @@ export const accordionStyles = css`
     letter-spacing: 0.05rem;
     text-transform: lowercase;
   }
+
+  /* ── Reduced motion ─────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    details,
+    .chevron {
+      transition: none;
+    }
+
+    /* .content's height transition can't just be removed — accordion.ts's handleTransitionEnd() clears
+       _animating and finalizes styles only when the CSS transition actually completes; transition:none fires no
+       transitionend at all, leaving _animating stuck true after the very first toggle and silently breaking
+       every subsequent open/close. A 1ms duration is imperceptible (satisfies the reduced-motion intent) but
+       still fires the event the component's own state machine depends on. */
+    .content {
+      transition: height 1ms;
+    }
+  }
 `;
