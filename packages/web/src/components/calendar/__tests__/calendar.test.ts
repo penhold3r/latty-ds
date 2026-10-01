@@ -729,3 +729,90 @@ describe('<lt-calendar> disabled days stay focusable (CAL-5)', () => {
     expect(el.value).toBe('2026-05-20');
   });
 });
+
+describe('<lt-calendar> labels (i18n, X5)', () => {
+  let el: Calendar;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-calendar') as Calendar;
+    el.value = '2026-05-01';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('defaults the footer, nav, and picker-toggle labels to English (single-month layout)', () => {
+    const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
+    expect(el.shadowRoot!.querySelector('.today-btn')?.textContent?.trim()).toBe('Today');
+    expect(navBtns[0].getAttribute('aria-label')).toBe('Previous month');
+    expect(navBtns[1].getAttribute('aria-label')).toBe('Next month');
+    const pickerBtn = el.shadowRoot!.querySelector('.month-label-btn')!;
+    expect(pickerBtn.getAttribute('aria-label')).toBe('May 2026, choose month and year');
+  });
+
+  it('overrides the footer, nav, and picker-toggle labels via labels (single-month layout)', async () => {
+    el.labels = {
+      today: "Aujourd'hui",
+      previousMonth: 'Mois précédent',
+      nextMonth: 'Mois suivant',
+      chooseMonthYear: (monthYear) => `${monthYear}, choisir le mois et l'année`
+    };
+    await el.updateComplete;
+    const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
+    expect(el.shadowRoot!.querySelector('.today-btn')?.textContent?.trim()).toBe("Aujourd'hui");
+    expect(navBtns[0].getAttribute('aria-label')).toBe('Mois précédent');
+    expect(navBtns[1].getAttribute('aria-label')).toBe('Mois suivant');
+    const pickerBtn = el.shadowRoot!.querySelector('.month-label-btn')!;
+    expect(pickerBtn.getAttribute('aria-label')).toBe("May 2026, choisir le mois et l'année");
+  });
+
+  it('defaults to English previous/next year labels once the month/year picker is open', async () => {
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.month-label-btn')!.click();
+    await el.updateComplete;
+    const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
+    expect(navBtns[0].getAttribute('aria-label')).toBe('Previous year');
+    expect(navBtns[1].getAttribute('aria-label')).toBe('Next year');
+  });
+
+  it('overrides previous/next year labels via labels once the picker is open', async () => {
+    el.labels = { previousYear: 'Année précédente', nextYear: 'Année suivante' };
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.month-label-btn')!.click();
+    await el.updateComplete;
+    const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
+    expect(navBtns[0].getAttribute('aria-label')).toBe('Année précédente');
+    expect(navBtns[1].getAttribute('aria-label')).toBe('Année suivante');
+  });
+});
+
+describe('<lt-calendar months="2"> labels (i18n, X5)', () => {
+  let el: Calendar;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-calendar') as Calendar;
+    el.setAttribute('months', '2');
+    el.value = '2026-05-01';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('defaults the multi-month nav labels to English', () => {
+    const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
+    expect(navBtns[0].getAttribute('aria-label')).toBe('Previous month');
+    expect(navBtns[1].getAttribute('aria-label')).toBe('Next month');
+  });
+
+  it('overrides the multi-month nav labels via labels', async () => {
+    el.labels = { previousMonth: 'Mois précédent', nextMonth: 'Mois suivant' };
+    await el.updateComplete;
+    const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
+    expect(navBtns[0].getAttribute('aria-label')).toBe('Mois précédent');
+    expect(navBtns[1].getAttribute('aria-label')).toBe('Mois suivant');
+  });
+});

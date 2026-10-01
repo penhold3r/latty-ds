@@ -4,8 +4,17 @@ import { ThemeableElement } from '../../base';
 import '@latty-ds/icons';
 
 import { calendarStyles } from './calendar.styles';
-import type { CalendarDay, CalendarMode, CalendarWeekStart } from './calendar.types';
+import type { CalendarDay, CalendarMode, CalendarWeekStart, CalendarLabels } from './calendar.types';
 import { dispatch } from '../../utils';
+
+const DEFAULT_LABELS: CalendarLabels = {
+  today: 'Today',
+  previousMonth: 'Previous month',
+  nextMonth: 'Next month',
+  previousYear: 'Previous year',
+  nextYear: 'Next year',
+  chooseMonthYear: (monthYear) => `${monthYear}, choose month and year`
+};
 
 /**
  * A visual calendar grid for single-date or date-range selection.
@@ -70,6 +79,13 @@ export class Calendar extends ThemeableElement {
 
   /** Specific dates to disable, as an array of Date objects. Set as a JS property (`.disabledDates`). */
   @property({ attribute: false }) disabledDates: Date[] = [];
+
+  /** Overridable UI text (nav button labels, the "Today" footer button, the month/year picker toggle), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<CalendarLabels> = {};
+
+  private get _labels(): CalendarLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
 
   @state() private _viewYear = new Date().getFullYear();
   @state() private _viewMonth = new Date().getMonth();
@@ -513,7 +529,7 @@ export class Calendar extends ThemeableElement {
 
     const footer = html`
       <div class="footer">
-        <button class="today-btn" ?disabled=${this.disabled} @click=${this._goToToday}>Today</button>
+        <button class="today-btn" ?disabled=${this.disabled} @click=${this._goToToday}>${this._labels.today}</button>
       </div>
     `;
 
@@ -529,7 +545,7 @@ export class Calendar extends ThemeableElement {
           <div class="header">
             <button
               class="nav-btn"
-              aria-label="Previous month"
+              aria-label=${this._labels.previousMonth}
               ?disabled=${this.disabled}
               @click=${() => this._navigate(-1)}
             >
@@ -545,7 +561,7 @@ export class Calendar extends ThemeableElement {
             </div>
             <button
               class="nav-btn"
-              aria-label="Next month"
+              aria-label=${this._labels.nextMonth}
               ?disabled=${this.disabled}
               @click=${() => this._navigate(1)}
             >
@@ -576,8 +592,8 @@ export class Calendar extends ThemeableElement {
     const monthLabel = new Intl.DateTimeFormat(this.locale, { month: 'long', year: 'numeric' }).format(
       new Date(this._viewYear, this._viewMonth)
     );
-    const prevLabel = this._pickingMonthYear ? 'Previous year' : 'Previous month';
-    const nextLabel = this._pickingMonthYear ? 'Next year' : 'Next month';
+    const prevLabel = this._pickingMonthYear ? this._labels.previousYear : this._labels.previousMonth;
+    const nextLabel = this._pickingMonthYear ? this._labels.nextYear : this._labels.nextMonth;
     // WCAG 2.5.3 Label in Name: the visible text (a live-updating month/year) has to be part of the accessible
     // name, not replaced by it — otherwise a speech-input user saying what they see on the button can't match it.
     const monthYearVisibleText = this._pickingMonthYear ? String(this._pickerYear) : monthLabel;
@@ -590,7 +606,7 @@ export class Calendar extends ThemeableElement {
         <button
           class="month-label-btn ${this._pickingMonthYear ? 'month-label-btn--open' : ''}"
           aria-expanded=${this._pickingMonthYear ? 'true' : 'false'}
-          aria-label="${monthYearVisibleText}, choose month and year"
+          aria-label=${this._labels.chooseMonthYear(monthYearVisibleText)}
           ?disabled=${this.disabled}
           @click=${() => (this._pickingMonthYear ? this._closePicker() : this._openPicker())}
         >

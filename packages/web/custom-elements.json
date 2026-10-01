@@ -1510,6 +1510,24 @@
             },
             {
               "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<CalendarLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (nav button labels, the \"Today\" footer button, the month/year picker toggle), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "CalendarLabels"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "_viewYear",
               "privacy": "private"
             },
