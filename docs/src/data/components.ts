@@ -284,13 +284,13 @@ export const propConventions: PropConvention[] = [
   {
     prop: 'placement',
     controls: 'Position of floating / overlay elements',
-    values: ['top', 'bottom', 'left', 'right', 'top-start', 'top-end', 'bottom-start', 'bottom-end'],
+    values: ['top', 'bottom', 'start', 'end', 'top-start', 'top-end', 'bottom-start', 'bottom-end'],
     usedOn: 'Tooltip, Dropdown'
   },
   {
     prop: 'anchor',
     controls: 'Viewport edge the panel attaches to',
-    values: ['left', 'right'],
+    values: ['start', 'end'],
     usedOn: 'SidePanel'
   },
   {

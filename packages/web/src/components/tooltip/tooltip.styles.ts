@@ -43,18 +43,21 @@ export const tooltipStyles = css`
   }
 
   /* ── Top (default) ──────────────────────────── */
+  /* left: 50%; transform: translateX(-50%) centers the tooltip over the host — this is direction-symmetric
+     (centering isn't direction-dependent) so inset-inline-start:50% + a literal translateX(-50%) is correct in
+     both LTR and RTL without any custom-property trick, unlike the start/end placements below. */
 
   :host(:not([placement])) .tooltip,
   :host([placement='top']) .tooltip {
     bottom: calc(100% + var(--lt-tooltip-offset));
-    left: 50%;
+    inset-inline-start: 50%;
     transform: translateX(-50%);
   }
 
   :host(:not([placement])) .arrow,
   :host([placement='top']) .arrow {
     border-top-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
-    left: 50%;
+    inset-inline-start: 50%;
     top: 100%;
     transform: translateX(-50%);
   }
@@ -62,7 +65,7 @@ export const tooltipStyles = css`
   /* ── Bottom ─────────────────────────────────── */
 
   :host([placement='bottom']) .tooltip {
-    left: 50%;
+    inset-inline-start: 50%;
     top: calc(100% + var(--lt-tooltip-offset));
     transform: translateX(-50%);
   }
@@ -70,36 +73,39 @@ export const tooltipStyles = css`
   :host([placement='bottom']) .arrow {
     border-bottom-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
     bottom: 100%;
-    left: 50%;
+    inset-inline-start: 50%;
     transform: translateX(-50%);
   }
 
-  /* ── Left ───────────────────────────────────── */
+  /* ── Start ──────────────────────────────────── */
+  /* Unlike the transform/box-shadow cases in lt-sidepanel, every property the start/end placements need
+     (inset-inline-*, border-inline-*-color) has a real logical-property equivalent — no :dir(rtl) custom
+     property trick needed here at all. */
 
-  :host([placement='left']) .tooltip {
-    right: calc(100% + var(--lt-tooltip-offset));
+  :host([placement='start']) .tooltip {
+    inset-inline-end: calc(100% + var(--lt-tooltip-offset));
     top: 50%;
     transform: translateY(-50%);
   }
 
-  :host([placement='left']) .arrow {
-    border-left-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
-    left: 100%;
+  :host([placement='start']) .arrow {
+    border-inline-start-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
+    inset-inline-start: 100%;
     top: 50%;
     transform: translateY(-50%);
   }
 
-  /* ── Right ──────────────────────────────────── */
+  /* ── End ────────────────────────────────────── */
 
-  :host([placement='right']) .tooltip {
-    left: calc(100% + var(--lt-tooltip-offset));
+  :host([placement='end']) .tooltip {
+    inset-inline-start: calc(100% + var(--lt-tooltip-offset));
     top: 50%;
     transform: translateY(-50%);
   }
 
-  :host([placement='right']) .arrow {
-    border-right-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
-    right: 100%;
+  :host([placement='end']) .arrow {
+    border-inline-end-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
+    inset-inline-end: 100%;
     top: 50%;
     transform: translateY(-50%);
   }

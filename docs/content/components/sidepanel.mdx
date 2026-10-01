@@ -18,7 +18,7 @@ or any contextual content that shouldn't interrupt the main flow.
 <ComponentPlayground
   tag="lt-sidepanel"
   previewTrigger="Open panel"
-  defaults={{ label: 'Panel title', anchor: 'left', size: '320px' }}
+  defaults={{ label: 'Panel title', anchor: 'start', size: '320px' }}
   content={`<div style="padding: var(--lt-spacing-5);">
   <lt-text variant="body-sm" style="color: var(--lt-text-muted);">
     Panel content goes here — navigation links, filters, a detail view, or a form.
@@ -31,7 +31,7 @@ or any contextual content that shouldn't interrupt the main flow.
   <FrameworkTabs
     html={`<lt-button onclick="document.getElementById('panel').open = true">Open</lt-button>
 
-<lt-sidepanel id="panel" label="Settings" anchor="left" size="320px">
+<lt-sidepanel id="panel" label="Settings" anchor="start" size="320px">
   <div style="padding: var(--lt-spacing-5);">
     <p>Panel content goes here.</p>
   </div>
@@ -60,7 +60,7 @@ return (
       <SidePanel
         open={open}
         label="Settings"
-        anchor="left"
+        anchor="start"
         size="320px"
         onClose={() => setOpen(false)}
       >
@@ -84,7 +84,7 @@ const open = ref(false)
 <lt-sidepanel
 :open="open"
 label="Settings"
-anchor="left"
+anchor="start"
 size="320px"
 @close="open = false">
 

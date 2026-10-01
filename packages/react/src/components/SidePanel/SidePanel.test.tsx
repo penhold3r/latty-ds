@@ -14,8 +14,8 @@ describe('SidePanel', () => {
   });
 
   it('passes anchor as attribute', () => {
-    const { container } = render(<SidePanel anchor="right" />);
-    expect(container.querySelector('lt-sidepanel')?.getAttribute('anchor')).toBe('right');
+    const { container } = render(<SidePanel anchor="end" />);
+    expect(container.querySelector('lt-sidepanel')?.getAttribute('anchor')).toBe('end');
   });
 
   it('passes size as attribute', () => {

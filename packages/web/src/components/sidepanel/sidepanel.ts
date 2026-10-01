@@ -45,10 +45,10 @@ export class SidePanel extends ThemeableElement {
   /** Whether the panel is visible. */
   @property({ type: Boolean, reflect: true }) open = false;
 
-  /** Edge from which the panel slides in. */
-  @property({ reflect: true }) anchor: SidePanelAnchor = 'left';
+  /** Edge from which the panel slides in. `'start'`/`'end'` flip with reading direction. */
+  @property({ reflect: true }) anchor: SidePanelAnchor = 'start';
 
-  /** Panel width (left/right anchors) or height (top/bottom anchors). */
+  /** Panel width (start/end anchors) or height (top/bottom anchors). */
   @property() size = '320px';
 
   /** Title shown in the panel header. When empty, the header is hidden. */
@@ -172,22 +172,25 @@ export class SidePanel extends ThemeableElement {
     }
   };
 
+  // translateX has no logical/direction-aware equivalent in CSS, unlike the positioning below (inset-inline-*
+  // resolves automatically) — var(--_start-x)/var(--_end-x) carry the direction-dependent sign instead (defined
+  // in the stylesheet, flipped under :host(:dir(rtl))), so this stays correct under RTL without reading
+  // getComputedStyle(this).direction here at all.
   private get _offScreenTransform(): string {
     switch (this.anchor) {
-      case 'right':
-        return 'translateX(100%)';
+      case 'end':
+        return 'translateX(var(--_end-x, 100%))';
       case 'top':
         return 'translateY(-100%)';
       case 'bottom':
         return 'translateY(100%)';
       default:
-        return 'translateX(-100%)';
+        return 'translateX(var(--_start-x, -100%))';
     }
   }
 
   private get _panelStyle(): string {
-    const sizeStyle =
-      this.anchor === 'left' || this.anchor === 'right' ? `width: ${this.size}` : `height: ${this.size}`;
+    const sizeStyle = this.anchor === 'start' || this.anchor === 'end' ? `width: ${this.size}` : `height: ${this.size}`;
     return `${sizeStyle}; --lt-sidepanel-overlay-opacity: ${this.overlayOpacity}`;
   }
 

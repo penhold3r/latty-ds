@@ -3,6 +3,19 @@ import { css } from 'lit';
 export const sidepanelStyles = css`
   :host {
     display: contents;
+    /* translateX/box-shadow offsets have no logical-property equivalent, unlike the inset-inline-*
+       positioning below (which resolves automatically) — these carry the direction-dependent sign instead,
+       flipped under :dir(rtl), so the off-screen slide direction and shadow side both stay correct without
+       any JS reading computed direction at all. */
+    --_start-x: -100%;
+    --_end-x: 100%;
+    --_dir-sign: 1;
+  }
+
+  :host(:dir(rtl)) {
+    --_start-x: 100%;
+    --_end-x: -100%;
+    --_dir-sign: -1;
   }
 
   /* ── Panel — the native <dialog> itself now provides the overlay too, via ::backdrop; a closed dialog is
@@ -42,37 +55,37 @@ export const sidepanelStyles = css`
   }
 
   /* ── Anchors — off-screen positions; dialog[open] (below) is the only thing that moves it on-screen. Fully
-     explicit left/right/top/bottom (not inset-block/inline shorthand, and not omitting the opposite side to
-     fall back to "auto") and an explicit height/width — a native <dialog>, even position:fixed, does not
-     stretch to fill top:0/bottom:0 the way a plain block box would; confirmed empirically, it needs an
-     explicit dimension on the axis inset alone doesn't constrain. ─────────────────────────────────────────── */
+     explicit inset-inline-start/end/top/bottom (not inset-block/inline shorthand, and not omitting the
+     opposite side to fall back to "auto") and an explicit height/width — a native <dialog>, even
+     position:fixed, does not stretch to fill top:0/bottom:0 the way a plain block box would; confirmed
+     empirically, it needs an explicit dimension on the axis inset alone doesn't constrain. ────────────────── */
 
-  :host([anchor='left']) dialog,
+  :host([anchor='start']) dialog,
   :host(:not([anchor])) dialog {
     top: 0;
-    right: auto;
+    inset-inline-end: auto;
     bottom: auto;
-    left: 0;
+    inset-inline-start: 0;
     height: 100vh;
-    transform: translateX(-100%);
-    box-shadow: var(--lt-sidepanel-shadow, 4px 0 24px rgba(0, 0, 0, 0.12));
+    transform: translateX(var(--_start-x));
+    box-shadow: var(--lt-sidepanel-shadow, calc(4px * var(--_dir-sign)) 0 24px rgba(0, 0, 0, 0.12));
   }
 
-  :host([anchor='right']) dialog {
+  :host([anchor='end']) dialog {
     top: 0;
-    right: 0;
+    inset-inline-end: 0;
     bottom: auto;
-    left: auto;
+    inset-inline-start: auto;
     height: 100vh;
-    transform: translateX(100%);
-    box-shadow: var(--lt-sidepanel-shadow, -4px 0 24px rgba(0, 0, 0, 0.12));
+    transform: translateX(var(--_end-x));
+    box-shadow: var(--lt-sidepanel-shadow, calc(-4px * var(--_dir-sign)) 0 24px rgba(0, 0, 0, 0.12));
   }
 
   :host([anchor='top']) dialog {
     top: 0;
-    right: auto;
+    inset-inline-end: auto;
     bottom: auto;
-    left: 0;
+    inset-inline-start: 0;
     width: 100vw;
     transform: translateY(-100%);
     box-shadow: var(--lt-sidepanel-shadow, 0 4px 24px rgba(0, 0, 0, 0.12));
@@ -80,9 +93,9 @@ export const sidepanelStyles = css`
 
   :host([anchor='bottom']) dialog {
     top: auto;
-    right: auto;
+    inset-inline-end: auto;
     bottom: 0;
-    left: 0;
+    inset-inline-start: 0;
     width: 100vw;
     transform: translateY(100%);
     box-shadow: var(--lt-sidepanel-shadow, 0 -4px 24px rgba(0, 0, 0, 0.12));
@@ -93,14 +106,14 @@ export const sidepanelStyles = css`
     flex-direction: column;
   }
 
-  /* The transform override has to be scoped per anchor, not a bare dialog[open] — :host([anchor='right'])
+  /* The transform override has to be scoped per anchor, not a bare dialog[open] — :host([anchor='end'])
      dialog (above) has HIGHER specificity than a plain dialog[open] (one more attribute selector, from the
      :host() argument), so a bare "dialog[open] { transform: translate(0,0); }" would lose the cascade to the
      anchor rule's own closed-position transform regardless of source order, leaving the panel permanently
      stuck off-screen. Matching each anchor rule's own specificity here guarantees the open state wins. */
-  :host([anchor='left']) dialog[open],
+  :host([anchor='start']) dialog[open],
   :host(:not([anchor])) dialog[open],
-  :host([anchor='right']) dialog[open],
+  :host([anchor='end']) dialog[open],
   :host([anchor='top']) dialog[open],
   :host([anchor='bottom']) dialog[open] {
     transform: translate(0, 0);
@@ -109,12 +122,12 @@ export const sidepanelStyles = css`
   /* A newly-shown dialog has no earlier rendered frame to transition from — @starting-style supplies one,
      per anchor, so the slide-in actually animates instead of snapping straight to the open position. */
   @starting-style {
-    :host([anchor='left']) dialog[open],
+    :host([anchor='start']) dialog[open],
     :host(:not([anchor])) dialog[open] {
-      transform: translateX(-100%);
+      transform: translateX(var(--_start-x));
     }
-    :host([anchor='right']) dialog[open] {
-      transform: translateX(100%);
+    :host([anchor='end']) dialog[open] {
+      transform: translateX(var(--_end-x));
     }
     :host([anchor='top']) dialog[open] {
       transform: translateY(-100%);
@@ -142,7 +155,7 @@ export const sidepanelStyles = css`
 
   .close-button {
     flex-shrink: 0;
-    margin-left: auto;
+    margin-inline-start: auto;
   }
 
   /* ── Body ───────────────────────────────────────────────────────────────── */

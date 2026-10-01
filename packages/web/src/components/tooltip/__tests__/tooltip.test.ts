@@ -36,7 +36,7 @@ describe('<lt-tooltip>', () => {
     expect(el.getAttribute('placement')).toBe('top');
   });
 
-  it.each(['top', 'bottom', 'left', 'right'] as const)('reflects %s placement to attribute', async (placement) => {
+  it.each(['top', 'bottom', 'start', 'end'] as const)('reflects %s placement to attribute', async (placement) => {
     el.placement = placement;
     await el.updateComplete;
     expect(el.getAttribute('placement')).toBe(placement);

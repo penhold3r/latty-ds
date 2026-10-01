@@ -31,12 +31,12 @@ describe('<lt-sidepanel>', () => {
     expect(el.hasAttribute('open')).toBe(true);
   });
 
-  it('defaults anchor to left', () => {
-    expect(el.anchor).toBe('left');
-    expect(el.getAttribute('anchor')).toBe('left');
+  it('defaults anchor to start', () => {
+    expect(el.anchor).toBe('start');
+    expect(el.getAttribute('anchor')).toBe('start');
   });
 
-  it.each(['left', 'right', 'top', 'bottom'] as const)('reflects %s anchor to attribute', async (anchor) => {
+  it.each(['start', 'end', 'top', 'bottom'] as const)('reflects %s anchor to attribute', async (anchor) => {
     el.anchor = anchor;
     await el.updateComplete;
     expect(el.getAttribute('anchor')).toBe(anchor);
