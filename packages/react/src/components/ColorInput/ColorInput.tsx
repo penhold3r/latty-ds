@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { ColorInput as ColorInputEl } from '@latty-ds/web';
 
 export type ColorInputProps = Omit<HTMLAttributes<ColorInputEl>, 'onChange'> & {
@@ -11,11 +11,12 @@ export type ColorInputProps = Omit<HTMLAttributes<ColorInputEl>, 'onChange'> & {
   required?: boolean;
   name?: string;
   size?: ColorInputEl['size'];
+  labels?: ColorInputEl['labels'];
   onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const ColorInput = forwardRef<ColorInputEl, ColorInputProps>(function ColorInput(
-  { onChange, children, ...props },
+  { onChange, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<ColorInputEl>(null);
@@ -29,6 +30,11 @@ export const ColorInput = forwardRef<ColorInputEl, ColorInputProps>(function Col
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (labels !== undefined) el.labels = labels;
+  }, [labels]);
 
   return (
     <lt-color-input ref={innerRef} {...(props as Record<string, unknown>)}>

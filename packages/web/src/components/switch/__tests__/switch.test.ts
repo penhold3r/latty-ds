@@ -226,4 +226,23 @@ describe('<lt-switch>', () => {
       expect(input.disabled).toBe(true);
     });
   });
+
+  // jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
+  // component makes rather than reading back a real validationMessage.
+  describe('labels (i18n, X5)', () => {
+    it('defaults the required-field validation message to English', async () => {
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.required = true;
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[1]).toBe('Please check this switch');
+    });
+
+    it('overrides the required-field validation message via labels', async () => {
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.labels = { validationMessage: 'Veuillez activer ce commutateur' };
+      el.required = true;
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[1]).toBe('Veuillez activer ce commutateur');
+    });
+  });
 });

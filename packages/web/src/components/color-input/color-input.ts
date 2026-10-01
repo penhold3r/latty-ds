@@ -3,7 +3,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement, property } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
 import { colorInputStyles } from './color-input.styles';
-import { ColorInputFormat, ColorInputSize } from './color-input.types';
+import { ColorInputFormat, ColorInputSize, type ColorInputLabels } from './color-input.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 import '@latty-ds/icons';
@@ -79,6 +79,10 @@ function formatColor(hex: string, format: ColorInputFormat): string {
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
+
+const DEFAULT_LABELS: ColorInputLabels = {
+  validationMessage: 'Please select a color'
+};
 
 /**
  * A read-only textfield that opens the native browser color picker on click.
@@ -159,11 +163,18 @@ export class ColorInput extends ThemeableElement {
    */
   @property({ reflect: true }) size: ColorInputSize = 'md';
 
+  /** Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<ColorInputLabels> = {};
+
+  private get _labels(): ColorInputLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   updated() {
     this._internals.setFormValue(this.value || null);
     const input = this.shadowRoot?.querySelector<HTMLElement>('input[type="color"]');
     if (this.required && !this.value && input) {
-      this._internals.setValidity({ valueMissing: true }, 'Please select a color', input);
+      this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, input);
     } else {
       this._internals.setValidity({});
     }

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Checkbox as CheckboxEl } from '@latty-ds/web';
 
 export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
@@ -13,11 +13,12 @@ export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
   labelPosition?: CheckboxEl['labelPosition'];
   name?: string;
   value?: string;
+  labels?: CheckboxEl['labels'];
   onChange?: (event: CustomEvent<{ checked: boolean }>) => void;
 };
 
 export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
-  { onChange, children, ...props },
+  { onChange, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<CheckboxEl>(null);
@@ -31,6 +32,11 @@ export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (labels !== undefined) el.labels = labels;
+  }, [labels]);
 
   return (
     <lt-checkbox ref={innerRef} {...(props as Record<string, unknown>)}>

@@ -21,3 +21,9 @@ export type SwitchSize = 'sm' | 'md' | 'lg';
 export type SwitchVariant = 'primary' | 'secondary' | 'success' | 'error' | 'info';
 
 export type SwitchLabelPosition = 'left' | 'right';
+
+/** Overridable UI text for `lt-switch`, for i18n. */
+export interface SwitchLabels {
+  /** Validation message shown when a required switch is left unchecked. */
+  validationMessage: string;
+}

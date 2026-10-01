@@ -3,9 +3,13 @@ import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { radioStyles } from './radio.styles';
-import { RadioSize, RadioVariant, RadioLabelPosition } from './radio.types';
+import { RadioSize, RadioVariant, RadioLabelPosition, type RadioLabels } from './radio.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+
+const DEFAULT_LABELS: RadioLabels = {
+  validationMessage: 'Please select this option'
+};
 
 /**
  * Groups radios that share a `name`, scoped to the nearest form (or else the containing root — a document or
@@ -177,11 +181,18 @@ export class Radio extends ThemeableElement {
    */
   @property({ type: Boolean }) tabbable = true;
 
+  /** Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<RadioLabels> = {};
+
+  private get _labels(): RadioLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   updated() {
     this._internals.setFormValue(this.checked ? this.value : null);
     const input = this.shadowRoot?.querySelector<HTMLElement>('input');
     if (this.required && !this.checked && input) {
-      this._internals.setValidity({ valueMissing: true }, 'Please select this option', input);
+      this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, input);
     } else {
       this._internals.setValidity({});
     }

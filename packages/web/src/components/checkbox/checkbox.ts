@@ -3,11 +3,15 @@ import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { checkboxStyles } from './checkbox.styles';
-import { CheckboxSize, CheckboxVariant, CheckboxLabelPosition } from './checkbox.types';
+import { CheckboxSize, CheckboxVariant, CheckboxLabelPosition, type CheckboxLabels } from './checkbox.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 
 import '@latty-ds/icons';
+
+const DEFAULT_LABELS: CheckboxLabels = {
+  validationMessage: 'Please check this box'
+};
 
 /**
  * A customizable checkbox component with support for multiple variants and sizes.
@@ -117,6 +121,13 @@ export class Checkbox extends ThemeableElement {
    */
   @property({ reflect: true }) value = 'on';
 
+  /** Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<CheckboxLabels> = {};
+
+  private get _labels(): CheckboxLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   /**
    * Reference to the native input element.
    * @private
@@ -129,7 +140,7 @@ export class Checkbox extends ThemeableElement {
     }
     this._internals.setFormValue(this.checked ? this.value : null);
     if (this.required && !this.checked && this.input) {
-      this._internals.setValidity({ valueMissing: true }, 'Please check this box', this.input);
+      this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, this.input);
     } else {
       this._internals.setValidity({});
     }

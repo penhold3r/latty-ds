@@ -2055,6 +2055,24 @@
             },
             {
               "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<CheckboxLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "CheckboxLabels"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "input",
               "type": {
                 "text": "HTMLInputElement"
@@ -2535,6 +2553,24 @@
               },
               "default": "'md'",
               "description": "Size of the input — affects height and padding."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<ColorInputLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "ColorInputLabels"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "method",
@@ -6618,6 +6654,24 @@
               "description": "Whether this radio is reachable with Tab. Defaults to true for a standalone radio; `lt-radio-group` drives\nthis itself for its managed radios — a roving tabindex (only the checked radio, or the first enabled one,\nis a Tab stop), matching the native radiogroup pattern."
             },
             {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<RadioLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "RadioLabels"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
               "kind": "method",
               "name": "updated"
             },
@@ -6906,6 +6960,24 @@
               },
               "default": "[]",
               "description": "Array of options to display in the dropdown."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<SelectLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "SelectLabels"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "field",
@@ -8960,6 +9032,24 @@
               },
               "default": "'on'",
               "description": "Value attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<SwitchLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "SwitchLabels"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "method",

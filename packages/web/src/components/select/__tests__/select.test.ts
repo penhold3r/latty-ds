@@ -375,4 +375,23 @@ describe('<lt-select>', () => {
       fresh.remove();
     });
   });
+
+  // jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
+  // component makes rather than reading back a real validationMessage.
+  describe('labels (i18n, X5)', () => {
+    it('defaults the required-field validation message to English', async () => {
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.required = true;
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[1]).toBe('Please select an option');
+    });
+
+    it('overrides the required-field validation message via labels', async () => {
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.labels = { validationMessage: 'Veuillez sélectionner une option' };
+      el.required = true;
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[1]).toBe('Veuillez sélectionner une option');
+    });
+  });
 });

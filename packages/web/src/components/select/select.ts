@@ -3,7 +3,7 @@ import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { selectStyles } from './select.styles';
-import { SelectOption, SelectSize, SelectVariant } from './select.types';
+import { SelectOption, SelectSize, SelectVariant, type SelectLabels } from './select.types';
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty-ds/icons';
 import '../surface/';
@@ -13,6 +13,10 @@ import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 
 let selectCount = 0;
+
+const DEFAULT_LABELS: SelectLabels = {
+  validationMessage: 'Please select an option'
+};
 
 /**
  * A customizable select dropdown component with support for multiple variants and sizes.
@@ -123,6 +127,13 @@ export class Select extends ThemeableElement {
    * @default []
    */
   @property({ type: Array }) options: SelectOption[] = [];
+
+  /** Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<SelectLabels> = {};
+
+  private get _labels(): SelectLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
 
   /**
    * Internal state tracking whether the dropdown is open.
@@ -262,7 +273,7 @@ export class Select extends ThemeableElement {
     this._internals.setFormValue(this.value || null);
     const trigger = this.shadowRoot?.querySelector<HTMLElement>('.select-trigger');
     if (this.required && !this.value && trigger) {
-      this._internals.setValidity({ valueMissing: true }, 'Please select an option', trigger);
+      this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, trigger);
     } else {
       this._internals.setValidity({});
     }

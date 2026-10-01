@@ -39,3 +39,9 @@ export interface SelectOption {
    */
   disabled?: boolean;
 }
+
+/** Overridable UI text for `lt-select`, for i18n. */
+export interface SelectLabels {
+  /** Validation message shown when a required select has no option chosen. */
+  validationMessage: string;
+}

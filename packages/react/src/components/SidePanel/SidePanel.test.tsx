@@ -51,4 +51,11 @@ describe('SidePanel', () => {
     el.dispatchEvent(new CustomEvent('close', { bubbles: true }));
     expect(handler).toHaveBeenCalledOnce();
   });
+
+  it('assigns labels as a real property, not a stringified attribute', () => {
+    const { container } = render(<SidePanel labels={{ close: 'Fermer' }} />);
+    const el = container.querySelector('lt-sidepanel')! as any;
+    expect(el.labels).toEqual({ close: 'Fermer' });
+    expect(el.getAttribute('labels')).toBeNull();
+  });
 });

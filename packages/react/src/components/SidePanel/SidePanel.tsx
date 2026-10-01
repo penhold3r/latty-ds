@@ -1,5 +1,5 @@
 // codegen:manual — extended to set no-close-button attribute directly (React 18 lowercases camelCase on custom elements)
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useEffect, useLayoutEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { SidePanel as SidePanelEl } from '@latty-ds/web';
 
 export type SidePanelProps = HTMLAttributes<SidePanelEl> & {
@@ -10,11 +10,12 @@ export type SidePanelProps = HTMLAttributes<SidePanelEl> & {
   noCloseButton?: boolean;
   backdropBlur?: boolean;
   overlayOpacity?: number;
+  labels?: SidePanelEl['labels'];
   onClose?: (event: CustomEvent) => void;
 };
 
 export const SidePanel = forwardRef<SidePanelEl, SidePanelProps>(function SidePanel(
-  { onClose, noCloseButton, children, ...props },
+  { onClose, noCloseButton, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SidePanelEl>(null);
@@ -35,6 +36,13 @@ export const SidePanel = forwardRef<SidePanelEl, SidePanelProps>(function SidePa
     if (noCloseButton) el.setAttribute('no-close-button', '');
     else el.removeAttribute('no-close-button');
   }, [noCloseButton]);
+  // React 18 stringifies non-primitive JSX props into a DOM attribute instead of setting the property (see
+  // scripts/codegen-wrappers.mjs) — assign labels imperatively via the ref instead of spreading it as a JSX prop.
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (labels !== undefined) el.labels = labels;
+  }, [labels]);
 
   return (
     <lt-sidepanel ref={innerRef} {...(props as Record<string, unknown>)}>

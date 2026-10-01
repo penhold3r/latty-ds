@@ -13,11 +13,12 @@ export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
   disabled?: boolean;
   required?: boolean;
   options?: SelectEl['options'];
+  labels?: SelectEl['labels'];
   onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const Select = forwardRef<SelectEl, SelectProps>(function Select(
-  { onChange, options, children, ...props },
+  { onChange, options, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SelectEl>(null);
@@ -35,7 +36,8 @@ export const Select = forwardRef<SelectEl, SelectProps>(function Select(
     const el = innerRef.current;
     if (!el) return;
     if (options !== undefined) el.options = options;
-  }, [options]);
+    if (labels !== undefined) el.labels = labels;
+  }, [options, labels]);
 
   return (
     <lt-select ref={innerRef} {...(props as Record<string, unknown>)}>

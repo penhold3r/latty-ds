@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Switch as SwitchEl } from '@latty-ds/web';
 
 export type SwitchProps = Omit<HTMLAttributes<SwitchEl>, 'onChange'> & {
@@ -12,11 +12,12 @@ export type SwitchProps = Omit<HTMLAttributes<SwitchEl>, 'onChange'> & {
   labelPosition?: SwitchEl['labelPosition'];
   name?: string;
   value?: string;
+  labels?: SwitchEl['labels'];
   onChange?: (event: CustomEvent<{ checked: boolean }>) => void;
 };
 
 export const Switch = forwardRef<SwitchEl, SwitchProps>(function Switch(
-  { onChange, children, ...props },
+  { onChange, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SwitchEl>(null);
@@ -30,6 +31,11 @@ export const Switch = forwardRef<SwitchEl, SwitchProps>(function Switch(
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (labels !== undefined) el.labels = labels;
+  }, [labels]);
 
   return (
     <lt-switch ref={innerRef} {...(props as Record<string, unknown>)}>

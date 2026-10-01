@@ -21,3 +21,9 @@ export type CheckboxSize = 'sm' | 'md' | 'lg';
 export type CheckboxVariant = 'primary' | 'secondary' | 'success' | 'error' | 'info';
 
 export type CheckboxLabelPosition = 'left' | 'right';
+
+/** Overridable UI text for `lt-checkbox`, for i18n. */
+export interface CheckboxLabels {
+  /** Validation message shown when a required checkbox is left unchecked. */
+  validationMessage: string;
+}

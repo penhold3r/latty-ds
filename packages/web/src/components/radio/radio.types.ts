@@ -21,3 +21,9 @@ export type RadioSize = 'sm' | 'md' | 'lg';
 export type RadioVariant = 'primary' | 'secondary' | 'success' | 'error' | 'info';
 
 export type RadioLabelPosition = 'left' | 'right';
+
+/** Overridable UI text for `lt-radio`, for i18n. */
+export interface RadioLabels {
+  /** Validation message shown when a required radio group has no option selected. */
+  validationMessage: string;
+}

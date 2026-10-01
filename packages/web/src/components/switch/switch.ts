@@ -3,9 +3,13 @@ import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { switchStyles } from './switch.styles';
-import { SwitchSize, SwitchVariant, SwitchLabelPosition } from './switch.types';
+import { SwitchSize, SwitchVariant, SwitchLabelPosition, type SwitchLabels } from './switch.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+
+const DEFAULT_LABELS: SwitchLabels = {
+  validationMessage: 'Please check this switch'
+};
 
 /**
  * A toggle switch component with sliding animation.
@@ -109,6 +113,13 @@ export class Switch extends ThemeableElement {
    */
   @property({ reflect: true }) value = 'on';
 
+  /** Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<SwitchLabels> = {};
+
+  private get _labels(): SwitchLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   /**
    * Handles switch change events.
    * Updates the checked state and dispatches a custom change event.
@@ -120,7 +131,7 @@ export class Switch extends ThemeableElement {
     this._internals.setFormValue(this.checked ? this.value : null);
     const input = this.shadowRoot?.querySelector<HTMLElement>('input');
     if (this.required && !this.checked && input) {
-      this._internals.setValidity({ valueMissing: true }, 'Please check this switch', input);
+      this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, input);
     } else {
       this._internals.setValidity({});
     }

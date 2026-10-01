@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Radio as RadioEl } from '@latty-ds/web';
 
 export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
@@ -13,10 +13,14 @@ export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
   name?: string;
   value?: string;
   tabbable?: boolean;
+  labels?: RadioEl['labels'];
   onChange?: (event: CustomEvent<{ value: string; checked: boolean }>) => void;
 };
 
-export const Radio = forwardRef<RadioEl, RadioProps>(function Radio({ onChange, children, ...props }, forwardedRef) {
+export const Radio = forwardRef<RadioEl, RadioProps>(function Radio(
+  { onChange, labels, children, ...props },
+  forwardedRef
+) {
   const innerRef = useRef<RadioEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
@@ -28,6 +32,11 @@ export const Radio = forwardRef<RadioEl, RadioProps>(function Radio({ onChange, 
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (labels !== undefined) el.labels = labels;
+  }, [labels]);
 
   return (
     <lt-radio ref={innerRef} {...(props as Record<string, unknown>)}>
