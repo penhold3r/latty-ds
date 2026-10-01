@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Dialog as DialogEl } from '@latty-ds/web';
 
 export type DialogProps = HTMLAttributes<DialogEl> & {
@@ -13,12 +13,13 @@ export type DialogProps = HTMLAttributes<DialogEl> & {
   backdropBlur?: boolean;
   elevation?: DialogEl['elevation'];
   appearance?: DialogEl['appearance'];
+  labels?: DialogEl['labels'];
   onOpen?: (event: CustomEvent) => void;
   onClose?: (event: CustomEvent) => void;
 };
 
 export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(
-  { onOpen, onClose, children, ...props },
+  { onOpen, onClose, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DialogEl>(null);
@@ -39,6 +40,11 @@ export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(
     el.addEventListener('close', h);
     return () => el.removeEventListener('close', h);
   }, [onClose]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (labels !== undefined) el.labels = labels;
+  }, [labels]);
 
   return (
     <lt-dialog ref={innerRef} {...(props as Record<string, unknown>)}>

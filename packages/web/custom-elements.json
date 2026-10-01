@@ -356,6 +356,24 @@
             },
             {
               "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<AlertLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the dismiss button's accessible name), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "AlertLabels"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "_iconMap",
               "type": {
                 "text": "Record<AlertVariant, string>"
@@ -850,6 +868,24 @@
               },
               "default": "'/'",
               "description": "The character or element to use as a separator between breadcrumb items.\nThis is passed down to all children items via CSS variables."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<BreadcrumbLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the breadcrumb nav's landmark label), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "BreadcrumbLabels"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "method",
@@ -2264,6 +2300,24 @@
               },
               "default": "''",
               "description": "Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600)."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<ChipLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the delete button's accessible name), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "ChipLabels"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "field",
@@ -3886,6 +3940,24 @@
               },
               "default": "'filled'",
               "description": "Visual appearance of the internal surface, matching `lt-surface`'s vocabulary."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<DialogLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the close button's accessible name), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "DialogLabels"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "field",
@@ -7590,6 +7662,24 @@
             },
             {
               "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<SidePanelLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the close button's accessible name), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "SidePanelLabels"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "dialogElement",
               "type": {
                 "text": "HTMLDialogElement | undefined"
@@ -8298,6 +8388,24 @@
               },
               "default": "'filled'",
               "description": "Visual appearance of the internal surface, matching `lt-surface`'s vocabulary."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<SnackbarLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (the close button's accessible name), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "SnackbarLabels"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "field",

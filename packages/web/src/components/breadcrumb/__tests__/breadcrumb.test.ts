@@ -54,6 +54,20 @@ describe('<lt-breadcrumb>', () => {
     await el.updateComplete;
     expect(el.style.getPropertyValue('--lt-breadcrumb-separator')).toBe('');
   });
+
+  describe('labels (i18n, X5)', () => {
+    it('defaults the nav landmark label to English', () => {
+      const nav = el.shadowRoot!.querySelector('nav');
+      expect(nav?.getAttribute('aria-label')).toBe('breadcrumb');
+    });
+
+    it('overrides the nav landmark label via labels', async () => {
+      el.labels = { navigation: "fil d'Ariane" };
+      await el.updateComplete;
+      const nav = el.shadowRoot!.querySelector('nav');
+      expect(nav?.getAttribute('aria-label')).toBe("fil d'Ariane");
+    });
+  });
 });
 
 describe('<lt-breadcrumb-item>', () => {

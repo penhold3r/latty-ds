@@ -3,12 +3,16 @@ import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { snackbarStyles } from './snackbar.styles';
-import type { SnackbarVariant } from './snackbar.types';
+import type { SnackbarVariant, SnackbarLabels } from './snackbar.types';
 import type { SurfaceElevation, SurfaceAppearance } from '../surface/surface.types';
 import { dispatch } from '../../utils';
 
 import '@latty-ds/icons';
 import '../surface/surface';
+
+const DEFAULT_LABELS: SnackbarLabels = {
+  dismiss: 'Dismiss'
+};
 
 /**
  * Brief notification that appears temporarily at the bottom of the viewport.
@@ -82,6 +86,13 @@ export class Snackbar extends ThemeableElement {
    * @default 'filled'
    */
   @property({ reflect: true }) appearance: SurfaceAppearance = 'filled';
+
+  /** Overridable UI text (the close button's accessible name), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<SnackbarLabels> = {};
+
+  private get _labels(): SnackbarLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
 
   private _timer?: ReturnType<typeof setTimeout>;
   // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
@@ -199,7 +210,7 @@ export class Snackbar extends ThemeableElement {
             ? html`<button class="action" @click=${this._handleAction} part="action">${this.actionLabel}</button>`
             : ''}
           ${this.closable
-            ? html`<button class="close" @click=${this._handleClose} aria-label="Dismiss" part="close">
+            ? html`<button class="close" @click=${this._handleClose} aria-label=${this._labels.dismiss} part="close">
                 <lt-icon name="xmark"></lt-icon>
               </button>`
             : ''}

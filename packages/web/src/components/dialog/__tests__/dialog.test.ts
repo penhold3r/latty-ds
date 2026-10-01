@@ -465,4 +465,21 @@ describe('<lt-dialog>', () => {
       opener.remove();
     });
   });
+
+  describe('labels (i18n, X5)', () => {
+    it('defaults the close button label to English', async () => {
+      el.open = true;
+      await el.updateComplete;
+      const btn = el.shadowRoot!.querySelector('.close-button');
+      expect(btn?.getAttribute('label')).toBe('Close dialog');
+    });
+
+    it('overrides the close button label via labels', async () => {
+      el.labels = { close: 'Fermer la boîte de dialogue' };
+      el.open = true;
+      await el.updateComplete;
+      const btn = el.shadowRoot!.querySelector('.close-button');
+      expect(btn?.getAttribute('label')).toBe('Fermer la boîte de dialogue');
+    });
+  });
 });

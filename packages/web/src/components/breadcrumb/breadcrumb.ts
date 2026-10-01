@@ -3,6 +3,11 @@ import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { breadcrumbStyles, breadcrumbItemStyles } from './breadcrumb.styles';
+import type { BreadcrumbLabels } from './breadcrumb.types';
+
+const DEFAULT_LABELS: BreadcrumbLabels = {
+  navigation: 'breadcrumb'
+};
 
 /**
  * Navigation breadcrumb trail container.
@@ -30,6 +35,13 @@ export class Breadcrumb extends ThemeableElement {
    */
   @property() separator = '/';
 
+  /** Overridable UI text (the breadcrumb nav's landmark label), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<BreadcrumbLabels> = {};
+
+  private get _labels(): BreadcrumbLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   override updated(changed: PropertyValues<this>) {
     super.updated(changed);
     if (changed.has('separator')) {
@@ -44,7 +56,7 @@ export class Breadcrumb extends ThemeableElement {
 
   render() {
     return html`
-      <nav aria-label="breadcrumb">
+      <nav aria-label=${this._labels.navigation}>
         <div part="list" role="list">
           <slot></slot>
         </div>

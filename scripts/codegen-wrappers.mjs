@@ -67,16 +67,17 @@ for (const mod of cem.modules) {
           // Most non-string/boolean/number fields are still string-literal-union "enum" types at runtime
           // (ButtonVariant, TextfieldSize, …) and are perfectly safe as JSX attributes — only flag a field as
           // needing property assignment (X7) when the manifest itself signals a real array or object: the type
-          // text ends in `[]` (`SelectOption[]`, `Date[]`), the default is an array literal (catches
-          // `Calendar['disabledDates']`, a type lookup that doesn't textually end in `[]`), or there's no
-          // default at all where every genuine enum prop always has a quoted-string one (catches `Table.sort:
-          // SortState | undefined`, a real interface — verified against every current non-primitive field, no
-          // false positives: nullable primitives like `Image.rounded: string | null = null` keep a `null`
-          // default, distinct from a field with no default whatsoever).
+          // text ends in `[]` (`SelectOption[]`, `Date[]`), the default is an array or object literal (catches
+          // `Calendar['disabledDates']`, a type lookup that doesn't textually end in `[]`, and object-typed
+          // props like a component's `labels` override, default `{}`), or there's no default at all where
+          // every genuine enum prop always has a quoted-string one (catches `Table.sort: SortState | undefined`,
+          // a real interface — verified against every current non-primitive field, no false positives: nullable
+          // primitives like `Image.rounded: string | null = null` keep a `null` default, distinct from a field
+          // with no default whatsoever).
           const isArrayType = raw.replace(/\s*\|\s*(undefined|null)$/, '').endsWith('[]');
-          const isArrayDefault = typeof f.default === 'string' && f.default.trim().startsWith('[');
+          const isArrayOrObjectDefault = typeof f.default === 'string' && /^[[{]/.test(f.default.trim());
           const isMissingDefault = f.default === undefined;
-          const isComplex = isArrayType || isArrayDefault || (isMissingDefault && !SIMPLE_TYPES.has(raw));
+          const isComplex = isArrayType || isArrayOrObjectDefault || (isMissingDefault && !SIMPLE_TYPES.has(raw));
           isSimple = !isComplex;
         }
         return { name: f.name, displayType, isSimple };

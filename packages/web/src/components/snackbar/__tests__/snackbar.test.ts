@@ -209,4 +209,18 @@ describe('<lt-snackbar>', () => {
       expect(el.matches(':popover-open')).toBe(true);
     });
   });
+
+  describe('labels (i18n, X5)', () => {
+    it('defaults the close button label to English', () => {
+      const btn = el.shadowRoot!.querySelector('.close');
+      expect(btn?.getAttribute('aria-label')).toBe('Dismiss');
+    });
+
+    it('overrides the close button label via labels', async () => {
+      el.labels = { dismiss: 'Fermer' };
+      await el.updateComplete;
+      const btn = el.shadowRoot!.querySelector('.close');
+      expect(btn?.getAttribute('aria-label')).toBe('Fermer');
+    });
+  });
 });

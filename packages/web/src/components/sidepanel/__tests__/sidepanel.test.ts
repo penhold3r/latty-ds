@@ -165,4 +165,18 @@ describe('<lt-sidepanel>', () => {
     const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
     expect(dialog.style.getPropertyValue('--lt-sidepanel-overlay-opacity')).toBe('0.9');
   });
+
+  describe('labels (i18n, X5)', () => {
+    it('defaults the close button label to English', () => {
+      const btn = el.shadowRoot!.querySelector('.close-button');
+      expect(btn?.getAttribute('label')).toBe('Close panel');
+    });
+
+    it('overrides the close button label via labels', async () => {
+      el.labels = { close: 'Fermer le panneau' };
+      await el.updateComplete;
+      const btn = el.shadowRoot!.querySelector('.close-button');
+      expect(btn?.getAttribute('label')).toBe('Fermer le panneau');
+    });
+  });
 });

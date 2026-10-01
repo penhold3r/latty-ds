@@ -4,12 +4,16 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 import { sidepanelStyles } from './sidepanel.styles';
 import { backdropFeatureStyles } from '../shared/backdrop.styles';
-import type { SidePanelAnchor } from './sidepanel.types';
+import type { SidePanelAnchor, SidePanelLabels } from './sidepanel.types';
 import { dispatch } from '../../utils';
 import { lockBodyScroll, unlockBodyScroll } from '../shared/scroll-lock';
 
 import '../icon-button/icon-button';
 import '../text/text';
+
+const DEFAULT_LABELS: SidePanelLabels = {
+  close: 'Close panel'
+};
 
 /**
  * A slide-in panel anchored to any edge of the viewport, built on the native `<dialog>` element — the same
@@ -62,6 +66,13 @@ export class SidePanel extends ThemeableElement {
 
   /** Backdrop darkness as an alpha value from 0 (transparent) to 1 (opaque). */
   @property({ type: Number, attribute: 'overlay-opacity' }) overlayOpacity = 0.45;
+
+  /** Overridable UI text (the close button's accessible name), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<SidePanelLabels> = {};
+
+  private get _labels(): SidePanelLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
 
   @query('dialog') private dialogElement?: HTMLDialogElement;
   private _scrollLocked = false;
@@ -211,7 +222,7 @@ export class SidePanel extends ThemeableElement {
                 part="close-button"
                 class="close-button"
                 icon="xmark"
-                label="Close panel"
+                label=${this._labels.close}
                 size="sm"
                 @click=${this.hide}
               ></lt-icon-button>

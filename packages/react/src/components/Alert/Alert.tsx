@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Alert as AlertEl, LattyIconName } from '@latty-ds/web';
 
 export type AlertProps = HTMLAttributes<AlertEl> & {
@@ -11,10 +11,14 @@ export type AlertProps = HTMLAttributes<AlertEl> & {
   open?: boolean;
   background?: string;
   uppercase?: boolean;
+  labels?: AlertEl['labels'];
   onClose?: (event: CustomEvent) => void;
 };
 
-export const Alert = forwardRef<AlertEl, AlertProps>(function Alert({ onClose, children, ...props }, forwardedRef) {
+export const Alert = forwardRef<AlertEl, AlertProps>(function Alert(
+  { onClose, labels, children, ...props },
+  forwardedRef
+) {
   const innerRef = useRef<AlertEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
@@ -26,6 +30,11 @@ export const Alert = forwardRef<AlertEl, AlertProps>(function Alert({ onClose, c
     el.addEventListener('close', h);
     return () => el.removeEventListener('close', h);
   }, [onClose]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (labels !== undefined) el.labels = labels;
+  }, [labels]);
 
   return (
     <lt-alert ref={innerRef} {...(props as Record<string, unknown>)}>

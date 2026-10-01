@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Chip as ChipEl } from '@latty-ds/web';
 
 export type ChipProps = HTMLAttributes<ChipEl> & {
@@ -8,10 +8,14 @@ export type ChipProps = HTMLAttributes<ChipEl> & {
   disabled?: boolean;
   deletable?: boolean;
   background?: string;
+  labels?: ChipEl['labels'];
   onDelete?: (event: CustomEvent) => void;
 };
 
-export const Chip = forwardRef<ChipEl, ChipProps>(function Chip({ onDelete, children, ...props }, forwardedRef) {
+export const Chip = forwardRef<ChipEl, ChipProps>(function Chip(
+  { onDelete, labels, children, ...props },
+  forwardedRef
+) {
   const innerRef = useRef<ChipEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
@@ -23,6 +27,11 @@ export const Chip = forwardRef<ChipEl, ChipProps>(function Chip({ onDelete, chil
     el.addEventListener('delete', h);
     return () => el.removeEventListener('delete', h);
   }, [onDelete]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (labels !== undefined) el.labels = labels;
+  }, [labels]);
 
   return (
     <lt-chip ref={innerRef} {...(props as Record<string, unknown>)}>

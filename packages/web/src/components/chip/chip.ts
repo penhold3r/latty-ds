@@ -5,8 +5,12 @@ import { styleMap } from 'lit/directives/style-map.js';
 
 import { chipStyles } from './chip.styles';
 import '@latty-ds/icons';
-import type { ChipVariant, ChipSize, ChipAppearance } from './chip.types';
+import type { ChipVariant, ChipSize, ChipAppearance, ChipLabels } from './chip.types';
 import { resolveColorValue, dispatch } from '../../utils';
+
+const DEFAULT_LABELS: ChipLabels = {
+  remove: 'Remove'
+};
 
 /**
  * Compact label element for tags, filters, and attributes.
@@ -44,6 +48,13 @@ export class Chip extends ThemeableElement {
   /** Background color override. Accepts a hex value (#1a1a2e) or a CSS token name (--lt-color-primary-600). */
   @property({ reflect: true }) background = '';
 
+  /** Overridable UI text (the delete button's accessible name), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<ChipLabels> = {};
+
+  private get _labels(): ChipLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   private get _deleteIconSize() {
     return this.size === 'lg' ? 'sm' : 'xs';
   }
@@ -64,7 +75,7 @@ export class Chip extends ThemeableElement {
                 class="delete"
                 part="delete-button"
                 ?disabled=${this.disabled}
-                aria-label="Remove"
+                aria-label=${this._labels.remove}
                 @click=${this._handleDelete}
               >
                 <lt-icon name="xmark" size=${this._deleteIconSize}></lt-icon>

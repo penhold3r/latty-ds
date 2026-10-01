@@ -101,4 +101,21 @@ describe('<lt-chip>', () => {
     (el as any)._handleDelete();
     expect(fired).toBe(true);
   });
+
+  describe('labels (i18n, X5)', () => {
+    it('defaults the delete button label to English', async () => {
+      el.deletable = true;
+      await el.updateComplete;
+      const btn = el.shadowRoot!.querySelector('.delete');
+      expect(btn?.getAttribute('aria-label')).toBe('Remove');
+    });
+
+    it('overrides the delete button label via labels', async () => {
+      el.deletable = true;
+      el.labels = { remove: 'Supprimer' };
+      await el.updateComplete;
+      const btn = el.shadowRoot!.querySelector('.delete');
+      expect(btn?.getAttribute('aria-label')).toBe('Supprimer');
+    });
+  });
 });

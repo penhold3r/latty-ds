@@ -220,4 +220,21 @@ describe('<lt-alert>', () => {
       fresh.remove();
     });
   });
+
+  describe('labels (i18n, X5)', () => {
+    it('defaults the dismiss button label to English', async () => {
+      el.closable = true;
+      await el.updateComplete;
+      const close = el.shadowRoot!.querySelector('.close');
+      expect(close?.getAttribute('label')).toBe('Dismiss');
+    });
+
+    it('overrides the dismiss button label via labels', async () => {
+      el.closable = true;
+      el.labels = { dismiss: 'Fermer' };
+      await el.updateComplete;
+      const close = el.shadowRoot!.querySelector('.close');
+      expect(close?.getAttribute('label')).toBe('Fermer');
+    });
+  });
 });

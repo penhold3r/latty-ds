@@ -4,9 +4,13 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 import { dialogStyles } from './dialog.styles';
 import { backdropFeatureStyles } from '../shared/backdrop.styles';
-import { DialogSize } from './dialog.types';
+import { DialogSize, type DialogLabels } from './dialog.types';
 import type { SurfaceElevation, SurfaceAppearance } from '../surface/surface.types';
 import { lockBodyScroll, unlockBodyScroll } from '../shared/scroll-lock';
+
+const DEFAULT_LABELS: DialogLabels = {
+  close: 'Close dialog'
+};
 
 import '../icon-button/icon-button';
 import '../surface/surface';
@@ -135,6 +139,13 @@ export class Dialog extends ThemeableElement {
    * @default 'filled'
    */
   @property({ reflect: true }) appearance: SurfaceAppearance = 'filled';
+
+  /** Overridable UI text (the close button's accessible name), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<DialogLabels> = {};
+
+  private get _labels(): DialogLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
 
   @query('dialog') private dialogElement?: HTMLDialogElement;
   private previouslyFocusedElement?: HTMLElement;
@@ -298,7 +309,7 @@ export class Dialog extends ThemeableElement {
                     class="close-button"
                     part="close-button"
                     icon="xmark"
-                    label="Close dialog"
+                    label=${this._labels.close}
                     size="sm"
                     @click=${this.handleCloseClick}
                   ></lt-icon-button>

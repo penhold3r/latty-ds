@@ -9,3 +9,9 @@
  * - `fullscreen`: Full viewport width and height
  */
 export type DialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'fullscreen';
+
+/** Overridable UI text, for i18n — English defaults; override only the keys you need. */
+export interface DialogLabels {
+  /** Accessible label for the close button. */
+  close: string;
+}

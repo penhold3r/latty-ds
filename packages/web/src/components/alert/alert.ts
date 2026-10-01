@@ -4,11 +4,15 @@ import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
 import { alertStyles } from './alert.styles';
-import type { AlertVariant, AlertAppearance } from './alert.types';
+import type { AlertVariant, AlertAppearance, AlertLabels } from './alert.types';
 import { resolveColorValue, dispatch } from '../../utils';
 
 import '../icon-button/icon-button';
 import '../text/text';
+
+const DEFAULT_LABELS: AlertLabels = {
+  dismiss: 'Dismiss'
+};
 
 /**
  * Inline notification for persistent contextual feedback.
@@ -83,6 +87,13 @@ export class Alert extends ThemeableElement {
   /** Renders the heading in small caps with wider letter spacing. */
   @property({ type: Boolean, reflect: true }) uppercase = false;
 
+  /** Overridable UI text (the dismiss button's accessible name), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<AlertLabels> = {};
+
+  private get _labels(): AlertLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   connectedCallback() {
     super.connectedCallback();
     // Markup never goes through the `title` accessor above — the attribute is just present on the node from
@@ -149,7 +160,7 @@ export class Alert extends ThemeableElement {
               class="close"
               part="close"
               icon="xmark"
-              label="Dismiss"
+              label=${this._labels.dismiss}
               size="sm"
               @click=${this._handleClose}
             ></lt-icon-button>`
