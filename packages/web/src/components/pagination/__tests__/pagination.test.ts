@@ -149,4 +149,43 @@ describe('<lt-pagination>', () => {
       expect(events).toEqual([]);
     });
   });
+
+  describe('labels (i18n, X5)', () => {
+    it('defaults all labels to English', () => {
+      const nav = el.shadowRoot!.querySelector('nav');
+      expect(nav?.getAttribute('aria-label')).toBe('Pagination');
+      expect(el.shadowRoot!.querySelector('button[aria-label="First page"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('button[aria-label="Previous page"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('button[aria-label="Page 1"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('button[aria-label="Next page"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('button[aria-label="Last page"]')).toBeTruthy();
+    });
+
+    it('overrides all labels via labels', async () => {
+      el.labels = {
+        navigation: 'Pagination des résultats',
+        firstPage: 'Première page',
+        previousPage: 'Page précédente',
+        page: (n) => `Page ${n}`,
+        nextPage: 'Page suivante',
+        lastPage: 'Dernière page'
+      };
+      await el.updateComplete;
+      const nav = el.shadowRoot!.querySelector('nav');
+      expect(nav?.getAttribute('aria-label')).toBe('Pagination des résultats');
+      expect(el.shadowRoot!.querySelector('button[aria-label="Première page"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('button[aria-label="Page précédente"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('button[aria-label="Page suivante"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('button[aria-label="Dernière page"]')).toBeTruthy();
+    });
+
+    it('calls the page() template with the 1-indexed page number for each numbered button', async () => {
+      el.totalPages = 3;
+      el.labels = { page: (n) => `Página ${n}` };
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('button[aria-label="Página 1"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('button[aria-label="Página 2"]')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('button[aria-label="Página 3"]')).toBeTruthy();
+    });
+  });
 });

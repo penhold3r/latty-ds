@@ -5993,6 +5993,24 @@
             },
             {
               "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<PaginationLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (nav landmark label, control button labels), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "PaginationLabels"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "_total",
               "type": {
                 "text": "number"

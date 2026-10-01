@@ -3,9 +3,18 @@ import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { paginationStyles } from './pagination.styles';
-import type { PaginationSize } from './pagination.types';
+import type { PaginationSize, PaginationLabels } from './pagination.types';
 import { dispatch } from '../../utils';
 import '@latty-ds/icons';
+
+const DEFAULT_LABELS: PaginationLabels = {
+  navigation: 'Pagination',
+  firstPage: 'First page',
+  previousPage: 'Previous page',
+  page: (n) => `Page ${n}`,
+  nextPage: 'Next page',
+  lastPage: 'Last page'
+};
 
 /**
  * Page navigation control for paged data sets.
@@ -39,6 +48,13 @@ export class Pagination extends ThemeableElement {
 
   /** Disable all controls. */
   @property({ type: Boolean, reflect: true }) disabled = false;
+
+  /** Overridable UI text (nav landmark label, control button labels), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<PaginationLabels> = {};
+
+  private get _labels(): PaginationLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
 
   /** `total-pages` as a whole number >= 1: NaN, zero and negatives collapse to a single page. */
   private get _total(): number {
@@ -85,12 +101,12 @@ export class Pagination extends ThemeableElement {
     const atLast = this._current >= this._total;
 
     return html`
-      <nav aria-label="Pagination">
-        <button aria-label="First page" ?disabled=${atFirst || this.disabled} @click=${() => this._go(1)}>
+      <nav aria-label=${this._labels.navigation}>
+        <button aria-label=${this._labels.firstPage} ?disabled=${atFirst || this.disabled} @click=${() => this._go(1)}>
           <lt-icon name="double-caret-left" size="sm"></lt-icon>
         </button>
         <button
-          aria-label="Previous page"
+          aria-label=${this._labels.previousPage}
           ?disabled=${atFirst || this.disabled}
           @click=${() => this._go(this._current - 1)}
         >
@@ -101,7 +117,7 @@ export class Pagination extends ThemeableElement {
           p === '…'
             ? html`<button class="ellipsis" aria-hidden="true" tabindex="-1">…</button>`
             : html`<button
-                aria-label="Page ${p}"
+                aria-label=${this._labels.page(p as number)}
                 aria-current=${p === this._current ? 'page' : nothing}
                 ?disabled=${this.disabled}
                 @click=${() => this._go(p as number)}
@@ -110,10 +126,18 @@ export class Pagination extends ThemeableElement {
               </button>`
         )}
 
-        <button aria-label="Next page" ?disabled=${atLast || this.disabled} @click=${() => this._go(this._current + 1)}>
+        <button
+          aria-label=${this._labels.nextPage}
+          ?disabled=${atLast || this.disabled}
+          @click=${() => this._go(this._current + 1)}
+        >
           <lt-icon name="caret-right" size="sm"></lt-icon>
         </button>
-        <button aria-label="Last page" ?disabled=${atLast || this.disabled} @click=${() => this._go(this._total)}>
+        <button
+          aria-label=${this._labels.lastPage}
+          ?disabled=${atLast || this.disabled}
+          @click=${() => this._go(this._total)}
+        >
           <lt-icon name="double-caret-right" size="sm"></lt-icon>
         </button>
       </nav>
