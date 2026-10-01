@@ -5,7 +5,7 @@ import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { textfieldStyles } from './textfield.styles';
-import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant } from './textfield.types';
+import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant, type TextfieldLabels } from './textfield.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 import { toValidityFlags } from '../shared/form-validity';
@@ -13,6 +13,12 @@ import '@latty-ds/icons';
 import '../text/text';
 
 let textfieldCount = 0;
+
+const DEFAULT_LABELS: TextfieldLabels = {
+  validationMessage: 'Please match the requested format',
+  showPassword: 'Show password',
+  hidePassword: 'Hide password'
+};
 
 /**
  * A customizable text input component with support for multiple variants, sizes, and input types.
@@ -176,6 +182,13 @@ export class Textfield extends ThemeableElement {
    */
   @property({ type: Boolean, reflect: true }) uppercase = false;
 
+  /** Overridable UI text (format validation message, password-toggle button labels), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<TextfieldLabels> = {};
+
+  private get _labels(): TextfieldLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   @state() private isPasswordVisible = false;
   @state() private _touched = false;
   @state() private _autoError = false;
@@ -322,7 +335,7 @@ export class Textfield extends ThemeableElement {
     if (!inner.validity.valid) {
       this._internals.setValidity(toValidityFlags(inner.validity), inner.validationMessage, inner);
     } else if (!this._validate()) {
-      this._internals.setValidity({ customError: true }, 'Please match the requested format', inner);
+      this._internals.setValidity({ customError: true }, this._labels.validationMessage, inner);
     } else {
       this._internals.setValidity({});
     }
@@ -431,7 +444,7 @@ export class Textfield extends ThemeableElement {
                     type="button"
                     class="icon-end password-toggle"
                     ?disabled=${this._isDisabled}
-                    aria-label=${this.isPasswordVisible ? 'Hide password' : 'Show password'}
+                    aria-label=${this.isPasswordVisible ? this._labels.hidePassword : this._labels.showPassword}
                     aria-pressed=${this.isPasswordVisible ? 'true' : 'false'}
                     @mousedown=${this._preventFocusSteal}
                     @click=${this.togglePasswordVisibility}

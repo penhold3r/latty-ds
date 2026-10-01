@@ -3,7 +3,7 @@ import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { comboboxStyles } from './combobox.styles';
-import type { ComboboxOption, ComboboxSize, ComboboxVariant } from './combobox.types';
+import type { ComboboxOption, ComboboxSize, ComboboxVariant, ComboboxLabels } from './combobox.types';
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty-ds/icons';
 import '../text/text';
@@ -12,6 +12,11 @@ import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 
 let comboboxCount = 0;
+
+const DEFAULT_LABELS: ComboboxLabels = {
+  validationMessage: 'Please select an option',
+  noResults: 'No results'
+};
 
 /**
  * Searchable single-select combobox. The user types to filter options; selecting an option sets the value.
@@ -77,6 +82,13 @@ export class Combobox extends ThemeableElement {
 
   /** Name used in form submission. */
   @property({ reflect: true }) name = '';
+
+  /** Overridable UI text (validation message, "no results" text), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<ComboboxLabels> = {};
+
+  private get _labels(): ComboboxLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
 
   @state() private query = '';
   @state() private open = false;
@@ -219,7 +231,7 @@ export class Combobox extends ThemeableElement {
     this._internals.setFormValue(this.value || null);
     const input = this.shadowRoot?.querySelector<HTMLElement>('input');
     if (this.required && !this.value && input) {
-      this._internals.setValidity({ valueMissing: true }, 'Please select an option', input);
+      this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, input);
     } else {
       this._internals.setValidity({});
     }
@@ -303,7 +315,7 @@ export class Combobox extends ThemeableElement {
                         </button>
                       `
                     )
-                  : html`<p class="no-results">No results</p>`}
+                  : html`<p class="no-results">${this._labels.noResults}</p>`}
               </div>
             `
           : nothing}

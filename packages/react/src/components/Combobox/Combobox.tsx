@@ -13,11 +13,12 @@ export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   disabled?: boolean;
   required?: boolean;
   name?: string;
+  labels?: ComboboxEl['labels'];
   onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
-  { onChange, options, children, ...props },
+  { onChange, options, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<ComboboxEl>(null);
@@ -35,7 +36,8 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
     const el = innerRef.current;
     if (!el) return;
     if (options !== undefined) el.options = options;
-  }, [options]);
+    if (labels !== undefined) el.labels = labels;
+  }, [options, labels]);
 
   return (
     <lt-combobox ref={innerRef} {...(props as Record<string, unknown>)}>

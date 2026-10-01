@@ -400,4 +400,33 @@ describe('<lt-date-input>', () => {
       expect(el.shadowRoot!.querySelector('lt-calendar')).toBeNull();
     });
   });
+
+  describe('labels (i18n, X5)', () => {
+    it('defaults the calendar popover aria-label to English', () => {
+      expect(el.shadowRoot!.querySelector('.dropdown')?.getAttribute('aria-label')).toBe('Date picker');
+    });
+
+    it('overrides the calendar popover aria-label via labels', async () => {
+      el.labels = { datePicker: 'Sélecteur de date' };
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.dropdown')?.getAttribute('aria-label')).toBe('Sélecteur de date');
+    });
+
+    // jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
+    // component makes rather than reading back a real validationMessage.
+    it('defaults the required-field validation message to English', async () => {
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.required = true;
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[1]).toBe('Please select a date');
+    });
+
+    it('overrides the required-field validation message via labels', async () => {
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.labels = { validationMessage: 'Veuillez sélectionner une date' };
+      el.required = true;
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[1]).toBe('Veuillez sélectionner une date');
+    });
+  });
 });

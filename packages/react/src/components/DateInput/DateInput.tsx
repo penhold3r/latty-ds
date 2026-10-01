@@ -18,11 +18,12 @@ export type DateInputProps = Omit<HTMLAttributes<DateInputEl>, 'onChange'> & {
   required?: boolean;
   name?: string;
   disabledDates?: DateInputEl['disabledDates'];
+  labels?: DateInputEl['labels'];
   onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateInput(
-  { onChange, disabledDates, children, ...props },
+  { onChange, disabledDates, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DateInputEl>(null);
@@ -40,7 +41,8 @@ export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateIn
     const el = innerRef.current;
     if (!el) return;
     if (disabledDates !== undefined) el.disabledDates = disabledDates;
-  }, [disabledDates]);
+    if (labels !== undefined) el.labels = labels;
+  }, [disabledDates, labels]);
 
   return (
     <lt-date-input ref={innerRef} {...(props as Record<string, unknown>)}>

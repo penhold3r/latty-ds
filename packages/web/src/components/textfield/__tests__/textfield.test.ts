@@ -552,6 +552,17 @@ describe('<lt-textfield>', () => {
       expect(toggle().getAttribute('aria-pressed')).toBe('true');
     });
 
+    it('overrides the toggle button labels via labels (i18n, X5)', async () => {
+      el.type = 'password';
+      el.labels = { showPassword: 'Afficher le mot de passe', hidePassword: 'Masquer le mot de passe' };
+      await el.updateComplete;
+      expect(toggle().getAttribute('aria-label')).toBe('Afficher le mot de passe');
+
+      toggle().click();
+      await el.updateComplete;
+      expect(toggle().getAttribute('aria-label')).toBe('Masquer le mot de passe');
+    });
+
     it('toggles to eye-off icon when clicked', async () => {
       el.type = 'password';
       await el.updateComplete;
@@ -901,6 +912,25 @@ describe('<lt-textfield>', () => {
         await el.updateComplete;
         const input = el.shadowRoot!.querySelector('input');
         expect(spy.mock.lastCall?.[2]).toBe(input);
+      });
+    });
+
+    describe('labels (i18n, X5)', () => {
+      it('defaults the tel format validation message to English', async () => {
+        el.type = 'tel';
+        await el.updateComplete;
+        const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+        await typeOnly('ab');
+        expect(spy.mock.lastCall?.[1]).toBe('Please match the requested format');
+      });
+
+      it('overrides the tel format validation message via labels', async () => {
+        el.type = 'tel';
+        el.labels = { validationMessage: 'Veuillez respecter le format demandé' };
+        await el.updateComplete;
+        const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+        await typeOnly('ab');
+        expect(spy.mock.lastCall?.[1]).toBe('Veuillez respecter le format demandé');
       });
     });
   });

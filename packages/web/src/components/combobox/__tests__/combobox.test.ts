@@ -356,4 +356,44 @@ describe('<lt-combobox>', () => {
       expect(el.shadowRoot!.querySelector('.dropdown')).toBeNull();
     });
   });
+
+  describe('labels (i18n, X5)', () => {
+    it('defaults the no-results text to English', async () => {
+      const input = el.shadowRoot!.querySelector('input')!;
+      input.dispatchEvent(new FocusEvent('focus'));
+      await el.updateComplete;
+      input.value = 'zzz';
+      input.dispatchEvent(new Event('input'));
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.no-results')?.textContent).toBe('No results');
+    });
+
+    it('overrides the no-results text via labels', async () => {
+      el.labels = { noResults: 'Aucun résultat' };
+      const input = el.shadowRoot!.querySelector('input')!;
+      input.dispatchEvent(new FocusEvent('focus'));
+      await el.updateComplete;
+      input.value = 'zzz';
+      input.dispatchEvent(new Event('input'));
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.no-results')?.textContent).toBe('Aucun résultat');
+    });
+
+    // jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
+    // component makes rather than reading back a real validationMessage.
+    it('defaults the required-field validation message to English', async () => {
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.required = true;
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[1]).toBe('Please select an option');
+    });
+
+    it('overrides the required-field validation message via labels', async () => {
+      const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+      el.labels = { validationMessage: 'Veuillez sélectionner une option' };
+      el.required = true;
+      await el.updateComplete;
+      expect(spy.mock.lastCall?.[1]).toBe('Veuillez sélectionner une option');
+    });
+  });
 });

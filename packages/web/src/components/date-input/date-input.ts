@@ -6,7 +6,7 @@ import '../calendar/calendar';
 import '../text/text';
 
 import { dateInputStyles } from './date-input.styles';
-import type { DateInputSize, DateInputVariant, DateInputFormat } from './date-input.types';
+import type { DateInputSize, DateInputVariant, DateInputFormat, DateInputLabels } from './date-input.types';
 import type { Calendar } from '../calendar/calendar';
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import { openFloating, closeFloating } from '../shared/floating';
@@ -14,6 +14,11 @@ import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+const DEFAULT_LABELS: DateInputLabels = {
+  validationMessage: 'Please select a date',
+  datePicker: 'Date picker'
+};
 
 /**
  * Parses a plain `YYYY-MM-DD` string into a local date, or `null` when it isn't one — including real-looking
@@ -105,6 +110,13 @@ export class DateInput extends ThemeableElement {
   /** Individual dates to disable in the calendar, as Date objects. Set as a JS property (`.disabledDates`). */
   @property({ attribute: false }) disabledDates: Calendar['disabledDates'] = [];
 
+  /** Overridable UI text (validation message, calendar popover's accessible label), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<DateInputLabels> = {};
+
+  private get _labels(): DateInputLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   @state() private _open = false;
 
   private _cleanupClickOutside: (() => void) | null = null;
@@ -177,7 +189,7 @@ export class DateInput extends ThemeableElement {
     this._internals.setFormValue(this.value || null);
     const btn = this.shadowRoot?.querySelector<HTMLElement>('#field-btn');
     if (this.required && !this.value && btn) {
-      this._internals.setValidity({ valueMissing: true }, 'Please select a date', btn);
+      this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, btn);
     } else {
       this._internals.setValidity({});
     }
@@ -240,7 +252,7 @@ export class DateInput extends ThemeableElement {
             class="dropdown"
             popover="manual"
             role="dialog"
-            aria-label="Date picker"
+            aria-label=${this._labels.datePicker}
             @keydown=${this._handleDropdownKeyDown}
           >
             ${this._open

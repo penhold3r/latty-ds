@@ -41,3 +41,13 @@ export type TextfieldType = 'text' | 'email' | 'password' | 'tel' | 'url' | 'num
  * helperText={(error) => error ? 'Enter a valid email' : 'We\'ll never share your email'}
  */
 export type HelperText = string | ((error: boolean) => string);
+
+/** Overridable UI text for `lt-textfield`, for i18n. */
+export interface TextfieldLabels {
+  /** Validation message shown when the value fails a format rule HTML has no native constraint for (e.g. `tel`). */
+  validationMessage: string;
+  /** Accessible label for the password-visibility toggle when the password is hidden. */
+  showPassword: string;
+  /** Accessible label for the password-visibility toggle when the password is shown. */
+  hidePassword: string;
+}

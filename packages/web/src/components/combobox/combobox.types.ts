@@ -6,3 +6,11 @@ export interface ComboboxOption {
   label: string;
   disabled?: boolean;
 }
+
+/** Overridable UI text for `lt-combobox`, for i18n. */
+export interface ComboboxLabels {
+  /** Validation message shown when a required combobox has no option selected. */
+  validationMessage: string;
+  /** Shown in the dropdown when no options match the current search text. */
+  noResults: string;
+}

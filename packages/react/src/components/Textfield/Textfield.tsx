@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Textfield as TextfieldEl, LattyIconName } from '@latty-ds/web';
 
 export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onChange'> & {
@@ -19,12 +19,13 @@ export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onCh
   min?: TextfieldEl['min'];
   max?: TextfieldEl['max'];
   uppercase?: boolean;
+  labels?: TextfieldEl['labels'];
   onInput?: (event: CustomEvent<{ value: string }>) => void;
   onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfield(
-  { onInput, onChange, children, ...props },
+  { onInput, onChange, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<TextfieldEl>(null);
@@ -45,6 +46,11 @@ export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfi
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (labels !== undefined) el.labels = labels;
+  }, [labels]);
 
   return (
     <lt-textfield ref={innerRef} {...(props as Record<string, unknown>)}>

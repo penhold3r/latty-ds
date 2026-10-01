@@ -2838,6 +2838,24 @@
             },
             {
               "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<ComboboxLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (validation message, \"no results\" text), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "ComboboxLabels"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "query",
               "type": {
                 "text": "string"
@@ -3310,6 +3328,24 @@
               },
               "default": "[]",
               "description": "Individual dates to disable in the calendar, as Date objects. Set as a JS property (`.disabledDates`)."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<DateInputLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (validation message, calendar popover's accessible label), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "DateInputLabels"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "field",
@@ -10398,6 +10434,24 @@
               },
               "default": "false",
               "description": "Renders the label in small caps with wider letter spacing."
+            },
+            {
+              "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<TextfieldLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (format validation message, password-toggle button labels), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "TextfieldLabels"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "field",
