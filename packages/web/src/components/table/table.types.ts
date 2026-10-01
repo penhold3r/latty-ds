@@ -21,9 +21,10 @@ export type TableDensity = 'compact' | 'normal' | 'comfortable';
 export type SortDirection = 'asc' | 'desc' | null;
 
 /**
- * Alignment for cell content.
+ * Alignment for cell content. Logical, not physical — `'end'` means "the trailing edge of the reading
+ * direction" (right in LTR, left in RTL), matching CSS `text-align: end` rather than `text-align: right`.
  */
-export type CellAlign = 'left' | 'center' | 'right';
+export type CellAlign = 'start' | 'center' | 'end';
 
 /**
  * Configuration for a table column.
@@ -64,7 +65,7 @@ export interface TableColumn<T = Record<string, unknown>> {
 
   /**
    * Text alignment for this column.
-   * @default 'left'
+   * @default 'start'
    */
   align?: CellAlign;
 

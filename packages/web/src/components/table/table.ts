@@ -57,7 +57,7 @@ import '@latty-ds/icons';
  * const columns = [
  *   { key: 'name', label: 'Name', sortable: true },
  *   { key: 'email', label: 'Email', sortable: true },
- *   { key: 'age', label: 'Age', sortable: true, align: 'right' }
+ *   { key: 'age', label: 'Age', sortable: true, align: 'end' }
  * ];
  *
  * const data = [
@@ -320,7 +320,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
                   sticky: !!column.sticky,
                   'hide-on-mobile': !!column.hideOnMobile
                 })}
-                data-align=${column.align || 'left'}
+                data-align=${column.align || 'start'}
                 aria-sort=${column.sortable
                   ? this.currentSort?.key === column.key
                     ? this.currentSort.direction === 'asc'
@@ -383,7 +383,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
                 sticky: !!column.sticky,
                 'hide-on-mobile': !!column.hideOnMobile
               })}
-              data-align=${column.align || 'left'}
+              data-align=${column.align || 'start'}
               data-label=${column.label}
               style=${styleMap({
                 ...(column.width ? { width: column.width } : {}),

@@ -19,7 +19,7 @@ describe('<lt-table>', () => {
     columns = [
       { key: 'id', label: 'ID', sortable: true },
       { key: 'name', label: 'Name', sortable: true },
-      { key: 'age', label: 'Age', sortable: true, align: 'right' }
+      { key: 'age', label: 'Age', sortable: true, align: 'end' }
     ];
 
     data = [
@@ -110,7 +110,7 @@ describe('<lt-table>', () => {
 
   it('applies column alignment', () => {
     const lastHeader = el.shadowRoot!.querySelectorAll('th')[2];
-    expect(lastHeader.getAttribute('data-align')).toBe('right');
+    expect(lastHeader.getAttribute('data-align')).toBe('end');
   });
 
   it('sorts data when header is clicked', async () => {

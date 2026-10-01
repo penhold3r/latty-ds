@@ -33,15 +33,15 @@ export const tableStyles = css`
   th {
     color: var(--lt-text-default);
     font-weight: 600;
-    text-align: left;
+    text-align: start;
     white-space: nowrap;
   }
 
   th[data-align='center'] {
     text-align: center;
   }
-  th[data-align='right'] {
-    text-align: right;
+  th[data-align='end'] {
+    text-align: end;
   }
 
   /* Sortable headers */
@@ -72,7 +72,7 @@ export const tableStyles = css`
   th[data-align='center'] .header-content {
     justify-content: center;
   }
-  th[data-align='right'] .header-content {
+  th[data-align='end'] .header-content {
     justify-content: flex-end;
   }
 
@@ -123,8 +123,8 @@ export const tableStyles = css`
   td[data-align='center'] {
     text-align: center;
   }
-  td[data-align='right'] {
-    text-align: right;
+  td[data-align='end'] {
+    text-align: end;
   }
 
   /* Density variants */

@@ -34,7 +34,7 @@ export default function SpacingTable(): JSX.Element {
         key: 'step',
         label: 'Step',
         width: '52px',
-        align: 'right',
+        align: 'end',
         render: (v: unknown) => styledEl('span', 'font-weight: 600; color: var(--lt-text-subtle);', String(v))
       },
       {
