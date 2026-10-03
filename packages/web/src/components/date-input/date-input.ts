@@ -1,4 +1,5 @@
 import { html, nothing } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
 import '@latty-ds/icons';
@@ -8,6 +9,7 @@ import '../text/text';
 import { dateInputStyles } from './date-input.styles';
 import type { DateInputSize, DateInputVariant, DateInputFormat, DateInputLabels } from './date-input.types';
 import type { Calendar } from '../calendar/calendar';
+import type { CalendarWeekStart } from '../calendar/calendar.types';
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
@@ -80,8 +82,12 @@ export class DateInput extends ThemeableElement {
   /** How to format the selected date in the trigger field. Maps to `Intl.DateTimeFormat` `dateStyle`. */
   @property({ reflect: true }) format: DateInputFormat = 'medium';
 
-  /** First day of the week in the calendar. 0 = Sunday, 1 = Monday. */
-  @property({ attribute: 'week-start', reflect: true }) weekStart: '0' | '1' = '0';
+  /**
+   * First day of the week in the calendar (0 = Sunday … 6 = Saturday). Defaults to whatever `locale` implies —
+   * set this explicitly only to override that. Forwarded as-is to the internal `lt-calendar`, which does the
+   * actual derivation when this is left unset.
+   */
+  @property({ attribute: 'week-start', reflect: true }) weekStart?: CalendarWeekStart;
 
   /** Field label displayed above the trigger. */
   @property({ reflect: true }) label = '';
@@ -261,7 +267,7 @@ export class DateInput extends ThemeableElement {
                   min=${this.min}
                   max=${this.max}
                   locale=${this.locale}
-                  week-start=${this.weekStart}
+                  week-start=${ifDefined(this.weekStart)}
                   .disabledDates=${this.disabledDates}
                   @change=${this._handleCalendarChange}
                 ></lt-calendar>`

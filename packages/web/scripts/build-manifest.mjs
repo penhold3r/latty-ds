@@ -34,7 +34,11 @@ function resolveUnion(typeName, componentDir) {
   const typesFile = join(root, 'src/components', componentDir, `${componentDir}.types.ts`);
   if (!existsSync(typesFile)) return null;
   const src = readFileSync(typesFile, 'utf8');
-  const match = src.match(new RegExp(`export type ${typeName}\\s*=\\s*([^;]+);`));
+  // Escape regex metacharacters — typeName comes from a CEM type-text string, not a literal identifier, so it
+  // isn't guaranteed regex-safe (an unescaped `|`, for instance, silently becomes alternation instead of a
+  // literal character and can match a shorter, group-less prefix, leaving match[1] undefined).
+  const escaped = typeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = src.match(new RegExp(`export type ${escaped}\\s*=\\s*([^;]+);`));
   if (!match) return null;
   return [...match[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
 }
@@ -110,11 +114,14 @@ function toMember(field, componentDir) {
     return null;
   }
 
-  // Strip `| ''` / `'' |` suffixes that just represent an "unset" sentinel
+  // Strip `| ''` / `'' |` suffixes that just represent an "unset" sentinel, and `| undefined` from an optional
+  // (no-default) property's CEM type text — neither is itself a type name resolveUnion() should look up.
   const hasEmptySentinel = /\|\s*''|''\s*\|/.test(typeText);
   const resolvedType = typeText
     .replace(/\s*\|\s*''/g, '')
     .replace(/^''\s*\|\s*/g, '')
+    .replace(/\s*\|\s*undefined/g, '')
+    .replace(/^undefined\s*\|\s*/g, '')
     .trim();
 
   // Union / named type — try to resolve from *.types.ts

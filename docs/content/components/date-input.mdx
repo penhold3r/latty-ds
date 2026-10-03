@@ -11,8 +11,8 @@ import FrameworkTabs from '@site/src/components/FrameworkTabs';
 # Date Input
 
 A date field that opens an always-visible calendar for selection. Built on top of
-<lt-link href="/components/calendar">lt-calendar</lt-link>, it supports locale-aware display, min/max constraints,
-validation variants, and keyboard navigation.
+<lt-link href="/components/calendar">lt-calendar</lt-link>, it supports locale-aware display (including a week start
+that follows `locale` by default), min/max constraints, validation variants, and keyboard navigation.
 
 <lt-alert variant="info">
   <strong>Date Input vs Datepicker</strong> — Use <code>lt-date-input</code> when you need a consistent cross-browser
@@ -26,7 +26,7 @@ validation variants, and keyboard navigation.
 
 <ComponentPlayground
   tag="lt-date-input"
-  defaults={{ locale: 'en-US', 'week-start': '0', format: 'medium', placeholder: 'Select a date' }}
+  defaults={{ locale: 'en-US', format: 'medium', placeholder: 'Select a date' }}
 />
 
 ## Usage
@@ -59,9 +59,9 @@ validation variants, and keyboard navigation.
 
 <lt-date-input label="Date" variant="error" helper-text="Date is required"></lt-date-input>
 
-<!-- Monday week start, French locale -->
+<!-- French locale — week start follows the locale automatically (Monday) -->
 
-<lt-date-input locale="fr-FR" week-start="1"></lt-date-input>
+<lt-date-input locale="fr-FR"></lt-date-input>
 
 <!-- Sizes -->
 
@@ -103,9 +103,9 @@ import { DateInput } from '@latty-ds/react';
 
 <DateInput label="Date" variant="error" helperText="Date is required" />
 
-// Monday week start, French locale
+// French locale — week start follows the locale automatically (Monday)
 
-<DateInput locale="fr-FR" weekStart="1" />
+<DateInput locale="fr-FR" />
 
 // Sizes
 
@@ -145,9 +145,9 @@ import { DateInput } from '@latty-ds/react';
 
 <lt-date-input label="Date" variant="error" helper-text="Date is required"></lt-date-input>
 
-  <!-- Monday week start, French locale -->
+  <!-- French locale — week start follows the locale automatically (Monday) -->
 
-<lt-date-input locale="fr-FR" week-start="1"></lt-date-input>
+<lt-date-input locale="fr-FR"></lt-date-input>
 
   <!-- Sizes -->
 

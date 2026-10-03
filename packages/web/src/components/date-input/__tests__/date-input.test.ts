@@ -306,6 +306,14 @@ describe('<lt-date-input>', () => {
     expect(cal.getAttribute('week-start')).toBe('1');
   });
 
+  it('does not forward a week-start attribute when left unset, so the nested lt-calendar derives its own from locale (X5)', async () => {
+    el.setAttribute('locale', 'de-DE');
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.field-btn')!.click();
+    await el.updateComplete;
+    const cal = el.shadowRoot!.querySelector('lt-calendar')!;
+    expect(cal.hasAttribute('week-start')).toBe(false);
+  });
+
   // ── Values that aren't a plain ISO date ────────────────────────────────────
 
   it.each(['abc', '2026-06-15T10:00', '2026-02-31', '2026-13-01', '15/06/2026', ' 2026-06-15'])(

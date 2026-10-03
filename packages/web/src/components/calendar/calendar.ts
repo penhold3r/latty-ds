@@ -16,6 +16,28 @@ const DEFAULT_LABELS: CalendarLabels = {
   chooseMonthYear: (monthYear) => `${monthYear}, choose month and year`
 };
 
+// `Intl.Locale.prototype.getWeekInfo` isn't in this project's configured `lib` (adding it would pull in the
+// unrelated, much larger Temporal proposal's ambient types via lib.esnext.intl.d.ts) — declare just the one
+// method shape we actually use instead of widening the global lib for every package.
+interface LocaleWithWeekInfo {
+  getWeekInfo?(): { firstDay: number };
+}
+
+/**
+ * The locale's own first day of the week (`getWeekInfo().firstDay` is 1 = Monday … 7 = Sunday per spec; `% 7`
+ * converts it to this component's `Date#getDay()`-style convention, 0 = Sunday … 6 = Saturday). Falls back to
+ * Sunday for an invalid locale string or a runtime with no `getWeekInfo` support.
+ */
+function deriveWeekStart(locale: string): CalendarWeekStart {
+  try {
+    const info = (new Intl.Locale(locale) as unknown as LocaleWithWeekInfo).getWeekInfo?.();
+    if (info) return String(info.firstDay % 7) as CalendarWeekStart;
+  } catch {
+    // Invalid/unsupported locale string — Intl.Locale's constructor throws a RangeError for these.
+  }
+  return '0';
+}
+
 /**
  * A visual calendar grid for single-date or date-range selection.
  *
@@ -65,8 +87,16 @@ export class Calendar extends ThemeableElement {
   /** BCP 47 locale used for day and month names. */
   @property({ reflect: true }) locale = 'en-US';
 
-  /** First day of the week. 0 = Sunday, 1 = Monday. */
-  @property({ attribute: 'week-start', reflect: true }) weekStart: CalendarWeekStart = '0';
+  /**
+   * First day of the week (0 = Sunday … 6 = Saturday). Defaults to whatever `locale` implies (via
+   * `Intl.Locale#getWeekInfo`, falling back to Sunday) — set this explicitly only to override that.
+   */
+  @property({ attribute: 'week-start', reflect: true }) weekStart?: CalendarWeekStart;
+
+  /** `weekStart` if explicitly set, otherwise derived from `locale`. Internal code should always read this, never `weekStart` directly. */
+  private get _weekStart(): CalendarWeekStart {
+    return this.weekStart ?? deriveWeekStart(this.locale);
+  }
 
   /** Whether to render filler days from the previous and next month. */
   @property({ type: Boolean, attribute: 'show-outside-days', reflect: true }) showOutsideDays = true;
@@ -159,7 +189,7 @@ export class Calendar extends ThemeableElement {
   private _buildDays(year = this._viewYear, month = this._viewMonth): CalendarDay[] {
     const today = new Date();
     const selected = this._parseDate(this.value);
-    const weekStart = Number(this.weekStart);
+    const weekStart = Number(this._weekStart);
 
     const rangeStart = this.mode === 'range' ? this._parseDate(this.valueStart) : null;
     const rangeEnd = this.mode === 'range' ? this._parseDate(this.valueEnd) : null;
@@ -233,7 +263,7 @@ export class Calendar extends ThemeableElement {
   }
 
   private _getWeekdayLabels(): string[] {
-    const weekStart = Number(this.weekStart);
+    const weekStart = Number(this._weekStart);
     const fmt = new Intl.DateTimeFormat(this.locale, { weekday: 'narrow' });
     // Jan 4 2026 is a Sunday — use as reference
     const refSunday = new Date(2026, 0, 4);
@@ -380,7 +410,7 @@ export class Calendar extends ThemeableElement {
     const currentIso = (e.currentTarget as HTMLElement).dataset.date ?? '';
     const focusedDate = this._parseDate(currentIso) ?? new Date(this._viewYear, this._viewMonth, 1);
     const next = new Date(focusedDate);
-    const weekStart = Number(this.weekStart);
+    const weekStart = Number(this._weekStart);
 
     switch (e.key) {
       case 'ArrowRight':

@@ -1,4 +1,5 @@
-export type CalendarWeekStart = '0' | '1';
+/** First day of the week, matching `Date#getDay()`'s convention: 0 = Sunday, 1 = Monday, … 6 = Saturday. */
+export type CalendarWeekStart = '0' | '1' | '2' | '3' | '4' | '5' | '6';
 export type CalendarMode = 'single' | 'range';
 
 export interface CalendarDay {

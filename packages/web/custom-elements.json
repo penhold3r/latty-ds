@@ -1467,10 +1467,19 @@
               "kind": "field",
               "name": "weekStart",
               "type": {
+                "text": "CalendarWeekStart | undefined"
+              },
+              "description": "First day of the week (0 = Sunday … 6 = Saturday). Defaults to whatever `locale` implies (via\n`Intl.Locale#getWeekInfo`, falling back to Sunday) — set this explicitly only to override that."
+            },
+            {
+              "kind": "field",
+              "name": "_weekStart",
+              "type": {
                 "text": "CalendarWeekStart"
               },
-              "default": "'0'",
-              "description": "First day of the week. 0 = Sunday, 1 = Monday."
+              "privacy": "private",
+              "description": "`weekStart` if explicitly set, otherwise derived from `locale`. Internal code should always read this, never `weekStart` directly.",
+              "readonly": true
             },
             {
               "kind": "field",
@@ -3261,10 +3270,9 @@
               "kind": "field",
               "name": "weekStart",
               "type": {
-                "text": "'0' | '1'"
+                "text": "CalendarWeekStart | undefined"
               },
-              "default": "'0'",
-              "description": "First day of the week in the calendar. 0 = Sunday, 1 = Monday."
+              "description": "First day of the week in the calendar (0 = Sunday … 6 = Saturday). Defaults to whatever `locale` implies —\nset this explicitly only to override that. Forwarded as-is to the internal `lt-calendar`, which does the\nactual derivation when this is left unset."
             },
             {
               "kind": "field",

@@ -23,7 +23,7 @@ export type DateInputProps = Omit<HTMLAttributes<DateInputEl>, 'onChange'> & {
 };
 
 export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateInput(
-  { onChange, disabledDates, labels, children, ...props },
+  { onChange, weekStart, disabledDates, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DateInputEl>(null);
@@ -40,9 +40,10 @@ export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateIn
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;
+    if (weekStart !== undefined) el.weekStart = weekStart;
     if (disabledDates !== undefined) el.disabledDates = disabledDates;
     if (labels !== undefined) el.labels = labels;
-  }, [disabledDates, labels]);
+  }, [weekStart, disabledDates, labels]);
 
   return (
     <lt-date-input ref={innerRef} {...(props as Record<string, unknown>)}>

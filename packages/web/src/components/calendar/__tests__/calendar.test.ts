@@ -816,3 +816,54 @@ describe('<lt-calendar months="2"> labels (i18n, X5)', () => {
     expect(navBtns[1].getAttribute('aria-label')).toBe('Mois suivant');
   });
 });
+
+describe('<lt-calendar> week-start derived from locale (X5)', () => {
+  let el: Calendar;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-calendar') as Calendar;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  const firstWeekdayLabel = () => el.shadowRoot!.querySelectorAll('.weekday')[0]?.textContent?.trim();
+
+  it('defaults to Sunday-start for the default locale (en-US)', () => {
+    const fmt = new Intl.DateTimeFormat('en-US', { weekday: 'narrow' });
+    expect(firstWeekdayLabel()).toBe(fmt.format(new Date(2026, 0, 4))); // Sunday
+  });
+
+  it('derives Monday-start from a locale whose week starts on Monday (de-DE), with no week-start set', async () => {
+    el.locale = 'de-DE';
+    await el.updateComplete;
+    const fmt = new Intl.DateTimeFormat('en-US', { weekday: 'narrow' });
+    expect(firstWeekdayLabel()).toBe(fmt.format(new Date(2026, 0, 5))); // Monday
+  });
+
+  it('derives Saturday-start from a locale whose week starts on Saturday (ar-EG)', async () => {
+    el.locale = 'ar-EG';
+    await el.updateComplete;
+    // The weekday header itself renders in the element's own locale, not en-US — compare against that.
+    const fmt = new Intl.DateTimeFormat('ar-EG', { weekday: 'narrow' });
+    expect(firstWeekdayLabel()).toBe(fmt.format(new Date(2026, 0, 3))); // Saturday
+  });
+
+  it('an explicit week-start overrides the locale-derived value', async () => {
+    el.locale = 'de-DE';
+    el.weekStart = '0';
+    await el.updateComplete;
+    const fmt = new Intl.DateTimeFormat('en-US', { weekday: 'narrow' });
+    expect(firstWeekdayLabel()).toBe(fmt.format(new Date(2026, 0, 4))); // Sunday, not the locale's Monday
+  });
+
+  // A malformed `locale` string (e.g. '!!!') isn't tested here: `Intl.Locale`'s constructor throws a
+  // RangeError for these, and deriveWeekStart()'s own try/catch handles that fine in isolation — but
+  // calendar.ts already constructs several other `new Intl.DateTimeFormat(this.locale, ...)` instances
+  // elsewhere in render() with no such guard (pre-existing, not introduced by this fix), so a malformed
+  // locale crashes the whole render regardless of week-start. Tracked as its own finding, not fixed here —
+  // see X5's locale/week-start note in the audit doc.
+});
