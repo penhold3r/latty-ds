@@ -7702,6 +7702,110 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/shared/roving.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "enabledItems",
+          "return": {
+            "type": {
+              "text": "T[]"
+            }
+          },
+          "parameters": [
+            {
+              "name": "items",
+              "type": {
+                "text": "readonly T[]"
+              }
+            }
+          ],
+          "description": "Items a user can reach with the keyboard: everything not disabled, in order."
+        },
+        {
+          "kind": "function",
+          "name": "rovingTargetOf",
+          "return": {
+            "type": {
+              "text": "T | undefined"
+            }
+          },
+          "parameters": [
+            {
+              "name": "enabled",
+              "type": {
+                "text": "readonly T[]"
+              }
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "description": "The one item that's a Tab stop: the one matching `value`, else the first enabled item."
+        },
+        {
+          "kind": "function",
+          "name": "stepIndex",
+          "return": {
+            "type": {
+              "text": "number"
+            }
+          },
+          "parameters": [
+            {
+              "name": "index",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "length",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "delta",
+              "type": {
+                "text": "1 | -1"
+              }
+            }
+          ],
+          "description": "One step forward or back, wrapping at both ends. An index of -1 (not in the list) steps from the start."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "enabledItems",
+          "declaration": {
+            "name": "enabledItems",
+            "module": "src/components/shared/roving.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "rovingTargetOf",
+          "declaration": {
+            "name": "rovingTargetOf",
+            "module": "src/components/shared/roving.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "stepIndex",
+          "declaration": {
+            "name": "stepIndex",
+            "module": "src/components/shared/roving.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/shared/scroll-lock.ts",
       "declarations": [
         {

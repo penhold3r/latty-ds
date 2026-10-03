@@ -1,3 +1,4 @@
+import { enabledItems, rovingTargetOf, stepIndex } from '../shared/roving';
 import { createFieldIds } from '../shared/form-field';
 import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
@@ -132,8 +133,8 @@ export class RadioGroup extends ThemeableElement {
     // Roving tabindex (native radiogroup behavior): only one radio is ever a Tab stop. It's the checked one,
     // or — if none is checked, or the checked one is disabled — the first enabled radio, so the group is still
     // reachable in one Tab press.
-    const enabled = this.radios.filter((r) => !r.disabled);
-    const rovingTarget = enabled.find((r) => r.value === this.value) ?? enabled[0];
+    const enabled = enabledItems(this.radios);
+    const rovingTarget = rovingTargetOf(enabled, this.value);
 
     this.radios.forEach((radio) => {
       if (this.name) radio.name = this.name;
@@ -190,7 +191,7 @@ export class RadioGroup extends ThemeableElement {
    * @private
    */
   private handleRadioKeydown = (e: KeyboardEvent) => {
-    const enabled = (this.radios ?? []).filter((r) => !r.disabled);
+    const enabled = enabledItems(this.radios ?? []);
     if (enabled.length === 0) return;
 
     const index = enabled.indexOf(e.currentTarget as Radio);
@@ -198,11 +199,11 @@ export class RadioGroup extends ThemeableElement {
     switch (e.key) {
       case 'ArrowRight':
       case 'ArrowDown':
-        next = enabled[(Math.max(index, 0) + 1) % enabled.length];
+        next = enabled[stepIndex(index, enabled.length, 1)];
         break;
       case 'ArrowLeft':
       case 'ArrowUp':
-        next = enabled[(Math.max(index, 0) - 1 + enabled.length) % enabled.length];
+        next = enabled[stepIndex(index, enabled.length, -1)];
         break;
     }
     if (!next) return;

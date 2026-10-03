@@ -1,3 +1,4 @@
+import { enabledItems, rovingTargetOf, stepIndex } from '../shared/roving';
 import { html } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
@@ -118,8 +119,8 @@ export class TabGroup extends ThemeableElement {
     // Roving tabindex (WAI-ARIA Tabs pattern): only one tab is ever a Tab stop. It's the active tab, or — if
     // none is active, or the active one is disabled — the first enabled tab, so the tablist is still reachable
     // in one Tab press.
-    const enabled = this.tabs.filter((t) => !t.disabled);
-    const rovingTarget = enabled.find((t) => t.value === this.value) ?? enabled[0];
+    const enabled = enabledItems(this.tabs);
+    const rovingTarget = rovingTargetOf(enabled, this.value);
 
     this.tabs.forEach((tab) => {
       // Set size
@@ -203,17 +204,17 @@ export class TabGroup extends ThemeableElement {
    * @private
    */
   private handleTabKeydown = (e: KeyboardEvent) => {
-    const enabled = (this.tabs ?? []).filter((t) => !t.disabled);
+    const enabled = enabledItems(this.tabs ?? []);
     if (enabled.length === 0) return;
 
     const index = enabled.indexOf(e.currentTarget as Tab);
     let next: Tab | undefined;
     switch (e.key) {
       case 'ArrowRight':
-        next = enabled[(Math.max(index, 0) + 1) % enabled.length];
+        next = enabled[stepIndex(index, enabled.length, 1)];
         break;
       case 'ArrowLeft':
-        next = enabled[(Math.max(index, 0) - 1 + enabled.length) % enabled.length];
+        next = enabled[stepIndex(index, enabled.length, -1)];
         break;
       case 'Home':
         next = enabled[0];
