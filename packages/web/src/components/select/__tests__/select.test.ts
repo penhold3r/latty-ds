@@ -395,3 +395,31 @@ describe('<lt-select>', () => {
     });
   });
 });
+
+describe('helper text is described by its control (aria-describedby)', () => {
+  let el: Select;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-select') as Select;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('points the control at the rendered helper text', async () => {
+    el.helperText = 'Pick one';
+    await el.updateComplete;
+    const control = el.shadowRoot!.querySelector('.select-trigger')!;
+    const helper = el.shadowRoot!.querySelector('.helper-text')!;
+    expect(control.getAttribute('aria-describedby')).toBe(helper.id);
+    expect(helper.textContent!.trim()).toBe('Pick one');
+  });
+
+  it('omits aria-describedby when there is no helper text', () => {
+    const control = el.shadowRoot!.querySelector('.select-trigger')!;
+    expect(control.hasAttribute('aria-describedby')).toBe(false);
+  });
+});

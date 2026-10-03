@@ -1,3 +1,4 @@
+import { createFieldIds } from '../shared/form-field';
 import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -152,6 +153,8 @@ export class Select extends ThemeableElement {
 
   private _cleanupClickOutside: (() => void) | null = null;
   private _floatingCleanup: (() => void) | null = null;
+
+  private readonly _fieldIds = createFieldIds();
 
   private get enabledOptions(): SelectOption[] {
     return this.options.filter((o) => !o.disabled);
@@ -343,6 +346,7 @@ export class Select extends ThemeableElement {
             aria-expanded=${this.isOpen}
             aria-disabled=${this._isDisabled}
             aria-label=${this.label || this.placeholder}
+            aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
             aria-controls=${this.isOpen ? listboxId : nothing}
             aria-activedescendant=${this.isOpen && activeOption ? this._idFor(activeOption) : nothing}
             tabindex=${this._isDisabled ? '-1' : '0'}
@@ -386,7 +390,9 @@ export class Select extends ThemeableElement {
           </lt-surface>
         </div>
         ${this.helperText
-          ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>`
+          ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
+              >${this.helperText}</lt-text
+            >`
           : ''}
       </div>
     `;

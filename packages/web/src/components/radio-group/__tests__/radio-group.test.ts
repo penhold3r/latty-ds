@@ -237,3 +237,31 @@ describe('<lt-radio-group>', () => {
     });
   });
 });
+
+describe('helper text is described by its control (aria-describedby)', () => {
+  let el: RadioGroup;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-radio-group') as RadioGroup;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('points the control at the rendered helper text', async () => {
+    el.helperText = 'Pick one';
+    await el.updateComplete;
+    const control = el.shadowRoot!.querySelector('.radio-group')!;
+    const helper = el.shadowRoot!.querySelector('.helper-text')!;
+    expect(control.getAttribute('aria-describedby')).toBe(helper.id);
+    expect(helper.textContent!.trim()).toBe('Pick one');
+  });
+
+  it('omits aria-describedby when there is no helper text', () => {
+    const control = el.shadowRoot!.querySelector('.radio-group')!;
+    expect(control.hasAttribute('aria-describedby')).toBe(false);
+  });
+});

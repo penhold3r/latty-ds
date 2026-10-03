@@ -1,3 +1,4 @@
+import { createFieldIds } from '../shared/form-field';
 import { html, nothing, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
@@ -61,6 +62,8 @@ export class Datepicker extends ThemeableElement {
 
   /** Helper or error text displayed below the input. */
   @property({ attribute: 'helper-text' }) helperText = '';
+
+  private readonly _fieldIds = createFieldIds();
 
   /** Visual state variant. */
   @property({ reflect: true }) variant: DatepickerVariant = 'default';
@@ -140,6 +143,7 @@ export class Datepicker extends ThemeableElement {
         max=${this.max || nothing}
         ?disabled=${this._isDisabled}
         ?required=${this.required}
+        aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
         ?readonly=${this.readonly}
         @change=${this.handleChange}
         @input=${this.handleInput}
@@ -154,7 +158,9 @@ export class Datepicker extends ThemeableElement {
               ${this.required ? html`<span class="required-indicator">*</span>` : nothing} ${inputEl}
             </label>`
           : inputEl}
-        ${this.helperText ? html`<span class="helper-text">${this.helperText}</span>` : nothing}
+        ${this.helperText
+          ? html`<span id=${this._fieldIds.helper} class="helper-text">${this.helperText}</span>`
+          : nothing}
       </div>
     `;
   }

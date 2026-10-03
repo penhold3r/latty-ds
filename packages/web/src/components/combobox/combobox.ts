@@ -1,3 +1,4 @@
+import { createFieldIds } from '../shared/form-field';
 import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -96,6 +97,8 @@ export class Combobox extends ThemeableElement {
 
   private _cleanupClickOutside: (() => void) | null = null;
   private _floatingCleanup: (() => void) | null = null;
+
+  private readonly _fieldIds = createFieldIds();
 
   private get selectedLabel(): string {
     return this.options.find((o) => o.value === this.value)?.label ?? '';
@@ -270,6 +273,7 @@ export class Combobox extends ThemeableElement {
           role="combobox"
           aria-expanded=${this.open}
           aria-autocomplete="list"
+          aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           aria-required=${this.required}
           aria-controls=${this.open ? `${this._uid}-listbox` : nothing}
           aria-activedescendant=${this.open && activeOption ? this._idFor(activeOption) : nothing}
@@ -319,7 +323,9 @@ export class Combobox extends ThemeableElement {
               </div>
             `
           : nothing}
-        ${this.helperText ? html`<span class="helper-text">${this.helperText}</span>` : nothing}
+        ${this.helperText
+          ? html`<span id=${this._fieldIds.helper} class="helper-text">${this.helperText}</span>`
+          : nothing}
       </div>
     `;
   }

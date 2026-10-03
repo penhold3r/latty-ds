@@ -1,3 +1,4 @@
+import { createFieldIds } from '../shared/form-field';
 import { html, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -128,6 +129,8 @@ export class DateInput extends ThemeableElement {
   private _cleanupClickOutside: (() => void) | null = null;
   private _floatingCleanup: (() => void) | null = null;
 
+  private readonly _fieldIds = createFieldIds();
+
   private get _displayValue(): string {
     const date = parseIsoDate(this.value);
     if (!date) return '';
@@ -244,6 +247,7 @@ export class DateInput extends ThemeableElement {
             type="button"
             class="field-btn"
             aria-haspopup="dialog"
+            aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
             aria-expanded=${this._open ? 'true' : 'false'}
             ?disabled=${this._isDisabled}
             ?required=${this.required}
@@ -278,7 +282,9 @@ export class DateInput extends ThemeableElement {
           </div>
         </div>
 
-        ${this.helperText ? html`<span class="helper-text">${this.helperText}</span>` : nothing}
+        ${this.helperText
+          ? html`<span id=${this._fieldIds.helper} class="helper-text">${this.helperText}</span>`
+          : nothing}
       </div>
     `;
   }

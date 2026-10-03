@@ -1,3 +1,4 @@
+import { createFieldIds } from '../shared/form-field';
 import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
@@ -72,6 +73,8 @@ export class RadioGroup extends ThemeableElement {
    * Helper text displayed below the radio group.
    * @default ''
    */
+  private readonly _fieldIds = createFieldIds();
+
   @property({ attribute: 'helper-text' }) helperText = '';
 
   /**
@@ -242,7 +245,12 @@ export class RadioGroup extends ThemeableElement {
 
   render() {
     return html`
-      <div class="radio-group" role="radiogroup" aria-label=${this.label || nothing}>
+      <div
+        class="radio-group"
+        role="radiogroup"
+        aria-label=${this.label || nothing}
+        aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
+      >
         ${this.label
           ? html`
               <div class="label">
@@ -255,7 +263,9 @@ export class RadioGroup extends ThemeableElement {
           <slot @slotchange=${this.handleSlotChange}></slot>
         </div>
         ${this.helperText
-          ? html`<lt-text variant="caption" as="span" class="helper-text">${this.helperText}</lt-text>`
+          ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
+              >${this.helperText}</lt-text
+            >`
           : ''}
       </div>
     `;
