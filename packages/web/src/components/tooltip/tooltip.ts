@@ -40,6 +40,11 @@ export class Tooltip extends ThemeableElement {
 
   @query('slot') private _slot!: HTMLSlotElement;
 
+  @query('.tooltip') private _tooltipEl!: HTMLElement;
+
+  private _hovered = false;
+  private _focused = false;
+
   /** Tooltip label text. */
   @property({ reflect: true }) content = '';
 
@@ -64,6 +69,105 @@ export class Tooltip extends ThemeableElement {
     trigger?.setAttribute('aria-description', this.content);
   }
 
+  private _isShown(): boolean {
+    return this._tooltipEl?.matches(':popover-open') ?? false;
+  }
+
+  private _sync() {
+    const shouldShow = (this._hovered || this._focused) && !this.disabled && !!this.content;
+    if (shouldShow) this._show();
+    else this._hide();
+  }
+
+  private _show() {
+    if (!this._isShown()) {
+      this._tooltipEl.showPopover();
+      window.addEventListener('scroll', this._reposition, true);
+      window.addEventListener('resize', this._reposition);
+    }
+    this._reposition();
+  }
+
+  private _hide() {
+    if (!this._isShown()) return;
+    this._tooltipEl.hidePopover();
+    window.removeEventListener('scroll', this._reposition, true);
+    window.removeEventListener('resize', this._reposition);
+  }
+
+  // A top-layer popover is positioned against the viewport, not the host, so the bubble's fixed coordinates are
+  // computed here from the host's rect. Fixed coordinates need a physical side, so the logical start/end placements
+  // are resolved against the host's computed direction (start is the left side in LTR, the right side in RTL).
+  private _reposition = () => {
+    if (!this._isShown()) return;
+    const host = this.getBoundingClientRect();
+    const { width, height } = this._tooltipEl.getBoundingClientRect();
+    const style = getComputedStyle(this);
+    const offset = parseFloat(style.getPropertyValue('--lt-tooltip-offset')) || 8;
+    const rtl = style.direction === 'rtl';
+
+    let left: number;
+    let top: number;
+    switch (this.placement) {
+      case 'bottom':
+        left = host.left + host.width / 2 - width / 2;
+        top = host.bottom + offset;
+        break;
+      case 'start':
+      case 'end': {
+        const onLeft = (this.placement === 'start') !== rtl;
+        left = onLeft ? host.left - offset - width : host.right + offset;
+        top = host.top + host.height / 2 - height / 2;
+        break;
+      }
+      default:
+        left = host.left + host.width / 2 - width / 2;
+        top = host.top - offset - height;
+    }
+    this._tooltipEl.style.left = `${left}px`;
+    this._tooltipEl.style.top = `${top}px`;
+  };
+
+  private _onPointerEnter = () => {
+    this._hovered = true;
+    this._sync();
+  };
+
+  private _onPointerLeave = () => {
+    this._hovered = false;
+    this._sync();
+  };
+
+  private _onFocusIn = () => {
+    this._focused = true;
+    this._sync();
+  };
+
+  private _onFocusOut = (e: FocusEvent) => {
+    if (this.contains(e.relatedTarget as Node | null)) return;
+    this._focused = false;
+    this._sync();
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('pointerenter', this._onPointerEnter);
+    this.addEventListener('pointerleave', this._onPointerLeave);
+    this.addEventListener('focusin', this._onFocusIn);
+    this.addEventListener('focusout', this._onFocusOut);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('pointerenter', this._onPointerEnter);
+    this.removeEventListener('pointerleave', this._onPointerLeave);
+    this.removeEventListener('focusin', this._onFocusIn);
+    this.removeEventListener('focusout', this._onFocusOut);
+    this._hovered = false;
+    this._focused = false;
+    this._hide();
+  }
+
   protected firstUpdated() {
     this._describeTrigger();
   }
@@ -71,6 +175,8 @@ export class Tooltip extends ThemeableElement {
   protected updated(changed: PropertyValues<this>) {
     super.updated(changed);
     if (changed.has('content')) this._describeTrigger();
+    if (changed.has('content') || changed.has('disabled')) this._sync();
+    else if (changed.has('placement')) this._reposition();
   }
 
   render() {
@@ -81,7 +187,15 @@ export class Tooltip extends ThemeableElement {
 
     return html`
       <slot></slot>
-      <div class="tooltip" id=${this._tooltipId} role="tooltip" part="tooltip" aria-hidden="true" style=${tooltipStyle}>
+      <div
+        class="tooltip"
+        id=${this._tooltipId}
+        popover="manual"
+        role="tooltip"
+        part="tooltip"
+        aria-hidden="true"
+        style=${tooltipStyle}
+      >
         <lt-text variant="caption" as="span">${this.content}</lt-text>
         <span class="arrow" part="arrow"></span>
       </div>

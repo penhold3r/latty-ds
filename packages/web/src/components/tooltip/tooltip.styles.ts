@@ -7,20 +7,39 @@ export const tooltipStyles = css`
     --lt-tooltip-offset: 8px;
   }
 
+  /* The bubble is a "manual" popover so it renders in the top layer — above an open lt-dialog/lt-sidepanel
+     regardless of z-index, and never clipped by an overflow:hidden ancestor. Its position is set from JS (see
+     _reposition in tooltip.ts), since a top-layer element is positioned against the viewport, not the host.
+     display/overlay need allow-discrete so hidePopover() doesn't cut the exit fade short — same as lt-snackbar. */
   .tooltip {
     background: var(--lt-tooltip-bg, var(--lt-bg-inverse));
+    border: 0;
     border-radius: 4px;
     color: var(--lt-tooltip-color, var(--lt-text-inverse));
+    inset: auto;
+    margin: 0;
     opacity: 0;
+    overflow: visible;
     padding: var(--lt-spacing-1) var(--lt-spacing-2);
     pointer-events: none;
-    position: absolute;
+    position: fixed;
     transition:
       opacity 150ms ease,
-      visibility 150ms ease;
-    visibility: hidden;
+      display 150ms allow-discrete,
+      overlay 150ms allow-discrete;
     white-space: nowrap;
-    z-index: 1000;
+  }
+
+  .tooltip:popover-open {
+    opacity: 1;
+  }
+
+  /* A newly-shown popover has no earlier rendered frame to transition from — @starting-style supplies one so the
+     fade-in actually animates instead of snapping straight to the open state. */
+  @starting-style {
+    .tooltip:popover-open {
+      opacity: 0;
+    }
   }
 
   .arrow {
@@ -30,29 +49,18 @@ export const tooltipStyles = css`
     width: 0;
   }
 
-  :host(:hover) .tooltip,
-  :host(:focus-within) .tooltip {
-    opacity: 1;
-    visibility: visible;
-  }
-
   :host([disabled]) .tooltip,
   :host(:not([content])) .tooltip,
   :host([content='']) .tooltip {
     display: none;
   }
 
-  /* ── Top (default) ──────────────────────────── */
-  /* left: 50%; transform: translateX(-50%) centers the tooltip over the host — this is direction-symmetric
-     (centering isn't direction-dependent) so inset-inline-start:50% + a literal translateX(-50%) is correct in
-     both LTR and RTL without any custom-property trick, unlike the start/end placements below. */
+  /* ── Arrows ─────────────────────────────────────────────────────────────── The bubble's own position is set
+     from JS; each arrow sits on the bubble edge facing the host. Centering is direction-symmetric, so
+     inset-inline-start:50% + translateX(-50%) is correct in both LTR and RTL. Start/end use logical properties, so
+     they flip with the page direction without a custom-property trick. ─────────────────────────── */
 
-  :host(:not([placement])) .tooltip,
-  :host([placement='top']) .tooltip {
-    bottom: calc(100% + var(--lt-tooltip-offset));
-    inset-inline-start: 50%;
-    transform: translateX(-50%);
-  }
+  /* ── Top (default) ──────────────────────────── */
 
   :host(:not([placement])) .arrow,
   :host([placement='top']) .arrow {
@@ -64,12 +72,6 @@ export const tooltipStyles = css`
 
   /* ── Bottom ─────────────────────────────────── */
 
-  :host([placement='bottom']) .tooltip {
-    inset-inline-start: 50%;
-    top: calc(100% + var(--lt-tooltip-offset));
-    transform: translateX(-50%);
-  }
-
   :host([placement='bottom']) .arrow {
     border-bottom-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
     bottom: 100%;
@@ -78,15 +80,6 @@ export const tooltipStyles = css`
   }
 
   /* ── Start ──────────────────────────────────── */
-  /* Unlike the transform/box-shadow cases in lt-sidepanel, every property the start/end placements need
-     (inset-inline-*, border-inline-*-color) has a real logical-property equivalent — no :dir(rtl) custom
-     property trick needed here at all. */
-
-  :host([placement='start']) .tooltip {
-    inset-inline-end: calc(100% + var(--lt-tooltip-offset));
-    top: 50%;
-    transform: translateY(-50%);
-  }
 
   :host([placement='start']) .arrow {
     border-inline-start-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
@@ -96,12 +89,6 @@ export const tooltipStyles = css`
   }
 
   /* ── End ────────────────────────────────────── */
-
-  :host([placement='end']) .tooltip {
-    inset-inline-start: calc(100% + var(--lt-tooltip-offset));
-    top: 50%;
-    transform: translateY(-50%);
-  }
 
   :host([placement='end']) .arrow {
     border-inline-end-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
