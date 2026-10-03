@@ -89,6 +89,9 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap 
   map['border-strong'] = `color-neutral-${lightBorderSteps.strong}`;
   map['border-subtle'] = `color-neutral-${lightBorderSteps.subtle}`;
   map['border-focus'] = 'color-primary-200';
+  map['border-input'] = 'border-default';
+  map['focus-ring-color'] = 'border-focus';
+  map['focus-halo-color'] = 'bg-primary-subtle';
 
   for (const v of VARIANTS) {
     map[`border-${v}`] = `color-${v}-200`;
@@ -137,6 +140,9 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap =
   map['border-strong'] = `color-neutral-${darkBorderSteps.strong}`;
   map['border-subtle'] = `color-neutral-${darkBorderSteps.subtle}`;
   map['border-focus'] = 'color-primary-400';
+  map['border-input'] = 'border-default';
+  map['focus-ring-color'] = 'border-focus';
+  map['focus-halo-color'] = 'bg-primary-subtle';
 
   for (const v of VARIANTS) {
     map[`border-${v}`] = `color-${v}-700`;

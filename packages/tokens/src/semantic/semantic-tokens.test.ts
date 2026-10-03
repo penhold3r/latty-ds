@@ -115,3 +115,17 @@ describe('semantic tokens — neutral interactive contrast', () => {
     expect(contrastRatio(resolveHex('default', 'color-white'), bg)).toBeGreaterThanOrEqual(AA);
   });
 });
+
+describe('semantic tokens — border-input and focus-ring tokens', () => {
+  it.each(MODES)('border-input aliases border-default in %s', (mode) => {
+    expect(built.default[mode]['border-input']).toBe('border-default');
+  });
+
+  it.each(MODES)('focus-ring-color aliases border-focus in %s', (mode) => {
+    expect(built.default[mode]['focus-ring-color']).toBe('border-focus');
+  });
+
+  it.each(MODES)('focus-halo-color aliases bg-primary-subtle in %s', (mode) => {
+    expect(built.default[mode]['focus-halo-color']).toBe('bg-primary-subtle');
+  });
+});

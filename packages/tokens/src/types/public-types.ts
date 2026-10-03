@@ -1,10 +1,12 @@
 import type { PaletteFlat } from './palette.types';
 import type { SpacingTokens } from './spacing.types';
 import type { ElevationTokens } from '../elevation/';
+import type { DurationToken, EaseToken } from '../motion/';
+import type { ZIndexLayer } from '../zindex/';
 
 /**
  * Complete design system tokens.
- * Includes color palettes, spacing scales, border properties, typography, and elevation.
+ * Includes color palettes, spacing scales, border properties, typography, elevation, motion, and z-index.
  *
  * Elevation is automatically generated from the neutral color palette to ensure
  * consistent shadows that match the design system's color scheme.
@@ -22,7 +24,10 @@ import type { ElevationTokens } from '../elevation/';
  *     px: { "0": "0px", "1": "4px", ... }
  *   },
  *   border: {
- *     radius: "0.375rem"
+ *     radius: "0.375rem",
+ *     width: "1px",
+ *     focusRingWidth: "3px",
+ *     focusRingOffset: "2px"
  *   },
  *   typography: {
  *     fontFamilyPrimary: "Hanken Grotesk, sans-serif"
@@ -31,7 +36,10 @@ import type { ElevationTokens } from '../elevation/';
  *     "0": "none",
  *     "1": "0 1px 3px 0 rgb(23 23 23 / 0.1), 0 1px 2px 0 rgb(23 23 23 / 0.06)",
  *     // ... other elevations (generated from neutral-900)
- *   }
+ *   },
+ *   duration: { instant: "100ms", fast: "150ms", moderate: "200ms", slow: "300ms" },
+ *   ease: { standard: "cubic-bezier(0.4, 0, 0.2, 1)", emphasized: "cubic-bezier(0.34, 1.2, 0.64, 1)" },
+ *   z: { sticky: "100", overlay: "1000" }
  * };
  * ```
  */
@@ -41,11 +49,16 @@ export type Tokens = {
   border: {
     radius: string;
     width: string;
+    focusRingWidth: string;
+    focusRingOffset: string;
   };
   typography: {
     fontFamilyPrimary: string;
   } & Record<string, string>;
   elevation: ElevationTokens;
+  duration: Record<DurationToken, string>;
+  ease: Record<EaseToken, string>;
+  z: Record<ZIndexLayer, string>;
 };
 
 export type { Config, TokenColorName } from './';

@@ -2,9 +2,17 @@ import type { Config, PaletteFlat } from '../types/';
 import type { Tokens } from '../types/public-types';
 import type { SemanticTokenMap } from '../semantic/';
 
-import { DEFAULT_BORDER_RADIUS, DEFAULT_BORDER_WIDTH, DEFAULT_FONT_FAMILY } from '../constants/';
+import {
+  DEFAULT_BORDER_RADIUS,
+  DEFAULT_BORDER_WIDTH,
+  DEFAULT_FOCUS_RING_WIDTH,
+  DEFAULT_FOCUS_RING_OFFSET,
+  DEFAULT_FONT_FAMILY
+} from '../constants/';
 import { buildSpacing } from '../spacing/';
 import { buildElevation } from '../elevation/';
+import { buildMotion } from '../motion/';
+import { buildZIndex } from '../zindex/';
 import { addSystemColors, buildColorTokens } from '../build/colors';
 
 export const buildTokens = (cfg: Config): Tokens => {
@@ -12,11 +20,18 @@ export const buildTokens = (cfg: Config): Tokens => {
   color = addSystemColors(color);
 
   const spacing = buildSpacing();
-  const border = { radius: DEFAULT_BORDER_RADIUS, width: DEFAULT_BORDER_WIDTH };
+  const border = {
+    radius: DEFAULT_BORDER_RADIUS,
+    width: DEFAULT_BORDER_WIDTH,
+    focusRingWidth: DEFAULT_FOCUS_RING_WIDTH,
+    focusRingOffset: DEFAULT_FOCUS_RING_OFFSET
+  };
   const typography = { fontFamilyPrimary: DEFAULT_FONT_FAMILY };
   const elevation = buildElevation(color.neutral as PaletteFlat);
+  const { duration, ease } = buildMotion();
+  const z = buildZIndex();
 
-  return { color, spacing, border, typography, elevation };
+  return { color, spacing, border, typography, elevation, duration, ease, z };
 };
 
 export const tokensToCss = (tokens: Tokens): string => {
