@@ -254,4 +254,34 @@ describe('<lt-checkbox>', () => {
       expect(spy.mock.lastCall?.[1]).toBe('Veuillez cocher cette case');
     });
   });
+
+  describe('dev-mode warnings', () => {
+    let warn: ReturnType<typeof vi.spyOn>;
+
+    beforeEach(() => {
+      warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      warn.mockRestore();
+    });
+
+    it('warns when there is no label', async () => {
+      const el = document.createElement('lt-checkbox') as Checkbox;
+
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('[lt-checkbox]'));
+      el.remove();
+    });
+
+    it('does not warn when a label is set', async () => {
+      const el = document.createElement('lt-checkbox') as Checkbox;
+      el.label = 'Accept terms';
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).not.toHaveBeenCalled();
+      el.remove();
+    });
+  });
 });

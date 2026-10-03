@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import { ThemeableElement } from '../../base';
+import { devWarn } from '../../utils';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { checkboxStyles } from './checkbox.styles';
@@ -206,6 +207,10 @@ export class Checkbox extends ThemeableElement {
       return html`<lt-icon class="checkmark" name="check"></lt-icon>`;
     }
     return html``;
+  }
+
+  protected firstUpdated() {
+    if (!this.label) devWarn('lt-checkbox', 'no `label` — the checkbox has no accessible name');
   }
 
   render() {

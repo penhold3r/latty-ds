@@ -482,4 +482,43 @@ describe('<lt-dialog>', () => {
       expect(btn?.getAttribute('label')).toBe('Fermer la boîte de dialogue');
     });
   });
+
+  describe('dev-mode warnings', () => {
+    let warn: ReturnType<typeof vi.spyOn>;
+
+    beforeEach(() => {
+      warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      warn.mockRestore();
+    });
+
+    it('warns when there is no heading or accessible name', async () => {
+      const el = document.createElement('lt-dialog') as Dialog;
+
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('[lt-dialog]'));
+      el.remove();
+    });
+
+    it('does not warn when a heading is set', async () => {
+      const el = document.createElement('lt-dialog') as Dialog;
+      el.heading = 'Confirm';
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).not.toHaveBeenCalled();
+      el.remove();
+    });
+
+    it('does not warn when aria-label names the dialog', async () => {
+      const el = document.createElement('lt-dialog') as Dialog;
+      el.setAttribute('aria-label', 'Confirm');
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).not.toHaveBeenCalled();
+      el.remove();
+    });
+  });
 });

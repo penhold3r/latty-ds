@@ -1,5 +1,6 @@
 import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
+import { devWarn } from '../../utils';
 import { customElement, property } from 'lit/decorators.js';
 
 import { progressStyles } from './progress.styles';
@@ -64,6 +65,10 @@ export class Progress extends ThemeableElement {
    * @default false
    */
   @property({ type: Boolean, reflect: true }) indeterminate = false;
+
+  protected firstUpdated() {
+    if (!this.label) devWarn('lt-progress', 'no `label` — set one so assistive tech can name the progress bar');
+  }
 
   render() {
     // A non-finite or non-positive max falls back to 100 rather than dividing by zero/NaN.

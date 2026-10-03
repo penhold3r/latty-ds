@@ -10,7 +10,7 @@ import { dateInputStyles } from './date-input.styles';
 import type { DateInputSize, DateInputVariant, DateInputFormat, DateInputLabels } from './date-input.types';
 import type { Calendar } from '../calendar/calendar';
 import type { CalendarWeekStart } from '../calendar/calendar.types';
-import { dispatch, createClickOutsideHandler } from '../../utils';
+import { dispatch, createClickOutsideHandler, devWarn } from '../../utils';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
@@ -191,7 +191,10 @@ export class DateInput extends ThemeableElement {
     }
   }
 
-  updated() {
+  updated(changed: Map<string, unknown>) {
+    if (changed.has('value') && this.value && !parseIsoDate(this.value)) {
+      devWarn('lt-date-input', `value "${this.value}" isn't a plain YYYY-MM-DD date — showing the placeholder instead`);
+    }
     this._internals.setFormValue(this.value || null);
     const btn = this.shadowRoot?.querySelector<HTMLElement>('#field-btn');
     if (this.required && !this.value && btn) {

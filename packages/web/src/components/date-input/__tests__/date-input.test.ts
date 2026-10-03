@@ -437,4 +437,28 @@ describe('<lt-date-input>', () => {
       expect(spy.mock.lastCall?.[1]).toBe('Veuillez sélectionner une date');
     });
   });
+
+  describe('dev-mode warnings', () => {
+    it('warns when value is not a plain YYYY-MM-DD date', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const el = document.createElement('lt-date-input') as DateInput;
+      el.value = '2026-06-15T10:00';
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('[lt-date-input]'));
+      warn.mockRestore();
+      el.remove();
+    });
+
+    it('does not warn for a valid ISO date', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const el = document.createElement('lt-date-input') as DateInput;
+      el.value = '2026-06-15';
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).not.toHaveBeenCalled();
+      warn.mockRestore();
+      el.remove();
+    });
+  });
 });

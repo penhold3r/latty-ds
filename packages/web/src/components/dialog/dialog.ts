@@ -1,5 +1,6 @@
 import { html, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
+import { devWarn } from '../../utils';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { dialogStyles } from './dialog.styles';
@@ -175,6 +176,12 @@ export class Dialog extends ThemeableElement {
    */
   public toggle() {
     this.open = !this.open;
+  }
+
+  protected firstUpdated() {
+    if (!this.heading && !this.hasAttribute('aria-label') && !this.hasAttribute('aria-labelledby')) {
+      devWarn('lt-dialog', 'no `heading` — the dialog has no accessible name; set `heading` or `aria-label`');
+    }
   }
 
   connectedCallback() {

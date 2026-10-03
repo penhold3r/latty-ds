@@ -141,4 +141,44 @@ describe('<lt-icon-button>', () => {
       expect(el.shadowRoot!.querySelector('button')!.hasAttribute('aria-expanded')).toBe(false);
     });
   });
+
+  describe('dev-mode warnings', () => {
+    let warn: ReturnType<typeof vi.spyOn>;
+
+    beforeEach(() => {
+      warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      warn.mockRestore();
+    });
+
+    it('warns when an icon-only button has no label', async () => {
+      const el = document.createElement('lt-icon-button') as IconButton;
+      el.setAttribute('icon', 'xmark');
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('[lt-icon-button]'));
+      el.remove();
+    });
+
+    it('does not warn when a label is set', async () => {
+      const el = document.createElement('lt-icon-button') as IconButton;
+      el.setAttribute('icon', 'xmark');
+      el.label = 'Close';
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).not.toHaveBeenCalled();
+      el.remove();
+    });
+
+    it('does not warn when the button has visible slotted text', async () => {
+      const el = document.createElement('lt-icon-button') as IconButton;
+      el.textContent = 'Save';
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).not.toHaveBeenCalled();
+      el.remove();
+    });
+  });
 });

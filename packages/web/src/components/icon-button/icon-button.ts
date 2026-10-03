@@ -2,6 +2,7 @@ import { html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ThemeableElement } from '../../base';
+import { devWarn } from '../../utils';
 
 import { iconButtonStyles } from './icon-button.styles';
 import type { IconButtonVariant, IconButtonAppearance, IconButtonSize } from './icon-button.types';
@@ -66,6 +67,12 @@ export class IconButton extends ThemeableElement {
 
   /** Whether the button is disabled. */
   @property({ type: Boolean, reflect: true }) disabled = false;
+
+  protected firstUpdated() {
+    if (!this.label && !this.textContent?.trim()) {
+      devWarn('lt-icon-button', 'no label or visible text — set `label` so screen readers can name the button');
+    }
+  }
 
   connectedCallback() {
     super.connectedCallback();

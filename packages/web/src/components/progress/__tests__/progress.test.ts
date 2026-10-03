@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { Progress } from '../progress';
 import '../progress';
 
@@ -122,5 +122,35 @@ describe('<lt-progress>', () => {
     el.indeterminate = true;
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('[role="progressbar"]')!.hasAttribute('aria-valuetext')).toBe(false);
+  });
+
+  describe('dev-mode warnings', () => {
+    let warn: ReturnType<typeof vi.spyOn>;
+
+    beforeEach(() => {
+      warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      warn.mockRestore();
+    });
+
+    it('warns when there is no label', async () => {
+      const el = document.createElement('lt-progress') as Progress;
+
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('[lt-progress]'));
+      el.remove();
+    });
+
+    it('does not warn when a label is set', async () => {
+      const el = document.createElement('lt-progress') as Progress;
+      el.label = 'Uploading';
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).not.toHaveBeenCalled();
+      el.remove();
+    });
   });
 });
