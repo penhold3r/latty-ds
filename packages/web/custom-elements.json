@@ -2933,6 +2933,12 @@
             },
             {
               "kind": "field",
+              "name": "_fieldIds",
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "selectedLabel",
               "type": {
                 "text": "string"
@@ -3407,6 +3413,12 @@
             },
             {
               "kind": "field",
+              "name": "_fieldIds",
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "_displayValue",
               "type": {
                 "text": "string"
@@ -3686,6 +3698,12 @@
               },
               "default": "''",
               "description": "Helper or error text displayed below the input."
+            },
+            {
+              "kind": "field",
+              "name": "_fieldIds",
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "field",
@@ -6396,12 +6414,19 @@
             },
             {
               "kind": "field",
+              "name": "_fieldIds",
+              "privacy": "private",
+              "readonly": true,
+              "description": "Helper text displayed below the radio group.",
+              "default": "''"
+            },
+            {
+              "kind": "field",
               "name": "helperText",
               "type": {
                 "text": "string"
               },
-              "default": "''",
-              "description": "Helper text displayed below the radio group."
+              "default": "''"
             },
             {
               "kind": "field",
@@ -7127,6 +7152,12 @@
             },
             {
               "kind": "field",
+              "name": "_fieldIds",
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "enabledOptions",
               "type": {
                 "text": "SelectOption[]"
@@ -7605,6 +7636,32 @@
           "declaration": {
             "name": "FormDisabledController",
             "module": "src/components/shared/form-disabled.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/form-field.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "createFieldIds",
+          "return": {
+            "type": {
+              "text": "{ helper: string }"
+            }
+          },
+          "description": "Stable id for a field's helper text, so the control can point `aria-describedby` at it. Ids only need to be\nunique within one shadow root, but a counter keeps them unique across the page too."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "createFieldIds",
+          "declaration": {
+            "name": "createFieldIds",
+            "module": "src/components/shared/form-field.ts"
           }
         }
       ]
