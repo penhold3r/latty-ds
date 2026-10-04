@@ -7026,10 +7026,28 @@
               "kind": "field",
               "name": "value",
               "type": {
-                "text": "string"
+                "text": "string | string[]"
               },
               "default": "''",
-              "description": "Current selected value. Not reflected as an attribute — read the property, or the `change` event's\n`detail.value`, instead of `getAttribute('value')`/`[value]` (consistent with the rest of the form controls;\nsee `lt-textfield`'s equivalent doc comment for why)."
+              "description": "Current selected value. A string for a single select; with `multiple`, an array of the selected values. Not\nreflected as an attribute — read the property, or the `change` event's `detail.value`, instead of\n`getAttribute('value')`/`[value]` (consistent with the rest of the form controls; see `lt-textfield`'s\nequivalent doc comment for why)."
+            },
+            {
+              "kind": "field",
+              "name": "multiple",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Allow more than one option to be selected. The option list stays open while picking, and `value` becomes an\narray of the selected values."
+            },
+            {
+              "kind": "field",
+              "name": "_selected",
+              "type": {
+                "text": "string[]"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "field",
@@ -7251,6 +7269,18 @@
             },
             {
               "kind": "method",
+              "name": "willUpdate",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "updated",
               "parameters": [
                 {
@@ -7303,9 +7333,9 @@
           "events": [
             {
               "type": {
-                "text": "CustomEvent<{value: string}>"
+                "text": "CustomEvent<{value: string | string[]}>"
               },
-              "description": "Dispatched when the selected value changes",
+              "description": "Dispatched when the selected value changes. With `multiple`, `value` is the array of selected values.",
               "name": "change"
             }
           ],
@@ -10445,7 +10475,7 @@
         {
           "kind": "variable",
           "name": "textfieldStyles",
-          "default": "css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); width: 100%; } label { color: var(--lt-text-subtle); } .input-container { position: relative; width: 100%; display: flex; align-items: center; gap: var(--lt-spacing-2); } .icon-start, .icon-end { color: var(--lt-text-muted); flex-shrink: 0; position: absolute; pointer-events: none; } .icon-start { inset-inline-start: var(--lt-spacing-3); } .icon-end { inset-inline-end: var(--lt-spacing-3); } /* Unlike .variant-icon (a decorative lt-icon), the password toggle is a real <button> — reset the native chrome so it reads as an inline icon, and re-declare align-items since it's no longer a plain absolutely- positioned element inheriting the .icon-start/.icon-end flex-adjacent layout by accident. */ .password-toggle { align-items: center; background: none; border: none; cursor: pointer; display: inline-flex; font: inherit; padding: 0; pointer-events: auto; transition: color 120ms ease; } .password-toggle:hover { color: var(--lt-text-default); } .password-toggle:disabled { cursor: not-allowed; opacity: 0.6; } .password-toggle:focus-visible { outline: 2px solid var(--lt-border-focus); outline-offset: 2px; } .variant-icon { pointer-events: none; } :host([variant='success']) .variant-icon { color: var(--lt-interactive-success-bg); } :host([variant='warning']) .variant-icon { color: var(--lt-interactive-warning-bg); } :host([variant='error']) .variant-icon, :host([data-invalid]) .variant-icon { color: var(--lt-interactive-error-bg); } input, textarea { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); box-sizing: border-box; color: var(--lt-text-default); font-family: inherit; font-weight: 400; transition: border-color 120ms ease, box-shadow 120ms ease; width: 100%; } textarea { min-height: 80px; padding-block: var(--lt-spacing-3); resize: vertical; } input::placeholder, textarea::placeholder { color: var(--lt-text-muted); } input:hover:not(:disabled), textarea:hover:not(:disabled) { border-color: var(--lt-border-strong); } input:focus, textarea:focus { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); outline: none; } input:disabled, textarea:disabled { background: var(--lt-bg-surface); color: var(--lt-text-muted); cursor: not-allowed; } /* sizes */ :host([size='sm']) input, :host([size='sm']) textarea { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='sm']) input.has-start-icon, :host([size='sm']) textarea.has-start-icon { padding-inline-start: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='sm']) input.has-end-icon, :host([size='sm']) textarea.has-end-icon { padding-inline-end: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='md']) input, :host([size='md']) textarea { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='md']) input.has-start-icon, :host([size='md']) textarea.has-start-icon { padding-inline-start: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='md']) input.has-end-icon, :host([size='md']) textarea.has-end-icon { padding-inline-end: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='lg']) input, :host([size='lg']) textarea { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } :host([size='lg']) input.has-start-icon, :host([size='lg']) textarea.has-start-icon { padding-inline-start: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) input.has-end-icon, :host([size='lg']) textarea.has-end-icon { padding-inline-end: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) .icon-start, :host([size='lg']) .icon-end { width: 24px; height: 24px; } /* variants */ :host([variant='success']) input, :host([variant='success']) textarea { border-color: var(--lt-border-success-strong); } :host([variant='success']) input:focus, :host([variant='success']) textarea:focus { border-color: var(--lt-interactive-success-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input, :host([variant='warning']) textarea { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) input:focus, :host([variant='warning']) textarea:focus { border-color: var(--lt-interactive-warning-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input, :host([variant='error']) textarea, :host([data-invalid]) input, :host([data-invalid]) textarea { border-color: var(--lt-border-error-strong); } :host([variant='error']) input:focus, :host([variant='error']) textarea:focus, :host([data-invalid]) input:focus, :host([data-invalid]) textarea:focus { border-color: var(--lt-interactive-error-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); } .helper-text::part(base) { font-weight: 200; } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .helper-text, :host([data-invalid]) .helper-text { color: var(--lt-text-error); } .required-indicator { color: var(--lt-text-error); } :host([uppercase]) label lt-text::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .password-toggle, input, textarea { transition: none; } } `"
+          "default": "css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); width: 100%; } label { color: var(--lt-text-subtle); } .input-container { position: relative; width: 100%; display: flex; align-items: center; gap: var(--lt-spacing-2); } .icon-start, .icon-end { color: var(--lt-text-muted); flex-shrink: 0; position: absolute; pointer-events: none; } .icon-start { inset-inline-start: var(--lt-spacing-3); } .icon-end { inset-inline-end: var(--lt-spacing-3); } /* Unlike .variant-icon (a decorative lt-icon), the password toggle is a real <button> — reset the native chrome so it reads as an inline icon, and re-declare align-items since it's no longer a plain absolutely- positioned element inheriting the .icon-start/.icon-end flex-adjacent layout by accident. */ .password-toggle { align-items: center; background: none; border: none; cursor: pointer; display: inline-flex; font: inherit; padding: 0; pointer-events: auto; transition: color 120ms ease; } .password-toggle:hover { color: var(--lt-text-default); } .password-toggle:disabled { cursor: not-allowed; opacity: 0.6; } .password-toggle:focus-visible { outline: 2px solid var(--lt-border-focus); outline-offset: 2px; } .variant-icon { pointer-events: none; } :host([variant='success']) .variant-icon { color: var(--lt-interactive-success-bg); } :host([variant='warning']) .variant-icon { color: var(--lt-interactive-warning-bg); } :host([variant='error']) .variant-icon, :host([data-invalid]) .variant-icon { color: var(--lt-interactive-error-bg); } input, textarea { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); box-sizing: border-box; color: var(--lt-text-default); font-family: inherit; font-weight: 400; transition: border-color 120ms ease, box-shadow 120ms ease; width: 100%; } textarea { min-height: 80px; padding-block: var(--lt-spacing-3); resize: vertical; } input::placeholder, textarea::placeholder { color: var(--lt-text-muted); } input:hover:not(:disabled), textarea:hover:not(:disabled) { border-color: var(--lt-border-strong); } input:focus, textarea:focus { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); outline: none; } input:disabled, textarea:disabled { background: var(--lt-bg-surface); color: var(--lt-text-muted); cursor: not-allowed; } /* sizes */ :host([size='sm']) input, :host([size='sm']) textarea { font-size: 0.875rem; height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='sm']) input.has-start-icon, :host([size='sm']) textarea.has-start-icon { padding-inline-start: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='sm']) input.has-end-icon, :host([size='sm']) textarea.has-end-icon { padding-inline-end: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='md']) input, :host([size='md']) textarea { font-size: 1rem; height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='md']) input.has-start-icon, :host([size='md']) textarea.has-start-icon { padding-inline-start: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='md']) input.has-end-icon, :host([size='md']) textarea.has-end-icon { padding-inline-end: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='lg']) input, :host([size='lg']) textarea { font-size: 1.0625rem; height: 48px; padding-inline: var(--lt-spacing-5); } :host([size='lg']) input.has-start-icon, :host([size='lg']) textarea.has-start-icon { padding-inline-start: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) input.has-end-icon, :host([size='lg']) textarea.has-end-icon { padding-inline-end: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) .icon-start, :host([size='lg']) .icon-end { width: 24px; height: 24px; } /* variants */ :host([variant='success']) input, :host([variant='success']) textarea { border-color: var(--lt-border-success-strong); } :host([variant='success']) input:focus, :host([variant='success']) textarea:focus { border-color: var(--lt-interactive-success-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input, :host([variant='warning']) textarea { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) input:focus, :host([variant='warning']) textarea:focus { border-color: var(--lt-interactive-warning-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input, :host([variant='error']) textarea, :host([data-invalid]) input, :host([data-invalid]) textarea { border-color: var(--lt-border-error-strong); } :host([variant='error']) input:focus, :host([variant='error']) textarea:focus, :host([data-invalid]) input:focus, :host([data-invalid]) textarea:focus { border-color: var(--lt-interactive-error-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); } .helper-text::part(base) { font-weight: 200; } /* .icon-end disables pointer events so decorative icons never swallow clicks; the clear button is the one real control in that slot, so it opts back in and resets native button chrome. */ .clear-button { align-items: center; background: none; border: 0; border-radius: var(--lt-border-radius, 4px); cursor: pointer; display: flex; padding: 0; pointer-events: auto; } .counter { color: var(--lt-text-subtle); display: block; text-align: end; } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .helper-text, :host([data-invalid]) .helper-text { color: var(--lt-text-error); } .required-indicator { color: var(--lt-text-error); } :host([uppercase]) label lt-text::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .password-toggle, input, textarea { transition: none; } } `"
         }
       ],
       "exports": [
@@ -10670,12 +10700,29 @@
             },
             {
               "kind": "field",
+              "name": "clearable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Shows a clear button while the field has a value. Not shown for password fields, which have their own toggle."
+            },
+            {
+              "kind": "field",
+              "name": "counter",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Shows the character count as `length / max` below the field. Uses `max` as the limit, which is also enforced natively."
+            },
+            {
+              "kind": "field",
               "name": "labels",
               "type": {
                 "text": "Partial<TextfieldLabels>"
               },
-              "default": "{}",
-              "description": "Overridable UI text (format validation message, password-toggle button labels), for i18n. English defaults — override only the keys you need."
+              "default": "{}"
             },
             {
               "kind": "field",
@@ -10749,6 +10796,27 @@
               ]
             },
             {
+              "kind": "field",
+              "name": "_showClear",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "description": "Handles change events from the native input or textarea element.\nUpdates the component's value property and dispatches a custom change event.",
+              "parameters": [
+                {
+                  "description": "The native change event",
+                  "name": "e"
+                }
+              ],
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_clear",
+              "privacy": "private"
+            },
+            {
               "kind": "method",
               "name": "handleChange",
               "privacy": "private",
@@ -10757,11 +10825,9 @@
                   "name": "e",
                   "type": {
                     "text": "Event"
-                  },
-                  "description": "The native change event"
+                  }
                 }
-              ],
-              "description": "Handles change events from the native input or textarea element.\nUpdates the component's value property and dispatches a custom change event."
+              ]
             },
             {
               "kind": "field",
