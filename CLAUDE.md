@@ -346,6 +346,8 @@ Tests use Vitest with jsdom environment. Test files are located at `packages/**/
 
 **ESLint**: Uses v9 flat config (`eslint.config.mts`) with JSON, CSS, and Markdown support. CSS rules allow unknown `--lt-*` custom properties (`allowUnknownVariables: true`) since they are resolved at runtime by `@latty-ds/tokens`. `no-console` is an error — use the `logger` utility from `@latty-ds/utils` in scripts instead. Never use `any` or suppress linting warnings unless explicitly instructed.
 
+**Component colour ratchet**: `*.styles.ts` may not add raw palette steps (`var(--lt-color-*-N)`) or literal `rgb()`/`rgba()` colour. Use semantic tokens. Existing violations are grandfathered per file in `eslint-rules/no-raw-component-colors.mjs`; when you fix one, lower its count there so the baseline only shrinks.
+
 **Prettier**: `printWidth: 120`, `singleQuote: true`, `trailingComma: "none"`.
 
 **TypeScript 6**: the workspace runs TypeScript 6 (matching the compiler bundled with VS Code, so the editor and CI agree). Three things differ from 5.x and will bite a new package:

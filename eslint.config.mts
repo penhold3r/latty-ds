@@ -6,6 +6,7 @@ import markdown from '@eslint/markdown';
 import css from '@eslint/css';
 import vitest from '@vitest/eslint-plugin';
 import { defineConfig } from 'eslint/config';
+import lattyComponentColors from './eslint-rules/no-raw-component-colors.mjs';
 
 export default defineConfig([
   {
@@ -99,6 +100,13 @@ export default defineConfig([
       // --lt-* custom properties are resolved at runtime by @latty-ds/tokens
       'css/no-invalid-properties': ['error', { allowUnknownVariables: true }]
     }
+  },
+  {
+    // Component stylesheets must use tokens, not hard-coded colour; existing violations are grandfathered per file
+    // (see the rule's BASELINE) so this only fails on new ones.
+    files: ['packages/web/src/components/**/*.styles.ts'],
+    plugins: { 'latty-colors': lattyComponentColors },
+    rules: { 'latty-colors/no-raw-component-colors': 'error' }
   },
   {
     // Test files routinely need any for ref generics and mock shapes that don't
