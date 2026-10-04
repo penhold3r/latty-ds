@@ -17,7 +17,8 @@ let textfieldCount = 0;
 const DEFAULT_LABELS: TextfieldLabels = {
   validationMessage: 'Please match the requested format',
   showPassword: 'Show password',
-  hidePassword: 'Hide password'
+  hidePassword: 'Hide password',
+  clear: 'Clear'
 };
 
 /**
@@ -183,6 +184,12 @@ export class Textfield extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) uppercase = false;
 
   /** Overridable UI text (format validation message, password-toggle button labels), for i18n. English defaults — override only the keys you need. */
+  /** Shows a clear button while the field has a value. Not shown for password fields, which have their own toggle. */
+  @property({ type: Boolean, reflect: true }) clearable = false;
+
+  /** Shows the character count as `length / max` below the field. Uses `max` as the limit, which is also enforced natively. */
+  @property({ type: Boolean, reflect: true }) counter = false;
+
   @property({ type: Object }) labels: Partial<TextfieldLabels> = {};
 
   private get _labels(): TextfieldLabels {
@@ -255,6 +262,21 @@ export class Textfield extends ThemeableElement {
    * @param e - The native change event
    * @private
    */
+  private get _showClear(): boolean {
+    return this.clearable && !!this.value && !this._isDisabled && !this.readonly && this.type !== 'password';
+  }
+
+  private _clear() {
+    this.value = '';
+    if (this._touched) this._autoError = !this._validate();
+    const detail = { value: '' };
+    this.dispatchEvent(new CustomEvent('input', { detail, bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('change', { detail, bubbles: true, composed: true }));
+    this.updateComplete.then(() => {
+      this.shadowRoot?.querySelector<HTMLInputElement | HTMLTextAreaElement>('input, textarea')?.focus();
+    });
+  }
+
   private handleChange(e: Event) {
     e.stopPropagation();
     const input = e.target as HTMLInputElement | HTMLTextAreaElement;
@@ -370,7 +392,8 @@ export class Textfield extends ThemeableElement {
     const isMultiline = this.type === 'multiline';
     const isNumber = this.type === 'number';
     const endIconName = this.getEndIconName();
-    const hasEndIcon = Boolean(endIconName);
+    const showClear = this._showClear;
+    const hasEndIcon = Boolean(endIconName) || showClear;
     const actualInputType = isPasswordField && this.isPasswordVisible ? 'text' : this.type;
     const isInvalid = this._autoError || this.variant === 'error';
     const resolvedHelperText = typeof this.helperText === 'function' ? this.helperText(isInvalid) : this.helperText;
@@ -437,7 +460,18 @@ export class Textfield extends ThemeableElement {
                   class=${classMap({ 'has-start-icon': hasStartIcon, 'has-end-icon': hasEndIcon })}
                 />
               `}
-          ${hasEndIcon
+          ${showClear
+            ? html`<button
+                type="button"
+                class="icon-end clear-button"
+                aria-label=${this._labels.clear}
+                @mousedown=${this._preventFocusSteal}
+                @click=${this._clear}
+              >
+                <lt-icon name="xmark"></lt-icon>
+              </button>`
+            : ''}
+          ${endIconName
             ? isPasswordField
               ? html`
                   <button
@@ -459,6 +493,9 @@ export class Textfield extends ThemeableElement {
           ? html`<lt-text id=${this._helperId} variant="caption" as="span" class="helper-text"
               >${resolvedHelperText}</lt-text
             >`
+          : ''}
+        ${this.counter && !isNumber && this.max !== null
+          ? html`<lt-text variant="caption" as="span" class="counter">${this.value.length} / ${this.max}</lt-text>`
           : ''}
       </div>
     `;

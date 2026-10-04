@@ -50,4 +50,6 @@ export interface TextfieldLabels {
   showPassword: string;
   /** Accessible label for the password-visibility toggle when the password is shown. */
   hidePassword: string;
+  /** Accessible label for the clear button shown by `clearable`. */
+  clear: string;
 }

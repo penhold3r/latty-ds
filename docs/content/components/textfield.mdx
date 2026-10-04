@@ -32,6 +32,10 @@ text. Password type includes an automatic visibility toggle.
   label="Bio"
   type="multiline"
   placeholder="Tell us about yourself..."></lt-textfield>
+
+<!-- Clear button, and a character count against the native max length -->
+
+<lt-textfield label="Nickname" clearable counter max="20"></lt-textfield>
 `}
     react={`
 import { Textfield } from '@latty-ds/react';
@@ -40,13 +44,13 @@ import { Textfield } from '@latty-ds/react';
 
 <Textfield label="Password" type="password" helperText="Minimum 8 characters" />
 
-<Textfield
-  label="Bio"
-  type="multiline"
-  placeholder="Tell us about yourself..."
-/>
+<Textfield label="Bio" type="multiline" placeholder="Tell us about yourself..." />
+// Clear button, and a character count against the native max length
+<Textfield label="Nickname" clearable counter max={20} />
+
     `}
     vue={`
+
 <template>
   <lt-textfield label="Email" type="email" placeholder="you@example.com" required></lt-textfield>
 

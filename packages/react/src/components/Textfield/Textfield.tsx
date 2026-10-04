@@ -19,6 +19,8 @@ export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onCh
   min?: TextfieldEl['min'];
   max?: TextfieldEl['max'];
   uppercase?: boolean;
+  clearable?: boolean;
+  counter?: boolean;
   labels?: TextfieldEl['labels'];
   onInput?: (event: CustomEvent<{ value: string }>) => void;
   onChange?: (event: CustomEvent<{ value: string }>) => void;

@@ -1084,3 +1084,95 @@ describe('<lt-textfield>', () => {
     });
   });
 });
+
+describe('clearable and counter', () => {
+  let el: Textfield;
+
+  const clearBtn = () => el.shadowRoot!.querySelector<HTMLButtonElement>('.clear-button');
+  const nativeInput = () => el.shadowRoot!.querySelector<HTMLInputElement | HTMLTextAreaElement>('input, textarea')!;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-textfield') as Textfield;
+    el.clearable = true;
+    el.value = 'hello';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('shows a clear button only while there is a value', async () => {
+    expect(clearBtn()).toBeTruthy();
+    el.value = '';
+    await el.updateComplete;
+    expect(clearBtn()).toBeNull();
+  });
+
+  it('is hidden unless clearable is set', async () => {
+    el.clearable = false;
+    await el.updateComplete;
+    expect(clearBtn()).toBeNull();
+  });
+
+  it('is hidden when disabled or readonly', async () => {
+    el.disabled = true;
+    await el.updateComplete;
+    expect(clearBtn()).toBeNull();
+    el.disabled = false;
+    el.readonly = true;
+    await el.updateComplete;
+    expect(clearBtn()).toBeNull();
+  });
+
+  it('is not shown for password fields, which have their own toggle', async () => {
+    el.type = 'password';
+    await el.updateComplete;
+    expect(clearBtn()).toBeNull();
+  });
+
+  it('empties the value and fires input and change with an empty value', async () => {
+    const input = vi.fn();
+    const change = vi.fn();
+    el.addEventListener('input', input);
+    el.addEventListener('change', change);
+    clearBtn()!.click();
+    await el.updateComplete;
+    expect(el.value).toBe('');
+    expect(input.mock.calls[0][0].detail).toEqual({ value: '' });
+    expect(change.mock.calls[0][0].detail).toEqual({ value: '' });
+  });
+
+  it('returns focus to the native input after clearing', async () => {
+    clearBtn()!.click();
+    await el.updateComplete;
+    await new Promise((r) => setTimeout(r, 0));
+    expect(el.shadowRoot!.activeElement).toBe(nativeInput());
+  });
+
+  it('takes the accessible name from labels.clear', async () => {
+    expect(clearBtn()!.getAttribute('aria-label')).toBe('Clear');
+    el.labels = { clear: 'Effacer' };
+    await el.updateComplete;
+    expect(clearBtn()!.getAttribute('aria-label')).toBe('Effacer');
+  });
+
+  it('shows length / max when counter is set and max is the limit', async () => {
+    el.counter = true;
+    el.max = 10;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.counter')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5 / 10');
+    expect(nativeInput().getAttribute('maxlength')).toBe('10');
+  });
+
+  it('hides the counter unless counter is set and a max is given', async () => {
+    el.max = 10;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.counter')).toBeNull();
+    el.counter = true;
+    el.max = null;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.counter')).toBeNull();
+  });
+});

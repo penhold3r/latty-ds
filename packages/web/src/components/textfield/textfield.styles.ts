@@ -237,6 +237,25 @@ export const textfieldStyles = css`
     font-weight: 200;
   }
 
+  /* .icon-end disables pointer events so decorative icons never swallow clicks; the clear button is the one real
+     control in that slot, so it opts back in and resets native button chrome. */
+  .clear-button {
+    align-items: center;
+    background: none;
+    border: 0;
+    border-radius: var(--lt-border-radius, 4px);
+    cursor: pointer;
+    display: flex;
+    padding: 0;
+    pointer-events: auto;
+  }
+
+  .counter {
+    color: var(--lt-text-subtle);
+    display: block;
+    text-align: end;
+  }
+
   :host([variant='success']) .helper-text {
     color: var(--lt-text-success);
   }
