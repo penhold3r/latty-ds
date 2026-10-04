@@ -131,7 +131,6 @@ export class TabGroup extends ThemeableElement {
 
       tab.tabIndex = tab === rovingTarget ? 0 : -1;
       if (!tab.id) tab.id = `${this._uid}-tab-${tab.value}`;
-      tab.setAttribute('aria-controls', `${this._uid}-panel-${tab.value}`);
 
       // Set variant attribute for styling
       if (this.appearance === 'pills') {
@@ -166,6 +165,14 @@ export class TabGroup extends ThemeableElement {
       panel.setAttribute('role', 'tabpanel');
       panel.setAttribute('aria-labelledby', `${this._uid}-tab-${panelValue}`);
       if (!panel.hasAttribute('tabindex')) panel.setAttribute('tabindex', '0');
+    });
+
+    // A tab only points at a panel that actually exists, and only once that panel has its id — otherwise
+    // aria-controls dangles (a tab with no panel, or a tab whose panel hasn't been wired up yet).
+    this.tabs?.forEach((tab) => {
+      const panel = this.panels.find((p) => (p.getAttribute('value') ?? p.getAttribute('data-value')) === tab.value);
+      if (panel) tab.setAttribute('aria-controls', panel.id);
+      else tab.removeAttribute('aria-controls');
     });
   }
 

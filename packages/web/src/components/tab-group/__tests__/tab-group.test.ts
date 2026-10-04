@@ -207,3 +207,45 @@ describe('<lt-tab-group>', () => {
     });
   });
 });
+
+describe('aria-controls only points at a real panel', () => {
+  it('links each tab to its own panel and leaves a tab with no panel unlinked', async () => {
+    const group = document.createElement('lt-tab-group') as TabGroup;
+    group.innerHTML = `
+      <lt-tab value="a" label="A"></lt-tab>
+      <lt-tab value="b" label="B"></lt-tab>
+      <div slot="panel" data-value="a">A content</div>
+    `;
+    document.body.appendChild(group);
+    await group.updateComplete;
+    await new Promise((r) => setTimeout(r, 0));
+
+    const tabA = group.querySelector('lt-tab[value="a"]')!;
+    const tabB = group.querySelector('lt-tab[value="b"]')!;
+    const panelA = group.querySelector('[data-value="a"]')!;
+    expect(panelA.id).toBeTruthy();
+    expect(tabA.getAttribute('aria-controls')).toBe(panelA.id);
+    expect(document.getElementById(tabA.getAttribute('aria-controls')!)).toBe(panelA);
+    expect(tabB.hasAttribute('aria-controls')).toBe(false);
+    group.remove();
+  });
+
+  it('stays unlinked when a panel-less tab is disabled (the attribute observer runs updateTabs alone)', async () => {
+    const group = document.createElement('lt-tab-group') as TabGroup;
+    group.innerHTML = `
+      <lt-tab value="a" label="A"></lt-tab>
+      <lt-tab value="b" label="B"></lt-tab>
+      <div slot="panel" data-value="a">A content</div>
+    `;
+    document.body.appendChild(group);
+    await group.updateComplete;
+    await new Promise((r) => setTimeout(r, 0));
+
+    const tabB = group.querySelector('lt-tab[value="b"]')!;
+    tabB.setAttribute('disabled', '');
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(tabB.hasAttribute('aria-controls')).toBe(false);
+    group.remove();
+  });
+});
