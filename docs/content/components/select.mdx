@@ -44,7 +44,10 @@ via JavaScript as an array of <code>&#123; value, label &#125;</code> objects.
   ];
   select.addEventListener('change', (e) => console.log(e.detail.value));
 <\/script>
-    `}
+    
+<!-- Multiple selection: value is an array of the selected values -->
+<lt-select id="fruit" label="Fruit" multiple></lt-select>
+`}
     react={`
 import { Select } from '@latty-ds/react';
 
@@ -60,6 +63,9 @@ const options = [
   options={options}
   onChange={(e) => console.log(e.detail.value)}
 />
+// Multiple selection: value is an array of the selected values
+<Select label="Fruit" multiple />
+
     `}
     vue={`
 <script setup lang="ts">

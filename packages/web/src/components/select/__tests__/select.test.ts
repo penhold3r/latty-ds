@@ -423,3 +423,88 @@ describe('helper text is described by its control (aria-describedby)', () => {
     expect(control.hasAttribute('aria-describedby')).toBe(false);
   });
 });
+
+describe('multiple selection (value becomes an array)', () => {
+  let el: Select;
+  const opts = () => Array.from(el.shadowRoot!.querySelectorAll<HTMLButtonElement>('.option'));
+  const optionFor = (value: string) =>
+    opts().find((o) => o.id.endsWith(`-option-${el.options.findIndex((x) => x.value === value)}`))!;
+  const trigger = () => el.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-select') as Select;
+    el.options = [
+      { value: 'a', label: 'Apple' },
+      { value: 'b', label: 'Banana' },
+      { value: 'c', label: 'Cherry' }
+    ];
+    el.multiple = true;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('starts with an empty array and reflects the multiple attribute', async () => {
+    expect(el.value).toEqual([]);
+    expect(el.hasAttribute('multiple')).toBe(true);
+  });
+
+  it('adds and removes values on click, and keeps the list open', async () => {
+    trigger().click();
+    await el.updateComplete;
+    optionFor('a').click();
+    await el.updateComplete;
+    expect(el.value).toEqual(['a']);
+    expect(el.hasAttribute('open')).toBe(true);
+    optionFor('c').click();
+    await el.updateComplete;
+    expect(el.value).toEqual(['a', 'c']);
+    optionFor('a').click();
+    await el.updateComplete;
+    expect(el.value).toEqual(['c']);
+  });
+
+  it('reports the array in the change event detail', async () => {
+    const detail: unknown[] = [];
+    el.addEventListener('change', (e) => detail.push((e as CustomEvent).detail.value));
+    optionFor('b').click();
+    await el.updateComplete;
+    expect(detail).toEqual([['b']]);
+  });
+
+  it('shows the selected labels in the trigger', async () => {
+    el.value = ['a', 'c'];
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.select-trigger')!.textContent).toContain('Apple, Cherry');
+  });
+
+  it('marks each selected option with aria-selected and the listbox as multiselectable', async () => {
+    el.value = ['b'];
+    await el.updateComplete;
+    expect(optionFor('b').getAttribute('aria-selected')).toBe('true');
+    expect(optionFor('a').getAttribute('aria-selected')).toBe('false');
+    expect(el.shadowRoot!.querySelector('[role="listbox"]')!.getAttribute('aria-multiselectable')).toBe('true');
+  });
+
+  it('is invalid when required and nothing is selected', async () => {
+    const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+    el.required = true;
+    await el.updateComplete;
+    expect(spy.mock.lastCall?.[0]).toMatchObject({ valueMissing: true });
+    el.value = ['a'];
+    await el.updateComplete;
+    expect(spy.mock.lastCall?.[0]).toEqual({});
+  });
+
+  it('submits one form entry per selected value', async () => {
+    const spy = vi.spyOn(ElementInternals.prototype, 'setFormValue');
+    el.name = 'fruit';
+    el.value = ['a', 'b'];
+    await el.updateComplete;
+    const data = spy.mock.lastCall?.[0] as FormData;
+    expect(data.getAll('fruit')).toEqual(['a', 'b']);
+  });
+});

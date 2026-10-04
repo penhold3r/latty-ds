@@ -49,7 +49,7 @@ describe('event-first handlers', () => {
 
   it('hand over the real event, so the consumer can stop it or read its target', () => {
     const outer = vi.fn();
-    const inner = vi.fn((e: CustomEvent<{ value: string }>) => {
+    const inner = vi.fn((e: CustomEvent<{ value: string | string[] }>) => {
       e.stopPropagation();
       return e.target;
     });

@@ -5,7 +5,8 @@ export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
   formAssociated?: boolean;
   variant?: SelectEl['variant'];
   size?: SelectEl['size'];
-  value?: string;
+  value?: SelectEl['value'];
+  multiple?: boolean;
   placeholder?: string;
   label?: string;
   name?: string;
@@ -14,11 +15,11 @@ export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
   required?: boolean;
   options?: SelectEl['options'];
   labels?: SelectEl['labels'];
-  onChange?: (event: CustomEvent<{ value: string }>) => void;
+  onChange?: (event: CustomEvent<{ value: string | string[] }>) => void;
 };
 
 export const Select = forwardRef<SelectEl, SelectProps>(function Select(
-  { onChange, options, labels, children, ...props },
+  { onChange, value, options, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SelectEl>(null);
@@ -28,16 +29,17 @@ export const Select = forwardRef<SelectEl, SelectProps>(function Select(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!(ev as CustomEvent<{ value: string }>);
+    const h = (ev: Event) => onChange!(ev as CustomEvent<{ value: string | string[] }>);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;
+    if (value !== undefined) el.value = value;
     if (options !== undefined) el.options = options;
     if (labels !== undefined) el.labels = labels;
-  }, [options, labels]);
+  }, [value, options, labels]);
 
   return (
     <lt-select ref={innerRef} {...(props as Record<string, unknown>)}>

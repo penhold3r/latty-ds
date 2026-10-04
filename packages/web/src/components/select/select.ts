@@ -1,5 +1,5 @@
 import { createFieldIds } from '../shared/form-field';
-import { html, nothing } from 'lit';
+import { html, nothing, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
@@ -24,7 +24,8 @@ const DEFAULT_LABELS: SelectLabels = {
  *
  * @element lt-select
  *
- * @fires {CustomEvent<{value: string}>} change - Dispatched when the selected value changes
+ * @fires {CustomEvent<{value: string | string[]}>} change - Dispatched when the selected value changes. With `multiple`,
+ *   `value` is the array of selected values.
  *
  * @example
  * ```html
@@ -80,12 +81,25 @@ export class Select extends ThemeableElement {
   @property({ reflect: true }) size: SelectSize = 'md';
 
   /**
-   * Current selected value. Not reflected as an attribute — read the property, or the `change` event's
-   * `detail.value`, instead of `getAttribute('value')`/`[value]` (consistent with the rest of the form controls;
-   * see `lt-textfield`'s equivalent doc comment for why).
+   * Current selected value. A string for a single select; with `multiple`, an array of the selected values. Not
+   * reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of
+   * `getAttribute('value')`/`[value]` (consistent with the rest of the form controls; see `lt-textfield`'s
+   * equivalent doc comment for why).
    * @default ''
    */
-  @property() value = '';
+  @property() value: string | string[] = '';
+
+  /**
+   * Allow more than one option to be selected. The option list stays open while picking, and `value` becomes an
+   * array of the selected values.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) multiple = false;
+
+  private get _selected(): string[] {
+    if (Array.isArray(this.value)) return this.value;
+    return this.value ? [this.value] : [];
+  }
 
   /**
    * Placeholder text shown when no option is selected.
@@ -202,6 +216,15 @@ export class Select extends ThemeableElement {
   private selectOption(option: SelectOption) {
     if (option.disabled) return;
 
+    if (this.multiple) {
+      const current = this._selected;
+      this.value = current.includes(option.value)
+        ? current.filter((v) => v !== option.value)
+        : [...current, option.value];
+      dispatch(this, 'change', { value: this.value });
+      return;
+    }
+
     this.value = option.value;
     this.closeDropdown();
 
@@ -268,14 +291,31 @@ export class Select extends ThemeableElement {
    * @private
    */
   private getSelectedLabel(): string {
-    const selected = this.options.find((opt) => opt.value === this.value);
+    if (this.multiple) {
+      return this._selected
+        .map((v) => this.options.find((opt) => opt.value === v)?.label)
+        .filter((label): label is string => Boolean(label))
+        .join(', ');
+    }
+    const selected = this.options.find((opt) => opt.value === this._selected[0]);
     return selected ? selected.label : '';
   }
 
+  override willUpdate(changed: PropertyValues<this>) {
+    super.willUpdate(changed);
+    if (this.multiple && !Array.isArray(this.value)) this.value = this._selected;
+  }
+
   updated(changedProperties: Map<string, unknown>) {
-    this._internals.setFormValue(this.value || null);
+    if (this.multiple) {
+      const formData = new FormData();
+      if (this.name) for (const v of this._selected) formData.append(this.name, v);
+      this._internals.setFormValue(formData);
+    } else {
+      this._internals.setFormValue(this._selected[0] || null);
+    }
     const trigger = this.shadowRoot?.querySelector<HTMLElement>('.select-trigger');
-    if (this.required && !this.value && trigger) {
+    if (this.required && this._selected.length === 0 && trigger) {
       this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, trigger);
     } else {
       this._internals.setValidity({});
@@ -324,7 +364,7 @@ export class Select extends ThemeableElement {
 
   render() {
     const selectedLabel = this.getSelectedLabel();
-    const hasValue = Boolean(this.value && selectedLabel);
+    const hasValue = Boolean(this._selected.length && selectedLabel);
     const activeOption = this.enabledOptions[this.activeIndex];
     const listboxId = `${this._uid}-listbox`;
 
@@ -366,6 +406,7 @@ export class Select extends ThemeableElement {
             appearance="outlined"
             background="--lt-bg-default"
             role="listbox"
+            aria-multiselectable=${this.multiple ? 'true' : nothing}
             part="listbox"
           >
             <div class="options-container">
@@ -376,7 +417,7 @@ export class Select extends ThemeableElement {
                     class="option"
                     role="option"
                     tabindex="-1"
-                    aria-selected=${option.value === this.value}
+                    aria-selected=${this._selected.includes(option.value)}
                     ?disabled=${option.disabled}
                     data-active=${option === activeOption}
                     @mousedown=${this._preventFocusSteal}
