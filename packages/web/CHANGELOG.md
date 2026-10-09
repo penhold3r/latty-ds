@@ -3,6 +3,134 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/penhold3r/latty-ds/compare/v0.10.4...v1.0.0) (2026-10-09)
+
+### Bug Fixes
+
+- **web:** add forced-colors support to radio, switch, slider, progress (X6) ([78f86bd](https://github.com/penhold3r/latty-ds/commit/78f86bd20b94ee813e91deb0db4a292371c1b469))
+- **web:** add prefers-reduced-motion support to 25 components (X6) ([4bb4d95](https://github.com/penhold3r/latty-ds/commit/4bb4d9526112af4c503392e7d1573760c68221c4))
+- **web:** associate lt-textfield's label with its input, describe it with helper text ([c3d075b](https://github.com/penhold3r/latty-ds/commit/c3d075b3c2b8a493e1ec23bba1b52de6400e7abf))
+- **web:** clamp lt-slider's value, compute its thumb offset in pure CSS ([2c4fe0f](https://github.com/penhold3r/latty-ds/commit/2c4fe0f010bad035c720fb1e18991c1cc1b180c3))
+- **web:** close out the keyboard/ARIA batch (radio, dropdown, combobox, tabs) ([72f216c](https://github.com/penhold3r/latty-ds/commit/72f216c14aee8fb2ec3cdea4de821b19b97506d4))
+- **web:** convert physical CSS properties to logical ones for RTL (X5) ([7aa24cb](https://github.com/penhold3r/latty-ds/commit/7aa24cbd3e9e0dbed8ff91bb30e6e1e6760c3f8d))
+- **web:** derive lt-calendar/lt-date-input week-start from locale (X5) ([e90a337](https://github.com/penhold3r/latty-ds/commit/e90a337cd2c7213fd094f9596eadd115970f0df4))
+- **web:** expose nav group open/closed state to assistive tech ([c1a9b27](https://github.com/penhold3r/latty-ds/commit/c1a9b275f11d10959488d2fe25f79c6e21683bdb))
+- **web:** finish the audit's robustness batch (alert, progress, table) ([4d32ffd](https://github.com/penhold3r/latty-ds/commit/4d32ffd58ea9163197ba15f609a95b66b28bd3eb))
+- **web:** fix calendar roving tabindex, keyboard nav, and disabled-day focus ([1efde10](https://github.com/penhold3r/latty-ds/commit/1efde1008a743879022383045bba179006bfa16c))
+- **web:** fix lt-button's form association, add name/value/formaction ([c0b0c8a](https://github.com/penhold3r/latty-ds/commit/c0b0c8afab76c6b33f8eceb71d2b74fd20604194))
+- **web:** fix lt-sidepanel CSS bugs found via live-browser verification ([c4e182d](https://github.com/penhold3r/latty-ds/commit/c4e182dcbb57b9845f687f98500bd42c866308fa))
+- **web:** forward native validity into lt-datepicker's ElementInternals ([3c57fd8](https://github.com/penhold3r/latty-ds/commit/3c57fd8a5012b1a25a285c4474eae1411f2fe618))
+- **web:** forward native validity into lt-textfield's ElementInternals ([9cbd48d](https://github.com/penhold3r/latty-ds/commit/9cbd48dcee7d490504e190612123862d84e5c5c6))
+- **web:** harden components against bad input and undersized targets ([44ca860](https://github.com/penhold3r/latty-ds/commit/44ca86017a26c59ee4ca8410575d8db639db67c6))
+- **web:** implement formDisabledCallback across all form controls ([9435556](https://github.com/penhold3r/latty-ds/commit/94355560c9259d1bd92ec8ae1e24642fced0842c))
+- **web:** implement the ARIA tabs pattern for lt-tab-group ([acc845d](https://github.com/penhold3r/latty-ds/commit/acc845d0ccb9682467004e602a9cc087735d588d))
+- **web:** keep focus on the select/combobox control, not its options ([95a8b70](https://github.com/penhold3r/latty-ds/commit/95a8b7041cf93e2b083bf6a03c5c5123fa4ba67a))
+- **web:** keep text on lt-alert and lt-snackbar fills at full opacity ([37f8427](https://github.com/penhold3r/latty-ds/commit/37f84276475d4800b25877059661b4f24bdbae7a))
+- **web:** link helper text to its control with aria-describedby ([d0bd734](https://github.com/penhold3r/latty-ds/commit/d0bd734a6b44a94b12e371c1af93325d43049047))
+- **web:** make lt-tooltip's text reach the accessibility tree ([59679a0](https://github.com/penhold3r/latty-ds/commit/59679a08fe3aed83bcbed8c06cb2e6a7ffb4c664))
+- **web:** make radios group correctly with or without lt-radio-group ([b551a12](https://github.com/penhold3r/latty-ds/commit/b551a12b62b1140a4fc862729f0c2e2cc2e4f507))
+- **web:** make the password show/hide toggle keyboard and screen-reader operable ([63f7077](https://github.com/penhold3r/latty-ds/commit/63f70778da3e03a9de87a2a0b8f0e5fde0983e82))
+- **web:** prevent default on Escape in combobox/date-input dropdowns ([3431db0](https://github.com/penhold3r/latty-ds/commit/3431db08345e1ed3a7c1a4676840260edc98a574))
+- **web:** remove dead ./shared export from package.json (X7) ([1c5af51](https://github.com/penhold3r/latty-ds/commit/1c5af515abc9ab84ca30d95d6d83dc5ca96bc5bc))
+- **web:** rename lt-dialog/lt-alert's title prop to heading ([b6186c1](https://github.com/penhold3r/latty-ds/commit/b6186c10d3ba87b80758c119f8237f5d2ab08d8b))
+- **web:** render lt-tooltip in the top layer so it isn't hidden by an open dialog ([60e05da](https://github.com/penhold3r/latty-ds/commit/60e05da7fd66f3ab25fbc27562b7719f4abfa1fc))
+- **web:** stop loading/disabled buttons from leaking clicks to the host ([bf6d737](https://github.com/penhold3r/latty-ds/commit/bf6d737400b3cde9681670f9cdc6933991146a0e))
+- **web:** stop lt-datepicker's native input/change from double-firing ([9004ef7](https://github.com/penhold3r/latty-ds/commit/9004ef78b681b3ad8b3d37bd54af684ab3f1caa7))
+- **web:** stop lt-snackbar emitting hide on mount ([64b948d](https://github.com/penhold3r/latty-ds/commit/64b948ddb16d94a038b1f18b74868a4db876a34e))
+- **web:** stop lt-tab pointing aria-controls at panels that don't exist ([2e6fe2e](https://github.com/penhold3r/latty-ds/commit/2e6fe2e9829011a4f66c8466f387071fdbd92086))
+- **web:** stop reflecting value/checked on form controls, fix reset defaults ([2d01f47](https://github.com/penhold3r/latty-ds/commit/2d01f4752688cb8b5ecd8d1fa07b7027a9ecb241))
+- **web:** submit the form on Enter in lt-textfield ([7d5025e](https://github.com/penhold3r/latty-ds/commit/7d5025e810acda5e57207e08a4c24b345fbd3e62))
+- **web:** use theme-aware tokens instead of raw palette colors ([d1abb63](https://github.com/penhold3r/latty-ds/commit/d1abb63b4a9bc13d67c3cd54c4775b8986ab1860))
+
+- feat(web)!: make lt-select's value an array when multiple is set ([0dba3b7](https://github.com/penhold3r/latty-ds/commit/0dba3b71cdc9e1bda32cf0e943e14310ab422ea0))
+- feat(web)!: make lt-sidepanel's anchor and lt-tooltip's placement logical (X5) ([3994ec3](https://github.com/penhold3r/latty-ds/commit/3994ec3cfda8dd3c868dccfad637a5518a62437b))
+- feat(web)!: make lt-table's column align logical, not physical (X5) ([8fa9f93](https://github.com/penhold3r/latty-ds/commit/8fa9f935da2f8c0ab3bd825e3a994ee3b42b9311))
+
+### Features
+
+- **web:** add clearable and counter to lt-textfield ([48e19cd](https://github.com/penhold3r/latty-ds/commit/48e19cd14f04cb25831fd01a9e6d8156f471c5ff))
+- **web:** add i18n labels prop to alert, breadcrumb, chip, dialog, sidepanel, snackbar (X5) ([887e474](https://github.com/penhold3r/latty-ds/commit/887e474abf5720119334d973701685b8a0613482))
+- **web:** add i18n labels prop to calendar (X5) ([341dc1e](https://github.com/penhold3r/latty-ds/commit/341dc1e0cbe409133e5f7133586487c9619d2fe8))
+- **web:** add i18n labels prop to checkbox, color-input, radio, select, switch (X5) ([5baf0b9](https://github.com/penhold3r/latty-ds/commit/5baf0b9be08467777abfb025d6e85783c905f28e))
+- **web:** add i18n labels prop to combobox, date-input, textfield (X5) ([f7e2666](https://github.com/penhold3r/latty-ds/commit/f7e2666788dcb7ffdbe0d3e681441a28eaa03c4a))
+- **web:** add i18n labels prop to pagination (X5) ([822db70](https://github.com/penhold3r/latty-ds/commit/822db70df8d758089472f5564a7e211715cd5c97))
+- **web:** migrate lt-dialog to a native <dialog> element ([dd57141](https://github.com/penhold3r/latty-ds/commit/dd57141a36e39db93e1fb93ba405cf723f54f364))
+- **web:** migrate lt-sidepanel to a native <dialog> element ([e8e96d6](https://github.com/penhold3r/latty-ds/commit/e8e96d6e41c59b2a168f217129eedd894da3504e))
+- **web:** migrate lt-snackbar to a native popover (SNK-6) ([6772135](https://github.com/penhold3r/latty-ds/commit/677213560ccece1d71437a7b1018595ebfea5156))
+- **web:** use native-shaped event names ([afcf232](https://github.com/penhold3r/latty-ds/commit/afcf2327d18e1a892ef9ac4a870ffbe330e0ee6f))
+- **web:** warn in development when a component is missing its accessible name ([16ccc38](https://github.com/penhold3r/latty-ds/commit/16ccc387edd49d27ef4d785de83b8d46c20ba85c))
+
+### BREAKING CHANGES
+
+- lt-select's value is now typed string | string[]. Code that
+  reads select.value as a string needs to narrow it, or read the change event's
+  detail.value. Single-select behaviour is unchanged.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+- SidePanelAnchor changes from 'left' | 'right' | 'top' |
+  'bottom' to 'start' | 'end' | 'top' | 'bottom'; TooltipPlacement changes
+  from 'top' | 'bottom' | 'left' | 'right' to 'top' | 'bottom' | 'start' |
+  'end'. Per user decision: both previously meant a fixed physical side
+  regardless of reading direction. anchor='start'/placement='start' now
+  resolve to the left edge in LTR and the right edge in RTL (and vice versa
+  for 'end'), matching every other RTL-aware convention in this batch.
+
+lt-tooltip needed no JavaScript changes at all — every property its
+start/end placements need (inset-inline-_, border-inline-_-color) already
+has a real CSS logical-property equivalent, unlike lt-sidepanel/box-shadow
+below.
+
+lt-sidepanel's positioning (inset-inline-start/end) is the same story, but
+its off-screen slide transform and box-shadow offset are not expressible
+as logical properties at all — translateX() and box-shadow take raw
+lengths with no "which side" semantic. Solved with two CSS custom
+properties (--\_start-x/--\_end-x for the transform sign, --\_dir-sign for
+the shadow offset) defined once under :host and flipped under
+:host(:dir(rtl)) — sidepanel.ts's \_offScreenTransform getter references
+these by name instead of hardcoding a literal sign, so the component
+itself never reads computed direction; the existing anchor-change JS
+(snapping to the off-screen position without a transition) needed no
+other changes, since it already just reads this same getter.
+
+Live-verified in real Chromium, both LTR and the page's actual
+`direction: rtl` (not merely attribute-syntax — confirmed via
+getComputedStyle): sidepanel's position, slide direction and box-shadow
+side all correctly flip for both anchor values; tooltip's bubble position
+and arrow direction (border-inline-\*-color) both correctly flip for both
+placement values. Not re-verified: hot-swapping anchor on an already-open
+panel while direction is rtl — this exercises the same
+requestAnimationFrame-deferred cleanup this session has repeatedly found
+unreliable to observe through this specific browser-automation tool (not
+a mechanism this change altered); the primary use case (anchor set once,
+then opened) is what's confirmed above.
+
+Updated every consumer: docs pages (sidepanel.mdx, tooltip.mdx), the
+agents/ context pack's prop-vocabulary table (per CLAUDE.md), and both
+packages' test suites.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01VVmMnZua36PpJGtPtgA6T8
+
+- CellAlign changes from 'left' | 'center' | 'right' to
+  'start' | 'center' | 'end'. Per user decision: numeric/currency columns
+  using align should flip to the reading-end side in RTL rather than staying
+  pinned to a physical edge, consistent with the rest of this component's
+  own default alignment (already converted to text-align: start in the
+  RTL logical-properties pass, 7aa24cb).
+
+Renamed the data-align attribute values and their CSS selectors
+(th/td[data-align='right'] -> [data-align='end'], text-align: right ->
+end) to match, and updated every internal consumer: table.ts's default
+fallback, its own JSDoc example, the table test suite, and the docs site's
+SpacingTable (a real lt-table consumer using align: 'right' for its
+numeric step column — not caught by typechecking since its columns ref is
+typed unknown[], so needed a manual sweep). Live-verified: an 'end'-
+aligned column still renders right-aligned in today's LTR-only pages.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01VVmMnZua36PpJGtPtgA6T8
+
 ## [0.10.4](https://github.com/penhold3r/latty-ds/compare/v0.10.3...v0.10.4) (2026-09-26)
 
 ### Bug Fixes

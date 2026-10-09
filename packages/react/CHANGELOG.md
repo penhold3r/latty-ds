@@ -3,6 +3,82 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/penhold3r/latty-ds/compare/v0.10.4...v1.0.0) (2026-10-09)
+
+### Bug Fixes
+
+- **react:** assign array/object props via ref instead of JSX attributes (X7) ([ac9e402](https://github.com/penhold3r/latty-ds/commit/ac9e402554c74f06bf6be47738e131882e11192f))
+- **web:** close out the keyboard/ARIA batch (radio, dropdown, combobox, tabs) ([72f216c](https://github.com/penhold3r/latty-ds/commit/72f216c14aee8fb2ec3cdea4de821b19b97506d4))
+- **web:** derive lt-calendar/lt-date-input week-start from locale (X5) ([e90a337](https://github.com/penhold3r/latty-ds/commit/e90a337cd2c7213fd094f9596eadd115970f0df4))
+- **web:** finish the audit's robustness batch (alert, progress, table) ([4d32ffd](https://github.com/penhold3r/latty-ds/commit/4d32ffd58ea9163197ba15f609a95b66b28bd3eb))
+- **web:** fix lt-button's form association, add name/value/formaction ([c0b0c8a](https://github.com/penhold3r/latty-ds/commit/c0b0c8afab76c6b33f8eceb71d2b74fd20604194))
+- **web:** rename lt-dialog/lt-alert's title prop to heading ([b6186c1](https://github.com/penhold3r/latty-ds/commit/b6186c10d3ba87b80758c119f8237f5d2ab08d8b))
+
+- feat(web)!: make lt-select's value an array when multiple is set ([0dba3b7](https://github.com/penhold3r/latty-ds/commit/0dba3b71cdc9e1bda32cf0e943e14310ab422ea0))
+- feat(web)!: make lt-sidepanel's anchor and lt-tooltip's placement logical (X5) ([3994ec3](https://github.com/penhold3r/latty-ds/commit/3994ec3cfda8dd3c868dccfad637a5518a62437b))
+
+### Features
+
+- **react:** pass the event to every wrapper handler ([75253cc](https://github.com/penhold3r/latty-ds/commit/75253cc93bbbd319cf9a6b9bddc00c056d2da7a2))
+- **web:** add clearable and counter to lt-textfield ([48e19cd](https://github.com/penhold3r/latty-ds/commit/48e19cd14f04cb25831fd01a9e6d8156f471c5ff))
+- **web:** add i18n labels prop to alert, breadcrumb, chip, dialog, sidepanel, snackbar (X5) ([887e474](https://github.com/penhold3r/latty-ds/commit/887e474abf5720119334d973701685b8a0613482))
+- **web:** add i18n labels prop to calendar (X5) ([341dc1e](https://github.com/penhold3r/latty-ds/commit/341dc1e0cbe409133e5f7133586487c9619d2fe8))
+- **web:** add i18n labels prop to checkbox, color-input, radio, select, switch (X5) ([5baf0b9](https://github.com/penhold3r/latty-ds/commit/5baf0b9be08467777abfb025d6e85783c905f28e))
+- **web:** add i18n labels prop to combobox, date-input, textfield (X5) ([f7e2666](https://github.com/penhold3r/latty-ds/commit/f7e2666788dcb7ffdbe0d3e681441a28eaa03c4a))
+- **web:** add i18n labels prop to pagination (X5) ([822db70](https://github.com/penhold3r/latty-ds/commit/822db70df8d758089472f5564a7e211715cd5c97))
+
+### BREAKING CHANGES
+
+- lt-select's value is now typed string | string[]. Code that
+  reads select.value as a string needs to narrow it, or read the change event's
+  detail.value. Single-select behaviour is unchanged.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+
+- SidePanelAnchor changes from 'left' | 'right' | 'top' |
+  'bottom' to 'start' | 'end' | 'top' | 'bottom'; TooltipPlacement changes
+  from 'top' | 'bottom' | 'left' | 'right' to 'top' | 'bottom' | 'start' |
+  'end'. Per user decision: both previously meant a fixed physical side
+  regardless of reading direction. anchor='start'/placement='start' now
+  resolve to the left edge in LTR and the right edge in RTL (and vice versa
+  for 'end'), matching every other RTL-aware convention in this batch.
+
+lt-tooltip needed no JavaScript changes at all — every property its
+start/end placements need (inset-inline-_, border-inline-_-color) already
+has a real CSS logical-property equivalent, unlike lt-sidepanel/box-shadow
+below.
+
+lt-sidepanel's positioning (inset-inline-start/end) is the same story, but
+its off-screen slide transform and box-shadow offset are not expressible
+as logical properties at all — translateX() and box-shadow take raw
+lengths with no "which side" semantic. Solved with two CSS custom
+properties (--\_start-x/--\_end-x for the transform sign, --\_dir-sign for
+the shadow offset) defined once under :host and flipped under
+:host(:dir(rtl)) — sidepanel.ts's \_offScreenTransform getter references
+these by name instead of hardcoding a literal sign, so the component
+itself never reads computed direction; the existing anchor-change JS
+(snapping to the off-screen position without a transition) needed no
+other changes, since it already just reads this same getter.
+
+Live-verified in real Chromium, both LTR and the page's actual
+`direction: rtl` (not merely attribute-syntax — confirmed via
+getComputedStyle): sidepanel's position, slide direction and box-shadow
+side all correctly flip for both anchor values; tooltip's bubble position
+and arrow direction (border-inline-\*-color) both correctly flip for both
+placement values. Not re-verified: hot-swapping anchor on an already-open
+panel while direction is rtl — this exercises the same
+requestAnimationFrame-deferred cleanup this session has repeatedly found
+unreliable to observe through this specific browser-automation tool (not
+a mechanism this change altered); the primary use case (anchor set once,
+then opened) is what's confirmed above.
+
+Updated every consumer: docs pages (sidepanel.mdx, tooltip.mdx), the
+agents/ context pack's prop-vocabulary table (per CLAUDE.md), and both
+packages' test suites.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01VVmMnZua36PpJGtPtgA6T8
+
 ## [0.10.4](https://github.com/penhold3r/latty-ds/compare/v0.10.3...v0.10.4) (2026-09-26)
 
 **Note:** Version bump only for package @latty-ds/react

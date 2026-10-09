@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/penhold3r/latty-ds/compare/v0.10.4...v1.0.0) (2026-10-09)
+
+### Features
+
+- **tokens:** add motion, z-index, border-input, and focus-ring tokens ([2a4aae7](https://github.com/penhold3r/latty-ds/commit/2a4aae788a9b316bebb44bedc879e5c5085ecc7f))
+- **tokens:** pick on-colors and interactive fills from the palette by contrast ([7b80911](https://github.com/penhold3r/latty-ds/commit/7b8091153460e23111900977e5a9cbddf9ae36d6))
+
 ## [0.10.4](https://github.com/penhold3r/latty-ds/compare/v0.10.3...v0.10.4) (2026-09-26)
 
 ### Bug Fixes

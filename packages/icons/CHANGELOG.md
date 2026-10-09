@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/penhold3r/latty-ds/compare/v0.10.4...v1.0.0) (2026-10-09)
+
+### Bug Fixes
+
+- **icons:** fix Node ESM resolution with explicit .js extensions (X7) ([46c765d](https://github.com/penhold3r/latty-ds/commit/46c765d290b34b31a0702eaac0b352af2c563ac9))
+- **icons:** load a missing icon once instead of twice ([07f225d](https://github.com/penhold3r/latty-ds/commit/07f225dce136c18890ae0777da7d3ca55527f4d7))
+
 ## [0.10.4](https://github.com/penhold3r/latty-ds/compare/v0.10.3...v0.10.4) (2026-09-26)
 
 **Note:** Version bump only for package @latty-ds/icons
