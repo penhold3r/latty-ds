@@ -10,6 +10,12 @@ npm install @latty-ds/tokens @latty-ds/web
 yarn add @latty-ds/tokens @latty-ds/web
 ```
 
+If using standalone `<lt-icon>` elements directly or custom icon registration:
+
+```bash
+pnpm add @latty-ds/icons
+```
+
 ## Load the tokens
 
 Both CSS files must be loaded before any components render — import them once at the app's entry point.
@@ -18,18 +24,25 @@ Both CSS files must be loaded before any components render — import them once 
 // JS / bundler
 import '@latty-ds/tokens/tokens.css';
 import '@latty-ds/tokens/semantic.css';
+
+// Optional: Latty sensible HTML baseline / reset
+import '@latty-ds/web/css/latty.css';
 ```
 
 ```css
 /* CSS @import */
 @import '@latty-ds/tokens/tokens.css';
 @import '@latty-ds/tokens/semantic.css';
+
+/* Optional baseline */
+@import '@latty-ds/web/css/latty.css';
 ```
 
 ```html
 <!-- Plain HTML, no bundler -->
 <link rel="stylesheet" href="node_modules/@latty-ds/tokens/dist/tokens.css" />
 <link rel="stylesheet" href="node_modules/@latty-ds/tokens/dist/semantic.css" />
+<link rel="stylesheet" href="node_modules/@latty-ds/web/dist/css/latty.css" />
 ```
 
 ## Register components
@@ -64,3 +77,4 @@ All packages ship with `.d.ts` files — no extra setup needed.
 
 - [`usage.md`](./usage.md) — start using components
 - [`theming.md`](./theming.md) — customize the look and feel
+- [`SKILL.md`](./SKILL.md) — review agent skill guidelines and gotchas

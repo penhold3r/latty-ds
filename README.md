@@ -103,6 +103,7 @@ The [`agents/`](agents) directory is a self-contained context pack for AI coding
 | File                       | Covers                                                       |
 | -------------------------- | ------------------------------------------------------------ |
 | `agents/README.md`         | Entry point — what's in the pack and how to use it           |
+| `agents/SKILL.md`          | Agent skill entry point with YAML frontmatter                |
 | `agents/installation.md`   | Installing packages and registering components               |
 | `agents/usage.md`          | Vanilla/React/Vue/Svelte usage, slots, events, forms         |
 | `agents/theming.md`        | `configure()`/`createStyleSheet()`, colors, fonts, dark mode |

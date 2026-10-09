@@ -86,7 +86,7 @@ import { Button, Dialog } from '@latty-ds/react';
 export function ConfirmDialog({ onConfirm }: { onConfirm: () => void }) {
   return (
     <Dialog heading="Are you sure?">
-      <Button slot="footer" variant="danger" onClick={onConfirm}>
+      <Button slot="footer" variant="error" onClick={onConfirm}>
         Delete
       </Button>
     </Dialog>
@@ -161,7 +161,7 @@ The most common named slot is `trigger` on `lt-dropdown` — any element placed 
 
 ```html
 <lt-dropdown>
-  <lt-icon-button slot="trigger" name="more-horiz" label="Options"></lt-icon-button>
+  <lt-icon-button slot="trigger" icon="more-horiz" label="Options"></lt-icon-button>
   <lt-dropdown-item>Edit</lt-dropdown-item>
   <lt-dropdown-item>Delete</lt-dropdown-item>
 </lt-dropdown>
@@ -174,7 +174,7 @@ The most common named slot is `trigger` on `lt-dropdown` — any element placed 
   Are you sure you want to permanently delete this item?
   <div slot="footer">
     <lt-button appearance="outlined" id="cancel-btn">Cancel</lt-button>
-    <lt-button variant="danger" id="confirm-btn">Delete</lt-button>
+    <lt-button variant="error" id="confirm-btn">Delete</lt-button>
   </div>
 </lt-dialog>
 ```
@@ -185,7 +185,7 @@ Components that expose slots list them in `custom-elements.json`. Omitting a nam
 
 Some components are parent/child pairs. The parent manages shared state; child elements are slotted in as its content.
 
-**Tabs** — `lt-tab-group` owns the active tab state via its `value` prop. Each `lt-tab` declares its own value, and panel content is slotted with a matching `data-value`:
+**Tabs** — `lt-tab-group` owns the active tab state via its `value` prop. Each `lt-tab` declares its own value, and panel content can be provided using `<lt-tab-panel slot="panel" value="...">` (or a plain element with `slot="panel" data-value="..."`):
 
 ```html
 <lt-tab-group value="profile">
@@ -193,9 +193,9 @@ Some components are parent/child pairs. The parent manages shared state; child e
   <lt-tab label="Settings" value="settings" icon-start="settings"></lt-tab>
   <lt-tab label="Billing" value="billing" icon-start="credit-card"></lt-tab>
 
-  <div slot="panel" data-value="profile">Profile content here</div>
-  <div slot="panel" data-value="settings">Settings content here</div>
-  <div slot="panel" data-value="billing">Billing content here</div>
+  <lt-tab-panel slot="panel" value="profile">Profile content here</lt-tab-panel>
+  <lt-tab-panel slot="panel" value="settings">Settings content here</lt-tab-panel>
+  <lt-tab-panel slot="panel" value="billing">Billing content here</lt-tab-panel>
 </lt-tab-group>
 
 <script type="module">
@@ -352,3 +352,4 @@ A common gotcha: `element.setAttribute('disabled', false)` does not disable the 
 - [`theming.md`](./theming.md) — customize tokens to match your brand
 - [`components.md`](./components.md) — explore the full component catalog
 - [`decision-guide.md`](./decision-guide.md) — pick the right component for a task
+- [`SKILL.md`](./SKILL.md) — review agent skill guidelines and gotchas

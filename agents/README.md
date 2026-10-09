@@ -8,13 +8,14 @@ This pack covers the design system from a **consumer's** perspective — install
 
 - `@latty-ds/tokens` — design tokens (CSS variables, JSON, JS) and the `configure()`/`createStyleSheet()` theming API
 - `@latty-ds/web` — the Web Components themselves (Lit-based, `lt-*` custom elements)
-- `@latty-ds/icons` — icon components
+- `@latty-ds/icons` — icon components (`lt-icon` and icon registry)
 - `@latty-ds/react` — typed React wrappers around `@latty-ds/web`
 
 ## Files in this pack
 
 | File                                       | Load this when you need to...                                                                         |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| [`SKILL.md`](./SKILL.md)                   | Agent skill entry point with YAML frontmatter for agent skill discovery                               |
 | [`installation.md`](./installation.md)     | Add Latty to a project for the first time                                                             |
 | [`usage.md`](./usage.md)                   | Use components in vanilla HTML, a bundler, React, Vue, or Svelte; understand slots, events, forms     |
 | [`theming.md`](./theming.md)               | Change brand colors, fonts, border radius/width, or switch light/dark theme                           |
@@ -28,4 +29,4 @@ This pack is orientation and decision-making context — it is deliberately not 
 
 - **Per-component props, slots, and events**: `node_modules/@latty-ds/web/custom-elements.json` (Custom Elements Manifest format) ships with the package.
 - **Token names and values**: `node_modules/@latty-ds/tokens/dist/tokens.json` and `tokens.css`.
-- **Full docs site**: the published documentation site covers every component in depth with live examples.
+- **Full docs site**: the published documentation site covers every component in depth with live examples (https://latty-ds.com).

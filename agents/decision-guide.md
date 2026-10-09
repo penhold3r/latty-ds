@@ -37,38 +37,42 @@ Organized by UI intent rather than alphabetically. See [`components.md`](./compo
 
 ## Navigation
 
-| Need                                                      | Component                 | Notes                                                                               |
-| --------------------------------------------------------- | ------------------------- | ----------------------------------------------------------------------------------- |
-| App-level sidebar navigation, possibly with nested groups | `lt-nav` / `lt-nav-item`  | Nested `lt-nav-item`s collapse inline (vertical) or open as a dropdown (horizontal) |
-| Switching between sections of content on the same page    | `lt-tab-group` / `lt-tab` | Panels are slotted with a matching `data-value`                                     |
-| Showing where the user is in a hierarchy                  | `lt-breadcrumb`           |                                                                                     |
-| Navigating pages of a data set                            | `lt-pagination`           | Includes ellipsis windowing for long page counts                                    |
+| Need                                                      | Component                                  | Notes                                                                               |
+| --------------------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------- |
+| App-level sidebar navigation, possibly with nested groups | `lt-nav` / `lt-nav-item`                   | Nested `lt-nav-item`s collapse inline (vertical) or open as a dropdown (horizontal) |
+| Switching between sections of content on the same page    | `lt-tab-group` / `lt-tab` / `lt-tab-panel` | Panels use `<lt-tab-panel slot="panel" value="...">` or slotted `data-value`        |
+| Showing where the user is in a hierarchy                  | `lt-breadcrumb` / `lt-breadcrumb-item`     | Hierarchical trail with configurable separators                                     |
+| Navigating pages of a data set                            | `lt-pagination`                            | Includes ellipsis windowing for long page counts                                    |
+| An inline navigation link or anchor                       | `lt-link`                                  | Styled with design system typography and interactive focus/hover states             |
 
 ## Overlays
 
-| Need                                                            | Component      | Notes                                                                   |
-| --------------------------------------------------------------- | -------------- | ----------------------------------------------------------------------- |
-| A confirmation or focused task that blocks the rest of the page | `lt-dialog`    | Modal; named `footer` slot for actions                                  |
-| A menu anchored to a trigger element                            | `lt-dropdown`  | Trigger is a slotted element (`slot="trigger"`)                         |
-| A short, non-interactive hint on hover/focus                    | `lt-tooltip`   | Not for interactive content — use `lt-dropdown` or `lt-dialog` for that |
-| A larger panel of content sliding in from an edge               | `lt-sidepanel` | Anchored `left` or `right`                                              |
+| Need                                                            | Component                          | Notes                                                                   |
+| --------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------- |
+| A confirmation or focused task that blocks the rest of the page | `lt-dialog`                        | Modal; named `footer` slot for actions                                  |
+| A menu anchored to a trigger element                            | `lt-dropdown` / `lt-dropdown-item` | Trigger is a slotted element (`slot="trigger"`)                         |
+| A short, non-interactive hint on hover/focus                    | `lt-tooltip`                       | Not for interactive content — use `lt-dropdown` or `lt-dialog` for that |
+| A larger panel of content sliding in from an edge               | `lt-sidepanel`                     | Anchored `left` or `right`                                              |
 
 ## Layout and containers
 
-| Need                                                        | Component    | Notes                                                                                                   |
-| ----------------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------- |
-| An elevated container for a card, panel, or layered section | `lt-surface` | Provides background, elevation (shadow), and border-radius — prefer this over hand-rolled container CSS |
-| A visual separator between sections                         | `lt-divider` | Horizontal or vertical, solid/dashed/dotted                                                             |
-| A top app bar                                               | `lt-header`  | Title, navigation, and action slots                                                                     |
+| Need                                                        | Component      | Notes                                                                                                   |
+| ----------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------- |
+| An elevated container for a card, panel, or layered section | `lt-surface`   | Provides background, elevation (shadow), and border-radius — prefer this over hand-rolled container CSS |
+| Collapsible section or FAQ accordion panels                 | `lt-accordion` | Native details/summary behavior with animated smooth expansion and chevron                              |
+| A visual separator between sections                         | `lt-divider`   | Horizontal or vertical, solid/dashed/dotted                                                             |
+| A top app bar                                               | `lt-header`    | Title, navigation, and action slots                                                                     |
 
 ## Data display
 
-| Need                      | Component                  | Notes                                                |
-| ------------------------- | -------------------------- | ---------------------------------------------------- |
-| Tabular data with sorting | `lt-table`                 | Supports sortable columns, striped rows, hover state |
-| A vertical list of items  | `lt-list` / `lt-list-item` | Supports icons, dividers, and marker options         |
-| A user or entity image    | `lt-avatar`                | Falls back to initials if no image                   |
-| A responsive image        | `lt-image`                 | Lazy loading + aspect-ratio control built in         |
+| Need                                                       | Component                  | Notes                                                |
+| ---------------------------------------------------------- | -------------------------- | ---------------------------------------------------- |
+| Tabular data with sorting                                  | `lt-table`                 | Supports sortable columns, striped rows, hover state |
+| A vertical list of items                                   | `lt-list` / `lt-list-item` | Supports icons, dividers, and marker options         |
+| Typography for headings, subheadings, body text, or labels | `lt-text`                  | Semantic type scale with variant-based font handling |
+| Standalone vector icon                                     | `lt-icon`                  | Vector icon from `@latty-ds/icons` registry          |
+| A user or entity image                                     | `lt-avatar`                | Falls back to initials if no image                   |
+| A responsive image                                         | `lt-image`                 | Lazy loading + aspect-ratio control built in         |
 
 ## Actions
 
@@ -76,3 +80,9 @@ Organized by UI intent rather than alphabetically. See [`components.md`](./compo
 | ------------------- | ---------------- | ----------------------------------------------------------- |
 | A labeled action    | `lt-button`      | Participates in native form submission with `type="submit"` |
 | An icon-only action | `lt-icon-button` | Square or circular; always pair with an accessible `label`  |
+
+## Next
+
+- [`components.md`](./components.md) — see the full component catalog
+- [`patterns.md`](./patterns.md) — see real multi-component recipes
+- [`SKILL.md`](./SKILL.md) — review agent skill guidelines and gotchas

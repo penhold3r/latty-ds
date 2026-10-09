@@ -103,14 +103,22 @@ configure({
 });
 ```
 
-No manual CSS selectors needed — every heading automatically picks up the heading font, body text stays on `family`.
+No manual CSS selectors needed — every `lt-text` heading automatically picks up the heading font, body text stays on `family`. For raw HTML headings outside Latty components:
 
 ```css
 h1,
 h2,
 h3 {
-  font-family: var(--lt-typography-fontFamilySecondary);
+  font-family: var(--lt-typography-fontFamilyHeading);
 }
+```
+
+### Flattening elevations (flat / brutalist themes)
+
+`elevation: 'none'` flattens every `--lt-elevation-N` token (box-shadow) to `none` in one call, instead of overriding each level individually:
+
+```ts
+configure({ elevation: 'none' });
 ```
 
 ### SSR
@@ -252,3 +260,10 @@ export default function RootLayout({ children }) {
 ```
 
 Tokens are inlined server-side so there is no flash. Theme toggling with `data-theme` still works client-side as described above.
+
+## Next
+
+- [`components.md`](./components.md) — explore the full component catalog
+- [`decision-guide.md`](./decision-guide.md) — pick the right component for a task
+- [`patterns.md`](./patterns.md) — see multi-component composition examples
+- [`SKILL.md`](./SKILL.md) — review agent skill guidelines and gotchas

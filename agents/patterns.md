@@ -86,3 +86,10 @@ Plain container (no `lt-surface` needed — this is a full-width state, not a ca
 - **Spacing uses token custom properties** (`var(--lt-spacing-4)`, etc.) rather than hardcoded pixel values, so layouts stay consistent with the rest of the theme and respond to `configure()` overrides.
 - **Muted/secondary text** uses `color: var(--lt-text-subtle)` (or the `text-muted` utility class on the docs site) rather than a hardcoded gray.
 - **React equivalents**: every tag maps 1:1 to a `@latty-ds/react` component with the same name in PascalCase and camelCase props (`full-width` → `fullWidth`, `icon-start` → `iconStart`). See [`installation.md`](./installation.md) and [`usage.md`](./usage.md) for the wrapper setup.
+- **Icon elements**: `<lt-icon>` custom element is provided by `@latty-ds/icons` and registered automatically when importing `@latty-ds/web` components that use icons.
+
+## Next
+
+- [`decision-guide.md`](./decision-guide.md) — choose components for your task
+- [`theming.md`](./theming.md) — customize tokens and palettes
+- [`SKILL.md`](./SKILL.md) — review agent skill guidelines and gotchas
