@@ -2,7 +2,7 @@
 
 > A lattice is an invisible grid that gives things their shape. Latty is that grid for your product.
 
-![Version](https://img.shields.io/badge/version-0.1.0-6C4DE6) ![License](https://img.shields.io/badge/license-MIT-22c55e) ![Node](https://img.shields.io/badge/node-%E2%89%A524-339933?logo=nodedotjs&logoColor=white) ![Built with Lit](https://img.shields.io/badge/built_with-Lit-324FFF?logo=lit&logoColor=white) ![pnpm workspace](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white) ![Web Components](https://img.shields.io/badge/Web_Components-lt--*-e11d48?logo=webcomponentsdotorg&logoColor=white)
+![Version](https://img.shields.io/badge/version-1.0.0-6C4DE6) ![License](https://img.shields.io/badge/license-MIT-22c55e) ![Node](https://img.shields.io/badge/node-%E2%89%A524-339933?logo=nodedotjs&logoColor=white) ![Built with Lit](https://img.shields.io/badge/built_with-Lit-324FFF?logo=lit&logoColor=white) ![pnpm workspace](https://img.shields.io/badge/pnpm-workspace-F69220?logo=pnpm&logoColor=white) ![Web Components](https://img.shields.io/badge/Web_Components-lt--*-e11d48?logo=webcomponentsdotorg&logoColor=white)
 
 Framework-agnostic design system built on design tokens and Web Components. One token change cascades through every component in every framework — no re-theming, no duplication.
 
