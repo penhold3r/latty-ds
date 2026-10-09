@@ -23,32 +23,39 @@ import useBrokenLinks from '@docusaurus/useBrokenLinks';
 // validation and the TOC sidebar's scroll-spy depend on — so both keep
 // working exactly as they did with plain h1-h6.
 //
-// `lt-text`'s `as` prop (decoupled from `variant`) is what makes this
-// possible without losing document outline/semantics: `variant="h2" as="h2"`
-// renders a real `<h2>` inside lt-text's shadow DOM, so this is additive
-// (real styling from the design system) rather than a semantic downgrade.
-interface HeadingProps {
-  as: React.ElementType;
+// Rendering the heading tag `As` (`h1`..`h6`) on the outside with `<lt-text
+// variant={variant} as="span">` inside preserves real heading semantics in
+// static SSR HTML — essential for screen readers, web crawlers, and offline
+// search indexers (like `docusaurus-lunr-search`, which scans static HTML for
+// `h1` and `h2`/`h3` nodes) — while continuing to style every heading directly
+// through Latty's design tokens and typography component.
+type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
+interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  as?: HeadingTag | React.ElementType;
   id?: string;
   children?: React.ReactNode;
   className?: string;
   [key: string]: unknown;
 }
 
-const HEADING_VARIANTS = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+const HEADING_VARIANTS = new Set<HeadingTag>(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
 
-export default function Heading({ as: As, id, children, className, ...props }: HeadingProps): JSX.Element {
+export default function Heading({ as: As = 'h2', id, children, className, ...props }: HeadingProps): JSX.Element {
   const brokenLinks = useBrokenLinks();
   const anchorTargetClassName = useAnchorTargetClassName(id);
-  const tag = typeof As === 'string' ? As : 'h2';
-  const variant = HEADING_VARIANTS.has(tag) ? tag : 'h2';
+  const tag: HeadingTag = typeof As === 'string' && HEADING_VARIANTS.has(As as HeadingTag) ? (As as HeadingTag) : 'h2';
+  const variant = tag;
+  const Tag = tag;
 
   // H1 headings do not need an id because they don't appear in the TOC.
-  if (As === 'h1' || !id) {
+  if (tag === 'h1' || !id) {
     return (
-      <lt-text variant={variant} as={tag} class={className} {...props}>
-        {children}
-      </lt-text>
+      <Tag className={className} {...props}>
+        <lt-text variant={variant} as="span">
+          {children}
+        </lt-text>
+      </Tag>
     );
   }
 
@@ -63,11 +70,13 @@ export default function Heading({ as: As, id, children, className, ...props }: H
   );
 
   return (
-    <lt-text variant={variant} as={tag} id={id} class={clsx('anchor', anchorTargetClassName, className)} {...props}>
-      {children}
+    <Tag id={id} className={clsx('anchor', anchorTargetClassName, className)} {...props}>
+      <lt-text variant={variant} as="span">
+        {children}
+      </lt-text>
       <Link className="hash-link" to={`#${id}`} aria-label={anchorTitle} title={anchorTitle} translate="no">
         &#8203;
       </Link>
-    </lt-text>
+    </Tag>
   );
 }

@@ -23,3 +23,13 @@ declare module 'react' {
     }
   }
 }
+
+declare module '@theme/SearchBar' {
+  import type { ReactNode } from 'react';
+  export interface Props {
+    readonly handleSearchBarToggle?: (expanded: boolean) => void;
+    readonly isSearchBarExpanded?: boolean;
+    readonly autoFocus?: boolean;
+  }
+  export default function SearchBar(props?: Props): ReactNode;
+}

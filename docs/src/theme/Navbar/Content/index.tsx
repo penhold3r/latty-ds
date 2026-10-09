@@ -4,6 +4,7 @@ import { ThemeClassNames, useColorMode } from '@docusaurus/theme-common';
 import { useNavbarMobileSidebar } from '@docusaurus/theme-common/internal';
 import NavbarMobileSidebarToggle from '@theme/Navbar/MobileSidebar/Toggle';
 import NavbarLogo from '@theme/Navbar/Logo';
+import SearchBar from '@theme/SearchBar';
 // Reads the repo-root lerna.json for the version badge — same pattern the
 // Astro site's BaseLayout uses (root-level version metadata, not another
 // workspace package's src, so this isn't the cross-package relative import
@@ -32,6 +33,7 @@ export default function NavbarContent(): JSX.Element {
         <NavbarLogo />
       </div>
       <div className={clsx(ThemeClassNames.layout.navbar.containerRight, 'navbar__items navbar__items--right')}>
+        <SearchBar />
         <lt-badge class="navbar__version-badge" content={version} variant="neutral" appearance="filled" size="sm" />
         <lt-icon-button
           class="navbar__header-btn"

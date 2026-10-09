@@ -215,3 +215,138 @@ lt-snackbar > p {
 .markdown lt-text > p {
   font: inherit;
 }
+
+/* When lt-text is rendered inside a heading tag (src/theme/Heading), let the
+   heading tag control block margins rather than stacking duplicate margins. */
+:is(h1, h2, h3, h4, h5, h6) > lt-text {
+  margin: 0;
+}
+
+/* ── Offline Search (docusaurus-lunr-search) ─────────────────────────────── */
+
+.navbar__search {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-right: var(--lt-spacing-2, 0.5rem);
+}
+
+.navbar__search-input {
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
+  font-size: 0.8125rem;
+  height: 32px;
+  width: 170px;
+  padding: 0 0.75rem 0 2rem;
+  border-radius: var(--lt-border-radius-full, 9999px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--lt-text-on-primary, #ffffff);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10.5' cy='10.5' r='5.5' stroke='white' stroke-opacity='0.75' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M15 15L20.5 20.5' stroke='white' stroke-opacity='0.75' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 8px center;
+  background-size: 16px 16px;
+  outline: none;
+  transition:
+    width 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.navbar__search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.navbar__search-input:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.navbar__search-input:focus {
+  width: 220px;
+  background-color: var(--lt-bg-surface, #ffffff);
+  color: var(--lt-text-default, #1e293b);
+  border-color: var(--lt-color-primary-500, #ff8200);
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10.5' cy='10.5' r='5.5' stroke='%23ff8200' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M15 15L20.5 20.5' stroke='%23ff8200' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.navbar__search-input:focus::placeholder {
+  color: var(--lt-text-subtle, #94a3b8);
+}
+
+.navbar__search-input:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Autocomplete suggestions dropdown styling matching Latty tokens */
+html .algolia-autocomplete .ds-dropdown-menu {
+  background: var(--lt-bg-surface);
+  border: 1px solid var(--lt-border-default);
+  border-radius: var(--lt-border-radius-lg, 8px);
+  box-shadow: var(--lt-shadow-lg, 0 10px 25px -5px rgba(0, 0, 0, 0.2));
+  overflow: hidden;
+}
+
+html .algolia-autocomplete .ds-dropdown-menu:before {
+  background: var(--lt-bg-surface);
+  border-top: 1px solid var(--lt-border-default);
+  border-right: 1px solid var(--lt-border-default);
+}
+
+html .algolia-autocomplete .algolia-docsearch-suggestion--wrapper {
+  background: var(--lt-bg-surface);
+}
+
+html .algolia-autocomplete .algolia-docsearch-suggestion--category-header {
+  background: var(--lt-bg-muted);
+  color: var(--lt-text-muted);
+  font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+html .algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column {
+  color: var(--lt-text-secondary);
+  font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
+}
+
+html .algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column:before,
+html .algolia-autocomplete .algolia-docsearch-suggestion--content:before {
+  background: var(--lt-border-default);
+}
+
+html .algolia-autocomplete .algolia-docsearch-suggestion--title {
+  color: var(--lt-text-default);
+  font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
+}
+
+html .algolia-autocomplete .algolia-docsearch-suggestion--text {
+  color: var(--lt-text-secondary);
+  font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
+}
+
+html .algolia-autocomplete .algolia-docsearch-suggestion--highlight {
+  background-color: var(--lt-color-primary-100);
+  color: var(--lt-color-primary-800);
+}
+
+html[data-theme='dark'] .algolia-autocomplete .algolia-docsearch-suggestion--highlight {
+  background-color: var(--lt-color-primary-900);
+  color: var(--lt-color-primary-200);
+}
+
+html .algolia-autocomplete .ds-cursor .algolia-docsearch-suggestion--wrapper {
+  background: var(--lt-bg-subtle);
+  box-shadow: inset -3px 0 0 var(--lt-color-primary-500);
+}
+
+html .algolia-autocomplete .algolia-docsearch-footer {
+  background: var(--lt-bg-muted);
+  border-top: 1px solid var(--lt-border-default);
+}

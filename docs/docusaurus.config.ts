@@ -47,7 +47,16 @@ const config: Config = {
 
   clientModules: [require.resolve('./src/clientModules/registerLatty.ts')],
 
-  plugins: [relaxLattyIconsEsmResolution],
+  plugins: [
+    relaxLattyIconsEsmResolution,
+    [
+      require.resolve('docusaurus-lunr-search'),
+      {
+        languages: ['en'],
+        highlightResult: true
+      }
+    ]
+  ],
 
   url: siteUrl,
   baseUrl: basePath,
