@@ -120,7 +120,7 @@ Claude-Session: https://claude.ai/code/session_01VVmMnZua36PpJGtPtgA6T8
   RTL logical-properties pass, 7aa24cb).
 
 Renamed the data-align attribute values and their CSS selectors
-(th/td[data-align='right'] -> [data-align='end'], text-align: right ->
+(`th/td[data-align='right']` -> `[data-align='end']`, text-align: right ->
 end) to match, and updated every internal consumer: table.ts's default
 fallback, its own JSDoc example, the table test suite, and the docs site's
 SpacingTable (a real lt-table consumer using align: 'right' for its
