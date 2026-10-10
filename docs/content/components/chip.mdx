@@ -25,19 +25,46 @@ Compact pill-shaped labels for tags, filters, status indicators, and attributes.
 <lt-chip variant="primary">Design</lt-chip>
 <lt-chip variant="success" appearance="outlined">Active</lt-chip>
 <lt-chip variant="error" deletable>Urgent</lt-chip>
+
+<!-- Filter chip: clicking toggles selected and dispatches change -->
+
+<lt-chip id="filter-chip" variant="primary" selectable>In stock</lt-chip>
+
+<script>
+  document.getElementById('filter-chip').addEventListener('change', (e) => {
+    console.log('selected:', e.detail.selected);
+  });
+</script>
+
     `}
     react={`
+
 import { Chip } from '@latty-ds/react';
 
 <Chip variant="primary">Design</Chip>
-<Chip variant="success" appearance="outlined">Active</Chip>
-<Chip variant="error" deletable>Urgent</Chip>
+<Chip variant="success" appearance="outlined">
+  Active
+</Chip>
+<Chip variant="error" deletable>
+  Urgent
+</Chip>
+
+{/* Filter chip: clicking toggles selected and dispatches change */}
+
+<Chip variant="primary" selectable onChange={(e) => console.log('selected:', e.detail.selected)}>
+  In stock
+</Chip>
     `}
     vue={`
 <template>
   <lt-chip variant="primary">Design</lt-chip>
   <lt-chip variant="success" appearance="outlined">Active</lt-chip>
   <lt-chip variant="error" deletable>Urgent</lt-chip>
+
+  <!-- Filter chip: clicking toggles selected and dispatches change -->
+
+<lt-chip variant="primary" selectable @change="(e) => (inStock = e.detail.selected)">In stock</lt-chip>
+
 </template>
     `}
   />

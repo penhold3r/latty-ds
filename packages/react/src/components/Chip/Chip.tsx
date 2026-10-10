@@ -1,19 +1,22 @@
 import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Chip as ChipEl } from '@latty-ds/web';
 
-export type ChipProps = HTMLAttributes<ChipEl> & {
+export type ChipProps = Omit<HTMLAttributes<ChipEl>, 'onChange'> & {
   appearance?: ChipEl['appearance'];
   variant?: ChipEl['variant'];
   size?: ChipEl['size'];
   disabled?: boolean;
   deletable?: boolean;
+  selectable?: boolean;
+  selected?: boolean;
   background?: string;
   labels?: ChipEl['labels'];
   onDelete?: (event: CustomEvent) => void;
+  onChange?: (event: CustomEvent<{ selected: boolean }>) => void;
 };
 
 export const Chip = forwardRef<ChipEl, ChipProps>(function Chip(
-  { onDelete, labels, children, ...props },
+  { onDelete, onChange, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<ChipEl>(null);
@@ -27,6 +30,13 @@ export const Chip = forwardRef<ChipEl, ChipProps>(function Chip(
     el.addEventListener('delete', h);
     return () => el.removeEventListener('delete', h);
   }, [onDelete]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onChange) return;
+    const h = (ev: Event) => onChange!(ev as CustomEvent<{ selected: boolean }>);
+    el.addEventListener('change', h);
+    return () => el.removeEventListener('change', h);
+  }, [onChange]);
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;

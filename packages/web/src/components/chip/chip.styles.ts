@@ -32,6 +32,15 @@ export const chipStyles = css`
     flex-shrink: 0;
   }
 
+  :host([selectable]) span[part='base'] {
+    cursor: pointer;
+  }
+
+  span[part='base']:focus-visible {
+    outline: 3px solid var(--lt-border-focus);
+    outline-offset: 2px;
+  }
+
   .delete {
     align-items: center;
     background: none;
@@ -178,6 +187,51 @@ export const chipStyles = css`
     background: transparent;
     border-color: var(--lt-border-info-strong);
     color: var(--lt-text-info);
+  }
+
+  /* ── Selected (filter-chip active state) — solid interactive fill, inverse text, same pairing already used by
+     other filled-interactive elements (contrast-tested there). Declared after the appearance rules above (same
+     specificity), so it wins the cascade regardless of appearance="filled"/"outlined". ─────────────────────── */
+  :host([selected][variant='primary']) span[part='base'] {
+    background: var(--lt-interactive-primary-bg);
+    border-color: var(--lt-interactive-primary-bg);
+    color: var(--lt-text-inverse);
+  }
+
+  :host([selected][variant='secondary']) span[part='base'] {
+    background: var(--lt-interactive-secondary-bg);
+    border-color: var(--lt-interactive-secondary-bg);
+    color: var(--lt-text-inverse);
+  }
+
+  :host([selected][variant='neutral']) span[part='base'] {
+    background: var(--lt-interactive-neutral-bg);
+    border-color: var(--lt-interactive-neutral-bg);
+    color: var(--lt-text-inverse);
+  }
+
+  :host([selected][variant='success']) span[part='base'] {
+    background: var(--lt-interactive-success-bg);
+    border-color: var(--lt-interactive-success-bg);
+    color: var(--lt-text-inverse);
+  }
+
+  :host([selected][variant='warning']) span[part='base'] {
+    background: var(--lt-interactive-warning-bg);
+    border-color: var(--lt-interactive-warning-bg);
+    color: var(--lt-text-inverse);
+  }
+
+  :host([selected][variant='error']) span[part='base'] {
+    background: var(--lt-interactive-error-bg);
+    border-color: var(--lt-interactive-error-bg);
+    color: var(--lt-text-inverse);
+  }
+
+  :host([selected][variant='info']) span[part='base'] {
+    background: var(--lt-interactive-info-bg);
+    border-color: var(--lt-interactive-info-bg);
+    color: var(--lt-text-inverse);
   }
 
   /* ── Reduced motion ─────────────────────────────────────────────────────── */
