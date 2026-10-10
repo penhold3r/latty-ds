@@ -1,9 +1,11 @@
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 import { html, unsafeStatic } from 'lit/static-html.js';
+import type { PropertyValues } from 'lit';
 
 import { textStyles } from './text.styles';
 import type { TextVariant, TextTag } from './text.types';
+import { devWarn } from '../../utils';
 
 // `as` reaches the template through unsafeStatic, so anything not on this list (an attribute can hold any string,
 // including markup) must never get there.
@@ -72,6 +74,16 @@ export class Text extends ThemeableElement {
 
   /** HTML tag to render. Defaults to the semantic tag for the chosen variant; anything outside `TextTag` is ignored. */
   @property({ reflect: true }) as: TextTag | '' = '';
+
+  protected updated(changed: PropertyValues<this>) {
+    super.updated(changed);
+    if (changed.has('as') && this.as && !ALLOWED_TAGS.has(this.as)) {
+      devWarn('lt-text', `unknown \`as\` value "${this.as}" — falling back to the variant's default tag`);
+    }
+    if (changed.has('variant') && !(this.variant in VARIANT_TAG)) {
+      devWarn('lt-text', `unknown \`variant\` value "${this.variant}" — no typographic styles will apply`);
+    }
+  }
 
   render() {
     const requested = this.as && ALLOWED_TAGS.has(this.as) ? this.as : '';

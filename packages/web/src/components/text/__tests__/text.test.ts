@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { Text } from '../text';
 import '../text';
 
@@ -94,5 +94,73 @@ describe('<lt-text>', () => {
       expect((window as unknown as { __pwned?: number }).__pwned).toBe(0);
       t.remove();
     });
+  });
+});
+
+describe('dev-mode warnings (unknown as/variant)', () => {
+  let warn: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    warn.mockRestore();
+  });
+
+  it('warns once when `as` is set to an unrecognized tag', async () => {
+    const el = document.createElement('lt-text') as Text;
+    el.as = 'blink' as never;
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('[lt-text]'));
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('unknown `as` value "blink"'));
+    el.remove();
+  });
+
+  it('does not warn for an allowed `as` value', async () => {
+    const el = document.createElement('lt-text') as Text;
+    el.as = 'span';
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(warn).not.toHaveBeenCalled();
+    el.remove();
+  });
+
+  it('does not warn when `as` is left unset', async () => {
+    const el = document.createElement('lt-text') as Text;
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(warn).not.toHaveBeenCalled();
+    el.remove();
+  });
+
+  it('warns when `variant` is set to an unrecognized value', async () => {
+    const el = document.createElement('lt-text') as Text;
+    el.variant = 'subtitle' as never;
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('unknown `variant` value "subtitle"'));
+    el.remove();
+  });
+
+  it('does not warn for the default variant', async () => {
+    const el = document.createElement('lt-text') as Text;
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(warn).not.toHaveBeenCalled();
+    el.remove();
+  });
+
+  it('only warns again if the invalid value actually changes', async () => {
+    const el = document.createElement('lt-text') as Text;
+    el.as = 'blink' as never;
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    el.requestUpdate();
+    await el.updateComplete;
+    expect(warn).toHaveBeenCalledTimes(1);
   });
 });
