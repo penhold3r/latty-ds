@@ -64,3 +64,130 @@ describe('<lt-link>', () => {
     expect(el.shadowRoot!.querySelector('slot')).toBeTruthy();
   });
 });
+
+describe('target', () => {
+  let el: Link;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-link') as Link;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('forwards an explicit target', async () => {
+    el.target = '_parent';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('a')!.getAttribute('target')).toBe('_parent');
+  });
+
+  it('an explicit target wins over external', async () => {
+    el.external = true;
+    el.target = '_self';
+    await el.updateComplete;
+    const a = el.shadowRoot!.querySelector('a')!;
+    expect(a.getAttribute('target')).toBe('_self');
+    // Still shows the icon and the safe rel — external's own effects aren't suppressed, only the target value.
+    expect(el.shadowRoot!.querySelector('lt-icon')).toBeTruthy();
+  });
+
+  it('does not default rel to noopener noreferrer for a non-_blank explicit target', async () => {
+    el.target = '_parent';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('a')!.hasAttribute('rel')).toBe(false);
+  });
+
+  it('applies the safe rel default for an explicit target="_blank" too, not just external', async () => {
+    el.target = '_blank';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('a')!.getAttribute('rel')).toBe('noopener noreferrer');
+  });
+});
+
+describe('rel override', () => {
+  let el: Link;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-link') as Link;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('overrides the computed rel', async () => {
+    el.external = true;
+    el.rel = 'nofollow sponsor';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('a')!.getAttribute('rel')).toBe('nofollow sponsor');
+  });
+
+  it('an explicit empty-string rel suppresses the safe default entirely', async () => {
+    el.external = true;
+    el.rel = '';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('a')!.hasAttribute('rel')).toBe(false);
+  });
+});
+
+describe('download', () => {
+  let el: Link;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-link') as Link;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('omits download by default', () => {
+    expect(el.shadowRoot!.querySelector('a')!.hasAttribute('download')).toBe(false);
+  });
+
+  it('sets a boolean-style download with an empty value', async () => {
+    el.download = '';
+    await el.updateComplete;
+    const a = el.shadowRoot!.querySelector('a')!;
+    expect(a.hasAttribute('download')).toBe(true);
+    expect(a.getAttribute('download')).toBe('');
+  });
+
+  it('sets a suggested filename', async () => {
+    el.download = 'report.pdf';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('a')!.getAttribute('download')).toBe('report.pdf');
+  });
+});
+
+describe('underline', () => {
+  let el: Link;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-link') as Link;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('defaults to hover', () => {
+    expect(el.underline).toBe('hover');
+    expect(el.getAttribute('underline')).toBe('hover');
+  });
+
+  it.each(['always', 'hover', 'none'] as const)('reflects %s to attribute', async (underline) => {
+    el.underline = underline;
+    await el.updateComplete;
+    expect(el.getAttribute('underline')).toBe(underline);
+  });
+});

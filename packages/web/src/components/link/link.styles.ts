@@ -30,4 +30,16 @@ export const linkStyles = css`
   lt-icon[part='icon'] {
     flex-shrink: 0;
   }
+
+  /* ── Underline ──────────────────────────────────────────────────────── 'hover' (the default) is already the
+     base behaviour above; these only need to override it for the other two modes. */
+
+  :host([underline='always']) a[part='base'] {
+    text-decoration: underline;
+  }
+
+  :host([underline='none']) a[part='base'],
+  :host([underline='none']) a[part='base']:hover {
+    text-decoration: none;
+  }
 `;

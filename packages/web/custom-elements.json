@@ -5501,7 +5501,7 @@
         {
           "kind": "variable",
           "name": "linkStyles",
-          "default": "css` :host { display: inline; } a[part='base'] { align-items: center; color: var(--lt-text-primary); cursor: pointer; display: inline-flex; font: inherit; gap: 0.25em; text-decoration: none; vertical-align: baseline; } a[part='base']:hover { color: var(--lt-text-primary); text-decoration: underline; } a[part='base']:focus-visible { border-radius: 2px; outline: 2px solid var(--lt-border-focus); outline-offset: 2px; } lt-icon[part='icon'] { flex-shrink: 0; } `"
+          "default": "css` :host { display: inline; } a[part='base'] { align-items: center; color: var(--lt-text-primary); cursor: pointer; display: inline-flex; font: inherit; gap: 0.25em; text-decoration: none; vertical-align: baseline; } a[part='base']:hover { color: var(--lt-text-primary); text-decoration: underline; } a[part='base']:focus-visible { border-radius: 2px; outline: 2px solid var(--lt-border-focus); outline-offset: 2px; } lt-icon[part='icon'] { flex-shrink: 0; } /* ── Underline ──────────────────────────────────────────────────────── 'hover' (the default) is already the base behaviour above; these only need to override it for the other two modes. */ :host([underline='always']) a[part='base'] { text-decoration: underline; } :host([underline='none']) a[part='base'], :host([underline='none']) a[part='base']:hover { text-decoration: none; } `"
         }
       ],
       "exports": [
@@ -5546,7 +5546,58 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Opens the link in a new tab and appends an external-link icon."
+              "description": "Opens the link in a new tab and appends an external-link icon. Equivalent to `target=\"_blank\"` with safe\n`rel` defaults, plus the icon — set `target` directly for a new tab without the icon."
+            },
+            {
+              "kind": "field",
+              "name": "target",
+              "type": {
+                "text": "LinkTarget | undefined"
+              },
+              "description": "Explicit `target` for the underlying `<a>`. Defaults to `_blank` when `external` is set, otherwise the\nnative default (same tab)."
+            },
+            {
+              "kind": "field",
+              "name": "rel",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Overrides the computed `rel`. By default, `rel=\"noopener noreferrer\"` is applied whenever the resolved\ntarget is `_blank` (security best practice for new-tab links), and omitted otherwise."
+            },
+            {
+              "kind": "field",
+              "name": "download",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Marks the link for download instead of navigation, forwarded to the native `download` attribute. An empty\nstring (`<lt-link download>`) downloads with the browser's default suggested filename; a non-empty string\nsets the suggested filename."
+            },
+            {
+              "kind": "field",
+              "name": "underline",
+              "type": {
+                "text": "LinkUnderline"
+              },
+              "default": "'hover'",
+              "description": "Controls when the underline shows."
+            },
+            {
+              "kind": "field",
+              "name": "_target",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "_rel",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "method",

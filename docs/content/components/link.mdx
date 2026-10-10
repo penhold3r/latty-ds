@@ -21,17 +21,41 @@ in a new tab and display a trailing external-link icon.
 
   <FrameworkTabs
     html={`<lt-link href="https://example.com">Visit site</lt-link>
-<lt-link href="https://example.com" external>Open in new tab</lt-link>`}
+<lt-link href="https://example.com" external>Open in new tab</lt-link>
+
+<!-- target/rel without the external icon; download; underline modes -->
+
+<lt-link href="https://example.com" target="_blank">New tab, no icon</lt-link>
+<lt-link href="/report.pdf" download>Download report</lt-link>
+<lt-link href="/doc" underline="always">Always underlined</lt-link>
+<lt-link href="/doc" underline="none">Never underlined</lt-link>`}
     react={`
 import { Link } from '@latty-ds/react';
 
 <Link href="https://example.com">Visit site</Link>
-<Link href="https://example.com" external>Open in new tab</Link>
+<Link href="https://example.com" external>
+  Open in new tab
+</Link>
+
+{/* target/rel without the external icon; download; underline modes */}
+
+<Link href="https://example.com" target="_blank">New tab, no icon</Link>
+<Link href="/report.pdf" download>Download report</Link>
+<Link href="/doc" underline="always">Always underlined</Link>
+<Link href="/doc" underline="none">Never underlined</Link>
     `}
     vue={`
 <template>
   <lt-link href="https://example.com">Visit site</lt-link>
   <lt-link href="https://example.com" external>Open in new tab</lt-link>
+
+  <!-- target/rel without the external icon; download; underline modes -->
+
+<lt-link href="https://example.com" target="_blank">New tab, no icon</lt-link>
+<lt-link href="/report.pdf" download>Download report</lt-link>
+<lt-link href="/doc" underline="always">Always underlined</lt-link>
+<lt-link href="/doc" underline="none">Never underlined</lt-link>
+
 </template>
     `}
   />
