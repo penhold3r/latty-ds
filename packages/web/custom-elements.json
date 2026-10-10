@@ -5358,6 +5358,33 @@
             },
             {
               "kind": "field",
+              "name": "srcset",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Forwarded to the underlying `<img srcset>` — a comma-separated list of candidate image URLs, each with a\nwidth (`800w`) or pixel-density (`2x`) descriptor, for the browser to pick the best fit. Pair with `sizes`\nwhen using width descriptors."
+            },
+            {
+              "kind": "field",
+              "name": "sizes",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Forwarded to the underlying `<img sizes>` — a comma-separated list of media-condition/width pairs (e.g.\n`\"(min-width: 768px) 50vw, 100vw\"`) telling the browser how wide the image will render at each breakpoint.\nOnly meaningful alongside a width-descriptor `srcset`."
+            },
+            {
+              "kind": "field",
+              "name": "aspectRatio",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Reserves the image's box before it loads, preventing layout shift. Any valid CSS `aspect-ratio` value (e.g.\n`\"16/9\"`, `\"1\"`, `\"4/3\"`). Implies `object-fit: cover` so the image fills the reserved box without\ndistorting."
+            },
+            {
+              "kind": "field",
               "name": "rounded",
               "type": {
                 "text": "string | null"
@@ -5398,6 +5425,15 @@
               "name": "_borderRadius",
               "type": {
                 "text": "string | undefined"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "_imgStyle",
+              "type": {
+                "text": "string"
               },
               "privacy": "private",
               "readonly": true

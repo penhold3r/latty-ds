@@ -71,6 +71,57 @@ describe('<lt-image>', () => {
     expect(img.getAttribute('loading')).toBe(loading);
   });
 
+  describe('srcset and sizes', () => {
+    it('does not set srcset or sizes on the img by default', () => {
+      const img = el.shadowRoot!.querySelector('img')!;
+      expect(img.hasAttribute('srcset')).toBe(false);
+      expect(img.hasAttribute('sizes')).toBe(false);
+    });
+
+    it('forwards srcset to the img', async () => {
+      el.srcset = '/a.jpg 400w, /b.jpg 800w';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('img')!.getAttribute('srcset')).toBe('/a.jpg 400w, /b.jpg 800w');
+    });
+
+    it('forwards sizes to the img', async () => {
+      el.sizes = '(min-width: 768px) 50vw, 100vw';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('img')!.getAttribute('sizes')).toBe('(min-width: 768px) 50vw, 100vw');
+    });
+  });
+
+  describe('aspect-ratio', () => {
+    it('does not set aspect-ratio on the img by default', () => {
+      const img = el.shadowRoot!.querySelector('img')!;
+      expect(img.getAttribute('style') ?? '').not.toContain('aspect-ratio');
+    });
+
+    it('reflects aspect-ratio to the host attribute', async () => {
+      el.aspectRatio = '16/9';
+      await el.updateComplete;
+      expect(el.getAttribute('aspect-ratio')).toBe('16/9');
+    });
+
+    it('applies aspect-ratio, width, and object-fit to the img', async () => {
+      el.aspectRatio = '16/9';
+      await el.updateComplete;
+      const style = el.shadowRoot!.querySelector('img')!.getAttribute('style')!;
+      expect(style).toContain('aspect-ratio: 16/9');
+      expect(style).toContain('width: 100%');
+      expect(style).toContain('object-fit: cover');
+    });
+
+    it('combines with border-radius in the same style attribute', async () => {
+      el.aspectRatio = '1';
+      el.rounded = '8px';
+      await el.updateComplete;
+      const style = el.shadowRoot!.querySelector('img')!.getAttribute('style')!;
+      expect(style).toContain('aspect-ratio: 1');
+      expect(style).toContain('border-radius: 8px');
+    });
+  });
+
   describe('load / error events', () => {
     it('re-dispatches a native-style load event (with src) when the img loads', async () => {
       el.src = 'image.png';

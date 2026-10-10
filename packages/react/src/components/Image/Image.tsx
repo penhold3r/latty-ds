@@ -4,6 +4,9 @@ import type { Image as ImageEl } from '@latty-ds/web';
 export type ImageProps = Omit<HTMLAttributes<ImageEl>, 'onLoad' | 'onError'> & {
   src?: string;
   alt?: string;
+  srcset?: string;
+  sizes?: string;
+  aspectRatio?: string;
   rounded?: ImageEl['rounded'];
   responsive?: boolean;
   loading?: ImageEl['loading'];

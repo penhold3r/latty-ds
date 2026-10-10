@@ -45,7 +45,19 @@ A lightweight wrapper around <code>&lt;img&gt;</code> that adds rounded corners 
 
 <lt-image src="cover.jpg" alt="Album cover" loading="lazy">
   <div slot="fallback">No cover available</div>
-</lt-image>`}
+</lt-image>
+
+<!-- srcset/sizes + aspect-ratio (reserves space before load, preventing layout shift) -->
+
+<lt-image
+src="cover-800.jpg"
+srcset="cover-400.jpg 400w, cover-800.jpg 800w, cover-1200.jpg 1200w"
+sizes="(min-width: 768px) 50vw, 100vw"
+aspect-ratio="16/9"
+alt="Album cover"
+
+> </lt-image>`}
+
     react={`import { Image } from '@latty-ds/react';
 
 // Default
@@ -67,7 +79,17 @@ A lightweight wrapper around <code>&lt;img&gt;</code> that adds rounded corners 
 
 <Image src="cover.jpg" alt="Album cover" loading="lazy">
   <div slot="fallback">No cover available</div>
-</Image>`}
+</Image>
+
+// srcset/sizes + aspect-ratio (reserves space before load, preventing layout shift)
+
+<Image
+  src="cover-800.jpg"
+  srcset="cover-400.jpg 400w, cover-800.jpg 800w, cover-1200.jpg 1200w"
+  sizes="(min-width: 768px) 50vw, 100vw"
+  aspectRatio="16/9"
+  alt="Album cover"
+/>`}
     vue={`<template>
   <!-- Default -->
   <lt-image src="photo.jpg" alt="A scenic view" />
@@ -89,6 +111,16 @@ A lightweight wrapper around <code>&lt;img&gt;</code> that adds rounded corners 
 
 <div slot="fallback">No cover available</div>
 </lt-image>
+
+  <!-- srcset/sizes + aspect-ratio (reserves space before load, preventing layout shift) -->
+
+<lt-image
+  src="cover-800.jpg"
+  srcset="cover-400.jpg 400w, cover-800.jpg 800w, cover-1200.jpg 1200w"
+  sizes="(min-width: 768px) 50vw, 100vw"
+  aspect-ratio="16/9"
+  alt="Album cover"
+/>
 
 </template>`}
   />
