@@ -535,3 +535,108 @@ describe('<lt-button>', () => {
     });
   });
 });
+
+describe('toggle mode', () => {
+  let el: Button;
+
+  const inner = () => el.shadowRoot!.querySelector('button')!;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-button') as Button;
+    el.toggle = true;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('starts unpressed, reflected as aria-pressed="false" on the inner control', () => {
+    expect(el.pressed).toBe(false);
+    expect(inner().getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('flips pressed and aria-pressed on click, and dispatches toggle', async () => {
+    const handler = vi.fn();
+    el.addEventListener('toggle', handler);
+    inner().click();
+    await el.updateComplete;
+    expect(el.pressed).toBe(true);
+    expect(inner().getAttribute('aria-pressed')).toBe('true');
+    expect(handler).toHaveBeenCalledOnce();
+    expect((handler.mock.calls[0][0] as CustomEvent).detail).toEqual({ pressed: true });
+
+    inner().click();
+    await el.updateComplete;
+    expect(el.pressed).toBe(false);
+    expect(inner().getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('does not render aria-pressed when toggle is off', async () => {
+    el.toggle = false;
+    await el.updateComplete;
+    expect(inner().hasAttribute('aria-pressed')).toBe(false);
+  });
+
+  it('does not reflect aria-pressed when href is set (a link has no toggle semantics)', async () => {
+    el.href = '/dashboard';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('a')!.hasAttribute('aria-pressed')).toBe(false);
+  });
+
+  it('can be set directly for a controlled toggle button', async () => {
+    el.pressed = true;
+    await el.updateComplete;
+    expect(inner().getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('does not toggle while disabled or loading', async () => {
+    el.disabled = true;
+    await el.updateComplete;
+    inner().click();
+    await el.updateComplete;
+    expect(el.pressed).toBe(false);
+  });
+});
+
+describe('loading-label', () => {
+  let el: Button;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-button') as Button;
+    el.textContent = 'Save';
+    el.loadingLabel = 'Saving…';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('is not set unless loading', () => {
+    expect(el.shadowRoot!.querySelector('button')!.hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('overrides the accessible name while loading', async () => {
+    el.loading = true;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('button')!.getAttribute('aria-label')).toBe('Saving…');
+  });
+
+  it('falls back to the visible label once loading ends', async () => {
+    el.loading = true;
+    await el.updateComplete;
+    el.loading = false;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('button')!.hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('also applies to the anchor rendering when href is set', async () => {
+    el.href = '/save';
+    el.loading = true;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('a')!.getAttribute('aria-label')).toBe('Saving…');
+  });
+});

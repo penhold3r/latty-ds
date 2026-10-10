@@ -26,10 +26,11 @@ An interactive button with multiple color variants, appearances, sizes, optional
 <lt-button variant="primary" appearance="outlined" icon-start="download">Download</lt-button>
 <lt-button variant="neutral" appearance="ghost">Cancel</lt-button>
 <lt-button variant="error" icon-start="trash" loading>Deleting…</lt-button>
+<lt-button variant="error" icon-start="trash" loading loading-label="Deleting…">Delete</lt-button>
 
-<!-- Toggle button — aria-pressed on the host is forwarded to the internal native button -->
+<!-- Toggle button: clicking flips pressed and dispatches toggle -->
 
-<lt-button variant="neutral" icon-start="heart" aria-pressed="true">42</lt-button>
+<lt-button variant="neutral" icon-start="heart" toggle pressed>42</lt-button>
 `}
   react={`
 import { Button } from '@latty-ds/react';
@@ -44,10 +45,15 @@ import { Button } from '@latty-ds/react';
 <Button variant="error" iconStart="trash" loading>
   Deleting…
 </Button>
+<Button variant="error" iconStart="trash" loading loadingLabel="Deleting…">
+  Delete
+</Button>
 
-{/* Toggle button — aria-pressed on the host is forwarded to the internal native button */}
+{/* Toggle button: clicking flips pressed and dispatches toggle */}
 
-<Button variant="neutral" iconStart="heart" aria-pressed={liked}>{count}</Button>
+<Button variant="neutral" iconStart="heart" toggle pressed={liked} onToggle={(e) => setLiked(e.detail.pressed)}>
+  {count}
+</Button>
   `}
   vue={`
 <script setup lang="ts">
@@ -59,10 +65,11 @@ function save() { /* ... */ }
   <lt-button variant="primary" appearance="outlined" icon-start="download">Download</lt-button>
   <lt-button variant="neutral" appearance="ghost">Cancel</lt-button>
   <lt-button variant="error" icon-start="trash" loading>Deleting…</lt-button>
+  <lt-button variant="error" icon-start="trash" loading loading-label="Deleting…">Delete</lt-button>
 
-  <!-- Toggle button — aria-pressed on the host is forwarded to the internal native button -->
+  <!-- Toggle button: clicking flips pressed and dispatches toggle -->
 
-<lt-button variant="neutral" icon-start="heart" :aria-pressed="String(liked)">{{ count }}</lt-button>
+<lt-button variant="neutral" icon-start="heart" toggle :pressed="liked" @toggle="liked = $event.detail.pressed">{{ count }}</lt-button>
 
 </template>
   `}

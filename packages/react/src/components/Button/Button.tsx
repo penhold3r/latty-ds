@@ -1,7 +1,7 @@
-import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Button as ButtonEl, LattyIconName } from '@latty-ds/web';
 
-export type ButtonProps = HTMLAttributes<ButtonEl> & {
+export type ButtonProps = Omit<HTMLAttributes<ButtonEl>, 'onToggle'> & {
   formAssociated?: boolean;
   variant?: ButtonEl['variant'];
   appearance?: ButtonEl['appearance'];
@@ -9,6 +9,9 @@ export type ButtonProps = HTMLAttributes<ButtonEl> & {
   size?: ButtonEl['size'];
   disabled?: boolean;
   loading?: boolean;
+  loadingLabel?: string;
+  toggle?: boolean;
+  pressed?: boolean;
   iconStart?: LattyIconName;
   iconEnd?: LattyIconName;
   fullWidth?: boolean;
@@ -20,12 +23,24 @@ export type ButtonProps = HTMLAttributes<ButtonEl> & {
   name?: string;
   value?: string;
   formAction?: string;
+  onToggle?: (event: CustomEvent<{ pressed: boolean }>) => void;
 };
 
-export const Button = forwardRef<ButtonEl, ButtonProps>(function Button({ children, ...props }, forwardedRef) {
+export const Button = forwardRef<ButtonEl, ButtonProps>(function Button(
+  { onToggle, children, ...props },
+  forwardedRef
+) {
   const innerRef = useRef<ButtonEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
+
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onToggle) return;
+    const h = (ev: Event) => onToggle!(ev as CustomEvent<{ pressed: boolean }>);
+    el.addEventListener('toggle', h);
+    return () => el.removeEventListener('toggle', h);
+  }, [onToggle]);
 
   return (
     <lt-button ref={innerRef} {...(props as Record<string, unknown>)}>

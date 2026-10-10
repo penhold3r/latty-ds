@@ -1101,6 +1101,15 @@
             },
             {
               "kind": "field",
+              "name": "_ownsAriaPressed",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "_blockClickWhileBusy",
               "privacy": "private"
             },
@@ -1112,6 +1121,18 @@
                   "name": "disabled",
                   "type": {
                     "text": "boolean"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "willUpdate",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
                   }
                 }
               ]
@@ -1169,6 +1190,33 @@
               },
               "default": "false",
               "description": "Whether the button is in loading state.\nShows a spinner and disables interaction."
+            },
+            {
+              "kind": "field",
+              "name": "loadingLabel",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Accessible name while loading, overriding the visible label (which stays in the accessibility tree, just\nvisually faded) with a status-appropriate announcement — e.g. `\"Saving…\"` instead of `\"Save\"`."
+            },
+            {
+              "kind": "field",
+              "name": "toggle",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Enables toggle-button behavior (the WAI-ARIA toggle button pattern): clicking flips `pressed`, dispatches\n`toggle`, and reflects `aria-pressed` on the inner control. Has no effect when `href` is set — links don't\nhave toggle semantics."
+            },
+            {
+              "kind": "field",
+              "name": "pressed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Current pressed state. Only meaningful with `toggle`; settable directly for a controlled toggle button."
             },
             {
               "kind": "field",
@@ -1296,6 +1344,15 @@
             {
               "kind": "method",
               "name": "render"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{pressed: boolean}>"
+              },
+              "description": "Fired when `toggle` is set and the button is clicked.",
+              "name": "toggle"
             }
           ],
           "superclass": {

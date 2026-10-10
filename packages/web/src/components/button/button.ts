@@ -1,8 +1,9 @@
-import { html, nothing, LitElement } from 'lit';
+import { html, nothing, LitElement, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { dispatch } from '../../utils';
 
 import { buttonStyles } from './button.styles';
 import { ButtonAppearance, ButtonSize, ButtonType, ButtonVariant } from './button.types';
@@ -27,8 +28,11 @@ import '@latty-ds/icons';
  * - Accessible with aria-busy for loading state
  * - Forwards host `aria-pressed`, `aria-expanded`, `aria-haspopup`, `aria-controls`, and
  *   `aria-current` onto the internal native control (e.g. for toggle buttons)
+ * - `toggle` mode: clicking flips `pressed`, dispatches `toggle`, and reflects `aria-pressed`
  * - Renders as `<a>` when `href` is provided (link button)
  * - Form-associated: `type="submit"` submits the containing form, `type="reset"` resets it
+ *
+ * @fires {CustomEvent<{pressed: boolean}>} toggle - Fired when `toggle` is set and the button is clicked.
  *
  * @slot - Button label/content
  *
@@ -62,6 +66,9 @@ export class Button extends ThemeableElement {
 
   private _ariaForwarding = new AriaForwardingController(this, () => this.shadowRoot?.querySelector('[part="base"]'));
   private _fieldsetDisabled = new FormDisabledController(this);
+  // Tracks whether willUpdate() below is the one that set the host's aria-pressed, so it only ever cleans up its
+  // own writes — a consumer managing aria-pressed directly (without `toggle`) must be left alone.
+  private _ownsAriaPressed = false;
 
   constructor() {
     super();
@@ -92,6 +99,30 @@ export class Button extends ThemeableElement {
 
   formDisabledCallback(disabled: boolean) {
     this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  }
+
+  override willUpdate(changed: PropertyValues<this>) {
+    super.willUpdate(changed);
+    // aria-pressed needs the literal ARIA strings 'true'/'false', not Lit's presence-based boolean reflection, so
+    // it's written here as a host attribute instead of a `reflect: true` property — the existing
+    // AriaForwardingController (already wired up below) then mirrors it onto the inner control for free, the same
+    // path a consumer's own `aria-pressed` would take. Set in willUpdate(), not updated(): a ReactiveController's
+    // hostUpdated() runs *before* the element's own updated() (confirmed in Lit's source), so by the time
+    // updated() could set this, the controller would already have copied this cycle's (stale) host value onto the
+    // inner control — willUpdate() runs before render, so the controller's hostUpdated() picks up the new value
+    // in the same pass instead of needing an extra MutationObserver-triggered re-render. Only meaningful in
+    // `toggle` mode; href makes this a link, and links don't have toggle-button semantics.
+    if (changed.has('toggle') || changed.has('pressed') || changed.has('href')) {
+      if (this.toggle && !this.href) {
+        this.setAttribute('aria-pressed', this.pressed ? 'true' : 'false');
+        this._ownsAriaPressed = true;
+      } else if (this._ownsAriaPressed) {
+        // Only remove what this logic itself set — a consumer managing aria-pressed directly (not via `toggle`)
+        // must keep working, same as before `toggle` existed.
+        this.removeAttribute('aria-pressed');
+        this._ownsAriaPressed = false;
+      }
+    }
   }
 
   /**
@@ -131,6 +162,27 @@ export class Button extends ThemeableElement {
    * @default false
    */
   @property({ type: Boolean, reflect: true }) loading = false;
+
+  /**
+   * Accessible name while loading, overriding the visible label (which stays in the accessibility tree, just
+   * visually faded) with a status-appropriate announcement — e.g. `"Saving…"` instead of `"Save"`.
+   * @default ''
+   */
+  @property({ attribute: 'loading-label' }) loadingLabel = '';
+
+  /**
+   * Enables toggle-button behavior (the WAI-ARIA toggle button pattern): clicking flips `pressed`, dispatches
+   * `toggle`, and reflects `aria-pressed` on the inner control. Has no effect when `href` is set — links don't
+   * have toggle semantics.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) toggle = false;
+
+  /**
+   * Current pressed state. Only meaningful with `toggle`; settable directly for a controlled toggle button.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) pressed = false;
 
   /**
    * Icon name to display at the start of the button.
@@ -222,6 +274,12 @@ export class Button extends ThemeableElement {
 
   private _handleClick() {
     if (this.disabled || this.loading || this._fieldsetDisabled.fieldsetDisabled) return;
+
+    if (this.toggle) {
+      this.pressed = !this.pressed;
+      dispatch(this, 'toggle', { pressed: this.pressed });
+    }
+
     // this._internals.form (not this.closest('form')) so a button placed outside its form via form="id", or one
     // whose form is across a shadow root, still works — closest('form') can never resolve either (BTN-3).
     const form = this._internals.form;
@@ -268,6 +326,7 @@ export class Button extends ThemeableElement {
           target=${ifDefined(this.target || undefined)}
           rel=${ifDefined(rel)}
           aria-disabled=${isDisabled ? 'true' : nothing}
+          aria-label=${this.loading && this.loadingLabel ? this.loadingLabel : nothing}
           tabindex=${isDisabled ? '-1' : nothing}
           >${inner}</a
         >
@@ -281,6 +340,7 @@ export class Button extends ThemeableElement {
         @click=${this._handleClick}
         ?disabled=${isDisabled}
         aria-busy=${this.loading ? 'true' : 'false'}
+        aria-label=${this.loading && this.loadingLabel ? this.loadingLabel : nothing}
       >
         ${inner}
       </button>
