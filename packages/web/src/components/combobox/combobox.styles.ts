@@ -114,6 +114,27 @@ export const comboboxStyles = [
       font-size: 1rem;
     }
 
+    /* Multiple mode: tags replace the fixed single-line height with a wrapping row, min-height per size instead. */
+    :host([multiple]) .input-wrap {
+      flex-wrap: wrap;
+      height: auto;
+      overflow: visible;
+      padding-block: var(--lt-spacing-1);
+    }
+    :host([multiple][size='sm']) .input-wrap {
+      min-height: 32px;
+    }
+    :host([multiple][size='md']) .input-wrap,
+    :host([multiple]:not([size])) .input-wrap {
+      min-height: 40px;
+    }
+    :host([multiple][size='lg']) .input-wrap {
+      min-height: 48px;
+    }
+    :host([multiple]) input {
+      min-width: 80px;
+    }
+
     .chevron {
       color: var(--lt-text-subtle);
       flex-shrink: 0;

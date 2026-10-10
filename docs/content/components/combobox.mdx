@@ -54,6 +54,9 @@ navigation (Arrow, Enter, Escape) is fully supported. Use <code>lt-select</code>
     console.log('selected', e.detail.value, e.detail.label);
   });
 <\/script>
+
+<!-- Multiple selection: value is an array of the selected values, rendered as removable tags -->
+<lt-combobox id="skills" label="Skills" multiple></lt-combobox>
     `}
     react={`
 import { Combobox } from '@latty-ds/react';
@@ -71,6 +74,8 @@ const countries = [
   onChange={(e) => console.log(e.detail.value)}
   required
 />
+// Multiple selection: value is an array of the selected values, rendered as removable tags
+<Combobox label="Skills" options={skills} multiple />
     `}
     vue={`
 <template>
@@ -80,6 +85,9 @@ const countries = [
     :options="countries"
     @change="(e) => selected = e.detail.value"
   />
+
+  <!-- Multiple selection: value is an array of the selected values, rendered as removable tags -->
+  <lt-combobox label="Skills" :options="skills" multiple />
 </template>
     `}
   />

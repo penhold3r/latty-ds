@@ -1,5 +1,5 @@
 import { createFieldIds } from '../shared/form-field';
-import { html, nothing } from 'lit';
+import { html, nothing, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
@@ -8,6 +8,7 @@ import type { ComboboxOption, ComboboxSize, ComboboxVariant, ComboboxLabels } fr
 import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty-ds/icons';
 import '../text/text';
+import '../chip/';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
@@ -24,7 +25,8 @@ const DEFAULT_LABELS: ComboboxLabels = {
  *
  * @element lt-combobox
  *
- * @fires {CustomEvent<{value: string}>} change - Fired when the selected value changes.
+ * @fires {CustomEvent<{value: string | string[]}>} change - Fired when the selected value changes. With
+ *   `multiple`, `value` is the array of selected values.
  *
  * @example
  * ```html
@@ -32,6 +34,16 @@ const DEFAULT_LABELS: ComboboxLabels = {
  *   label="Country"
  *   placeholder="Search countries…"
  *   .options=${[{ value: 'us', label: 'United States' }, { value: 'ca', label: 'Canada' }]}
+ * ></lt-combobox>
+ * ```
+ *
+ * @example
+ * ```html
+ * <lt-combobox
+ *   multiple
+ *   label="Skills"
+ *   placeholder="Search skills…"
+ *   .options=${skills}
  * ></lt-combobox>
  * ```
  */
@@ -55,10 +67,27 @@ export class Combobox extends ThemeableElement {
   /** Array of selectable options. Set as a JS property (`.options`). */
   @property({ type: Array }) options: ComboboxOption[] = [];
 
-  /** Currently selected value. Not reflected as an attribute — read the property, or the `change` event's
-   * `detail.value`, instead of `getAttribute('value')`/`[value]` (consistent with the rest of the form
-   * controls; see `lt-textfield`'s equivalent doc comment for why). */
-  @property() value = '';
+  /** Currently selected value. A string for a single combobox; with `multiple`, an array of the selected values.
+   * Not reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of
+   * `getAttribute('value')`/`[value]` (consistent with the rest of the form controls; see `lt-textfield`'s
+   * equivalent doc comment for why). */
+  @property() value: string | string[] = '';
+
+  /**
+   * Allow more than one option to be selected. The dropdown stays open while picking, selections render as
+   * removable tags in the field, and `value` becomes an array of the selected values.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) multiple = false;
+
+  private get _selected(): string[] {
+    if (Array.isArray(this.value)) return this.value;
+    return this.value ? [this.value] : [];
+  }
+
+  private _labelFor(value: string): string {
+    return this.options.find((o) => o.value === value)?.label ?? value;
+  }
 
   /** Field label displayed above the input. */
   @property({ reflect: true }) label = '';
@@ -159,9 +188,22 @@ export class Combobox extends ThemeableElement {
 
   private selectOption(opt: ComboboxOption) {
     if (opt.disabled) return;
+    if (this.multiple) {
+      const current = this._selected;
+      this.value = current.includes(opt.value) ? current.filter((v) => v !== opt.value) : [...current, opt.value];
+      this.query = '';
+      this.activeIndex = -1;
+      dispatch(this, 'change', { value: this.value });
+      return;
+    }
     this.value = opt.value;
     this.closeDropdown();
     dispatch(this, 'change', { value: opt.value });
+  }
+
+  private _removeTag(value: string) {
+    this.value = this._selected.filter((v) => v !== value);
+    dispatch(this, 'change', { value: this.value });
   }
 
   private handleInput(e: Event) {
@@ -175,6 +217,14 @@ export class Combobox extends ThemeableElement {
   }
 
   private handleKeydown(e: KeyboardEvent) {
+    // Backspace in an empty field removes the last tag — the same affordance `lt-chip` itself just gained,
+    // and the standard tag-input convention (Gmail's "To" field, GitHub's label picker). Guarded on an empty
+    // query so backspacing through typed text never also eats a tag.
+    if (this.multiple && e.key === 'Backspace' && this.query === '' && this._selected.length > 0) {
+      e.preventDefault();
+      this._removeTag(this._selected[this._selected.length - 1]);
+      return;
+    }
     if (e.key === 'Escape') {
       // Only claim the keypress if there's actually something here to close — otherwise an ancestor (an open
       // <lt-dialog>, which closes itself on Escape unless something else already prevented the keydown's
@@ -208,11 +258,26 @@ export class Combobox extends ThemeableElement {
     }
   }
 
-  // Now that options are tabindex="-1" (see SEL-3/CMB-1), the input is the only focusable thing in this
-  // component's shadow root — so any focusout while open means focus is leaving the combobox entirely, unlike
-  // lt-dropdown, which has to check where focus actually went.
-  private _onFocusOut = () => {
-    if (this.open) this.closeDropdown();
+  // `Node.contains()` is plain tree order, not shadow-including — it doesn't cross into a descendant's own
+  // shadow root. A removable tag's delete button lives inside `lt-chip`'s own shadow root, nested inside this
+  // component's, so checking containment means walking up through each shadow root's host in turn.
+  private _isWithin(node: Node): boolean {
+    let current: Node | null = node;
+    while (current) {
+      if (current === this) return true;
+      current = current instanceof ShadowRoot ? current.host : current.parentNode;
+    }
+    return false;
+  }
+
+  // Options are tabindex="-1" (see SEL-3/CMB-1), but `multiple`'s removable tags are real focusable buttons —
+  // so focus can legitimately move within the component without leaving it, the same check `lt-dropdown`
+  // needs for its own (light DOM) children. relatedTarget is the element focus is moving *to*.
+  private _onFocusOut = (e: FocusEvent) => {
+    if (!this.open) return;
+    const next = e.relatedTarget as Node | null;
+    if (next && this._isWithin(next)) return;
+    this.closeDropdown();
   };
 
   connectedCallback() {
@@ -230,10 +295,21 @@ export class Combobox extends ThemeableElement {
     this._floatingCleanup = null;
   }
 
+  override willUpdate(changed: PropertyValues<this>) {
+    super.willUpdate(changed);
+    if (this.multiple && !Array.isArray(this.value)) this.value = this._selected;
+  }
+
   updated() {
-    this._internals.setFormValue(this.value || null);
+    if (this.multiple) {
+      const formData = new FormData();
+      if (this.name) for (const v of this._selected) formData.append(this.name, v);
+      this._internals.setFormValue(formData);
+    } else {
+      this._internals.setFormValue((this.value as string) || null);
+    }
     const input = this.shadowRoot?.querySelector<HTMLElement>('input');
-    if (this.required && !this.value && input) {
+    if (this.required && this._selected.length === 0 && input) {
       this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, input);
     } else {
       this._internals.setValidity({});
@@ -264,10 +340,31 @@ export class Combobox extends ThemeableElement {
   render() {
     const opts = this.filtered;
     const activeOption = this.enabledOpts[this.activeIndex];
-    const displayValue = this.open ? this.query : this.selectedLabel;
+    const displayValue = this.open ? this.query : this.multiple ? '' : this.selectedLabel;
+    const placeholderText = this.multiple
+      ? this.placeholder
+      : this.open
+        ? this.placeholder
+        : this.selectedLabel || this.placeholder;
+
+    const tags = this.multiple
+      ? this._selected.map(
+          (v) => html`
+            <lt-chip
+              size="sm"
+              variant="neutral"
+              deletable
+              ?disabled=${this._isDisabled}
+              @delete=${() => this._removeTag(v)}
+              >${this._labelFor(v)}</lt-chip
+            >
+          `
+        )
+      : nothing;
 
     const inputRow = html`
       <div class="input-wrap" @click=${this.openDropdown}>
+        ${tags}
         <input
           id="combobox-input"
           role="combobox"
@@ -278,7 +375,7 @@ export class Combobox extends ThemeableElement {
           aria-controls=${this.open ? `${this._uid}-listbox` : nothing}
           aria-activedescendant=${this.open && activeOption ? this._idFor(activeOption) : nothing}
           autocomplete="off"
-          placeholder=${this.open ? this.placeholder : this.selectedLabel || this.placeholder}
+          placeholder=${placeholderText}
           .value=${displayValue}
           ?disabled=${this._isDisabled}
           @focus=${this.handleFocus}
@@ -300,7 +397,13 @@ export class Combobox extends ThemeableElement {
         ${inputRow}
         ${this.open
           ? html`
-              <div class="dropdown" id=${`${this._uid}-listbox`} popover="manual" role="listbox">
+              <div
+                class="dropdown"
+                id=${`${this._uid}-listbox`}
+                popover="manual"
+                role="listbox"
+                aria-multiselectable=${this.multiple ? 'true' : nothing}
+              >
                 ${opts.length > 0
                   ? opts.map(
                       (opt) => html`
@@ -309,7 +412,7 @@ export class Combobox extends ThemeableElement {
                           class="option"
                           role="option"
                           tabindex="-1"
-                          aria-selected=${opt.value === this.value}
+                          aria-selected=${this._selected.includes(opt.value)}
                           ?disabled=${opt.disabled}
                           data-active=${opt === activeOption}
                           @mousedown=${this._preventFocusSteal}

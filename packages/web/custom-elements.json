@@ -2853,7 +2853,7 @@
           "type": {
             "text": "array"
           },
-          "default": "[ floatingPanelReset, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-text-error); margin-inline-start: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color 150ms ease, box-shadow 150ms ease; } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } :host([variant='error']) .input-wrap { border-color: var(--lt-text-error); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-color-success-500); } :host([variant='warning']) .input-wrap { border-color: var(--lt-color-warning-500); } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .input-wrap, :host(:disabled) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-color-neutral-400)); } :host([disabled]) input, :host(:disabled) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform 150ms ease; } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); box-shadow: var(--lt-shadow-md); max-height: 240px; overflow-y: auto; z-index: 100; } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: start; width: 100%; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[data-active='true'] { background: var(--lt-bg-neutral-subtle); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .input-wrap, .chevron { transition: none; } } ` ]"
+          "default": "[ floatingPanelReset, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-text-error); margin-inline-start: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color 150ms ease, box-shadow 150ms ease; } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } :host([variant='error']) .input-wrap { border-color: var(--lt-text-error); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-color-success-500); } :host([variant='warning']) .input-wrap { border-color: var(--lt-color-warning-500); } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .input-wrap, :host(:disabled) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-color-neutral-400)); } :host([disabled]) input, :host(:disabled) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } /* Multiple mode: tags replace the fixed single-line height with a wrapping row, min-height per size instead. */ :host([multiple]) .input-wrap { flex-wrap: wrap; height: auto; overflow: visible; padding-block: var(--lt-spacing-1); } :host([multiple][size='sm']) .input-wrap { min-height: 32px; } :host([multiple][size='md']) .input-wrap, :host([multiple]:not([size])) .input-wrap { min-height: 40px; } :host([multiple][size='lg']) .input-wrap { min-height: 48px; } :host([multiple]) input { min-width: 80px; } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform 150ms ease; } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); box-shadow: var(--lt-shadow-md); max-height: 240px; overflow-y: auto; z-index: 100; } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: start; width: 100%; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[data-active='true'] { background: var(--lt-bg-neutral-subtle); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .input-wrap, .chevron { transition: none; } } ` ]"
         }
       ],
       "exports": [
@@ -2931,10 +2931,46 @@
               "kind": "field",
               "name": "value",
               "type": {
-                "text": "string"
+                "text": "string | string[]"
               },
               "default": "''",
-              "description": "Currently selected value. Not reflected as an attribute — read the property, or the `change` event's\n`detail.value`, instead of `getAttribute('value')`/`[value]` (consistent with the rest of the form\ncontrols; see `lt-textfield`'s equivalent doc comment for why)."
+              "description": "Currently selected value. A string for a single combobox; with `multiple`, an array of the selected values.\nNot reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of\n`getAttribute('value')`/`[value]` (consistent with the rest of the form controls; see `lt-textfield`'s\nequivalent doc comment for why)."
+            },
+            {
+              "kind": "field",
+              "name": "multiple",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Allow more than one option to be selected. The dropdown stays open while picking, selections render as\nremovable tags in the field, and `value` becomes an array of the selected values."
+            },
+            {
+              "kind": "field",
+              "name": "_selected",
+              "type": {
+                "text": "string[]"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_labelFor",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "string"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
             },
             {
               "kind": "field",
@@ -3160,6 +3196,19 @@
             },
             {
               "kind": "method",
+              "name": "_removeTag",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "value",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
               "name": "handleInput",
               "privacy": "private",
               "parameters": [
@@ -3190,9 +3239,39 @@
               ]
             },
             {
+              "kind": "method",
+              "name": "_isWithin",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "node",
+                  "type": {
+                    "text": "Node"
+                  }
+                }
+              ]
+            },
+            {
               "kind": "field",
               "name": "_onFocusOut",
               "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "willUpdate",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues<this>"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -3240,9 +3319,9 @@
           "events": [
             {
               "type": {
-                "text": "CustomEvent<{value: string}>"
+                "text": "CustomEvent<{value: string | string[]}>"
               },
-              "description": "Fired when the selected value changes.",
+              "description": "Fired when the selected value changes. With `multiple`, `value` is the array of selected values.",
               "name": "change"
             }
           ],

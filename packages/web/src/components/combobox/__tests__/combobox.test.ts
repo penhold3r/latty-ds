@@ -398,6 +398,184 @@ describe('<lt-combobox>', () => {
   });
 });
 
+describe('multiple (tags)', () => {
+  let el: Combobox;
+
+  const input = () => el.shadowRoot!.querySelector('input')!;
+  const tags = () => [...el.shadowRoot!.querySelectorAll('lt-chip')];
+  const options = () => [...el.shadowRoot!.querySelectorAll<HTMLButtonElement>('.option')];
+
+  beforeEach(async () => {
+    el = document.createElement('lt-combobox') as Combobox;
+    el.multiple = true;
+    el.options = OPTIONS;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('coerces a string value to an array', async () => {
+    el.value = 'us';
+    await el.updateComplete;
+    expect(el.value).toEqual(['us']);
+  });
+
+  it('renders a tag per selected value', async () => {
+    el.value = ['us', 'ca'];
+    await el.updateComplete;
+    expect(tags()).toHaveLength(2);
+    expect(tags().map((t) => t.textContent!.trim())).toEqual(['United States', 'Canada']);
+  });
+
+  it('renders no tags when nothing is selected', () => {
+    expect(tags()).toHaveLength(0);
+  });
+
+  it('clicking an option adds it, keeps the dropdown open, and dispatches change with the array', async () => {
+    const handler = vi.fn();
+    el.addEventListener('change', handler);
+    input().dispatchEvent(new FocusEvent('focus'));
+    await el.updateComplete;
+
+    options()[0].click();
+    await el.updateComplete;
+
+    expect(el.value).toEqual(['us']);
+    expect(el.hasAttribute('open')).toBe(true);
+    expect(handler.mock.calls[0][0].detail).toEqual({ value: ['us'] });
+  });
+
+  it('clicking an already-selected option removes it (toggle)', async () => {
+    el.value = ['us'];
+    await el.updateComplete;
+    input().dispatchEvent(new FocusEvent('focus'));
+    await el.updateComplete;
+
+    options()[0].click();
+    await el.updateComplete;
+
+    expect(el.value).toEqual([]);
+  });
+
+  it('clicking a tag delete button removes just that tag', async () => {
+    el.value = ['us', 'ca'];
+    await el.updateComplete;
+    const handler = vi.fn();
+    el.addEventListener('change', handler);
+
+    tags()[0].dispatchEvent(new Event('delete', { bubbles: true, composed: true }));
+    await el.updateComplete;
+
+    expect(el.value).toEqual(['ca']);
+    expect(handler.mock.calls[0][0].detail).toEqual({ value: ['ca'] });
+  });
+
+  it('Backspace in an empty field removes the last tag', async () => {
+    el.value = ['us', 'ca'];
+    await el.updateComplete;
+    input().dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', cancelable: true }));
+    await el.updateComplete;
+    expect(el.value).toEqual(['us']);
+  });
+
+  it('Backspace with typed text does not remove a tag', async () => {
+    el.value = ['us'];
+    input().dispatchEvent(new FocusEvent('focus'));
+    await el.updateComplete;
+    input().value = 'can';
+    input().dispatchEvent(new Event('input'));
+    await el.updateComplete;
+
+    input().dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', cancelable: true }));
+    await el.updateComplete;
+    expect(el.value).toEqual(['us']);
+  });
+
+  it('marks selected options with aria-selected and the listbox as aria-multiselectable', async () => {
+    el.value = ['ca'];
+    input().dispatchEvent(new FocusEvent('focus'));
+    await el.updateComplete;
+
+    expect(el.shadowRoot!.querySelector('[role="listbox"]')!.getAttribute('aria-multiselectable')).toBe('true');
+    expect(
+      options()
+        .find((o) => o.textContent!.trim() === 'Canada')!
+        .getAttribute('aria-selected')
+    ).toBe('true');
+    expect(
+      options()
+        .find((o) => o.textContent!.trim() === 'United States')!
+        .getAttribute('aria-selected')
+    ).toBe('false');
+  });
+
+  it('does not close the dropdown when focus moves from the input to a tag delete button', async () => {
+    el.value = ['us'];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (el as any).open = true;
+    await el.updateComplete;
+
+    // The delete button lives inside lt-chip's own (nested) shadow root, so this exercises the shadow-walking
+    // containment check, not plain Node.contains() (which does not cross shadow boundaries). Invoked directly
+    // (matching chip.test.ts's precedent for `_handleDelete`) since jsdom's focus/event-composition emulation
+    // for nested custom-element shadow roots is unreliable to drive through a real dispatch.
+    const deleteBtn = tags()[0].shadowRoot!.querySelector<HTMLButtonElement>('.delete')!;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (el as any)._onFocusOut({ relatedTarget: deleteBtn } as unknown as FocusEvent);
+    await el.updateComplete;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((el as any).open).toBe(true);
+  });
+
+  it('closes the dropdown when focus leaves to something outside the component', async () => {
+    el.value = ['us'];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (el as any).open = true;
+    await el.updateComplete;
+
+    const outside = document.createElement('button');
+    document.body.appendChild(outside);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (el as any)._onFocusOut({ relatedTarget: outside } as unknown as FocusEvent);
+    await el.updateComplete;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((el as any).open).toBe(false);
+    outside.remove();
+  });
+
+  it('disables tag delete buttons when the combobox is disabled', async () => {
+    el.value = ['us'];
+    el.disabled = true;
+    await el.updateComplete;
+    expect(tags()[0].hasAttribute('disabled')).toBe(true);
+  });
+
+  it('submits one form entry per selected value', async () => {
+    const spy = vi.spyOn(ElementInternals.prototype, 'setFormValue');
+    el.name = 'skills';
+    el.value = ['us', 'ca'];
+    await el.updateComplete;
+    const data = spy.mock.lastCall?.[0] as FormData;
+    expect(data.getAll('skills')).toEqual(['us', 'ca']);
+  });
+
+  it('is valid once required is satisfied by any number of selections', async () => {
+    const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
+    el.required = true;
+    await el.updateComplete;
+    expect(spy.mock.lastCall?.[0]).toEqual({ valueMissing: true });
+
+    el.value = ['us'];
+    await el.updateComplete;
+    expect(spy.mock.lastCall?.[0]).toEqual({});
+  });
+});
+
 describe('helper text is described by its control (aria-describedby)', () => {
   let el: Combobox;
 

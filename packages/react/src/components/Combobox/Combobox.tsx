@@ -4,7 +4,8 @@ import type { Combobox as ComboboxEl } from '@latty-ds/web';
 export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   formAssociated?: boolean;
   options?: ComboboxEl['options'];
-  value?: string;
+  value?: ComboboxEl['value'];
+  multiple?: boolean;
   label?: string;
   placeholder?: string;
   helperText?: string;
@@ -14,11 +15,11 @@ export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   required?: boolean;
   name?: string;
   labels?: ComboboxEl['labels'];
-  onChange?: (event: CustomEvent<{ value: string }>) => void;
+  onChange?: (event: CustomEvent<{ value: string | string[] }>) => void;
 };
 
 export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
-  { onChange, options, labels, children, ...props },
+  { onChange, options, value, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<ComboboxEl>(null);
@@ -28,7 +29,7 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onChange) return;
-    const h = (ev: Event) => onChange!(ev as CustomEvent<{ value: string }>);
+    const h = (ev: Event) => onChange!(ev as CustomEvent<{ value: string | string[] }>);
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
@@ -36,8 +37,9 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
     const el = innerRef.current;
     if (!el) return;
     if (options !== undefined) el.options = options;
+    if (value !== undefined) el.value = value;
     if (labels !== undefined) el.labels = labels;
-  }, [options, labels]);
+  }, [options, value, labels]);
 
   return (
     <lt-combobox ref={innerRef} {...(props as Record<string, unknown>)}>
