@@ -283,5 +283,85 @@ describe('<lt-checkbox>', () => {
       expect(warn).not.toHaveBeenCalled();
       el.remove();
     });
+
+    it('does not warn when there is slotted content but no label prop', async () => {
+      const el = document.createElement('lt-checkbox') as Checkbox;
+      el.textContent = 'Accept terms';
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(warn).not.toHaveBeenCalled();
+      el.remove();
+    });
+  });
+
+  describe('rich label content (slot)', () => {
+    let el: Checkbox;
+
+    afterEach(() => {
+      el.remove();
+    });
+
+    it('wraps slotted content in the label, with no redundant aria-label', async () => {
+      el = document.createElement('lt-checkbox') as Checkbox;
+      el.innerHTML = 'I agree to the <a href="/terms">terms</a>';
+      document.body.appendChild(el);
+      await el.updateComplete;
+
+      const labelSpan = el.shadowRoot!.querySelector('.label');
+      expect(labelSpan).toBeTruthy();
+      const input = el.shadowRoot!.querySelector('input')!;
+      expect(input.hasAttribute('aria-label')).toBe(false);
+      // Implicit <label> wrapping gives the real accessible name — slotted content renders through the slot.
+      const slot = el.shadowRoot!.querySelector('slot')!;
+      expect(slot.assignedNodes({ flatten: true }).length).toBeGreaterThan(0);
+    });
+
+    it('falls back to the label attribute when nothing is slotted', async () => {
+      el = document.createElement('lt-checkbox') as Checkbox;
+      el.label = 'Accept terms';
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.label')!.textContent!.trim()).toBe('Accept terms');
+    });
+
+    it('picks up content added after construction (slotchange)', async () => {
+      el = document.createElement('lt-checkbox') as Checkbox;
+      document.body.appendChild(el);
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.label')).toBeNull();
+
+      el.textContent = 'Added later';
+      el.shadowRoot!.querySelector('slot')!.dispatchEvent(new Event('slotchange'));
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.label')).toBeTruthy();
+    });
+  });
+
+  describe('helper text', () => {
+    let el: Checkbox;
+
+    beforeEach(async () => {
+      el = document.createElement('lt-checkbox') as Checkbox;
+      el.label = 'Accept terms';
+      document.body.appendChild(el);
+      await el.updateComplete;
+    });
+
+    afterEach(() => {
+      el.remove();
+    });
+
+    it('is not rendered by default', () => {
+      expect(el.shadowRoot!.querySelector('.helper-text')).toBeNull();
+      expect(el.shadowRoot!.querySelector('input')!.hasAttribute('aria-describedby')).toBe(false);
+    });
+
+    it('renders and links to the input via aria-describedby', async () => {
+      el.helperText = 'Required to continue';
+      await el.updateComplete;
+      const helper = el.shadowRoot!.querySelector('.helper-text')!;
+      expect(helper.textContent!.trim()).toBe('Required to continue');
+      expect(el.shadowRoot!.querySelector('input')!.getAttribute('aria-describedby')).toBe(helper.id);
+    });
   });
 });

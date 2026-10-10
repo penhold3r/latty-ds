@@ -311,3 +311,111 @@ describe('<lt-radio>', () => {
     });
   });
 });
+
+describe('dev-mode warnings (label slot)', () => {
+  let warn: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    warn.mockRestore();
+  });
+
+  it('warns when there is no label and nothing slotted', async () => {
+    const el = document.createElement('lt-radio') as Radio;
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('[lt-radio]'));
+    el.remove();
+  });
+
+  it('does not warn when a label is set', async () => {
+    const el = document.createElement('lt-radio') as Radio;
+    el.label = 'Option';
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(warn).not.toHaveBeenCalled();
+    el.remove();
+  });
+
+  it('does not warn when there is slotted content but no label prop', async () => {
+    const el = document.createElement('lt-radio') as Radio;
+    el.textContent = 'Option';
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(warn).not.toHaveBeenCalled();
+    el.remove();
+  });
+});
+
+describe('rich label content (slot)', () => {
+  let el: Radio;
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('wraps slotted content in the label, with no redundant aria-label', async () => {
+    el = document.createElement('lt-radio') as Radio;
+    el.innerHTML = 'I agree to the <a href="/terms">terms</a>';
+    document.body.appendChild(el);
+    await el.updateComplete;
+
+    const labelSpan = el.shadowRoot!.querySelector('.label');
+    expect(labelSpan).toBeTruthy();
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.hasAttribute('aria-label')).toBe(false);
+    const slot = el.shadowRoot!.querySelector('slot')!;
+    expect(slot.assignedNodes({ flatten: true }).length).toBeGreaterThan(0);
+  });
+
+  it('falls back to the label attribute when nothing is slotted', async () => {
+    el = document.createElement('lt-radio') as Radio;
+    el.label = 'Option';
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.label')!.textContent!.trim()).toBe('Option');
+  });
+
+  it('picks up content added after construction (slotchange)', async () => {
+    el = document.createElement('lt-radio') as Radio;
+    document.body.appendChild(el);
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.label')).toBeNull();
+
+    el.textContent = 'Added later';
+    el.shadowRoot!.querySelector('slot')!.dispatchEvent(new Event('slotchange'));
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.label')).toBeTruthy();
+  });
+});
+
+describe('helper text', () => {
+  let el: Radio;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-radio') as Radio;
+    el.label = 'Option';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('is not rendered by default', () => {
+    expect(el.shadowRoot!.querySelector('.helper-text')).toBeNull();
+    expect(el.shadowRoot!.querySelector('input')!.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('renders and links to the input via aria-describedby', async () => {
+    el.helperText = 'Required to continue';
+    await el.updateComplete;
+    const helper = el.shadowRoot!.querySelector('.helper-text')!;
+    expect(helper.textContent!.trim()).toBe('Required to continue');
+    expect(el.shadowRoot!.querySelector('input')!.getAttribute('aria-describedby')).toBe(helper.id);
+  });
+});

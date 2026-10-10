@@ -13,6 +13,7 @@ export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
   labelPosition?: CheckboxEl['labelPosition'];
   name?: string;
   value?: string;
+  helperText?: string;
   labels?: CheckboxEl['labels'];
   onChange?: (event: CustomEvent<{ checked: boolean }>) => void;
 };

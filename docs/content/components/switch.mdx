@@ -24,6 +24,12 @@ A toggle switch for binary on/off settings. Emits a <code>change</code> event wi
 <lt-switch label="Dark mode" variant="success" checked></lt-switch>
 <lt-switch label="Unavailable" disabled></lt-switch>
 
+<!-- Rich label content and helper text -->
+
+<lt-switch helper-text="Turns on push notifications for this device">
+  Enable <strong>push</strong> notifications
+</lt-switch>
+
 <lt-switch id="notif" label="Enable notifications"></lt-switch>
 
 <script>
@@ -41,6 +47,12 @@ import { Switch } from '@latty-ds/react';
 <Switch label="Dark mode" variant="success" checked />
 <Switch label="Unavailable" disabled />
 
+{/* Rich label content and helper text */}
+
+<Switch helperText="Turns on push notifications for this device">
+  Enable <strong>push</strong> notifications
+</Switch>
+
 <Switch
   label="Enable notifications"
   onChange={(e) => console.log('checked:', e.detail.checked)}
@@ -56,6 +68,12 @@ const enabled = ref(false)
   <lt-switch label="Enable notifications"></lt-switch>
   <lt-switch label="Dark mode" variant="success" checked></lt-switch>
   <lt-switch label="Unavailable" disabled></lt-switch>
+
+  <!-- Rich label content and helper text -->
+
+<lt-switch helper-text="Turns on push notifications for this device">
+  Enable <strong>push</strong> notifications
+</lt-switch>
 
 <lt-switch
 label="Enable notifications"

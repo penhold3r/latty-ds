@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { devWarn } from '../../utils';
 import { customElement, property, query } from 'lit/decorators.js';
@@ -7,8 +7,11 @@ import { checkboxStyles } from './checkbox.styles';
 import { CheckboxSize, CheckboxVariant, CheckboxLabelPosition, type CheckboxLabels } from './checkbox.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { SlottedContentController } from '../shared/slotted-content';
+import { createFieldIds } from '../shared/form-field';
 
 import '@latty-ds/icons';
+import '../text/text';
 
 const DEFAULT_LABELS: CheckboxLabels = {
   validationMessage: 'Please check this box'
@@ -19,11 +22,21 @@ const DEFAULT_LABELS: CheckboxLabels = {
  *
  * @element lt-checkbox
  *
+ * @slot - Rich label content, in place of the `label` attribute (e.g. a link inside the label text). Falls back
+ *   to `label` when nothing is slotted.
+ *
  * @fires {CustomEvent<{checked: boolean}>} change - Dispatched when the checked state changes
  *
  * @example
  * ```html
  * <lt-checkbox label="Accept terms and conditions"></lt-checkbox>
+ * ```
+ *
+ * @example
+ * ```html
+ * <lt-checkbox name="terms" required>
+ *   I agree to the <a href="/terms">terms of service</a>
+ * </lt-checkbox>
  * ```
  *
  * @example
@@ -52,6 +65,8 @@ export class Checkbox extends ThemeableElement {
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.checked);
   private _fieldsetDisabled = new FormDisabledController(this);
+  private _slotted = new SlottedContentController(this);
+  private readonly _fieldIds = createFieldIds();
 
   constructor() {
     super();
@@ -121,6 +136,12 @@ export class Checkbox extends ThemeableElement {
    * @default 'on'
    */
   @property({ reflect: true }) value = 'on';
+
+  /**
+   * Helper or error text displayed below the checkbox. Colored for the error variant when `variant="error"`.
+   * @default ''
+   */
+  @property({ attribute: 'helper-text' }) helperText = '';
 
   /** Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<CheckboxLabels> = {};
@@ -210,10 +231,13 @@ export class Checkbox extends ThemeableElement {
   }
 
   protected firstUpdated() {
-    if (!this.label) devWarn('lt-checkbox', 'no `label` — the checkbox has no accessible name');
+    if (!this.label && !this._slotted.hasContent) {
+      devWarn('lt-checkbox', 'no `label` and no slotted content — the checkbox has no accessible name');
+    }
   }
 
   render() {
+    const hasLabel = Boolean(this.label) || this._slotted.hasContent;
     return html`
       <label class="checkbox-wrapper">
         <span class="box">
@@ -225,13 +249,21 @@ export class Checkbox extends ThemeableElement {
             name=${this.name}
             value=${this.value}
             @change=${this.handleChange}
-            aria-label=${this.label || 'checkbox'}
+            aria-label=${hasLabel ? nothing : 'checkbox'}
             aria-checked=${this.indeterminate ? 'mixed' : this.checked ? 'true' : 'false'}
+            aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           />
           ${this.renderCheckmark()}
         </span>
-        ${this.label ? html`<span class="label">${this.label}</span>` : ''}
+        ${hasLabel
+          ? html`<span class="label"><slot @slotchange=${this._slotted.onSlotChange}>${this.label}</slot></span>`
+          : html`<slot hidden @slotchange=${this._slotted.onSlotChange}>${this.label}</slot>`}
       </label>
+      ${this.helperText
+        ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
+            >${this.helperText}</lt-text
+          >`
+        : ''}
     `;
   }
 }

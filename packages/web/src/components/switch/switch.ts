@@ -1,11 +1,16 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
+import { devWarn } from '../../utils';
 import { customElement, property } from 'lit/decorators.js';
 
 import { switchStyles } from './switch.styles';
 import { SwitchSize, SwitchVariant, SwitchLabelPosition, type SwitchLabels } from './switch.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { SlottedContentController } from '../shared/slotted-content';
+import { createFieldIds } from '../shared/form-field';
+
+import '../text/text';
 
 const DEFAULT_LABELS: SwitchLabels = {
   validationMessage: 'Please check this switch'
@@ -16,6 +21,8 @@ const DEFAULT_LABELS: SwitchLabels = {
  * Internally uses a checkbox input with custom toggle styling.
  *
  * @element lt-switch
+ *
+ * @slot - Rich label content, in place of the `label` attribute. Falls back to `label` when nothing is slotted.
  *
  * @fires {CustomEvent<{checked: boolean}>} change - Dispatched when the switch state changes
  *
@@ -50,6 +57,8 @@ export class Switch extends ThemeableElement {
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.checked);
   private _fieldsetDisabled = new FormDisabledController(this);
+  private _slotted = new SlottedContentController(this);
+  private readonly _fieldIds = createFieldIds();
 
   constructor() {
     super();
@@ -113,6 +122,12 @@ export class Switch extends ThemeableElement {
    */
   @property({ reflect: true }) value = 'on';
 
+  /**
+   * Helper or error text displayed below the switch. Colored for the error variant when `variant="error"`.
+   * @default ''
+   */
+  @property({ attribute: 'helper-text' }) helperText = '';
+
   /** Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<SwitchLabels> = {};
 
@@ -175,7 +190,14 @@ export class Switch extends ThemeableElement {
     );
   }
 
+  protected firstUpdated() {
+    if (!this.label && !this._slotted.hasContent) {
+      devWarn('lt-switch', 'no `label` and no slotted content — the switch has no accessible name');
+    }
+  }
+
   render() {
+    const hasLabel = Boolean(this.label) || this._slotted.hasContent;
     return html`
       <label class="switch-wrapper">
         <div class="switch-container">
@@ -187,14 +209,22 @@ export class Switch extends ThemeableElement {
             name=${this.name}
             value=${this.value}
             @change=${this.handleChange}
-            aria-label=${this.label || 'switch'}
+            aria-label=${hasLabel ? nothing : 'switch'}
             role="switch"
             aria-checked=${this.checked ? 'true' : 'false'}
+            aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           />
           <span class="thumb"></span>
         </div>
-        ${this.label ? html`<span class="label">${this.label}</span>` : ''}
+        ${hasLabel
+          ? html`<span class="label"><slot @slotchange=${this._slotted.onSlotChange}>${this.label}</slot></span>`
+          : html`<slot hidden @slotchange=${this._slotted.onSlotChange}>${this.label}</slot>`}
       </label>
+      ${this.helperText
+        ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
+            >${this.helperText}</lt-text
+          >`
+        : ''}
     `;
   }
 }

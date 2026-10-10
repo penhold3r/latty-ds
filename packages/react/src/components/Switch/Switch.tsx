@@ -12,6 +12,7 @@ export type SwitchProps = Omit<HTMLAttributes<SwitchEl>, 'onChange'> & {
   labelPosition?: SwitchEl['labelPosition'];
   name?: string;
   value?: string;
+  helperText?: string;
   labels?: SwitchEl['labels'];
   onChange?: (event: CustomEvent<{ checked: boolean }>) => void;
 };

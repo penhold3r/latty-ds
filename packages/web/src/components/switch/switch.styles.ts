@@ -68,6 +68,20 @@ export const switchStyles = css`
     user-select: none;
   }
 
+  .helper-text {
+    color: var(--lt-text-subtle);
+    display: block;
+    margin-top: var(--lt-spacing-1);
+  }
+
+  .helper-text::part(base) {
+    font-weight: 200;
+  }
+
+  :host([variant='error']) .helper-text {
+    color: var(--lt-text-error);
+  }
+
   /* Size variants */
   :host([size='sm']) input[type='checkbox'] {
     height: 18px;

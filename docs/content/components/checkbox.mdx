@@ -24,6 +24,12 @@ A checkbox input with support for checked, indeterminate, and disabled states ac
 <lt-checkbox label="Enable notifications" variant="success" checked></lt-checkbox>
 <lt-checkbox label="Unavailable option" disabled></lt-checkbox>
 
+<!-- Rich label content and helper text -->
+
+<lt-checkbox required helper-text="You must accept to continue">
+  I agree to the <a href="/terms">terms of service</a>
+</lt-checkbox>
+
 <lt-checkbox id="terms" label="Accept terms and conditions"></lt-checkbox>
 
 <script>
@@ -41,6 +47,12 @@ import { Checkbox } from '@latty-ds/react';
 <Checkbox label="Enable notifications" variant="success" checked />
 <Checkbox label="Unavailable option" disabled />
 
+{/* Rich label content and helper text */}
+
+<Checkbox required helperText="You must accept to continue">
+  I agree to the <a href="/terms">terms of service</a>
+</Checkbox>
+
 <Checkbox
   label="Accept terms and conditions"
   onChange={(e) => console.log('checked:', e.detail.checked)}
@@ -56,6 +68,12 @@ const accepted = ref(false)
   <lt-checkbox label="Accept terms and conditions"></lt-checkbox>
   <lt-checkbox label="Enable notifications" variant="success" checked></lt-checkbox>
   <lt-checkbox label="Unavailable option" disabled></lt-checkbox>
+
+  <!-- Rich label content and helper text -->
+
+<lt-checkbox required helper-text="You must accept to continue">
+  I agree to the <a href="/terms">terms of service</a>
+</lt-checkbox>
 
 <lt-checkbox
 label="Accept terms and conditions"

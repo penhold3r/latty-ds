@@ -1,11 +1,16 @@
-import { html, LitElement, type PropertyValues } from 'lit';
+import { html, nothing, LitElement, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
+import { devWarn } from '../../utils';
 import { customElement, property } from 'lit/decorators.js';
 
 import { radioStyles } from './radio.styles';
 import { RadioSize, RadioVariant, RadioLabelPosition, type RadioLabels } from './radio.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { SlottedContentController } from '../shared/slotted-content';
+import { createFieldIds } from '../shared/form-field';
+
+import '../text/text';
 
 const DEFAULT_LABELS: RadioLabels = {
   validationMessage: 'Please select this option'
@@ -40,6 +45,8 @@ const radioGroupFor = (radio: Radio): Set<Radio> | null => {
  * A customizable radio button component with support for multiple variants and sizes.
  *
  * @element lt-radio
+ *
+ * @slot - Rich label content, in place of the `label` attribute. Falls back to `label` when nothing is slotted.
  *
  * @fires {CustomEvent<{value: string, checked: boolean}>} change - Dispatched when the radio is selected
  *
@@ -85,6 +92,8 @@ export class Radio extends ThemeableElement {
   private _group: Set<Radio> | null = null;
   private _default = new FormDefaultController(this, () => this.checked);
   private _fieldsetDisabled = new FormDisabledController(this);
+  private _slotted = new SlottedContentController(this);
+  private readonly _fieldIds = createFieldIds();
 
   constructor() {
     super();
@@ -174,6 +183,12 @@ export class Radio extends ThemeableElement {
   @property({ reflect: true }) value = '';
 
   /**
+   * Helper or error text displayed below the radio. Colored for the error variant when `variant="error"`.
+   * @default ''
+   */
+  @property({ attribute: 'helper-text' }) helperText = '';
+
+  /**
    * Whether this radio is reachable with Tab. Defaults to true for a standalone radio; `lt-radio-group` drives
    * this itself for its managed radios — a roving tabindex (only the checked radio, or the first enabled one,
    * is a Tab stop), matching the native radiogroup pattern.
@@ -251,7 +266,14 @@ export class Radio extends ThemeableElement {
     );
   }
 
+  protected firstUpdated() {
+    if (!this.label && !this._slotted.hasContent) {
+      devWarn('lt-radio', 'no `label` and no slotted content — the radio has no accessible name');
+    }
+  }
+
   render() {
+    const hasLabel = Boolean(this.label) || this._slotted.hasContent;
     return html`
       <label class="radio-wrapper">
         <div class="radio-container">
@@ -264,12 +286,20 @@ export class Radio extends ThemeableElement {
             value=${this.value}
             tabindex=${this.tabbable ? '0' : '-1'}
             @change=${this.handleChange}
-            aria-label=${this.label || 'radio'}
+            aria-label=${hasLabel ? nothing : 'radio'}
+            aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           />
           <span class="dot"></span>
         </div>
-        ${this.label ? html`<span class="label">${this.label}</span>` : ''}
+        ${hasLabel
+          ? html`<span class="label"><slot @slotchange=${this._slotted.onSlotChange}>${this.label}</slot></span>`
+          : html`<slot hidden @slotchange=${this._slotted.onSlotChange}>${this.label}</slot>`}
       </label>
+      ${this.helperText
+        ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
+            >${this.helperText}</lt-text
+          >`
+        : ''}
     `;
   }
 }

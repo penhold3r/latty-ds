@@ -33,6 +33,12 @@ label, value, and validation state.
   <lt-radio label="Phone" value="phone"></lt-radio>
   <lt-radio label="Post" value="post" disabled></lt-radio>
 </lt-radio-group>
+
+<!-- Standalone radio with rich label content and helper text -->
+
+<lt-radio name="plan" value="pro" helper-text="Billed annually">
+  <strong>Pro</strong> plan
+</lt-radio>
     `}
     react={`
 import { RadioGroup, Radio } from '@latty-ds/react';
@@ -42,6 +48,12 @@ import { RadioGroup, Radio } from '@latty-ds/react';
   <Radio label="Phone" value="phone" />
   <Radio label="Post" value="post" disabled />
 </RadioGroup>
+
+{/* Standalone radio with rich label content and helper text */}
+
+<Radio name="plan" value="pro" helperText="Billed annually">
+  <strong>Pro</strong> plan
+</Radio>
     `}
     vue={`
 <template>
@@ -50,6 +62,12 @@ import { RadioGroup, Radio } from '@latty-ds/react';
     <lt-radio label="Phone" value="phone"></lt-radio>
     <lt-radio label="Post" value="post" disabled></lt-radio>
   </lt-radio-group>
+
+  <!-- Standalone radio with rich label content and helper text -->
+
+  <lt-radio name="plan" value="pro" helper-text="Billed annually">
+    <strong>Pro</strong> plan
+  </lt-radio>
 </template>
     `}
   />

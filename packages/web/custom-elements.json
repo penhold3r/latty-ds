@@ -1989,7 +1989,7 @@
         {
           "kind": "variable",
           "name": "checkboxStyles",
-          "default": "css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .checkbox-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } .box { display: inline-flex; flex-shrink: 0; position: relative; } :host([label-position='left']) .checkbox-wrapper { flex-direction: row-reverse; } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .checkbox-wrapper, :host(:disabled) .checkbox-wrapper { cursor: not-allowed; opacity: 0.6; } input[type='checkbox'] { appearance: none; border-radius: calc(var(--lt-border-radius) * 0.5); border: 2px solid var(--lt-border-strong); cursor: pointer; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='checkbox']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .checkmark { align-items: center; color: white; display: none; inset: 0; justify-content: center; pointer-events: none; position: absolute; } input[type='checkbox']:checked ~ .checkmark, input[type='checkbox']:indeterminate ~ .checkmark { display: flex; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 16px; width: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 20px; width: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 24px; width: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked, :host([variant='primary']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-primary-bg); border-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='primary']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); border-color: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked, :host([variant='secondary']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-secondary-bg); border-color: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='secondary']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); border-color: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked, :host([variant='success']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-success-bg); border-color: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='success']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); border-color: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked, :host([variant='error']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-error-bg); border-color: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='error']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); border-color: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked, :host([variant='info']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-info-bg); border-color: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='info']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); border-color: var(--lt-interactive-info-bg-hover); } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { input[type='checkbox'] { transition: none; } } `"
+          "default": "css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .checkbox-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } .box { display: inline-flex; flex-shrink: 0; position: relative; } :host([label-position='left']) .checkbox-wrapper { flex-direction: row-reverse; } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .checkbox-wrapper, :host(:disabled) .checkbox-wrapper { cursor: not-allowed; opacity: 0.6; } input[type='checkbox'] { appearance: none; border-radius: calc(var(--lt-border-radius) * 0.5); border: 2px solid var(--lt-border-strong); cursor: pointer; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='checkbox']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .checkmark { align-items: center; color: white; display: none; inset: 0; justify-content: center; pointer-events: none; position: absolute; } input[type='checkbox']:checked ~ .checkmark, input[type='checkbox']:indeterminate ~ .checkmark { display: flex; } .label { color: var(--lt-text-default); user-select: none; } .helper-text { color: var(--lt-text-subtle); display: block; margin-top: var(--lt-spacing-1); } .helper-text::part(base) { font-weight: 200; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 16px; width: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 20px; width: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 24px; width: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked, :host([variant='primary']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-primary-bg); border-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='primary']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); border-color: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked, :host([variant='secondary']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-secondary-bg); border-color: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='secondary']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); border-color: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked, :host([variant='success']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-success-bg); border-color: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='success']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); border-color: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked, :host([variant='error']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-error-bg); border-color: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='error']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); border-color: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked, :host([variant='info']) input[type='checkbox']:indeterminate { background: var(--lt-interactive-info-bg); border-color: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled), :host([variant='info']) input[type='checkbox']:indeterminate:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); border-color: var(--lt-interactive-info-bg-hover); } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { input[type='checkbox'] { transition: none; } } `"
         }
       ],
       "exports": [
@@ -2011,6 +2011,12 @@
           "kind": "class",
           "description": "A customizable checkbox component with support for multiple variants and sizes.",
           "name": "Checkbox",
+          "slots": [
+            {
+              "description": "Rich label content, in place of the `label` attribute (e.g. a link inside the label text). Falls back to `label` when nothing is slotted.",
+              "name": ""
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -2046,6 +2052,18 @@
               "name": "_fieldsetDisabled",
               "privacy": "private",
               "default": "new FormDisabledController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "_slotted",
+              "privacy": "private",
+              "default": "new SlottedContentController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "_fieldIds",
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "field",
@@ -2136,6 +2154,15 @@
               },
               "default": "'on'",
               "description": "Value attribute for form submission."
+            },
+            {
+              "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Helper or error text displayed below the checkbox. Colored for the error variant when `variant=\"error\"`."
             },
             {
               "kind": "field",
@@ -6660,7 +6687,7 @@
         {
           "kind": "variable",
           "name": "radioStyles",
-          "default": "css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .radio-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } .radio-container { display: inline-flex; position: relative; } :host([label-position='left']) .radio-wrapper { flex-direction: row-reverse; } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .radio-wrapper, :host(:disabled) .radio-wrapper { cursor: not-allowed; opacity: 0.6; } input[type='radio'] { appearance: none; border-radius: 50%; border: 2px solid var(--lt-border-strong); cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='radio']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='radio']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='radio']:disabled { cursor: not-allowed; } .dot { background: white; border-radius: 50%; display: none; pointer-events: none; position: absolute; } input[type='radio']:checked ~ .dot { display: block; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='radio'] { height: 16px; width: 16px; } :host([size='sm']) .dot { height: 8px; width: 8px; inset-inline-start: 4px; top: 4px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='radio'] { height: 20px; width: 20px; } :host([size='md']) .dot { height: 10px; width: 10px; inset-inline-start: 5px; top: 5px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='radio'] { height: 24px; width: 24px; } :host([size='lg']) .dot { height: 12px; width: 12px; inset-inline-start: 6px; top: 6px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='radio']:checked { background: var(--lt-interactive-primary-bg); border-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); border-color: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='radio']:checked { background: var(--lt-interactive-secondary-bg); border-color: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); border-color: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='radio']:checked { background: var(--lt-interactive-success-bg); border-color: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); border-color: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='radio']:checked { background: var(--lt-interactive-error-bg); border-color: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); border-color: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='radio']:checked { background: var(--lt-interactive-info-bg); border-color: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); border-color: var(--lt-interactive-info-bg-hover); } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { input[type='radio'] { transition: none; } } /* ── Forced colors (Windows High Contrast) ───────────────────────────────── Under forced-colors, any author background-color (including every variant's token-resolved fill above) is flattened to Canvas — the checked indicator is a plain background:white .dot with no border of its own, so it disappears into the input's own (also-flattened) background, leaving checked and unchecked visually identical. System color keywords are exempt from that flattening and always resolve to the OS's own guaranteed-contrasting palette, regardless of which variant was selected — Highlight/HighlightText is the canonical \"selected state\" pairing (the same pair the OS uses for native text selection), unaffected by this component's own --lt-* tokens, which forced-colors mode is specifically overriding. !important is needed since a variant rule like :host([variant='primary']) input:checked outranks a bare input[type='radio']:checked in specificity — this is the standard, accepted use of !important for a forced-colors override (overriding the page's own author styling is the entire point). ─────────────────── */ @media (forced-colors: active) { input[type='radio']:checked { background: Highlight !important; border-color: Highlight !important; } .dot { background: HighlightText !important; } } `"
+          "default": "css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .radio-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } .radio-container { display: inline-flex; position: relative; } :host([label-position='left']) .radio-wrapper { flex-direction: row-reverse; } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .radio-wrapper, :host(:disabled) .radio-wrapper { cursor: not-allowed; opacity: 0.6; } input[type='radio'] { appearance: none; border-radius: 50%; border: 2px solid var(--lt-border-strong); cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 120ms ease, border-color 120ms ease; } input[type='radio']:hover:not(:disabled) { border-color: var(--lt-color-neutral-600); } input[type='radio']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='radio']:disabled { cursor: not-allowed; } .dot { background: white; border-radius: 50%; display: none; pointer-events: none; position: absolute; } input[type='radio']:checked ~ .dot { display: block; } .label { color: var(--lt-text-default); user-select: none; } .helper-text { color: var(--lt-text-subtle); display: block; margin-top: var(--lt-spacing-1); } .helper-text::part(base) { font-weight: 200; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } /* Size variants */ :host([size='sm']) input[type='radio'] { height: 16px; width: 16px; } :host([size='sm']) .dot { height: 8px; width: 8px; inset-inline-start: 4px; top: 4px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='radio'] { height: 20px; width: 20px; } :host([size='md']) .dot { height: 10px; width: 10px; inset-inline-start: 5px; top: 5px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='radio'] { height: 24px; width: 24px; } :host([size='lg']) .dot { height: 12px; width: 12px; inset-inline-start: 6px; top: 6px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='radio']:checked { background: var(--lt-interactive-primary-bg); border-color: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); border-color: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='radio']:checked { background: var(--lt-interactive-secondary-bg); border-color: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); border-color: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='radio']:checked { background: var(--lt-interactive-success-bg); border-color: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); border-color: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='radio']:checked { background: var(--lt-interactive-error-bg); border-color: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); border-color: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='radio']:checked { background: var(--lt-interactive-info-bg); border-color: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='radio']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); border-color: var(--lt-interactive-info-bg-hover); } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { input[type='radio'] { transition: none; } } /* ── Forced colors (Windows High Contrast) ───────────────────────────────── Under forced-colors, any author background-color (including every variant's token-resolved fill above) is flattened to Canvas — the checked indicator is a plain background:white .dot with no border of its own, so it disappears into the input's own (also-flattened) background, leaving checked and unchecked visually identical. System color keywords are exempt from that flattening and always resolve to the OS's own guaranteed-contrasting palette, regardless of which variant was selected — Highlight/HighlightText is the canonical \"selected state\" pairing (the same pair the OS uses for native text selection), unaffected by this component's own --lt-* tokens, which forced-colors mode is specifically overriding. !important is needed since a variant rule like :host([variant='primary']) input:checked outranks a bare input[type='radio']:checked in specificity — this is the standard, accepted use of !important for a forced-colors override (overriding the page's own author styling is the entire point). ─────────────────── */ @media (forced-colors: active) { input[type='radio']:checked { background: Highlight !important; border-color: Highlight !important; } .dot { background: HighlightText !important; } } `"
         }
       ],
       "exports": [
@@ -6682,6 +6709,12 @@
           "kind": "class",
           "description": "A customizable radio button component with support for multiple variants and sizes.",
           "name": "Radio",
+          "slots": [
+            {
+              "description": "Rich label content, in place of the `label` attribute. Falls back to `label` when nothing is slotted.",
+              "name": ""
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -6735,6 +6768,18 @@
               "name": "_fieldsetDisabled",
               "privacy": "private",
               "default": "new FormDisabledController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "_slotted",
+              "privacy": "private",
+              "default": "new SlottedContentController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "_fieldIds",
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "method",
@@ -6836,6 +6881,15 @@
             },
             {
               "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Helper or error text displayed below the radio. Colored for the error variant when `variant=\"error\"`."
+            },
+            {
+              "kind": "field",
               "name": "tabbable",
               "type": {
                 "text": "boolean"
@@ -6913,6 +6967,11 @@
                 }
               ],
               "description": "Handles radio change events.\nUpdates the checked state and dispatches a custom change event."
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "privacy": "protected"
             },
             {
               "kind": "method",
@@ -7929,6 +7988,59 @@
           "declaration": {
             "name": "unlockBodyScroll",
             "module": "src/components/shared/scroll-lock.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/slotted-content.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Tracks whether a host element has meaningful default-slot content (slotted elements, or non-whitespace text),\nso a component can conditionally render a wrapper around its label slot without leaving stray flex/grid gap\nspacing when nothing is actually there.\n\nChecked synchronously on connect — not only via `slotchange` — so markup present at parse/upgrade time is\ncorrect on the very first render; `slotchange` fires after the browser resolves initial slot assignment, which\nwould otherwise cause a one-frame layout flash for slotted-only content with no fallback. Re-checked on\n`slotchange` for content added or removed later (e.g. a framework setting `textContent` after construction).",
+          "name": "SlottedContentController",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_host",
+              "type": {
+                "text": "ReactiveControllerHost & Element"
+              },
+              "privacy": "private",
+              "default": "host"
+            },
+            {
+              "kind": "field",
+              "name": "hasContent",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "method",
+              "name": "hostConnected"
+            },
+            {
+              "kind": "field",
+              "name": "onSlotChange"
+            },
+            {
+              "kind": "method",
+              "name": "_sync",
+              "privacy": "private"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SlottedContentController",
+          "declaration": {
+            "name": "SlottedContentController",
+            "module": "src/components/shared/slotted-content.ts"
           }
         }
       ]
@@ -9250,7 +9362,7 @@
         {
           "kind": "variable",
           "name": "switchStyles",
-          "default": "css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .switch-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } :host([label-position='left']) .switch-wrapper { flex-direction: row-reverse; } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .switch-wrapper, :host(:disabled) .switch-wrapper { cursor: not-allowed; opacity: 0.6; } .switch-container { display: inline-flex; position: relative; } input[type='checkbox'] { appearance: none; background: var(--lt-border-default); border-radius: 999px; cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 200ms ease; } input[type='checkbox']:hover:not(:disabled) { background: var(--lt-border-strong); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .thumb { background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); pointer-events: none; position: absolute; transition: left 200ms ease; } .label { color: var(--lt-text-default); user-select: none; } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 18px; width: 32px; } :host([size='sm']) .thumb { height: 14px; width: 14px; left: 2px; top: 2px; } :host([size='sm']) input[type='checkbox']:checked ~ .thumb { left: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 22px; width: 40px; } :host([size='md']) .thumb { height: 18px; width: 18px; left: 2px; top: 2px; } :host([size='md']) input[type='checkbox']:checked ~ .thumb { left: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 26px; width: 48px; } :host([size='lg']) .thumb { height: 22px; width: 22px; left: 2px; top: 2px; } :host([size='lg']) input[type='checkbox']:checked ~ .thumb { left: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked { background: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked { background: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked { background: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked { background: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked { background: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { input[type='checkbox'], .thumb { transition: none; } } /* ── Forced colors (Windows High Contrast) ───────────────────────────────── Under forced-colors, every author background-color here (the unchecked track's neutral fill, every variant's checked fill, and the thumb's plain white) is flattened to Canvas — the track has no border of its own to fall back on, and the thumb disappears into it, leaving neither track nor thumb visible at all. System color keywords are exempt from that flattening; Highlight/HighlightText is the canonical OS \"selected state\" pairing, unaffected by which variant was selected (forced-colors overrides that anyway). !important matches every variant's own :checked rule in specificity — standard for a forced-colors override, whose entire point is overriding the page's own author styling. ─────────────────────────────── */ @media (forced-colors: active) { input[type='checkbox'] { border: 1px solid ButtonText; } input[type='checkbox']:checked { background: Highlight !important; border-color: Highlight !important; } .thumb { background: ButtonText; } input[type='checkbox']:checked ~ .thumb { background: HighlightText; } } `"
+          "default": "css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .switch-wrapper { align-items: center; cursor: pointer; display: inline-flex; gap: var(--lt-spacing-2); } :host([label-position='left']) .switch-wrapper { flex-direction: row-reverse; } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .switch-wrapper, :host(:disabled) .switch-wrapper { cursor: not-allowed; opacity: 0.6; } .switch-container { display: inline-flex; position: relative; } input[type='checkbox'] { appearance: none; background: var(--lt-border-default); border-radius: 999px; cursor: pointer; flex-shrink: 0; margin: 0; position: relative; transition: background-color 200ms ease; } input[type='checkbox']:hover:not(:disabled) { background: var(--lt-border-strong); } input[type='checkbox']:focus-visible { outline: 3px solid var(--lt-border-focus); outline-offset: 2px; } input[type='checkbox']:disabled { cursor: not-allowed; } .thumb { background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); pointer-events: none; position: absolute; transition: left 200ms ease; } .label { color: var(--lt-text-default); user-select: none; } .helper-text { color: var(--lt-text-subtle); display: block; margin-top: var(--lt-spacing-1); } .helper-text::part(base) { font-weight: 200; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } /* Size variants */ :host([size='sm']) input[type='checkbox'] { height: 18px; width: 32px; } :host([size='sm']) .thumb { height: 14px; width: 14px; left: 2px; top: 2px; } :host([size='sm']) input[type='checkbox']:checked ~ .thumb { left: 16px; } :host([size='sm']) .label { font-size: 0.875rem; } :host([size='md']) input[type='checkbox'] { height: 22px; width: 40px; } :host([size='md']) .thumb { height: 18px; width: 18px; left: 2px; top: 2px; } :host([size='md']) input[type='checkbox']:checked ~ .thumb { left: 20px; } :host([size='md']) .label { font-size: 1rem; } :host([size='lg']) input[type='checkbox'] { height: 26px; width: 48px; } :host([size='lg']) .thumb { height: 22px; width: 22px; left: 2px; top: 2px; } :host([size='lg']) input[type='checkbox']:checked ~ .thumb { left: 24px; } :host([size='lg']) .label { font-size: 1.0625rem; } /* Variant styles */ :host([variant='primary']) input[type='checkbox']:checked { background: var(--lt-interactive-primary-bg); } :host([variant='primary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-primary-bg-hover); } :host([variant='secondary']) input[type='checkbox']:checked { background: var(--lt-interactive-secondary-bg); } :host([variant='secondary']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-secondary-bg-hover); } :host([variant='success']) input[type='checkbox']:checked { background: var(--lt-interactive-success-bg); } :host([variant='success']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-success-bg-hover); } :host([variant='error']) input[type='checkbox']:checked { background: var(--lt-interactive-error-bg); } :host([variant='error']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-error-bg-hover); } :host([variant='info']) input[type='checkbox']:checked { background: var(--lt-interactive-info-bg); } :host([variant='info']) input[type='checkbox']:checked:hover:not(:disabled) { background: var(--lt-interactive-info-bg-hover); } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { input[type='checkbox'], .thumb { transition: none; } } /* ── Forced colors (Windows High Contrast) ───────────────────────────────── Under forced-colors, every author background-color here (the unchecked track's neutral fill, every variant's checked fill, and the thumb's plain white) is flattened to Canvas — the track has no border of its own to fall back on, and the thumb disappears into it, leaving neither track nor thumb visible at all. System color keywords are exempt from that flattening; Highlight/HighlightText is the canonical OS \"selected state\" pairing, unaffected by which variant was selected (forced-colors overrides that anyway). !important matches every variant's own :checked rule in specificity — standard for a forced-colors override, whose entire point is overriding the page's own author styling. ─────────────────────────────── */ @media (forced-colors: active) { input[type='checkbox'] { border: 1px solid ButtonText; } input[type='checkbox']:checked { background: Highlight !important; border-color: Highlight !important; } .thumb { background: ButtonText; } input[type='checkbox']:checked ~ .thumb { background: HighlightText; } } `"
         }
       ],
       "exports": [
@@ -9272,6 +9384,12 @@
           "kind": "class",
           "description": "A toggle switch component with sliding animation.\nInternally uses a checkbox input with custom toggle styling.",
           "name": "Switch",
+          "slots": [
+            {
+              "description": "Rich label content, in place of the `label` attribute. Falls back to `label` when nothing is slotted.",
+              "name": ""
+            }
+          ],
           "members": [
             {
               "kind": "field",
@@ -9307,6 +9425,18 @@
               "name": "_fieldsetDisabled",
               "privacy": "private",
               "default": "new FormDisabledController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "_slotted",
+              "privacy": "private",
+              "default": "new SlottedContentController(this)"
+            },
+            {
+              "kind": "field",
+              "name": "_fieldIds",
+              "privacy": "private",
+              "readonly": true
             },
             {
               "kind": "field",
@@ -9391,6 +9521,15 @@
             },
             {
               "kind": "field",
+              "name": "helperText",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "description": "Helper or error text displayed below the switch. Colored for the error variant when `variant=\"error\"`."
+            },
+            {
+              "kind": "field",
               "name": "labels",
               "type": {
                 "text": "Partial<SwitchLabels>"
@@ -9465,6 +9604,11 @@
                   }
                 }
               ]
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "privacy": "protected"
             },
             {
               "kind": "method",
