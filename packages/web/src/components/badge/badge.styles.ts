@@ -31,6 +31,10 @@ export const badgeStyles = css`
     flex-shrink: 0;
   }
 
+  .content {
+    min-width: 0;
+  }
+
   /* ── Sizes ──────────────────────────────────────────────────────────── */
 
   :host([size='sm']) span[part='base'] {
@@ -67,16 +71,16 @@ export const badgeStyles = css`
   }
 
   /* When dot is the only content, fill it to the circle size */
-  :host([dot][content='']) .dot,
-  :host([dot]:not([content])) .dot {
+  :host([dot]) span[part='base'].empty .dot {
     height: 40%;
     width: 40%;
   }
 
-  /* ── Empty = perfect circle (covers content="" and absent attribute) */
+  /* ── Empty = perfect circle. Driven by a render-computed class (both the \`content\` attribute and slotted
+     content decide "empty"), not an attribute selector on \`content\` alone — a slotted-only badge with no
+     \`content\` must not collapse into the circle shape. ── */
 
-  :host([content='']) span[part='base'],
-  :host(:not([content])) span[part='base'] {
+  span[part='base'].empty {
     aspect-ratio: 1;
     justify-content: center;
     padding: 0;

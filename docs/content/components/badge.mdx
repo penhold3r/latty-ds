@@ -31,6 +31,10 @@ for display only. When no content is provided the badge collapses to a circle in
 <lt-badge variant="success" />
 <lt-badge variant="error" />
 <lt-badge variant="warning" />
+
+<!-- Count overflow: content above max displays as "max+" -->
+
+<lt-badge variant="error" appearance="solid" content="150" max="99" />
 		`}
     react={`
 import { Badge } from '@latty-ds/react';
@@ -43,6 +47,10 @@ import { Badge } from '@latty-ds/react';
 <Badge variant="success" />
 <Badge variant="error" />
 <Badge variant="warning" />
+
+// Count overflow: content above max displays as "max+"
+
+<Badge variant="error" appearance="solid" content="150" max={99} />
 		`}
     vue={`
 <template>
@@ -51,9 +59,13 @@ import { Badge } from '@latty-ds/react';
   <lt-badge variant="warning" appearance="outlined" content="Pending" />
   <lt-badge variant="primary" content="New" dot />
 
-  <lt-badge variant="success" />
-  <lt-badge variant="error" />
-  <lt-badge variant="warning" />
+<lt-badge variant="success" />
+<lt-badge variant="error" />
+<lt-badge variant="warning" />
+
+  <!-- Count overflow: content above max displays as "max+" -->
+
+  <lt-badge variant="error" appearance="solid" content="150" max="99" />
 </template>
 		`}
   />
