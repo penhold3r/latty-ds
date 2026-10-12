@@ -25,7 +25,12 @@ neither is available.
 <lt-avatar name="Jane Doe" size="lg"></lt-avatar>
 <lt-avatar name="Jane Doe" shape="square"></lt-avatar>
 <lt-avatar size="md"></lt-avatar>
-    `}
+
+<!-- Presence status dot -->
+
+<lt-avatar name="Jane Doe" status="online"></lt-avatar>
+<lt-avatar name="Jane Doe" status="busy"></lt-avatar>
+`}
     react={`
 import { Avatar } from '@latty-ds/react';
 
@@ -33,6 +38,11 @@ import { Avatar } from '@latty-ds/react';
 <Avatar name="Jane Doe" size="lg" />
 <Avatar name="Jane Doe" shape="square" />
 <Avatar size="md" />
+
+// Presence status dot
+
+<Avatar name="Jane Doe" status="online" />
+<Avatar name="Jane Doe" status="busy" />
     `}
     vue={`
 <template>
@@ -40,6 +50,12 @@ import { Avatar } from '@latty-ds/react';
   <lt-avatar name="Jane Doe" size="lg"></lt-avatar>
   <lt-avatar name="Jane Doe" shape="square"></lt-avatar>
   <lt-avatar size="md"></lt-avatar>
+
+  <!-- Presence status dot -->
+
+<lt-avatar name="Jane Doe" status="online"></lt-avatar>
+<lt-avatar name="Jane Doe" status="busy"></lt-avatar>
+
 </template>
     `}
   />

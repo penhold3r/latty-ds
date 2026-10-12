@@ -4,6 +4,7 @@ export const avatarStyles = css`
   :host {
     display: inline-flex;
     flex-shrink: 0;
+    position: relative;
     vertical-align: middle;
   }
 
@@ -30,6 +31,33 @@ export const avatarStyles = css`
     letter-spacing: 0.02em;
     line-height: 1;
     user-select: none;
+  }
+
+  /* ── Status ──────────────────────────────────────────────────────────── Positioned relative to the host (not
+     span[part='base'], which clips to the circle/square with overflow:hidden) so it sits outside that crop. */
+  .status {
+    border: 2px solid var(--lt-avatar-status-ring, var(--lt-bg-default));
+    border-radius: 50%;
+    box-sizing: border-box;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    position: absolute;
+  }
+
+  :host([status='online']) .status {
+    background: var(--lt-interactive-success-bg);
+  }
+
+  :host([status='away']) .status {
+    background: var(--lt-interactive-warning-bg);
+  }
+
+  :host([status='busy']) .status {
+    background: var(--lt-interactive-error-bg);
+  }
+
+  :host([status='offline']) .status {
+    background: var(--lt-interactive-neutral-bg);
   }
 
   /* ── Colors (fallback bg + text) ────────────────────────────────────── */
@@ -87,6 +115,11 @@ export const avatarStyles = css`
     font-size: 0.625rem;
   }
 
+  :host([size='xs']) .status {
+    height: 8px;
+    width: 8px;
+  }
+
   :host([size='sm']) span[part='base'] {
     height: 32px;
     width: 32px;
@@ -94,6 +127,11 @@ export const avatarStyles = css`
 
   :host([size='sm']) .initials {
     font-size: 0.75rem;
+  }
+
+  :host([size='sm']) .status {
+    height: 9px;
+    width: 9px;
   }
 
   :host([size='md']) span[part='base'] {
@@ -105,6 +143,11 @@ export const avatarStyles = css`
     font-size: 0.9375rem;
   }
 
+  :host([size='md']) .status {
+    height: 10px;
+    width: 10px;
+  }
+
   :host([size='lg']) span[part='base'] {
     height: 52px;
     width: 52px;
@@ -114,6 +157,12 @@ export const avatarStyles = css`
     font-size: 1.125rem;
   }
 
+  :host([size='lg']) .status {
+    border-width: 2.5px;
+    height: 13px;
+    width: 13px;
+  }
+
   :host([size='xl']) span[part='base'] {
     height: 68px;
     width: 68px;
@@ -121,5 +170,11 @@ export const avatarStyles = css`
 
   :host([size='xl']) .initials {
     font-size: 1.5rem;
+  }
+
+  :host([size='xl']) .status {
+    border-width: 3px;
+    height: 16px;
+    width: 16px;
   }
 `;

@@ -128,3 +128,62 @@ describe('<lt-avatar>', () => {
     });
   });
 });
+
+describe('status', () => {
+  let el: Avatar;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-avatar') as Avatar;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('renders no status dot by default', () => {
+    expect(el.shadowRoot!.querySelector('[part="status"]')).toBeNull();
+  });
+
+  it.each(['online', 'offline', 'busy', 'away'] as const)('renders a status dot for %s', async (status) => {
+    el.status = status;
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('[part="status"]')).toBeTruthy();
+    expect(el.getAttribute('status')).toBe(status);
+  });
+
+  it('is a sibling of the base span, not nested inside it', async () => {
+    el.status = 'online';
+    await el.updateComplete;
+    const base = el.shadowRoot!.querySelector('[part="base"]')!;
+    const status = el.shadowRoot!.querySelector('[part="status"]')!;
+    expect(base.contains(status)).toBe(false);
+    expect(status.parentNode).toBe(base.parentNode);
+  });
+
+  it('appends the capitalized status to the accessible label', async () => {
+    el.name = 'Jane Doe';
+    el.status = 'online';
+    await el.updateComplete;
+    const base = el.shadowRoot!.querySelector('[part="base"]')!;
+    expect(base.getAttribute('aria-label')).toBe('Jane Doe, Online');
+  });
+
+  it('overrides the status label for i18n', async () => {
+    el.name = 'Jane Doe';
+    el.status = 'online';
+    el.statusLabel = 'En ligne';
+    await el.updateComplete;
+    const base = el.shadowRoot!.querySelector('[part="base"]')!;
+    expect(base.getAttribute('aria-label')).toBe('Jane Doe, En ligne');
+  });
+
+  it('is announced as role=img with just the status label when there is no name or alt', async () => {
+    el.status = 'busy';
+    await el.updateComplete;
+    const base = el.shadowRoot!.querySelector('[part="base"]')!;
+    expect(base.getAttribute('role')).toBe('img');
+    expect(base.getAttribute('aria-label')).toBe('Busy');
+  });
+});
