@@ -1,0 +1,31 @@
+import { useRef, useLayoutEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import type { AvatarGroup as AvatarGroupEl } from '@latty-ds/web';
+
+export type AvatarGroupProps = HTMLAttributes<AvatarGroupEl> & {
+  size?: AvatarGroupEl['size'];
+  max?: AvatarGroupEl['max'];
+  overflowLabel?: string;
+};
+
+export const AvatarGroup = forwardRef<AvatarGroupEl, AvatarGroupProps>(function AvatarGroup(
+  { size, max, children, ...props },
+  forwardedRef
+) {
+  const innerRef = useRef<AvatarGroupEl>(null);
+
+  useImperativeHandle(forwardedRef, () => innerRef.current!);
+
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (size !== undefined) el.size = size;
+    if (max !== undefined) el.max = max;
+  }, [size, max]);
+
+  return (
+    <lt-avatar-group ref={innerRef} {...(props as Record<string, unknown>)}>
+      {children}
+    </lt-avatar-group>
+  );
+});
+AvatarGroup.displayName = 'AvatarGroup';

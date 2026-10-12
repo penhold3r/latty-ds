@@ -56,6 +56,10 @@
       "import": "./dist/components/avatar/index.js",
       "default": "./dist/components/avatar/index.js"
     },
+    "./avatar-group": {
+      "import": "./dist/components/avatar-group/index.js",
+      "default": "./dist/components/avatar-group/index.js"
+    },
     "./badge": {
       "import": "./dist/components/badge/index.js",
       "default": "./dist/components/badge/index.js"

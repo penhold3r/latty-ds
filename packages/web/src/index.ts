@@ -54,6 +54,7 @@ export * from './components/tab-group';
 export * from './components/table';
 export * from './components/textfield';
 export * from './components/avatar';
+export * from './components/avatar-group';
 export * from './components/badge';
 export * from './components/tooltip';
 export * from './components/snackbar';

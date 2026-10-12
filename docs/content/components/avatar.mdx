@@ -11,7 +11,8 @@ import FrameworkTabs from '@site/src/components/FrameworkTabs';
 # Avatar
 
 Displays a user avatar. Falls back to initials derived from <code>name</code>, then to a generic person icon if
-neither is available.
+neither is available. Wrap several in <code>lt-avatar-group</code> for an overlapping stack with an optional
+overflow cap.
 
 ## Playground
 
@@ -30,9 +31,19 @@ neither is available.
 
 <lt-avatar name="Jane Doe" status="online"></lt-avatar>
 <lt-avatar name="Jane Doe" status="busy"></lt-avatar>
+
+<!-- Overlapping stack, capped with a +N overflow indicator -->
+
+<lt-avatar-group max="3" size="sm">
+  <lt-avatar name="Ada Lovelace"></lt-avatar>
+  <lt-avatar name="Grace Hopper"></lt-avatar>
+  <lt-avatar name="Margaret Hamilton"></lt-avatar>
+  <lt-avatar name="Katherine Johnson"></lt-avatar>
+  <lt-avatar name="Hedy Lamarr"></lt-avatar>
+</lt-avatar-group>
 `}
     react={`
-import { Avatar } from '@latty-ds/react';
+import { Avatar, AvatarGroup } from '@latty-ds/react';
 
 <Avatar src="https://i.pravatar.cc/150" name="Jane Doe" />
 <Avatar name="Jane Doe" size="lg" />
@@ -43,6 +54,16 @@ import { Avatar } from '@latty-ds/react';
 
 <Avatar name="Jane Doe" status="online" />
 <Avatar name="Jane Doe" status="busy" />
+
+// Overlapping stack, capped with a +N overflow indicator
+
+<AvatarGroup max={3} size="sm">
+  <Avatar name="Ada Lovelace" />
+  <Avatar name="Grace Hopper" />
+  <Avatar name="Margaret Hamilton" />
+  <Avatar name="Katherine Johnson" />
+  <Avatar name="Hedy Lamarr" />
+</AvatarGroup>
     `}
     vue={`
 <template>
@@ -56,10 +77,23 @@ import { Avatar } from '@latty-ds/react';
 <lt-avatar name="Jane Doe" status="online"></lt-avatar>
 <lt-avatar name="Jane Doe" status="busy"></lt-avatar>
 
+  <!-- Overlapping stack, capped with a +N overflow indicator -->
+
+  <lt-avatar-group max="3" size="sm">
+    <lt-avatar name="Ada Lovelace"></lt-avatar>
+    <lt-avatar name="Grace Hopper"></lt-avatar>
+    <lt-avatar name="Margaret Hamilton"></lt-avatar>
+    <lt-avatar name="Katherine Johnson"></lt-avatar>
+    <lt-avatar name="Hedy Lamarr"></lt-avatar>
+  </lt-avatar-group>
 </template>
     `}
   />
 
-## API
+## API — lt-avatar
 
 <ApiTable tag="lt-avatar" />
+
+## API — lt-avatar-group
+
+<ApiTable tag="lt-avatar-group" />
