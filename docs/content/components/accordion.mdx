@@ -11,7 +11,8 @@ import FrameworkTabs from '@site/src/components/FrameworkTabs';
 # Accordion
 
 A collapsible section built on the native <code>&lt;details&gt;/&lt;summary&gt;</code> elements. Content placed in the
-default slot is shown when open.
+default slot is shown when open. Wrap several in <code>lt-accordion-group</code> to coordinate them — opening one
+closes the others, unless the group's <code>multiple</code> is set.
 
 ## Playground
 
@@ -33,9 +34,25 @@ default slot is shown when open.
 <lt-accordion label="Installation" icon-start="download" open>
   Install with: pnpm add @latty-ds/tokens @latty-ds/web
 </lt-accordion>
+
+<!-- Grouped: opening one closes the others sharing the group, like radio-button grouping -->
+
+<lt-accordion-group>
+  <lt-accordion label="What is Latty?" open>
+    Latty is a framework-agnostic design system built on design tokens and Web Components.
+  </lt-accordion>
+  <lt-accordion label="How do I install it?">Install with: pnpm add @latty-ds/tokens @latty-ds/web</lt-accordion>
+</lt-accordion-group>
+
+<!-- multiple: accordions in the group open independently instead -->
+
+<lt-accordion-group multiple>
+  <lt-accordion label="Section 1" open>…</lt-accordion>
+  <lt-accordion label="Section 2" open>…</lt-accordion>
+</lt-accordion-group>
     `}
     react={`
-import { Accordion } from '@latty-ds/react';
+import { Accordion, AccordionGroup } from '@latty-ds/react';
 
 <Accordion label="What is Latty?">
   Latty is a framework-agnostic design system built on design tokens and Web Components.
@@ -44,6 +61,22 @@ import { Accordion } from '@latty-ds/react';
 <Accordion label="Installation" iconStart="download" open>
   Install with: pnpm add @latty-ds/tokens @latty-ds/web
 </Accordion>
+
+// Grouped: opening one closes the others sharing the group
+
+<AccordionGroup>
+  <Accordion label="What is Latty?" open>
+    Latty is a framework-agnostic design system built on design tokens and Web Components.
+  </Accordion>
+  <Accordion label="How do I install it?">Install with: pnpm add @latty-ds/tokens @latty-ds/web</Accordion>
+</AccordionGroup>
+
+// multiple: accordions in the group open independently instead
+
+<AccordionGroup multiple>
+  <Accordion label="Section 1" open>…</Accordion>
+  <Accordion label="Section 2" open>…</Accordion>
+</AccordionGroup>
     `}
     vue={`
 <template>
@@ -51,13 +84,33 @@ import { Accordion } from '@latty-ds/react';
     Latty is a framework-agnostic design system built on design tokens and Web Components.
   </lt-accordion>
 
-  <lt-accordion label="Installation" icon-start="download" open>
-    Install with: pnpm add @latty-ds/tokens @latty-ds/web
+<lt-accordion label="Installation" icon-start="download" open>
+  Install with: pnpm add @latty-ds/tokens @latty-ds/web
+</lt-accordion>
+
+  <!-- Grouped: opening one closes the others sharing the group -->
+
+<lt-accordion-group>
+  <lt-accordion label="What is Latty?" open>
+    Latty is a framework-agnostic design system built on design tokens and Web Components.
   </lt-accordion>
+  <lt-accordion label="How do I install it?">Install with: pnpm add @latty-ds/tokens @latty-ds/web</lt-accordion>
+</lt-accordion-group>
+
+  <!-- multiple: accordions in the group open independently instead -->
+
+  <lt-accordion-group multiple>
+    <lt-accordion label="Section 1" open>…</lt-accordion>
+    <lt-accordion label="Section 2" open>…</lt-accordion>
+  </lt-accordion-group>
 </template>
     `}
   />
 
-## API
+## API — lt-accordion
 
 <ApiTable tag="lt-accordion" />
+
+## API — lt-accordion-group
+
+<ApiTable tag="lt-accordion-group" />

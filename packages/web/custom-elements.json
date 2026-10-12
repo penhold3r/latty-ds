@@ -4,6 +4,114 @@
   "modules": [
     {
       "kind": "javascript-module",
+      "path": "src/components/accordion-group/accordion-group.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "accordionGroupStyles",
+          "default": "css` :host { display: block; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "accordionGroupStyles",
+          "declaration": {
+            "name": "accordionGroupStyles",
+            "module": "src/components/accordion-group/accordion-group.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/accordion-group/accordion-group.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A container that coordinates multiple `lt-accordion` children. By default, opening one closes the others —\nthe classic exclusive accordion. Set `multiple` to let them open independently instead.\n\n`lt-accordion` itself has no concept of siblings (each is a standalone, self-contained disclosure widget); this\nis what adds cross-panel coordination, listening for each child's own `toggle` event rather than tracking a\nsingle `value` (unlike `lt-tab-group`, more than one child can be open at once when `multiple` is set).",
+          "name": "AccordionGroup",
+          "slots": [
+            {
+              "description": "`lt-accordion` elements",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "accordionGroupStyles"
+            },
+            {
+              "kind": "field",
+              "name": "multiple",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Allow more than one child accordion to stay open at once. Default (false) is the classic exclusive\naccordion: opening one closes any others."
+            },
+            {
+              "kind": "field",
+              "name": "_accordions",
+              "type": {
+                "text": "Accordion[]"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_wireAccordions",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_handleToggle",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-accordion-group",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AccordionGroup",
+          "declaration": {
+            "name": "AccordionGroup",
+            "module": "src/components/accordion-group/accordion-group.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/accordion-group/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "AccordionGroup",
+          "declaration": {
+            "name": "AccordionGroup",
+            "module": "./accordion-group"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/accordion/accordion.styles.ts",
       "declarations": [
         {

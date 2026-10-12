@@ -37,6 +37,7 @@ export type { LattyIconName } from '@latty-ds/icons';
 
 export * from './base';
 export * from './components/accordion';
+export * from './components/accordion-group';
 export * from './components/button';
 export * from './components/chip';
 export * from './components/checkbox';

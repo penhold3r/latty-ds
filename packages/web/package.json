@@ -44,6 +44,10 @@
       "import": "./dist/components/accordion/index.js",
       "default": "./dist/components/accordion/index.js"
     },
+    "./accordion-group": {
+      "import": "./dist/components/accordion-group/index.js",
+      "default": "./dist/components/accordion-group/index.js"
+    },
     "./alert": {
       "import": "./dist/components/alert/index.js",
       "default": "./dist/components/alert/index.js"

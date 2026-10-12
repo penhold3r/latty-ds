@@ -1,5 +1,6 @@
 import '@latty-ds/web';
 export { Accordion, type AccordionProps } from './components/Accordion';
+export { AccordionGroup, type AccordionGroupProps } from './components/AccordionGroup';
 export { Alert, type AlertProps } from './components/Alert';
 export { Avatar, type AvatarProps } from './components/Avatar';
 export { Badge, type BadgeProps } from './components/Badge';
