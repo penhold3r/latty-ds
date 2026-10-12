@@ -281,6 +281,10 @@ export class TabGroup extends ThemeableElement {
     if (changedProperties.has('value')) {
       this.updateTabs();
       this.updatePanels();
+      // Keeps the active tab visible in a scrollable tablist even when `value` is set directly (not via click
+      // or arrow-key navigation, where focus()'s own default scroll-into-view already covers it). `nearest`
+      // on both axes scrolls the minimum necessary — never the whole page — and is a no-op when already in view.
+      this.tabs?.find((tab) => tab.value === this.value)?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     }
 
     if (changedProperties.has('size') || changedProperties.has('appearance') || changedProperties.has('orientation')) {

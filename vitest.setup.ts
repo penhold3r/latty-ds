@@ -119,3 +119,12 @@ if (typeof HTMLElement !== 'undefined' && typeof HTMLElement.prototype.showPopov
     return originalMatches.call(this, selector);
   };
 }
+
+// jsdom (27.4, checked) doesn't implement Element.scrollIntoView at all (not even a no-op — calling it throws
+// "not a function"), since it has no real layout engine to scroll against. A plain no-op stub lets code that
+// calls it (e.g. lt-tab-group scrolling a newly-active tab into view) run without throwing, and lets tests
+// assert the call happened (vi.spyOn(Element.prototype, 'scrollIntoView')) without asserting on a scroll
+// position jsdom could never produce.
+if (typeof Element !== 'undefined' && typeof Element.prototype.scrollIntoView !== 'function') {
+  Element.prototype.scrollIntoView = function () {};
+}

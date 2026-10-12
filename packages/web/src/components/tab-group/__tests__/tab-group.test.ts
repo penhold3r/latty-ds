@@ -208,6 +208,59 @@ describe('<lt-tab-group>', () => {
   });
 });
 
+describe('scrolls the active tab into view', () => {
+  let el: TabGroup;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-tab-group') as TabGroup;
+    el.value = 'tab1';
+    el.innerHTML = `
+      <lt-tab value="tab1" label="Tab 1"></lt-tab>
+      <lt-tab value="tab2" label="Tab 2"></lt-tab>
+      <lt-tab value="tab3" label="Tab 3"></lt-tab>
+      <div slot="panel" data-value="tab1">Panel 1</div>
+      <div slot="panel" data-value="tab2">Panel 2</div>
+      <div slot="panel" data-value="tab3">Panel 3</div>
+    `;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('scrolls the newly active tab into view when value is set directly', async () => {
+    const [, tab2] = el.querySelectorAll('lt-tab');
+    const spy = vi.spyOn(tab2, 'scrollIntoView');
+
+    el.value = 'tab2';
+    await el.updateComplete;
+
+    expect(spy).toHaveBeenCalledWith({ block: 'nearest', inline: 'nearest' });
+  });
+
+  it('does not scroll a tab that is not becoming active', async () => {
+    const [tab1] = el.querySelectorAll('lt-tab');
+    const spy = vi.spyOn(tab1, 'scrollIntoView');
+
+    el.value = 'tab2';
+    await el.updateComplete;
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('does nothing when value does not match any tab', async () => {
+    const tabs = el.querySelectorAll('lt-tab');
+    const spies = [...tabs].map((t) => vi.spyOn(t, 'scrollIntoView'));
+
+    el.value = 'no-such-tab';
+    await el.updateComplete;
+
+    spies.forEach((spy) => expect(spy).not.toHaveBeenCalled());
+  });
+});
+
 describe('orientation', () => {
   let el: TabGroup;
 
