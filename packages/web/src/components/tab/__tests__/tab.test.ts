@@ -64,6 +64,17 @@ describe('<lt-tab>', () => {
     expect(el.getAttribute('size')).toBe(size);
   });
 
+  it('has default orientation of horizontal', () => {
+    expect(el.orientation).toBe('horizontal');
+    expect(el.getAttribute('orientation')).toBe('horizontal');
+  });
+
+  it('reflects vertical orientation to attribute', async () => {
+    el.orientation = 'vertical';
+    await el.updateComplete;
+    expect(el.getAttribute('orientation')).toBe('vertical');
+  });
+
   it('renders icon when provided', async () => {
     el.iconStart = 'home';
     await el.updateComplete;

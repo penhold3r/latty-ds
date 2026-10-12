@@ -5,6 +5,7 @@ export type TabGroupProps = Omit<HTMLAttributes<TabGroupEl>, 'onChange'> & {
   value?: string;
   appearance?: TabGroupEl['appearance'];
   size?: TabGroupEl['size'];
+  orientation?: TabGroupEl['orientation'];
   onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 

@@ -52,4 +52,32 @@ export const tabGroupStyles = css`
     gap: var(--lt-spacing-2);
     padding: var(--lt-spacing-1);
   }
+
+  /* ── Vertical orientation ─────────────────────────────────────────────── Tabs stack in a column beside the
+     panels instead of a row above them; the dividing border moves from the bottom edge to the inline-end
+     (trailing) edge of the tab list. */
+  :host([orientation='vertical']) .tab-group {
+    flex-direction: row;
+  }
+
+  :host([orientation='vertical']) .tabs-container {
+    border-bottom: none;
+    border-inline-end: 1px solid var(--lt-border-default);
+    flex-direction: column;
+    overflow-x: visible;
+    overflow-y: auto;
+  }
+
+  :host([orientation='vertical']) .tabs-container::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  :host([orientation='vertical']) .panels-container {
+    padding-block: 0;
+    padding-inline: var(--lt-spacing-4) 0;
+  }
+
+  :host([orientation='vertical'][appearance='pills']) .tabs-container {
+    border-inline-end: none;
+  }
 `;

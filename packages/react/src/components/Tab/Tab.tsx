@@ -8,6 +8,7 @@ export type TabProps = HTMLAttributes<TabEl> & {
   active?: boolean;
   disabled?: boolean;
   size?: TabEl['size'];
+  orientation?: TabEl['orientation'];
 };
 
 export const Tab = forwardRef<TabEl, TabProps>(function Tab({ children, ...props }, forwardedRef) {

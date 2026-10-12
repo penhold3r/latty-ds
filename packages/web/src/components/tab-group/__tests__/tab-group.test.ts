@@ -208,6 +208,87 @@ describe('<lt-tab-group>', () => {
   });
 });
 
+describe('orientation', () => {
+  let el: TabGroup;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-tab-group') as TabGroup;
+    el.value = 'tab1';
+    el.innerHTML = `
+      <lt-tab value="tab1" label="Tab 1"></lt-tab>
+      <lt-tab value="tab2" label="Tab 2"></lt-tab>
+      <lt-tab value="tab3" label="Tab 3"></lt-tab>
+      <div slot="panel" data-value="tab1">Panel 1</div>
+      <div slot="panel" data-value="tab2">Panel 2</div>
+      <div slot="panel" data-value="tab3">Panel 3</div>
+    `;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  const arrow = (target: Element, key: string) =>
+    target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+
+  it('defaults to horizontal and omits aria-orientation', () => {
+    expect(el.orientation).toBe('horizontal');
+    expect(el.getAttribute('orientation')).toBe('horizontal');
+    expect(el.shadowRoot!.querySelector('[role="tablist"]')!.hasAttribute('aria-orientation')).toBe(false);
+  });
+
+  it('sets aria-orientation="vertical" on the tablist', async () => {
+    el.orientation = 'vertical';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('[role="tablist"]')!.getAttribute('aria-orientation')).toBe('vertical');
+  });
+
+  it('forwards orientation to each tab', async () => {
+    el.orientation = 'vertical';
+    await el.updateComplete;
+    const tabs = el.querySelectorAll('lt-tab');
+    tabs.forEach((tab) => expect(tab.getAttribute('orientation')).toBe('vertical'));
+  });
+
+  it('ArrowDown/Up navigate when vertical; ArrowRight/Left do nothing', async () => {
+    el.orientation = 'vertical';
+    await el.updateComplete;
+    const [tab1, tab2] = el.querySelectorAll('lt-tab');
+
+    arrow(tab1, 'ArrowRight');
+    expect(el.value).toBe('tab1');
+
+    arrow(tab1, 'ArrowDown');
+    expect(el.value).toBe('tab2');
+    expect(document.activeElement).toBe(tab2);
+
+    arrow(tab2, 'ArrowUp');
+    expect(el.value).toBe('tab1');
+  });
+
+  it('ArrowRight/Left still navigate when horizontal; ArrowDown/Up do nothing', () => {
+    const [tab1] = el.querySelectorAll('lt-tab');
+
+    arrow(tab1, 'ArrowDown');
+    expect(el.value).toBe('tab1');
+
+    arrow(tab1, 'ArrowRight');
+    expect(el.value).toBe('tab2');
+  });
+
+  it('Home/End still work regardless of orientation', async () => {
+    el.orientation = 'vertical';
+    await el.updateComplete;
+    const [tab1, , tab3] = el.querySelectorAll('lt-tab');
+    arrow(tab1, 'End');
+    expect(el.value).toBe('tab3');
+    arrow(tab3, 'Home');
+    expect(el.value).toBe('tab1');
+  });
+});
+
 describe('aria-controls only points at a real panel', () => {
   it('links each tab to its own panel and leaves a tab with no panel unlinked', async () => {
     const group = document.createElement('lt-tab-group') as TabGroup;

@@ -40,6 +40,15 @@ tab is controlled by <code>value</code> on the group.
     console.log('active tab:', e.detail.value);
   });
 <\/script>
+
+<!-- Vertical orientation: tabs stack beside the panels; arrow keys become Up/Down -->
+
+<lt-tab-group value="tab1" orientation="vertical">
+  <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
+  <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
+  <div slot="panel" data-value="tab1">Overview content</div>
+  <div slot="panel" data-value="tab2">Settings content</div>
+</lt-tab-group>
     `}
     react={`
 import { TabGroup, Tab } from '@latty-ds/react';
@@ -49,6 +58,12 @@ import { TabGroup, Tab } from '@latty-ds/react';
   <Tab label="Settings" value="tab2" iconStart="settings" />
   <Tab label="Disabled" value="tab3" disabled />
 </TabGroup>
+
+// Vertical orientation: tabs stack beside the panels; arrow keys become Up/Down
+<TabGroup value="tab1" orientation="vertical">
+  <Tab label="Overview" value="tab1" iconStart="home" />
+  <Tab label="Settings" value="tab2" iconStart="settings" />
+</TabGroup>
     `}
     vue={`
 <template>
@@ -57,6 +72,12 @@ import { TabGroup, Tab } from '@latty-ds/react';
     <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
     <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
     <lt-tab label="Disabled" value="tab3" disabled></lt-tab>
+  </lt-tab-group>
+
+  <!-- Vertical orientation: tabs stack beside the panels; arrow keys become Up/Down -->
+  <lt-tab-group value="tab1" orientation="vertical">
+    <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
+    <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
   </lt-tab-group>
 </template>
     `}

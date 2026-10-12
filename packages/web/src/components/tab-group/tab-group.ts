@@ -1,10 +1,10 @@
 import { enabledItems, rovingTargetOf, stepIndex } from '../shared/roving';
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
 
 import { tabGroupStyles } from './tab-group.styles';
-import { TabGroupSize, TabGroupAppearance } from './tab-group.types';
+import { TabGroupSize, TabGroupAppearance, TabGroupOrientation } from './tab-group.types';
 import type { Tab } from '../tab/tab';
 
 import '../tab/tab';
@@ -69,6 +69,13 @@ export class TabGroup extends ThemeableElement {
   @property({ reflect: true }) size: TabGroupSize = 'md';
 
   /**
+   * Orientation of the tab list. Vertical stacks the tabs in a column beside the panels and swaps the keyboard
+   * navigation from ArrowLeft/Right to ArrowUp/Down, per the WAI-ARIA Tabs pattern.
+   * @default 'horizontal'
+   */
+  @property({ reflect: true }) orientation: TabGroupOrientation = 'horizontal';
+
+  /**
    * Reference to all slotted tab elements.
    * @private
    */
@@ -125,6 +132,7 @@ export class TabGroup extends ThemeableElement {
     this.tabs.forEach((tab) => {
       // Set size
       tab.size = this.size;
+      tab.orientation = this.orientation;
 
       // Set active state
       tab.active = tab.value === this.value;
@@ -205,22 +213,26 @@ export class TabGroup extends ThemeableElement {
   };
 
   /**
-   * ArrowLeft/Right move the roving tab stop (and, per the automatic-activation model, select the tab); Home/End
-   * jump to the first/last enabled tab. Disabled tabs are skipped entirely, matching the radiogroup/listbox
-   * patterns elsewhere in the DS.
+   * ArrowLeft/Right (or ArrowUp/Down when `orientation="vertical"`, per the WAI-ARIA Tabs pattern) move the
+   * roving tab stop (and, per the automatic-activation model, select the tab); Home/End jump to the first/last
+   * enabled tab. Disabled tabs are skipped entirely, matching the radiogroup/listbox patterns elsewhere in the
+   * DS.
    * @private
    */
   private handleTabKeydown = (e: KeyboardEvent) => {
     const enabled = enabledItems(this.tabs ?? []);
     if (enabled.length === 0) return;
 
+    const forwardKey = this.orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
+    const backwardKey = this.orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
+
     const index = enabled.indexOf(e.currentTarget as Tab);
     let next: Tab | undefined;
     switch (e.key) {
-      case 'ArrowRight':
+      case forwardKey:
         next = enabled[stepIndex(index, enabled.length, 1)];
         break;
-      case 'ArrowLeft':
+      case backwardKey:
         next = enabled[stepIndex(index, enabled.length, -1)];
         break;
       case 'Home':
@@ -271,7 +283,7 @@ export class TabGroup extends ThemeableElement {
       this.updatePanels();
     }
 
-    if (changedProperties.has('size') || changedProperties.has('appearance')) {
+    if (changedProperties.has('size') || changedProperties.has('appearance') || changedProperties.has('orientation')) {
       this.updateTabs();
     }
   }
@@ -279,7 +291,11 @@ export class TabGroup extends ThemeableElement {
   render() {
     return html`
       <div class="tab-group">
-        <div class="tabs-container" role="tablist">
+        <div
+          class="tabs-container"
+          role="tablist"
+          aria-orientation=${this.orientation === 'vertical' ? 'vertical' : nothing}
+        >
           <slot @slotchange=${this.handleSlotChange}></slot>
         </div>
         <div class="panels-container" part="panels-container">

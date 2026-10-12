@@ -3,7 +3,7 @@ import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { tabStyles } from './tab.styles';
-import { TabSize } from './tab.types';
+import { TabSize, TabOrientation } from './tab.types';
 
 import '@latty-ds/icons';
 
@@ -63,6 +63,12 @@ export class Tab extends ThemeableElement {
    * @default 'md'
    */
   @property({ reflect: true }) size: TabSize = 'md';
+
+  /**
+   * Orientation, forwarded from the parent `lt-tab-group` — not meant to be set directly.
+   * @default 'horizontal'
+   */
+  @property({ reflect: true }) orientation: TabOrientation = 'horizontal';
 
   connectedCallback() {
     super.connectedCallback();

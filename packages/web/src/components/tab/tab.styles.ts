@@ -71,6 +71,18 @@ export const tabStyles = css`
     font-size: 1.25rem;
   }
 
+  /* ── Vertical orientation ─────────────────────────────────────────────── The active indicator moves from the
+     bottom edge to the inline-start (leading) edge, so it stays legible when tabs stack in a column instead of
+     a row. */
+  :host([orientation='vertical']) .tab {
+    border-bottom: none;
+    border-inline-start: 2px solid transparent;
+  }
+
+  :host([orientation='vertical'][active]) .tab {
+    border-inline-start-color: var(--lt-border-primary-strong);
+  }
+
   /* Pills variant (applied by parent tab-group) */
   :host([data-variant='pills']) .tab {
     border-bottom: none;
