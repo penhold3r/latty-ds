@@ -36,6 +36,7 @@ export { SidePanel, type SidePanelProps } from './components/SidePanel';
 export { Skeleton, type SkeletonProps } from './components/Skeleton';
 export { Slider, type SliderProps } from './components/Slider';
 export { Snackbar, type SnackbarProps } from './components/Snackbar';
+export { SnackbarGroup, type SnackbarGroupProps } from './components/SnackbarGroup';
 export { Spinner, type SpinnerProps } from './components/Spinner';
 export { Surface, type SurfaceProps } from './components/Surface';
 export { Switch, type SwitchProps } from './components/Switch';

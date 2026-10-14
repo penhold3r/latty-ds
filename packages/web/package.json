@@ -172,6 +172,10 @@
       "import": "./dist/components/snackbar/index.js",
       "default": "./dist/components/snackbar/index.js"
     },
+    "./snackbar-group": {
+      "import": "./dist/components/snackbar-group/index.js",
+      "default": "./dist/components/snackbar-group/index.js"
+    },
     "./spinner": {
       "import": "./dist/components/spinner/index.js",
       "default": "./dist/components/spinner/index.js"

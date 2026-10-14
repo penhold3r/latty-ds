@@ -9337,6 +9337,202 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/snackbar-group/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SnackbarGroup",
+          "declaration": {
+            "name": "SnackbarGroup",
+            "module": "./snackbar-group"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "SnackbarShowOptions",
+          "declaration": {
+            "name": "SnackbarShowOptions",
+            "module": "./snackbar-group.types"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/snackbar-group/snackbar-group.styles.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "snackbarGroupStyles",
+          "default": "css` /* ── Popover ─────────────────────────────────────────────── Same reasoning as lt-snackbar's own (now managed-mode-only) comment: the host itself is a \"manual\" popover so the whole stack renders in the top layer, above an open lt-dialog/lt-sidepanel regardless of z-index. Shown/hidden based on whether anything is actually visible (see snackbar-group.ts) rather than unconditionally, so it has zero top-layer presence while empty. display is deliberately NOT set on the base rule for the same native-default reason. */ :host { align-items: center; background: transparent; border: none; bottom: 24px; flex-direction: column; gap: var(--lt-spacing-2); left: 50%; margin: 0; max-width: calc(100vw - 48px); overflow: visible; padding: 0; position: fixed; right: auto; top: auto; transform: translateX(-50%); width: max-content; } :host(:popover-open) { display: flex; } `"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "snackbarGroupStyles",
+          "declaration": {
+            "name": "snackbarGroupStyles",
+            "module": "src/components/snackbar-group/snackbar-group.styles.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/snackbar-group/snackbar-group.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Coordinates multiple `lt-snackbar`s shown imperatively: queues excess ones past `max-visible` instead of\nletting them overlap at the same spot, and stacks simultaneously-visible ones vertically. Place one instance\nonce (e.g. at the end of `<body>`); every other part of the app calls its `show()` method.\n\nRenders as a native \"manual\" popover on its own host (same reasoning as `lt-snackbar` itself used to have\nalone, before this component existed) so the whole stack always appears in the top layer, above an open\n`lt-dialog`/`lt-sidepanel` regardless of z-index — shown only while at least one snackbar is actually visible,\nso it has zero top-layer presence otherwise.",
+          "name": "SnackbarGroup",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "snackbarGroupStyles"
+            },
+            {
+              "kind": "field",
+              "name": "maxVisible",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "How many snackbars can be visible at once. Calls to `show()` past this limit queue instead of overlapping,\nand are presented automatically as earlier ones close."
+            },
+            {
+              "kind": "field",
+              "name": "_visible",
+              "type": {
+                "text": "Snackbar[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "field",
+              "name": "_queue",
+              "type": {
+                "text": "Snackbar[]"
+              },
+              "privacy": "private",
+              "default": "[]"
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "Snackbar"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "options",
+                  "type": {
+                    "text": "SnackbarShowOptions"
+                  }
+                }
+              ],
+              "description": "Creates and shows a snackbar (or queues it if `max-visible` is already reached). Returns the created\n`lt-snackbar` instance — call `.hide()` on it directly to dismiss early, or listen for its own events."
+            },
+            {
+              "kind": "method",
+              "name": "_build",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Snackbar"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "options",
+                  "type": {
+                    "text": "SnackbarShowOptions"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_present",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "sb",
+                  "type": {
+                    "text": "Snackbar"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_onHide",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "sb",
+                  "type": {
+                    "text": "Snackbar"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_removeAfterExit",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "sb",
+                  "type": {
+                    "text": "Snackbar"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_promoteFromQueue",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_syncPopoverState",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "superclass": {
+            "name": "ThemeableElement",
+            "module": "/src/base"
+          },
+          "tagName": "lt-snackbar-group",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "SnackbarGroup",
+          "declaration": {
+            "name": "SnackbarGroup",
+            "module": "src/components/snackbar-group/snackbar-group.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/snackbar/index.ts",
       "declarations": [],
       "exports": [
@@ -9365,7 +9561,7 @@
         {
           "kind": "variable",
           "name": "snackbarStyles",
-          "default": "css` /* ── Popover ─────────────────────────────────────────────── The host itself is the popover element (no wrapped child, unlike lt-dialog/lt-sidepanel's inner <dialog>) — the browser's own [popover] UA stylesheet sets inset:0, margin:auto, width/height:fit-content, padding, border, and Canvas colors, all of which are reset below in favor of this component's own bottom-center placement. display is deliberately NOT set on the base rule — a closed (not :popover-open) popover must stay display:none (the native default) so it's genuinely non-interactive and out of the accessibility tree; it's set to block only for the open state, below. display/overlay need transition-behavior: allow-discrete so hidePopover() doesn't remove it from rendering instantly, cutting the exit transition off partway through — same reasoning as lt-dialog. ─────── */ :host { background: transparent; border: none; bottom: 24px; left: 50%; margin: 0; max-width: calc(100vw - 48px); opacity: 0; overflow: visible; padding: 0; position: fixed; right: auto; top: auto; transform: translateX(-50%) translateY(8px); transition: opacity 200ms ease, transform 200ms ease, display 200ms allow-discrete, overlay 200ms allow-discrete; width: max-content; } :host([open]) { display: block; opacity: 1; transform: translateX(-50%) translateY(0); } /* A newly-shown popover has no earlier rendered frame to transition from — @starting-style supplies one so the fade/slide-in actually animates instead of snapping straight to the open position. */ @starting-style { :host([open]) { opacity: 0; transform: translateX(-50%) translateY(8px); } } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: center; color: var(--lt-text-inverse); display: flex; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); font-size: 0.875rem; gap: var(--lt-spacing-2); line-height: 1.4; padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Variant text colors ─────────────────────────────────── */ :host([variant='success']) .inner { color: var(--lt-text-on-success); } :host([variant='warning']) .inner { color: var(--lt-text-on-warning); } :host([variant='error']) .inner { color: var(--lt-text-on-error); } :host([variant='info']) .inner { color: var(--lt-text-on-info); } /* ── Variant icon ────────────────────────────────────────── */ .variant-icon { flex-shrink: 0; font-size: 1.125rem; } /* ── Message ─────────────────────────────────────────────── */ .message { flex: 1; } /* ── Action button ───────────────────────────────────────── */ .action { background: transparent; border: none; color: inherit; cursor: pointer; font-family: inherit; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.05em; padding: 0 var(--lt-spacing-1); text-transform: uppercase; } /* Text on a coloured fill is never dimmed with opacity (that blends it into the fill and lowers its contrast below whatever the on-colour was picked for), so hover is shown with an underline instead. */ .action:hover { text-decoration: underline; } /* ── Close button ────────────────────────────────────────── */ .close { align-items: center; background: transparent; border: none; color: inherit; cursor: pointer; display: flex; flex-shrink: 0; justify-content: center; min-height: 24px; /* WCAG 2.5.8 */ min-width: 24px; opacity: 0.7; padding: 0; } .close:hover { opacity: 1; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { :host { transition: none; } } `"
+          "default": "css` /* ── Popover ─────────────────────────────────────────────── The host itself is the popover element (no wrapped child, unlike lt-dialog/lt-sidepanel's inner <dialog>) — the browser's own [popover] UA stylesheet sets inset:0, margin:auto, width/height:fit-content, padding, border, and Canvas colors, all of which are reset below in favor of this component's own bottom-center placement. display is deliberately NOT set on the base rule — a closed (not :popover-open) popover must stay display:none (the native default) so it's genuinely non-interactive and out of the accessibility tree; it's set to block only for the open state, below. display/overlay need transition-behavior: allow-discrete so hidePopover() doesn't remove it from rendering instantly, cutting the exit transition off partway through — same reasoning as lt-dialog. ─────── */ :host { background: transparent; border: none; bottom: 24px; left: 50%; margin: 0; max-width: calc(100vw - 48px); opacity: 0; overflow: visible; padding: 0; position: fixed; right: auto; top: auto; transform: translateX(-50%) translateY(8px); transition: opacity 200ms ease, transform 200ms ease, display 200ms allow-discrete, overlay 200ms allow-discrete; width: max-content; } :host([open]) { display: block; opacity: 1; transform: translateX(-50%) translateY(0); } /* A newly-shown popover has no earlier rendered frame to transition from — @starting-style supplies one so the fade/slide-in actually animates instead of snapping straight to the open position. */ @starting-style { :host([open]) { opacity: 0; transform: translateX(-50%) translateY(8px); } } /* ── Managed mode (lt-snackbar-group) ───────────────────────────────────── A managed instance isn't its own popover (no [popover] attribute at all, see snackbar.ts), so it needs its own explicit closed-state display:none — nothing native supplies that default here. It also isn't self-positioned: the group owns a single fixed/top-layer container and lays several of these out as plain flex children inside it (stacking only works if each instance behaves like a normal block in flow, not an independently centered fixed box). */ :host([managed]) { bottom: auto; display: none; left: auto; max-width: none; position: static; transform: translateY(8px); width: auto; } :host([managed][open]) { display: block; transform: translateY(0); } @starting-style { :host([managed][open]) { transform: translateY(8px); } } /* ── Layout ──────────────────────────────────────────────── */ .inner { align-items: center; color: var(--lt-text-inverse); display: flex; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); font-size: 0.875rem; gap: var(--lt-spacing-2); line-height: 1.4; padding: var(--lt-spacing-3) var(--lt-spacing-4); } /* ── Variant text colors ─────────────────────────────────── */ :host([variant='success']) .inner { color: var(--lt-text-on-success); } :host([variant='warning']) .inner { color: var(--lt-text-on-warning); } :host([variant='error']) .inner { color: var(--lt-text-on-error); } :host([variant='info']) .inner { color: var(--lt-text-on-info); } /* ── Variant icon ────────────────────────────────────────── */ .variant-icon { flex-shrink: 0; font-size: 1.125rem; } /* ── Message ─────────────────────────────────────────────── */ .message { flex: 1; } /* ── Action button ───────────────────────────────────────── */ .action { background: transparent; border: none; color: inherit; cursor: pointer; font-family: inherit; font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.05em; padding: 0 var(--lt-spacing-1); text-transform: uppercase; } /* Text on a coloured fill is never dimmed with opacity (that blends it into the fill and lowers its contrast below whatever the on-colour was picked for), so hover is shown with an underline instead. */ .action:hover { text-decoration: underline; } /* ── Close button ────────────────────────────────────────── */ .close { align-items: center; background: transparent; border: none; color: inherit; cursor: pointer; display: flex; flex-shrink: 0; justify-content: center; min-height: 24px; /* WCAG 2.5.8 */ min-width: 24px; opacity: 0.7; padding: 0; } .close:hover { opacity: 1; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { :host { transition: none; } } `"
         }
       ],
       "exports": [
@@ -9480,6 +9676,15 @@
               },
               "default": "{}",
               "description": "Overridable UI text (the close button's accessible name), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "managed",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Set automatically by `lt-snackbar-group` on every instance it creates — not meant to be set directly. A\nmanaged snackbar isn't its own top-layer popover and doesn't self-position (no fixed bottom/left/transform);\nit renders as a plain flex child inside the group's own single fixed/top-layer container instead, so\nseveral can stack vertically. A standalone `<lt-snackbar>` (the default) keeps positioning/popover behavior\nexactly as before."
             },
             {
               "kind": "field",

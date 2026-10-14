@@ -20,12 +20,13 @@ Organized by UI intent rather than alphabetically. See [`components.md`](./compo
 
 ## Showing status or metadata
 
-| Need                                              | Component     | Notes                                                     |
-| ------------------------------------------------- | ------------- | --------------------------------------------------------- |
-| A small count, category, or status label          | `lt-badge`    | Not interactive/removable                                 |
-| A removable tag (filters, multi-select summaries) | `lt-chip`     | Can carry a dismiss action                                |
-| An inline message that needs the user's attention | `lt-alert`    | Supports icon + dismiss button, sits inline in the layout |
-| A transient, auto-dismissing notification         | `lt-snackbar` | Anchored to the viewport, not inline                      |
+| Need                                                                     | Component           | Notes                                                                          |
+| ------------------------------------------------------------------------ | ------------------- | ------------------------------------------------------------------------------ |
+| A small count, category, or status label                                 | `lt-badge`          | Not interactive/removable                                                      |
+| A removable tag (filters, multi-select summaries)                        | `lt-chip`           | Can carry a dismiss action                                                     |
+| An inline message that needs the user's attention                        | `lt-alert`          | Supports icon + dismiss button, sits inline in the layout                      |
+| A transient, auto-dismissing notification                                | `lt-snackbar`       | Anchored to the viewport, not inline                                           |
+| Toasts triggered imperatively from anywhere (e.g. after an async action) | `lt-snackbar-group` | Place once; its `show()` method queues/stacks instead of letting calls overlap |
 
 ## Feedback and loading states
 

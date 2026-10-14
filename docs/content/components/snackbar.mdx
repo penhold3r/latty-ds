@@ -16,6 +16,13 @@ confirmations, undo prompts, or transient alerts. The auto-dismiss countdown pau
 or focused — including the action button itself — so an "Undo" snackbar never disappears out from under someone
 reaching for it, and resumes with whatever time was left once they move away.
 
+Showing more than one at a time this way makes them overlap at the same spot. For snackbars shown imperatively
+from anywhere in the app (the common case — after an async action succeeds or fails), use
+
+<code>lt-snackbar-group</code> instead: place one instance once, then call its <code>show()</code> method with a plain
+options object. It queues calls past <code>max-visible</code> instead of overlapping them, and stacks
+simultaneously-visible ones.
+
 ## Playground
 
 <ComponentPlayground
@@ -40,14 +47,31 @@ reaching for it, and resumes with whatever time was left once they move away.
 <lt-snackbar action-label="Undo">Message deleted</lt-snackbar>
 
 <lt-snackbar duration="0" variant="warning">You are offline</lt-snackbar>
+
+<!-- Place once; call show() from anywhere. Queues past max-visible instead of overlapping. -->
+
+<lt-snackbar-group id="toasts" max-visible="2"></lt-snackbar-group>
+
+<script type="module">
+  const toasts = document.getElementById('toasts');
+  document.getElementById('delete-btn').addEventListener('click', () => {
+    toasts.show({
+      message: 'File deleted',
+      variant: 'success',
+      actionLabel: 'Undo',
+      onAction: () => restoreFile()
+    });
+  });
+<\/script>
 `}
     react={`
 import { useRef } from 'react';
-import { Snackbar, Button } from '@latty-ds/react';
-import type { Snackbar as SnackbarEl } from '@latty-ds/web';
+import { Snackbar, Button, SnackbarGroup } from '@latty-ds/react';
+import type { Snackbar as SnackbarEl, SnackbarGroup as SnackbarGroupEl } from '@latty-ds/web';
 
 function Example() {
 const ref = useRef<SnackbarEl>(null);
+const toastsRef = useRef<SnackbarGroupEl>(null);
 return (
 
 <>
@@ -55,19 +79,45 @@ return (
 <Snackbar ref={ref} variant="success" actionLabel="Undo">
 Changes saved
 </Snackbar>
+
+{/_ Place once; call show() from anywhere. Queues past maxVisible instead of overlapping. _/}
+<SnackbarGroup ref={toastsRef} maxVisible={2} />
+<Button
+variant="error"
+onClick={() =>
+toastsRef.current?.show({
+message: 'File deleted',
+variant: 'success',
+actionLabel: 'Undo',
+onAction: () => restoreFile()
+})
+}
+
+>
+
+    Delete
+  </Button>
 </>
 );
 }
 `}
     vue={`
 
-<script setup>import {ref} from 'vue' const snackbar = ref(null)</script>
+<script setup>import {ref} from 'vue' const snackbar = ref(null) const toasts = ref(null) function onDelete() {
+toasts.value?.show({ message: 'File deleted', variant: 'success', actionLabel: 'Undo', onAction: () =>
+restoreFile() }) }</script>
 
 <template>
   <lt-button variant="primary" @click="snackbar?.show()">Save</lt-button>
   <lt-snackbar ref="snackbar" variant="success" action-label="Undo">
     Changes saved
   </lt-snackbar>
+
+  <!-- Place once; call show() from anywhere. Queues past max-visible instead of overlapping. -->
+
+<lt-snackbar-group ref="toasts" max-visible="2"></lt-snackbar-group>
+<lt-button variant="error" @click="onDelete">Delete</lt-button>
+
 </template>
     `}
   />
@@ -116,6 +166,10 @@ Both communicate feedback to the user, but they serve different moments:
   </tbody>
 </table>
 
-## API
+## API — lt-snackbar
 
 <ApiTable tag="lt-snackbar" />
+
+## API — lt-snackbar-group
+
+<ApiTable tag="lt-snackbar-group" />

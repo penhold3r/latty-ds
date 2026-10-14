@@ -47,6 +47,32 @@ export const snackbarStyles = css`
     }
   }
 
+  /* ── Managed mode (lt-snackbar-group) ───────────────────────────────────── A managed instance isn't its own
+     popover (no [popover] attribute at all, see snackbar.ts), so it needs its own explicit closed-state
+     display:none — nothing native supplies that default here. It also isn't self-positioned: the group owns a
+     single fixed/top-layer container and lays several of these out as plain flex children inside it (stacking
+     only works if each instance behaves like a normal block in flow, not an independently centered fixed box). */
+  :host([managed]) {
+    bottom: auto;
+    display: none;
+    left: auto;
+    max-width: none;
+    position: static;
+    transform: translateY(8px);
+    width: auto;
+  }
+
+  :host([managed][open]) {
+    display: block;
+    transform: translateY(0);
+  }
+
+  @starting-style {
+    :host([managed][open]) {
+      transform: translateY(8px);
+    }
+  }
+
   /* ── Layout ──────────────────────────────────────────────── */
 
   .inner {

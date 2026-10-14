@@ -90,6 +90,15 @@ export class Snackbar extends ThemeableElement {
   /** Overridable UI text (the close button's accessible name), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<SnackbarLabels> = {};
 
+  /**
+   * Set automatically by `lt-snackbar-group` on every instance it creates — not meant to be set directly. A
+   * managed snackbar isn't its own top-layer popover and doesn't self-position (no fixed bottom/left/transform);
+   * it renders as a plain flex child inside the group's own single fixed/top-layer container instead, so
+   * several can stack vertically. A standalone `<lt-snackbar>` (the default) keeps positioning/popover behavior
+   * exactly as before.
+   */
+  @property({ type: Boolean, reflect: true }) managed = false;
+
   private get _labels(): SnackbarLabels {
     return { ...DEFAULT_LABELS, ...this.labels };
   }
@@ -130,8 +139,9 @@ export class Snackbar extends ThemeableElement {
     // whole reason for this migration (§6.1: a snackbar shown while a dialog is open would otherwise be hidden
     // behind it, since top-layer content always wins). "manual" means nothing native can show or dismiss it —
     // no light-dismiss on outside click, no Escape — only our own show()/hide() can, matching the existing
-    // behavior (duration timer + explicit close button) exactly.
-    this.setAttribute('popover', 'manual');
+    // behavior (duration timer + explicit close button) exactly. Skipped entirely when `managed` — the group
+    // that created this instance owns top-layer rendering for the whole stack with its own single popover.
+    if (!this.managed) this.setAttribute('popover', 'manual');
     this.addEventListener('pointerenter', this._onPointerEnter);
     this.addEventListener('pointerleave', this._onPointerLeave);
     this.addEventListener('focusin', this._onFocusIn);
@@ -175,6 +185,9 @@ export class Snackbar extends ThemeableElement {
   }
 
   private _syncPopoverState() {
+    // Not a popover at all when managed (see `managed`'s own doc comment) — this instance's visibility is
+    // driven purely by the `:host([managed][open])` CSS rule, same as any other reactive attribute toggle.
+    if (this.managed) return;
     if (this.open) {
       if (!this.matches(':popover-open')) this.showPopover();
     } else if (this.matches(':popover-open')) {

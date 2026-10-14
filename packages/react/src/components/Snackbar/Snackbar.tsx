@@ -11,6 +11,7 @@ export type SnackbarProps = HTMLAttributes<SnackbarEl> & {
   elevation?: SnackbarEl['elevation'];
   appearance?: SnackbarEl['appearance'];
   labels?: SnackbarEl['labels'];
+  managed?: boolean;
   onShow?: (event: CustomEvent) => void;
   onHide?: (event: CustomEvent) => void;
   onAction?: (event: CustomEvent) => void;

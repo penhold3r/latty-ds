@@ -58,6 +58,7 @@ export * from './components/avatar-group';
 export * from './components/badge';
 export * from './components/tooltip';
 export * from './components/snackbar';
+export * from './components/snackbar-group';
 export * from './components/alert';
 export * from './components/slider';
 export * from './components/dropdown';
