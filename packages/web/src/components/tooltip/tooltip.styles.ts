@@ -56,10 +56,12 @@ export const tooltipStyles = css`
   }
 
   /* pointer-events stays none by default so the bubble never intercepts clicks meant for whatever's underneath
-     it (e.g. another control it happens to overlap). hoverable opts back in — without this, the real mouse could
-     never actually hit the bubble to keep it open, no matter what tooltip.ts's pointerenter/pointerleave
-     listeners do. */
-  :host([hoverable]) .tooltip {
+     it (e.g. another control it happens to overlap). hoverable/touch opt back in: without this, the real mouse
+     could never actually hit the bubble to keep it open (hoverable's pointerenter/pointerleave listeners would
+     never fire), and on touch, a tap landing on the visible bubble would silently fall through to activate
+     whatever it happens to be covering instead of just dismissing the tooltip. */
+  :host([hoverable]) .tooltip,
+  :host([touch]) .tooltip {
     pointer-events: auto;
   }
 

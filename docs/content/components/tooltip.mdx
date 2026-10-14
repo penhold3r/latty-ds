@@ -46,6 +46,12 @@ visible label.
 <lt-tooltip content="a1b2c3d4-e5f6-7890-abcd-ef1234567890" hoverable>
   <code>Copy ID</code>
 </lt-tooltip>
+
+<!-- A tap shows it immediately; tap again, tap elsewhere, or press Escape to dismiss -->
+
+<lt-tooltip content="Encrypted with your device's passcode" touch>
+  <code>Why is this locked?</code>
+</lt-tooltip>
 		`}
     react={`
 import { Tooltip } from '@latty-ds/react';
@@ -78,6 +84,12 @@ import { Tooltip } from '@latty-ds/react';
 <Tooltip content="a1b2c3d4-e5f6-7890-abcd-ef1234567890" hoverable>
   <code>Copy ID</code>
 </Tooltip>
+
+{/* A tap shows it immediately; tap again, tap elsewhere, or press Escape to dismiss */}
+
+<Tooltip content="Encrypted with your device's passcode" touch>
+  <code>Why is this locked?</code>
+</Tooltip>
 		`}
     vue={`
 <template>
@@ -98,8 +110,14 @@ import { Tooltip } from '@latty-ds/react';
 
   <!-- Stays open briefly when the pointer leaves, so it can be reached to select/copy its text -->
 
-  <lt-tooltip content="a1b2c3d4-e5f6-7890-abcd-ef1234567890" hoverable>
-    <code>Copy ID</code>
+<lt-tooltip content="a1b2c3d4-e5f6-7890-abcd-ef1234567890" hoverable>
+  <code>Copy ID</code>
+</lt-tooltip>
+
+  <!-- A tap shows it immediately; tap again, tap elsewhere, or press Escape to dismiss -->
+
+  <lt-tooltip content="Encrypted with your device's passcode" touch>
+    <code>Why is this locked?</code>
   </lt-tooltip>
 </template>
 		`}

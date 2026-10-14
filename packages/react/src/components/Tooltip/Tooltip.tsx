@@ -9,6 +9,7 @@ export type TooltipProps = HTMLAttributes<TooltipEl> & {
   color?: string;
   delay?: number;
   hoverable?: boolean;
+  touch?: boolean;
 };
 
 export const Tooltip = forwardRef<TooltipEl, TooltipProps>(function Tooltip({ children, ...props }, forwardedRef) {

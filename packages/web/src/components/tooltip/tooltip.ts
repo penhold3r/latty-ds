@@ -5,7 +5,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 
 import { tooltipStyles } from './tooltip.styles';
 import type { TooltipPlacement } from './tooltip.types';
-import { resolveColorValue } from '../../utils';
+import { resolveColorValue, createClickOutsideHandler } from '../../utils';
 import '../text/text';
 
 let _tooltipIdCounter = 0;
@@ -56,6 +56,14 @@ const HOVER_GRACE_MS = 150;
  *   <code>ID</code>
  * </lt-tooltip>
  * ```
+ *
+ * @example
+ * ```html
+ * <!-- A tap shows it immediately; tap again, tap elsewhere, or press Escape to dismiss -->
+ * <lt-tooltip content="Encrypted with your device's passcode" touch>
+ *   <code>Why is this locked?</code>
+ * </lt-tooltip>
+ * ```
  */
 @customElement('lt-tooltip')
 export class Tooltip extends ThemeableElement {
@@ -104,6 +112,20 @@ export class Tooltip extends ThemeableElement {
 
   private _hoveredBubble = false;
 
+  /**
+   * Switches the trigger's interaction model for touch pointers: a tap shows the tooltip immediately
+   * (bypassing `delay`), instead of the default behavior — a touch tap fires a `pointerenter`/`pointerleave`
+   * pair just like a mouse hover, but `pointerleave` follows almost immediately once the finger lifts, so the
+   * tooltip flashes and vanishes before it can actually be read. Tapping the trigger again, tapping anywhere
+   * else, or pressing Escape (if a keyboard is attached) closes it. Has no effect on mouse/pen pointers, which
+   * keep using the normal hover/focus model regardless of this prop.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) touch = false;
+
+  private _touchOpen = false;
+  private _cleanupOutsideTap: (() => void) | null = null;
+
   private _showTimer?: ReturnType<typeof setTimeout>;
   private _hideTimer?: ReturnType<typeof setTimeout>;
 
@@ -132,7 +154,9 @@ export class Tooltip extends ThemeableElement {
 
   private _sync() {
     const shouldShow =
-      (this._hovered || this._focused || (this.hoverable && this._hoveredBubble)) && !this.disabled && !!this.content;
+      (this._hovered || this._focused || (this.hoverable && this._hoveredBubble) || this._touchOpen) &&
+      !this.disabled &&
+      !!this.content;
 
     if (shouldShow) {
       // Something is hovered/focused again — cancel any grace-period hide that was running.
@@ -222,15 +246,52 @@ export class Tooltip extends ThemeableElement {
     this._tooltipEl.style.top = `${top}px`;
   };
 
-  private _onPointerEnter = () => {
+  private _onPointerEnter = (e: PointerEvent) => {
+    // In touch mode, a tap drives `_touchOpen` instead (see _onPointerUp) — the pointerenter/pointerleave pair
+    // a touch tap also fires would otherwise flash the tooltip via the hover path before the finger even lifts.
+    if (this.touch && e.pointerType === 'touch') return;
     this._hovered = true;
     this._sync();
   };
 
-  private _onPointerLeave = () => {
+  private _onPointerLeave = (e: PointerEvent) => {
+    if (this.touch && e.pointerType === 'touch') return;
     this._hovered = false;
     this._sync();
   };
+
+  private _onPointerUp = (e: PointerEvent) => {
+    if (!this.touch || e.pointerType !== 'touch' || this.disabled || !this.content) return;
+    if (this._touchOpen) {
+      this._closeTouchOpen();
+    } else {
+      this._touchOpen = true;
+      this._clearShowTimer();
+      this._show();
+      this._startTouchOpenWatchers();
+    }
+  };
+
+  private _onEscapeKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') this._closeTouchOpen();
+  };
+
+  private _closeTouchOpen() {
+    this._touchOpen = false;
+    this._hide();
+    this._stopTouchOpenWatchers();
+  }
+
+  private _startTouchOpenWatchers() {
+    this._cleanupOutsideTap = createClickOutsideHandler(this, () => this._closeTouchOpen());
+    document.addEventListener('keydown', this._onEscapeKey);
+  }
+
+  private _stopTouchOpenWatchers() {
+    this._cleanupOutsideTap?.();
+    this._cleanupOutsideTap = null;
+    document.removeEventListener('keydown', this._onEscapeKey);
+  }
 
   private _onFocusIn = () => {
     this._focused = true;
@@ -257,6 +318,7 @@ export class Tooltip extends ThemeableElement {
     super.connectedCallback();
     this.addEventListener('pointerenter', this._onPointerEnter);
     this.addEventListener('pointerleave', this._onPointerLeave);
+    this.addEventListener('pointerup', this._onPointerUp);
     this.addEventListener('focusin', this._onFocusIn);
     this.addEventListener('focusout', this._onFocusOut);
   }
@@ -265,12 +327,15 @@ export class Tooltip extends ThemeableElement {
     super.disconnectedCallback();
     this.removeEventListener('pointerenter', this._onPointerEnter);
     this.removeEventListener('pointerleave', this._onPointerLeave);
+    this.removeEventListener('pointerup', this._onPointerUp);
     this.removeEventListener('focusin', this._onFocusIn);
     this.removeEventListener('focusout', this._onFocusOut);
     this._hovered = false;
     this._focused = false;
+    this._touchOpen = false;
     this._clearShowTimer();
     this._clearHideTimer();
+    this._stopTouchOpenWatchers();
     this._hide();
   }
 

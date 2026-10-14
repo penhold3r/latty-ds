@@ -415,6 +415,147 @@ describe('<lt-tooltip>', () => {
     });
   });
 
+  describe('touch', () => {
+    let wrap: Tooltip;
+    let btn: HTMLButtonElement;
+
+    const bubble = () => wrap.shadowRoot!.querySelector<HTMLElement>('.tooltip')!;
+    const tap = () => {
+      wrap.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'touch', bubbles: true }));
+      wrap.dispatchEvent(new PointerEvent('pointerup', { pointerType: 'touch', bubbles: true }));
+      wrap.dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'touch', bubbles: true }));
+    };
+
+    beforeEach(async () => {
+      wrap = document.createElement('lt-tooltip') as Tooltip;
+      wrap.content = 'Tip';
+      wrap.touch = true;
+      btn = document.createElement('button');
+      wrap.appendChild(btn);
+      document.body.appendChild(wrap);
+      await wrap.updateComplete;
+    });
+
+    afterEach(() => {
+      wrap.remove();
+    });
+
+    it('defaults to false', () => {
+      expect(wrap.touch).toBe(true); // this instance opted in in beforeEach
+      const fresh = document.createElement('lt-tooltip') as Tooltip;
+      expect(fresh.touch).toBe(false);
+    });
+
+    it('a tap shows the tooltip immediately, bypassing delay', async () => {
+      wrap.delay = 1000;
+      tap();
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+    });
+
+    it('a touch pointerenter/pointerleave pair alone does not open it — only pointerup toggles', async () => {
+      wrap.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'touch', bubbles: true }));
+      wrap.dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'touch', bubbles: true }));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('tapping the trigger again closes it', async () => {
+      tap();
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+
+      tap();
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('tapping outside closes it', async () => {
+      tap();
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+
+      document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('pressing Escape closes it', async () => {
+      tap();
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('a non-Escape key does not close it', async () => {
+      tap();
+      await wrap.updateComplete;
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+    });
+
+    it('does nothing while disabled', async () => {
+      wrap.disabled = true;
+      await wrap.updateComplete;
+      tap();
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('does nothing with empty content', async () => {
+      wrap.content = '';
+      await wrap.updateComplete;
+      tap();
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('a mouse pointerup does not trigger the tap-toggle', async () => {
+      wrap.dispatchEvent(new PointerEvent('pointerup', { pointerType: 'mouse', bubbles: true }));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('a touch tap does nothing when touch is false', async () => {
+      wrap.touch = false;
+      await wrap.updateComplete;
+      tap();
+      await wrap.updateComplete;
+      // Falls through to the ordinary hover model instead: pointerenter opened it immediately (delay=0), then
+      // pointerleave (also part of `tap()`) closed it again — so by the end of the sequence it's closed either
+      // way, but via the hover path, not a stuck-open touch toggle.
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('mouse hover still works normally when touch is enabled', async () => {
+      wrap.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse', bubbles: true }));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+
+      wrap.dispatchEvent(new PointerEvent('pointerleave', { pointerType: 'mouse', bubbles: true }));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('cleans up the outside-tap and Escape listeners on disconnect', async () => {
+      tap();
+      await wrap.updateComplete;
+      wrap.remove();
+
+      // If the document-level listeners weren't cleaned up on disconnect, these would still find something to
+      // act on (or throw reaching into a disconnected element's internals).
+      expect(() => {
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+        document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));
+      }).not.toThrow();
+    });
+  });
+
   describe('placement', () => {
     let wrap: Tooltip;
 
