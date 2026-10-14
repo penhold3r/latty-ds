@@ -40,6 +40,12 @@ visible label.
 <lt-tooltip content="Delayed" delay="500">
   <button>Hover and wait</button>
 </lt-tooltip>
+
+<!-- Stays open briefly when the pointer leaves, so it can be reached to select/copy its text -->
+
+<lt-tooltip content="a1b2c3d4-e5f6-7890-abcd-ef1234567890" hoverable>
+  <code>Copy ID</code>
+</lt-tooltip>
 		`}
     react={`
 import { Tooltip } from '@latty-ds/react';
@@ -66,6 +72,12 @@ import { Tooltip } from '@latty-ds/react';
 <Tooltip content="Delayed" delay={500}>
   <button>Hover and wait</button>
 </Tooltip>
+
+{/* Stays open briefly when the pointer leaves, so it can be reached to select/copy its text */}
+
+<Tooltip content="a1b2c3d4-e5f6-7890-abcd-ef1234567890" hoverable>
+  <code>Copy ID</code>
+</Tooltip>
 		`}
     vue={`
 <template>
@@ -80,8 +92,14 @@ import { Tooltip } from '@latty-ds/react';
 
   <!-- Waits 500ms before showing, so a fast mouse pass-through never flashes it -->
 
-  <lt-tooltip content="Delayed" delay="500">
-    <button>Hover and wait</button>
+<lt-tooltip content="Delayed" delay="500">
+  <button>Hover and wait</button>
+</lt-tooltip>
+
+  <!-- Stays open briefly when the pointer leaves, so it can be reached to select/copy its text -->
+
+  <lt-tooltip content="a1b2c3d4-e5f6-7890-abcd-ef1234567890" hoverable>
+    <code>Copy ID</code>
   </lt-tooltip>
 </template>
 		`}

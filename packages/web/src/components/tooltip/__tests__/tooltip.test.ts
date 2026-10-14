@@ -284,6 +284,137 @@ describe('<lt-tooltip>', () => {
     });
   });
 
+  describe('hoverable', () => {
+    let wrap: Tooltip;
+    let btn: HTMLButtonElement;
+
+    const bubble = () => wrap.shadowRoot!.querySelector<HTMLElement>('.tooltip')!;
+
+    beforeEach(async () => {
+      vi.useFakeTimers();
+      wrap = document.createElement('lt-tooltip') as Tooltip;
+      wrap.content = 'Tip';
+      btn = document.createElement('button');
+      wrap.appendChild(btn);
+      document.body.appendChild(wrap);
+      await wrap.updateComplete;
+    });
+
+    afterEach(() => {
+      wrap.remove();
+      vi.useRealTimers();
+    });
+
+    it('defaults to false', () => {
+      expect(wrap.hoverable).toBe(false);
+      expect(wrap.hasAttribute('hoverable')).toBe(false);
+    });
+
+    it('hides immediately on pointerleave when hoverable is false (unchanged prior behavior)', async () => {
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      wrap.dispatchEvent(new Event('pointerleave'));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('hovering the bubble has no effect when hoverable is false', async () => {
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      wrap.dispatchEvent(new Event('pointerleave'));
+      bubble().dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('does not hide immediately on pointerleave when hoverable is true — grants a grace period', async () => {
+      wrap.hoverable = true;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      wrap.dispatchEvent(new Event('pointerleave'));
+      await wrap.updateComplete;
+      // Still open immediately after leaving — the grace period hasn't elapsed yet.
+      expect(bubble().matches(':popover-open')).toBe(true);
+    });
+
+    it('hides after the grace period if the bubble is never reached', async () => {
+      wrap.hoverable = true;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      wrap.dispatchEvent(new Event('pointerleave'));
+      await wrap.updateComplete;
+
+      vi.advanceTimersByTime(149);
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+
+      vi.advanceTimersByTime(1);
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('stays open if the bubble is hovered before the grace period elapses, even well past it', async () => {
+      wrap.hoverable = true;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      wrap.dispatchEvent(new Event('pointerleave'));
+      await wrap.updateComplete;
+
+      vi.advanceTimersByTime(100);
+      bubble().dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+
+      vi.advanceTimersByTime(1000);
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+    });
+
+    it('hides once the bubble is also left', async () => {
+      wrap.hoverable = true;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      wrap.dispatchEvent(new Event('pointerleave'));
+      bubble().dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+
+      bubble().dispatchEvent(new Event('pointerleave'));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true); // grace period just started
+
+      vi.advanceTimersByTime(150);
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('does not schedule a second hide timer while one is already pending', async () => {
+      wrap.hoverable = true;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+
+      const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+      wrap.dispatchEvent(new Event('pointerleave'));
+      await wrap.updateComplete;
+      expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
+
+      // A redundant pointerleave-driven sync (e.g. a stray duplicate event) must not restart the grace period.
+      wrap.dispatchEvent(new Event('pointerleave'));
+      await wrap.updateComplete;
+      expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('clears a pending grace-period hide on disconnect', async () => {
+      wrap.hoverable = true;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      wrap.dispatchEvent(new Event('pointerleave'));
+      await wrap.updateComplete;
+      wrap.remove();
+
+      // If the timer weren't cleared, this would throw trying to hide a popover on a disconnected element.
+      expect(() => vi.advanceTimersByTime(150)).not.toThrow();
+    });
+  });
+
   describe('placement', () => {
     let wrap: Tooltip;
 

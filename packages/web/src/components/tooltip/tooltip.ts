@@ -10,6 +10,14 @@ import '../text/text';
 
 let _tooltipIdCounter = 0;
 
+// A short, fixed grace period (not configurable — `hoverable` is a boolean, not a second delay knob) between
+// losing hover/focus and actually hiding, when `hoverable` is set. The trigger and the bubble are visually
+// separated by `--lt-tooltip-offset` (8px by default) — without this, a real mouse movement from one to the
+// other passes over that gap, which isn't part of either element, firing a `pointerleave` that hides the
+// tooltip before the pointer ever reaches it. Long enough to cross a typical small gap deliberately, short
+// enough to read as instant to anyone not heading for the bubble.
+const HOVER_GRACE_MS = 150;
+
 /**
  * Floating label that appears on hover or focus of its trigger element.
  *
@@ -37,6 +45,15 @@ let _tooltipIdCounter = 0;
  * <!-- Waits 500ms before showing, so a fast mouse pass-through never flashes it -->
  * <lt-tooltip content="Delete permanently" delay="500">
  *   <lt-icon-button icon="trash" label="Delete"></lt-icon-button>
+ * </lt-tooltip>
+ * ```
+ *
+ * @example
+ * ```html
+ * <!-- Lets the pointer reach the bubble itself (e.g. to select and copy a long value) without it vanishing
+ *      mid-transit -->
+ * <lt-tooltip content="a1b2c3d4-e5f6-7890-abcd-ef1234567890" hoverable>
+ *   <code>ID</code>
  * </lt-tooltip>
  * ```
  */
@@ -76,11 +93,28 @@ export class Tooltip extends ThemeableElement {
    */
   @property({ type: Number }) delay = 0;
 
+  /**
+   * Keeps the tooltip open briefly when the pointer leaves the trigger, giving it time to reach the tooltip
+   * bubble itself (e.g. to select and copy its text) instead of dismissing instantly. Hovering the bubble then
+   * keeps it open for as long as the pointer stays there. Has no effect on focus-driven showing/hiding, which
+   * stays immediate either way — there's no equivalent "hover the bubble" for keyboard users.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) hoverable = false;
+
+  private _hoveredBubble = false;
+
   private _showTimer?: ReturnType<typeof setTimeout>;
+  private _hideTimer?: ReturnType<typeof setTimeout>;
 
   private _clearShowTimer() {
     clearTimeout(this._showTimer);
     this._showTimer = undefined;
+  }
+
+  private _clearHideTimer() {
+    clearTimeout(this._hideTimer);
+    this._hideTimer = undefined;
   }
 
   // aria-describedby's id lookup only works within one tree: the tooltip bubble lives in this element's own
@@ -97,31 +131,46 @@ export class Tooltip extends ThemeableElement {
   }
 
   private _sync() {
-    const shouldShow = (this._hovered || this._focused) && !this.disabled && !!this.content;
+    const shouldShow =
+      (this._hovered || this._focused || (this.hoverable && this._hoveredBubble)) && !this.disabled && !!this.content;
 
-    if (!shouldShow) {
-      // Ends a pending delay before it ever shows — a hover that ends before `delay` elapses never shows the
-      // tooltip at all, only a completed wait schedules it.
-      this._clearShowTimer();
-      this._hide();
-      return;
-    }
+    if (shouldShow) {
+      // Something is hovered/focused again — cancel any grace-period hide that was running.
+      this._clearHideTimer();
 
-    // Already visible (e.g. `content` changed while shown) or no delay configured — show without waiting.
-    if (this._isShown() || this.delay <= 0) {
-      this._clearShowTimer();
-      this._show();
-      return;
-    }
-
-    // A delay is already running — let it finish rather than restarting the clock on every pointermove-driven
-    // re-sync.
-    if (this._showTimer === undefined) {
-      this._showTimer = setTimeout(() => {
-        this._showTimer = undefined;
+      // Already visible (e.g. `content` changed while shown) or no delay configured — show without waiting.
+      if (this._isShown() || this.delay <= 0) {
+        this._clearShowTimer();
         this._show();
-      }, this.delay);
+        return;
+      }
+
+      // A delay is already running — let it finish rather than restarting the clock on every
+      // pointermove-driven re-sync.
+      if (this._showTimer === undefined) {
+        this._showTimer = setTimeout(() => {
+          this._showTimer = undefined;
+          this._show();
+        }, this.delay);
+      }
+      return;
     }
+
+    // Ends a pending delay before it ever shows — a hover that ends before `delay` elapses never shows the
+    // tooltip at all, only a completed wait schedules it.
+    this._clearShowTimer();
+
+    if (this.hoverable && this._isShown() && this._hideTimer === undefined) {
+      // Grace period: gives the pointer time to cross the gap between the trigger and the bubble before
+      // actually hiding — see HOVER_GRACE_MS.
+      this._hideTimer = setTimeout(() => {
+        this._hideTimer = undefined;
+        this._hide();
+      }, HOVER_GRACE_MS);
+      return;
+    }
+
+    this._hide();
   }
 
   private _show() {
@@ -194,6 +243,16 @@ export class Tooltip extends ThemeableElement {
     this._sync();
   };
 
+  private _onBubblePointerEnter = () => {
+    this._hoveredBubble = true;
+    this._sync();
+  };
+
+  private _onBubblePointerLeave = () => {
+    this._hoveredBubble = false;
+    this._sync();
+  };
+
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('pointerenter', this._onPointerEnter);
@@ -211,6 +270,7 @@ export class Tooltip extends ThemeableElement {
     this._hovered = false;
     this._focused = false;
     this._clearShowTimer();
+    this._clearHideTimer();
     this._hide();
   }
 
@@ -241,6 +301,8 @@ export class Tooltip extends ThemeableElement {
         part="tooltip"
         aria-hidden="true"
         style=${tooltipStyle}
+        @pointerenter=${this._onBubblePointerEnter}
+        @pointerleave=${this._onBubblePointerLeave}
       >
         <lt-text variant="caption" as="span">${this.content}</lt-text>
         <span class="arrow" part="arrow"></span>

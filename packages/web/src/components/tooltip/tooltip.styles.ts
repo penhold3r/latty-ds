@@ -55,6 +55,14 @@ export const tooltipStyles = css`
     display: none;
   }
 
+  /* pointer-events stays none by default so the bubble never intercepts clicks meant for whatever's underneath
+     it (e.g. another control it happens to overlap). hoverable opts back in — without this, the real mouse could
+     never actually hit the bubble to keep it open, no matter what tooltip.ts's pointerenter/pointerleave
+     listeners do. */
+  :host([hoverable]) .tooltip {
+    pointer-events: auto;
+  }
+
   /* ── Arrows ─────────────────────────────────────────────────────────────── The bubble's own position is set
      from JS; each arrow sits on the bubble edge facing the host. Centering is direction-symmetric, so
      inset-inline-start:50% + translateX(-50%) is correct in both LTR and RTL. Start/end use logical properties, so
