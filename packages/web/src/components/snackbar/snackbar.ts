@@ -95,6 +95,16 @@ export class Snackbar extends ThemeableElement {
   }
 
   private _timer?: ReturnType<typeof setTimeout>;
+  // Remaining time left on the auto-dismiss countdown, in ms — tracked separately from `duration` so a
+  // hover/focus pause-and-resume doesn't restart the full countdown from scratch (WCAG 2.2.1 Timing Adjustable:
+  // the point is to stop it disappearing *while the user is engaging with it*, not to give it a fresh full
+  // `duration` every time the pointer happens to pass over it). Also what makes an actionable (`actionLabel`)
+  // snackbar actually usable as an "Undo" pattern — without this, reading the message and reaching for the
+  // action button could lose the race against its own timer.
+  private _remainingMs = 0;
+  private _timerStartedAt = 0;
+  private _hovered = false;
+  private _focused = false;
   // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
   // was ever shown — `open` starts false, so the else branch ran, dispatching a `hide` for a snackbar that was
   // never visible (SNK-1). Same fix and reasoning as lt-dropdown's `_skipNextOpenChange` (DDN-1). This guards
@@ -122,7 +132,32 @@ export class Snackbar extends ThemeableElement {
     // no light-dismiss on outside click, no Escape — only our own show()/hide() can, matching the existing
     // behavior (duration timer + explicit close button) exactly.
     this.setAttribute('popover', 'manual');
+    this.addEventListener('pointerenter', this._onPointerEnter);
+    this.addEventListener('pointerleave', this._onPointerLeave);
+    this.addEventListener('focusin', this._onFocusIn);
+    this.addEventListener('focusout', this._onFocusOut);
   }
+
+  private _onPointerEnter = () => {
+    this._hovered = true;
+    this._pauseTimer();
+  };
+
+  private _onPointerLeave = () => {
+    this._hovered = false;
+    this._resumeTimer();
+  };
+
+  private _onFocusIn = () => {
+    this._focused = true;
+    this._pauseTimer();
+  };
+
+  private _onFocusOut = (e: FocusEvent) => {
+    if (this.contains(e.relatedTarget as Node | null)) return;
+    this._focused = false;
+    this._resumeTimer();
+  };
 
   updated(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('open')) {
@@ -149,14 +184,45 @@ export class Snackbar extends ThemeableElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    this.removeEventListener('pointerenter', this._onPointerEnter);
+    this.removeEventListener('pointerleave', this._onPointerLeave);
+    this.removeEventListener('focusin', this._onFocusIn);
+    this.removeEventListener('focusout', this._onFocusOut);
+    this._hovered = false;
+    this._focused = false;
     this._clearTimer();
   }
 
   private _startTimer() {
     this._clearTimer();
     if (this.duration > 0) {
-      this._timer = setTimeout(() => this.hide(), this.duration);
+      this._remainingMs = this.duration;
+      // A snackbar can be shown while already hovered/focused (e.g. shown in direct response to clicking
+      // something the pointer is still sitting on) — start paused in that case rather than racing a timer the
+      // user is already engaging with from the very first frame.
+      if (this._hovered || this._focused) return;
+      this._scheduleTimer();
     }
+  }
+
+  private _scheduleTimer() {
+    this._timerStartedAt = performance.now();
+    this._timer = setTimeout(() => this.hide(), this._remainingMs);
+  }
+
+  private _pauseTimer() {
+    if (this._timer === undefined) return;
+    clearTimeout(this._timer);
+    this._timer = undefined;
+    this._remainingMs -= performance.now() - this._timerStartedAt;
+  }
+
+  private _resumeTimer() {
+    // Still engaged via the other channel (e.g. focus left but the pointer is still hovering), already running,
+    // or nothing to resume (not open, or auto-dismiss disabled entirely) — any of these means there's nothing to
+    // actually resume right now.
+    if (this._hovered || this._focused || this._timer !== undefined || !this.open || this.duration <= 0) return;
+    this._scheduleTimer();
   }
 
   private _clearTimer() {

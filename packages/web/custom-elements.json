@@ -9500,6 +9500,42 @@
             },
             {
               "kind": "field",
+              "name": "_remainingMs",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_timerStartedAt",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "default": "0"
+            },
+            {
+              "kind": "field",
+              "name": "_hovered",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_focused",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
               "name": "_skipNextOpenChange",
               "type": {
                 "text": "boolean"
@@ -9518,6 +9554,26 @@
               "name": "hide",
               "privacy": "public",
               "description": "Dismisses the snackbar."
+            },
+            {
+              "kind": "field",
+              "name": "_onPointerEnter",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_onPointerLeave",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_onFocusIn",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_onFocusOut",
+              "privacy": "private"
             },
             {
               "kind": "method",
@@ -9539,6 +9595,21 @@
             {
               "kind": "method",
               "name": "_startTimer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_scheduleTimer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_pauseTimer",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_resumeTimer",
               "privacy": "private"
             },
             {

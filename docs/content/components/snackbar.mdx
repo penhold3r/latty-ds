@@ -12,7 +12,9 @@ import FrameworkTabs from '@site/src/components/FrameworkTabs';
 
 A brief, non-blocking notification anchored to the bottom of the viewport. Snackbars auto-dismiss after a
 configurable delay and can optionally include an action button. Use them for short feedback messages —
-confirmations, undo prompts, or transient alerts.
+confirmations, undo prompts, or transient alerts. The auto-dismiss countdown pauses automatically while hovered
+or focused — including the action button itself — so an "Undo" snackbar never disappears out from under someone
+reaching for it, and resumes with whatever time was left once they move away.
 
 ## Playground
 

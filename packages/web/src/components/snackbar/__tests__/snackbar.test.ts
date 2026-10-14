@@ -166,6 +166,198 @@ describe('<lt-snackbar>', () => {
     expect(el.open).toBe(true);
   });
 
+  describe('pause on hover/focus (SNK-3)', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('pauses the countdown while hovered and resumes with the remaining time on leave', async () => {
+      el.duration = 1000;
+      el.show();
+      await el.updateComplete;
+
+      vi.advanceTimersByTime(400);
+      el.dispatchEvent(new Event('pointerenter'));
+      vi.advanceTimersByTime(1000); // well past the original 1000ms duration — paused, so no dismissal yet
+      await el.updateComplete;
+      expect(el.open).toBe(true);
+
+      el.dispatchEvent(new Event('pointerleave'));
+      vi.advanceTimersByTime(599); // 1000 - 400 - 1 = 599ms remaining; not quite there yet
+      await el.updateComplete;
+      expect(el.open).toBe(true);
+
+      vi.advanceTimersByTime(1);
+      await el.updateComplete;
+      expect(el.open).toBe(false);
+    });
+
+    it('pauses on focus the same way as hover', async () => {
+      el.duration = 1000;
+      el.show();
+      await el.updateComplete;
+
+      vi.advanceTimersByTime(500);
+      el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+      vi.advanceTimersByTime(1000);
+      await el.updateComplete;
+      expect(el.open).toBe(true);
+
+      el.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: document.body }));
+      vi.advanceTimersByTime(500);
+      await el.updateComplete;
+      expect(el.open).toBe(false);
+    });
+
+    it('stays paused until both hover and focus have ended', async () => {
+      el.duration = 1000;
+      el.show();
+      await el.updateComplete;
+
+      el.dispatchEvent(new Event('pointerenter'));
+      el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+      el.dispatchEvent(new Event('pointerleave'));
+      vi.advanceTimersByTime(2000);
+      await el.updateComplete;
+      expect(el.open).toBe(true); // still focused
+
+      el.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: document.body }));
+      vi.advanceTimersByTime(1000);
+      await el.updateComplete;
+      expect(el.open).toBe(false);
+    });
+
+    it('stays open on focusout when focus moves to another element inside the snackbar', async () => {
+      el.actionLabel = 'Undo';
+      await el.updateComplete;
+      const actionBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('.action')!;
+
+      el.duration = 1000;
+      el.show();
+      await el.updateComplete;
+      el.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+      el.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: actionBtn }));
+      vi.advanceTimersByTime(2000);
+      await el.updateComplete;
+      expect(el.open).toBe(true);
+    });
+
+    it('has no pause effect when duration=0 (auto-dismiss already disabled)', async () => {
+      el.duration = 0;
+      el.show();
+      await el.updateComplete;
+      el.dispatchEvent(new Event('pointerenter'));
+      el.dispatchEvent(new Event('pointerleave'));
+      vi.advanceTimersByTime(10000);
+      await el.updateComplete;
+      expect(el.open).toBe(true);
+    });
+
+    it('does not schedule a stray timer from a pointerleave that outlives a manual hide()', async () => {
+      el.duration = 1000;
+      el.show();
+      await el.updateComplete;
+      el.dispatchEvent(new Event('pointerenter'));
+      el.hide();
+      await el.updateComplete;
+
+      const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+      // The close transition can leave the pointer appearing to "leave" an already-closed snackbar — this must
+      // not schedule a hide() timer that nothing will ever clear (open won't change again to trigger cleanup).
+      el.dispatchEvent(new Event('pointerleave'));
+      expect(setTimeoutSpy).not.toHaveBeenCalled();
+    });
+
+    it('starts already paused if shown while the pointer is already hovering it', async () => {
+      el.duration = 1000;
+      el.dispatchEvent(new Event('pointerenter'));
+      el.show();
+      await el.updateComplete;
+
+      vi.advanceTimersByTime(1000);
+      await el.updateComplete;
+      expect(el.open).toBe(true); // never started, since it opened already-hovered
+
+      el.dispatchEvent(new Event('pointerleave'));
+      vi.advanceTimersByTime(1000);
+      await el.updateComplete;
+      expect(el.open).toBe(false);
+    });
+
+    it('does not restart an already-paused timer on a redundant pointerenter', async () => {
+      el.duration = 1000;
+      el.show();
+      await el.updateComplete;
+      vi.advanceTimersByTime(100); // 900ms remaining at the pause below
+      el.dispatchEvent(new Event('pointerenter'));
+      const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+
+      // Real time passes before the redundant pointerenter — if it re-ran the pause logic (clearTimeout on
+      // nothing + decrementing _remainingMs a second time using a stale _timerStartedAt), the eventual resume
+      // below would fire too early.
+      vi.advanceTimersByTime(300);
+      el.dispatchEvent(new Event('pointerenter'));
+      expect(setTimeoutSpy).not.toHaveBeenCalled(); // no new timer scheduled — nothing restarted
+
+      el.dispatchEvent(new Event('pointerleave'));
+      vi.advanceTimersByTime(899); // the original 900ms remaining, minus 1
+      await el.updateComplete;
+      expect(el.open).toBe(true);
+
+      vi.advanceTimersByTime(1);
+      await el.updateComplete;
+      expect(el.open).toBe(false);
+    });
+
+    it('does not reschedule an already-running timer on a redundant pointerleave', async () => {
+      el.duration = 1000;
+      el.show();
+      await el.updateComplete;
+      vi.advanceTimersByTime(300); // 700ms remaining once paused below
+      el.dispatchEvent(new Event('pointerenter'));
+      el.dispatchEvent(new Event('pointerleave')); // resumes with 700ms remaining
+      const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+
+      // A second, redundant pointerleave (e.g. a stray duplicate) must not reschedule the already-running
+      // timer — doing so would leak the original one (never cleared) and could fire the second with slightly
+      // skewed timing.
+      el.dispatchEvent(new Event('pointerleave'));
+      expect(setTimeoutSpy).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(699);
+      await el.updateComplete;
+      expect(el.open).toBe(true);
+
+      vi.advanceTimersByTime(1);
+      await el.updateComplete;
+      expect(el.open).toBe(false);
+    });
+
+    it('resets hover/focus state on disconnect', async () => {
+      el.duration = 1000;
+      el.show();
+      await el.updateComplete;
+      el.dispatchEvent(new Event('pointerenter'));
+      el.remove();
+
+      // If hover state leaked across a disconnect, a later show() on a fresh connection would start paused
+      // (per the "starts already paused if shown while hovering" behavior above) even though the pointer was
+      // never actually over the reconnected element.
+      document.body.appendChild(el);
+      el.hide();
+      await el.updateComplete;
+      el.show();
+      await el.updateComplete;
+      vi.advanceTimersByTime(1000);
+      await el.updateComplete;
+      expect(el.open).toBe(false);
+    });
+  });
+
   // §6.1's companion migration: lt-snackbar renders as a "manual" popover on its own host so it stays above an
   // open lt-dialog/lt-sidepanel regardless of z-index (top-layer content always wins). jsdom has no real Popover
   // API (vitest.setup.ts stubs it), so these verify the component calls the right methods at the right times,
