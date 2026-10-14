@@ -128,3 +128,45 @@ if (typeof HTMLElement !== 'undefined' && typeof HTMLElement.prototype.showPopov
 if (typeof Element !== 'undefined' && typeof Element.prototype.scrollIntoView !== 'function') {
   Element.prototype.scrollIntoView = function () {};
 }
+
+// jsdom (27.4, checked) doesn't implement ResizeObserver at all — confirmed it's simply undefined. Since
+// jsdom has no real layout engine, a real implementation could never fire with meaningful sizes anyway; this
+// stub only lets code that constructs one (e.g. lt-tab-group's scroll-button visibility) run without throwing.
+// Tests exercise the resulting recompute logic directly (calling it, or via the scroll/slotchange events that
+// also trigger it) rather than relying on an actual resize callback firing.
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  class ResizeObserverStub {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+  globalThis.ResizeObserver = ResizeObserverStub as unknown as typeof ResizeObserver;
+}
+
+// jsdom (27.4, checked) doesn't implement Element.scrollBy either — same root cause as scrollIntoView above (no
+// real layout to scroll against). A plain no-op stub lets code that calls it (e.g. lt-tab-group's scroll
+// buttons) run without throwing; tests assert the call happened, and with what arguments, via
+// vi.spyOn(Element.prototype, 'scrollBy') rather than asserting an actual scroll position jsdom could never
+// produce.
+if (typeof Element !== 'undefined' && typeof Element.prototype.scrollBy !== 'function') {
+  Element.prototype.scrollBy = function () {};
+}
+
+// jsdom (27.4, checked) doesn't implement window.matchMedia at all. Components that branch on a media feature
+// (e.g. lt-tab-group's scroll buttons checking prefers-reduced-motion) need something to call rather than
+// throwing; this stub always reports "no match", like a plain default environment with no particular OS
+// preference set. Tests that need the opposite branch override it with vi.spyOn(window, 'matchMedia').
+if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
+  window.matchMedia = function (query: string): MediaQueryList {
+    return {
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false
+    } as MediaQueryList;
+  };
+}

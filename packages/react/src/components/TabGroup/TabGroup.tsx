@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { TabGroup as TabGroupEl } from '@latty-ds/web';
 
 export type TabGroupProps = Omit<HTMLAttributes<TabGroupEl>, 'onChange'> & {
@@ -6,11 +6,12 @@ export type TabGroupProps = Omit<HTMLAttributes<TabGroupEl>, 'onChange'> & {
   appearance?: TabGroupEl['appearance'];
   size?: TabGroupEl['size'];
   orientation?: TabGroupEl['orientation'];
+  labels?: TabGroupEl['labels'];
   onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const TabGroup = forwardRef<TabGroupEl, TabGroupProps>(function TabGroup(
-  { onChange, children, ...props },
+  { onChange, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<TabGroupEl>(null);
@@ -24,6 +25,11 @@ export const TabGroup = forwardRef<TabGroupEl, TabGroupProps>(function TabGroup(
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (labels !== undefined) el.labels = labels;
+  }, [labels]);
 
   return (
     <lt-tab-group ref={innerRef} {...(props as Record<string, unknown>)}>

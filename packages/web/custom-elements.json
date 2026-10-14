@@ -10224,7 +10224,7 @@
         {
           "kind": "variable",
           "name": "tabGroupStyles",
-          "default": "css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .tab-group { display: flex; flex-direction: column; } .tabs-container { border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-1); overflow-x: auto; scrollbar-width: thin; } .tabs-container::-webkit-scrollbar { height: 4px; } .tabs-container::-webkit-scrollbar-track { background: var(--lt-bg-surface); } .tabs-container::-webkit-scrollbar-thumb { background: var(--lt-color-neutral-300); border-radius: 2px; } .panels-container { padding: var(--lt-spacing-4) 0; } ::slotted([slot='panel']) { display: none; } ::slotted([slot='panel'][active]) { display: block; } /* Pills variant */ :host([appearance='pills']) .tabs-container { background: var(--lt-bg-surface); border: none; border-radius: var(--lt-border-radius); gap: var(--lt-spacing-2); padding: var(--lt-spacing-1); } /* ── Vertical orientation ─────────────────────────────────────────────── Tabs stack in a column beside the panels instead of a row above them; the dividing border moves from the bottom edge to the inline-end (trailing) edge of the tab list. */ :host([orientation='vertical']) .tab-group { flex-direction: row; } :host([orientation='vertical']) .tabs-container { border-bottom: none; border-inline-end: 1px solid var(--lt-border-default); flex-direction: column; overflow-x: visible; overflow-y: auto; } :host([orientation='vertical']) .tabs-container::-webkit-scrollbar { width: 4px; } :host([orientation='vertical']) .panels-container { padding-block: 0; padding-inline: var(--lt-spacing-4) 0; } :host([orientation='vertical'][appearance='pills']) .tabs-container { border-inline-end: none; } `"
+          "default": "css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .tab-group { display: flex; flex-direction: column; } /* Holds the optional scroll buttons either side of .tabs-container. Carries the border/pills decoration that used to live on .tabs-container alone, so it spans the buttons too instead of looking cut off beside them. */ .tablist-row { align-items: center; border-bottom: 1px solid var(--lt-border-default); display: flex; gap: var(--lt-spacing-1); } .tabs-container { display: flex; gap: var(--lt-spacing-1); /* Overrides flexbox's default min-width:auto, which would otherwise refuse to shrink this item below its content's natural width — exactly the thing that needs to shrink for overflow-x to ever actually scroll instead of pushing .tablist-row wider than its own container. */ min-width: 0; overflow-x: auto; scrollbar-width: thin; } .scroll-button { flex-shrink: 0; } .tabs-container::-webkit-scrollbar { height: 4px; } .tabs-container::-webkit-scrollbar-track { background: var(--lt-bg-surface); } .tabs-container::-webkit-scrollbar-thumb { background: var(--lt-color-neutral-300); border-radius: 2px; } .panels-container { padding: var(--lt-spacing-4) 0; } ::slotted([slot='panel']) { display: none; } ::slotted([slot='panel'][active]) { display: block; } /* Pills variant — the capsule background/radius lives on the row so the scroll buttons (when present) sit inside it alongside the tabs, instead of looking like they belong to a separate, unstyled control. */ :host([appearance='pills']) .tablist-row { background: var(--lt-bg-surface); border: none; border-radius: var(--lt-border-radius); padding: var(--lt-spacing-1); } :host([appearance='pills']) .tabs-container { gap: var(--lt-spacing-2); } /* ── Vertical orientation ─────────────────────────────────────────────── Tabs stack in a column beside the panels instead of a row above them; the dividing border moves from the bottom edge to the inline-end (trailing) edge of the tab list. */ :host([orientation='vertical']) .tab-group { flex-direction: row; /* A block element's width naturally flows down from its container, but height never does without an explicit chain saying so — without this, .tab-group just grows to fit its own content and silently ignores whatever bounded height a consumer actually gave the host, leaving .tabs-container's own overflow-y:auto structurally unreachable (confirmed live: scrollHeight === clientHeight even inside an explicitly height-constrained host). Only needed for vertical: horizontal's natural \"auto\" height already is the component's own intended height. */ height: 100%; } :host([orientation='vertical']) .tablist-row { border-bottom: none; border-inline-end: 1px solid var(--lt-border-default); flex-direction: column; } :host([orientation='vertical']) .tabs-container { flex-direction: column; /* Same flex min-size override as min-width:0 above, for the vertical scrolling axis instead. */ min-height: 0; min-width: auto; overflow-x: visible; overflow-y: auto; } :host([orientation='vertical']) .tabs-container::-webkit-scrollbar { width: 4px; } :host([orientation='vertical']) .panels-container { padding-block: 0; padding-inline: var(--lt-spacing-4) 0; } :host([orientation='vertical'][appearance='pills']) .tablist-row { border-inline-end: none; } `"
         }
       ],
       "exports": [
@@ -10301,6 +10301,24 @@
             },
             {
               "kind": "field",
+              "name": "labels",
+              "type": {
+                "text": "Partial<TabGroupLabels>"
+              },
+              "default": "{}",
+              "description": "Overridable UI text (scroll button labels), for i18n. English defaults — override only the keys you need."
+            },
+            {
+              "kind": "field",
+              "name": "_labels",
+              "type": {
+                "text": "TabGroupLabels"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "field",
               "name": "tabs",
               "type": {
                 "text": "Tab[]"
@@ -10316,6 +10334,77 @@
               },
               "privacy": "private",
               "description": "Reference to all slotted panel elements."
+            },
+            {
+              "kind": "field",
+              "name": "_tabsContainerEl",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_overflowing",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_atStart",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_atEnd",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "_scrollButtonsSettled",
+              "type": {
+                "text": "Promise<void>"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_awaitScrollButtonsSettled",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "getUpdateComplete",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "Promise<boolean>"
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "_scrollResizeObserver",
+              "type": {
+                "text": "ResizeObserver | undefined"
+              },
+              "privacy": "private"
             },
             {
               "kind": "field",
@@ -10341,6 +10430,26 @@
               "name": "updateTabs",
               "privacy": "private",
               "description": "Updates all tabs with the correct active/roving-tabindex state, size, and ARIA wiring."
+            },
+            {
+              "kind": "field",
+              "name": "_updateScrollButtons",
+              "privacy": "private",
+              "description": "Recomputes whether the tab list overflows its container, and if so, whether it's scrolled to either edge.\nBound to the container's own `scroll` event, a `ResizeObserver` on it (catches window-resize-driven layout\nchanges), and called from every place that can change which/how many tabs are rendered."
+            },
+            {
+              "kind": "method",
+              "name": "_scrollBy",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "direction",
+                  "type": {
+                    "text": "1 | -1"
+                  }
+                }
+              ],
+              "description": "Scrolls the tab list by ~80% of its own visible size in the scrolling axis — far enough to feel like real\nprogress, short enough to keep context with what was already visible. Instant instead of smooth for anyone\nwho's asked the OS/browser to reduce motion."
             },
             {
               "kind": "method",

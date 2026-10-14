@@ -1,16 +1,22 @@
 import { enabledItems, rovingTargetOf, stepIndex } from '../shared/roving';
 import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
-import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
+import { customElement, property, query, queryAssignedElements, state } from 'lit/decorators.js';
 
 import { tabGroupStyles } from './tab-group.styles';
-import { TabGroupSize, TabGroupAppearance, TabGroupOrientation } from './tab-group.types';
+import { TabGroupSize, TabGroupAppearance, TabGroupOrientation, TabGroupLabels } from './tab-group.types';
 import type { Tab } from '../tab/tab';
 
 import '../tab/tab';
 import '../tab/tab-panel';
+import '../icon-button/icon-button';
 
 let groupCount = 0;
+
+const DEFAULT_LABELS: TabGroupLabels = {
+  scrollPrevious: 'Scroll tabs backward',
+  scrollNext: 'Scroll tabs forward'
+};
 
 /**
  * A container component that manages a group of tabs.
@@ -75,6 +81,13 @@ export class TabGroup extends ThemeableElement {
    */
   @property({ reflect: true }) orientation: TabGroupOrientation = 'horizontal';
 
+  /** Overridable UI text (scroll button labels), for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<TabGroupLabels> = {};
+
+  private get _labels(): TabGroupLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   /**
    * Reference to all slotted tab elements.
    * @private
@@ -88,6 +101,44 @@ export class TabGroup extends ThemeableElement {
    */
   @queryAssignedElements({ slot: 'panel' })
   private panels!: HTMLElement[];
+
+  @query('.tabs-container') private _tabsContainerEl!: HTMLElement;
+
+  // Whether the tab list actually overflows its own container in the scrolling axis — controls whether the
+  // scroll buttons render at all. Kept separate from _atStart/_atEnd below so toggling an edge while already
+  // overflowing (the common case, every scroll tick) never adds/removes the buttons themselves and reflows the
+  // available width for the tabs-container — only a genuine start/end of overflow does that, which is far rarer.
+  @state() private _overflowing = false;
+  @state() private _atStart = false;
+  @state() private _atEnd = false;
+
+  // Measuring real DOM (scrollWidth/clientWidth) can only happen after a render has actually painted, so
+  // _updateScrollButtons() sometimes sets the three @state fields above from inside firstUpdated()/updated() —
+  // by that point Lit's own isUpdatePending has already gone false for the render in progress, so assigning them
+  // synchronously schedules a genuinely separate follow-up update that the update() call already in flight's own
+  // updateComplete promise does NOT chain to (confirmed empirically: awaiting it once still left a pending
+  // update behind — and overriding getUpdateComplete() to simply `await this.updateComplete` again deadlocks,
+  // since that read re-enters this same override while the outer call is still resolving). Polling
+  // isUpdatePending via microtasks instead sidesteps that re-entrancy: it reads the flag rather than awaiting
+  // the promise machinery that produces it, so a single `await el.updateComplete` reliably sees the final
+  // settled state instead of a stale pre-measurement default.
+  private _scrollButtonsSettled: Promise<void> = Promise.resolve();
+
+  private _awaitScrollButtonsSettled(): Promise<void> {
+    if (!this.isUpdatePending) return Promise.resolve();
+    return new Promise((resolve) => {
+      const check = () => (this.isUpdatePending ? queueMicrotask(check) : resolve());
+      queueMicrotask(check);
+    });
+  }
+
+  protected async getUpdateComplete(): Promise<boolean> {
+    const result = await super.getUpdateComplete();
+    await this._scrollButtonsSettled;
+    return result;
+  }
+
+  private _scrollResizeObserver?: ResizeObserver;
 
   // Scopes generated tab/panel ids to this instance, so two groups on the same page whose tabs happen to share a
   // `value` (e.g. two groups each with a "settings" tab) don't collide.
@@ -114,6 +165,12 @@ export class TabGroup extends ThemeableElement {
   firstUpdated() {
     this.updateTabs();
     this.updatePanels();
+    // The container itself resizing (e.g. the window, or a sibling panel growing/shrinking) is the one
+    // overflow-affecting trigger none of updateTabs/handleSlotChange's call sites cover — ResizeObserver's
+    // own first callback (fired as soon as observation starts) also gives the initial measurement, so no
+    // separate up-front _updateScrollButtons() call is needed here.
+    this._scrollResizeObserver = new ResizeObserver(this._updateScrollButtons);
+    this._scrollResizeObserver.observe(this._tabsContainerEl);
   }
 
   /**
@@ -153,6 +210,52 @@ export class TabGroup extends ThemeableElement {
       tab.addEventListener('click', this.handleTabClick);
       tab.addEventListener('keydown', this.handleTabKeydown);
     });
+
+    this._updateScrollButtons();
+  }
+
+  /**
+   * Recomputes whether the tab list overflows its container, and if so, whether it's scrolled to either edge.
+   * Bound to the container's own `scroll` event, a `ResizeObserver` on it (catches window-resize-driven layout
+   * changes), and called from every place that can change which/how many tabs are rendered.
+   * @private
+   */
+  private _updateScrollButtons = () => {
+    const el = this._tabsContainerEl;
+    if (!el) return;
+    // A 1px tolerance absorbs sub-pixel scroll-position rounding, which would otherwise flicker the buttons'
+    // disabled state right at either edge.
+    if (this.orientation === 'vertical') {
+      this._overflowing = el.scrollHeight > el.clientHeight + 1;
+      this._atStart = el.scrollTop <= 1;
+      this._atEnd = el.scrollTop >= el.scrollHeight - el.clientHeight - 1;
+    } else {
+      this._overflowing = el.scrollWidth > el.clientWidth + 1;
+      this._atStart = el.scrollLeft <= 1;
+      this._atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 1;
+    }
+    // Captures a promise that resolves once any update the three assignments above just (re-)triggered has
+    // actually settled — see the field's own comment for why this can't just be `this.updateComplete` directly.
+    this._scrollButtonsSettled = this._awaitScrollButtonsSettled();
+  };
+
+  /**
+   * Scrolls the tab list by ~80% of its own visible size in the scrolling axis — far enough to feel like real
+   * progress, short enough to keep context with what was already visible. Instant instead of smooth for anyone
+   * who's asked the OS/browser to reduce motion.
+   * @private
+   */
+  private _scrollBy(direction: 1 | -1) {
+    const el = this._tabsContainerEl;
+    if (!el) return;
+    const behavior: ScrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? 'instant'
+      : 'smooth';
+    if (this.orientation === 'vertical') {
+      el.scrollBy({ top: el.clientHeight * 0.8 * direction, behavior });
+    } else {
+      el.scrollBy({ left: el.clientWidth * 0.8 * direction, behavior });
+    }
   }
 
   /**
@@ -264,6 +367,7 @@ export class TabGroup extends ThemeableElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     this._tabObserver.disconnect();
+    this._scrollResizeObserver?.disconnect();
     if (this.tabs) {
       this.tabs.forEach((tab) => {
         tab.removeEventListener('click', this.handleTabClick);
@@ -293,14 +397,38 @@ export class TabGroup extends ThemeableElement {
   }
 
   render() {
+    const vertical = this.orientation === 'vertical';
     return html`
       <div class="tab-group">
-        <div
-          class="tabs-container"
-          role="tablist"
-          aria-orientation=${this.orientation === 'vertical' ? 'vertical' : nothing}
-        >
-          <slot @slotchange=${this.handleSlotChange}></slot>
+        <div class="tablist-row">
+          ${this._overflowing
+            ? html`<lt-icon-button
+                class="scroll-button scroll-prev"
+                icon=${vertical ? 'caret-up' : 'caret-left'}
+                label=${this._labels.scrollPrevious}
+                size=${this.size}
+                ?disabled=${this._atStart}
+                @click=${() => this._scrollBy(-1)}
+              ></lt-icon-button>`
+            : nothing}
+          <div
+            class="tabs-container"
+            role="tablist"
+            aria-orientation=${vertical ? 'vertical' : nothing}
+            @scroll=${this._updateScrollButtons}
+          >
+            <slot @slotchange=${this.handleSlotChange}></slot>
+          </div>
+          ${this._overflowing
+            ? html`<lt-icon-button
+                class="scroll-button scroll-next"
+                icon=${vertical ? 'caret-down' : 'caret-right'}
+                label=${this._labels.scrollNext}
+                size=${this.size}
+                ?disabled=${this._atEnd}
+                @click=${() => this._scrollBy(1)}
+              ></lt-icon-button>`
+            : nothing}
         </div>
         <div class="panels-container" part="panels-container">
           <slot name="panel"></slot>

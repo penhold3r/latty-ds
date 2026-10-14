@@ -383,3 +383,180 @@ describe('aria-controls only points at a real panel', () => {
     group.remove();
   });
 });
+
+describe('scroll buttons', () => {
+  let el: TabGroup;
+
+  const container = () => el.shadowRoot!.querySelector<HTMLElement>('.tabs-container')!;
+  const prevButton = () => el.shadowRoot!.querySelector<HTMLElement & { label: string; icon: string }>('.scroll-prev');
+  const nextButton = () => el.shadowRoot!.querySelector<HTMLElement & { label: string; icon: string }>('.scroll-next');
+
+  // jsdom reports 0 for every layout dimension, so "overflow" has to be simulated by overriding the relevant
+  // getters directly on the real container element, then forcing a recompute the same way a real resize/scroll
+  // would — dispatching the container's own `scroll` event, which the component already listens for.
+  const mockLayout = (dims: {
+    scrollWidth?: number;
+    clientWidth?: number;
+    scrollLeft?: number;
+    scrollHeight?: number;
+    clientHeight?: number;
+    scrollTop?: number;
+  }) => {
+    const el2 = container();
+    for (const [key, value] of Object.entries(dims)) {
+      Object.defineProperty(el2, key, { value, configurable: true });
+    }
+    el2.dispatchEvent(new Event('scroll'));
+  };
+
+  beforeEach(async () => {
+    el = document.createElement('lt-tab-group') as TabGroup;
+    el.value = 'tab1';
+    el.innerHTML = `
+      <lt-tab value="tab1" label="Tab 1"></lt-tab>
+      <lt-tab value="tab2" label="Tab 2"></lt-tab>
+      <lt-tab value="tab3" label="Tab 3"></lt-tab>
+    `;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+    vi.restoreAllMocks();
+  });
+
+  it('settles after a single updateComplete, with no lingering pending update left behind', async () => {
+    // Regression guard: _updateScrollButtons sets @state from inside firstUpdated()/updated(), which schedules
+    // a genuinely separate follow-up update a naive `await el.updateComplete` would NOT wait for — confirmed
+    // empirically while building this feature. getUpdateComplete() is overridden specifically to fix this.
+    const fresh = document.createElement('lt-tab-group') as TabGroup;
+    fresh.value = 'tab1';
+    fresh.innerHTML = '<lt-tab value="tab1" label="Tab 1"></lt-tab>';
+    document.body.appendChild(fresh);
+    await fresh.updateComplete;
+    expect((fresh as unknown as { isUpdatePending: boolean }).isUpdatePending).toBe(false);
+    fresh.remove();
+  });
+
+  it('renders no scroll buttons when the tab list does not overflow', () => {
+    expect(prevButton()).toBeNull();
+    expect(nextButton()).toBeNull();
+  });
+
+  it('renders both scroll buttons once the tab list overflows', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 0 });
+    await el.updateComplete;
+    expect(prevButton()).not.toBeNull();
+    expect(nextButton()).not.toBeNull();
+  });
+
+  it('disables only the previous button while scrolled all the way to the start', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 0 });
+    await el.updateComplete;
+    expect(prevButton()!.hasAttribute('disabled')).toBe(true);
+    expect(nextButton()!.hasAttribute('disabled')).toBe(false);
+  });
+
+  it('disables only the next button while scrolled all the way to the end', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 300 });
+    await el.updateComplete;
+    expect(prevButton()!.hasAttribute('disabled')).toBe(false);
+    expect(nextButton()!.hasAttribute('disabled')).toBe(true);
+  });
+
+  it('disables neither button in the middle of a scroll', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 150 });
+    await el.updateComplete;
+    expect(prevButton()!.hasAttribute('disabled')).toBe(false);
+    expect(nextButton()!.hasAttribute('disabled')).toBe(false);
+  });
+
+  it('removes the buttons again once content no longer overflows', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 0 });
+    await el.updateComplete;
+    expect(prevButton()).not.toBeNull();
+
+    mockLayout({ scrollWidth: 200, clientWidth: 200, scrollLeft: 0 });
+    await el.updateComplete;
+    expect(prevButton()).toBeNull();
+    expect(nextButton()).toBeNull();
+  });
+
+  it('clicking previous scrolls backward by ~80% of the visible width', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 150 });
+    await el.updateComplete;
+    const scrollBySpy = vi.spyOn(Element.prototype, 'scrollBy');
+
+    prevButton()!.dispatchEvent(new Event('click', { bubbles: true }));
+    expect(scrollBySpy).toHaveBeenCalledWith(expect.objectContaining({ left: -160 }));
+  });
+
+  it('clicking next scrolls forward by ~80% of the visible width', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 150 });
+    await el.updateComplete;
+    const scrollBySpy = vi.spyOn(Element.prototype, 'scrollBy');
+
+    nextButton()!.dispatchEvent(new Event('click', { bubbles: true }));
+    expect(scrollBySpy).toHaveBeenCalledWith(expect.objectContaining({ left: 160 }));
+  });
+
+  it('scrolls with a smooth behavior by default', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 150 });
+    await el.updateComplete;
+    const scrollBySpy = vi.spyOn(Element.prototype, 'scrollBy');
+
+    nextButton()!.dispatchEvent(new Event('click', { bubbles: true }));
+    expect(scrollBySpy).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'smooth' }));
+  });
+
+  it('scrolls instantly when the user has asked to reduce motion', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 150 });
+    await el.updateComplete;
+    vi.spyOn(window, 'matchMedia').mockImplementation(
+      (query) => ({ matches: query === '(prefers-reduced-motion: reduce)' }) as MediaQueryList
+    );
+    const scrollBySpy = vi.spyOn(Element.prototype, 'scrollBy');
+
+    nextButton()!.dispatchEvent(new Event('click', { bubbles: true }));
+    expect(scrollBySpy).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'instant' }));
+  });
+
+  it('uses left/right caret icons and scrollWidth/scrollLeft when horizontal', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 0 });
+    await el.updateComplete;
+    expect(prevButton()!.icon).toBe('caret-left');
+    expect(nextButton()!.icon).toBe('caret-right');
+  });
+
+  it('uses up/down caret icons and scrollHeight/scrollTop when vertical', async () => {
+    el.orientation = 'vertical';
+    await el.updateComplete;
+    mockLayout({ scrollHeight: 500, clientHeight: 200, scrollTop: 0 });
+    await el.updateComplete;
+    expect(prevButton()!.icon).toBe('caret-up');
+    expect(nextButton()!.icon).toBe('caret-down');
+    expect(prevButton()!.hasAttribute('disabled')).toBe(true);
+  });
+
+  it('applies default English labels', async () => {
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 0 });
+    await el.updateComplete;
+    expect(prevButton()!.label).toBe('Scroll tabs backward');
+    expect(nextButton()!.label).toBe('Scroll tabs forward');
+  });
+
+  it('overrides only the given label keys', async () => {
+    el.labels = { scrollPrevious: 'Back' };
+    mockLayout({ scrollWidth: 500, clientWidth: 200, scrollLeft: 0 });
+    await el.updateComplete;
+    expect(prevButton()!.label).toBe('Back');
+    expect(nextButton()!.label).toBe('Scroll tabs forward');
+  });
+
+  it('disconnects the ResizeObserver on disconnect', async () => {
+    const disconnectSpy = vi.spyOn(globalThis.ResizeObserver.prototype, 'disconnect');
+    el.remove();
+    expect(disconnectSpy).toHaveBeenCalled();
+  });
+});
