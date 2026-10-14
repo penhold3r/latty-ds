@@ -34,6 +34,12 @@ visible label.
 <lt-tooltip content="You can't do that" disabled>
   <button disabled>Locked</button>
 </lt-tooltip>
+
+<!-- Waits 500ms before showing, so a fast mouse pass-through never flashes it -->
+
+<lt-tooltip content="Delayed" delay="500">
+  <button>Hover and wait</button>
+</lt-tooltip>
 		`}
     react={`
 import { Tooltip } from '@latty-ds/react';
@@ -54,6 +60,12 @@ import { Tooltip } from '@latty-ds/react';
 <Tooltip content="Primary" background="--lt-color-primary-600" color="#fff">
   <button>Token bg</button>
 </Tooltip>
+
+{/* Waits 500ms before showing, so a fast mouse pass-through never flashes it */}
+
+<Tooltip content="Delayed" delay={500}>
+  <button>Hover and wait</button>
+</Tooltip>
 		`}
     vue={`
 <template>
@@ -62,8 +74,14 @@ import { Tooltip } from '@latty-ds/react';
   <lt-tooltip content="Start side" placement="start"><button>Start</button></lt-tooltip>
   <lt-tooltip content="End side" placement="end"><button>End</button></lt-tooltip>
 
-  <lt-tooltip content="Primary" background="--lt-color-primary-600" color="#fff">
-    <button>Token bg</button>
+<lt-tooltip content="Primary" background="--lt-color-primary-600" color="#fff">
+  <button>Token bg</button>
+</lt-tooltip>
+
+  <!-- Waits 500ms before showing, so a fast mouse pass-through never flashes it -->
+
+  <lt-tooltip content="Delayed" delay="500">
+    <button>Hover and wait</button>
   </lt-tooltip>
 </template>
 		`}

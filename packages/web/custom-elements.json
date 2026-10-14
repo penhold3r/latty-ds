@@ -11876,6 +11876,28 @@
               "description": "Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50)."
             },
             {
+              "kind": "field",
+              "name": "delay",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "Milliseconds to wait before showing the tooltip after hover/focus starts. `0` (default) shows immediately.\nA hover that ends before the delay elapses never shows the tooltip at all — only a completed wait schedules\nit. Hiding is always immediate, regardless of `delay`."
+            },
+            {
+              "kind": "field",
+              "name": "_showTimer",
+              "type": {
+                "text": "ReturnType<typeof setTimeout> | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_clearShowTimer",
+              "privacy": "private"
+            },
+            {
               "kind": "method",
               "name": "_describeTrigger",
               "privacy": "private"

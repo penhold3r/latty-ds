@@ -173,6 +173,117 @@ describe('<lt-tooltip>', () => {
     });
   });
 
+  describe('delay', () => {
+    let wrap: Tooltip;
+    let btn: HTMLButtonElement;
+
+    const bubble = () => wrap.shadowRoot!.querySelector<HTMLElement>('.tooltip')!;
+
+    beforeEach(async () => {
+      vi.useFakeTimers();
+      wrap = document.createElement('lt-tooltip') as Tooltip;
+      wrap.content = 'Tip';
+      btn = document.createElement('button');
+      wrap.appendChild(btn);
+      document.body.appendChild(wrap);
+      await wrap.updateComplete;
+    });
+
+    afterEach(() => {
+      wrap.remove();
+      vi.useRealTimers();
+    });
+
+    it('defaults to 0 (shows immediately, unchanged prior behavior)', async () => {
+      expect(wrap.delay).toBe(0);
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+    });
+
+    it('waits the configured delay before showing', async () => {
+      wrap.delay = 500;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+
+      vi.advanceTimersByTime(499);
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+
+      vi.advanceTimersByTime(1);
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+    });
+
+    it('never shows if the hover ends before the delay elapses', async () => {
+      wrap.delay = 500;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+
+      vi.advanceTimersByTime(300);
+      wrap.dispatchEvent(new Event('pointerleave'));
+      await wrap.updateComplete;
+
+      vi.advanceTimersByTime(500);
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('does not restart the delay clock on a second sync while already waiting', async () => {
+      const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+      wrap.delay = 500;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(300);
+      // A second pointerenter-driven sync while already waiting (e.g. a stray duplicate event) must not
+      // schedule a second timer — only one wait should ever be running at a time.
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
+
+      vi.advanceTimersByTime(200);
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+    });
+
+    it('hides immediately regardless of delay', async () => {
+      wrap.delay = 500;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      vi.advanceTimersByTime(500);
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+
+      wrap.dispatchEvent(new Event('pointerleave'));
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(false);
+    });
+
+    it('shows without waiting again if content changes while already shown', async () => {
+      wrap.delay = 500;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      vi.advanceTimersByTime(500);
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+
+      wrap.content = 'Updated tip';
+      await wrap.updateComplete;
+      expect(bubble().matches(':popover-open')).toBe(true);
+    });
+
+    it('clears a pending delay on disconnect', async () => {
+      wrap.delay = 500;
+      wrap.dispatchEvent(new Event('pointerenter'));
+      await wrap.updateComplete;
+      wrap.remove();
+
+      // If the timer weren't cleared, this would throw trying to show a popover on a disconnected element.
+      expect(() => vi.advanceTimersByTime(500)).not.toThrow();
+    });
+  });
+
   describe('placement', () => {
     let wrap: Tooltip;
 

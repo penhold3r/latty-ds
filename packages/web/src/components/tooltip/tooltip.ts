@@ -31,6 +31,14 @@ let _tooltipIdCounter = 0;
  *   <a href="#">Learn more</a>
  * </lt-tooltip>
  * ```
+ *
+ * @example
+ * ```html
+ * <!-- Waits 500ms before showing, so a fast mouse pass-through never flashes it -->
+ * <lt-tooltip content="Delete permanently" delay="500">
+ *   <lt-icon-button icon="trash" label="Delete"></lt-icon-button>
+ * </lt-tooltip>
+ * ```
  */
 @customElement('lt-tooltip')
 export class Tooltip extends ThemeableElement {
@@ -60,6 +68,21 @@ export class Tooltip extends ThemeableElement {
   /** Text color override. Accepts a hex value (#ffffff) or a CSS token name (--lt-color-neutral-50). */
   @property({ reflect: true }) color = '';
 
+  /**
+   * Milliseconds to wait before showing the tooltip after hover/focus starts. `0` (default) shows immediately.
+   * A hover that ends before the delay elapses never shows the tooltip at all — only a completed wait schedules
+   * it. Hiding is always immediate, regardless of `delay`.
+   * @default 0
+   */
+  @property({ type: Number }) delay = 0;
+
+  private _showTimer?: ReturnType<typeof setTimeout>;
+
+  private _clearShowTimer() {
+    clearTimeout(this._showTimer);
+    this._showTimer = undefined;
+  }
+
   // aria-describedby's id lookup only works within one tree: the tooltip bubble lives in this element's own
   // shadow root, but the trigger the id is set on is the slotted (light DOM) element — an id reference can't
   // cross that boundary, so no AT ever actually announces it (verified: resolves to nothing in the accessibility
@@ -75,8 +98,30 @@ export class Tooltip extends ThemeableElement {
 
   private _sync() {
     const shouldShow = (this._hovered || this._focused) && !this.disabled && !!this.content;
-    if (shouldShow) this._show();
-    else this._hide();
+
+    if (!shouldShow) {
+      // Ends a pending delay before it ever shows — a hover that ends before `delay` elapses never shows the
+      // tooltip at all, only a completed wait schedules it.
+      this._clearShowTimer();
+      this._hide();
+      return;
+    }
+
+    // Already visible (e.g. `content` changed while shown) or no delay configured — show without waiting.
+    if (this._isShown() || this.delay <= 0) {
+      this._clearShowTimer();
+      this._show();
+      return;
+    }
+
+    // A delay is already running — let it finish rather than restarting the clock on every pointermove-driven
+    // re-sync.
+    if (this._showTimer === undefined) {
+      this._showTimer = setTimeout(() => {
+        this._showTimer = undefined;
+        this._show();
+      }, this.delay);
+    }
   }
 
   private _show() {
@@ -165,6 +210,7 @@ export class Tooltip extends ThemeableElement {
     this.removeEventListener('focusout', this._onFocusOut);
     this._hovered = false;
     this._focused = false;
+    this._clearShowTimer();
     this._hide();
   }
 
