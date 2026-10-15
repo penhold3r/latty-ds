@@ -12,6 +12,9 @@ export type TableProps = HTMLAttributes<TableEl> & {
   loading?: boolean;
   emptyMessage?: string;
   label?: string;
+  caption?: string;
+  captionSide?: TableEl['captionSide'];
+  stickyHeader?: boolean;
   rowKey?: string;
   sort?: TableEl['sort'];
   onSortChange?: (event: CustomEvent) => void;

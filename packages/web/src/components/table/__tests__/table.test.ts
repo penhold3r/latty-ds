@@ -137,6 +137,53 @@ describe('<lt-table>', () => {
     expect(el.shadowRoot!.querySelector('table')!.hasAttribute('aria-label')).toBe(false);
   });
 
+  describe('caption', () => {
+    it('omits the caption element when none is set', () => {
+      expect(el.shadowRoot!.querySelector('caption')).toBeNull();
+    });
+
+    it('renders a caption element with the given text', async () => {
+      el.caption = 'Team roster';
+      await el.updateComplete;
+
+      const caption = el.shadowRoot!.querySelector('caption');
+      expect(caption).toBeTruthy();
+      expect(caption!.textContent?.trim()).toBe('Team roster');
+    });
+
+    it('renders the caption as the first child of the table', async () => {
+      el.caption = 'Team roster';
+      await el.updateComplete;
+
+      const table = el.shadowRoot!.querySelector('table')!;
+      expect(table.firstElementChild?.tagName).toBe('CAPTION');
+    });
+
+    it('defaults caption-side to top', () => {
+      expect(el.captionSide).toBe('top');
+      expect(el.getAttribute('caption-side')).toBe('top');
+    });
+
+    it('reflects caption-side changes', async () => {
+      el.captionSide = 'bottom';
+      await el.updateComplete;
+      expect(el.getAttribute('caption-side')).toBe('bottom');
+    });
+  });
+
+  describe('sticky-header', () => {
+    it('is not sticky by default', () => {
+      expect(el.stickyHeader).toBe(false);
+      expect(el.hasAttribute('sticky-header')).toBe(false);
+    });
+
+    it('reflects sticky-header when enabled', async () => {
+      el.stickyHeader = true;
+      await el.updateComplete;
+      expect(el.hasAttribute('sticky-header')).toBe(true);
+    });
+  });
+
   it('toggles sort direction on subsequent clicks', async () => {
     const nameHeader = el.shadowRoot!.querySelectorAll('th')[1].querySelector('button') as HTMLElement;
 

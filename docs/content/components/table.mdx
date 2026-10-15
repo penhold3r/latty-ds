@@ -19,7 +19,7 @@ properties.
   tag="lt-table"
   previewHeight="auto"
   stretch={true}
-  defaults={{ hoverable: true }}
+  defaults={{ hoverable: true, caption: 'Team roster' }}
   seedData={{
     columns: [
       { key: 'name', label: 'Name', sortable: true },
@@ -93,6 +93,11 @@ const data = [
 </template>
     `}
   />
+
+A `caption` gives the table a visible, accessible title — unlike `label` (which only sets `aria-label`), it's shown
+on screen above (or with `caption-side="bottom"`, below) the table. `sticky-header` pins the header row to the top
+of the nearest scrolling ancestor, which is usually the page itself unless `.table-container`'s own height and
+scroll are constrained by the surrounding page layout.
 
 ## API
 

@@ -20,17 +20,35 @@ export const tableStyles = css`
   }
 
   table {
-    border-collapse: collapse;
+    /* Separate, not collapsed: position: sticky on th/td (used by sticky-header and sticky columns) is
+       ignored by browsers on table cells when border-collapse is 'collapse'. Row/header dividers below are
+       set per-cell rather than on tr/thead to compensate — the separated-borders model doesn't paint a
+       border placed directly on a row or row-group. */
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
+  }
+
+  /* Caption */
+  caption {
+    caption-side: top;
+    color: var(--lt-text-default);
+    font-weight: 600;
+    padding: var(--lt-spacing-3) var(--lt-spacing-4);
+    text-align: start;
+  }
+
+  :host([caption-side='bottom']) caption {
+    caption-side: bottom;
   }
 
   /* Header */
   thead {
     background: var(--lt-bg-surface);
-    border-bottom: 2px solid var(--lt-border-default);
   }
 
   th {
+    border-bottom: 2px solid var(--lt-border-default);
     color: var(--lt-text-default);
     font-weight: 600;
     text-align: start;
@@ -96,11 +114,14 @@ export const tableStyles = css`
 
   /* Body */
   tbody tr {
-    border-bottom: 1px solid var(--lt-border-default);
     transition: background-color 120ms ease;
   }
 
-  tbody tr:last-child {
+  tbody tr td {
+    border-bottom: 1px solid var(--lt-border-default);
+  }
+
+  tbody tr:last-child td {
     border-bottom: none;
   }
 
@@ -160,6 +181,14 @@ export const tableStyles = css`
 
   :host([density='comfortable']) th.sortable .header-content {
     padding: var(--lt-spacing-4) var(--lt-spacing-5);
+  }
+
+  /* Sticky header */
+  :host([sticky-header]) thead th {
+    background: var(--lt-bg-surface);
+    position: sticky;
+    top: 0;
+    z-index: 3;
   }
 
   /* Sticky columns */

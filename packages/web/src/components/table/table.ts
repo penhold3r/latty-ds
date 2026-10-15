@@ -49,6 +49,8 @@ import '@latty-ds/icons';
  * - Column alignment and sizing
  * - Hide columns on mobile
  * - Accessible with keyboard navigation
+ * - Visible caption via the `caption` property
+ * - Sticky header via `sticky-header`
  *
  * @fires sortchange - Fired when sort changes
  *
@@ -148,10 +150,34 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Accessible name for the table. Required when a page has more than one table, since column labels alone
-   * don't tell assistive tech which table it's in.
+   * don't tell assistive tech which table it's in. Renders as `aria-label`, so it isn't visible on screen —
+   * for a visible title, use `caption` instead.
    * @default ''
    */
   @property({ reflect: true }) label = '';
+
+  /**
+   * Visible caption describing the table's contents, rendered as a native `<caption>` element. Unlike `label`,
+   * this text is shown on screen, and it becomes the table's accessible name natively (the HTML accessible-name
+   * algorithm prefers a present `<caption>` over nothing) — though an explicit `label` still wins over it, since
+   * `aria-label` takes precedence over `<caption>` in that algorithm. Omitted entirely when empty.
+   * @default ''
+   */
+  @property() caption = '';
+
+  /**
+   * Which edge of the table the caption renders against.
+   * @default 'top'
+   */
+  @property({ reflect: true, attribute: 'caption-side' }) captionSide: 'top' | 'bottom' = 'top';
+
+  /**
+   * Keeps the header row pinned to the top of the nearest scrolling ancestor while the body scrolls past it —
+   * that ancestor is `.table-container` itself when it has its own bounded height and vertical overflow (not
+   * set by this component), or the page otherwise.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true, attribute: 'sticky-header' }) stickyHeader = false;
 
   /**
    * Field name to use as a stable row identity key for efficient DOM reuse during sorts/updates.
@@ -415,6 +441,11 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     return html`
       <div class="table-container">
         <table aria-label=${this.label || nothing}>
+          ${this.caption
+            ? html`<caption>
+                ${this.caption}
+              </caption>`
+            : nothing}
           ${this.renderHeader()} ${this.renderBody()}
         </table>
         ${this.loading
