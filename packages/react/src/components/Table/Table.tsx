@@ -16,13 +16,17 @@ export type TableProps = HTMLAttributes<TableEl> & {
   captionSide?: TableEl['captionSide'];
   stickyHeader?: boolean;
   rowKey?: string;
+  selectionMode?: TableEl['selectionMode'];
+  selected?: TableEl['selected'];
+  labels?: TableEl['labels'];
   sort?: TableEl['sort'];
   onSortChange?: (event: CustomEvent) => void;
   onRowclick?: (event: CustomEvent) => void;
+  onSelectionChange?: (event: CustomEvent) => void;
 };
 
 export const Table = forwardRef<TableEl, TableProps>(function Table(
-  { onSortChange, onRowclick, columns, data, sort, children, ...props },
+  { onSortChange, onRowclick, onSelectionChange, columns, data, selected, labels, sort, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<TableEl>(null);
@@ -43,13 +47,22 @@ export const Table = forwardRef<TableEl, TableProps>(function Table(
     el.addEventListener('rowclick', h);
     return () => el.removeEventListener('rowclick', h);
   }, [onRowclick]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onSelectionChange) return;
+    const h = (ev: Event) => onSelectionChange!(ev as CustomEvent);
+    el.addEventListener('selectionchange', h);
+    return () => el.removeEventListener('selectionchange', h);
+  }, [onSelectionChange]);
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;
     if (columns !== undefined) el.columns = columns;
     if (data !== undefined) el.data = data;
+    if (selected !== undefined) el.selected = selected;
+    if (labels !== undefined) el.labels = labels;
     if (sort !== undefined) el.sort = sort;
-  }, [columns, data, sort]);
+  }, [columns, data, selected, labels, sort]);
 
   return (
     <lt-table ref={innerRef} {...(props as Record<string, unknown>)}>

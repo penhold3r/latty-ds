@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { html } from 'lit';
 import type { Table } from '../table';
-import type { TableColumn, SortChangeDetail, RowClickDetail } from '../table.types';
+import type { TableColumn, SortChangeDetail, RowClickDetail, SelectionChangeDetail } from '../table.types';
 import '../table';
 
 interface TestData {
@@ -221,6 +221,223 @@ describe('<lt-table>', () => {
       el.stickyHeader = true;
       await el.updateComplete;
       expect(el.hasAttribute('sticky-header')).toBe(true);
+    });
+  });
+
+  describe('selection', () => {
+    it('renders no selection column by default', () => {
+      expect(el.shadowRoot!.querySelector('.selection-cell')).toBeNull();
+    });
+
+    it('renders a checkbox per row and a select-all checkbox in multiple mode', async () => {
+      el.selectionMode = 'multiple';
+      await el.updateComplete;
+
+      const headerCheckbox = el.shadowRoot!.querySelector('thead .selection-cell input') as HTMLInputElement;
+      expect(headerCheckbox.type).toBe('checkbox');
+      const rowCheckboxes = el.shadowRoot!.querySelectorAll('tbody .selection-cell input');
+      expect(rowCheckboxes).toHaveLength(3);
+      expect((rowCheckboxes[0] as HTMLInputElement).type).toBe('checkbox');
+    });
+
+    it('renders a radio per row and no select-all control in single mode', async () => {
+      el.selectionMode = 'single';
+      await el.updateComplete;
+
+      expect(el.shadowRoot!.querySelector('thead .selection-cell input')).toBeNull();
+      const rowRadios = el.shadowRoot!.querySelectorAll('tbody .selection-cell input');
+      expect(rowRadios).toHaveLength(3);
+      expect((rowRadios[0] as HTMLInputElement).type).toBe('radio');
+    });
+
+    it('checking a row checkbox selects it and dispatches selectionchange', async () => {
+      el.selectionMode = 'multiple';
+      await el.updateComplete;
+
+      const handler = vi.fn();
+      el.addEventListener('selectionchange', handler);
+
+      const firstCheckbox = el.shadowRoot!.querySelector('tbody .selection-cell input') as HTMLInputElement;
+      firstCheckbox.click();
+      await el.updateComplete;
+
+      expect(handler).toHaveBeenCalledOnce();
+      const event = handler.mock.calls[0][0] as CustomEvent<SelectionChangeDetail>;
+      expect(event.detail.selected).toEqual([0]);
+      expect(event.detail.previousSelected).toEqual([]);
+      expect(firstCheckbox.checked).toBe(true);
+    });
+
+    it('unchecking a selected row checkbox deselects it', async () => {
+      el.selectionMode = 'multiple';
+      el.selected = [0];
+      await el.updateComplete;
+
+      const firstCheckbox = el.shadowRoot!.querySelector('tbody .selection-cell input') as HTMLInputElement;
+      expect(firstCheckbox.checked).toBe(true);
+      firstCheckbox.click();
+      await el.updateComplete;
+
+      expect(firstCheckbox.checked).toBe(false);
+    });
+
+    it('selecting a radio replaces the previous selection, never adds to it', async () => {
+      el.selectionMode = 'single';
+      await el.updateComplete;
+
+      const radios = el.shadowRoot!.querySelectorAll('tbody .selection-cell input') as NodeListOf<HTMLInputElement>;
+      radios[0].click();
+      await el.updateComplete;
+      expect(el.selected).toBeUndefined(); // uncontrolled — internal state only, selected stays undefined
+
+      radios[1].click();
+      await el.updateComplete;
+
+      const radiosAfter = el.shadowRoot!.querySelectorAll(
+        'tbody .selection-cell input'
+      ) as NodeListOf<HTMLInputElement>;
+      expect(radiosAfter[0].checked).toBe(false);
+      expect(radiosAfter[1].checked).toBe(true);
+    });
+
+    it('clicking a row checkbox does not also fire rowclick', async () => {
+      el.selectionMode = 'multiple';
+      await el.updateComplete;
+
+      const rowClickHandler = vi.fn();
+      el.addEventListener('rowclick', rowClickHandler);
+
+      const firstCheckbox = el.shadowRoot!.querySelector('tbody .selection-cell input') as HTMLInputElement;
+      firstCheckbox.click();
+      await el.updateComplete;
+
+      expect(rowClickHandler).not.toHaveBeenCalled();
+    });
+
+    it('a row click does not also toggle selection (only the control does)', async () => {
+      el.selectionMode = 'multiple';
+      await el.updateComplete;
+
+      const selectionHandler = vi.fn();
+      el.addEventListener('selectionchange', selectionHandler);
+
+      const nameCell = el.shadowRoot!.querySelectorAll('tbody tr')[0].querySelectorAll('td')[2] as HTMLElement;
+      nameCell.click();
+      await el.updateComplete;
+
+      expect(selectionHandler).not.toHaveBeenCalled();
+    });
+
+    it('select-all checks every visible row, re-clicking clears the selection', async () => {
+      el.selectionMode = 'multiple';
+      await el.updateComplete;
+
+      const headerCheckbox = el.shadowRoot!.querySelector('thead .selection-cell input') as HTMLInputElement;
+      headerCheckbox.click();
+      await el.updateComplete;
+
+      const rowCheckboxes = el.shadowRoot!.querySelectorAll(
+        'tbody .selection-cell input'
+      ) as NodeListOf<HTMLInputElement>;
+      expect([...rowCheckboxes].every((cb) => cb.checked)).toBe(true);
+
+      headerCheckbox.click();
+      await el.updateComplete;
+      expect([...rowCheckboxes].every((cb) => !cb.checked)).toBe(true);
+    });
+
+    it('select-all checkbox is indeterminate when only some rows are selected', async () => {
+      el.selectionMode = 'multiple';
+      el.selected = [0];
+      await el.updateComplete;
+
+      const headerCheckbox = el.shadowRoot!.querySelector('thead .selection-cell input') as HTMLInputElement;
+      expect(headerCheckbox.indeterminate).toBe(true);
+      expect(headerCheckbox.checked).toBe(false);
+    });
+
+    it('uses row-key for selection identity when row-key is set', async () => {
+      el.selectionMode = 'multiple';
+      el.rowKey = 'id';
+      await el.updateComplete;
+
+      const handler = vi.fn();
+      el.addEventListener('selectionchange', handler);
+
+      const firstCheckbox = el.shadowRoot!.querySelector('tbody .selection-cell input') as HTMLInputElement;
+      firstCheckbox.click();
+      await el.updateComplete;
+
+      const event = handler.mock.calls[0][0] as CustomEvent<SelectionChangeDetail>;
+      expect(event.detail.selected).toEqual([1]); // data[0].id === 1, not the row index
+    });
+
+    it('respects a controlled selected array — the event fires but `selected` itself is untouched', async () => {
+      el.selectionMode = 'multiple';
+      el.selected = [1];
+      await el.updateComplete;
+
+      const rowCheckboxes = el.shadowRoot!.querySelectorAll(
+        'tbody .selection-cell input'
+      ) as NodeListOf<HTMLInputElement>;
+      expect(rowCheckboxes[0].checked).toBe(false);
+      expect(rowCheckboxes[1].checked).toBe(true);
+
+      const handler = vi.fn();
+      el.addEventListener('selectionchange', handler);
+      rowCheckboxes[0].click();
+      await el.updateComplete;
+
+      expect(handler).toHaveBeenCalledOnce();
+      // A controlled component doesn't write back on its own — `selected` only changes when the consumer updates
+      // it in response to the event, same as a controlled checkbox in any other framework.
+      expect(el.selected).toEqual([1]);
+    });
+
+    it('adjusts the empty-state colspan to include the selection column', async () => {
+      el.selectionMode = 'multiple';
+      el.data = [];
+      await el.updateComplete;
+      await el.updateComplete;
+
+      expect(el.shadowRoot!.querySelector('td.empty-state')!.getAttribute('colspan')).toBe('4');
+    });
+
+    it('uses a default accessible label naming the row position', async () => {
+      el.selectionMode = 'multiple';
+      await el.updateComplete;
+
+      const firstCheckbox = el.shadowRoot!.querySelector('tbody .selection-cell input') as HTMLInputElement;
+      expect(firstCheckbox.getAttribute('aria-label')).toBe('Select row 1');
+    });
+
+    it('supports overriding selection labels via the labels property', async () => {
+      el.selectionMode = 'multiple';
+      el.labels = { selectAll: 'Pick everyone', selectRow: (row) => `Pick ${(row as TestData).name}` };
+      await el.updateComplete;
+
+      const headerCheckbox = el.shadowRoot!.querySelector('thead .selection-cell input') as HTMLInputElement;
+      expect(headerCheckbox.getAttribute('aria-label')).toBe('Pick everyone');
+      const firstCheckbox = el.shadowRoot!.querySelector('tbody .selection-cell input') as HTMLInputElement;
+      expect(firstCheckbox.getAttribute('aria-label')).toBe('Pick Alice');
+    });
+
+    it('gives a two-table page independent single-select radio groups', async () => {
+      const second = document.createElement('lt-table') as Table<TestData>;
+      second.columns = columns;
+      second.data = data;
+      second.selectionMode = 'single';
+      document.body.appendChild(second);
+      await second.updateComplete;
+
+      el.selectionMode = 'single';
+      await el.updateComplete;
+
+      const firstTableName = (el.shadowRoot!.querySelector('tbody .selection-cell input') as HTMLInputElement).name;
+      const secondTableName = (second.shadowRoot!.querySelector('tbody .selection-cell input') as HTMLInputElement)
+        .name;
+      expect(firstTableName).not.toBe(secondTableName);
+      second.remove();
     });
   });
 

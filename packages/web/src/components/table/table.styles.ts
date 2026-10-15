@@ -235,6 +235,28 @@ export const tableStyles = css`
     border-inline-end: none;
   }
 
+  /* Row selection */
+  .selection-cell {
+    cursor: pointer;
+    vertical-align: middle;
+    width: 1px;
+    white-space: nowrap;
+  }
+
+  .selection-cell input {
+    cursor: pointer;
+    display: block;
+    margin: 0;
+  }
+
+  tbody tr.selected {
+    background: var(--lt-bg-overlay);
+  }
+
+  :host([striped]) tbody tr.selected:nth-child(even) {
+    background: var(--lt-bg-overlay);
+  }
+
   /* Empty state */
   .empty-state {
     color: var(--lt-text-subtle);
@@ -296,6 +318,14 @@ export const tableStyles = css`
       content: attr(data-label);
       color: var(--lt-text-default);
       font-weight: 600;
+    }
+
+    :host([responsive-mode='stack']) td.selection-cell {
+      grid-template-columns: 1fr;
+    }
+
+    :host([responsive-mode='stack']) td.selection-cell::before {
+      content: none;
     }
 
     :host([responsive-mode='stack']) td:last-child {

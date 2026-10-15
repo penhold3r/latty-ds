@@ -12,8 +12,19 @@ import {
   TableResponsiveMode,
   SortState,
   SortChangeDetail,
-  RowClickDetail
+  RowClickDetail,
+  TableSelectionMode,
+  RowKey,
+  SelectionChangeDetail,
+  TableLabels
 } from './table.types';
+
+const DEFAULT_LABELS: TableLabels<unknown> = {
+  selectRow: (_row, index) => `Select row ${index + 1}`,
+  selectAll: 'Select all rows'
+};
+
+let selectionGroupCounter = 0;
 
 /**
  * Default sort comparison. Dates compare by time (their string form sorts "Fri Jan 02" before "Mon Jan 05" but after
@@ -59,9 +70,11 @@ import '@latty-ds/icons';
  * - Visible caption via the `caption` property
  * - Sticky header via `sticky-header`
  * - `rowclick` event for custom row interactions (navigation, custom selection, etc.)
+ * - Row selection via `selection-mode` (`single` radio buttons or `multiple` checkboxes + select-all)
  *
  * @fires sortchange - Fired when sort changes
  * @fires rowclick - Fired when a body row is clicked, with `{ row, index }` detail
+ * @fires selectionchange - Fired when row selection changes, with `{ selected, previousSelected }` detail
  *
  * @example
  * ```typescript
@@ -196,6 +209,30 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   @property({ attribute: 'row-key' }) rowKey = '';
 
   /**
+   * How row selection behaves: `'none'` (no selection UI), `'single'` (one row at a time, radio buttons), or
+   * `'multiple'` (any number of rows, checkboxes plus a "select all" control in the header).
+   * @default 'none'
+   */
+  @property({ reflect: true, attribute: 'selection-mode' }) selectionMode: TableSelectionMode = 'none';
+
+  /**
+   * Current selection (controlled externally), as an array of row keys — the `row-key` field's value for each
+   * selected row when `row-key` is set, otherwise its index within the sorted data. If not provided, selection
+   * is managed internally.
+   */
+  @property({ type: Array }) selected?: RowKey[];
+
+  /**
+   * i18n overrides for the row-selection controls' accessible labels.
+   * @default {}
+   */
+  @property({ type: Object }) labels: Partial<TableLabels<T>> = {};
+
+  private get _labels(): TableLabels<T> {
+    return { ...(DEFAULT_LABELS as TableLabels<T>), ...this.labels };
+  }
+
+  /**
    * Current sort state (controlled externally).
    * If not provided, sorting is managed internally.
    */
@@ -207,6 +244,17 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   @state() private internalSort: SortState | null = null;
 
   /**
+   * Internal selection state (when not controlled externally).
+   */
+  @state() private internalSelected: RowKey[] = [];
+
+  /**
+   * Unique `name` for this instance's `single`-mode radio inputs, so multiple tables on the same page don't
+   * group their radios together.
+   */
+  private readonly _selectionGroupName = `lt-table-selection-${++selectionGroupCounter}`;
+
+  /**
    * Sorted data based on current sort state.
    */
   @state() private sortedData: T[] = [];
@@ -216,6 +264,21 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    */
   private get currentSort(): SortState | null {
     return this.sort ?? this.internalSort;
+  }
+
+  /**
+   * Gets the current effective selection.
+   */
+  private get currentSelected(): RowKey[] {
+    return this.selected ?? this.internalSelected;
+  }
+
+  /**
+   * Resolves a row's selection/rendering identity key: the `row-key` field's value when `row-key` is set,
+   * otherwise the row's index within the sorted data.
+   */
+  private getRowKey(row: T, index: number): RowKey {
+    return this.rowKey ? ((row as Record<string, unknown>)[this.rowKey] as RowKey) : index;
   }
 
   override willUpdate(changedProperties: PropertyValues<this>) {
@@ -318,6 +381,51 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   }
 
   /**
+   * Toggles a single row's selection. In `single` mode this always replaces the selection (matching native radio
+   * behavior — clicking the already-selected one is a no-op, not a way to clear it); in `multiple` mode it adds
+   * or removes just that row's key.
+   */
+  private toggleRowSelection(row: T, index: number) {
+    const key = this.getRowKey(row, index);
+    const previousSelected = this.currentSelected;
+    const next =
+      this.selectionMode === 'single'
+        ? [key]
+        : previousSelected.includes(key)
+          ? previousSelected.filter((k) => k !== key)
+          : [...previousSelected, key];
+
+    if (this.selected === undefined) this.internalSelected = next;
+    this.dispatchEvent(
+      new CustomEvent<SelectionChangeDetail>('selectionchange', {
+        bubbles: true,
+        composed: true,
+        detail: { selected: next, previousSelected }
+      })
+    );
+  }
+
+  /**
+   * Toggles selection of every currently visible (sorted) row — selects all if any are unselected, otherwise
+   * clears the selection. Multiple mode only.
+   */
+  private toggleSelectAll() {
+    const allKeys = this.sortedData.map((row, index) => this.getRowKey(row, index));
+    const previousSelected = this.currentSelected;
+    const allSelected = allKeys.length > 0 && allKeys.every((key) => previousSelected.includes(key));
+    const next = allSelected ? [] : allKeys;
+
+    if (this.selected === undefined) this.internalSelected = next;
+    this.dispatchEvent(
+      new CustomEvent<SelectionChangeDetail>('selectionchange', {
+        bubbles: true,
+        composed: true,
+        detail: { selected: next, previousSelected }
+      })
+    );
+  }
+
+  /**
    * Gets a cell value from a row using a key (supports nested keys).
    */
   private getCellValue(row: unknown, key: string): unknown {
@@ -356,9 +464,28 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * Renders the table header.
    */
   private renderHeader() {
+    const allKeys = this.sortedData.map((row, index) => this.getRowKey(row, index));
+    const selectedCount = allKeys.filter((key) => this.currentSelected.includes(key)).length;
+
     return html`
       <thead>
         <tr>
+          ${this.selectionMode === 'multiple'
+            ? html`
+                <th class="selection-cell">
+                  <input
+                    type="checkbox"
+                    aria-label=${this._labels.selectAll}
+                    .checked=${selectedCount > 0 && selectedCount === allKeys.length}
+                    .indeterminate=${selectedCount > 0 && selectedCount < allKeys.length}
+                    @click=${(e: Event) => e.stopPropagation()}
+                    @change=${() => this.toggleSelectAll()}
+                  />
+                </th>
+              `
+            : this.selectionMode === 'single'
+              ? html`<th class="selection-cell"></th>`
+              : nothing}
           ${(this.columns ?? []).map(
             (column) => html`
               <th
@@ -412,44 +539,66 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    */
   private renderBody() {
     const columns = this.columns ?? [];
+    const selectionColumnCount = this.selectionMode === 'none' ? 0 : 1;
     if (this.sortedData.length === 0) {
       return html`
         <tbody>
           <tr>
-            <td colspan=${Math.max(columns.length, 1)} class="empty-state">${this.emptyMessage}</td>
+            <td colspan=${Math.max(columns.length + selectionColumnCount, 1)} class="empty-state">
+              ${this.emptyMessage}
+            </td>
           </tr>
         </tbody>
       `;
     }
 
-    const renderRow = (row: T, index: number) => html`
-      <tr @click=${() => this.handleRowClick(row, index)}>
-        ${columns.map(
-          (column) => html`
-            <td
-              class=${classMap({
-                sticky: !!column.sticky,
-                'hide-on-mobile': !!column.hideOnMobile
-              })}
-              data-align=${column.align || 'start'}
-              data-label=${column.label}
-              style=${styleMap({
-                ...(column.width ? { width: column.width } : {}),
-                ...(column.minWidth ? { minWidth: column.minWidth } : {})
-              })}
-            >
-              ${this.renderCell(column, row, index)}
-            </td>
-          `
-        )}
-      </tr>
-    `;
+    const renderRow = (row: T, index: number) => {
+      const key = this.getRowKey(row, index);
+      const selected = this.currentSelected.includes(key);
+
+      return html`
+        <tr @click=${() => this.handleRowClick(row, index)} class=${classMap({ selected })}>
+          ${this.selectionMode === 'none'
+            ? nothing
+            : html`
+                <td class="selection-cell" data-label="">
+                  <input
+                    type=${this.selectionMode === 'single' ? 'radio' : 'checkbox'}
+                    name=${this.selectionMode === 'single' ? this._selectionGroupName : nothing}
+                    aria-label=${this._labels.selectRow(row, index)}
+                    .checked=${selected}
+                    @click=${(e: Event) => e.stopPropagation()}
+                    @change=${() => this.toggleRowSelection(row, index)}
+                  />
+                </td>
+              `}
+          ${columns.map(
+            (column) => html`
+              <td
+                class=${classMap({
+                  sticky: !!column.sticky,
+                  'hide-on-mobile': !!column.hideOnMobile
+                })}
+                data-align=${column.align || 'start'}
+                data-label=${column.label}
+                style=${styleMap({
+                  ...(column.width ? { width: column.width } : {}),
+                  ...(column.minWidth ? { minWidth: column.minWidth } : {})
+                })}
+              >
+                ${this.renderCell(column, row, index)}
+              </td>
+            `
+          )}
+        </tr>
+      `;
+    };
 
     // Keyed rendering only makes sense with a real key. Without `row-key` the old fallback (JSON.stringify(row)) was
     // O(n) per render, threw on circular data and BigInt, and gave identical rows identical keys; index-based
     // rendering has none of those problems.
     const rows = this.rowKey
-      ? repeat(this.sortedData, (row) => (row as Record<string, unknown>)[this.rowKey], renderRow)
+      ? repeat(this.sortedData, (row, index) => this.getRowKey(row, index), renderRow)
       : this.sortedData.map(renderRow);
 
     return html`

@@ -120,6 +120,52 @@ export interface RowClickDetail<T = Record<string, unknown>> {
 }
 
 /**
+ * How row selection behaves.
+ *
+ * - `none`: no selection UI (default)
+ * - `single`: one row selectable at a time, rendered as a radio button per row
+ * - `multiple`: any number of rows selectable, rendered as a checkbox per row plus a "select all" checkbox
+ */
+export type TableSelectionMode = 'none' | 'single' | 'multiple';
+
+/**
+ * A row's selection key — the `row-key` field's value when `row-key` is set, otherwise the row's index.
+ */
+export type RowKey = string | number;
+
+/**
+ * Event detail for selection change events.
+ */
+export interface SelectionChangeDetail {
+  /**
+   * The new selection, as an array of row keys.
+   */
+  selected: RowKey[];
+
+  /**
+   * The selection before this change.
+   */
+  previousSelected: RowKey[];
+}
+
+/**
+ * Labels for row-selection controls, overridable for i18n.
+ */
+export interface TableLabels<T = Record<string, unknown>> {
+  /**
+   * Accessible label for an individual row's selection control.
+   * @default (row, index) => `Select row ${index + 1}`
+   */
+  selectRow: (row: T, index: number) => string;
+
+  /**
+   * Accessible label for the "select all" control in the header (multiple mode only).
+   * @default 'Select all rows'
+   */
+  selectAll: string;
+}
+
+/**
  * Event detail for sort change events.
  */
 export interface SortChangeDetail {

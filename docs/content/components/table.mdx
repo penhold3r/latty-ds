@@ -108,6 +108,19 @@ table.addEventListener('rowclick', (e) => {
 });
 ```
 
+Set `selection-mode="multiple"` (checkboxes + a "select all" control) or `selection-mode="single"` (radio buttons)
+to add a built-in selection column. `selected` is an array of row keys — the `row-key` field's value for each
+selected row when `row-key` is set, otherwise the row's index — and is controlled the same way `sort` is: pass it
+to manage selection yourself, or leave it unset and listen for `selectionchange`:
+
+```js
+table.selectionMode = 'multiple';
+table.rowKey = 'id';
+table.addEventListener('selectionchange', (e) => {
+  console.log(e.detail.selected); // e.g. [1, 3]
+});
+```
+
 ## API
 
 <ApiTable tag="lt-table" />
