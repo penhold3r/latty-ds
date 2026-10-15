@@ -16,7 +16,9 @@ export default defineConfig([
       '**/*.d.ts',
       'packages/utils/src/*.js',
       'docs/build/**',
-      'docs/.docusaurus/**'
+      'docs/.docusaurus/**',
+      'docs/test-results/**',
+      'docs/playwright-a11y-report/**'
     ]
   },
   {
