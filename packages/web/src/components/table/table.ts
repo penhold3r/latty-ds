@@ -1,9 +1,10 @@
 import { html, nothing, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit/directives/repeat.js';
+import { devWarn } from '../../utils';
 
 import { tableStyles } from './table.styles';
 import {
@@ -31,6 +32,12 @@ const DEFAULT_MIN_COLUMN_WIDTH = 40;
 
 /** Pixels a keyboard arrow-key press grows/shrinks a resizable column by. */
 const RESIZE_KEY_STEP = 10;
+
+/** `rowHeight` fallback when `virtualized` is set but `rowHeight` itself is unset or not a positive number. */
+const DEFAULT_ROW_HEIGHT = 44;
+
+/** Extra rows rendered beyond the strictly-visible range on each side, so a fast scroll doesn't flash blank. */
+const VIRTUAL_OVERSCAN = 4;
 
 let selectionGroupCounter = 0;
 
@@ -81,6 +88,7 @@ import '@latty-ds/icons';
  * - Row selection via `selection-mode` (`single` radio buttons or `multiple` checkboxes + select-all)
  * - Pagination coupling via `page-size`/`page`/`totalPages`, for pairing with a standalone `lt-pagination`
  * - Per-column resize (`column.resizable`) via pointer drag or, for keyboard users, arrow keys on the same handle
+ * - Row virtualization (`virtualized` + `height`) for rendering only the visible rows of a large dataset
  *
  * @fires sortchange - Fired when sort changes
  * @fires rowclick - Fired when a body row is clicked, with `{ row, index }` detail
@@ -213,6 +221,31 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   @property({ type: Boolean, reflect: true, attribute: 'sticky-header' }) stickyHeader = false;
 
   /**
+   * Bounds `.table-container` to this fixed height with its own vertical scroll, instead of growing to fit all
+   * rows and leaving the ambient page to scroll past it. General-purpose (e.g. pairs well with `sticky-header`
+   * even without `virtualized`), but `virtualized` requires it — windowing needs a known viewport size to compute
+   * which rows are actually visible.
+   * @default ''
+   */
+  @property({ reflect: true }) height = '';
+
+  /**
+   * Renders only the body rows currently scrolled into view (plus a small overscan buffer) instead of every row,
+   * for datasets too large to put every row in the DOM at once. Requires `height` — without it there's no bounded
+   * viewport to compute visibility against, so this silently has no effect (and logs a dev-mode warning) rather
+   * than erroring. Assumes every row renders at the same height (`row-height`); not supported together with
+   * `responsive-mode="stack"`, whose card-style rows have no uniform height to assume.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) virtualized = false;
+
+  /**
+   * Fixed pixel height every row renders at, used only to compute the visible window when `virtualized` is set.
+   * @default 44
+   */
+  @property({ type: Number, reflect: true, attribute: 'row-height' }) rowHeight = DEFAULT_ROW_HEIGHT;
+
+  /**
    * Field name to use as a stable row identity key for efficient DOM reuse during sorts/updates.
    * When omitted, falls back to the row's JSON representation.
    * @default ''
@@ -292,6 +325,16 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    */
   @state() private columnWidthOverrides: Record<string, string> = {};
 
+  @query('.table-container') private _containerEl?: HTMLDivElement;
+
+  /** Current scroll offset of `.table-container`, tracked only while `virtualized` is set. */
+  @state() private _scrollTop = 0;
+
+  /** Measured rendered height of `.table-container`, tracked only while `virtualized` is set. */
+  @state() private _viewportHeight = 0;
+
+  private _containerResizeObserver?: ResizeObserver;
+
   /**
    * Sorted data based on current sort state.
    */
@@ -355,15 +398,47 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   }
 
   /**
-   * The rows actually rendered, paired with their index within `sortedData` — the index is preserved (not
+   * The current page's row range as plain indices into `sortedData` — computed without materializing any rows,
+   * so callers that only need the count (e.g. a virtualized render's spacer-row math) stay O(1).
+   */
+  private get pageRange(): { start: number; end: number } {
+    if (!this.pageSize || this.pageSize < 1) return { start: 0, end: this.sortedData.length };
+    const start = (this.currentPage - 1) * this.pageSize;
+    return { start, end: Math.min(start + this.pageSize, this.sortedData.length) };
+  }
+
+  /**
+   * Every row on the current page, paired with its index within `sortedData` — the index is preserved (not
    * re-based to the page) so `rowIndex` in `column.render`, `rowclick`'s detail, and row-selection keys all keep
-   * meaning "position within the full sorted data", not "position within this page".
+   * meaning "position within the full sorted data", not "position within this page". Slices `sortedData` before
+   * mapping (not after), so this costs O(page size), not O(total rows), regardless of dataset size.
    */
   private get pagedEntries(): Array<{ row: T; index: number }> {
-    const entries = this.sortedData.map((row, index) => ({ row, index }));
-    if (!this.pageSize || this.pageSize < 1) return entries;
-    const start = (this.currentPage - 1) * this.pageSize;
-    return entries.slice(start, start + this.pageSize);
+    const { start, end } = this.pageRange;
+    return this.sortedData.slice(start, end).map((row, i) => ({ row, index: start + i }));
+  }
+
+  /**
+   * The rows actually rendered into the DOM: `pagedEntries` as-is, unless `virtualized` (with `height` set) further
+   * windows it down to just the current page's visible range plus a small overscan buffer. Unlike `pagedEntries`,
+   * this slices `sortedData` directly for the visible window rather than materializing the whole page first, so
+   * scrolling a virtualized table costs O(visible rows), never O(page size) or O(total rows) — the entire point,
+   * since a scroll event recomputes this on every tick.
+   */
+  private get visibleEntries(): Array<{ row: T; index: number }> {
+    const { start: pageStart, end: pageEnd } = this.pageRange;
+    if (!this.virtualized || !this.height) return this.pagedEntries;
+
+    const pageRowCount = pageEnd - pageStart;
+    const rowHeightPx = this.rowHeight > 0 ? this.rowHeight : DEFAULT_ROW_HEIGHT;
+    const windowStart = Math.max(0, Math.floor(this._scrollTop / rowHeightPx) - VIRTUAL_OVERSCAN);
+    const windowEnd = Math.min(
+      pageRowCount,
+      Math.ceil((this._scrollTop + this._viewportHeight) / rowHeightPx) + VIRTUAL_OVERSCAN
+    );
+    const absoluteStart = pageStart + windowStart;
+    const absoluteEnd = pageStart + windowEnd;
+    return this.sortedData.slice(absoluteStart, absoluteEnd).map((row, i) => ({ row, index: absoluteStart + i }));
   }
 
   override willUpdate(changedProperties: PropertyValues<this>) {
@@ -372,6 +447,40 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     if (changed.has('data') || changed.has('sort') || changed.has('columns') || changed.has('internalSort')) {
       this.updateSortedData();
     }
+  }
+
+  override firstUpdated(changedProperties: PropertyValues<this>) {
+    super.firstUpdated(changedProperties);
+    // Measures .table-container whenever its rendered size changes (a height change, a window resize, a
+    // sidebar collapsing elsewhere on the page — anything), not just once on mount, so a virtualized table
+    // keeps computing its visible window correctly if its viewport is ever resized after the fact.
+    this._containerResizeObserver = new ResizeObserver((entries) => {
+      this._viewportHeight = entries[0]?.contentRect.height ?? 0;
+    });
+    if (this._containerEl) this._containerResizeObserver.observe(this._containerEl);
+  }
+
+  override disconnectedCallback() {
+    super.disconnectedCallback();
+    this._containerResizeObserver?.disconnect();
+  }
+
+  override updated(changedProperties: PropertyValues<this>) {
+    super.updated(changedProperties);
+    if ((changedProperties.has('virtualized') || changedProperties.has('height')) && this.virtualized && !this.height) {
+      devWarn(
+        'lt-table',
+        '`virtualized` has no effect without `height` — give the table a bounded height so there is a viewport to compute visible rows against'
+      );
+    }
+  }
+
+  /**
+   * Tracks `.table-container`'s scroll position while virtualized, driving `visibleEntries`'s windowing math.
+   */
+  private handleScroll(e: Event) {
+    if (!this.virtualized) return;
+    this._scrollTop = (e.currentTarget as HTMLElement).scrollTop;
   }
 
   /**
@@ -633,9 +742,11 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     const allKeys = this.pagedEntries.map(({ row, index }) => this.getRowKey(row, index));
     const selectedCount = allKeys.filter((key) => this.currentSelected.includes(key)).length;
 
+    const isVirtualized = this.virtualized && !!this.height;
+
     return html`
       <thead>
-        <tr>
+        <tr aria-rowindex=${isVirtualized ? 1 : nothing}>
           ${this.selectionMode === 'multiple'
             ? html`
                 <th class="selection-cell">
@@ -732,12 +843,23 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
       `;
     }
 
+    const isVirtualized = this.virtualized && !!this.height;
+    const { start: pageStart, end: pageEnd } = this.pageRange;
+    const pageRowCount = pageEnd - pageStart;
+
     const renderRow = (row: T, index: number) => {
       const key = this.getRowKey(row, index);
       const selected = this.currentSelected.includes(key);
+      // +2, not +1: row-index 1 is the header, matching the ARIA Grid pattern's row numbering, so a row's own
+      // position within the page (0-based) needs to shift by one more than usual to land after it.
+      const ariaRowIndex = isVirtualized ? index - pageStart + 2 : nothing;
 
       return html`
-        <tr @click=${() => this.handleRowClick(row, index)} class=${classMap({ selected })}>
+        <tr
+          @click=${() => this.handleRowClick(row, index)}
+          class=${classMap({ selected })}
+          aria-rowindex=${ariaRowIndex}
+        >
           ${this.selectionMode === 'none'
             ? nothing
             : html`
@@ -776,27 +898,64 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
     // Keyed rendering only makes sense with a real key. Without `row-key` the old fallback (JSON.stringify(row)) was
     // O(n) per render, threw on circular data and BigInt, and gave identical rows identical keys; index-based
-    // rendering has none of those problems. Iterates `pagedEntries` (not `sortedData` directly) so each entry's
-    // preserved global index — not its position within this page — is what `renderRow` ultimately uses.
+    // rendering has none of those problems. Iterates `visibleEntries` (not `sortedData` directly) so each entry's
+    // preserved global index — not its position within this page, let alone this scroll window — is what
+    // `renderRow` ultimately uses.
+    const entries = this.visibleEntries;
     const rows = this.rowKey
       ? repeat(
-          this.pagedEntries,
+          entries,
           ({ row, index }) => this.getRowKey(row, index),
           ({ row, index }) => renderRow(row, index)
         )
-      : this.pagedEntries.map(({ row, index }) => renderRow(row, index));
+      : entries.map(({ row, index }) => renderRow(row, index));
+
+    if (!isVirtualized) {
+      return html`
+        <tbody>
+          ${rows}
+        </tbody>
+      `;
+    }
+
+    // Rows scrolled out of view above/below still need to occupy their own vertical space, or the scrollbar's
+    // range (and the position everything else lands at while scrolling) would be wrong — two plain spacer rows,
+    // sized to stand in for however many rows aren't currently rendered on each side, do that without needing
+    // any non-table layout. aria-hidden since they carry no real content, just filler height.
+    const rowHeightPx = this.rowHeight > 0 ? this.rowHeight : DEFAULT_ROW_HEIGHT;
+    const firstRenderedOffset = entries.length ? entries[0].index - pageStart : 0;
+    const lastRenderedOffset = entries.length ? entries[entries.length - 1].index - pageStart : -1;
+    const topSpacerRows = firstRenderedOffset;
+    const bottomSpacerRows = pageRowCount - 1 - lastRenderedOffset;
+    const colCount = Math.max(columns.length + selectionColumnCount, 1);
+    const spacerRow = (rowCount: number) =>
+      rowCount > 0
+        ? html`
+            <tr class="virtual-spacer" aria-hidden="true" style=${styleMap({ height: `${rowCount * rowHeightPx}px` })}>
+              <td colspan=${colCount}></td>
+            </tr>
+          `
+        : nothing;
 
     return html`
       <tbody>
-        ${rows}
+        ${spacerRow(topSpacerRows)} ${rows} ${spacerRow(bottomSpacerRows)}
       </tbody>
     `;
   }
 
   render() {
+    const isVirtualized = this.virtualized && !!this.height;
     return html`
-      <div class="table-container">
-        <table aria-label=${this.label || nothing}>
+      <div
+        class="table-container"
+        style=${styleMap(this.height ? { height: this.height, overflowY: 'auto' } : {})}
+        @scroll=${this.handleScroll}
+      >
+        <table
+          aria-label=${this.label || nothing}
+          aria-rowcount=${isVirtualized ? this.pageRange.end - this.pageRange.start + 1 : nothing}
+        >
           ${this.caption
             ? html`<caption>
                 ${this.caption}

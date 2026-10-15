@@ -1117,4 +1117,186 @@ describe('<lt-table>', () => {
       expect(th.style.width).toBe('350px'); // driven by the override now, not frozen at the configured 300px
     });
   });
+
+  describe('virtualization', () => {
+    interface Row {
+      id: number;
+      name: string;
+    }
+
+    // 100 simple rows, row-keyed by id so repeat() keying is exercised the same way a real large dataset would be.
+    const bigData: Row[] = Array.from({ length: 100 }, (_, i) => ({ id: i, name: `Row ${i}` }));
+
+    const setViewport = (table: Table<Row>, scrollTop: number, viewportHeight: number) => {
+      const t = table as unknown as { _scrollTop: number; _viewportHeight: number };
+      t._scrollTop = scrollTop;
+      t._viewportHeight = viewportHeight;
+    };
+
+    let bigTable: Table<Row>;
+
+    beforeEach(async () => {
+      bigTable = document.createElement('lt-table') as Table<Row>;
+      bigTable.columns = [{ key: 'name', label: 'Name' }];
+      bigTable.data = bigData;
+      bigTable.rowKey = 'id';
+      document.body.appendChild(bigTable);
+      await bigTable.updateComplete;
+    });
+
+    afterEach(() => {
+      bigTable.remove();
+    });
+
+    it('renders every row when virtualized is unset, the default', () => {
+      expect(bigTable.shadowRoot!.querySelectorAll('tbody tr')).toHaveLength(100);
+    });
+
+    it('renders every row when virtualized but no height is given, rather than erroring', async () => {
+      bigTable.virtualized = true;
+      await bigTable.updateComplete;
+      expect(bigTable.shadowRoot!.querySelectorAll('tbody tr')).toHaveLength(100);
+    });
+
+    it('warns in dev mode when virtualized has no height to work with', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      bigTable.virtualized = true;
+      await bigTable.updateComplete;
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('[lt-table]'));
+      warn.mockRestore();
+    });
+
+    it('does not warn once height is also given', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      bigTable.virtualized = true;
+      bigTable.height = '300px';
+      await bigTable.updateComplete;
+      expect(warn).not.toHaveBeenCalled();
+      warn.mockRestore();
+    });
+
+    it('renders only the visible window (plus overscan) of rows, not all 100, once height is set', async () => {
+      bigTable.virtualized = true;
+      bigTable.height = '300px';
+      await bigTable.updateComplete;
+      setViewport(bigTable, 0, 300);
+      await bigTable.updateComplete;
+
+      const rows = bigTable.shadowRoot!.querySelectorAll('tbody tr:not(.virtual-spacer)');
+      // rowHeight defaults to 44px: ceil(300/44) + VIRTUAL_OVERSCAN(4) rows fit in the 300px viewport from the top.
+      expect(rows.length).toBeLessThan(100);
+      expect(rows.length).toBeGreaterThan(0);
+      expect((rows[0] as HTMLElement).textContent).toContain('Row 0');
+    });
+
+    it('renders the correct rows after scrolling partway down, not the top window', async () => {
+      bigTable.virtualized = true;
+      bigTable.height = '300px';
+      bigTable.rowHeight = 50;
+      await bigTable.updateComplete;
+      setViewport(bigTable, 1000, 300); // scrolled 1000px down = past row 20
+      await bigTable.updateComplete;
+
+      const rows = bigTable.shadowRoot!.querySelectorAll('tbody tr:not(.virtual-spacer)');
+      const names = [...rows].map((r) => r.textContent?.trim());
+      expect(names).toContain('Row 20'); // floor(1000/50) = 20, the first strictly-visible row
+      expect(names).not.toContain('Row 0'); // well outside the window + overscan
+    });
+
+    it('renders a top spacer row sized to stand in for the rows scrolled past', async () => {
+      bigTable.virtualized = true;
+      bigTable.height = '300px';
+      bigTable.rowHeight = 50;
+      await bigTable.updateComplete;
+      setViewport(bigTable, 1000, 300);
+      await bigTable.updateComplete;
+
+      const spacers = bigTable.shadowRoot!.querySelectorAll('tbody tr.virtual-spacer') as NodeListOf<HTMLElement>;
+      expect(spacers.length).toBe(2); // one above, one below the rendered window
+      // floor(1000/50) - overscan(4) = 16 rows above the window, each 50px.
+      expect(spacers[0].style.height).toBe('800px');
+    });
+
+    it('renders no top spacer when scrolled to the very top', async () => {
+      bigTable.virtualized = true;
+      bigTable.height = '300px';
+      await bigTable.updateComplete;
+      setViewport(bigTable, 0, 300);
+      await bigTable.updateComplete;
+
+      expect(bigTable.shadowRoot!.querySelectorAll('tbody tr.virtual-spacer')).toHaveLength(1); // bottom only
+    });
+
+    it('preserves the true sortedData index in rowclick even for a virtualized, scrolled-past row', async () => {
+      bigTable.virtualized = true;
+      bigTable.height = '300px';
+      bigTable.rowHeight = 50;
+      await bigTable.updateComplete;
+      setViewport(bigTable, 1000, 300);
+      await bigTable.updateComplete;
+
+      const handler = vi.fn();
+      bigTable.addEventListener('rowclick', handler);
+      const firstVisibleRow = bigTable.shadowRoot!.querySelector('tbody tr:not(.virtual-spacer)') as HTMLElement;
+      firstVisibleRow.click();
+
+      const event = handler.mock.calls[0][0] as CustomEvent<RowClickDetail<Row>>;
+      expect(event.detail.row.id).toBe(event.detail.index); // id and sortedData index match 1:1 in this fixture
+      expect(event.detail.index).toBeGreaterThan(0);
+    });
+
+    it("select-all still covers the whole page's rows, not just what's currently rendered in the DOM", async () => {
+      bigTable.selectionMode = 'multiple';
+      bigTable.virtualized = true;
+      bigTable.height = '300px';
+      await bigTable.updateComplete;
+      setViewport(bigTable, 0, 300);
+      await bigTable.updateComplete;
+
+      const handler = vi.fn();
+      bigTable.addEventListener('selectionchange', handler);
+      const headerCheckbox = bigTable.shadowRoot!.querySelector('thead .selection-cell input') as HTMLInputElement;
+      headerCheckbox.click();
+
+      const event = handler.mock.calls[0][0] as CustomEvent<SelectionChangeDetail>;
+      expect(event.detail.selected).toHaveLength(100); // all 100 rows, not just the dozen or so rendered
+    });
+
+    it('sets aria-rowcount/aria-rowindex only once virtualized is actually in effect', async () => {
+      const table = bigTable.shadowRoot!.querySelector('table')!;
+      const headerRow = bigTable.shadowRoot!.querySelector('thead tr')!;
+      expect(table.hasAttribute('aria-rowcount')).toBe(false);
+      expect(headerRow.hasAttribute('aria-rowindex')).toBe(false);
+
+      bigTable.virtualized = true;
+      bigTable.height = '300px';
+      await bigTable.updateComplete;
+
+      expect(table.getAttribute('aria-rowcount')).toBe('101'); // 100 data rows + the header row
+      expect(headerRow.getAttribute('aria-rowindex')).toBe('1');
+      const firstBodyRow = bigTable.shadowRoot!.querySelector('tbody tr:not(.virtual-spacer)')!;
+      expect(firstBodyRow.getAttribute('aria-rowindex')).toBe('2'); // row 0 of the page, +2 for the header offset
+    });
+
+    it('windows correctly within a page, not from the start of the full dataset', async () => {
+      // Page 2 of 20-per-page covers sortedData rows 20..39. Scrolled 300px into THAT page (not the dataset as a
+      // whole) at 50px rows should land on page-relative row 6 (floor(300/50)) — sortedData index 26.
+      bigTable.pageSize = 20;
+      bigTable.page = 2;
+      bigTable.virtualized = true;
+      bigTable.height = '300px';
+      bigTable.rowHeight = 50;
+      await bigTable.updateComplete;
+      setViewport(bigTable, 300, 300);
+      await bigTable.updateComplete;
+
+      const rows = bigTable.shadowRoot!.querySelectorAll('tbody tr:not(.virtual-spacer)');
+      const names = [...rows].map((r) => r.textContent?.trim());
+      expect(names).toContain('Row 26'); // sortedData[26], the real, global index
+      expect(names).not.toContain('Row 6'); // NOT the page-relative row, and not from page 1 at all
+      expect(names.every((n) => Number(n?.replace('Row ', '')) >= 20 && Number(n?.replace('Row ', '')) < 40)).toBe(
+        true
+      ); // every rendered row is actually within page 2's own range
+    });
+  });
 });

@@ -301,6 +301,17 @@ export const tableStyles = css`
     background: var(--lt-bg-overlay);
   }
 
+  /* Virtualization — the two spacer rows standing in for off-screen rows carry no real content, so none of the
+     interactive/decorative row styling (hover, stripe, borders, selection) should apply to them. */
+  .virtual-spacer {
+    pointer-events: none;
+  }
+
+  .virtual-spacer td {
+    border-bottom: none;
+    padding: 0;
+  }
+
   /* Empty state */
   .empty-state {
     color: var(--lt-text-subtle);

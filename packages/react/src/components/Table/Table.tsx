@@ -15,6 +15,9 @@ export type TableProps = HTMLAttributes<TableEl> & {
   caption?: string;
   captionSide?: TableEl['captionSide'];
   stickyHeader?: boolean;
+  height?: string;
+  virtualized?: boolean;
+  rowHeight?: number;
   rowKey?: string;
   selectionMode?: TableEl['selectionMode'];
   pageSize?: number;

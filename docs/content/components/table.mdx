@@ -96,8 +96,8 @@ const data = [
 
 A `caption` gives the table a visible, accessible title — unlike `label` (which only sets `aria-label`), it's shown
 on screen above (or with `caption-side="bottom"`, below) the table. `sticky-header` pins the header row to the top
-of the nearest scrolling ancestor, which is usually the page itself unless `.table-container`'s own height and
-scroll are constrained by the surrounding page layout.
+of the nearest scrolling ancestor; set `height` (a fixed CSS length) to bound the table to its own scroll area
+instead of letting it grow to fit every row — otherwise that ancestor is usually just the page.
 
 Listen for `rowclick` to react to a click anywhere on a body row — useful for navigation or a custom selection UI
 the built-in column features don't cover:
@@ -143,6 +143,19 @@ pager.addEventListener('change', (e) => {
   table.page = e.detail.page;
 });
 ```
+
+For a large dataset, set `virtualized` together with `height` to render only the rows currently scrolled into
+view (plus a small buffer) instead of every row at once:
+
+```js
+table.height = '400px';
+table.virtualized = true;
+table.rowHeight = 44; // every row must render at this same fixed height for the windowing math to work
+```
+
+`virtualized` has no effect without `height` (there'd be no bounded viewport to compute visibility against) — set
+without it, it's a no-op with a console warning in development. Not supported together with
+`responsive-mode="stack"`, whose card-style rows have no uniform height to assume.
 
 ## API
 
