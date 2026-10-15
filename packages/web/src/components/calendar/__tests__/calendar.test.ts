@@ -1064,3 +1064,97 @@ describe('<lt-calendar months="2"> min/max-aware navigation', () => {
     expect(navButtons()[0].disabled).toBe(true);
   });
 });
+
+describe('<lt-calendar> week numbers', () => {
+  let el: Calendar;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-calendar') as Calendar;
+    el.value = '2026-05-11'; // May 2026, rendered as 6 rows of Sun-start weeks with the default locale
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('renders no week-number column by default', () => {
+    expect(el.shadowRoot!.querySelectorAll('.week-number')).toHaveLength(0);
+  });
+
+  it('renders one week-number cell per row, plus one header cell, once enabled', async () => {
+    el.showWeekNumbers = true;
+    await el.updateComplete;
+
+    // May 2026 renders as 6 week rows with the default (Sunday) week-start.
+    const rowCells = el.shadowRoot!.querySelectorAll('[role="row"] > .week-number');
+    expect(rowCells).toHaveLength(6);
+    expect(el.shadowRoot!.querySelectorAll('.weekdays .week-number')).toHaveLength(1);
+  });
+
+  it('shows the correct ISO 8601 week number for each row', async () => {
+    el.showWeekNumbers = true;
+    await el.updateComplete;
+
+    const numbers = [...el.shadowRoot!.querySelectorAll('[role="row"] > .week-number')].map((c) =>
+      c.textContent?.trim()
+    );
+    // Row 0 is Sun Apr 26 - Sat May 2 2026 — 6 of those 7 days fall in ISO week 18 (only the leading Sunday is
+    // still week 17), so the row reports 18, the week most of its own dates actually belong to. Rows increment
+    // weekly through row 5 (Sun May 31 - Sat Jun 6, week 23).
+    expect(numbers).toEqual(['18', '19', '20', '21', '22', '23']);
+  });
+
+  it("reports the week that covers most of a row's days, not just its first day — a real bug a non-Monday week-start exposes", async () => {
+    // Regression test: a first version computed the row's number from its first day alone. For a Sunday-start
+    // row spanning two ISO weeks (the common case, since ISO weeks are Monday-Sunday), that mislabeled the
+    // *whole* row with the single leading Sunday's own (different, "stale") week number — caught via a live
+    // screenshot showing Oct 15 2026 (a Thursday, unambiguously ISO week 42) rendered in a row labeled "41".
+    el.value = '2026-10-15';
+    el.showWeekNumbers = true;
+    await el.updateComplete;
+
+    const rows = [...el.shadowRoot!.querySelectorAll('[role="row"]')];
+    const row = rows.find((r) => r.querySelector('[data-date="2026-10-15"]'))!;
+    expect(row.querySelector('.week-number')!.textContent?.trim()).toBe('42');
+  });
+
+  it('still reports the same real-world week consistently when week-start changes which dates group into a row', async () => {
+    el.showWeekNumbers = true;
+    el.weekStart = '1'; // Monday-start — row 0 becomes Mon Apr 27 - Sun May 3, entirely within ISO week 18
+    await el.updateComplete;
+
+    const firstRowNumber = el.shadowRoot!.querySelector('[role="row"] > .week-number')!.textContent?.trim();
+    expect(firstRowNumber).toBe('18'); // same week the default (Sunday-start) row 0 above also reports
+  });
+
+  it('gives each week-number cell an accessible label naming the week', async () => {
+    el.showWeekNumbers = true;
+    await el.updateComplete;
+
+    const first = el.shadowRoot!.querySelector('[role="row"] > .week-number')!;
+    expect(first.getAttribute('aria-label')).toBe('Week 18');
+  });
+
+  it('supports overriding the week-number labels via the labels property', async () => {
+    el.showWeekNumbers = true;
+    el.labels = { weekNumberHeader: 'Semaine', weekNumber: (n) => `Semaine ${n}` };
+    await el.updateComplete;
+
+    const header = el.shadowRoot!.querySelector('.weekdays .week-number')!;
+    expect(header.textContent?.trim()).toBe('Semaine');
+    const first = el.shadowRoot!.querySelector('[role="row"] > .week-number')!;
+    expect(first.getAttribute('aria-label')).toBe('Semaine 18');
+  });
+
+  it('correctly numbers a year-boundary week as belonging to the new year (ISO 8601)', async () => {
+    el.value = '2026-01-01'; // Thursday, ISO week 1 — its row starts Mon Dec 29 2025 with week-start="1"
+    el.weekStart = '1';
+    el.showWeekNumbers = true;
+    await el.updateComplete;
+
+    const first = el.shadowRoot!.querySelector('[role="row"] > .week-number')!;
+    expect(first.textContent?.trim()).toBe('1'); // not 53 of the prior year
+  });
+});

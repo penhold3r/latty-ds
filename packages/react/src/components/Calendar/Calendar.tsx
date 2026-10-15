@@ -11,6 +11,7 @@ export type CalendarProps = Omit<HTMLAttributes<CalendarEl>, 'onChange'> & {
   locale?: string;
   weekStart?: CalendarEl['weekStart'];
   showOutsideDays?: boolean;
+  showWeekNumbers?: boolean;
   disabled?: boolean;
   months?: number;
   disabledDates?: CalendarEl['disabledDates'];

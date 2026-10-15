@@ -53,6 +53,10 @@ button) disable themselves once moving further would only reach a month with no 
 <!-- French locale, but force a Sunday start -->
 
 <lt-calendar locale="fr-FR" week-start="0"></lt-calendar>
+
+<!-- With ISO 8601 week numbers -->
+
+<lt-calendar show-week-numbers></lt-calendar>
 `}
     react={`
 import { Calendar } from '@latty-ds/react';
@@ -88,6 +92,10 @@ import { Calendar } from '@latty-ds/react';
 // French locale, but force a Sunday start
 
 <Calendar locale="fr-FR" weekStart="0" />
+
+// With ISO 8601 week numbers
+
+<Calendar showWeekNumbers />
     `}
     vue={`
 <template>
@@ -121,6 +129,10 @@ import { Calendar } from '@latty-ds/react';
   <!-- French locale, but force a Sunday start -->
 
 <lt-calendar locale="fr-FR" week-start="0"></lt-calendar>
+
+  <!-- With ISO 8601 week numbers -->
+
+<lt-calendar show-week-numbers></lt-calendar>
 
 </template>
     `}

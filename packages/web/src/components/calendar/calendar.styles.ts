@@ -125,6 +125,45 @@ export const calendarStyles = css`
     display: contents;
   }
 
+  /* ── Week numbers ──
+     [role='row']'s display:contents means each row's own children (including this leading cell) become direct
+     grid items of .grid/.weekdays, so adding one more column here is all that's needed for it to land first.
+     A fixed width, not auto: .weekdays and .grid are two separate grid containers (the header row and the day
+     rows), each sizing an auto column purely from its OWN content — "Wk" in one, two-digit week numbers in the
+     other — so they silently resolved to different widths and threw every column after the first out of
+     alignment between the header and the data rows. A shared fixed length keeps both grids identical. */
+  :host([show-week-numbers]) .weekdays,
+  :host([show-week-numbers]) .grid {
+    grid-template-columns: 2rem repeat(7, 1fr);
+  }
+
+  .week-number {
+    align-items: center;
+    color: var(--lt-text-subtle);
+    display: flex;
+    font-size: 0.75rem;
+    justify-content: center;
+  }
+
+  /* One continuous line, not a per-cell border: a border on each .week-number cell only spans that single row's
+     own height, so row-gap between rows breaks it into short, disconnected dashes rather than one real line
+     running the full height of the header + day grid. .month-grid wraps both so a single absolutely-positioned
+     line can span across them as one piece, positioned exactly on the boundary the fixed-width column above
+     creates. */
+  .month-grid {
+    position: relative;
+  }
+
+  :host([show-week-numbers]) .month-grid::after {
+    background: var(--lt-border-default);
+    bottom: 0;
+    content: '';
+    inset-inline-start: 2rem;
+    position: absolute;
+    top: 0;
+    width: 1px;
+  }
+
   /* Day button — strip layer in range mode */
   .day {
     align-items: center;
@@ -138,6 +177,11 @@ export const calendarStyles = css`
     font-weight: 400;
     height: 2.25rem;
     justify-content: center;
+    /* A grid item's default min-width is auto (its own min-content size), not 0 — a <button>'s own intrinsic
+       minimum can exceed the 1fr share actually available once the week-number column takes its fixed cut of
+       the row, forcing .grid to silently overflow wider than .weekdays (whose short single-letter headers never
+       hit that floor) and drift every day column out of alignment with its own header. */
+    min-width: 0;
     outline: none;
     padding: 0;
     transition: background 100ms ease;
@@ -158,15 +202,21 @@ export const calendarStyles = css`
     border-radius: 50%;
     color: inherit;
     display: inline-flex;
+    /* .day (its flex parent) can end up narrower than this circle's own fixed size once the week-number column
+       takes its own cut of the grid's width — without this, the default flex-shrink:1 compresses only this
+       circle's *width* to fit (flex-shrink only ever resizes the main axis), leaving height untouched and
+       squishing the circle into an ellipse. A fixed size needs flex-shrink: 0 to actually stay fixed under a
+       flex parent. */
+    flex-shrink: 0;
     font-size: inherit;
     font-weight: inherit;
-    height: 2.25rem;
+    height: 1.75rem;
     justify-content: center;
     transition:
       background 100ms ease,
       border-color 100ms ease,
       color 100ms ease;
-    width: 2.25rem;
+    width: 1.75rem;
   }
 
   .day:hover:not([aria-disabled='true']) .day__inner {

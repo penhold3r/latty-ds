@@ -13,7 +13,9 @@ const DEFAULT_LABELS: CalendarLabels = {
   nextMonth: 'Next month',
   previousYear: 'Previous year',
   nextYear: 'Next year',
-  chooseMonthYear: (monthYear) => `${monthYear}, choose month and year`
+  chooseMonthYear: (monthYear) => `${monthYear}, choose month and year`,
+  weekNumberHeader: 'Wk',
+  weekNumber: (week) => `Week ${week}`
 };
 
 // `Intl.Locale.prototype.getWeekInfo` isn't in this project's configured `lib` (adding it would pull in the
@@ -36,6 +38,21 @@ function deriveWeekStart(locale: string): CalendarWeekStart {
     // Invalid/unsupported locale string — Intl.Locale's constructor throws a RangeError for these.
   }
   return '0';
+}
+
+/**
+ * The ISO 8601 week number (1-53) for the week containing `date`, computed off that week's Thursday — the day
+ * ISO 8601 uses to decide which year (and so which week-1) a week spanning a year boundary belongs to. Shown
+ * against each row's own first day regardless of `week-start`: like most calendar UIs that offer week numbers,
+ * this component doesn't re-derive a locale-relative week numbering scheme, just the one standard everyone
+ * recognizes.
+ */
+function getIsoWeekNumber(date: Date): number {
+  const thursday = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const isoDayOfWeek = thursday.getUTCDay() || 7; // Sunday (0) becomes 7, so Monday=1..Sunday=7
+  thursday.setUTCDate(thursday.getUTCDate() + 4 - isoDayOfWeek);
+  const yearStart = new Date(Date.UTC(thursday.getUTCFullYear(), 0, 1));
+  return Math.ceil(((thursday.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
 }
 
 /**
@@ -100,6 +117,14 @@ export class Calendar extends ThemeableElement {
 
   /** Whether to render filler days from the previous and next month. */
   @property({ type: Boolean, attribute: 'show-outside-days', reflect: true }) showOutsideDays = true;
+
+  /**
+   * Whether to show each row's ISO 8601 week number in a leading column. The number itself isn't
+   * locale/`week-start`-relative — it's the one standard numbering everyone recognizes, computed off each row's
+   * own first visible day regardless of what day that is.
+   * @default false
+   */
+  @property({ type: Boolean, attribute: 'show-week-numbers', reflect: true }) showWeekNumbers = false;
 
   /** Disables all interaction. */
   @property({ type: Boolean, reflect: true }) disabled = false;
@@ -596,17 +621,40 @@ export class Calendar extends ThemeableElement {
     for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7));
 
     return html`
-      <div class="weekdays" aria-hidden="true">
-        ${weekdayLabels.map((label) => html`<div class="weekday">${label}</div>`)}
-      </div>
-      <div
-        class="grid"
-        role="grid"
-        aria-label="${gridLabel}"
-        @mouseover=${this._handleGridMouseOver}
-        @mouseleave=${this._handleGridMouseLeave}
-      >
-        ${weeks.map((week) => html` <div role="row">${week.map((day) => this._renderDay(day, rovingDate))}</div> `)}
+      <div class="month-grid">
+        <div class="weekdays" aria-hidden="true">
+          ${this.showWeekNumbers
+            ? html`<div class="weekday week-number">${this._labels.weekNumberHeader}</div>`
+            : nothing}
+          ${weekdayLabels.map((label) => html`<div class="weekday">${label}</div>`)}
+        </div>
+        <div
+          class="grid"
+          role="grid"
+          aria-label="${gridLabel}"
+          @mouseover=${this._handleGridMouseOver}
+          @mouseleave=${this._handleGridMouseLeave}
+        >
+          ${weeks.map((week) => {
+            // week[3] — the row's middle day — not week[0], its first: ISO weeks run Monday-Sunday, so for any
+            // week-start other than Monday, a row's first day can belong to a different ISO week than most of
+            // its other six days (e.g. a Sunday-start row spanning Sun Oct 11 - Sat Oct 17 2026 is 6/7 ISO week
+            // 42, with only that leading Sunday itself still counted in week 41 — using day 0 would mislabel the
+            // whole row "41"). The middle day of any 7 consecutive days is mathematically guaranteed to fall in
+            // whichever ISO week has the most days in that row, matching what a reader scanning the row expects.
+            const weekNumber = getIsoWeekNumber(week[3].date);
+            return html`
+              <div role="row">
+                ${this.showWeekNumbers
+                  ? html`<div class="week-number" role="rowheader" aria-label=${this._labels.weekNumber(weekNumber)}>
+                      ${weekNumber}
+                    </div>`
+                  : nothing}
+                ${week.map((day) => this._renderDay(day, rovingDate))}
+              </div>
+            `;
+          })}
+        </div>
       </div>
     `;
   }

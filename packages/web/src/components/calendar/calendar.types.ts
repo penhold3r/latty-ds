@@ -30,4 +30,8 @@ export interface CalendarLabels {
   nextYear: string;
   /** Accessible label for the month/year picker toggle button (single-month layout only), given its current visible text. */
   chooseMonthYear: (monthYear: string) => string;
+  /** Short header label for the week-number column (`show-week-numbers`). */
+  weekNumberHeader: string;
+  /** Accessible label for a week-number cell, given its ISO 8601 week number. */
+  weekNumber: (week: number) => string;
 }
