@@ -165,6 +165,32 @@ describe('<lt-calendar>', () => {
     expect(day12?.getAttribute('aria-disabled')).toBe('true');
   });
 
+  it('disables dates via a disabledDates predicate, for rules impractical to enumerate as a list', async () => {
+    el.value = '2026-05-01';
+    await el.updateComplete;
+    // Disable every weekend — 2026-05-16/17 is a Saturday/Sunday.
+    el.disabledDates = (date) => date.getDay() === 0 || date.getDay() === 6;
+    el.requestUpdate();
+    await el.updateComplete;
+
+    const saturday = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-16"]');
+    const sunday = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-17"]');
+    const monday = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-18"]');
+    expect(saturday?.getAttribute('aria-disabled')).toBe('true');
+    expect(sunday?.getAttribute('aria-disabled')).toBe('true');
+    expect(monday?.hasAttribute('aria-disabled')).toBe(false);
+  });
+
+  it('a disabledDates predicate still composes with min/max, not replacing them', async () => {
+    el.value = '2026-05-15';
+    el.min = '2026-05-10';
+    el.disabledDates = () => false; // never disables anything on its own
+    await el.updateComplete;
+
+    const day5 = el.shadowRoot!.querySelector<HTMLButtonElement>('[data-date="2026-05-05"]');
+    expect(day5?.getAttribute('aria-disabled')).toBe('true'); // still disabled by min, predicate notwithstanding
+  });
+
   it('renders Mon–Sun headers when week-start="1"', async () => {
     el.setAttribute('week-start', '1');
     await el.updateComplete;

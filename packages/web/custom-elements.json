@@ -1890,10 +1890,10 @@
               "kind": "field",
               "name": "disabledDates",
               "type": {
-                "text": "Date[]"
+                "text": "Date[] | ((date: Date) => boolean)"
               },
               "default": "[]",
-              "description": "Specific dates to disable, as an array of Date objects. Set as a JS property (`.disabledDates`)."
+              "description": "Dates to disable beyond `min`/`max`: either an explicit array of Date objects, or a predicate called with\neach candidate date (e.g. `(date) => date.getDay() === 0 || date.getDay() === 6` to disable every weekend) —\nfor a rule that would be impractical to enumerate as a fixed list. Set as a JS property (`.disabledDates`)."
             },
             {
               "kind": "field",
@@ -3986,7 +3986,7 @@
                 "text": "Calendar['disabledDates']"
               },
               "default": "[]",
-              "description": "Individual dates to disable in the calendar, as Date objects. Set as a JS property (`.disabledDates`)."
+              "description": "Dates to disable in the calendar: an array of Date objects, or a predicate for a rule impractical to\nenumerate (e.g. disabling every weekend). Set as a JS property (`.disabledDates`)."
             },
             {
               "kind": "field",

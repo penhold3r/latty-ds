@@ -107,8 +107,13 @@ export class Calendar extends ThemeableElement {
   /** Number of month panels to display side-by-side. */
   @property({ type: Number, reflect: true }) months = 1;
 
-  /** Specific dates to disable, as an array of Date objects. Set as a JS property (`.disabledDates`). */
-  @property({ attribute: false }) disabledDates: Date[] = [];
+  /**
+   * Dates to disable beyond `min`/`max`: either an explicit array of Date objects, or a predicate called with
+   * each candidate date (e.g. `(date) => date.getDay() === 0 || date.getDay() === 6` to disable every weekend) —
+   * for a rule that would be impractical to enumerate as a fixed list. Set as a JS property (`.disabledDates`).
+   * @default []
+   */
+  @property({ attribute: false }) disabledDates: Date[] | ((date: Date) => boolean) = [];
 
   /** Overridable UI text (nav button labels, the "Today" footer button, the month/year picker toggle), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<CalendarLabels> = {};
@@ -214,7 +219,9 @@ export class Calendar extends ThemeableElement {
       const max = this._parseDate(this.max);
       if (max && date > max) return true;
     }
-    return this.disabledDates.some((d) => this._isSameDay(d, date));
+    return typeof this.disabledDates === 'function'
+      ? this.disabledDates(date)
+      : this.disabledDates.some((d) => this._isSameDay(d, date));
   }
 
   private _buildDays(year = this._viewYear, month = this._viewMonth): CalendarDay[] {

@@ -126,6 +126,17 @@ import { Calendar } from '@latty-ds/react';
     `}
   />
 
+`disabledDates` (a JS-only property, since it can take a function) disables individual dates beyond `min`/`max` —
+either a fixed list, or a predicate for a rule impractical to enumerate:
+
+```js
+// A fixed list
+calendar.disabledDates = [new Date(2026, 5, 19)];
+
+// A rule — every weekend, in this example
+calendar.disabledDates = (date) => date.getDay() === 0 || date.getDay() === 6;
+```
+
 ## API
 
 <ApiTable tag="lt-calendar" />

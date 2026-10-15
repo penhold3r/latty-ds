@@ -114,7 +114,10 @@ export class DateInput extends ThemeableElement {
   /** Name used in form submission (through `ElementInternals`, so no hidden input is rendered). */
   @property({ reflect: true }) name = '';
 
-  /** Individual dates to disable in the calendar, as Date objects. Set as a JS property (`.disabledDates`). */
+  /**
+   * Dates to disable in the calendar: an array of Date objects, or a predicate for a rule impractical to
+   * enumerate (e.g. disabling every weekend). Set as a JS property (`.disabledDates`).
+   */
   @property({ attribute: false }) disabledDates: Calendar['disabledDates'] = [];
 
   /** Overridable UI text (validation message, calendar popover's accessible label), for i18n. English defaults — override only the keys you need. */
