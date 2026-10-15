@@ -12,7 +12,8 @@ import FrameworkTabs from '@site/src/components/FrameworkTabs';
 
 An always-visible date-selection grid. Supports single-date and date-range selection, locale-aware day and month
 names, a week start that follows `locale` by default (override with `week-start`), min/max constraints, and full
-keyboard navigation.
+keyboard navigation. Navigation itself is min/max-aware — the prev/next month and year controls (and the "Today"
+button) disable themselves once moving further would only reach a month with no selectable days left.
 
 ## Playground
 

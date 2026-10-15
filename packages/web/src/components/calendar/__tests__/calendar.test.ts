@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { Calendar } from '../calendar';
 import '../calendar';
 
@@ -866,4 +866,175 @@ describe('<lt-calendar> week-start derived from locale (X5)', () => {
   // elsewhere in render() with no such guard (pre-existing, not introduced by this fix), so a malformed
   // locale crashes the whole render regardless of week-start. Tracked as its own finding, not fixed here —
   // see X5's locale/week-start note in the audit doc.
+});
+
+describe('<lt-calendar> min/max-aware navigation', () => {
+  let el: Calendar;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-calendar') as Calendar;
+    el.value = '2026-05-15';
+    el.min = '2026-04-01';
+    el.max = '2026-06-30';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  const navButtons = () => el.shadowRoot!.querySelectorAll('.nav-btn') as NodeListOf<HTMLButtonElement>;
+
+  it('enables both nav buttons when neighboring months are still in range', () => {
+    const [prev, next] = navButtons();
+    expect(prev.disabled).toBe(false);
+    expect(next.disabled).toBe(false);
+  });
+
+  it('disables the previous-month button once the previous month is entirely before min', async () => {
+    el.min = '2026-05-01'; // April is now entirely out of range
+    await el.updateComplete;
+    const [prev, next] = navButtons();
+    expect(prev.disabled).toBe(true);
+    expect(next.disabled).toBe(false);
+  });
+
+  it('disables the next-month button once the next month is entirely after max', async () => {
+    el.max = '2026-05-31'; // June is now entirely out of range
+    await el.updateComplete;
+    const [prev, next] = navButtons();
+    expect(prev.disabled).toBe(false);
+    expect(next.disabled).toBe(true);
+  });
+
+  it('does not disable navigation into a month only partially out of range', async () => {
+    // max falls mid-June — June still has in-range days (1st-14th), so next should stay enabled.
+    el.max = '2026-06-14';
+    await el.updateComplete;
+    const [, next] = navButtons();
+    expect(next.disabled).toBe(false);
+  });
+
+  it('re-enables navigation once the boundary no longer excludes the neighboring month', async () => {
+    el.max = '2026-05-31';
+    await el.updateComplete;
+    expect(navButtons()[1].disabled).toBe(true);
+
+    el.max = '2026-07-31';
+    await el.updateComplete;
+    expect(navButtons()[1].disabled).toBe(false);
+  });
+
+  it('guards PageDown/PageUp at the source too, not just the disabled button', async () => {
+    el.max = '2026-05-31'; // June out of range
+    await el.updateComplete;
+
+    const handler = vi.fn();
+    el.addEventListener('monthchange', handler);
+    const cell = el.shadowRoot!.querySelector('[role="gridcell"][tabindex="0"]') as HTMLElement;
+    cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', bubbles: true }));
+    await el.updateComplete;
+
+    expect(handler).not.toHaveBeenCalled();
+    const monthLabel = el.shadowRoot!.querySelector('.month-label-btn')!;
+    expect(monthLabel.textContent).toContain('May');
+  });
+
+  it('allows PageDown when the next month is still navigable', async () => {
+    const handler = vi.fn();
+    el.addEventListener('monthchange', handler);
+    const cell = el.shadowRoot!.querySelector('[role="gridcell"][tabindex="0"]') as HTMLElement;
+    cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', bubbles: true }));
+    await el.updateComplete;
+
+    expect(handler).toHaveBeenCalledOnce();
+    const monthLabel = el.shadowRoot!.querySelector('.month-label-btn')!;
+    expect(monthLabel.textContent).toContain('June');
+  });
+
+  it('disables the "Today" footer button when today\'s month is entirely out of range', async () => {
+    const today = new Date();
+    const beforeToday = new Date(today.getFullYear(), today.getMonth(), 0); // last day of the prior month
+    el.min = '';
+    el.max = `${beforeToday.getFullYear()}-${String(beforeToday.getMonth() + 1).padStart(2, '0')}-${String(beforeToday.getDate()).padStart(2, '0')}`;
+    await el.updateComplete;
+
+    const todayBtn = el.shadowRoot!.querySelector('.today-btn') as HTMLButtonElement;
+    expect(todayBtn.disabled).toBe(true);
+  });
+
+  it('disables out-of-range months in the month/year picker grid, not just the main nav buttons', async () => {
+    el.max = '2026-05-31'; // June through December out of range for 2026
+    await el.updateComplete;
+
+    const monthLabelBtn = el.shadowRoot!.querySelector('.month-label-btn') as HTMLButtonElement;
+    monthLabelBtn.click();
+    await el.updateComplete;
+
+    const monthButtons = el.shadowRoot!.querySelectorAll('.picker-month-btn') as NodeListOf<HTMLButtonElement>;
+    expect(monthButtons[4].disabled).toBe(false); // May (index 4)
+    expect(monthButtons[5].disabled).toBe(true); // June (index 5)
+  });
+
+  it("disables the picker's own prev/next-year buttons once the whole neighboring year is out of range", async () => {
+    // min is 2026-04-01 and max is now 2026-12-31 (set in beforeEach/this test) — 2025 is entirely before min,
+    // 2027 is entirely after max, so from the 2026 picker both neighboring years should be unreachable.
+    el.max = '2026-12-31';
+    await el.updateComplete;
+
+    const monthLabelBtn = el.shadowRoot!.querySelector('.month-label-btn') as HTMLButtonElement;
+    monthLabelBtn.click();
+    await el.updateComplete;
+
+    const [prevYear, nextYear] = navButtons();
+    expect(prevYear.disabled).toBe(true); // 2025, entirely before min
+    expect(nextYear.disabled).toBe(true); // 2027, entirely after max
+  });
+});
+
+describe('<lt-calendar months="2"> min/max-aware navigation', () => {
+  let el: Calendar;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-calendar') as Calendar;
+    el.setAttribute('months', '2');
+    el.value = '2026-05-01'; // panels show May + June
+    el.min = '2026-04-01';
+    el.max = '2026-07-31';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  const navButtons = () => el.shadowRoot!.querySelectorAll('.nav-btn') as NodeListOf<HTMLButtonElement>;
+
+  it('checks the LAST visible panel (not the first) for next-button availability', async () => {
+    // Panels are May + June. max excludes July — the panel that would newly come into view going forward —
+    // but May and June themselves are still fully in range, so next should stay enabled.
+    const [, next] = navButtons();
+    expect(next.disabled).toBe(false);
+  });
+
+  it('disables next once the panel that would scroll into view is entirely out of range', async () => {
+    el.max = '2026-06-30'; // July (the incoming panel on next) is now entirely excluded
+    await el.updateComplete;
+    expect(navButtons()[1].disabled).toBe(true);
+  });
+
+  it('checks the FIRST visible panel (not the last) for prev-button availability', async () => {
+    // Panels are May + June; min excludes everything before April. Going back one panel shows April + May —
+    // April is the new first panel, and April is still in range, so prev should stay enabled.
+    const [prev] = navButtons();
+    expect(prev.disabled).toBe(false);
+  });
+
+  it('disables prev once the panel that would scroll into view is entirely out of range', async () => {
+    el.min = '2026-05-01'; // April (the incoming panel on prev) is now entirely excluded
+    await el.updateComplete;
+    expect(navButtons()[0].disabled).toBe(true);
+  });
 });

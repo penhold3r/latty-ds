@@ -1969,6 +1969,50 @@
             },
             {
               "kind": "method",
+              "name": "_isMonthOutOfRange",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "year",
+                  "type": {
+                    "text": "number"
+                  }
+                },
+                {
+                  "name": "month",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Whether every day of the given month falls outside `[min, max]` — not just the 1st, so a month that's only\npartially in range (the common case right at a boundary) still counts as navigable."
+            },
+            {
+              "kind": "method",
+              "name": "_isYearOutOfRange",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "year",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Same idea as `_isMonthOutOfRange`, for the year-picker's own prev/next-year navigation."
+            },
+            {
+              "kind": "method",
               "name": "_monthAtOffset",
               "privacy": "private",
               "return": {
@@ -2092,6 +2136,44 @@
                   "text": "string[]"
                 }
               }
+            },
+            {
+              "kind": "method",
+              "name": "_canNavigateMonth",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "delta",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Whether navigating the month view by `delta` months would land on a view with at least one in-range day. In\nmulti-month layout, navigating shifts every panel by one month — the relevant boundary is whichever edge\npanel moves further from what's already visible: the new base month going backward, or the last panel\n(base + months - 1) going forward. For `months === 1` both reduce to the same single month either way."
+            },
+            {
+              "kind": "method",
+              "name": "_canNavigateYear",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "delta",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Same idea as `_canNavigateMonth`, for the year-picker's own prev/next-year buttons."
             },
             {
               "kind": "method",

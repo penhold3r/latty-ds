@@ -145,6 +145,37 @@ export class Calendar extends ThemeableElement {
     }
   }
 
+  /**
+   * Whether every day of the given month falls outside `[min, max]` — not just the 1st, so a month that's only
+   * partially in range (the common case right at a boundary) still counts as navigable.
+   */
+  private _isMonthOutOfRange(year: number, month: number): boolean {
+    const firstOfMonth = new Date(year, month, 1);
+    const lastOfMonth = new Date(year, month + 1, 0);
+    if (this.min) {
+      const min = this._parseDate(this.min);
+      if (min && lastOfMonth < min) return true;
+    }
+    if (this.max) {
+      const max = this._parseDate(this.max);
+      if (max && firstOfMonth > max) return true;
+    }
+    return false;
+  }
+
+  /** Same idea as `_isMonthOutOfRange`, for the year-picker's own prev/next-year navigation. */
+  private _isYearOutOfRange(year: number): boolean {
+    if (this.min) {
+      const min = this._parseDate(this.min);
+      if (min && new Date(year, 11, 31) < min) return true;
+    }
+    if (this.max) {
+      const max = this._parseDate(this.max);
+      if (max && new Date(year, 0, 1) > max) return true;
+    }
+    return false;
+  }
+
   private _monthAtOffset(offset: number): { year: number; month: number } {
     let m = this._viewMonth + offset;
     let y = this._viewYear;
@@ -274,11 +305,13 @@ export class Calendar extends ThemeableElement {
     });
   }
 
-  private _navigate(delta: number) {
-    if (this._pickingMonthYear) {
-      this._pickerYear += delta;
-      return;
-    }
+  /**
+   * Whether navigating the month view by `delta` months would land on a view with at least one in-range day. In
+   * multi-month layout, navigating shifts every panel by one month — the relevant boundary is whichever edge
+   * panel moves further from what's already visible: the new base month going backward, or the last panel
+   * (base + months - 1) going forward. For `months === 1` both reduce to the same single month either way.
+   */
+  private _canNavigateMonth(delta: number): boolean {
     let month = this._viewMonth + delta;
     let year = this._viewYear;
     while (month < 0) {
@@ -289,6 +322,43 @@ export class Calendar extends ThemeableElement {
       month -= 12;
       year++;
     }
+
+    let edgeMonth = delta < 0 ? month : month + (this.months - 1);
+    let edgeYear = year;
+    while (edgeMonth > 11) {
+      edgeMonth -= 12;
+      edgeYear++;
+    }
+    return !this._isMonthOutOfRange(edgeYear, edgeMonth);
+  }
+
+  /** Same idea as `_canNavigateMonth`, for the year-picker's own prev/next-year buttons. */
+  private _canNavigateYear(delta: number): boolean {
+    return !this._isYearOutOfRange(this._pickerYear + delta);
+  }
+
+  private _navigate(delta: number) {
+    if (this._pickingMonthYear) {
+      if (!this._canNavigateYear(delta)) return;
+      this._pickerYear += delta;
+      return;
+    }
+
+    // Guarded here too, not just on the rendered buttons' `disabled` attribute, since PageUp/PageDown calls this
+    // directly from the keyboard.
+    if (!this._canNavigateMonth(delta)) return;
+
+    let month = this._viewMonth + delta;
+    let year = this._viewYear;
+    while (month < 0) {
+      month += 12;
+      year--;
+    }
+    while (month > 11) {
+      month -= 12;
+      year++;
+    }
+
     this._viewMonth = month;
     this._viewYear = year;
     this._focusedDate = null;
@@ -359,6 +429,7 @@ export class Calendar extends ThemeableElement {
 
   private _goToToday() {
     const today = new Date();
+    if (this._isMonthOutOfRange(today.getFullYear(), today.getMonth())) return;
     this._viewYear = today.getFullYear();
     this._viewMonth = today.getMonth();
     this._focusedDate = null;
@@ -559,7 +630,13 @@ export class Calendar extends ThemeableElement {
 
     const footer = html`
       <div class="footer">
-        <button class="today-btn" ?disabled=${this.disabled} @click=${this._goToToday}>${this._labels.today}</button>
+        <button
+          class="today-btn"
+          ?disabled=${this.disabled || this._isMonthOutOfRange(today.getFullYear(), today.getMonth())}
+          @click=${this._goToToday}
+        >
+          ${this._labels.today}
+        </button>
       </div>
     `;
 
@@ -576,7 +653,7 @@ export class Calendar extends ThemeableElement {
             <button
               class="nav-btn"
               aria-label=${this._labels.previousMonth}
-              ?disabled=${this.disabled}
+              ?disabled=${this.disabled || !this._canNavigateMonth(-1)}
               @click=${() => this._navigate(-1)}
             >
               <lt-icon name="arrow-left" size="sm"></lt-icon>
@@ -592,7 +669,7 @@ export class Calendar extends ThemeableElement {
             <button
               class="nav-btn"
               aria-label=${this._labels.nextMonth}
-              ?disabled=${this.disabled}
+              ?disabled=${this.disabled || !this._canNavigateMonth(1)}
               @click=${() => this._navigate(1)}
             >
               <lt-icon name="arrow-right" size="sm"></lt-icon>
@@ -624,13 +701,20 @@ export class Calendar extends ThemeableElement {
     );
     const prevLabel = this._pickingMonthYear ? this._labels.previousYear : this._labels.previousMonth;
     const nextLabel = this._pickingMonthYear ? this._labels.nextYear : this._labels.nextMonth;
+    const canNavigatePrev = this._pickingMonthYear ? this._canNavigateYear(-1) : this._canNavigateMonth(-1);
+    const canNavigateNext = this._pickingMonthYear ? this._canNavigateYear(1) : this._canNavigateMonth(1);
     // WCAG 2.5.3 Label in Name: the visible text (a live-updating month/year) has to be part of the accessible
     // name, not replaced by it — otherwise a speech-input user saying what they see on the button can't match it.
     const monthYearVisibleText = this._pickingMonthYear ? String(this._pickerYear) : monthLabel;
 
     const header = html`
       <div class="header">
-        <button class="nav-btn" aria-label=${prevLabel} ?disabled=${this.disabled} @click=${() => this._navigate(-1)}>
+        <button
+          class="nav-btn"
+          aria-label=${prevLabel}
+          ?disabled=${this.disabled || !canNavigatePrev}
+          @click=${() => this._navigate(-1)}
+        >
           <lt-icon name="arrow-left" size="sm"></lt-icon>
         </button>
         <button
@@ -643,7 +727,12 @@ export class Calendar extends ThemeableElement {
           <span aria-live="polite" aria-atomic="true">${monthYearVisibleText}</span>
           <lt-icon name="arrow-down" size="sm" class="picker-chevron"></lt-icon>
         </button>
-        <button class="nav-btn" aria-label=${nextLabel} ?disabled=${this.disabled} @click=${() => this._navigate(1)}>
+        <button
+          class="nav-btn"
+          aria-label=${nextLabel}
+          ?disabled=${this.disabled || !canNavigateNext}
+          @click=${() => this._navigate(1)}
+        >
           <lt-icon name="arrow-right" size="sm"></lt-icon>
         </button>
       </div>
@@ -660,7 +749,7 @@ export class Calendar extends ThemeableElement {
               return html`
                 <button
                   class="picker-month-btn ${isCurrent ? 'picker-month-btn--current' : ''}"
-                  ?disabled=${this.disabled}
+                  ?disabled=${this.disabled || this._isMonthOutOfRange(this._pickerYear, i)}
                   @click=${() => this._selectPickerMonth(i)}
                 >
                   ${label}
