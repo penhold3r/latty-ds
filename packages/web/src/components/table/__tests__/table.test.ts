@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { html } from 'lit';
 import type { Table } from '../table';
-import type { TableColumn, SortChangeDetail } from '../table.types';
+import type { TableColumn, SortChangeDetail, RowClickDetail } from '../table.types';
 import '../table';
 
 interface TestData {
@@ -168,6 +168,46 @@ describe('<lt-table>', () => {
       el.captionSide = 'bottom';
       await el.updateComplete;
       expect(el.getAttribute('caption-side')).toBe('bottom');
+    });
+  });
+
+  describe('rowclick', () => {
+    it('dispatches rowclick with the row and index when a body row is clicked', () => {
+      const handler = vi.fn();
+      el.addEventListener('rowclick', handler);
+
+      const secondRow = el.shadowRoot!.querySelectorAll('tbody tr')[1] as HTMLElement;
+      secondRow.click();
+
+      expect(handler).toHaveBeenCalledOnce();
+      const event = handler.mock.calls[0][0] as CustomEvent<RowClickDetail<TestData>>;
+      expect(event.detail.row).toEqual(data[1]);
+      expect(event.detail.index).toBe(1);
+    });
+
+    it('fires rowclick when a click originates on a cell inside the row', () => {
+      const handler = vi.fn();
+      el.addEventListener('rowclick', handler);
+
+      const cell = el.shadowRoot!.querySelectorAll('tbody tr')[0].querySelector('td') as HTMLElement;
+      cell.click();
+
+      expect(handler).toHaveBeenCalledOnce();
+      expect((handler.mock.calls[0][0] as CustomEvent<RowClickDetail<TestData>>).detail.index).toBe(0);
+    });
+
+    it('does not fire rowclick for the empty-state row', async () => {
+      el.data = [];
+      await el.updateComplete;
+      await el.updateComplete;
+
+      const handler = vi.fn();
+      el.addEventListener('rowclick', handler);
+
+      const emptyRow = el.shadowRoot!.querySelector('tbody tr') as HTMLElement;
+      emptyRow.click();
+
+      expect(handler).not.toHaveBeenCalled();
     });
   });
 

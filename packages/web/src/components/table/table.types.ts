@@ -105,6 +105,21 @@ export interface SortState {
 }
 
 /**
+ * Event detail for row click events.
+ */
+export interface RowClickDetail<T = Record<string, unknown>> {
+  /**
+   * The row data that was clicked.
+   */
+  row: T;
+
+  /**
+   * Index of the row within the currently sorted/rendered data.
+   */
+  index: number;
+}
+
+/**
  * Event detail for sort change events.
  */
 export interface SortChangeDetail {

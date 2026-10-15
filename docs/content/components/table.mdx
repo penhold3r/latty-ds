@@ -99,6 +99,15 @@ on screen above (or with `caption-side="bottom"`, below) the table. `sticky-head
 of the nearest scrolling ancestor, which is usually the page itself unless `.table-container`'s own height and
 scroll are constrained by the surrounding page layout.
 
+Listen for `rowclick` to react to a click anywhere on a body row — useful for navigation or a custom selection UI
+the built-in column features don't cover:
+
+```js
+table.addEventListener('rowclick', (e) => {
+  console.log(e.detail.row, e.detail.index);
+});
+```
+
 ## API
 
 <ApiTable tag="lt-table" />

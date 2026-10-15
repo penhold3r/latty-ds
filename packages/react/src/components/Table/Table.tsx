@@ -18,10 +18,11 @@ export type TableProps = HTMLAttributes<TableEl> & {
   rowKey?: string;
   sort?: TableEl['sort'];
   onSortChange?: (event: CustomEvent) => void;
+  onRowclick?: (event: CustomEvent) => void;
 };
 
 export const Table = forwardRef<TableEl, TableProps>(function Table(
-  { onSortChange, columns, data, sort, children, ...props },
+  { onSortChange, onRowclick, columns, data, sort, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<TableEl>(null);
@@ -35,6 +36,13 @@ export const Table = forwardRef<TableEl, TableProps>(function Table(
     el.addEventListener('sortchange', h);
     return () => el.removeEventListener('sortchange', h);
   }, [onSortChange]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onRowclick) return;
+    const h = (ev: Event) => onRowclick!(ev as CustomEvent);
+    el.addEventListener('rowclick', h);
+    return () => el.removeEventListener('rowclick', h);
+  }, [onRowclick]);
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;

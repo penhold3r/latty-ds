@@ -11379,6 +11379,26 @@
             },
             {
               "kind": "method",
+              "name": "handleRowClick",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "row",
+                  "type": {
+                    "text": "T"
+                  }
+                },
+                {
+                  "name": "index",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Handles a click on a body row."
+            },
+            {
+              "kind": "method",
               "name": "getCellValue",
               "privacy": "private",
               "return": {
@@ -11471,6 +11491,13 @@
                 "text": "CustomEvent"
               },
               "description": "Fired when sort changes"
+            },
+            {
+              "name": "rowclick",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "Fired when a body row is clicked, with `{ row, index }` detail"
             }
           ],
           "superclass": {

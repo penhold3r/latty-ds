@@ -6,7 +6,14 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { repeat } from 'lit/directives/repeat.js';
 
 import { tableStyles } from './table.styles';
-import { TableColumn, TableDensity, TableResponsiveMode, SortState, SortChangeDetail } from './table.types';
+import {
+  TableColumn,
+  TableDensity,
+  TableResponsiveMode,
+  SortState,
+  SortChangeDetail,
+  RowClickDetail
+} from './table.types';
 
 /**
  * Default sort comparison. Dates compare by time (their string form sorts "Fri Jan 02" before "Mon Jan 05" but after
@@ -51,8 +58,10 @@ import '@latty-ds/icons';
  * - Accessible with keyboard navigation
  * - Visible caption via the `caption` property
  * - Sticky header via `sticky-header`
+ * - `rowclick` event for custom row interactions (navigation, custom selection, etc.)
  *
  * @fires sortchange - Fired when sort changes
+ * @fires rowclick - Fired when a body row is clicked, with `{ row, index }` detail
  *
  * @example
  * ```typescript
@@ -296,6 +305,19 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   }
 
   /**
+   * Handles a click on a body row.
+   */
+  private handleRowClick(row: T, index: number) {
+    this.dispatchEvent(
+      new CustomEvent<RowClickDetail<T>>('rowclick', {
+        bubbles: true,
+        composed: true,
+        detail: { row, index }
+      })
+    );
+  }
+
+  /**
    * Gets a cell value from a row using a key (supports nested keys).
    */
   private getCellValue(row: unknown, key: string): unknown {
@@ -401,7 +423,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     }
 
     const renderRow = (row: T, index: number) => html`
-      <tr>
+      <tr @click=${() => this.handleRowClick(row, index)}>
         ${columns.map(
           (column) => html`
             <td
