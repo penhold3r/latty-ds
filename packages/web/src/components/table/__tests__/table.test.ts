@@ -1,7 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { html } from 'lit';
 import type { Table } from '../table';
-import type { TableColumn, SortChangeDetail, RowClickDetail, SelectionChangeDetail } from '../table.types';
+import type {
+  TableColumn,
+  SortChangeDetail,
+  RowClickDetail,
+  SelectionChangeDetail,
+  ColumnResizeDetail
+} from '../table.types';
 import '../table';
 
 interface TestData {
@@ -921,6 +927,194 @@ describe('<lt-table>', () => {
       await el.updateComplete;
 
       expect(el.shadowRoot!.querySelector('.empty-state')).toBeTruthy();
+    });
+  });
+
+  describe('column resize', () => {
+    // Reflects whatever width was last applied inline (matching a real browser's live geometry) so repeated
+    // keyboard steps compound correctly, falling back to `initialWidth` before any resize has happened yet.
+    const mockThWidth = (initialWidth: number) => {
+      vi.spyOn(HTMLTableCellElement.prototype, 'getBoundingClientRect').mockImplementation(function (
+        this: HTMLElement
+      ) {
+        const styleWidth = parseFloat(this.style.width);
+        const width = this.style.width && Number.isFinite(styleWidth) ? styleWidth : initialWidth;
+        return { width, height: 0, top: 0, left: 0, right: 0, bottom: 0, x: 0, y: 0, toJSON: () => '' } as DOMRect;
+      });
+    };
+
+    const pointerEvent = (type: string, clientX: number) =>
+      new PointerEvent(type, { clientX, pointerId: 1, bubbles: true });
+
+    // th/td must render as border-box, not the CSS content-box default: getBoundingClientRect() reports
+    // width + padding under content-box, so reading the rendered width back and writing it as the new width —
+    // which every keyboard resize step and the start of every drag does — grows the column by its own padding
+    // each time. jsdom has no real CSS cascade or layout (confirmed: getComputedStyle(th).boxSizing reads '' in
+    // jsdom regardless of the actual stylesheet), so this can only be verified live — confirmed in real Chromium:
+    // before the fix, 3 ArrowRight presses (10px step) grew a column by 126px instead of 30px; after, exactly 30.
+
+    it('renders no resize handle for a column that does not opt in', () => {
+      expect(el.shadowRoot!.querySelector('.resize-handle')).toBeNull();
+    });
+
+    it('renders a resize handle only for resizable columns', async () => {
+      el.columns = [
+        { key: 'id', label: 'ID', resizable: true },
+        { key: 'name', label: 'Name' }
+      ];
+      await el.updateComplete;
+
+      const headers = el.shadowRoot!.querySelectorAll('th');
+      expect(headers[0].querySelector('.resize-handle')).toBeTruthy();
+      expect(headers[1].querySelector('.resize-handle')).toBeNull();
+    });
+
+    it('dragging the handle right grows the column and fires columnresize on release', async () => {
+      el.columns = [{ key: 'name', label: 'Name', resizable: true }];
+      await el.updateComplete;
+      mockThWidth(200);
+
+      const handler = vi.fn();
+      el.addEventListener('columnresize', handler);
+
+      const handle = el.shadowRoot!.querySelector('.resize-handle') as HTMLElement;
+      handle.dispatchEvent(pointerEvent('pointerdown', 100));
+      handle.dispatchEvent(pointerEvent('pointermove', 150));
+      await el.updateComplete;
+
+      const th = el.shadowRoot!.querySelector('th') as HTMLElement;
+      expect(th.style.width).toBe('250px');
+      expect(handler).not.toHaveBeenCalled(); // not committed until release
+
+      handle.dispatchEvent(pointerEvent('pointerup', 150));
+      expect(handler).toHaveBeenCalledOnce();
+      const event = handler.mock.calls[0][0] as CustomEvent<ColumnResizeDetail>;
+      expect(event.detail).toEqual({ key: 'name', width: '250px' });
+    });
+
+    it('dragging left shrinks the column, clamped to its minWidth', async () => {
+      el.columns = [{ key: 'name', label: 'Name', resizable: true, minWidth: '80px' }];
+      await el.updateComplete;
+      mockThWidth(200);
+
+      const handle = el.shadowRoot!.querySelector('.resize-handle') as HTMLElement;
+      handle.dispatchEvent(pointerEvent('pointerdown', 100));
+      handle.dispatchEvent(pointerEvent('pointermove', -500)); // way past the minimum
+      await el.updateComplete;
+
+      const th = el.shadowRoot!.querySelector('th') as HTMLElement;
+      expect(th.style.width).toBe('80px'); // clamped, not negative or zero
+    });
+
+    it('clamps to a sane default floor when the column has no minWidth of its own', async () => {
+      el.columns = [{ key: 'name', label: 'Name', resizable: true }];
+      await el.updateComplete;
+      mockThWidth(200);
+
+      const handle = el.shadowRoot!.querySelector('.resize-handle') as HTMLElement;
+      handle.dispatchEvent(pointerEvent('pointerdown', 100));
+      handle.dispatchEvent(pointerEvent('pointermove', -500));
+      await el.updateComplete;
+
+      const th = el.shadowRoot!.querySelector('th') as HTMLElement;
+      expect(th.style.width).toBe('40px');
+    });
+
+    it('flips the drag direction under RTL, so the visually-dragged edge still tracks the cursor', async () => {
+      el.columns = [{ key: 'name', label: 'Name', resizable: true }];
+      el.style.direction = 'rtl';
+      await el.updateComplete;
+      mockThWidth(200);
+
+      const handle = el.shadowRoot!.querySelector('.resize-handle') as HTMLElement;
+      handle.dispatchEvent(pointerEvent('pointerdown', 100));
+      handle.dispatchEvent(pointerEvent('pointermove', 150)); // +50 raw, grows in LTR, shrinks in RTL
+      await el.updateComplete;
+
+      const th = el.shadowRoot!.querySelector('th') as HTMLElement;
+      expect(th.style.width).toBe('150px');
+    });
+
+    it('ArrowRight grows and ArrowLeft shrinks the column by a fixed step', async () => {
+      el.columns = [{ key: 'name', label: 'Name', resizable: true }];
+      await el.updateComplete;
+      mockThWidth(200);
+
+      const handler = vi.fn();
+      el.addEventListener('columnresize', handler);
+      const handle = el.shadowRoot!.querySelector('.resize-handle') as HTMLElement;
+
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+      await el.updateComplete;
+      let th = el.shadowRoot!.querySelector('th') as HTMLElement;
+      expect(th.style.width).toBe('210px');
+
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+      await el.updateComplete;
+      th = el.shadowRoot!.querySelector('th') as HTMLElement;
+      expect(th.style.width).toBe('200px');
+
+      expect(handler).toHaveBeenCalledTimes(2); // each key press commits immediately, unlike a drag
+    });
+
+    it('ignores keys other than the arrow keys', async () => {
+      el.columns = [{ key: 'name', label: 'Name', resizable: true }];
+      await el.updateComplete;
+      mockThWidth(200);
+
+      const handler = vi.fn();
+      el.addEventListener('columnresize', handler);
+      const handle = el.shadowRoot!.querySelector('.resize-handle') as HTMLElement;
+      handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+
+      expect(handler).not.toHaveBeenCalled();
+    });
+
+    it('applies the resized width to the matching body cells too, not just the header', async () => {
+      el.columns = [{ key: 'name', label: 'Name', resizable: true }];
+      await el.updateComplete;
+      mockThWidth(200);
+
+      const handle = el.shadowRoot!.querySelector('.resize-handle') as HTMLElement;
+      handle.dispatchEvent(pointerEvent('pointerdown', 100));
+      handle.dispatchEvent(pointerEvent('pointermove', 150));
+      handle.dispatchEvent(pointerEvent('pointerup', 150));
+      await el.updateComplete;
+
+      const td = el.shadowRoot!.querySelector('tbody td') as HTMLElement;
+      expect(td.style.width).toBe('250px');
+    });
+
+    it('a resize survives an unrelated columns update, keyed by column.key', async () => {
+      el.columns = [{ key: 'name', label: 'Name', resizable: true }];
+      await el.updateComplete;
+      mockThWidth(200);
+
+      const handle = el.shadowRoot!.querySelector('.resize-handle') as HTMLElement;
+      handle.dispatchEvent(pointerEvent('pointerdown', 100));
+      handle.dispatchEvent(pointerEvent('pointermove', 150));
+      handle.dispatchEvent(pointerEvent('pointerup', 150));
+      await el.updateComplete;
+
+      el.columns = [{ key: 'name', label: 'Name', resizable: true, sortable: true }];
+      await el.updateComplete;
+
+      const th = el.shadowRoot!.querySelector('th') as HTMLElement;
+      expect(th.style.width).toBe('250px');
+    });
+
+    it("a resize override wins over the column's own configured width going forward", async () => {
+      el.columns = [{ key: 'name', label: 'Name', resizable: true, width: '300px' }];
+      await el.updateComplete;
+      mockThWidth(200); // irrelevant here — the th already renders at the configured 300px before any drag
+
+      const handle = el.shadowRoot!.querySelector('.resize-handle') as HTMLElement;
+      handle.dispatchEvent(pointerEvent('pointerdown', 100));
+      handle.dispatchEvent(pointerEvent('pointermove', 150)); // +50 from the actual starting width, 300px
+      await el.updateComplete;
+
+      const th = el.shadowRoot!.querySelector('th') as HTMLElement;
+      expect(th.style.width).toBe('350px'); // driven by the override now, not frozen at the configured 300px
     });
   });
 });

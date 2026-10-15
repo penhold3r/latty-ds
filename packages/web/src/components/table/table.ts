@@ -16,13 +16,21 @@ import {
   TableSelectionMode,
   RowKey,
   SelectionChangeDetail,
-  TableLabels
+  TableLabels,
+  ColumnResizeDetail
 } from './table.types';
 
 const DEFAULT_LABELS: TableLabels<unknown> = {
   selectRow: (_row, index) => `Select row ${index + 1}`,
-  selectAll: 'Select all rows'
+  selectAll: 'Select all rows',
+  resizeColumn: (column) => `Resize ${column.label} column`
 };
+
+/** Smallest width a column can be dragged/keyed down to, when it has no explicit `minWidth` of its own. */
+const DEFAULT_MIN_COLUMN_WIDTH = 40;
+
+/** Pixels a keyboard arrow-key press grows/shrinks a resizable column by. */
+const RESIZE_KEY_STEP = 10;
 
 let selectionGroupCounter = 0;
 
@@ -72,10 +80,12 @@ import '@latty-ds/icons';
  * - `rowclick` event for custom row interactions (navigation, custom selection, etc.)
  * - Row selection via `selection-mode` (`single` radio buttons or `multiple` checkboxes + select-all)
  * - Pagination coupling via `page-size`/`page`/`totalPages`, for pairing with a standalone `lt-pagination`
+ * - Per-column resize (`column.resizable`) via pointer drag or, for keyboard users, arrow keys on the same handle
  *
  * @fires sortchange - Fired when sort changes
  * @fires rowclick - Fired when a body row is clicked, with `{ row, index }` detail
  * @fires selectionchange - Fired when row selection changes, with `{ selected, previousSelected }` detail
+ * @fires columnresize - Fired when a column's width changes via its resize handle, with `{ key, width }` detail
  *
  * @example
  * ```typescript
@@ -276,6 +286,13 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   private readonly _selectionGroupName = `lt-table-selection-${++selectionGroupCounter}`;
 
   /**
+   * Live, self-managed column widths from resizing, keyed by `column.key`. Always wins over `column.width` when
+   * present — survives a `columns` re-render (keyed by `key`, not array identity) until the page reloads.
+   * `columnresize` gives the consumer a hook to persist a resize if they want it to survive that too.
+   */
+  @state() private columnWidthOverrides: Record<string, string> = {};
+
+  /**
    * Sorted data based on current sort state.
    */
   @state() private sortedData: T[] = [];
@@ -300,6 +317,22 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    */
   private getRowKey(row: T, index: number): RowKey {
     return this.rowKey ? ((row as Record<string, unknown>)[this.rowKey] as RowKey) : index;
+  }
+
+  /**
+   * A column's effective width: a live resize override when one exists, otherwise its configured `width`.
+   */
+  private getColumnWidth(column: TableColumn<T>): string | undefined {
+    return this.columnWidthOverrides[column.key] ?? column.width;
+  }
+
+  /**
+   * A column's minimum width in pixels, as a plain number — its own `minWidth` when it parses as one, otherwise
+   * the shared floor every resizable column gets regardless.
+   */
+  private getColumnMinWidthPx(column: TableColumn<T>): number {
+    const parsed = column.minWidth ? parseFloat(column.minWidth) : NaN;
+    return Number.isFinite(parsed) ? Math.max(parsed, DEFAULT_MIN_COLUMN_WIDTH) : DEFAULT_MIN_COLUMN_WIDTH;
   }
 
   /**
@@ -417,6 +450,87 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
         }
       })
     );
+  }
+
+  /**
+   * Updates a column's width live, without telling the consumer yet — used for every step of an in-progress
+   * drag, where firing `columnresize` on each pixel of movement would be excessive. Returns the applied width.
+   */
+  private updateColumnWidth(column: TableColumn<T>, widthPx: number): string {
+    const width = `${Math.round(widthPx)}px`;
+    this.columnWidthOverrides = { ...this.columnWidthOverrides, [column.key]: width };
+    return width;
+  }
+
+  /**
+   * Tells the consumer a column's width change is final — once per drag (on release), or once per keyboard step
+   * (each press is already a discrete, complete action with no "in progress" state to speak of).
+   */
+  private dispatchColumnResize(key: string, width: string) {
+    this.dispatchEvent(
+      new CustomEvent<ColumnResizeDetail>('columnresize', {
+        bubbles: true,
+        composed: true,
+        detail: { key, width }
+      })
+    );
+  }
+
+  /**
+   * Starts a pointer-drag resize of a column. The handle captures the pointer for the whole drag (so a fast
+   * movement past the handle's own bounds doesn't drop the gesture) and tracks start position/width as plain
+   * closure state — simpler than threading per-drag fields through the instance for something this self-contained.
+   */
+  private handleResizeStart(e: PointerEvent, column: TableColumn<T>) {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    e.preventDefault();
+
+    const handle = e.currentTarget as HTMLElement;
+    const th = handle.closest('th') as HTMLElement;
+    const startX = e.clientX;
+    const startWidth = th.getBoundingClientRect().width;
+    const minWidth = this.getColumnMinWidthPx(column);
+    // A physical drag must track the cursor correctly regardless of reading direction: the handle sits at the
+    // column's trailing (inset-inline-end) edge, which is the column's *left* edge under RTL — so "dragging
+    // further away from the column" is a *negative* clientX delta there, the opposite of LTR.
+    const isRtl = getComputedStyle(this).direction === 'rtl';
+
+    handle.setPointerCapture(e.pointerId);
+
+    const onMove = (moveEvent: PointerEvent) => {
+      const rawDelta = moveEvent.clientX - startX;
+      const delta = isRtl ? -rawDelta : rawDelta;
+      this.updateColumnWidth(column, Math.max(minWidth, startWidth + delta));
+    };
+
+    const onUp = (upEvent: PointerEvent) => {
+      handle.removeEventListener('pointermove', onMove);
+      handle.removeEventListener('pointerup', onUp);
+      handle.releasePointerCapture(upEvent.pointerId);
+      const width = this.columnWidthOverrides[column.key];
+      if (width) this.dispatchColumnResize(column.key, width);
+    };
+
+    handle.addEventListener('pointermove', onMove);
+    handle.addEventListener('pointerup', onUp);
+  }
+
+  /**
+   * Keyboard alternative to dragging (WCAG 2.5.1 — a pointer-only drag gesture needs a non-pointer equivalent).
+   * Arrow-right always grows and arrow-left always shrinks, the same as a native `<input type="range">`'s own
+   * increment keys — unlike the mouse drag, this doesn't flip for RTL, since "right arrow increases" is the
+   * more universally understood convention for a plain magnitude control.
+   */
+  private handleResizeKeydown(e: KeyboardEvent, column: TableColumn<T>) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+
+    const th = (e.currentTarget as HTMLElement).closest('th') as HTMLElement;
+    const currentWidth = th.getBoundingClientRect().width;
+    const minWidth = this.getColumnMinWidthPx(column);
+    const step = e.key === 'ArrowRight' ? RESIZE_KEY_STEP : -RESIZE_KEY_STEP;
+    const width = this.updateColumnWidth(column, Math.max(minWidth, currentWidth + step));
+    this.dispatchColumnResize(column.key, width);
   }
 
   /**
@@ -545,6 +659,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
                   sortable: !!column.sortable,
                   sorted: this.currentSort?.key === column.key,
                   sticky: !!column.sticky,
+                  resizable: !!column.resizable,
                   'hide-on-mobile': !!column.hideOnMobile
                 })}
                 data-align=${column.align || 'start'}
@@ -556,7 +671,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
                     : 'none'
                   : nothing}
                 style=${styleMap({
-                  ...(column.width ? { width: column.width } : {}),
+                  ...(this.getColumnWidth(column) ? { width: this.getColumnWidth(column) } : {}),
                   ...(column.minWidth ? { minWidth: column.minWidth } : {})
                 })}
               >
@@ -578,6 +693,19 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
                       </button>
                     `
                   : column.label}
+                ${column.resizable
+                  ? html`
+                      <div
+                        class="resize-handle"
+                        role="separator"
+                        aria-label=${this._labels.resizeColumn(column)}
+                        aria-orientation="vertical"
+                        tabindex="0"
+                        @pointerdown=${(e: PointerEvent) => this.handleResizeStart(e, column)}
+                        @keydown=${(e: KeyboardEvent) => this.handleResizeKeydown(e, column)}
+                      ></div>
+                    `
+                  : nothing}
               </th>
             `
           )}
@@ -634,7 +762,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
                 data-align=${column.align || 'start'}
                 data-label=${column.label}
                 style=${styleMap({
-                  ...(column.width ? { width: column.width } : {}),
+                  ...(this.getColumnWidth(column) ? { width: this.getColumnWidth(column) } : {}),
                   ...(column.minWidth ? { minWidth: column.minWidth } : {})
                 })}
               >

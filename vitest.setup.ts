@@ -152,6 +152,20 @@ if (typeof Element !== 'undefined' && typeof Element.prototype.scrollBy !== 'fun
   Element.prototype.scrollBy = function () {};
 }
 
+// jsdom (27.4, checked) implements PointerEvent itself (construction, clientX, pointerId) but not
+// Element.setPointerCapture/releasePointerCapture/hasPointerCapture — confirmed empirically, calling any of them
+// throws "not a function". Real pointer capture (keeping move/up events routed to the original target even once
+// the cursor leaves its bounds, e.g. lt-table's column-resize drag handle) has no jsdom equivalent to simulate
+// anyway, so these are plain no-ops: tests exercise the resize math directly via dispatched pointermove/pointerup
+// events, not real capture behavior.
+if (typeof Element !== 'undefined' && typeof Element.prototype.setPointerCapture !== 'function') {
+  Element.prototype.setPointerCapture = function () {};
+  Element.prototype.releasePointerCapture = function () {};
+  Element.prototype.hasPointerCapture = function () {
+    return false;
+  };
+}
+
 // jsdom (27.4, checked) doesn't implement window.matchMedia at all. Components that branch on a media feature
 // (e.g. lt-tab-group's scroll buttons checking prefers-reduced-motion) need something to call rather than
 // throwing; this stub always reports "no match", like a plain default environment with no particular OS

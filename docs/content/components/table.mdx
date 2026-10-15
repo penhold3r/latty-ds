@@ -22,7 +22,7 @@ properties.
   defaults={{ hoverable: true, caption: 'Team roster' }}
   seedData={{
     columns: [
-      { key: 'name', label: 'Name', sortable: true },
+      { key: 'name', label: 'Name', sortable: true, resizable: true },
       { key: 'email', label: 'Email' },
       { key: 'role', label: 'Role', sortable: true },
       { key: 'status', label: 'Status' }
@@ -118,6 +118,17 @@ table.selectionMode = 'multiple';
 table.rowKey = 'id';
 table.addEventListener('selectionchange', (e) => {
   console.log(e.detail.selected); // e.g. [1, 3]
+});
+```
+
+Set `resizable: true` on a column to let it be dragged wider or narrower from a handle at its trailing edge
+(keyboard users can tab to the same handle and use the arrow keys). Listen for `columnresize` to persist the
+chosen width — the table keeps its own live override internally either way, so persistence is optional:
+
+```js
+table.columns = [{ key: 'name', label: 'Name', resizable: true, width: '200px' }];
+table.addEventListener('columnresize', (e) => {
+  console.log(e.detail.key, e.detail.width); // e.g. "name", "238px"
 });
 ```
 

@@ -87,6 +87,28 @@ export interface TableColumn<T = Record<string, unknown>> {
    * @default false
    */
   sticky?: boolean;
+
+  /**
+   * Whether this column's width can be adjusted by dragging a handle at its trailing edge (or, for keyboard
+   * users, by focusing that handle and pressing the arrow keys).
+   * @default false
+   */
+  resizable?: boolean;
+}
+
+/**
+ * Event detail for column resize events.
+ */
+export interface ColumnResizeDetail {
+  /**
+   * Key of the column that was resized.
+   */
+  key: string;
+
+  /**
+   * The new width, as a CSS length (e.g. `'182px'`).
+   */
+  width: string;
 }
 
 /**
@@ -163,6 +185,12 @@ export interface TableLabels<T = Record<string, unknown>> {
    * @default 'Select all rows'
    */
   selectAll: string;
+
+  /**
+   * Accessible label for a resizable column's drag handle.
+   * @default (column) => `Resize ${column.label} column`
+   */
+  resizeColumn: (column: TableColumn<T>) => string;
 }
 
 /**

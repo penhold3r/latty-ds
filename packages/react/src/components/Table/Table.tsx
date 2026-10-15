@@ -23,12 +23,25 @@ export type TableProps = HTMLAttributes<TableEl> & {
   labels?: TableEl['labels'];
   sort?: TableEl['sort'];
   onSortChange?: (event: CustomEvent) => void;
+  onColumnresize?: (event: CustomEvent) => void;
   onRowclick?: (event: CustomEvent) => void;
   onSelectionChange?: (event: CustomEvent) => void;
 };
 
 export const Table = forwardRef<TableEl, TableProps>(function Table(
-  { onSortChange, onRowclick, onSelectionChange, columns, data, selected, labels, sort, children, ...props },
+  {
+    onSortChange,
+    onColumnresize,
+    onRowclick,
+    onSelectionChange,
+    columns,
+    data,
+    selected,
+    labels,
+    sort,
+    children,
+    ...props
+  },
   forwardedRef
 ) {
   const innerRef = useRef<TableEl>(null);
@@ -42,6 +55,13 @@ export const Table = forwardRef<TableEl, TableProps>(function Table(
     el.addEventListener('sortchange', h);
     return () => el.removeEventListener('sortchange', h);
   }, [onSortChange]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onColumnresize) return;
+    const h = (ev: Event) => onColumnresize!(ev as CustomEvent);
+    el.addEventListener('columnresize', h);
+    return () => el.removeEventListener('columnresize', h);
+  }, [onColumnresize]);
   useEffect(() => {
     const el = innerRef.current;
     if (!el || !onRowclick) return;

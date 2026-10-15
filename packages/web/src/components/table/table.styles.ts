@@ -29,6 +29,16 @@ export const tableStyles = css`
     width: 100%;
   }
 
+  /* Border-box, not the content-box default: th/td's own density padding would otherwise compound onto every
+     explicit or resized width on each read-write round-trip — getBoundingClientRect() always reports the
+     border-box size, but a content-box width excludes padding, so reading the rendered width back and writing
+     it as the new width (what both column resize and, less visibly, a configured column.width effectively do)
+     grows the cell by its own padding every single time. */
+  th,
+  td {
+    box-sizing: border-box;
+  }
+
   /* Caption */
   caption {
     caption-side: top;
@@ -110,6 +120,40 @@ export const tableStyles = css`
 
   th.sorted .sort-icon {
     color: var(--lt-interactive-primary-bg);
+  }
+
+  /* Column resize */
+  th.resizable {
+    position: relative;
+  }
+
+  .resize-handle {
+    cursor: col-resize;
+    inset-block: 0;
+    inset-inline-end: 0;
+    position: absolute;
+    touch-action: none;
+    width: 8px;
+  }
+
+  .resize-handle::after {
+    background: var(--lt-border-default);
+    content: '';
+    inset-block: var(--lt-spacing-2);
+    inset-inline-start: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 2px;
+  }
+
+  .resize-handle:hover::after,
+  .resize-handle:focus-visible::after {
+    background: var(--lt-interactive-primary-bg);
+  }
+
+  .resize-handle:focus-visible {
+    outline: 2px solid var(--lt-interactive-primary-bg);
+    outline-offset: -2px;
   }
 
   /* Body */
