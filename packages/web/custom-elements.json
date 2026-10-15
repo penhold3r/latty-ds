@@ -11318,6 +11318,24 @@
             },
             {
               "kind": "field",
+              "name": "pageSize",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "Number of rows to show per page. `0` disables pagination (every row renders, the default). The table renders\nno pagination controls itself — pair it with a standalone `lt-pagination`, reading `page`/`totalPages` from\nthis table and writing its own `change` event's `page` back onto `this.page`:\n```js\npager.totalPages = table.totalPages;\npager.addEventListener('change', (e) => (table.page = e.detail.page));\n```"
+            },
+            {
+              "kind": "field",
+              "name": "page",
+              "type": {
+                "text": "number"
+              },
+              "default": "1",
+              "description": "Current page (1-indexed). Out-of-range values clamp into `1..totalPages`, matching `lt-pagination`'s own\nclamping. Unlike `sort`/`selected`, this is a plain consumer-driven property, not controlled/uncontrolled —\nthe table has no page-navigation UI of its own to ever change it internally."
+            },
+            {
+              "kind": "field",
               "name": "selected",
               "type": {
                 "text": "RowKey[] | undefined"
@@ -11434,6 +11452,35 @@
               "description": "Resolves a row's selection/rendering identity key: the `row-key` field's value when `row-key` is set,\notherwise the row's index within the sorted data."
             },
             {
+              "kind": "field",
+              "name": "totalPages",
+              "type": {
+                "text": "number"
+              },
+              "description": "Total number of pages given the current sorted data and `pageSize`. `1` whenever pagination is disabled\n(`pageSize` unset or less than 1). Public so a consumer can feed it straight into `lt-pagination`'s own\n`total-pages`.",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "currentPage",
+              "type": {
+                "text": "number"
+              },
+              "privacy": "private",
+              "description": "`page`, clamped into `1..totalPages` — matches `lt-pagination`'s own `_current` clamping, so an out-of-range\n`page` (e.g. the data shrank after a fetch) never renders an empty page.",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "pagedEntries",
+              "type": {
+                "text": "Array<{ row: T; index: number }>"
+              },
+              "privacy": "private",
+              "description": "The rows actually rendered, paired with their index within `sortedData` — the index is preserved (not\nre-based to the page) so `rowIndex` in `column.render`, `rowclick`'s detail, and row-selection keys all keep\nmeaning \"position within the full sorted data\", not \"position within this page\".",
+              "readonly": true
+            },
+            {
               "kind": "method",
               "name": "willUpdate",
               "parameters": [
@@ -11509,7 +11556,7 @@
               "kind": "method",
               "name": "toggleSelectAll",
               "privacy": "private",
-              "description": "Toggles selection of every currently visible (sorted) row — selects all if any are unselected, otherwise\nclears the selection. Multiple mode only."
+              "description": "Toggles selection of every currently visible row (the current page, when paginated) — selects all if any\nare unselected, otherwise clears the selection. Multiple mode only."
             },
             {
               "kind": "method",

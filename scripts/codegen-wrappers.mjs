@@ -51,7 +51,16 @@ for (const mod of cem.modules) {
 
     const fields = (decl.members ?? [])
       .filter(
-        (m) => m.kind === 'field' && m.privacy !== 'private' && !m.name.startsWith('_') && !SKIP_FIELDS.has(m.name)
+        (m) =>
+          m.kind === 'field' &&
+          m.privacy !== 'private' &&
+          !m.name.startsWith('_') &&
+          !SKIP_FIELDS.has(m.name) &&
+          // A getter-only public field (cem marks it `readonly`) is derived state meant to be read via a ref
+          // (`tableRef.current.totalPages`), never set — including it as a settable prop would either throw
+          // (assigning to an accessor with no setter, under ES modules' always-strict mode) or silently no-op
+          // (spread as a plain JSX attribute the component never declared), depending on isSimple's heuristic.
+          !m.readonly
       )
       .map((f) => {
         let displayType;

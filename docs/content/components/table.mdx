@@ -121,6 +121,18 @@ table.addEventListener('selectionchange', (e) => {
 });
 ```
 
+Set `page-size` to paginate client-side — the table renders no pagination controls of its own, so pair it with a
+standalone [`lt-pagination`](/components/pagination), reading `totalPages` off the table and writing each page
+change straight back onto `page`:
+
+```js
+table.pageSize = 10;
+pager.totalPages = table.totalPages; // re-read after any `data` change, same as right here
+pager.addEventListener('change', (e) => {
+  table.page = e.detail.page;
+});
+```
+
 ## API
 
 <ApiTable tag="lt-table" />

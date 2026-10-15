@@ -422,6 +422,29 @@ describe('<lt-table>', () => {
       expect(firstCheckbox.getAttribute('aria-label')).toBe('Pick Alice');
     });
 
+    it("select-all with pagination active only selects the current page's rows", async () => {
+      el.selectionMode = 'multiple';
+      el.pageSize = 2;
+      await el.updateComplete;
+
+      const headerCheckbox = el.shadowRoot!.querySelector('thead .selection-cell input') as HTMLInputElement;
+      headerCheckbox.click();
+      await el.updateComplete;
+
+      expect(el.shadowRoot!.querySelectorAll('tbody tr')).toHaveLength(2); // page 1 of 2 rows
+      const rowCheckboxes = el.shadowRoot!.querySelectorAll(
+        'tbody .selection-cell input'
+      ) as NodeListOf<HTMLInputElement>;
+      expect([...rowCheckboxes].every((cb) => cb.checked)).toBe(true);
+
+      el.page = 2;
+      await el.updateComplete;
+      const page2Checkboxes = el.shadowRoot!.querySelectorAll(
+        'tbody .selection-cell input'
+      ) as NodeListOf<HTMLInputElement>;
+      expect([...page2Checkboxes].every((cb) => !cb.checked)).toBe(true); // page 2 wasn't touched
+    });
+
     it('gives a two-table page independent single-select radio groups', async () => {
       const second = document.createElement('lt-table') as Table<TestData>;
       second.columns = columns;
@@ -827,6 +850,77 @@ describe('<lt-table>', () => {
       t.data = [];
       await t.updateComplete;
       expect(el.shadowRoot!.querySelector('td.empty-state')!.getAttribute('colspan')).toBe('1');
+    });
+  });
+
+  describe('pagination', () => {
+    it('renders every row when page-size is unset (0), the default', () => {
+      expect(el.pageSize).toBe(0);
+      expect(el.shadowRoot!.querySelectorAll('tbody tr')).toHaveLength(3);
+    });
+
+    it('renders only pageSize rows for the current page', async () => {
+      el.pageSize = 2;
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelectorAll('tbody tr')).toHaveLength(2);
+
+      const names = [...el.shadowRoot!.querySelectorAll('tbody tr')].map((row) =>
+        row.querySelectorAll('td')[1].textContent?.trim()
+      );
+      expect(names).toEqual(['Alice', 'Bob']);
+    });
+
+    it('renders the remainder on the last page', async () => {
+      el.pageSize = 2;
+      el.page = 2;
+      await el.updateComplete;
+
+      const names = [...el.shadowRoot!.querySelectorAll('tbody tr')].map((row) =>
+        row.querySelectorAll('td')[1].textContent?.trim()
+      );
+      expect(names).toEqual(['Charlie']);
+    });
+
+    it('computes totalPages from the data length and pageSize', async () => {
+      expect(el.totalPages).toBe(1); // pagination disabled
+      el.pageSize = 2;
+      await el.updateComplete;
+      expect(el.totalPages).toBe(2); // 3 rows / 2 per page, rounded up
+    });
+
+    it('clamps an out-of-range page into 1..totalPages, like lt-pagination does', async () => {
+      el.pageSize = 2;
+      el.page = 99;
+      await el.updateComplete;
+
+      // Page 99 clamps to the real last page (2), not an empty result.
+      const names = [...el.shadowRoot!.querySelectorAll('tbody tr')].map((row) =>
+        row.querySelectorAll('td')[1].textContent?.trim()
+      );
+      expect(names).toEqual(['Charlie']);
+    });
+
+    it("preserves each row's global sortedData index across pages, not a page-relative one", async () => {
+      const handler = vi.fn();
+      el.addEventListener('rowclick', handler);
+      el.pageSize = 2;
+      el.page = 2;
+      await el.updateComplete;
+
+      const onlyRow = el.shadowRoot!.querySelectorAll('tbody tr')[0] as HTMLElement;
+      onlyRow.click();
+
+      const event = handler.mock.calls[0][0] as CustomEvent<RowClickDetail<TestData>>;
+      expect(event.detail.index).toBe(2); // Charlie is sortedData[2], not page-relative index 0
+    });
+
+    it('still shows the real empty state when there is no data at all, not an empty page', async () => {
+      el.pageSize = 2;
+      el.data = [];
+      await el.updateComplete;
+      await el.updateComplete;
+
+      expect(el.shadowRoot!.querySelector('.empty-state')).toBeTruthy();
     });
   });
 });

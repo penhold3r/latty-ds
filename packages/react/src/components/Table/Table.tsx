@@ -17,6 +17,8 @@ export type TableProps = HTMLAttributes<TableEl> & {
   stickyHeader?: boolean;
   rowKey?: string;
   selectionMode?: TableEl['selectionMode'];
+  pageSize?: number;
+  page?: number;
   selected?: TableEl['selected'];
   labels?: TableEl['labels'];
   sort?: TableEl['sort'];

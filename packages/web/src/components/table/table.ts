@@ -71,6 +71,7 @@ import '@latty-ds/icons';
  * - Sticky header via `sticky-header`
  * - `rowclick` event for custom row interactions (navigation, custom selection, etc.)
  * - Row selection via `selection-mode` (`single` radio buttons or `multiple` checkboxes + select-all)
+ * - Pagination coupling via `page-size`/`page`/`totalPages`, for pairing with a standalone `lt-pagination`
  *
  * @fires sortchange - Fired when sort changes
  * @fires rowclick - Fired when a body row is clicked, with `{ row, index }` detail
@@ -216,6 +217,26 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   @property({ reflect: true, attribute: 'selection-mode' }) selectionMode: TableSelectionMode = 'none';
 
   /**
+   * Number of rows to show per page. `0` disables pagination (every row renders, the default). The table renders
+   * no pagination controls itself — pair it with a standalone `lt-pagination`, reading `page`/`totalPages` from
+   * this table and writing its own `change` event's `page` back onto `this.page`:
+   * ```js
+   * pager.totalPages = table.totalPages;
+   * pager.addEventListener('change', (e) => (table.page = e.detail.page));
+   * ```
+   * @default 0
+   */
+  @property({ type: Number, reflect: true, attribute: 'page-size' }) pageSize = 0;
+
+  /**
+   * Current page (1-indexed). Out-of-range values clamp into `1..totalPages`, matching `lt-pagination`'s own
+   * clamping. Unlike `sort`/`selected`, this is a plain consumer-driven property, not controlled/uncontrolled —
+   * the table has no page-navigation UI of its own to ever change it internally.
+   * @default 1
+   */
+  @property({ type: Number, reflect: true }) page = 1;
+
+  /**
    * Current selection (controlled externally), as an array of row keys — the `row-key` field's value for each
    * selected row when `row-key` is set, otherwise its index within the sorted data. If not provided, selection
    * is managed internally.
@@ -279,6 +300,37 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    */
   private getRowKey(row: T, index: number): RowKey {
     return this.rowKey ? ((row as Record<string, unknown>)[this.rowKey] as RowKey) : index;
+  }
+
+  /**
+   * Total number of pages given the current sorted data and `pageSize`. `1` whenever pagination is disabled
+   * (`pageSize` unset or less than 1). Public so a consumer can feed it straight into `lt-pagination`'s own
+   * `total-pages`.
+   */
+  get totalPages(): number {
+    if (!this.pageSize || this.pageSize < 1) return 1;
+    return Math.max(1, Math.ceil(this.sortedData.length / this.pageSize));
+  }
+
+  /**
+   * `page`, clamped into `1..totalPages` — matches `lt-pagination`'s own `_current` clamping, so an out-of-range
+   * `page` (e.g. the data shrank after a fetch) never renders an empty page.
+   */
+  private get currentPage(): number {
+    const raw = Math.floor(Number(this.page));
+    return Number.isFinite(raw) ? Math.min(Math.max(raw, 1), this.totalPages) : 1;
+  }
+
+  /**
+   * The rows actually rendered, paired with their index within `sortedData` — the index is preserved (not
+   * re-based to the page) so `rowIndex` in `column.render`, `rowclick`'s detail, and row-selection keys all keep
+   * meaning "position within the full sorted data", not "position within this page".
+   */
+  private get pagedEntries(): Array<{ row: T; index: number }> {
+    const entries = this.sortedData.map((row, index) => ({ row, index }));
+    if (!this.pageSize || this.pageSize < 1) return entries;
+    const start = (this.currentPage - 1) * this.pageSize;
+    return entries.slice(start, start + this.pageSize);
   }
 
   override willUpdate(changedProperties: PropertyValues<this>) {
@@ -406,11 +458,11 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   }
 
   /**
-   * Toggles selection of every currently visible (sorted) row — selects all if any are unselected, otherwise
-   * clears the selection. Multiple mode only.
+   * Toggles selection of every currently visible row (the current page, when paginated) — selects all if any
+   * are unselected, otherwise clears the selection. Multiple mode only.
    */
   private toggleSelectAll() {
-    const allKeys = this.sortedData.map((row, index) => this.getRowKey(row, index));
+    const allKeys = this.pagedEntries.map(({ row, index }) => this.getRowKey(row, index));
     const previousSelected = this.currentSelected;
     const allSelected = allKeys.length > 0 && allKeys.every((key) => previousSelected.includes(key));
     const next = allSelected ? [] : allKeys;
@@ -464,7 +516,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * Renders the table header.
    */
   private renderHeader() {
-    const allKeys = this.sortedData.map((row, index) => this.getRowKey(row, index));
+    const allKeys = this.pagedEntries.map(({ row, index }) => this.getRowKey(row, index));
     const selectedCount = allKeys.filter((key) => this.currentSelected.includes(key)).length;
 
     return html`
@@ -596,10 +648,15 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
     // Keyed rendering only makes sense with a real key. Without `row-key` the old fallback (JSON.stringify(row)) was
     // O(n) per render, threw on circular data and BigInt, and gave identical rows identical keys; index-based
-    // rendering has none of those problems.
+    // rendering has none of those problems. Iterates `pagedEntries` (not `sortedData` directly) so each entry's
+    // preserved global index — not its position within this page — is what `renderRow` ultimately uses.
     const rows = this.rowKey
-      ? repeat(this.sortedData, (row, index) => this.getRowKey(row, index), renderRow)
-      : this.sortedData.map(renderRow);
+      ? repeat(
+          this.pagedEntries,
+          ({ row, index }) => this.getRowKey(row, index),
+          ({ row, index }) => renderRow(row, index)
+        )
+      : this.pagedEntries.map(({ row, index }) => renderRow(row, index));
 
     return html`
       <tbody>

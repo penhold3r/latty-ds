@@ -71,12 +71,25 @@ function parseDefault(raw) {
 
 /** Convert a CEM field declaration into a manifest member, or null to skip. */
 function toMember(field, componentDir) {
-  const { name: propName, attribute, type, default: rawDefault, privacy, static: isStatic, description } = field;
+  const {
+    name: propName,
+    attribute,
+    type,
+    default: rawDefault,
+    privacy,
+    static: isStatic,
+    description,
+    readonly
+  } = field;
   const name = attribute ?? toAttrName(propName);
 
   if (isStatic) return null;
   if (privacy === 'private' || privacy === 'protected') return null;
   if (propName.startsWith('_')) return null;
+  // A getter-only field (no setter) isn't a real attribute/property a consumer can configure — it's derived
+  // state meant to be read off the element directly (e.g. `table.totalPages`). Listing it here would make the
+  // playground render a control that silently does nothing when changed.
+  if (readonly) return null;
   // Skip framework / LitElement lifecycle fields
   if (['styles', 'shadowRoot', 'renderRoot', 'updateComplete'].includes(propName)) return null;
 
