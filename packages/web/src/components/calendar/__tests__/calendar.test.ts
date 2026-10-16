@@ -886,12 +886,21 @@ describe('<lt-calendar> week-start derived from locale (X5)', () => {
     expect(firstWeekdayLabel()).toBe(fmt.format(new Date(2026, 0, 4))); // Sunday, not the locale's Monday
   });
 
-  // A malformed `locale` string (e.g. '!!!') isn't tested here: `Intl.Locale`'s constructor throws a
-  // RangeError for these, and deriveWeekStart()'s own try/catch handles that fine in isolation — but
-  // calendar.ts already constructs several other `new Intl.DateTimeFormat(this.locale, ...)` instances
-  // elsewhere in render() with no such guard (pre-existing, not introduced by this fix), so a malformed
-  // locale crashes the whole render regardless of week-start. Tracked as its own finding, not fixed here —
-  // see X5's locale/week-start note in the audit doc.
+  it('falls back to en-US instead of crashing the render for a malformed locale string', async () => {
+    el.value = '2026-05-19';
+    el.locale = 'e-US'; // throws RangeError from Intl.DateTimeFormat's constructor — invalid primary subtag
+    await expect(el.updateComplete).resolves.toBe(true);
+
+    const weekdayFmt = new Intl.DateTimeFormat('en-US', { weekday: 'narrow' });
+    expect(firstWeekdayLabel()).toBe(weekdayFmt.format(new Date(2026, 0, 4))); // Sunday, en-US's own week start
+
+    // Covers the separate new Intl.DateTimeFormat(this.locale, ...) call sites in render() itself (month label,
+    // day aria-label), not just _getWeekdayLabels() above — all five used to be unguarded.
+    const monthLabel = el.shadowRoot!.querySelector('.month-label-btn')!;
+    expect(monthLabel.textContent).toContain(
+      new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(2026, 4))
+    );
+  });
 });
 
 describe('<lt-calendar> min/max-aware navigation', () => {
@@ -1156,5 +1165,99 @@ describe('<lt-calendar> week numbers', () => {
 
     const first = el.shadowRoot!.querySelector('[role="row"] > .week-number')!;
     expect(first.textContent?.trim()).toBe('1'); // not 53 of the prior year
+  });
+});
+
+describe('<lt-calendar> presets', () => {
+  let el: Calendar;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-calendar') as Calendar;
+    el.mode = 'range';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('renders no presets panel when the presets property is left empty', async () => {
+    expect(el.shadowRoot!.querySelector('.presets')).toBeNull();
+  });
+
+  it('renders no presets panel in single mode, even if presets are set', async () => {
+    el.mode = 'single';
+    el.presets = [{ label: 'Last 7 days', getRange: () => [new Date(2026, 4, 1), new Date(2026, 4, 7)] }];
+    await el.updateComplete;
+
+    expect(el.shadowRoot!.querySelector('.presets')).toBeNull();
+  });
+
+  it('renders one button per preset, labeled with its own text', async () => {
+    el.presets = [
+      { label: 'Last 7 days', getRange: () => [new Date(2026, 4, 1), new Date(2026, 4, 7)] },
+      { label: 'This month', getRange: () => [new Date(2026, 4, 1), new Date(2026, 4, 31)] }
+    ];
+    await el.updateComplete;
+
+    const buttons = el.shadowRoot!.querySelectorAll('.preset-btn');
+    expect(buttons).toHaveLength(2);
+    expect(buttons[0].textContent?.trim()).toBe('Last 7 days');
+    expect(buttons[1].textContent?.trim()).toBe('This month');
+  });
+
+  it('clicking a preset sets valueStart/valueEnd and fires change', async () => {
+    el.presets = [{ label: 'This month', getRange: () => [new Date(2026, 4, 1), new Date(2026, 4, 31)] }];
+    await el.updateComplete;
+
+    let detail: { valueStart: string; valueEnd: string } | undefined;
+    el.addEventListener('change', (e) => {
+      detail = (e as CustomEvent<{ valueStart: string; valueEnd: string }>).detail;
+    });
+
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.preset-btn')!.click();
+    await el.updateComplete;
+
+    expect(el.valueStart).toBe('2026-05-01');
+    expect(el.valueEnd).toBe('2026-05-31');
+    expect(detail).toEqual({ valueStart: '2026-05-01', valueEnd: '2026-05-31' });
+  });
+
+  it('normalizes a preset range given in end-before-start order', async () => {
+    el.presets = [{ label: 'Backwards', getRange: () => [new Date(2026, 4, 20), new Date(2026, 4, 10)] }];
+    await el.updateComplete;
+
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.preset-btn')!.click();
+    await el.updateComplete;
+
+    expect(el.valueStart).toBe('2026-05-10');
+    expect(el.valueEnd).toBe('2026-05-20');
+  });
+
+  it('navigates the view to the preset range start', async () => {
+    el.value = '2026-01-01';
+    el.presets = [{ label: 'This month', getRange: () => [new Date(2026, 7, 1), new Date(2026, 7, 31)] }];
+    await el.updateComplete;
+
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.preset-btn')!.click();
+    await el.updateComplete;
+
+    const label = el.shadowRoot!.querySelector('.month-label-btn')!;
+    expect(label.textContent?.trim()).toContain('August');
+  });
+
+  it('does nothing when a preset is clicked on a disabled calendar', async () => {
+    el.disabled = true;
+    el.presets = [{ label: 'This month', getRange: () => [new Date(2026, 4, 1), new Date(2026, 4, 31)] }];
+    await el.updateComplete;
+
+    const btn = el.shadowRoot!.querySelector<HTMLButtonElement>('.preset-btn')!;
+    expect(btn.disabled).toBe(true);
+    btn.click();
+    await el.updateComplete;
+
+    expect(el.valueStart).toBe('');
+    expect(el.valueEnd).toBe('');
   });
 });

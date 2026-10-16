@@ -2,6 +2,16 @@
 export type CalendarWeekStart = '0' | '1' | '2' | '3' | '4' | '5' | '6';
 export type CalendarMode = 'single' | 'range';
 
+/** A quick-select range button (`presets`, mode="range" only). `getRange` is called fresh on each click so the
+ * range it returns — typically relative to "today" — can't go stale while the calendar stays open across a day
+ * boundary. */
+export interface CalendarPreset {
+  /** Visible button text. */
+  label: string;
+  /** Returns the `[start, end]` dates to select; order doesn't matter, the earlier date always becomes the start. */
+  getRange: () => [Date, Date];
+}
+
 export interface CalendarDay {
   date: Date;
   isCurrentMonth: boolean;

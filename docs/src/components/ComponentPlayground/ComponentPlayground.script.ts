@@ -7,7 +7,7 @@
 // state, code generation) is identical and needed no rewrite for React/SSR,
 // since it only ever runs client-side inside that effect.
 import { highlight } from './ComponentPlayground.prism';
-import type { PlaygroundMember, PlaygroundGroup, ChildItem } from './ComponentPlayground.types';
+import type { PlaygroundMember, PlaygroundGroup, ChildItem, PlaygroundExtraControl } from './ComponentPlayground.types';
 
 // The previewed element is created from a runtime tag string (`document.createElement(tag)`),
 // so its actual custom-element shape (show/hide/open, arbitrary seed-data properties) isn't
@@ -68,7 +68,10 @@ const formatTime = (d: Date): string =>
     fractionalSecondDigits: 3
   } as Intl.DateTimeFormatOptions);
 
-export const initPlayground = async (playground: Element): Promise<void> => {
+export const initPlayground = async (
+  playground: Element,
+  extraControls: PlaygroundExtraControl[] = []
+): Promise<void> => {
   const ds = (playground as HTMLElement).dataset;
   const id = playground.id;
   const tag = ds.tag!;
@@ -132,6 +135,22 @@ export const initPlayground = async (playground: Element): Promise<void> => {
 
   const previewedEl = el as PreviewedElement;
   for (const [k, v] of Object.entries(seedData)) previewedEl[k] = v;
+
+  // Extra controls bypass the generic [data-prop]/stateMap attribute pipeline entirely (there's no real
+  // attribute for them to drive) — their own state lives here instead, and `applyState()` below re-invokes
+  // `apply` on every change, not just the extra control's own toggle, so one can read another live property off
+  // the element (e.g. a locale-aware control reading `el.locale`) and stay in sync as the user edits it.
+  const extraState: Record<string, boolean> = Object.fromEntries(
+    extraControls.map((c) => [c.name, c.default ?? false])
+  );
+  playground.querySelectorAll<ControlElement>('[data-extra-control]').forEach((ctrl) => {
+    const control = extraControls.find((c) => c.name === ctrl.dataset.extraControl);
+    if (!control) return;
+    ctrl.addEventListener('change', (e) => {
+      extraState[control.name] = (e as CustomEvent<{ checked: boolean }>).detail.checked;
+      applyState();
+    });
+  });
 
   const openEl = () => (typeof previewedEl.show === 'function' ? previewedEl.show() : (previewedEl.open = true));
   const closeEl = () => (typeof previewedEl.hide === 'function' ? previewedEl.hide() : (previewedEl.open = false));
@@ -292,6 +311,10 @@ export const initPlayground = async (playground: Element): Promise<void> => {
       el.style.height = isVertical ? '100%' : '';
       el.style.width = isVertical ? 'auto' : ds.stretch === 'true' ? '100%' : '';
     }
+
+    // Re-applied on every state change, not just an extra control's own toggle — attributes above are already
+    // set on `el` by this point in the same synchronous pass, so `apply` can safely read e.g. `el.locale` fresh.
+    for (const control of extraControls) control.apply(previewedEl, extraState[control.name]);
   };
 
   playground.querySelectorAll('lt-select[data-prop]').forEach((el) => {

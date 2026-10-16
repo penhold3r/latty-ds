@@ -2,10 +2,18 @@ import { css } from 'lit';
 
 export const calendarStyles = css`
   :host {
+    /* Shared by .day__inner's own size below and the range-strip backgrounds further down, so the two can never
+       drift out of sync again the way they did when the circle was sized down from 2.25rem without the strip
+       height following it — the strip kept painting at .day's full (unrelated) button height instead. */
+    --_circle-size: 1.75rem;
     display: inline-block;
     font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
   }
 
+  /* No fixed width here: .calendar shrink-wraps whatever its single flex child (.calendar-body) measures —
+     single-month width comes from .calendar-body's own 17.25rem below, multi-month's from its month-panels'
+     combined width. This is what lets the presets sidebar EXTEND the card's total width instead of eating into
+     the 17.25rem already budgeted to the day grid (see .calendar-body's own comment). */
   .calendar {
     background: var(--lt-bg-default);
     border-radius: var(--lt-border-radius);
@@ -14,6 +22,60 @@ export const calendarStyles = css`
     flex-direction: column;
     gap: var(--lt-spacing-2);
     padding: var(--lt-spacing-3);
+  }
+
+  /* ── Presets ── */
+
+  .calendar--with-presets {
+    flex-direction: row;
+  }
+
+  .presets {
+    border-inline-end: var(--lt-border-width, 1px) solid var(--lt-border-subtle);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--lt-spacing-1);
+    padding-inline-end: var(--lt-spacing-3);
+  }
+
+  .preset-btn {
+    background: transparent;
+    border-radius: var(--lt-border-radius);
+    border: 1px solid transparent;
+    color: var(--lt-text-default);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    padding: var(--lt-spacing-1) var(--lt-spacing-2);
+    text-align: start;
+    transition:
+      background 100ms ease,
+      border-color 100ms ease;
+    white-space: nowrap;
+  }
+
+  .preset-btn:hover:not(:disabled) {
+    background: var(--lt-bg-neutral-subtle);
+    border-color: var(--lt-border-default);
+  }
+
+  .preset-btn:disabled {
+    color: var(--lt-text-disabled);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  /* Fixed, not flex: 1 — a flexed width would let the presets column eat into the day grid's own space (the
+     original bug report: "squishes the grid"). This stays the single-month card's natural 17.25rem regardless
+     of whether a presets sidebar sits beside it; .calendar--multi overrides it below, since a multi-month
+     .calendar-body needs to size to its month-panels instead of one fixed single-month width. */
+  .calendar-body {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--lt-spacing-2);
     width: 17.25rem;
   }
 
@@ -200,6 +262,10 @@ export const calendarStyles = css`
     background: transparent;
     border: 2px solid transparent;
     border-radius: 50%;
+    /* Without this, height/width below (--_circle-size) only set the content box, and the 2px border on each
+       edge renders the actual circle 4px larger than that — exactly the size the range-strip background below
+       is painted at, since it has no border of its own to inflate by. */
+    box-sizing: border-box;
     color: inherit;
     display: inline-flex;
     /* .day (its flex parent) can end up narrower than this circle's own fixed size once the week-number column
@@ -210,13 +276,13 @@ export const calendarStyles = css`
     flex-shrink: 0;
     font-size: inherit;
     font-weight: inherit;
-    height: 1.75rem;
+    height: var(--_circle-size);
     justify-content: center;
     transition:
       background 100ms ease,
       border-color 100ms ease,
       color 100ms ease;
-    width: 1.75rem;
+    width: var(--_circle-size);
   }
 
   .day:hover:not([aria-disabled='true']) .day__inner {
@@ -265,16 +331,23 @@ export const calendarStyles = css`
     opacity: 0.4;
   }
 
-  /* ── Range strips (on .day button = strip layer) ── */
+  /* ── Range strips (on .day button = strip layer) ──
+     Painted at --_circle-size, not .day's own (taller) height, and vertically centered — .day stays tall enough
+     for a comfortable click target, but the strip itself should only ever look as tall as the circle it
+     connects to. A plain background-color ignores background-size/-position entirely (they only apply to
+     background-image), so .day--in-range/.day--in-hover-range express their flat fill as a same-color-stop
+     gradient purely to make background-size apply to it too. */
 
   /* Start: transparent on left, strip on right */
   .day--range-left {
-    background: linear-gradient(to right, transparent 50%, var(--lt-bg-primary-subtle) 50%);
+    background: linear-gradient(to right, transparent 50%, var(--lt-bg-primary-subtle) 50%) center / 100%
+      var(--_circle-size) no-repeat;
   }
 
   /* End: strip on left, transparent on right */
   .day--range-right {
-    background: linear-gradient(to right, var(--lt-bg-primary-subtle) 50%, transparent 50%);
+    background: linear-gradient(to right, var(--lt-bg-primary-subtle) 50%, transparent 50%) center / 100%
+      var(--_circle-size) no-repeat;
   }
 
   /* Same-day start+end — no strip needed */
@@ -284,7 +357,8 @@ export const calendarStyles = css`
 
   /* Days between confirmed endpoints */
   .day--in-range {
-    background: var(--lt-bg-primary-subtle);
+    background: linear-gradient(var(--lt-bg-primary-subtle), var(--lt-bg-primary-subtle)) center / 100%
+      var(--_circle-size) no-repeat;
   }
 
   .day--in-range:hover:not([aria-disabled='true']) .day__inner {
@@ -293,7 +367,8 @@ export const calendarStyles = css`
 
   /* Days between hover preview endpoints */
   .day--in-hover-range {
-    background: var(--lt-bg-primary-subtle);
+    background: linear-gradient(var(--lt-bg-primary-subtle), var(--lt-bg-primary-subtle)) center / 100%
+      var(--_circle-size) no-repeat;
     opacity: 0.45;
   }
 
@@ -319,7 +394,9 @@ export const calendarStyles = css`
 
   /* ── Multi-month layout ── */
 
-  .calendar--multi {
+  /* .calendar-body's single-month fixed width (above) doesn't apply here — let it size to its month-panels
+     (one .month-col per visible month) instead of being clamped to one month's worth of width. */
+  .calendar--multi .calendar-body {
     width: auto;
   }
 
@@ -438,7 +515,8 @@ export const calendarStyles = css`
     .day,
     .day__inner,
     .picker-month-btn,
-    .today-btn {
+    .today-btn,
+    .preset-btn {
       transition: none;
     }
   }

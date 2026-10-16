@@ -13,11 +13,71 @@ import FrameworkTabs from '@site/src/components/FrameworkTabs';
 An always-visible date-selection grid. Supports single-date and date-range selection, locale-aware day and month
 names, a week start that follows `locale` by default (override with `week-start`), min/max constraints, and full
 keyboard navigation. Navigation itself is min/max-aware — the prev/next month and year controls (and the "Today"
-button) disable themselves once moving further would only reach a month with no selectable days left.
+button) disable themselves once moving further would only reach a month with no selectable days left. In range
+mode, `presets` adds a sidebar of quick-select buttons (e.g. "Last 7 days", "This month") for jumping straight to a
+common range.
 
 ## Playground
 
-<ComponentPlayground tag="lt-calendar" defaults={{ locale: 'en-US', 'show-outside-days': true, mode: 'single' }} />
+Switch **Mode** to `range` and turn on **Sample Presets** to try the `presets` sidebar — it's off by default (`presets`
+itself defaults to an empty array) and seeded here only when toggled on, since it takes callback functions that
+can't be expressed as an HTML attribute like the rest of this Playground's controls.
+
+<ComponentPlayground
+  tag="lt-calendar"
+  defaults={{ locale: 'en-US', 'show-outside-days': true, mode: 'single' }}
+  extraControls={[
+    {
+      name: 'presets',
+      label: 'Sample Presets',
+      apply: (el, value) => {
+        if (!value) {
+          el.presets = [];
+          return;
+        }
+        // Re-applied by the Playground on every control change, not just this toggle — reads el.locale fresh
+        // each time, so these labels stay in sync as the Locale field is edited. Intl.RelativeTimeFormat
+        // throws for a malformed locale (e.g. a transient mid-keystroke value), same class of error
+        // lt-calendar's own safeDateTimeFormat() guards against internally — fall back to en-US here too.
+        let rtf;
+        try {
+          rtf = new Intl.RelativeTimeFormat(el.locale, { numeric: 'auto' });
+        } catch {
+          rtf = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' });
+        }
+        const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+        el.presets = [
+          {
+            label: capitalize(rtf.format(0, 'day')),
+            getRange: () => {
+              const d = new Date();
+              return [d, d];
+            }
+          },
+          {
+            label: capitalize(rtf.format(-7, 'day')),
+            getRange: () => {
+              const end = new Date();
+              const start = new Date();
+              start.setDate(start.getDate() - 6);
+              return [start, end];
+            }
+          },
+          {
+            label: capitalize(rtf.format(0, 'month')),
+            getRange: () => {
+              const now = new Date();
+              return [
+                new Date(now.getFullYear(), now.getMonth(), 1),
+                new Date(now.getFullYear(), now.getMonth() + 1, 0)
+              ];
+            }
+          }
+        ];
+      }
+    }
+  ]}
+/>
 
 ## Usage
 
@@ -147,6 +207,32 @@ calendar.disabledDates = [new Date(2026, 5, 19)];
 
 // A rule — every weekend, in this example
 calendar.disabledDates = (date) => date.getDay() === 0 || date.getDay() === 6;
+```
+
+`presets` (a JS-only property, mode="range" only) adds a sidebar of quick-select range buttons. Each preset's
+`getRange()` is called fresh on every click, so a "Last 7 days"-style preset stays correct relative to today even if
+the calendar is left open across a day boundary:
+
+```js
+calendar.mode = 'range';
+calendar.presets = [
+  {
+    label: 'Last 7 days',
+    getRange: () => {
+      const end = new Date();
+      const start = new Date();
+      start.setDate(start.getDate() - 6);
+      return [start, end];
+    }
+  },
+  {
+    label: 'This month',
+    getRange: () => {
+      const now = new Date();
+      return [new Date(now.getFullYear(), now.getMonth(), 1), new Date(now.getFullYear(), now.getMonth() + 1, 0)];
+    }
+  }
+];
 ```
 
 ## API

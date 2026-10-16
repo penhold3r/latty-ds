@@ -7,6 +7,8 @@ interface Member {
   options?: string[];
   default?: unknown;
   description?: string;
+  /** Raw TS type text, `type: 'complex'` only — see ComponentPlayground.types.ts. */
+  valueType?: string;
 }
 
 interface Props {
@@ -17,6 +19,7 @@ const formatType = (member: Member): string => {
   if (member.type === 'select' && member.options) {
     return member.options.map((o) => `'${o}'`).join(' | ');
   }
+  if (member.type === 'complex') return member.valueType ?? member.type;
   return member.type;
 };
 

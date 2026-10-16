@@ -5,7 +5,7 @@ import manifest from '@latty-ds/web/manifest.json';
 import { defaultValue, toLabel, buildSubTagsData } from './ComponentPlayground.ssr';
 import { initPlayground } from './ComponentPlayground.script';
 import { prismThemeToCss } from './ComponentPlayground.prism';
-import type { PlaygroundMember, PlaygroundGroup } from './ComponentPlayground.types';
+import type { PlaygroundMember, PlaygroundGroup, PlaygroundExtraControl } from './ComponentPlayground.types';
 import './ComponentPlayground.styles.css';
 
 export interface ComponentPlaygroundProps {
@@ -28,6 +28,17 @@ export interface ComponentPlaygroundProps {
    */
   seedData?: Record<string, unknown>;
   /**
+   * Extra, non-attribute-driven boolean toggles rendered in the Controls panel, for a property whose value
+   * can't survive the normal attribute/JSON round-trip at all (e.g. an array containing callback functions,
+   * like `lt-calendar`'s `presets`) — `seedData` can't express that either, since it's serialized via
+   * `JSON.stringify` into a `data-*` attribute for SSR/hydration, which silently drops function values before
+   * they ever reach the client. Each toggle starts at `default` (false unless given) and calls `apply(el,
+   * value)` directly against the live previewed element — once on mount, and again every time it's flipped —
+   * instead of going through the generic attribute-driven state/code-generation pipeline the manifest-driven
+   * controls use, since there's no real attribute this could generate example code for either.
+   */
+  extraControls?: PlaygroundExtraControl[];
+  /**
    * If set, renders a button in the preview stage with this label.
    * Clicking it calls el.show() if available, otherwise sets el.open = true.
    */
@@ -48,6 +59,7 @@ export default function ComponentPlayground({
   subTags: subTagsProp = [],
   subTagsFilter: subTagsFilterProp = {},
   seedData = {},
+  extraControls = [],
   previewTrigger
 }: ComponentPlaygroundProps): JSX.Element {
   // useId (not Math.random(), as the Astro version used) so the id matches
@@ -70,7 +82,7 @@ export default function ComponentPlayground({
   const allCtrlGroups: PlaygroundGroup[] = [{ tag, members, defaults }, ...subTagsData];
 
   useEffect(() => {
-    if (rootRef.current) void initPlayground(rootRef.current);
+    if (rootRef.current) void initPlayground(rootRef.current, extraControls);
   }, []);
 
   // Same Prism theme (and light/dark switching) as the site's code blocks.
@@ -194,6 +206,10 @@ export default function ComponentPlayground({
                   </div>
                 );
 
+              // Not attribute-settable (array/object/function-typed JS-only property) — no interactive control
+              // to render; still appears in the API table via ApiTable, which reads the same manifest member.
+              if (member.type === 'complex') return null;
+
               if (member.type === 'color')
                 return (
                   <div key={key} className="control-row" style={rowStyle} data-ctrl-group={ctrlTag}>
@@ -231,6 +247,23 @@ export default function ComponentPlayground({
               );
             })
           )}
+
+          {extraControls.map((control) => {
+            const ctrlId = `${id}-extra-${control.name}`;
+            return (
+              <div key={control.name} className="control-row">
+                <label className="control-label" htmlFor={ctrlId}>
+                  {control.label}
+                </label>
+                <lt-switch
+                  id={ctrlId}
+                  size="sm"
+                  data-extra-control={control.name}
+                  checked={control.default ? '' : undefined}
+                />
+              </div>
+            );
+          })}
         </div>
 
         <div className="code-panel" style={getPrismCssVariables(prismTheme)}>

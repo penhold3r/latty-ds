@@ -4,7 +4,7 @@ import { ThemeableElement } from '../../base';
 import '@latty-ds/icons';
 
 import { calendarStyles } from './calendar.styles';
-import type { CalendarDay, CalendarMode, CalendarWeekStart, CalendarLabels } from './calendar.types';
+import type { CalendarDay, CalendarMode, CalendarWeekStart, CalendarLabels, CalendarPreset } from './calendar.types';
 import { dispatch } from '../../utils';
 
 const DEFAULT_LABELS: CalendarLabels = {
@@ -38,6 +38,22 @@ function deriveWeekStart(locale: string): CalendarWeekStart {
     // Invalid/unsupported locale string — Intl.Locale's constructor throws a RangeError for these.
   }
   return '0';
+}
+
+/**
+ * `Intl.DateTimeFormat`'s constructor throws a RangeError for a malformed or incomplete locale string — not just
+ * a programming mistake to guard against defensively, but a state `locale` can genuinely pass through for real:
+ * it's a plain reflected attribute, and e.g. the docs Playground's text control sets it live on every keystroke,
+ * so a user typing "es-US" character by character briefly has it set to "e-US", "es-", etc. Every render() call
+ * site below goes through this instead of constructing `Intl.DateTimeFormat` directly, falling back to the
+ * 'en-US' default rather than letting a transient bad value crash the whole component's render.
+ */
+function safeDateTimeFormat(locale: string, options: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
+  try {
+    return new Intl.DateTimeFormat(locale, options);
+  } catch {
+    return new Intl.DateTimeFormat('en-US', options);
+  }
 }
 
 /**
@@ -142,6 +158,14 @@ export class Calendar extends ThemeableElement {
 
   /** Overridable UI text (nav button labels, the "Today" footer button, the month/year picker toggle), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<CalendarLabels> = {};
+
+  /**
+   * Quick-select range buttons shown as a sidebar column (mode="range" only) — e.g. "Last 7 days", "This month".
+   * Each preset's own label text is supplied by the consumer, not through `labels`: unlike the rest of this
+   * component's UI text, presets have no fixed, enumerable set of i18n keys to override. Set as a JS property.
+   * @default []
+   */
+  @property({ attribute: false }) presets: CalendarPreset[] = [];
 
   private get _labels(): CalendarLabels {
     return { ...DEFAULT_LABELS, ...this.labels };
@@ -327,7 +351,7 @@ export class Calendar extends ThemeableElement {
 
   private _getWeekdayLabels(): string[] {
     const weekStart = Number(this._weekStart);
-    const fmt = new Intl.DateTimeFormat(this.locale, { weekday: 'narrow' });
+    const fmt = safeDateTimeFormat(this.locale, { weekday: 'narrow' });
     // Jan 4 2026 is a Sunday — use as reference
     const refSunday = new Date(2026, 0, 4);
     return Array.from({ length: 7 }, (_, i) => {
@@ -459,6 +483,16 @@ export class Calendar extends ThemeableElement {
     dispatch(this, 'change', { value: iso });
   }
 
+  private _selectPreset(preset: CalendarPreset) {
+    const [a, b] = preset.getRange();
+    const [start, end] = a <= b ? [a, b] : [b, a];
+    this.valueStart = this._toIso(start);
+    this.valueEnd = this._toIso(end);
+    this._hoverDate = null;
+    this._focusedDate = start;
+    dispatch(this, 'change', { valueStart: this.valueStart, valueEnd: this.valueEnd });
+  }
+
   private _goToToday() {
     const today = new Date();
     if (this._isMonthOutOfRange(today.getFullYear(), today.getMonth())) return;
@@ -469,7 +503,7 @@ export class Calendar extends ThemeableElement {
   }
 
   private _dayAriaLabel(date: Date): string {
-    return new Intl.DateTimeFormat(this.locale, {
+    return safeDateTimeFormat(this.locale, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -695,63 +729,85 @@ export class Calendar extends ThemeableElement {
       </div>
     `;
 
+    const hasPresets = this.mode === 'range' && this.presets.length > 0;
+    const presetsPanel = hasPresets
+      ? html`
+          <div class="presets">
+            ${this.presets.map(
+              (preset) => html`
+                <button class="preset-btn" ?disabled=${this.disabled} @click=${() => this._selectPreset(preset)}>
+                  ${preset.label}
+                </button>
+              `
+            )}
+          </div>
+        `
+      : nothing;
+
     // ── Multi-month layout ──────────────────────────────────────────────
     if (isMulti) {
       const panelLabels = Array.from({ length: this.months }, (_, i) => {
         const { year, month } = this._monthAtOffset(i);
-        return new Intl.DateTimeFormat(this.locale, { month: 'long', year: 'numeric' }).format(new Date(year, month));
+        return safeDateTimeFormat(this.locale, { month: 'long', year: 'numeric' }).format(new Date(year, month));
       });
 
       return html`
-        <div class="calendar calendar--multi" part="base" @keydown=${this._handleCalendarKeyDown}>
-          <div class="header">
-            <button
-              class="nav-btn"
-              aria-label=${this._labels.previousMonth}
-              ?disabled=${this.disabled || !this._canNavigateMonth(-1)}
-              @click=${() => this._navigate(-1)}
-            >
-              <lt-icon name="arrow-left" size="sm"></lt-icon>
-            </button>
-            <div class="month-label-row">
-              ${panelLabels.map(
-                (label, i) =>
-                  html`<span class="month-label" aria-live=${i === 0 ? 'polite' : 'off'} aria-atomic="true"
-                    >${label}</span
-                  >`
+        <div
+          class="calendar calendar--multi ${hasPresets ? 'calendar--with-presets' : ''}"
+          part="base"
+          @keydown=${this._handleCalendarKeyDown}
+        >
+          ${presetsPanel}
+          <div class="calendar-body">
+            <div class="header">
+              <button
+                class="nav-btn"
+                aria-label=${this._labels.previousMonth}
+                ?disabled=${this.disabled || !this._canNavigateMonth(-1)}
+                @click=${() => this._navigate(-1)}
+              >
+                <lt-icon name="arrow-left" size="sm"></lt-icon>
+              </button>
+              <div class="month-label-row">
+                ${panelLabels.map(
+                  (label, i) =>
+                    html`<span class="month-label" aria-live=${i === 0 ? 'polite' : 'off'} aria-atomic="true"
+                      >${label}</span
+                    >`
+                )}
+              </div>
+              <button
+                class="nav-btn"
+                aria-label=${this._labels.nextMonth}
+                ?disabled=${this.disabled || !this._canNavigateMonth(1)}
+                @click=${() => this._navigate(1)}
+              >
+                <lt-icon name="arrow-right" size="sm"></lt-icon>
+              </button>
+            </div>
+            <div class="month-panels">
+              ${Array.from(
+                { length: this.months },
+                (_, i) => html`
+                  <div class="month-col">
+                    ${this._renderMonthGrid(
+                      this._monthAtOffset(i).year,
+                      this._monthAtOffset(i).month,
+                      panelLabels[i],
+                      rovingDate
+                    )}
+                  </div>
+                `
               )}
             </div>
-            <button
-              class="nav-btn"
-              aria-label=${this._labels.nextMonth}
-              ?disabled=${this.disabled || !this._canNavigateMonth(1)}
-              @click=${() => this._navigate(1)}
-            >
-              <lt-icon name="arrow-right" size="sm"></lt-icon>
-            </button>
+            ${footer}
           </div>
-          <div class="month-panels">
-            ${Array.from(
-              { length: this.months },
-              (_, i) => html`
-                <div class="month-col">
-                  ${this._renderMonthGrid(
-                    this._monthAtOffset(i).year,
-                    this._monthAtOffset(i).month,
-                    panelLabels[i],
-                    rovingDate
-                  )}
-                </div>
-              `
-            )}
-          </div>
-          ${footer}
         </div>
       `;
     }
 
     // ── Single-month layout ─────────────────────────────────────────────
-    const monthLabel = new Intl.DateTimeFormat(this.locale, { month: 'long', year: 'numeric' }).format(
+    const monthLabel = safeDateTimeFormat(this.locale, { month: 'long', year: 'numeric' }).format(
       new Date(this._viewYear, this._viewMonth)
     );
     const prevLabel = this._pickingMonthYear ? this._labels.previousYear : this._labels.previousMonth;
@@ -797,9 +853,7 @@ export class Calendar extends ThemeableElement {
       ? html`
           <div class="picker-months">
             ${Array.from({ length: 12 }, (_, i) => {
-              const label = new Intl.DateTimeFormat(this.locale, { month: 'short' }).format(
-                new Date(this._pickerYear, i)
-              );
+              const label = safeDateTimeFormat(this.locale, { month: 'short' }).format(new Date(this._pickerYear, i));
               const isCurrent = i === this._viewMonth && this._pickerYear === this._viewYear;
               return html`
                 <button
@@ -816,7 +870,14 @@ export class Calendar extends ThemeableElement {
       : this._renderMonthGrid(this._viewYear, this._viewMonth, monthLabel, rovingDate);
 
     return html`
-      <div class="calendar" part="base" @keydown=${this._handleCalendarKeyDown}>${header} ${pickerBody} ${footer}</div>
+      <div
+        class="calendar ${hasPresets ? 'calendar--with-presets' : ''}"
+        part="base"
+        @keydown=${this._handleCalendarKeyDown}
+      >
+        ${presetsPanel}
+        <div class="calendar-body">${header} ${pickerBody} ${footer}</div>
+      </div>
     `;
   }
 }

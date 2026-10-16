@@ -113,7 +113,12 @@ function toMember(field, componentDir) {
     return { name, description, type: 'text', default: parseDefault(rawDefault) ?? '' };
   }
 
-  // Unknown / complex type (arrays, objects, Element refs) → skip
+  // Unknown / complex type (arrays, objects, Element refs, functions) — not representable as an HTML attribute,
+  // so the Playground can't render an interactive control for it (ComponentPlayground skips `type: 'complex'`
+  // entirely rather than rendering a text input that would silently do nothing when edited). Still surfaced as
+  // an informational row in the API table, with the real JS property name (not the kebab-case attribute-name
+  // conversion `toAttrName` would otherwise produce, since no attribute exists for it) and its actual TS type
+  // text — previously this branch returned null and the property vanished from the generated docs entirely.
   if (
     typeText.includes('[]') ||
     typeText.includes('{') ||
@@ -124,7 +129,7 @@ function toMember(field, componentDir) {
     typeText.includes('Map') ||
     typeText.includes('HTMLElement')
   ) {
-    return null;
+    return { name: propName, description, type: 'complex', valueType: typeText, default: parseDefault(rawDefault) };
   }
 
   // Strip `| ''` / `'' |` suffixes that just represent an "unset" sentinel, and `| undefined` from an optional
