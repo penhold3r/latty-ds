@@ -11,7 +11,10 @@ import FrameworkTabs from '@site/src/components/FrameworkTabs';
 # Textfield
 
 A text input supporting multiple types (text, email, password, multiline), validation variants, icons, and helper
-text. Password type includes an automatic visibility toggle.
+text. Password type includes an automatic visibility toggle. `prefix`/`suffix` add a plain text label (e.g. a
+currency symbol or unit) inside the field's own border — deliberately strings, not slots, so they can't vary in
+size enough to break the field's layout. `autosize` (multiline only) grows the field to fit its content as you
+type, instead of a fixed-height box with a manual resize handle.
 
 ## Playground
 
@@ -33,9 +36,23 @@ text. Password type includes an automatic visibility toggle.
   type="multiline"
   placeholder="Tell us about yourself..."></lt-textfield>
 
+<!-- Autosize: grows with content instead of a fixed height + manual resize handle -->
+
+<lt-textfield label="Message" type="multiline" autosize placeholder="Type a message..."></lt-textfield>
+
 <!-- Clear button, and a character count against the native max length -->
 
 <lt-textfield label="Nickname" clearable counter max="20"></lt-textfield>
+
+<!-- Keyboard/autofill hints: a numeric keypad on touch devices, and a browser-suggested one-time code -->
+
+<lt-textfield label="Verification code" input-mode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}"></lt-textfield>
+
+<!-- prefix/suffix — plain text labels inside the field's own border -->
+
+<lt-textfield label="Price" type="number" prefix="$" value="100"></lt-textfield>
+
+<lt-textfield label="Weight" type="number" suffix="kg" value="72"></lt-textfield>
 `}
     react={`
 import { Textfield } from '@latty-ds/react';
@@ -45,8 +62,24 @@ import { Textfield } from '@latty-ds/react';
 <Textfield label="Password" type="password" helperText="Minimum 8 characters" />
 
 <Textfield label="Bio" type="multiline" placeholder="Tell us about yourself..." />
+
+// Autosize: grows with content instead of a fixed height + manual resize handle
+
+<Textfield label="Message" type="multiline" autosize placeholder="Type a message..." />
+
 // Clear button, and a character count against the native max length
+
 <Textfield label="Nickname" clearable counter max={20} />
+
+// Keyboard/autofill hints: a numeric keypad on touch devices, and a browser-suggested one-time code
+
+<Textfield label="Verification code" inputMode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" />
+
+// prefix/suffix — plain text labels inside the field's own border
+
+<Textfield label="Price" type="number" prefix="$" value="100" />
+
+<Textfield label="Weight" type="number" suffix="kg" value="72" />
 
     `}
     vue={`
@@ -63,6 +96,24 @@ import { Textfield } from '@latty-ds/react';
     label="Bio"
     type="multiline"
     placeholder="Tell us about yourself..."></lt-textfield>
+
+  <!-- Autosize: grows with content instead of a fixed height + manual resize handle -->
+
+<lt-textfield label="Message" type="multiline" autosize placeholder="Type a message..."></lt-textfield>
+
+  <!-- Keyboard/autofill hints: a numeric keypad on touch devices, and a browser-suggested one-time code -->
+
+<lt-textfield
+    label="Verification code"
+    input-mode="numeric"
+    autocomplete="one-time-code"
+    pattern="[0-9]{6}"></lt-textfield>
+
+  <!-- prefix/suffix — plain text labels inside the field's own border -->
+
+<lt-textfield label="Price" type="number" prefix="$" value="100"></lt-textfield>
+
+<lt-textfield label="Weight" type="number" suffix="kg" value="72"></lt-textfield>
 
 </template>
     `}

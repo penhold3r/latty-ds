@@ -16,11 +16,17 @@ export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onCh
   readonly?: boolean;
   iconStart?: LattyIconName;
   rows?: number;
+  autosize?: boolean;
   min?: TextfieldEl['min'];
   max?: TextfieldEl['max'];
   uppercase?: boolean;
   clearable?: boolean;
   counter?: boolean;
+  autocomplete?: string;
+  inputMode?: TextfieldEl['inputMode'];
+  pattern?: string;
+  prefix?: string;
+  suffix?: string;
   labels?: TextfieldEl['labels'];
   onInput?: (event: CustomEvent<{ value: string }>) => void;
   onChange?: (event: CustomEvent<{ value: string }>) => void;

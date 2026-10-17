@@ -5,7 +5,14 @@ import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { textfieldStyles } from './textfield.styles';
-import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant, type TextfieldLabels } from './textfield.types';
+import {
+  HelperText,
+  TextfieldInputMode,
+  TextfieldSize,
+  TextfieldType,
+  TextfieldVariant,
+  type TextfieldLabels
+} from './textfield.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 import { toValidityFlags } from '../shared/form-validity';
@@ -157,11 +164,21 @@ export class Textfield extends ThemeableElement {
   @property({ attribute: 'icon-start' }) iconStart = '';
 
   /**
-   * Number of visible text lines for multiline type (textarea).
+   * Number of visible text lines for multiline type (textarea). Also the minimum height while `autosize` is
+   * set — autosize only ever grows the textarea beyond this, never shrinks it below.
    * Only applies when type="multiline".
    * @default 3
    */
   @property({ type: Number }) rows = 3;
+
+  /**
+   * Grows the textarea's height to fit its content as the user types, instead of a fixed `rows`-tall box with a
+   * manual resize handle (which this disables, since a manual drag would just get overwritten by the next
+   * keystroke's auto-grow). Unbounded — there's currently no built-in way to cap the grown height. Only applies
+   * when `type="multiline"`.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) autosize = false;
 
   /**
    * For type="number": minimum allowed value.
@@ -183,13 +200,59 @@ export class Textfield extends ThemeableElement {
    */
   @property({ type: Boolean, reflect: true }) uppercase = false;
 
-  /** Overridable UI text (format validation message, password-toggle button labels), for i18n. English defaults — override only the keys you need. */
   /** Shows a clear button while the field has a value. Not shown for password fields, which have their own toggle. */
   @property({ type: Boolean, reflect: true }) clearable = false;
 
   /** Shows the character count as `length / max` below the field. Uses `max` as the limit, which is also enforced natively. */
   @property({ type: Boolean, reflect: true }) counter = false;
 
+  /**
+   * Native `autocomplete` hint (e.g. `'email'`, `'current-password'`, `'off'`), forwarded as-is to the inner
+   * `<input>`/`<textarea>`. Not validated or enumerated here — see the HTML spec for the full token list.
+   * @default ''
+   */
+  @property({ reflect: true }) autocomplete = '';
+
+  /**
+   * Hints the on-screen keyboard a touch device should show, forwarded as the native `inputmode` attribute on
+   * the inner `<input>`/`<textarea>`. The host's own attribute is kebab-case (`input-mode`), matching this
+   * codebase's convention for every other multi-word attribute — not `inputmode`, despite that being this
+   * property's native HTML spelling: the docs manifest generator derives a component's attribute name from its
+   * property name via a kebab-case guess (it has no way to read an explicit `attribute:` override), so diverging
+   * from kebab-case here would silently desync the Playground/API-table's idea of this prop's attribute from
+   * the real one. Typed `| ''`, not optional — `HTMLElement` already declares its own `inputMode: string` (a
+   * real DOM property every element has), so this has to stay assignable to that rather than `string | undefined`.
+   * @default ''
+   */
+  @property({ reflect: true, attribute: 'input-mode' }) inputMode: TextfieldInputMode | '' = '';
+
+  /**
+   * Native regex the value must match, forwarded as-is to the inner `<input>`. No effect on `type="multiline"`
+   * (textarea) or `type="number"` — `pattern` isn't a valid attribute on either in HTML.
+   * @default ''
+   */
+  @property({ reflect: true }) pattern = '';
+
+  /**
+   * Plain text shown before the input, inside the field's own border (e.g. a currency symbol). Deliberately a
+   * string, not a slot — arbitrary slotted markup could vary in height/width enough to break the field's fixed
+   * row layout, which a plain text label can't. Rendered via an explicit `String()` coercion rather than
+   * interpolated directly, so a consumer bypassing the type system (plain JS, an `as any` cast) and assigning a
+   * real DOM node can't get it inserted live either — Lit's child-position bindings accept any `Node` value and
+   * insert it as-is, not just strings. No effect on `type="multiline"`, the same way `pattern` has none there —
+   * prepending a short label in front of a multi-line paragraph doesn't read as a unit/symbol the way it does
+   * for a single value.
+   * @default ''
+   */
+  @property({ reflect: true }) prefix = '';
+
+  /** Plain text shown after the input, inside the field's own border (e.g. a unit like "kg"). Same reasoning
+   * and `type="multiline"` exception as `prefix`.
+   * @default ''
+   */
+  @property({ reflect: true }) suffix = '';
+
+  /** Overridable UI text (format validation message, password-toggle button labels), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<TextfieldLabels> = {};
 
   private get _labels(): TextfieldLabels {
@@ -246,6 +309,13 @@ export class Textfield extends ThemeableElement {
     const input = e.target as HTMLInputElement | HTMLTextAreaElement;
     this.value = input.value;
     if (this._touched) this._autoError = !this._validate();
+    // Called directly here, not left to the updated() hook alone (which also calls it, for the "value changed
+    // from outside typing" case below) — Lit's own update cycle is asynchronous, so waiting for it would show a
+    // one-frame-or-more lag between a keystroke and the textarea actually growing. Calling it synchronously,
+    // right where the native element's own content (and so its real scrollHeight) just changed, keeps it
+    // feeling instant. The resulting double call from updated() afterwards is a cheap, idempotent no-op, not a
+    // correctness issue — not worth a skip-next-call flag to avoid.
+    if (this.autosize && this.type === 'multiline') this._resizeTextarea(input as HTMLTextAreaElement);
     this.dispatchEvent(
       new CustomEvent('input', {
         detail: { value: this.value },
@@ -253,6 +323,17 @@ export class Textfield extends ThemeableElement {
         composed: true
       })
     );
+  }
+
+  /**
+   * Grows `textarea` to fit its current content, for `autosize`. Collapsing to `height: auto` first (rather than
+   * reading `scrollHeight` against whatever height is already set) is required for the textarea to ever shrink
+   * back down, not just grow — `scrollHeight` on an element with an explicit fixed height reports at least that
+   * height regardless of how little content is actually in it.
+   */
+  private _resizeTextarea(textarea: HTMLTextAreaElement) {
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
   }
 
   /**
@@ -350,6 +431,17 @@ export class Textfield extends ThemeableElement {
       | HTMLTextAreaElement
       | null;
     if (!inner) return;
+    // Covers every autosize-relevant change NOT already handled by handleInput()'s own direct call: the initial
+    // render with a pre-filled value, and value/rows/autosize changed from outside the user's own typing (e.g. a
+    // consumer sets `el.value` programmatically). No ResizeObserver, no guessed-at `changed.has(...)` gating on
+    // specific props — just unconditionally re-measure on every update while autosize+multiline are both active,
+    // since the call itself is cheap and idempotent; when either is off, clear any leftover inline height
+    // instead, so toggling autosize off restores plain CSS-driven sizing rather than leaving it stuck at
+    // whatever height it last grew to.
+    if (this.type === 'multiline') {
+      if (this.autosize) this._resizeTextarea(inner as HTMLTextAreaElement);
+      else inner.style.height = '';
+    }
     // The native `type`/`min`/`max`/`minlength`/`maxlength`/`required` attributes are already forwarded onto
     // the inner control (TFD-3), so its own `validity` already covers valueMissing, typeMismatch (email/url),
     // rangeUnderflow/Overflow (number), and tooShort/tooLong for free — mirror that first. `_validate()`'s extra
@@ -394,6 +486,8 @@ export class Textfield extends ThemeableElement {
     const endIconName = this.getEndIconName();
     const showClear = this._showClear;
     const hasEndIcon = Boolean(endIconName) || showClear;
+    const hasPrefix = !isMultiline && Boolean(this.prefix);
+    const hasSuffix = !isMultiline && Boolean(this.suffix);
     const actualInputType = isPasswordField && this.isPasswordVisible ? 'text' : this.type;
     const isInvalid = this._autoError || this.variant === 'error';
     const resolvedHelperText = typeof this.helperText === 'function' ? this.helperText(isInvalid) : this.helperText;
@@ -412,8 +506,9 @@ export class Textfield extends ThemeableElement {
               </label>
             `
           : ''}
-        <div class="input-container">
+        <div class=${classMap({ 'input-container': true, 'has-start-icon': hasStartIcon, 'has-end-icon': hasEndIcon })}>
           ${hasStartIcon ? html`<lt-icon class="icon-start" name=${this.iconStart}></lt-icon>` : ''}
+          ${hasPrefix ? html`<span class="prefix">${String(this.prefix)}</span>` : ''}
           ${isMultiline
             ? html`
                 <textarea
@@ -424,6 +519,8 @@ export class Textfield extends ThemeableElement {
                   rows=${this.rows}
                   minlength=${ifDefined(this.min !== null ? this.min : undefined)}
                   maxlength=${ifDefined(this.max !== null ? this.max : undefined)}
+                  autocomplete=${ifDefined(this.autocomplete || undefined)}
+                  inputmode=${ifDefined(this.inputMode || undefined)}
                   ?disabled=${this._isDisabled}
                   ?required=${this.required}
                   ?readonly=${this.readonly}
@@ -433,7 +530,11 @@ export class Textfield extends ThemeableElement {
                   aria-label=${ifDefined(ariaLabel)}
                   aria-invalid=${isInvalid ? 'true' : 'false'}
                   aria-describedby=${resolvedHelperText ? this._helperId : nothing}
-                  class=${classMap({ 'has-start-icon': hasStartIcon, 'has-end-icon': hasEndIcon })}
+                  class=${classMap({
+                    'has-start-icon': hasStartIcon,
+                    'has-end-icon': hasEndIcon,
+                    autosize: this.autosize
+                  })}
                 ></textarea>
               `
             : html`
@@ -447,6 +548,9 @@ export class Textfield extends ThemeableElement {
                   max=${ifDefined(isNumber && this.max !== null ? this.max : undefined)}
                   minlength=${ifDefined(!isNumber && this.min !== null ? this.min : undefined)}
                   maxlength=${ifDefined(!isNumber && this.max !== null ? this.max : undefined)}
+                  autocomplete=${ifDefined(this.autocomplete || undefined)}
+                  inputmode=${ifDefined(this.inputMode || undefined)}
+                  pattern=${ifDefined(!isNumber && this.pattern ? this.pattern : undefined)}
                   ?disabled=${this._isDisabled}
                   ?required=${this.required}
                   ?readonly=${this.readonly}
@@ -457,9 +561,10 @@ export class Textfield extends ThemeableElement {
                   aria-label=${ifDefined(ariaLabel)}
                   aria-invalid=${isInvalid ? 'true' : 'false'}
                   aria-describedby=${resolvedHelperText ? this._helperId : nothing}
-                  class=${classMap({ 'has-start-icon': hasStartIcon, 'has-end-icon': hasEndIcon })}
+                  class="field"
                 />
               `}
+          ${hasSuffix ? html`<span class="suffix">${String(this.suffix)}</span>` : ''}
           ${showClear
             ? html`<button
                 type="button"

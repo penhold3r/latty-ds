@@ -674,11 +674,11 @@ describe('<lt-textfield>', () => {
       expect(icon).toBeFalsy();
     });
 
-    it('adds has-start-icon class to input', async () => {
+    it('adds has-start-icon class to .input-container, the box the icon is absolutely positioned within', async () => {
       el.iconStart = 'search';
       await el.updateComplete;
-      const input = el.shadowRoot!.querySelector('input');
-      expect(input?.classList.contains('has-start-icon')).toBe(true);
+      const container = el.shadowRoot!.querySelector('.input-container');
+      expect(container?.classList.contains('has-start-icon')).toBe(true);
     });
   });
 
@@ -1053,29 +1053,32 @@ describe('<lt-textfield>', () => {
   });
 
   describe('end icon', () => {
-    const input = () => el.shadowRoot!.querySelector('input')!;
+    // has-start-icon/has-end-icon live on .input-container for the single-line case (the box the icon is
+    // absolutely positioned within, and — since prefix/suffix — the element with the field's own border/
+    // background/focus ring), not on the <input> itself; still on <textarea> directly for the multiline case.
+    const container = () => el.shadowRoot!.querySelector('.input-container')!;
 
     it('gets room for the password toggle so typed text cannot run under it', async () => {
       el.type = 'password';
       await el.updateComplete;
-      expect(input().classList.contains('has-end-icon')).toBe(true);
+      expect(container().classList.contains('has-end-icon')).toBe(true);
     });
 
     it.each(['success', 'warning', 'error'] as const)('gets room for the %s status icon', async (variant) => {
       el.variant = variant;
       await el.updateComplete;
-      expect(input().classList.contains('has-end-icon')).toBe(true);
+      expect(container().classList.contains('has-end-icon')).toBe(true);
     });
 
     it('has no end-icon padding when there is no end icon', async () => {
-      expect(input().classList.contains('has-end-icon')).toBe(false);
+      expect(container().classList.contains('has-end-icon')).toBe(false);
     });
 
     it('marks both sides when there is a start icon and an end icon, and the textarea too', async () => {
       el.iconStart = 'search';
       el.variant = 'error';
       await el.updateComplete;
-      expect([...input().classList].sort()).toEqual(['has-end-icon', 'has-start-icon']);
+      expect([...container().classList].sort()).toEqual(['has-end-icon', 'has-start-icon', 'input-container']);
 
       el.type = 'multiline';
       await el.updateComplete;
@@ -1174,5 +1177,251 @@ describe('clearable and counter', () => {
     el.max = null;
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('.counter')).toBeNull();
+  });
+});
+
+describe('autocomplete / inputmode / pattern', () => {
+  let el: Textfield;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-textfield') as Textfield;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('forwards autocomplete to the input', async () => {
+    el.autocomplete = 'email';
+    await el.updateComplete;
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.getAttribute('autocomplete')).toBe('email');
+  });
+
+  it('omits autocomplete from the input when unset', async () => {
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.hasAttribute('autocomplete')).toBe(false);
+  });
+
+  it('forwards autocomplete to the textarea', async () => {
+    el.type = 'multiline';
+    el.autocomplete = 'street-address';
+    await el.updateComplete;
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    expect(textarea.getAttribute('autocomplete')).toBe('street-address');
+  });
+
+  it('forwards inputmode to the input', async () => {
+    el.inputMode = 'numeric';
+    await el.updateComplete;
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.getAttribute('inputmode')).toBe('numeric');
+  });
+
+  // The host's own reflected attribute is kebab-case (input-mode), not inputmode — despite inputmode being this
+  // property's native HTML spelling (forwarded as-is to the inner control above). The docs manifest generator
+  // has no way to read an explicit Lit `attribute:` override; it derives a component's attribute name from its
+  // property name via a kebab-case guess, so this property's own host attribute has to follow that convention
+  // or the Playground/API table silently desync from the real attribute (confirmed live: the Playground's
+  // generated "input-mode" control set an attribute the component never declared, leaving the real `inputmode`
+  // attribute always empty).
+  it('reflects as the kebab-case input-mode attribute on the host, not inputmode', async () => {
+    el.inputMode = 'numeric';
+    await el.updateComplete;
+    expect(el.getAttribute('input-mode')).toBe('numeric');
+    expect(el.hasAttribute('inputmode')).toBe(false);
+  });
+
+  it('omits inputmode from the input when unset', async () => {
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.hasAttribute('inputmode')).toBe(false);
+  });
+
+  it('forwards inputmode to the textarea', async () => {
+    el.type = 'multiline';
+    el.inputMode = 'decimal';
+    await el.updateComplete;
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    expect(textarea.getAttribute('inputmode')).toBe('decimal');
+  });
+
+  it('forwards pattern to the input', async () => {
+    el.pattern = '[0-9]{3}';
+    await el.updateComplete;
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.getAttribute('pattern')).toBe('[0-9]{3}');
+  });
+
+  it('omits pattern from the input when unset', async () => {
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.hasAttribute('pattern')).toBe(false);
+  });
+
+  it('omits pattern on type="number" — not a valid attribute there', async () => {
+    el.type = 'number';
+    el.pattern = '[0-9]{3}';
+    await el.updateComplete;
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.hasAttribute('pattern')).toBe(false);
+  });
+
+  it('never renders pattern on the textarea — not a valid attribute there', async () => {
+    el.type = 'multiline';
+    el.pattern = '[0-9]{3}';
+    await el.updateComplete;
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    expect(textarea.hasAttribute('pattern')).toBe(false);
+  });
+});
+
+describe('prefix / suffix', () => {
+  let el: Textfield;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-textfield') as Textfield;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('renders no prefix/suffix span when unset', () => {
+    expect(el.shadowRoot!.querySelector('.prefix')).toBeNull();
+    expect(el.shadowRoot!.querySelector('.suffix')).toBeNull();
+  });
+
+  it('renders the prefix text before the input', async () => {
+    el.prefix = '$';
+    await el.updateComplete;
+    const prefix = el.shadowRoot!.querySelector('.prefix');
+    expect(prefix?.textContent?.trim()).toBe('$');
+    // Before the input in document order, so it renders to its visual start in the flex row.
+    const container = el.shadowRoot!.querySelector('.input-container')!;
+    const children = Array.from(container.children).map((c) => c.tagName.toLowerCase());
+    expect(children.indexOf('span')).toBeLessThan(children.indexOf('input'));
+  });
+
+  it('renders the suffix text after the input', async () => {
+    el.suffix = 'kg';
+    await el.updateComplete;
+    const suffix = el.shadowRoot!.querySelector('.suffix');
+    expect(suffix?.textContent?.trim()).toBe('kg');
+    const container = el.shadowRoot!.querySelector('.input-container')!;
+    const children = Array.from(container.children).map((c) => c.tagName.toLowerCase());
+    expect(children.indexOf('span')).toBeGreaterThan(children.indexOf('input'));
+  });
+
+  it('renders no prefix/suffix span on type="multiline", even if set — not supported there', async () => {
+    el.type = 'multiline';
+    el.prefix = '$';
+    el.suffix = 'kg';
+    await el.updateComplete;
+    expect(el.shadowRoot!.querySelector('.prefix')).toBeNull();
+    expect(el.shadowRoot!.querySelector('.suffix')).toBeNull();
+  });
+
+  // Lit's child-position template bindings accept a real DOM Node and insert it live, not just a string — so a
+  // consumer bypassing the type system (plain JS, an `as any` cast) and assigning an actual element could get it
+  // rendered for real if the template interpolated `this.prefix` directly. Explicitly coerced via `String()` to
+  // close that off; confirmed here by actually assigning a Node, not just asserting the TS type disallows it.
+  it('cannot have a real DOM node rendered via the property, even bypassing the type system', async () => {
+    const node = document.createElement('span');
+    node.textContent = 'malicious';
+    // @ts-expect-error — deliberately testing a consumer passing the wrong type
+    el.prefix = node;
+    await el.updateComplete;
+    const prefix = el.shadowRoot!.querySelector('.prefix')!;
+    expect(prefix.contains(node)).toBe(false);
+    expect(prefix.children.length).toBe(0);
+  });
+});
+
+describe('autosize', () => {
+  let el: Textfield;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-textfield') as Textfield;
+    el.type = 'multiline';
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('reflects as an attribute', async () => {
+    el.autosize = true;
+    await el.updateComplete;
+    expect(el.hasAttribute('autosize')).toBe(true);
+  });
+
+  it('adds the autosize class to the textarea when set', async () => {
+    el.autosize = true;
+    await el.updateComplete;
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    expect(textarea.classList.contains('autosize')).toBe(true);
+  });
+
+  it('does not add the autosize class when unset', async () => {
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    expect(textarea.classList.contains('autosize')).toBe(false);
+  });
+
+  // jsdom has no real layout engine — scrollHeight always reads 0 (no actual grown pixel height to assert,
+  // that needs live-browser verification, same class of gap as every other CSS-driven feature in this
+  // codebase). What's verifiable here is that the resize code path actually runs — reads scrollHeight, writes
+  // it back as an inline height — at the right times, not just that the CSS class is present.
+  it('re-measures height on input when autosize is set', async () => {
+    // updated() already resizes once as soon as autosize turns on (see its own test below) — reset the inline
+    // height to prove handleInput() independently re-triggers the same resize, not just that it happens to
+    // already be set from that earlier call.
+    el.autosize = true;
+    await el.updateComplete;
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    textarea.style.height = '';
+    textarea.value = 'some text';
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(textarea.style.height).toBe('0px'); // jsdom's own scrollHeight (always 0), not a real measurement
+  });
+
+  it('does not touch height on input when autosize is unset', async () => {
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    textarea.value = 'some text';
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    await el.updateComplete;
+    expect(textarea.style.height).toBe('');
+  });
+
+  it('re-measures when value is set from outside typing (the updated() path, not handleInput())', async () => {
+    el.autosize = true;
+    await el.updateComplete;
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    el.value = 'programmatically set';
+    await el.updateComplete;
+    expect(textarea.style.height).toBe('0px');
+  });
+
+  it('clears any leftover inline height when autosize is turned back off', async () => {
+    el.autosize = true;
+    await el.updateComplete;
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    expect(textarea.style.height).toBe('0px');
+    el.autosize = false;
+    await el.updateComplete;
+    expect(textarea.style.height).toBe('');
+  });
+
+  it('has no effect on type !== multiline — no autosize class, no resize attempt', async () => {
+    el.type = 'text';
+    el.autosize = true;
+    await el.updateComplete;
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.classList.contains('autosize')).toBe(false);
+    expect(input.style.height).toBe('');
   });
 });

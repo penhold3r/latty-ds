@@ -42,6 +42,12 @@ export type TextfieldType = 'text' | 'email' | 'password' | 'tel' | 'url' | 'num
  */
 export type HelperText = string | ((error: boolean) => string);
 
+/**
+ * Hints the on-screen keyboard a touch device should show. Forwarded as-is to the inner `<input>`/`<textarea>`.
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inputmode
+ */
+export type TextfieldInputMode = 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url';
+
 /** Overridable UI text for `lt-textfield`, for i18n. */
 export interface TextfieldLabels {
   /** Validation message shown when the value fails a format rule HTML has no native constraint for (e.g. `tel`). */
