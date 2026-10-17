@@ -50,6 +50,17 @@ describe('<lt-table>', () => {
     expect(table).toBeTruthy();
   });
 
+  // WCAG 2.1.1 — .table-container is horizontally scrollable (overflow-x: auto) whenever the table is wider
+  // than its available space, which can happen even with no other focusable element inside the table at all
+  // (e.g. no sortable columns, no row-selection controls) — without this, a keyboard user would have no way to
+  // reach the overflowed content at all. Found live via axe's scrollable-region-focusable rule failing on a
+  // docs page whose API table happened to be wide enough to overflow, not from reasoning about the component
+  // in isolation.
+  it('makes .table-container keyboard-focusable, so a horizontally overflowing table stays reachable', () => {
+    const container = el.shadowRoot!.querySelector('.table-container');
+    expect(container?.getAttribute('tabindex')).toBe('0');
+  });
+
   it('renders header with correct columns', () => {
     const headers = el.shadowRoot!.querySelectorAll('th');
     expect(headers.length).toBe(3);

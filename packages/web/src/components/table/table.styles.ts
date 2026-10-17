@@ -15,6 +15,14 @@ export const tableStyles = css`
     width: 100%;
   }
 
+  /* tabindex="0" on .table-container (WCAG 2.1.1 — a scrollable region must be keyboard-reachable even when
+     nothing else inside it is focusable, e.g. a table with no interactive cells) needs its own visible focus
+     indicator, same as any other focusable element in this codebase. */
+  .table-container:focus-visible {
+    outline: 2px solid var(--lt-border-focus);
+    outline-offset: -2px;
+  }
+
   :host([responsive-mode='scroll']) .table-container {
     -webkit-overflow-scrolling: touch;
   }

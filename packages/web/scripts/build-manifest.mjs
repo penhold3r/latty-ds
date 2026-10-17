@@ -13,6 +13,7 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import ts from 'typescript';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
@@ -41,6 +42,68 @@ function resolveUnion(typeName, componentDir) {
   const match = src.match(new RegExp(`export type ${escaped}\\s*=\\s*([^;]+);`));
   if (!match) return null;
   return [...match[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
+}
+
+/**
+ * Pulls a property's leading `/** ... *\/` JSDoc apart into its plain-prose description and any `@tag value`
+ * lines (only `@default` is used today, by `resolveInterfaceShape()` below) — the real TS compiler AST, not
+ * regex, since a JSDoc block can span multiple lines and a property's own type can be an arbitrarily complex
+ * function signature (`(row: T, index: number) => string`), both of which are exactly the kind of syntax a
+ * hand-rolled regex (like `resolveUnion()` above, fine for a single-line string-literal union) gets wrong on.
+ */
+function extractJsDoc(sourceFile, node) {
+  const ranges = ts.getLeadingCommentRanges(sourceFile.text, node.getFullStart()) ?? [];
+  const jsDocRange = ranges.find((r) => sourceFile.text.slice(r.pos, r.pos + 3) === '/**');
+  if (!jsDocRange) return { description: '', tags: {} };
+  const raw = sourceFile.text.slice(jsDocRange.pos, jsDocRange.end);
+  const body = raw.replace(/^\/\*\*/, '').replace(/\*\/$/, '');
+  const lines = body.split('\n').map((l) => l.replace(/^\s*\*\s?/, ''));
+  const descLines = [];
+  const tags = {};
+  let currentTag = null;
+  for (const line of lines) {
+    const tagMatch = line.match(/^\s*@(\w+)\s*(.*)$/);
+    if (tagMatch) {
+      currentTag = tagMatch[1];
+      tags[currentTag] = tagMatch[2];
+    } else if (currentTag) {
+      tags[currentTag] += ' ' + line.trim();
+    } else {
+      descLines.push(line);
+    }
+  }
+  for (const k in tags) tags[k] = tags[k].trim();
+  return { description: descLines.join(' ').replace(/\s+/g, ' ').trim(), tags };
+}
+
+/**
+ * Resolves a named interface's own member shape (name/type/description/`@default`) from a *.types.ts file, for
+ * the API table to show what an i18n `labels` prop (`Partial<XLabels>`) actually accepts — the interface itself
+ * already carries this exact information as per-field JSDoc, written once by whoever added the labels prop; this
+ * just surfaces it instead of leaving it discoverable only by opening the source. Returns null if the file or
+ * the named interface isn't found, so callers can fall back to not showing a shape rather than guessing.
+ */
+function resolveInterfaceShape(typeName, componentDir) {
+  const typesFile = join(root, 'src/components', componentDir, `${componentDir}.types.ts`);
+  if (!existsSync(typesFile)) return null;
+  const src = readFileSync(typesFile, 'utf8');
+  const sourceFile = ts.createSourceFile(typesFile, src, ts.ScriptTarget.Latest, true);
+  let found = null;
+  sourceFile.forEachChild((node) => {
+    if (ts.isInterfaceDeclaration(node) && node.name.text === typeName) found = node;
+  });
+  if (!found) return null;
+  return found.members
+    .filter((m) => ts.isPropertySignature(m))
+    .map((m) => {
+      const { description, tags } = extractJsDoc(sourceFile, m);
+      return {
+        name: m.name.getText(sourceFile),
+        type: m.type ? m.type.getText(sourceFile) : '',
+        description,
+        default: tags.default ?? ''
+      };
+    });
 }
 
 /** Enumerate all icon names from the @latty-ds/icons source directory. */
@@ -119,9 +182,19 @@ function toMember(field, componentDir) {
   // an informational row in the API table, with the real JS property name (not the kebab-case attribute-name
   // conversion `toAttrName` would otherwise produce, since no attribute exists for it) and its actual TS type
   // text — previously this branch returned null and the property vanished from the generated docs entirely.
+  //
+  // `Partial<` specifically catches the i18n `labels` prop every multi-label component declares as
+  // `Partial<XLabels>` — a generic wrapping a named interface, not an inline `{...}` object-literal type text,
+  // so it didn't trip the `{` check above. Without it, `labels` fell all the way through to the plain free-text
+  // fallback at the bottom of this function: a real, system-wide bug affecting all 18 components with this
+  // prop, not just one — the Playground rendered an editable "Labels" text control right next to the real
+  // `label` control on components that have both, and typing into it set a string onto a property Lit expects
+  // to JSON-parse as an object, silently doing nothing useful. `Partial<T>` is always object-shaped by
+  // construction (TS makes every property of T optional), so this substring can never misfire on a primitive.
   if (
     typeText.includes('[]') ||
     typeText.includes('{') ||
+    typeText.includes('Partial<') ||
     typeText.includes('Element') ||
     typeText.includes('Event') ||
     typeText.includes('Promise') ||
@@ -129,7 +202,19 @@ function toMember(field, componentDir) {
     typeText.includes('Map') ||
     typeText.includes('HTMLElement')
   ) {
-    return { name: propName, description, type: 'complex', valueType: typeText, default: parseDefault(rawDefault) };
+    // `Partial<XLabels>` (and `Partial<XLabels<T>>` for a generic interface like TableLabels) → resolve XLabels's
+    // own shape so the API table can show what keys an i18n `labels` override actually accepts, not just the
+    // bare "Partial<XLabels>" type text.
+    const interfaceMatch = typeText.match(/^Partial<(\w+)/);
+    const shape = interfaceMatch ? resolveInterfaceShape(interfaceMatch[1], componentDir) : null;
+    return {
+      name: propName,
+      description,
+      type: 'complex',
+      valueType: typeText,
+      default: parseDefault(rawDefault),
+      ...(shape ? { shape } : {})
+    };
   }
 
   // Strip `| ''` / `'' |` suffixes that just represent an "unset" sentinel, and `| undefined` from an optional

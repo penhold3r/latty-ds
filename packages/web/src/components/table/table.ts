@@ -951,6 +951,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
         class="table-container"
         style=${styleMap(this.height ? { height: this.height, overflowY: 'auto' } : {})}
         @scroll=${this.handleScroll}
+        tabindex="0"
       >
         <table
           aria-label=${this.label || nothing}
