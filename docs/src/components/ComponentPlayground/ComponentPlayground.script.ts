@@ -282,6 +282,17 @@ export const initPlayground = async (
     const parentState = stateMap[tag];
     members.forEach((member) => {
       if (member.name === 'theme') return;
+      // Complex (array/object/function-typed) members have no HTML-attribute representation at all — rendering
+      // no control for them (see the JSX switch's own `if (member.type === 'complex') return null`) already
+      // means `parentState[member.name]` never changes from its initial manifest-derived default, but that
+      // default itself is a raw stringified placeholder (e.g. `"[]"` for an array prop whose source default is
+      // `= []`), not an actual "unset" sentinel. `applyAttr` can't tell the difference and happily sets e.g.
+      // `columns="[]"` on the element — which a `type: Array` Lit property DOES react to via its own
+      // attributeChangedCallback, JSON-parsing it back to a real (empty) array and silently clobbering whatever
+      // real value `seedData` had just assigned as a JS property moments earlier. Skipping complex members here
+      // entirely (matching how `buildParentAttrParts()` already effectively no-ops for them, since their value
+      // never diverges from their own default) keeps a `seedData`-provided value intact for the life of the page.
+      if (member.type === 'complex') return;
       applyAttr(el, member, parentState[member.name]);
     });
 
