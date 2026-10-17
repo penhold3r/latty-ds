@@ -394,6 +394,64 @@ describe('<lt-select>', () => {
       expect(spy.mock.lastCall?.[1]).toBe('Veuillez sélectionner une option');
     });
   });
+
+  describe('clearable', () => {
+    it('does not render a clear button by default, even with a value selected', async () => {
+      el.value = 'banana';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.clear-button')).toBeNull();
+    });
+
+    it('does not render a clear button when clearable but nothing is selected', async () => {
+      el.clearable = true;
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.clear-button')).toBeNull();
+    });
+
+    it('renders a clear button once clearable and a value is selected', async () => {
+      el.clearable = true;
+      el.value = 'banana';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.clear-button')).toBeTruthy();
+    });
+
+    it('resets value and fires change when the clear button is clicked', async () => {
+      const handler = vi.fn();
+      el.addEventListener('change', handler);
+      el.clearable = true;
+      el.value = 'banana';
+      await el.updateComplete;
+      el.shadowRoot!.querySelector<HTMLButtonElement>('.clear-button')!.click();
+      await el.updateComplete;
+      expect(el.value).toBe('');
+      expect(el.shadowRoot!.querySelector('.clear-button')).toBeNull();
+      expect(handler).toHaveBeenCalledOnce();
+      expect((handler.mock.calls[0][0] as CustomEvent).detail.value).toBe('');
+    });
+
+    it('does not render a clear button while disabled, even with a value selected', async () => {
+      el.clearable = true;
+      el.value = 'banana';
+      el.disabled = true;
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.clear-button')).toBeNull();
+    });
+
+    it('uses the default English accessible label', async () => {
+      el.clearable = true;
+      el.value = 'banana';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.clear-button')!.getAttribute('aria-label')).toBe('Clear');
+    });
+
+    it('overrides the clear button label via labels', async () => {
+      el.labels = { clear: 'Effacer' };
+      el.clearable = true;
+      el.value = 'banana';
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.clear-button')!.getAttribute('aria-label')).toBe('Effacer');
+    });
+  });
 });
 
 describe('helper text is described by its control (aria-describedby)', () => {
@@ -506,5 +564,14 @@ describe('multiple selection (value becomes an array)', () => {
     await el.updateComplete;
     const data = spy.mock.lastCall?.[0] as FormData;
     expect(data.getAll('fruit')).toEqual(['a', 'b']);
+  });
+
+  it('clear button resets the whole array at once, not one value', async () => {
+    el.clearable = true;
+    el.value = ['a', 'c'];
+    await el.updateComplete;
+    el.shadowRoot!.querySelector<HTMLButtonElement>('.clear-button')!.click();
+    await el.updateComplete;
+    expect(el.value).toEqual([]);
   });
 });

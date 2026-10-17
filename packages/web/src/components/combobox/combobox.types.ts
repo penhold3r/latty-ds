@@ -13,4 +13,6 @@ export interface ComboboxLabels {
   validationMessage: string;
   /** Shown in the dropdown when no options match the current search text. */
   noResults: string;
+  /** Accessible label for the clear-all button shown by `clearable`. */
+  clear: string;
 }

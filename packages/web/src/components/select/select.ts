@@ -16,7 +16,8 @@ import { FormDisabledController } from '../shared/form-disabled';
 let selectCount = 0;
 
 const DEFAULT_LABELS: SelectLabels = {
-  validationMessage: 'Please select an option'
+  validationMessage: 'Please select an option',
+  clear: 'Clear'
 };
 
 /**
@@ -143,6 +144,9 @@ export class Select extends ThemeableElement {
    */
   @property({ type: Array }) options: SelectOption[] = [];
 
+  /** Shows a clear button while a value is selected, resetting to no selection. */
+  @property({ type: Boolean, reflect: true }) clearable = false;
+
   /** Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<SelectLabels> = {};
 
@@ -186,6 +190,18 @@ export class Select extends ThemeableElement {
   // never lost focus to begin with — stays the active element throughout.
   private _preventFocusSteal(e: MouseEvent) {
     e.preventDefault();
+  }
+
+  private get _showClear(): boolean {
+    return this.clearable && this._selected.length > 0 && !this._isDisabled;
+  }
+
+  // Stops propagation so clicking clear doesn't also toggle the dropdown open — the trigger's own click handler
+  // would otherwise fire right after this one, since the clear button lives inside it.
+  private _clear(e: MouseEvent) {
+    e.stopPropagation();
+    this.value = this.multiple ? [] : '';
+    dispatch(this, 'change', { value: this.value });
   }
 
   /**
@@ -367,6 +383,7 @@ export class Select extends ThemeableElement {
     const hasValue = Boolean(this._selected.length && selectedLabel);
     const activeOption = this.enabledOptions[this.activeIndex];
     const listboxId = `${this._uid}-listbox`;
+    const showClear = this._showClear;
 
     return html`
       <div class="wrapper">
@@ -396,6 +413,17 @@ export class Select extends ThemeableElement {
             <span class="select-value ${hasValue ? '' : 'placeholder'}">
               ${hasValue ? selectedLabel : this.placeholder}
             </span>
+            ${showClear
+              ? html`<button
+                  type="button"
+                  class="clear-button"
+                  aria-label=${this._labels.clear}
+                  @mousedown=${this._preventFocusSteal}
+                  @click=${this._clear}
+                >
+                  <lt-icon name="xmark" size="sm"></lt-icon>
+                </button>`
+              : ''}
             <lt-icon class="icon-end" name="caret-down"></lt-icon>
           </div>
           <lt-surface

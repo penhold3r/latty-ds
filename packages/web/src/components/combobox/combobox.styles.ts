@@ -135,6 +135,22 @@ export const comboboxStyles = [
       min-width: 80px;
     }
 
+    .clear-button {
+      align-items: center;
+      background: none;
+      border-radius: var(--lt-border-radius, 4px);
+      border: 0;
+      color: var(--lt-text-subtle);
+      cursor: pointer;
+      display: flex;
+      flex-shrink: 0;
+      padding: 0;
+    }
+
+    .clear-button:hover {
+      color: var(--lt-text-default);
+    }
+
     .chevron {
       color: var(--lt-text-subtle);
       flex-shrink: 0;

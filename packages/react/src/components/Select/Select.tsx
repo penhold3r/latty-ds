@@ -14,6 +14,7 @@ export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
   disabled?: boolean;
   required?: boolean;
   options?: SelectEl['options'];
+  clearable?: boolean;
   labels?: SelectEl['labels'];
   onChange?: (event: CustomEvent<{ value: string | string[] }>) => void;
 };

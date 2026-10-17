@@ -80,6 +80,23 @@ export const selectStyles = [
       transition: transform 120ms ease;
     }
 
+    .clear-button {
+      align-items: center;
+      background: none;
+      border-radius: var(--lt-border-radius, 4px);
+      border: 0;
+      color: var(--lt-text-subtle);
+      cursor: pointer;
+      display: flex;
+      flex-shrink: 0;
+      margin-inline-end: var(--lt-spacing-1);
+      padding: 0;
+    }
+
+    .clear-button:hover {
+      color: var(--lt-text-default);
+    }
+
     :host([open]) .icon-end {
       transform: rotate(180deg);
     }

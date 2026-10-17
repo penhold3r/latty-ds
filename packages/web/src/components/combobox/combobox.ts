@@ -17,7 +17,8 @@ let comboboxCount = 0;
 
 const DEFAULT_LABELS: ComboboxLabels = {
   validationMessage: 'Please select an option',
-  noResults: 'No results'
+  noResults: 'No results',
+  clear: 'Clear'
 };
 
 /**
@@ -66,6 +67,10 @@ export class Combobox extends ThemeableElement {
 
   /** Array of selectable options. Set as a JS property (`.options`). */
   @property({ type: Array }) options: ComboboxOption[] = [];
+
+  /** Shows a clear-all button while a value is selected, resetting to no selection (all tags, in `multiple`
+   * mode). */
+  @property({ type: Boolean, reflect: true }) clearable = false;
 
   /** Currently selected value. A string for a single combobox; with `multiple`, an array of the selected values.
    * Not reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of
@@ -157,6 +162,18 @@ export class Combobox extends ThemeableElement {
   // that default action leaves the click itself (and selectOption) untouched, and the input stays focused.
   private _preventFocusSteal(e: MouseEvent) {
     e.preventDefault();
+  }
+
+  private get _showClear(): boolean {
+    return this.clearable && this._selected.length > 0 && !this._isDisabled;
+  }
+
+  // Stops propagation so clicking clear doesn't also open the dropdown via .input-wrap's own click handler.
+  private _clear(e: MouseEvent) {
+    e.stopPropagation();
+    this.value = this.multiple ? [] : '';
+    this.query = '';
+    dispatch(this, 'change', { value: this.value });
   }
 
   private async openDropdown() {
@@ -340,6 +357,7 @@ export class Combobox extends ThemeableElement {
   render() {
     const opts = this.filtered;
     const activeOption = this.enabledOpts[this.activeIndex];
+    const showClear = this._showClear;
     const displayValue = this.open ? this.query : this.multiple ? '' : this.selectedLabel;
     const placeholderText = this.multiple
       ? this.placeholder
@@ -382,6 +400,17 @@ export class Combobox extends ThemeableElement {
           @input=${this.handleInput}
           @keydown=${this.handleKeydown}
         />
+        ${showClear
+          ? html`<button
+              type="button"
+              class="clear-button"
+              aria-label=${this._labels.clear}
+              @mousedown=${this._preventFocusSteal}
+              @click=${this._clear}
+            >
+              <lt-icon name="xmark" size="sm"></lt-icon>
+            </button>`
+          : nothing}
         <lt-icon class="chevron" name="caret-down" size="sm"></lt-icon>
       </div>
     `;

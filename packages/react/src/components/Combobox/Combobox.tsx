@@ -4,6 +4,7 @@ import type { Combobox as ComboboxEl } from '@latty-ds/web';
 export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   formAssociated?: boolean;
   options?: ComboboxEl['options'];
+  clearable?: boolean;
   value?: ComboboxEl['value'];
   multiple?: boolean;
   label?: string;

@@ -44,4 +44,6 @@ export interface SelectOption {
 export interface SelectLabels {
   /** Validation message shown when a required select has no option chosen. */
   validationMessage: string;
+  /** Accessible label for the clear button shown by `clearable`. */
+  clear: string;
 }
