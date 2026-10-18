@@ -31,7 +31,7 @@ export const colorInputStyles = css`
     display: flex;
     align-items: center;
     background: var(--lt-bg-subtle);
-    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
+    border: var(--lt-border-width, 1px) solid var(--lt-border-input);
     border-radius: var(--lt-border-radius);
     box-sizing: border-box;
     transition:

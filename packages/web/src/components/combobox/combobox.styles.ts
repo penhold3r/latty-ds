@@ -29,7 +29,7 @@ export const comboboxStyles = [
       align-items: center;
       background: var(--lt-bg-surface);
       border-radius: var(--lt-border-radius);
-      border: var(--lt-border-width, 1px) solid var(--lt-border-default);
+      border: var(--lt-border-width, 1px) solid var(--lt-border-input);
       cursor: text;
       display: flex;
       gap: var(--lt-spacing-2);
@@ -169,7 +169,7 @@ export const comboboxStyles = [
       box-shadow: var(--lt-elevation-2);
       max-height: 240px;
       overflow-y: auto;
-      z-index: 100;
+      z-index: var(--lt-z-overlay);
     }
 
     .option {

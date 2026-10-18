@@ -35,7 +35,7 @@ export const dateInputStyles = [
       align-items: center;
       background: var(--lt-bg-surface);
       border-radius: var(--lt-border-radius);
-      border: var(--lt-border-width, 1px) solid var(--lt-border-default);
+      border: var(--lt-border-width, 1px) solid var(--lt-border-input);
       color: var(--lt-text-default);
       cursor: pointer;
       display: flex;
@@ -130,7 +130,7 @@ export const dateInputStyles = [
     .dropdown {
       display: none;
       filter: drop-shadow(0 4px 12px rgb(var(--lt-shadow-rgb) / 0.08));
-      z-index: 9999;
+      z-index: var(--lt-z-overlay);
     }
 
     /* ── Helper text ── */

@@ -35,7 +35,7 @@ export const selectStyles = [
       align-items: center;
       background: var(--lt-bg-subtle);
       border-radius: var(--lt-border-radius);
-      border: var(--lt-border-width, 1px) solid var(--lt-border-default);
+      border: var(--lt-border-width, 1px) solid var(--lt-border-input);
       box-sizing: border-box;
       cursor: pointer;
       display: flex;
@@ -104,7 +104,7 @@ export const selectStyles = [
     .dropdown {
       display: none;
       max-height: 300px;
-      z-index: 1000;
+      z-index: var(--lt-z-overlay);
     }
 
     .options-container {

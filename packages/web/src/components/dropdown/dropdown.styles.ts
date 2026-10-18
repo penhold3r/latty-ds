@@ -16,7 +16,7 @@ export const dropdownStyles = [
     lt-surface.menu {
       display: none;
       min-width: 10rem;
-      z-index: 1000;
+      z-index: var(--lt-z-overlay);
     }
 
     lt-surface.menu::part(surface) {

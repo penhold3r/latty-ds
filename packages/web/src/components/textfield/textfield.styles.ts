@@ -105,7 +105,7 @@ export const textfieldStyles = css`
   textarea {
     background: var(--lt-bg-subtle);
     border-radius: var(--lt-border-radius);
-    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
+    border: var(--lt-border-width, 1px) solid var(--lt-border-input);
     box-sizing: border-box;
     min-height: 80px;
     padding-block: var(--lt-spacing-3);
@@ -146,7 +146,7 @@ export const textfieldStyles = css`
   .input-container:has(input) {
     background: var(--lt-bg-subtle);
     border-radius: var(--lt-border-radius);
-    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
+    border: var(--lt-border-width, 1px) solid var(--lt-border-input);
     box-sizing: border-box;
     transition:
       border-color 120ms ease,
