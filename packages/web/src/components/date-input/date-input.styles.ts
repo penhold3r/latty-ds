@@ -102,7 +102,7 @@ export const dateInputStyles = [
     /* ── Variants ── */
 
     :host([variant='success']) .field-btn {
-      border-color: var(--lt-color-success-500);
+      border-color: var(--lt-border-success-strong);
     }
 
     :host([variant='success']) .field-btn:focus-visible {
@@ -110,7 +110,7 @@ export const dateInputStyles = [
     }
 
     :host([variant='warning']) .field-btn {
-      border-color: var(--lt-color-warning-500);
+      border-color: var(--lt-border-warning-strong);
     }
 
     :host([variant='warning']) .field-btn:focus-visible {

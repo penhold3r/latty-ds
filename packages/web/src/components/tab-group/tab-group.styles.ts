@@ -44,7 +44,7 @@ export const tabGroupStyles = css`
   }
 
   .tabs-container::-webkit-scrollbar-thumb {
-    background: var(--lt-color-neutral-300);
+    background: var(--lt-border-strong);
     border-radius: 2px;
   }
 

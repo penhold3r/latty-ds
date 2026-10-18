@@ -12,7 +12,7 @@ export const avatarStyles = css`
     align-items: center;
     background: var(--lt-avatar-bg, var(--lt-bg-overlay));
     box-sizing: border-box;
-    color: var(--lt-avatar-color, var(--lt-color-neutral-700));
+    color: var(--lt-avatar-color, var(--lt-text-neutral));
     display: inline-flex;
     justify-content: center;
     overflow: hidden;

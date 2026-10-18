@@ -44,7 +44,7 @@ export const checkboxStyles = css`
   }
 
   input[type='checkbox']:hover:not(:disabled) {
-    border-color: var(--lt-color-neutral-600);
+    border-color: var(--lt-interactive-neutral-bg);
   }
 
   input[type='checkbox']:focus-visible {

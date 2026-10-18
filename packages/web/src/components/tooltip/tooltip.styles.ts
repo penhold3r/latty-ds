@@ -74,7 +74,7 @@ export const tooltipStyles = css`
 
   :host(:not([placement])) .arrow,
   :host([placement='top']) .arrow {
-    border-top-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
+    border-top-color: var(--lt-tooltip-bg, var(--lt-bg-inverse));
     inset-inline-start: 50%;
     top: 100%;
     transform: translateX(-50%);
@@ -83,7 +83,7 @@ export const tooltipStyles = css`
   /* ── Bottom ─────────────────────────────────── */
 
   :host([placement='bottom']) .arrow {
-    border-bottom-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
+    border-bottom-color: var(--lt-tooltip-bg, var(--lt-bg-inverse));
     bottom: 100%;
     inset-inline-start: 50%;
     transform: translateX(-50%);
@@ -92,7 +92,7 @@ export const tooltipStyles = css`
   /* ── Start ──────────────────────────────────── */
 
   :host([placement='start']) .arrow {
-    border-inline-start-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
+    border-inline-start-color: var(--lt-tooltip-bg, var(--lt-bg-inverse));
     inset-inline-start: 100%;
     top: 50%;
     transform: translateY(-50%);
@@ -101,7 +101,7 @@ export const tooltipStyles = css`
   /* ── End ────────────────────────────────────── */
 
   :host([placement='end']) .arrow {
-    border-inline-end-color: var(--lt-tooltip-bg, var(--lt-color-neutral-900));
+    border-inline-end-color: var(--lt-tooltip-bg, var(--lt-bg-inverse));
     inset-inline-end: 100%;
     top: 50%;
     transform: translateY(-50%);

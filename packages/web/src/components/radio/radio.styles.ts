@@ -44,7 +44,7 @@ export const radioStyles = css`
   }
 
   input[type='radio']:hover:not(:disabled) {
-    border-color: var(--lt-color-neutral-600);
+    border-color: var(--lt-interactive-neutral-bg);
   }
 
   input[type='radio']:focus-visible {

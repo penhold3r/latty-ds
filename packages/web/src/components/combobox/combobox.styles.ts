@@ -54,10 +54,10 @@ export const comboboxStyles = [
       box-shadow: 0 0 0 3px var(--lt-bg-error-subtle);
     }
     :host([variant='success']) .input-wrap {
-      border-color: var(--lt-color-success-500);
+      border-color: var(--lt-border-success-strong);
     }
     :host([variant='warning']) .input-wrap {
-      border-color: var(--lt-color-warning-500);
+      border-color: var(--lt-border-warning-strong);
     }
 
     /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a
@@ -80,7 +80,7 @@ export const comboboxStyles = [
     }
 
     input::placeholder {
-      color: var(--lt-text-placeholder, var(--lt-color-neutral-400));
+      color: var(--lt-text-placeholder, var(--lt-text-muted));
     }
 
     :host([disabled]) input,
@@ -166,7 +166,7 @@ export const comboboxStyles = [
       background: var(--lt-bg-surface);
       border-radius: var(--lt-border-radius);
       border: var(--lt-border-width, 1px) solid var(--lt-border-default);
-      box-shadow: var(--lt-shadow-md);
+      box-shadow: var(--lt-elevation-2);
       max-height: 240px;
       overflow-y: auto;
       z-index: 100;

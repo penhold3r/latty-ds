@@ -5,15 +5,7 @@
 // here, so the baseline only ever shrinks.
 
 const BASELINE = {
-  'avatar/avatar.styles.ts': {
-    steps: 1,
-    rgb: 0
-  },
   'button/button.styles.ts': {
-    steps: 1,
-    rgb: 0
-  },
-  'checkbox/checkbox.styles.ts': {
     steps: 1,
     rgb: 0
   },
@@ -21,17 +13,9 @@ const BASELINE = {
     steps: 0,
     rgb: 1
   },
-  'combobox/combobox.styles.ts': {
-    steps: 3,
-    rgb: 0
-  },
   'date-input/date-input.styles.ts': {
-    steps: 2,
+    steps: 0,
     rgb: 1
-  },
-  'datepicker/datepicker.styles.ts': {
-    steps: 2,
-    rgb: 0
   },
   'dialog/dialog.styles.ts': {
     steps: 0,
@@ -41,17 +25,9 @@ const BASELINE = {
     steps: 2,
     rgb: 0
   },
-  'list/list.styles.ts': {
-    steps: 1,
-    rgb: 0
-  },
   'nav/nav.styles.ts': {
     steps: 0,
     rgb: 2
-  },
-  'radio/radio.styles.ts': {
-    steps: 1,
-    rgb: 0
   },
   'sidepanel/sidepanel.styles.ts': {
     steps: 0,
@@ -61,17 +37,9 @@ const BASELINE = {
     steps: 0,
     rgb: 2
   },
-  'spinner/spinner.styles.ts': {
-    steps: 1,
-    rgb: 0
-  },
   'switch/switch.styles.ts': {
     steps: 0,
     rgb: 1
-  },
-  'tab-group/tab-group.styles.ts': {
-    steps: 1,
-    rgb: 0
   },
   'tab/tab.styles.ts': {
     steps: 0,
@@ -80,10 +48,6 @@ const BASELINE = {
   'table/table.styles.ts': {
     steps: 0,
     rgb: 2
-  },
-  'tooltip/tooltip.styles.ts': {
-    steps: 4,
-    rgb: 0
   }
 };
 

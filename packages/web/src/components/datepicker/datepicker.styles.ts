@@ -69,13 +69,13 @@ export const datepickerStyles = css`
 
   /* Variants */
   :host([variant='success']) input {
-    border-color: var(--lt-color-success-500);
+    border-color: var(--lt-border-success-strong);
   }
   :host([variant='success']) input:focus {
     box-shadow: 0 0 0 3px var(--lt-bg-success-subtle);
   }
   :host([variant='warning']) input {
-    border-color: var(--lt-color-warning-500);
+    border-color: var(--lt-border-warning-strong);
   }
   :host([variant='warning']) input:focus {
     box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle);

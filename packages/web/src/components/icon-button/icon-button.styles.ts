@@ -131,6 +131,8 @@ export const iconButtonStyles = css`
   }
   :host([appearance='filled'][variant='neutral']) {
     --_bg: var(--lt-interactive-neutral-bg);
+    /* See button.styles.ts's identical neutral-variant comment: --lt-text-inverse flips to dark text in dark
+       mode, but this background stays the same mid-gray in both themes, so it would fail AA in dark mode. */
     --_color: var(--lt-color-neutral-50);
     --_hover-bg: var(--lt-interactive-neutral-bg-hover);
     --_hover-color: var(--lt-color-neutral-50);

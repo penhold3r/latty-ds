@@ -28,7 +28,7 @@ export const spinnerStyles = css`
     --lt-spinner-color: var(--lt-interactive-secondary-bg);
   }
   :host([variant='neutral']) {
-    --lt-spinner-color: var(--lt-color-neutral-500);
+    --lt-spinner-color: var(--lt-text-subtle);
   }
   :host([variant='current']) {
     --lt-spinner-color: currentColor;
