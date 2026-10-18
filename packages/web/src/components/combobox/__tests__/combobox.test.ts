@@ -465,6 +465,61 @@ describe('<lt-combobox>', () => {
   });
 });
 
+describe('diacritic-insensitive filtering (CMB-5)', () => {
+  let el: Combobox;
+  const input = () => el.shadowRoot!.querySelector('input')!;
+  const optionLabels = () =>
+    [...el.shadowRoot!.querySelectorAll<HTMLButtonElement>('.option')].map((o) => o.textContent!.trim());
+
+  const type = async (text: string) => {
+    input().dispatchEvent(new FocusEvent('focus'));
+    await el.updateComplete;
+    input().value = text;
+    input().dispatchEvent(new Event('input'));
+    await el.updateComplete;
+  };
+
+  beforeEach(async () => {
+    el = document.createElement('lt-combobox') as Combobox;
+    el.options = [
+      { value: 'fr', label: 'Café de Paris' },
+      { value: 'ch', label: 'Zürich' },
+      { value: 'jp', label: 'Japan' }
+    ];
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('matches a plain-ASCII query against a diacritic label', async () => {
+    await type('cafe');
+    expect(optionLabels()).toEqual(['Café de Paris']);
+  });
+
+  it('matches a diacritic query against a diacritic label', async () => {
+    await type('café');
+    expect(optionLabels()).toEqual(['Café de Paris']);
+  });
+
+  it('matches regardless of case, combined with diacritic-insensitivity', async () => {
+    await type('ZURICH');
+    expect(optionLabels()).toEqual(['Zürich']);
+  });
+
+  it('still matches a plain label with no diacritics at all', async () => {
+    await type('japan');
+    expect(optionLabels()).toEqual(['Japan']);
+  });
+
+  it('shows no-results for a query that matches nothing even after normalizing', async () => {
+    await type('zzz');
+    expect(el.shadowRoot!.querySelector('.no-results')).toBeTruthy();
+  });
+});
+
 describe('multiple (tags)', () => {
   let el: Combobox;
 

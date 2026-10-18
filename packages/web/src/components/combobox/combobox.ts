@@ -15,6 +15,14 @@ import { FormDisabledController } from '../shared/form-disabled';
 
 let comboboxCount = 0;
 
+// Case- and diacritic-insensitive comparison key for the search filter below — "café" should match a query of
+// "cafe". NFD decomposes a combined character (e.g. "é") into its base letter plus a separate combining mark,
+// which the Unicode range ̀-ͯ then strips; toLowerCase() runs first so a combining mark's own casing
+// (irrelevant, marks have none) never factors in.
+function normalizeForSearch(s: string): string {
+  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
 const DEFAULT_LABELS: ComboboxLabels = {
   validationMessage: 'Please select an option',
   noResults: 'No results',
@@ -139,8 +147,8 @@ export class Combobox extends ThemeableElement {
   }
 
   private get filtered(): ComboboxOption[] {
-    const q = this.query.toLowerCase();
-    return this.options.filter((o) => o.label.toLowerCase().includes(q));
+    const q = normalizeForSearch(this.query);
+    return this.options.filter((o) => normalizeForSearch(o.label).includes(q));
   }
 
   // `activeIndex` counts positions in this list (enabled options only) — using the same list here and in
