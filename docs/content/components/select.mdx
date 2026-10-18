@@ -50,6 +50,9 @@ via JavaScript as an array of <code>&#123; value, label &#125;</code> objects.
 
 <!-- clearable: shows a clear button once a value is selected -->
 <lt-select id="clearable-select" label="Country" clearable></lt-select>
+
+<!-- loading: shows a spinner in place of the option list, for async-fetched options -->
+<lt-select id="loading-select" label="Country" loading></lt-select>
 `}
     react={`
 import { Select } from '@latty-ds/react';
@@ -71,6 +74,9 @@ const options = [
 
 // clearable: shows a clear button once a value is selected
 <Select label="Country" clearable />
+
+// loading: shows a spinner in place of the option list, for async-fetched options
+<Select label="Country" loading />
     `}
     vue={`
 <script setup lang="ts">
@@ -91,6 +97,10 @@ const options = [
   <!-- clearable: shows a clear button once a value is selected -->
 
 <lt-select label="Country" clearable></lt-select>
+
+  <!-- loading: shows a spinner in place of the option list, for async-fetched options -->
+
+<lt-select label="Country" loading></lt-select>
 
 </template>
     `}

@@ -5,6 +5,7 @@ export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   formAssociated?: boolean;
   options?: ComboboxEl['options'];
   clearable?: boolean;
+  loading?: boolean;
   value?: ComboboxEl['value'];
   multiple?: boolean;
   label?: string;

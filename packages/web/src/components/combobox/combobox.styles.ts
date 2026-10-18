@@ -212,6 +212,16 @@ export const comboboxStyles = [
       text-align: center;
     }
 
+    .loading-state {
+      align-items: center;
+      color: var(--lt-text-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: var(--lt-spacing-2);
+      padding: var(--lt-spacing-4) var(--lt-spacing-3);
+      text-align: center;
+    }
+
     .helper-text {
       color: var(--lt-text-subtle);
       font-size: 0.8125rem;

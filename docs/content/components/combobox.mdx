@@ -60,6 +60,9 @@ navigation (Arrow, Enter, Escape) is fully supported. Use <code>lt-select</code>
 
 <!-- clearable: shows a clear button once a value is selected -->
 <lt-combobox id="clearable-country" label="Country" clearable></lt-combobox>
+
+<!-- loading: shows a spinner in place of the option list, for options fetched as the user types -->
+<lt-combobox id="loading-country" label="Country" loading></lt-combobox>
     `}
     react={`
 import { Combobox } from '@latty-ds/react';
@@ -82,6 +85,9 @@ const countries = [
 
 // clearable: shows a clear button once a value is selected
 <Combobox label="Country" options={countries} clearable />
+
+// loading: shows a spinner in place of the option list, for options fetched as the user types
+<Combobox label="Country" loading />
     `}
     vue={`
 <template>
@@ -97,6 +103,9 @@ const countries = [
 
   <!-- clearable: shows a clear button once a value is selected -->
   <lt-combobox label="Country" :options="countries" clearable />
+
+  <!-- loading: shows a spinner in place of the option list, for options fetched as the user types -->
+  <lt-combobox label="Country" loading />
 </template>
     `}
   />

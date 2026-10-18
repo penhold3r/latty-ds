@@ -463,6 +463,66 @@ describe('<lt-combobox>', () => {
       expect(el.shadowRoot!.querySelector('.clear-button')!.getAttribute('aria-label')).toBe('Effacer');
     });
   });
+
+  describe('loading', () => {
+    const openDropdown = async () => {
+      el.shadowRoot!.querySelector('input')!.dispatchEvent(new FocusEvent('focus'));
+      await el.updateComplete;
+    };
+
+    it('renders a loading state instead of the option list when loading', async () => {
+      el.loading = true;
+      await openDropdown();
+      expect(el.shadowRoot!.querySelector('.loading-state')).toBeTruthy();
+      expect(el.shadowRoot!.querySelectorAll('.option')).toHaveLength(0);
+      expect(el.shadowRoot!.querySelector('.no-results')).toBeNull();
+    });
+
+    it('marks the listbox aria-busy while loading', async () => {
+      el.loading = true;
+      await openDropdown();
+      expect(el.shadowRoot!.querySelector('[role="listbox"]')!.getAttribute('aria-busy')).toBe('true');
+    });
+
+    it('omits aria-busy when not loading', async () => {
+      await openDropdown();
+      expect(el.shadowRoot!.querySelector('[role="listbox"]')!.hasAttribute('aria-busy')).toBe(false);
+    });
+
+    it('restores the option list once loading finishes', async () => {
+      el.loading = true;
+      await openDropdown();
+      el.loading = false;
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.loading-state')).toBeNull();
+      expect(el.shadowRoot!.querySelectorAll('.option').length).toBeGreaterThan(0);
+    });
+
+    it('uses the default English loading text', async () => {
+      el.loading = true;
+      await openDropdown();
+      expect(el.shadowRoot!.querySelector('.loading-state')!.textContent).toContain('Loading…');
+    });
+
+    it('overrides the loading text via labels', async () => {
+      el.labels = { loading: 'Chargement…' };
+      el.loading = true;
+      await openDropdown();
+      expect(el.shadowRoot!.querySelector('.loading-state')!.textContent).toContain('Chargement…');
+    });
+
+    it('takes priority over no-results even when the query matches nothing', async () => {
+      el.loading = true;
+      const input = el.shadowRoot!.querySelector('input')!;
+      input.dispatchEvent(new FocusEvent('focus'));
+      await el.updateComplete;
+      input.value = 'zzz';
+      input.dispatchEvent(new Event('input'));
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.loading-state')).toBeTruthy();
+      expect(el.shadowRoot!.querySelector('.no-results')).toBeNull();
+    });
+  });
 });
 
 describe('diacritic-insensitive filtering (CMB-5)', () => {

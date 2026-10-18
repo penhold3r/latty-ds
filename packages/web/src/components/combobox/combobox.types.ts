@@ -15,4 +15,6 @@ export interface ComboboxLabels {
   noResults: string;
   /** Accessible label for the clear-all button shown by `clearable`. */
   clear: string;
+  /** Shown in the dropdown while `loading` is true. */
+  loading: string;
 }

@@ -46,4 +46,6 @@ export interface SelectLabels {
   validationMessage: string;
   /** Accessible label for the clear button shown by `clearable`. */
   clear: string;
+  /** Shown in the dropdown while `loading` is true. */
+  loading: string;
 }

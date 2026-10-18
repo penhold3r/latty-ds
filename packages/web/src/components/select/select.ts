@@ -9,6 +9,7 @@ import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty-ds/icons';
 import '../surface/';
 import '../text/text';
+import '../spinner/';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
@@ -17,7 +18,8 @@ let selectCount = 0;
 
 const DEFAULT_LABELS: SelectLabels = {
   validationMessage: 'Please select an option',
-  clear: 'Clear'
+  clear: 'Clear',
+  loading: 'Loading…'
 };
 
 /**
@@ -146,6 +148,11 @@ export class Select extends ThemeableElement {
 
   /** Shows a clear button while a value is selected, resetting to no selection. */
   @property({ type: Boolean, reflect: true }) clearable = false;
+
+  /** Shows a loading indicator in place of the option list — for options fetched asynchronously. Purely a
+   * rendering concern: it doesn't touch `options` itself, so a consumer typically clears/leaves `options` empty
+   * while a fetch is in flight and populates it once the loading indicator is no longer needed. */
+  @property({ type: Boolean, reflect: true }) loading = false;
 
   /** Overridable UI text (the required-field validation message), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<SelectLabels> = {};
@@ -435,26 +442,32 @@ export class Select extends ThemeableElement {
             background="--lt-bg-default"
             role="listbox"
             aria-multiselectable=${this.multiple ? 'true' : nothing}
+            aria-busy=${this.loading ? 'true' : nothing}
             part="listbox"
           >
             <div class="options-container">
-              ${this.options.map(
-                (option) => html`
-                  <button
-                    id=${this._idFor(option)}
-                    class="option"
-                    role="option"
-                    tabindex="-1"
-                    aria-selected=${this._selected.includes(option.value)}
-                    ?disabled=${option.disabled}
-                    data-active=${option === activeOption}
-                    @mousedown=${this._preventFocusSteal}
-                    @click=${() => this.selectOption(option)}
-                  >
-                    ${option.label}
-                  </button>
-                `
-              )}
+              ${this.loading
+                ? html`<div class="loading-state">
+                    <lt-spinner size="sm"></lt-spinner>
+                    <lt-text variant="caption" as="span">${this._labels.loading}</lt-text>
+                  </div>`
+                : this.options.map(
+                    (option) => html`
+                      <button
+                        id=${this._idFor(option)}
+                        class="option"
+                        role="option"
+                        tabindex="-1"
+                        aria-selected=${this._selected.includes(option.value)}
+                        ?disabled=${option.disabled}
+                        data-active=${option === activeOption}
+                        @mousedown=${this._preventFocusSteal}
+                        @click=${() => this.selectOption(option)}
+                      >
+                        ${option.label}
+                      </button>
+                    `
+                  )}
             </div>
           </lt-surface>
         </div>

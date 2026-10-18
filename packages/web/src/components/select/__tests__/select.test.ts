@@ -452,6 +452,51 @@ describe('<lt-select>', () => {
       expect(el.shadowRoot!.querySelector('.clear-button')!.getAttribute('aria-label')).toBe('Effacer');
     });
   });
+
+  describe('loading', () => {
+    it('does not render a loading state by default', async () => {
+      expect(el.shadowRoot!.querySelector('.loading-state')).toBeNull();
+    });
+
+    it('renders a loading state instead of the option list when loading', async () => {
+      el.loading = true;
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.loading-state')).toBeTruthy();
+      expect(el.shadowRoot!.querySelectorAll('.option')).toHaveLength(0);
+    });
+
+    it('marks the listbox aria-busy while loading', async () => {
+      el.loading = true;
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('[role="listbox"]')!.getAttribute('aria-busy')).toBe('true');
+    });
+
+    it('omits aria-busy when not loading', () => {
+      expect(el.shadowRoot!.querySelector('[role="listbox"]')!.hasAttribute('aria-busy')).toBe(false);
+    });
+
+    it('restores the option list once loading finishes', async () => {
+      el.loading = true;
+      await el.updateComplete;
+      el.loading = false;
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.loading-state')).toBeNull();
+      expect(el.shadowRoot!.querySelectorAll('.option').length).toBeGreaterThan(0);
+    });
+
+    it('uses the default English loading text', async () => {
+      el.loading = true;
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.loading-state')!.textContent).toContain('Loading…');
+    });
+
+    it('overrides the loading text via labels', async () => {
+      el.labels = { loading: 'Chargement…' };
+      el.loading = true;
+      await el.updateComplete;
+      expect(el.shadowRoot!.querySelector('.loading-state')!.textContent).toContain('Chargement…');
+    });
+  });
 });
 
 describe('helper text is described by its control (aria-describedby)', () => {

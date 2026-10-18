@@ -9,6 +9,7 @@ import { dispatch, createClickOutsideHandler } from '../../utils';
 import '@latty-ds/icons';
 import '../text/text';
 import '../chip/';
+import '../spinner/';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
@@ -26,7 +27,8 @@ function normalizeForSearch(s: string): string {
 const DEFAULT_LABELS: ComboboxLabels = {
   validationMessage: 'Please select an option',
   noResults: 'No results',
-  clear: 'Clear'
+  clear: 'Clear',
+  loading: 'Loading…'
 };
 
 /**
@@ -79,6 +81,11 @@ export class Combobox extends ThemeableElement {
   /** Shows a clear-all button while a value is selected, resetting to no selection (all tags, in `multiple`
    * mode). */
   @property({ type: Boolean, reflect: true }) clearable = false;
+
+  /** Shows a loading indicator in place of the option list — for options fetched asynchronously as the user
+   * types. Purely a rendering concern: it doesn't touch `options` or the search `query` itself, so a consumer
+   * typically clears/leaves `options` empty while a fetch for the current query is in flight. */
+  @property({ type: Boolean, reflect: true }) loading = false;
 
   /** Currently selected value. A string for a single combobox; with `multiple`, an array of the selected values.
    * Not reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of
@@ -440,26 +447,32 @@ export class Combobox extends ThemeableElement {
                 popover="manual"
                 role="listbox"
                 aria-multiselectable=${this.multiple ? 'true' : nothing}
+                aria-busy=${this.loading ? 'true' : nothing}
               >
-                ${opts.length > 0
-                  ? opts.map(
-                      (opt) => html`
-                        <button
-                          id=${this._idFor(opt)}
-                          class="option"
-                          role="option"
-                          tabindex="-1"
-                          aria-selected=${this._selected.includes(opt.value)}
-                          ?disabled=${opt.disabled}
-                          data-active=${opt === activeOption}
-                          @mousedown=${this._preventFocusSteal}
-                          @click=${() => this.selectOption(opt)}
-                        >
-                          ${opt.label}
-                        </button>
-                      `
-                    )
-                  : html`<p class="no-results">${this._labels.noResults}</p>`}
+                ${this.loading
+                  ? html`<div class="loading-state">
+                      <lt-spinner size="sm"></lt-spinner>
+                      <lt-text variant="caption" as="span">${this._labels.loading}</lt-text>
+                    </div>`
+                  : opts.length > 0
+                    ? opts.map(
+                        (opt) => html`
+                          <button
+                            id=${this._idFor(opt)}
+                            class="option"
+                            role="option"
+                            tabindex="-1"
+                            aria-selected=${this._selected.includes(opt.value)}
+                            ?disabled=${opt.disabled}
+                            data-active=${opt === activeOption}
+                            @mousedown=${this._preventFocusSteal}
+                            @click=${() => this.selectOption(opt)}
+                          >
+                            ${opt.label}
+                          </button>
+                        `
+                      )
+                    : html`<p class="no-results">${this._labels.noResults}</p>`}
               </div>
             `
           : nothing}

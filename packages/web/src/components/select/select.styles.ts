@@ -112,6 +112,16 @@ export const selectStyles = [
       overflow: hidden auto;
     }
 
+    .loading-state {
+      align-items: center;
+      color: var(--lt-text-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: var(--lt-spacing-2);
+      padding: var(--lt-spacing-5) var(--lt-spacing-4);
+      text-align: center;
+    }
+
     .option {
       align-items: center;
       background: transparent;
