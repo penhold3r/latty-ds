@@ -523,6 +523,90 @@ describe('<lt-combobox>', () => {
       expect(el.shadowRoot!.querySelector('.no-results')).toBeNull();
     });
   });
+
+  describe('option groups, descriptions, and icons', () => {
+    const openDropdown = async () => {
+      el.shadowRoot!.querySelector('input')!.dispatchEvent(new FocusEvent('focus'));
+      await el.updateComplete;
+    };
+
+    it('renders no group heading for a flat, ungrouped option list', async () => {
+      await openDropdown();
+      expect(el.shadowRoot!.querySelectorAll('.option-group-label')).toHaveLength(0);
+    });
+
+    it('renders one heading for a contiguous run of grouped options', async () => {
+      el.options = [
+        { value: 'us', label: 'United States', group: 'North America' },
+        { value: 'ca', label: 'Canada', group: 'North America' },
+        { value: 'fr', label: 'France', group: 'Europe' }
+      ];
+      await openDropdown();
+      const headings = [...el.shadowRoot!.querySelectorAll('.option-group-label')].map((h) => h.textContent);
+      expect(headings).toEqual(['North America', 'Europe']);
+      expect(el.shadowRoot!.querySelectorAll('.option')).toHaveLength(3);
+    });
+
+    it('renders two separate headings for the same group name interrupted by a different group', async () => {
+      el.options = [
+        { value: 'us', label: 'United States', group: 'North America' },
+        { value: 'fr', label: 'France', group: 'Europe' },
+        { value: 'ca', label: 'Canada', group: 'North America' }
+      ];
+      await openDropdown();
+      const headings = [...el.shadowRoot!.querySelectorAll('.option-group-label')].map((h) => h.textContent);
+      expect(headings).toEqual(['North America', 'Europe', 'North America']);
+    });
+
+    it('wraps a group of options in a labeled role="group"', async () => {
+      el.options = [
+        { value: 'us', label: 'United States', group: 'North America' },
+        { value: 'ca', label: 'Canada', group: 'North America' }
+      ];
+      await openDropdown();
+      const group = el.shadowRoot!.querySelector('[role="group"]')!;
+      expect(group.getAttribute('aria-label')).toBe('North America');
+      expect(group.querySelectorAll('.option')).toHaveLength(2);
+    });
+
+    it('re-groups the filtered list as the search query narrows it down', async () => {
+      el.options = [
+        { value: 'us', label: 'United States', group: 'North America' },
+        { value: 'ca', label: 'Canada', group: 'North America' },
+        { value: 'fr', label: 'France', group: 'Europe' }
+      ];
+      await openDropdown();
+      const input = el.shadowRoot!.querySelector('input')!;
+      input.value = 'united';
+      input.dispatchEvent(new Event('input'));
+      await el.updateComplete;
+      const headings = [...el.shadowRoot!.querySelectorAll('.option-group-label')].map((h) => h.textContent);
+      expect(headings).toEqual(['North America']);
+      expect(el.shadowRoot!.querySelectorAll('.option')).toHaveLength(1);
+    });
+
+    it('renders an icon for an option with one, and none for an option without', async () => {
+      el.options = [
+        { value: 'us', label: 'United States', icon: 'globe' },
+        { value: 'ca', label: 'Canada' }
+      ];
+      await openDropdown();
+      const options = el.shadowRoot!.querySelectorAll('.option');
+      expect(options[0]!.querySelector('.option-icon')).toBeTruthy();
+      expect(options[1]!.querySelector('.option-icon')).toBeNull();
+    });
+
+    it('renders a description for an option with one, and none for an option without', async () => {
+      el.options = [
+        { value: 'us', label: 'United States', description: 'North America' },
+        { value: 'ca', label: 'Canada' }
+      ];
+      await openDropdown();
+      const options = el.shadowRoot!.querySelectorAll('.option');
+      expect(options[0]!.querySelector('.option-description')!.textContent).toBe('North America');
+      expect(options[1]!.querySelector('.option-description')).toBeNull();
+    });
+  });
 });
 
 describe('diacritic-insensitive filtering (CMB-5)', () => {

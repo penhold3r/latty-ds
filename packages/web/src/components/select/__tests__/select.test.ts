@@ -497,6 +497,86 @@ describe('<lt-select>', () => {
       expect(el.shadowRoot!.querySelector('.loading-state')!.textContent).toContain('Chargement…');
     });
   });
+
+  describe('option groups, descriptions, and icons', () => {
+    it('renders no group heading for a flat, ungrouped option list', () => {
+      expect(el.shadowRoot!.querySelectorAll('.option-group-label')).toHaveLength(0);
+    });
+
+    it('renders one heading for a contiguous run of grouped options', async () => {
+      el.options = [
+        { value: 'apple', label: 'Apple', group: 'Fruit' },
+        { value: 'banana', label: 'Banana', group: 'Fruit' },
+        { value: 'carrot', label: 'Carrot', group: 'Veg' }
+      ];
+      await el.updateComplete;
+      const headings = [...el.shadowRoot!.querySelectorAll('.option-group-label')].map((h) => h.textContent);
+      expect(headings).toEqual(['Fruit', 'Veg']);
+      expect(el.shadowRoot!.querySelectorAll('.option')).toHaveLength(3);
+    });
+
+    it('renders two separate headings for the same group name interrupted by a different group', async () => {
+      el.options = [
+        { value: 'apple', label: 'Apple', group: 'Fruit' },
+        { value: 'carrot', label: 'Carrot', group: 'Veg' },
+        { value: 'banana', label: 'Banana', group: 'Fruit' }
+      ];
+      await el.updateComplete;
+      const headings = [...el.shadowRoot!.querySelectorAll('.option-group-label')].map((h) => h.textContent);
+      expect(headings).toEqual(['Fruit', 'Veg', 'Fruit']);
+    });
+
+    it('wraps a group of options in a labeled role="group"', async () => {
+      el.options = [
+        { value: 'apple', label: 'Apple', group: 'Fruit' },
+        { value: 'banana', label: 'Banana', group: 'Fruit' }
+      ];
+      await el.updateComplete;
+      const group = el.shadowRoot!.querySelector('[role="group"]')!;
+      expect(group.getAttribute('aria-label')).toBe('Fruit');
+      expect(group.querySelectorAll('.option')).toHaveLength(2);
+    });
+
+    it('renders an icon for an option with one, and none for an option without', async () => {
+      el.options = [
+        { value: 'apple', label: 'Apple', icon: 'globe' },
+        { value: 'banana', label: 'Banana' }
+      ];
+      await el.updateComplete;
+      const options = el.shadowRoot!.querySelectorAll('.option');
+      expect(options[0]!.querySelector('.option-icon')).toBeTruthy();
+      expect(options[1]!.querySelector('.option-icon')).toBeNull();
+    });
+
+    it('renders a description for an option with one, and none for an option without', async () => {
+      el.options = [
+        { value: 'apple', label: 'Apple', description: 'Crisp and sweet' },
+        { value: 'banana', label: 'Banana' }
+      ];
+      await el.updateComplete;
+      const options = el.shadowRoot!.querySelectorAll('.option');
+      expect(options[0]!.querySelector('.option-description')!.textContent).toBe('Crisp and sweet');
+      expect(options[1]!.querySelector('.option-description')).toBeNull();
+    });
+
+    it('keyboard navigation moves between options across a group boundary, skipping the heading', async () => {
+      el.options = [
+        { value: 'apple', label: 'Apple', group: 'Fruit' },
+        { value: 'carrot', label: 'Carrot', group: 'Veg' }
+      ];
+      await el.updateComplete;
+      const trigger = el.shadowRoot!.querySelector('.select-trigger')!;
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await el.updateComplete;
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      await el.updateComplete;
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      await el.updateComplete;
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await el.updateComplete;
+      expect(el.value).toBe('carrot');
+    });
+  });
 });
 
 describe('helper text is described by its control (aria-describedby)', () => {

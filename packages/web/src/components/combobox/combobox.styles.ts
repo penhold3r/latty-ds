@@ -181,9 +181,45 @@ export const comboboxStyles = [
       display: flex;
       font-family: inherit;
       font-size: 0.9375rem;
+      gap: var(--lt-spacing-2);
       padding: var(--lt-spacing-2) var(--lt-spacing-3);
       text-align: start;
       width: 100%;
+    }
+
+    .option-icon {
+      color: var(--lt-text-subtle);
+      flex-shrink: 0;
+    }
+
+    .option-content {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .option-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .option-description {
+      color: var(--lt-text-subtle);
+      font-size: 0.8125em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .option-group-label {
+      color: var(--lt-text-subtle);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: var(--lt-spacing-2) var(--lt-spacing-3) var(--lt-spacing-1);
+      text-transform: uppercase;
     }
 
     .option:hover {

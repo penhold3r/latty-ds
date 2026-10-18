@@ -13,6 +13,9 @@ import FrameworkTabs from '@site/src/components/FrameworkTabs';
 A custom dropdown with labels, placeholder, helper text, and validation states. The <code>options</code> property is set
 via JavaScript as an array of <code>&#123; value, label &#125;</code> objects.
 
+Each option may also include an optional <code>group</code> (groups a contiguous run of options under one
+heading, like a native <code>&lt;optgroup&gt;</code>), <code>icon</code>, and <code>description</code>.
+
 ## Playground
 
 <ComponentPlayground
@@ -20,11 +23,11 @@ via JavaScript as an array of <code>&#123; value, label &#125;</code> objects.
   defaults={{ label: 'Country', placeholder: 'Select a country' }}
   seedData={{
     options: [
-      { value: 'us', label: 'United States' },
-      { value: 'gb', label: 'United Kingdom' },
-      { value: 'ca', label: 'Canada' },
-      { value: 'de', label: 'Germany' },
-      { value: 'fr', label: 'France' }
+      { value: 'us', label: 'United States', group: 'North America', icon: 'globe' },
+      { value: 'ca', label: 'Canada', group: 'North America' },
+      { value: 'gb', label: 'United Kingdom', group: 'Europe' },
+      { value: 'de', label: 'Germany', group: 'Europe' },
+      { value: 'fr', label: 'France', group: 'Europe', description: 'Eiffel Tower, croissants' }
     ]
   }}
 />
@@ -53,6 +56,19 @@ via JavaScript as an array of <code>&#123; value, label &#125;</code> objects.
 
 <!-- loading: shows a spinner in place of the option list, for async-fetched options -->
 <lt-select id="loading-select" label="Country" loading></lt-select>
+
+<!-- Option groups, descriptions, and icons: options sharing a "group" render under one heading (consecutive
+     entries only, like a native <optgroup>); "description" and "icon" are both optional, per option -->
+<lt-select id="grouped-select" label="Country"></lt-select>
+
+<script type="module">
+  document.getElementById('grouped-select').options = [
+    { value: 'us', label: 'United States', group: 'North America', icon: 'globe' },
+    { value: 'ca', label: 'Canada', group: 'North America' },
+    { value: 'gb', label: 'United Kingdom', group: 'Europe' },
+    { value: 'fr', label: 'France', group: 'Europe', description: 'Eiffel Tower, croissants' }
+  ];
+<\/script>
 `}
     react={`
 import { Select } from '@latty-ds/react';
@@ -77,6 +93,16 @@ const options = [
 
 // loading: shows a spinner in place of the option list, for async-fetched options
 <Select label="Country" loading />
+
+// Option groups, descriptions, and icons: options sharing a "group" render under one heading
+// (consecutive entries only, like a native <optgroup>); "description" and "icon" are both optional
+const groupedOptions = [
+  { value: 'us', label: 'United States', group: 'North America', icon: 'globe' },
+  { value: 'ca', label: 'Canada', group: 'North America' },
+  { value: 'gb', label: 'United Kingdom', group: 'Europe' },
+  { value: 'fr', label: 'France', group: 'Europe', description: 'Eiffel Tower, croissants' }
+];
+<Select label="Country" options={groupedOptions} />
     `}
     vue={`
 <script setup lang="ts">
@@ -84,6 +110,13 @@ const options = [
   { value: 'us', label: 'United States' },
   { value: 'gb', label: 'United Kingdom' },
   { value: 'ca', label: 'Canada' },
+]
+
+const groupedOptions = [
+  { value: 'us', label: 'United States', group: 'North America', icon: 'globe' },
+  { value: 'ca', label: 'Canada', group: 'North America' },
+  { value: 'gb', label: 'United Kingdom', group: 'Europe' },
+  { value: 'fr', label: 'France', group: 'Europe', description: 'Eiffel Tower, croissants' }
 ]
 </script>
 
@@ -101,6 +134,11 @@ const options = [
   <!-- loading: shows a spinner in place of the option list, for async-fetched options -->
 
 <lt-select label="Country" loading></lt-select>
+
+  <!-- Option groups, descriptions, and icons: options sharing a "group" render under one heading
+       (consecutive entries only, like a native <optgroup>); "description" and "icon" are both optional -->
+
+<lt-select label="Country" :options="groupedOptions"></lt-select>
 
 </template>
     `}
@@ -131,7 +169,8 @@ Both let the user choose from a list of options, but they are built for differen
         <strong>Options</strong>
       </td>
       <td>
-        <code>options</code> prop — array of <code>&#123; value, label &#125;</code>
+        <code>options</code> prop — array of <code>&#123; value, label &#125;</code>, with optional
+        <code>group</code>, <code>icon</code>, and <code>description</code>
       </td>
       <td>
         Fully custom slot content (<code>lt-dropdown-item</code>)
@@ -148,7 +187,7 @@ Both let the user choose from a list of options, but they are built for differen
       <td>
         <strong>Avoid when</strong>
       </td>
-      <td>You need custom item layouts, icons per item, or the trigger isn't a form field</td>
+      <td>You need fully custom item layouts beyond a label/description/icon, or the trigger isn't a form field</td>
       <td>You need the selected value to persist or participate in form submission — use Select instead</td>
     </tr>
   </tbody>

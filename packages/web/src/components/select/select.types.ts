@@ -38,6 +38,24 @@ export interface SelectOption {
    * @default false
    */
   disabled?: boolean;
+
+  /**
+   * Optional secondary text shown beneath the label inside the dropdown (not in the closed trigger, which
+   * always shows just the label).
+   */
+  description?: string;
+
+  /**
+   * Optional icon name (from `@latty-ds/icons`) shown before the label inside the dropdown.
+   */
+  icon?: string;
+
+  /**
+   * Optional group heading. Options sharing the same `group` are rendered together under one heading, as a
+   * contiguous run — mirrors native `<optgroup>`: two options with the same `group` name but separated by a
+   * different (or no) group in between render as two separate headings, not one merged group.
+   */
+  group?: string;
 }
 
 /** Overridable UI text for `lt-select`, for i18n. */

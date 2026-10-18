@@ -13,6 +13,7 @@ import '../spinner/';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { groupConsecutive } from '../shared/option-groups';
 
 let selectCount = 0;
 
@@ -385,6 +386,28 @@ export class Select extends ThemeableElement {
     return this._internals.reportValidity();
   }
 
+  private _renderOption(option: SelectOption, activeOption: SelectOption | undefined) {
+    return html`
+      <button
+        id=${this._idFor(option)}
+        class="option"
+        role="option"
+        tabindex="-1"
+        aria-selected=${this._selected.includes(option.value)}
+        ?disabled=${option.disabled}
+        data-active=${option === activeOption}
+        @mousedown=${this._preventFocusSteal}
+        @click=${() => this.selectOption(option)}
+      >
+        ${option.icon ? html`<lt-icon class="option-icon" name=${option.icon} size="sm"></lt-icon>` : nothing}
+        <span class="option-content">
+          <span class="option-label">${option.label}</span>
+          ${option.description ? html`<span class="option-description">${option.description}</span>` : nothing}
+        </span>
+      </button>
+    `;
+  }
+
   render() {
     const selectedLabel = this.getSelectedLabel();
     const hasValue = Boolean(this._selected.length && selectedLabel);
@@ -451,22 +474,13 @@ export class Select extends ThemeableElement {
                     <lt-spinner size="sm"></lt-spinner>
                     <lt-text variant="caption" as="span">${this._labels.loading}</lt-text>
                   </div>`
-                : this.options.map(
-                    (option) => html`
-                      <button
-                        id=${this._idFor(option)}
-                        class="option"
-                        role="option"
-                        tabindex="-1"
-                        aria-selected=${this._selected.includes(option.value)}
-                        ?disabled=${option.disabled}
-                        data-active=${option === activeOption}
-                        @mousedown=${this._preventFocusSteal}
-                        @click=${() => this.selectOption(option)}
-                      >
-                        ${option.label}
-                      </button>
-                    `
+                : groupConsecutive(this.options).map((run) =>
+                    run.group
+                      ? html`<div class="option-group" role="group" aria-label=${run.group}>
+                          <div class="option-group-label" aria-hidden="true">${run.group}</div>
+                          ${run.items.map((option) => this._renderOption(option, activeOption))}
+                        </div>`
+                      : run.items.map((option) => this._renderOption(option, activeOption))
                   )}
             </div>
           </lt-surface>

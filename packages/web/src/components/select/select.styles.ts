@@ -132,9 +132,58 @@ export const selectStyles = [
       cursor: pointer;
       display: flex;
       font-family: inherit;
+      gap: var(--lt-spacing-2);
       text-align: start;
       transition: background-color 80ms ease;
       width: 100%;
+    }
+
+    .option-icon {
+      color: var(--lt-text-subtle);
+      flex-shrink: 0;
+    }
+
+    .option-content {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .option-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .option-description {
+      color: var(--lt-text-subtle);
+      font-size: 0.8125em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .option-group-label {
+      color: var(--lt-text-subtle);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    :host([size='sm']) .option-group-label {
+      font-size: 0.6875rem;
+      padding: var(--lt-spacing-2) var(--lt-spacing-3) var(--lt-spacing-1);
+    }
+
+    :host([size='md']) .option-group-label {
+      font-size: 0.75rem;
+      padding: var(--lt-spacing-2) var(--lt-spacing-4) var(--lt-spacing-1);
+    }
+
+    :host([size='lg']) .option-group-label {
+      font-size: 0.8125rem;
+      padding: var(--lt-spacing-3) var(--lt-spacing-5) var(--lt-spacing-1);
     }
 
     .option:hover:not([disabled]) {
