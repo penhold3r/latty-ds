@@ -9,46 +9,18 @@ const BASELINE = {
     steps: 1,
     rgb: 0
   },
-  'color-input/color-input.styles.ts': {
-    steps: 0,
-    rgb: 1
-  },
-  'date-input/date-input.styles.ts': {
-    steps: 0,
-    rgb: 1
-  },
-  'dialog/dialog.styles.ts': {
-    steps: 0,
-    rgb: 2
-  },
   'icon-button/icon-button.styles.ts': {
     steps: 2,
     rgb: 0
-  },
-  'sidepanel/sidepanel.styles.ts': {
-    steps: 0,
-    rgb: 6
-  },
-  'slider/slider.styles.ts': {
-    steps: 0,
-    rgb: 2
-  },
-  'switch/switch.styles.ts': {
-    steps: 0,
-    rgb: 1
-  },
-  'tab/tab.styles.ts': {
-    steps: 0,
-    rgb: 1
-  },
-  'table/table.styles.ts': {
-    steps: 0,
-    rgb: 2
   }
 };
 
 const RAW_STEP = /var\(--lt-color-[a-z]+-\d+/g;
-const RGB = /rgba?\(/g;
+// A negative lookahead excludes `rgb(var(--lt-shadow-rgb) / <alpha>)` — the token-driven idiom (see
+// packages/tokens/src/shadow/) for a custom shadow/scrim/tinted-border color the canned --lt-elevation-N levels
+// don't cover. That goes through a real token, so it isn't a violation; a literal `rgb(0, 0, 0)`/
+// `rgba(0 0 0 / 0.5)` with hard-coded channel numbers still is.
+const RGB = /rgba?\(\s*(?!var\()/g;
 
 export default {
   rules: {

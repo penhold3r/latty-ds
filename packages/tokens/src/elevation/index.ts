@@ -5,5 +5,5 @@
  * @module elevation
  */
 
-export { buildElevation } from './elevation';
+export { buildElevation, hexToRgbChannels } from './elevation';
 export type { ElevationLevel, ElevationTokens } from './elevation';

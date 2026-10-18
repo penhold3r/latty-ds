@@ -95,7 +95,7 @@ export const tabStyles = css`
 
   :host([data-variant='pills'][active]) .tab {
     background: var(--lt-bg-default);
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    box-shadow: 0 1px 3px 0 rgb(var(--lt-shadow-rgb) / 0.1);
     color: var(--lt-text-primary);
   }
 

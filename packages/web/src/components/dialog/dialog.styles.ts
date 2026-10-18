@@ -48,7 +48,7 @@ export const dialogStyles = css`
   /* ::backdrop replaces the old .backdrop div — it's a real paintable box (just not a real DOM node), so its
      own background-color transition plays independently of lt-surface's. */
   dialog::backdrop {
-    background: rgba(0, 0, 0, 0);
+    background: rgb(var(--lt-shadow-rgb) / 0);
     transition:
       background-color 200ms ease,
       display 220ms allow-discrete,
@@ -56,7 +56,7 @@ export const dialogStyles = css`
   }
 
   dialog[open]::backdrop {
-    background: rgba(0, 0, 0, var(--lt-dialog-overlay-opacity, 0.5));
+    background: rgb(var(--lt-shadow-rgb) / var(--lt-dialog-overlay-opacity, 0.5));
   }
 
   /* lt-surface — fills the <dialog>, sized by it (max-width/height above); the entrance/exit animation */

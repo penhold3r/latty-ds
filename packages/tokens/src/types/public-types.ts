@@ -1,6 +1,7 @@
 import type { PaletteFlat } from './palette.types';
 import type { SpacingTokens } from './spacing.types';
 import type { ElevationTokens } from '../elevation/';
+import type { ShadowTokens } from '../shadow/';
 import type { DurationToken, EaseToken } from '../motion/';
 import type { ZIndexLayer } from '../zindex/';
 
@@ -37,6 +38,7 @@ import type { ZIndexLayer } from '../zindex/';
  *     "1": "0 1px 3px 0 rgb(23 23 23 / 0.1), 0 1px 2px 0 rgb(23 23 23 / 0.06)",
  *     // ... other elevations (generated from neutral-900)
  *   },
+ *   shadow: { rgb: "23 23 23" },
  *   duration: { instant: "100ms", fast: "150ms", moderate: "200ms", slow: "300ms" },
  *   ease: { standard: "cubic-bezier(0.4, 0, 0.2, 1)", emphasized: "cubic-bezier(0.34, 1.2, 0.64, 1)" },
  *   z: { sticky: "100", overlay: "1000" }
@@ -56,6 +58,7 @@ export type Tokens = {
     fontFamilyPrimary: string;
   } & Record<string, string>;
   elevation: ElevationTokens;
+  shadow: ShadowTokens;
   duration: Record<DurationToken, string>;
   ease: Record<EaseToken, string>;
   z: Record<ZIndexLayer, string>;

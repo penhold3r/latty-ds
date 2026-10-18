@@ -59,7 +59,7 @@ export const colorInputStyles = css`
   .color-swatch {
     flex-shrink: 0;
     border-radius: 50%;
-    border: 1.5px solid rgb(0 0 0 / 0.15);
+    border: 1.5px solid rgb(var(--lt-shadow-rgb) / 0.15);
     box-sizing: border-box;
   }
 

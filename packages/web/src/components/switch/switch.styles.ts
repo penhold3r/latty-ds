@@ -57,7 +57,7 @@ export const switchStyles = css`
   .thumb {
     background: white;
     border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgb(var(--lt-shadow-rgb) / 0.2);
     pointer-events: none;
     position: absolute;
     transition: left 200ms ease;

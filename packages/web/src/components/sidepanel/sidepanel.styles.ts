@@ -43,7 +43,7 @@ export const sidepanelStyles = css`
   }
 
   dialog::backdrop {
-    background: rgba(0, 0, 0, 0);
+    background: rgb(var(--lt-shadow-rgb) / 0);
     transition:
       background-color 200ms ease,
       display 250ms allow-discrete,
@@ -51,7 +51,7 @@ export const sidepanelStyles = css`
   }
 
   dialog[open]::backdrop {
-    background: rgba(0, 0, 0, var(--lt-sidepanel-overlay-opacity, 0.45));
+    background: rgb(var(--lt-shadow-rgb) / var(--lt-sidepanel-overlay-opacity, 0.45));
   }
 
   /* ── Anchors — off-screen positions; dialog[open] (below) is the only thing that moves it on-screen. Fully
@@ -68,7 +68,7 @@ export const sidepanelStyles = css`
     inset-inline-start: 0;
     height: 100vh;
     transform: translateX(var(--_start-x));
-    box-shadow: var(--lt-sidepanel-shadow, calc(4px * var(--_dir-sign)) 0 24px rgba(0, 0, 0, 0.12));
+    box-shadow: var(--lt-sidepanel-shadow, calc(4px * var(--_dir-sign)) 0 24px rgb(var(--lt-shadow-rgb) / 0.12));
   }
 
   :host([anchor='end']) dialog {
@@ -78,7 +78,7 @@ export const sidepanelStyles = css`
     inset-inline-start: auto;
     height: 100vh;
     transform: translateX(var(--_end-x));
-    box-shadow: var(--lt-sidepanel-shadow, calc(-4px * var(--_dir-sign)) 0 24px rgba(0, 0, 0, 0.12));
+    box-shadow: var(--lt-sidepanel-shadow, calc(-4px * var(--_dir-sign)) 0 24px rgb(var(--lt-shadow-rgb) / 0.12));
   }
 
   :host([anchor='top']) dialog {
@@ -88,7 +88,7 @@ export const sidepanelStyles = css`
     inset-inline-start: 0;
     width: 100vw;
     transform: translateY(-100%);
-    box-shadow: var(--lt-sidepanel-shadow, 0 4px 24px rgba(0, 0, 0, 0.12));
+    box-shadow: var(--lt-sidepanel-shadow, 0 4px 24px rgb(var(--lt-shadow-rgb) / 0.12));
   }
 
   :host([anchor='bottom']) dialog {
@@ -98,7 +98,7 @@ export const sidepanelStyles = css`
     inset-inline-start: 0;
     width: 100vw;
     transform: translateY(100%);
-    box-shadow: var(--lt-sidepanel-shadow, 0 -4px 24px rgba(0, 0, 0, 0.12));
+    box-shadow: var(--lt-sidepanel-shadow, 0 -4px 24px rgb(var(--lt-shadow-rgb) / 0.12));
   }
 
   dialog[open] {

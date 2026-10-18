@@ -11,6 +11,19 @@ export type ElevationLevel = '0' | '1' | '2' | '3' | '4' | '5';
 export type ElevationTokens = Record<ElevationLevel, string>;
 
 /**
+ * Converts a `#rrggbb` hex color into space-separated decimal RGB channels (e.g. `"27 27 27"`), the format CSS's
+ * `rgb(<channels> / <alpha>)` syntax expects. Shared by `buildElevation` (below) and `buildShadow` (`../shadow/`),
+ * which both derive a shadow-ink color from the same neutral-900 base.
+ */
+export const hexToRgbChannels = (hex: string): string => {
+  const stripped = hex.replace('#', '');
+  const r = parseInt(stripped.substring(0, 2), 16);
+  const g = parseInt(stripped.substring(2, 4), 16);
+  const b = parseInt(stripped.substring(4, 6), 16);
+  return `${r} ${g} ${b}`;
+};
+
+/**
  * Generates elevation (box-shadow) tokens using the neutral color palette.
  * Creates 6 levels of elevation from flat (0) to maximum shadow (5).
  *
@@ -32,13 +45,7 @@ export type ElevationTokens = Record<ElevationLevel, string>;
 export const buildElevation = (neutral: PaletteFlat): ElevationTokens => {
   // Use neutral-900 as the base shadow color for depth
   const shadowColor = neutral['900'] || '#171717';
-
-  // Extract RGB values from hex color
-  const hex = shadowColor.replace('#', '');
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-  const rgb = `${r} ${g} ${b}`;
+  const rgb = hexToRgbChannels(shadowColor);
 
   return {
     '0': 'none',

@@ -11,6 +11,7 @@ import {
 } from '../constants/';
 import { buildSpacing } from '../spacing/';
 import { buildElevation } from '../elevation/';
+import { buildShadow } from '../shadow/';
 import { buildMotion } from '../motion/';
 import { buildZIndex } from '../zindex/';
 import { addSystemColors, buildColorTokens } from '../build/colors';
@@ -28,10 +29,11 @@ export const buildTokens = (cfg: Config): Tokens => {
   };
   const typography = { fontFamilyPrimary: DEFAULT_FONT_FAMILY };
   const elevation = buildElevation(color.neutral as PaletteFlat);
+  const shadow = buildShadow(color.neutral as PaletteFlat);
   const { duration, ease } = buildMotion();
   const z = buildZIndex();
 
-  return { color, spacing, border, typography, elevation, duration, ease, z };
+  return { color, spacing, border, typography, elevation, shadow, duration, ease, z };
 };
 
 export const tokensToCss = (tokens: Tokens): string => {

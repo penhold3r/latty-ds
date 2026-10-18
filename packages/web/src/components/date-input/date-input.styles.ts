@@ -129,7 +129,7 @@ export const dateInputStyles = [
 
     .dropdown {
       display: none;
-      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
+      filter: drop-shadow(0 4px 12px rgb(var(--lt-shadow-rgb) / 0.08));
       z-index: 9999;
     }
 

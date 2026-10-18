@@ -246,7 +246,7 @@ export const tableStyles = css`
   /* Sticky columns */
   th.sticky {
     background: var(--lt-bg-surface);
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 2px 0 4px rgb(var(--lt-shadow-rgb) / 0.05);
     inset-inline-start: 0;
     position: sticky;
     z-index: 2;
@@ -254,7 +254,7 @@ export const tableStyles = css`
 
   td.sticky {
     background: var(--lt-bg-default);
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 2px 0 4px rgb(var(--lt-shadow-rgb) / 0.05);
     inset-inline-start: 0;
     position: sticky;
     z-index: 1;

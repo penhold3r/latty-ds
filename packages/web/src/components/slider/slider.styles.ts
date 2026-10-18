@@ -69,7 +69,7 @@ export const sliderStyles = css`
     background: var(--lt-interactive-primary-bg);
     border-radius: 50%;
     border: 2px solid white;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 4px rgb(var(--lt-shadow-rgb) / 0.25);
     cursor: pointer;
     height: var(--lt-slider-thumb-size, 18px);
     transition: transform 100ms ease;
@@ -90,7 +90,7 @@ export const sliderStyles = css`
     background: var(--lt-interactive-primary-bg);
     border-radius: 50%;
     border: 2px solid white;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1px 4px rgb(var(--lt-shadow-rgb) / 0.25);
     cursor: pointer;
     height: var(--lt-slider-thumb-size, 18px);
     transition: transform 100ms ease;
