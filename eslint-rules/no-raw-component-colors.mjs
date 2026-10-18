@@ -25,10 +25,6 @@ const BASELINE = {
     steps: 2,
     rgb: 0
   },
-  'nav/nav.styles.ts': {
-    steps: 0,
-    rgb: 2
-  },
   'sidepanel/sidepanel.styles.ts': {
     steps: 0,
     rgb: 6

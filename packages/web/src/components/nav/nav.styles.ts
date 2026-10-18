@@ -123,9 +123,7 @@ export const navItemStyles = css`
     color: var(--lt-text-neutral);
     border: var(--lt-border-width, 1px) solid var(--lt-border-default);
     border-radius: 8px;
-    box-shadow:
-      0 4px 6px -1px rgb(0 0 0 / 0.08),
-      0 2px 4px -2px rgb(0 0 0 / 0.05);
+    box-shadow: var(--lt-elevation-2);
     z-index: 100;
     height: auto !important;
     display: none;
