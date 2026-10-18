@@ -29,7 +29,8 @@ const DEFAULT_LABELS: ComboboxLabels = {
   validationMessage: 'Please select an option',
   noResults: 'No results',
   clear: 'Clear',
-  loading: 'Loading…'
+  loading: 'Loading…',
+  create: (query) => `Create "${query}"`
 };
 
 /**
@@ -39,6 +40,9 @@ const DEFAULT_LABELS: ComboboxLabels = {
  *
  * @fires {CustomEvent<{value: string | string[]}>} change - Fired when the selected value changes. With
  *   `multiple`, `value` is the array of selected values.
+ * @fires {CustomEvent<{value: string}>} create - Fired when `creatable` is set and the user selects the
+ *   "create new" row for free-text that matches no existing option. Does not modify `options` itself — the
+ *   consumer decides whether/how to persist the new option.
  *
  * @example
  * ```html
@@ -87,6 +91,13 @@ export class Combobox extends ThemeableElement {
    * types. Purely a rendering concern: it doesn't touch `options` or the search `query` itself, so a consumer
    * typically clears/leaves `options` empty while a fetch for the current query is in flight. */
   @property({ type: Boolean, reflect: true }) loading = false;
+
+  /** Allows creating a new option from free text when nothing in `options` matches the typed text (case- and
+   * diacritic-insensitively) — shows an extra "create" row at the end of the dropdown. Selecting it fires a
+   * `create` event with the typed text and sets `value` to it, but does not modify `options` itself: the
+   * selected/tag display falls back to the raw value when it isn't found in `options`, so persisting the new
+   * option (or not) is entirely up to the consumer. */
+  @property({ type: Boolean, reflect: true }) creatable = false;
 
   /** Currently selected value. A string for a single combobox; with `multiple`, an array of the selected values.
    * Not reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of
@@ -150,8 +161,11 @@ export class Combobox extends ThemeableElement {
 
   private readonly _fieldIds = createFieldIds();
 
+  // Falls back to the raw value when it isn't found in `options` (e.g. a `creatable` value the consumer hasn't
+  // added to `options`) — same fallback `_labelFor` already uses for multiple mode's tags, kept consistent here.
   private get selectedLabel(): string {
-    return this.options.find((o) => o.value === this.value)?.label ?? '';
+    if (Array.isArray(this.value) || !this.value) return '';
+    return this.options.find((o) => o.value === this.value)?.label ?? this.value;
   }
 
   private get filtered(): ComboboxOption[] {
@@ -171,6 +185,35 @@ export class Combobox extends ThemeableElement {
   // rendered — every option, enabled or not, gets one.
   private _idFor(opt: ComboboxOption): string {
     return `${this._uid}-option-${this.filtered.indexOf(opt)}`;
+  }
+
+  // Shown only when the typed text would actually create something new — not already a real option's label,
+  // and (in `multiple` mode) not already one of the selected tags, so re-typing an already-created ad hoc tag
+  // doesn't offer to "create" a duplicate of itself.
+  private get _showCreate(): boolean {
+    if (!this.creatable || this._isDisabled) return false;
+    const q = this.query.trim();
+    if (!q) return false;
+    const qn = normalizeForSearch(q);
+    if (this.options.some((o) => normalizeForSearch(o.label) === qn)) return false;
+    if (this.multiple && this._selected.some((v) => normalizeForSearch(v) === qn)) return false;
+    return true;
+  }
+
+  private _createOption() {
+    const value = this.query.trim();
+    if (!value) return;
+    dispatch(this, 'create', { value });
+    if (this.multiple) {
+      this.value = [...this._selected, value];
+      this.query = '';
+      this.activeIndex = -1;
+      dispatch(this, 'change', { value: this.value });
+      return;
+    }
+    this.value = value;
+    this.closeDropdown();
+    dispatch(this, 'change', { value });
   }
 
   // Clicking an option button would otherwise focus it first (the default mousedown action) — a button that
@@ -279,15 +322,23 @@ export class Combobox extends ThemeableElement {
     }
 
     const opts = this.enabledOpts;
+    const showCreate = this._showCreate;
+    // The create row, when shown, is one extra nav position past the last real option — so Up/Down treat it
+    // as just one more item to land on, and Enter branches on whether that's where the index landed.
+    const maxIndex = showCreate ? opts.length : opts.length - 1;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      this.activeIndex = Math.min(this.activeIndex + 1, opts.length - 1);
+      this.activeIndex = Math.min(this.activeIndex + 1, maxIndex);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       this.activeIndex = Math.max(this.activeIndex - 1, 0);
     } else if (e.key === 'Enter' && this.activeIndex >= 0) {
       e.preventDefault();
-      this.selectOption(opts[this.activeIndex]);
+      if (showCreate && this.activeIndex === opts.length) {
+        this._createOption();
+      } else if (opts[this.activeIndex]) {
+        this.selectOption(opts[this.activeIndex]);
+      }
     }
   }
 
@@ -392,10 +443,33 @@ export class Combobox extends ThemeableElement {
     `;
   }
 
+  private _renderCreateRow() {
+    const onCreateRow = this.activeIndex === this.enabledOpts.length;
+    return html`
+      <button
+        id=${`${this._uid}-create`}
+        class="option option-create"
+        role="option"
+        tabindex="-1"
+        aria-selected="false"
+        data-active=${onCreateRow}
+        @mousedown=${this._preventFocusSteal}
+        @click=${() => this._createOption()}
+      >
+        <lt-icon class="option-icon" name="plus" size="sm"></lt-icon>
+        <span class="option-content">
+          <span class="option-label">${this._labels.create(this.query.trim())}</span>
+        </span>
+      </button>
+    `;
+  }
+
   render() {
     const opts = this.filtered;
     const activeOption = this.enabledOpts[this.activeIndex];
     const showClear = this._showClear;
+    const showCreate = this._showCreate;
+    const onCreateRow = showCreate && this.activeIndex === this.enabledOpts.length;
     const displayValue = this.open ? this.query : this.multiple ? '' : this.selectedLabel;
     const placeholderText = this.multiple
       ? this.placeholder
@@ -429,7 +503,11 @@ export class Combobox extends ThemeableElement {
           aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           aria-required=${this.required}
           aria-controls=${this.open ? `${this._uid}-listbox` : nothing}
-          aria-activedescendant=${this.open && activeOption ? this._idFor(activeOption) : nothing}
+          aria-activedescendant=${this.open && activeOption
+            ? this._idFor(activeOption)
+            : this.open && onCreateRow
+              ? `${this._uid}-create`
+              : nothing}
           autocomplete="off"
           placeholder=${placeholderText}
           .value=${displayValue}
@@ -477,16 +555,21 @@ export class Combobox extends ThemeableElement {
                       <lt-spinner size="sm"></lt-spinner>
                       <lt-text variant="caption" as="span">${this._labels.loading}</lt-text>
                     </div>`
-                  : opts.length > 0
-                    ? groupConsecutive(opts).map((run) =>
-                        run.group
-                          ? html`<div class="option-group" role="group" aria-label=${run.group}>
-                              <div class="option-group-label" aria-hidden="true">${run.group}</div>
-                              ${run.items.map((opt) => this._renderOption(opt, activeOption))}
-                            </div>`
-                          : run.items.map((opt) => this._renderOption(opt, activeOption))
-                      )
-                    : html`<p class="no-results">${this._labels.noResults}</p>`}
+                  : html`
+                      ${opts.length > 0
+                        ? groupConsecutive(opts).map((run) =>
+                            run.group
+                              ? html`<div class="option-group" role="group" aria-label=${run.group}>
+                                  <div class="option-group-label" aria-hidden="true">${run.group}</div>
+                                  ${run.items.map((opt) => this._renderOption(opt, activeOption))}
+                                </div>`
+                              : run.items.map((opt) => this._renderOption(opt, activeOption))
+                          )
+                        : showCreate
+                          ? nothing
+                          : html`<p class="no-results">${this._labels.noResults}</p>`}
+                      ${showCreate ? this._renderCreateRow() : nothing}
+                    `}
               </div>
             `
           : nothing}

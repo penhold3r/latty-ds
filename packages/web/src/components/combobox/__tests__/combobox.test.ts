@@ -607,6 +607,124 @@ describe('<lt-combobox>', () => {
       expect(options[1]!.querySelector('.option-description')).toBeNull();
     });
   });
+
+  describe('creatable (create-new)', () => {
+    const input = () => el.shadowRoot!.querySelector('input')!;
+
+    const type = async (text: string) => {
+      input().dispatchEvent(new FocusEvent('focus'));
+      await el.updateComplete;
+      input().value = text;
+      input().dispatchEvent(new Event('input'));
+      await el.updateComplete;
+    };
+
+    it('does not show a create row by default, even for text matching nothing', async () => {
+      await type('xyz');
+      expect(el.shadowRoot!.querySelector('.option-create')).toBeNull();
+    });
+
+    it('shows a create row when creatable and the typed text matches no existing option', async () => {
+      el.creatable = true;
+      await type('xyz');
+      expect(el.shadowRoot!.querySelector('.option-create')).toBeTruthy();
+    });
+
+    it('does not show a create row for empty or whitespace-only text', async () => {
+      el.creatable = true;
+      await type('   ');
+      expect(el.shadowRoot!.querySelector('.option-create')).toBeNull();
+    });
+
+    it('does not show a create row when the text exactly matches an existing option (case/diacritic-insensitive)', async () => {
+      el.creatable = true;
+      await type('UNITED STATES');
+      expect(el.shadowRoot!.querySelector('.option-create')).toBeNull();
+    });
+
+    it('does not show a create row while disabled', async () => {
+      el.creatable = true;
+      el.disabled = true;
+      await type('xyz');
+      expect(el.shadowRoot!.querySelector('.option-create')).toBeNull();
+    });
+
+    it('uses the default create label with the typed text', async () => {
+      el.creatable = true;
+      await type('xyz');
+      expect(el.shadowRoot!.querySelector('.option-create')!.textContent).toContain('Create "xyz"');
+    });
+
+    it('overrides the create label via labels', async () => {
+      el.labels = { create: (q) => `Ajouter "${q}"` };
+      el.creatable = true;
+      await type('xyz');
+      expect(el.shadowRoot!.querySelector('.option-create')!.textContent).toContain('Ajouter "xyz"');
+    });
+
+    it('clicking the create row fires create and change, sets value, and closes the dropdown', async () => {
+      el.creatable = true;
+      await type('xyz');
+      const createHandler = vi.fn();
+      const changeHandler = vi.fn();
+      el.addEventListener('create', createHandler);
+      el.addEventListener('change', changeHandler);
+      el.shadowRoot!.querySelector<HTMLButtonElement>('.option-create')!.click();
+      await el.updateComplete;
+      expect(createHandler).toHaveBeenCalledOnce();
+      expect((createHandler.mock.calls[0]![0] as CustomEvent).detail).toEqual({ value: 'xyz' });
+      expect((changeHandler.mock.calls[0]![0] as CustomEvent).detail).toEqual({ value: 'xyz' });
+      expect(el.value).toBe('xyz');
+      expect(el.shadowRoot!.querySelector('.dropdown')).toBeNull();
+    });
+
+    it('displays the raw typed text in the closed field after creating, since it has no entry in options', async () => {
+      el.creatable = true;
+      await type('xyz');
+      el.shadowRoot!.querySelector<HTMLButtonElement>('.option-create')!.click();
+      await el.updateComplete;
+      expect(input().value).toBe('xyz');
+    });
+
+    it('selecting the create row via keyboard (ArrowDown past the last option, then Enter) creates it', async () => {
+      el.creatable = true;
+      await type('xyz');
+      const trigger = input();
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      await el.updateComplete;
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await el.updateComplete;
+      expect(el.value).toBe('xyz');
+    });
+
+    it('in multiple mode, creating adds the value as a tag, keeps the dropdown open, and clears the query', async () => {
+      el.multiple = true;
+      el.creatable = true;
+      await type('xyz');
+      el.shadowRoot!.querySelector<HTMLButtonElement>('.option-create')!.click();
+      await el.updateComplete;
+      expect(el.value).toEqual(['xyz']);
+      expect(el.shadowRoot!.querySelector('.dropdown')).toBeTruthy();
+      expect(input().value).toBe('');
+    });
+
+    it('does not offer to re-create a value already selected as a tag in multiple mode', async () => {
+      el.multiple = true;
+      el.creatable = true;
+      el.value = ['xyz'];
+      await type('xyz');
+      expect(el.shadowRoot!.querySelector('.option-create')).toBeNull();
+    });
+
+    it('falls back to the raw value for a created tag not present in options', async () => {
+      el.multiple = true;
+      el.creatable = true;
+      el.value = ['xyz'];
+      await el.updateComplete;
+      const chip = el.shadowRoot!.querySelector('lt-chip')!;
+      expect(chip.textContent!.trim()).toBe('xyz');
+    });
+  });
 });
 
 describe('diacritic-insensitive filtering (CMB-5)', () => {

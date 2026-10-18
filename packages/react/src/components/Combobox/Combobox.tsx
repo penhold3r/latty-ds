@@ -6,6 +6,7 @@ export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   options?: ComboboxEl['options'];
   clearable?: boolean;
   loading?: boolean;
+  creatable?: boolean;
   value?: ComboboxEl['value'];
   multiple?: boolean;
   label?: string;
@@ -18,10 +19,11 @@ export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   name?: string;
   labels?: ComboboxEl['labels'];
   onChange?: (event: CustomEvent<{ value: string | string[] }>) => void;
+  onCreate?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
-  { onChange, options, value, labels, children, ...props },
+  { onChange, onCreate, options, value, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<ComboboxEl>(null);
@@ -35,6 +37,13 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || !onCreate) return;
+    const h = (ev: Event) => onCreate!(ev as CustomEvent<{ value: string }>);
+    el.addEventListener('create', h);
+    return () => el.removeEventListener('create', h);
+  }, [onCreate]);
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;

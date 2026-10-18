@@ -35,4 +35,7 @@ export interface ComboboxLabels {
   clear: string;
   /** Shown in the dropdown while `loading` is true. */
   loading: string;
+  /** Label for the "create new option" row shown by `creatable` when the typed text matches no existing
+   * option. Receives the trimmed, currently-typed text. */
+  create: (query: string) => string;
 }

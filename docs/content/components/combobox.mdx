@@ -16,6 +16,9 @@ navigation (Arrow, Enter, Escape) is fully supported. Use <code>lt-select</code>
 Each option may also include an optional <code>group</code> (groups a contiguous run of options under one
 heading, like a native <code>&lt;optgroup&gt;</code>), <code>icon</code>, and <code>description</code>.
 
+Set the <code>creatable</code> property to let the user create a new option from free text that matches
+nothing in the list.
+
 ## Playground
 
 <ComponentPlayground
@@ -79,6 +82,21 @@ heading, like a native <code>&lt;optgroup&gt;</code>), <code>icon</code>, and <c
     { value: 'fr', label: 'France', group: 'Europe', description: 'Eiffel Tower, croissants' }
   ];
 <\/script>
+
+<!-- creatable: lets the user create a new option from free text that matches nothing in the list — fires
+     "create" with the typed text and sets it as the value, but does not modify options itself -->
+<lt-combobox id="creatable-tags" label="Skills" multiple creatable></lt-combobox>
+
+<script type="module">
+  const creatableTags = document.getElementById('creatable-tags');
+  creatableTags.options = [
+    { value: 'js', label: 'JavaScript' },
+    { value: 'ts', label: 'TypeScript' }
+  ];
+  creatableTags.addEventListener('create', (e) => {
+    console.log('created', e.detail.value);
+  });
+<\/script>
     `}
     react={`
 import { Combobox } from '@latty-ds/react';
@@ -114,6 +132,14 @@ const groupedCountries = [
   { value: 'fr', label: 'France', group: 'Europe', description: 'Eiffel Tower, croissants' }
 ];
 <Combobox label="Country" options={groupedCountries} />
+
+// creatable: lets the user create a new option from free text that matches nothing in the list — fires
+// onCreate with the typed text and sets it as the value, but does not modify options itself
+const skills = [
+  { value: 'js', label: 'JavaScript' },
+  { value: 'ts', label: 'TypeScript' }
+];
+<Combobox label="Skills" options={skills} multiple creatable onCreate={(e) => console.log('created', e.detail.value)} />
     `}
     vue={`
 <template>
@@ -136,6 +162,16 @@ const groupedCountries = [
   <!-- Option groups, descriptions, and icons: options sharing a "group" render under one heading
        (consecutive entries only, like a native <optgroup>); "description" and "icon" are both optional -->
   <lt-combobox label="Country" :options="groupedCountries" />
+
+  <!-- creatable: lets the user create a new option from free text that matches nothing in the list — fires
+       "create" with the typed text and sets it as the value, but does not modify options itself -->
+  <lt-combobox
+    label="Skills"
+    :options="skills"
+    multiple
+    creatable
+    @create="(e) => console.log('created', e.detail.value)"
+  />
 </template>
     `}
   />

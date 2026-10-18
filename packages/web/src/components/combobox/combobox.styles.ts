@@ -213,6 +213,11 @@ export const comboboxStyles = [
       white-space: nowrap;
     }
 
+    .option-create,
+    .option-create .option-icon {
+      color: var(--lt-text-primary);
+    }
+
     .option-group-label {
       color: var(--lt-text-subtle);
       font-size: 0.75rem;

@@ -3287,7 +3287,7 @@
           "type": {
             "text": "array"
           },
-          "default": "[ floatingPanelReset, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-text-error); margin-inline-start: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color 150ms ease, box-shadow 150ms ease; } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } :host([variant='error']) .input-wrap { border-color: var(--lt-text-error); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-color-success-500); } :host([variant='warning']) .input-wrap { border-color: var(--lt-color-warning-500); } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .input-wrap, :host(:disabled) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-color-neutral-400)); } :host([disabled]) input, :host(:disabled) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } /* Multiple mode: tags replace the fixed single-line height with a wrapping row, min-height per size instead. */ :host([multiple]) .input-wrap { flex-wrap: wrap; height: auto; overflow: visible; padding-block: var(--lt-spacing-1); } :host([multiple][size='sm']) .input-wrap { min-height: 32px; } :host([multiple][size='md']) .input-wrap, :host([multiple]:not([size])) .input-wrap { min-height: 40px; } :host([multiple][size='lg']) .input-wrap { min-height: 48px; } :host([multiple]) input { min-width: 80px; } .clear-button { align-items: center; background: none; border-radius: var(--lt-border-radius, 4px); border: 0; color: var(--lt-text-subtle); cursor: pointer; display: flex; flex-shrink: 0; padding: 0; } .clear-button:hover { color: var(--lt-text-default); } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform 150ms ease; } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); box-shadow: var(--lt-shadow-md); max-height: 240px; overflow-y: auto; z-index: 100; } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; gap: var(--lt-spacing-2); padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: start; width: 100%; } .option-icon { color: var(--lt-text-subtle); flex-shrink: 0; } .option-content { display: flex; flex-direction: column; min-width: 0; overflow: hidden; } .option-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-description { color: var(--lt-text-subtle); font-size: 0.8125em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-group-label { color: var(--lt-text-subtle); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; padding: var(--lt-spacing-2) var(--lt-spacing-3) var(--lt-spacing-1); text-transform: uppercase; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[data-active='true'] { background: var(--lt-bg-neutral-subtle); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .loading-state { align-items: center; color: var(--lt-text-subtle); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-4) var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .input-wrap, .chevron { transition: none; } } ` ]"
+          "default": "[ floatingPanelReset, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-text-error); margin-inline-start: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color 150ms ease, box-shadow 150ms ease; } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle); } :host([variant='error']) .input-wrap { border-color: var(--lt-text-error); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-color-success-500); } :host([variant='warning']) .input-wrap { border-color: var(--lt-color-warning-500); } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .input-wrap, :host(:disabled) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-color-neutral-400)); } :host([disabled]) input, :host(:disabled) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } /* Multiple mode: tags replace the fixed single-line height with a wrapping row, min-height per size instead. */ :host([multiple]) .input-wrap { flex-wrap: wrap; height: auto; overflow: visible; padding-block: var(--lt-spacing-1); } :host([multiple][size='sm']) .input-wrap { min-height: 32px; } :host([multiple][size='md']) .input-wrap, :host([multiple]:not([size])) .input-wrap { min-height: 40px; } :host([multiple][size='lg']) .input-wrap { min-height: 48px; } :host([multiple]) input { min-width: 80px; } .clear-button { align-items: center; background: none; border-radius: var(--lt-border-radius, 4px); border: 0; color: var(--lt-text-subtle); cursor: pointer; display: flex; flex-shrink: 0; padding: 0; } .clear-button:hover { color: var(--lt-text-default); } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform 150ms ease; } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); box-shadow: var(--lt-shadow-md); max-height: 240px; overflow-y: auto; z-index: 100; } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; gap: var(--lt-spacing-2); padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: start; width: 100%; } .option-icon { color: var(--lt-text-subtle); flex-shrink: 0; } .option-content { display: flex; flex-direction: column; min-width: 0; overflow: hidden; } .option-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-description { color: var(--lt-text-subtle); font-size: 0.8125em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-create, .option-create .option-icon { color: var(--lt-text-primary); } .option-group-label { color: var(--lt-text-subtle); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; padding: var(--lt-spacing-2) var(--lt-spacing-3) var(--lt-spacing-1); text-transform: uppercase; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[data-active='true'] { background: var(--lt-bg-neutral-subtle); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .loading-state { align-items: center; color: var(--lt-text-subtle); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-4) var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .input-wrap, .chevron { transition: none; } } ` ]"
         }
       ],
       "exports": [
@@ -3378,6 +3378,15 @@
               },
               "default": "false",
               "description": "Shows a loading indicator in place of the option list — for options fetched asynchronously as the user\ntypes. Purely a rendering concern: it doesn't touch `options` or the search `query` itself, so a consumer\ntypically clears/leaves `options` empty while a fetch for the current query is in flight."
+            },
+            {
+              "kind": "field",
+              "name": "creatable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Allows creating a new option from free text when nothing in `options` matches the typed text (case- and\ndiacritic-insensitively) — shows an extra \"create\" row at the end of the dropdown. Selecting it fires a\n`create` event with the typed text and sets `value` to it, but does not modify `options` itself: the\nselected/tag display falls back to the raw value when it isn't found in `options`, so persisting the new\noption (or not) is entirely up to the consumer."
             },
             {
               "kind": "field",
@@ -3611,6 +3620,20 @@
               ]
             },
             {
+              "kind": "field",
+              "name": "_showCreate",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "private",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_createOption",
+              "privacy": "private"
+            },
+            {
               "kind": "method",
               "name": "_preventFocusSteal",
               "privacy": "private",
@@ -3806,6 +3829,11 @@
             },
             {
               "kind": "method",
+              "name": "_renderCreateRow",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
               "name": "render"
             }
           ],
@@ -3816,6 +3844,13 @@
               },
               "description": "Fired when the selected value changes. With `multiple`, `value` is the array of selected values.",
               "name": "change"
+            },
+            {
+              "type": {
+                "text": "CustomEvent<{value: string}>"
+              },
+              "description": "Fired when `creatable` is set and the user selects the \"create new\" row for free-text that matches no existing option. Does not modify `options` itself — the consumer decides whether/how to persist the new option.",
+              "name": "create"
             }
           ],
           "superclass": {
