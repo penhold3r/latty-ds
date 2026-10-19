@@ -33,8 +33,8 @@ const BORDER_STEPS = {
     high: { default: '400', strong: '600', subtle: '300', input: '500' }
   },
   dark: {
-    default: { default: '700', strong: '500', subtle: '800' },
-    high: { default: '500', strong: '300', subtle: '600' }
+    default: { default: '700', strong: '500', subtle: '800', input: '600' },
+    high: { default: '500', strong: '300', subtle: '600', input: '400' }
   }
 } as const;
 
@@ -145,7 +145,10 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap =
   map['border-strong'] = `color-neutral-${darkBorderSteps.strong}`;
   map['border-subtle'] = `color-neutral-${darkBorderSteps.subtle}`;
   map['border-focus'] = 'color-primary-400';
-  map['border-input'] = 'border-default';
+  // Own step, mirroring the light-mode bump above (X4(d)): neutral-600 clears WCAG 1.4.11's 3:1 against the
+  // page background (neutral-900, ~3.14:1) but is still short against a field's own bg-subtle fill
+  // (neutral-800, ~2.30:1, up from neutral-700's ~1.49:1) — same "incremental step, not a full fix" caveat.
+  map['border-input'] = `color-neutral-${darkBorderSteps.input}`;
   map['focus-ring-color'] = 'border-focus';
   map['focus-halo-color'] = 'bg-primary-subtle';
 

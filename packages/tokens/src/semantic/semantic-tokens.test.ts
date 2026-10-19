@@ -122,8 +122,9 @@ describe('semantic tokens — border-input and focus-ring tokens', () => {
     expect(built.default.light['border-input']).not.toBe(built.default.light['border-default']);
   });
 
-  it('border-input stays an alias of border-default in dark mode (unchanged)', () => {
-    expect(built.default.dark['border-input']).toBe('border-default');
+  it('border-input is its own step in dark mode too, not an alias of border-default (X4(d))', () => {
+    expect(built.default.dark['border-input']).toBe('color-neutral-600');
+    expect(built.default.dark['border-input']).not.toBe(built.default.dark['border-default']);
   });
 
   it("border-input's contrast against a white/neutral-50 field background improved but still falls short of WCAG 1.4.11's 3:1 non-text minimum", () => {
@@ -133,6 +134,15 @@ describe('semantic tokens — border-input and focus-ring tokens', () => {
     expect(against50).toBeGreaterThan(1.22); // was neutral-200's ratio
     expect(againstWhite).toBeGreaterThan(1.27); // was neutral-200's ratio
     expect(against50).toBeLessThan(3); // still short of 1.4.11 — documents the gap, not a pass
+  });
+
+  it("border-input's dark-mode contrast against a field's own bg-subtle fill improved but still falls short of 3:1; against the page background (bg-default) it clears 3:1", () => {
+    const hex = resolveHex('default', built.default.dark['border-input']);
+    const againstBgSubtle = contrastRatio(hex, resolveHex('default', 'color-neutral-800'));
+    const againstBgDefault = contrastRatio(hex, resolveHex('default', 'color-neutral-900'));
+    expect(againstBgSubtle).toBeGreaterThan(1.49); // was neutral-700's ratio
+    expect(againstBgSubtle).toBeLessThan(3); // still short of 1.4.11 against the field's own fill
+    expect(againstBgDefault).toBeGreaterThanOrEqual(3); // clears 1.4.11 against the page background
   });
 
   it.each(MODES)('focus-ring-color aliases border-focus in %s', (mode) => {
