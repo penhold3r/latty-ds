@@ -19,8 +19,8 @@ export const tableStyles = css`
      nothing else inside it is focusable, e.g. a table with no interactive cells) needs its own visible focus
      indicator, same as any other focusable element in this codebase. */
   .table-container:focus-visible {
-    outline: 2px solid var(--lt-focus-ring-color);
-    outline-offset: -2px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: calc(-1 * var(--lt-border-focusRingOffset));
   }
 
   :host([responsive-mode='scroll']) .table-container {
@@ -160,8 +160,8 @@ export const tableStyles = css`
   }
 
   .resize-handle:focus-visible {
-    outline: 2px solid var(--lt-interactive-primary-bg);
-    outline-offset: -2px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-interactive-primary-bg);
+    outline-offset: calc(-1 * var(--lt-border-focusRingOffset));
   }
 
   /* Body */
@@ -403,8 +403,8 @@ export const tableStyles = css`
   }
 
   th.sortable .header-content:focus-visible {
-    outline: 2px solid var(--lt-interactive-primary-bg);
-    outline-offset: -2px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-interactive-primary-bg);
+    outline-offset: calc(-1 * var(--lt-border-focusRingOffset));
   }
 
   /* ── Reduced motion ─────────────────────────────────────────────────────── */

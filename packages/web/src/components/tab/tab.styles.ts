@@ -33,8 +33,8 @@ export const tabStyles = css`
 
   :host(:focus-visible) .tab {
     color: var(--lt-text-primary);
-    outline: 2px solid var(--lt-focus-ring-color);
-    outline-offset: 2px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   :host([active]) .tab {

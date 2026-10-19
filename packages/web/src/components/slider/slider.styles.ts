@@ -51,8 +51,8 @@ export const sliderStyles = css`
   }
 
   input[type='range']:focus-visible {
-    outline: 3px solid var(--lt-focus-ring-color);
-    outline-offset: 3px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   input[type='range']:hover:not(:disabled) {

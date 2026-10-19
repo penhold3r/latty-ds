@@ -57,8 +57,8 @@ export const listItemStyles = css`
 
   a.inner:focus-visible,
   button.inner:focus-visible {
-    outline: 3px solid var(--lt-focus-ring-color);
-    outline-offset: -3px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: calc(-1 * var(--lt-border-focusRingOffset));
   }
 
   button.inner[disabled],

@@ -290,8 +290,8 @@ export const calendarStyles = css`
   }
 
   .day:focus-visible .day__inner {
-    outline: 2px solid var(--lt-focus-ring-color);
-    outline-offset: 1px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   /* Today ring */

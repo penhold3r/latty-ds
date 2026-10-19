@@ -2,7 +2,7 @@ export const DEFAULT_BORDER_RADIUS = '0.5rem' as const;
 
 export const DEFAULT_BORDER_WIDTH = '1px' as const;
 
-export const DEFAULT_FOCUS_RING_WIDTH = '3px' as const;
+export const DEFAULT_FOCUS_RING_WIDTH = '2px' as const;
 
 export const DEFAULT_FOCUS_RING_OFFSET = '2px' as const;
 

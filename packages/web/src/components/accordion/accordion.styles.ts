@@ -67,8 +67,8 @@ export const accordionStyles = css`
   }
 
   summary:focus-visible {
-    outline: 2px solid var(--lt-focus-ring-color);
-    outline-offset: 2px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
     border-radius: var(--lt-border-radius);
   }
 
