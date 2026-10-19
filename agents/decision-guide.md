@@ -4,19 +4,22 @@ Organized by UI intent rather than alphabetically. See [`components.md`](./compo
 
 ## Getting input from the user
 
-| Need                                                                       | Component                        | Notes                                                                       |
-| -------------------------------------------------------------------------- | -------------------------------- | --------------------------------------------------------------------------- |
-| Free text (name, email, password, etc.)                                    | `lt-textfield`                   | `type` attribute mirrors native `<input>` types                             |
-| A single date                                                              | `lt-date-input`                  | Cross-browser text field with locale formatting + calendar popover          |
-| Date, time, or datetime, styled like a native picker                       | `lt-datepicker`                  | Thin styled wrapper around native `<input type="date/time/datetime-local">` |
-| A date picked from a visual grid, or a date range                          | `lt-calendar`                    | Interactive grid; supports range selection                                  |
-| One choice from a short, always-visible list (2–5 options)                 | `lt-radio-group` (of `lt-radio`) | All options visible at once — best when comparing options matters           |
-| One choice from a longer list                                              | `lt-select`                      | Closed dropdown, opens on interaction                                       |
-| One choice from a long or searchable list                                  | `lt-combobox`                    | Adds keyboard filtering on top of `lt-select`'s pattern                     |
-| A single yes/no or multi-select checkbox                                   | `lt-checkbox`                    | Supports an indeterminate state for "some selected"                         |
-| A binary setting that takes effect immediately (not part of a form submit) | `lt-switch`                      | Toggle semantics, not form-submission semantics                             |
-| A numeric value within a bounded range                                     | `lt-slider`                      |                                                                             |
-| A color value                                                              | `lt-color-input`                 | Opens the native OS color picker, shows a live swatch                       |
+| Need                                                                       | Component                        | Notes                                                                                                              |
+| -------------------------------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Free text (name, email, password, etc.)                                    | `lt-textfield`                   | `type` attribute mirrors native `<input>` types                                                                    |
+| A single date                                                              | `lt-date-input`                  | Cross-browser text field with locale formatting + calendar popover                                                 |
+| Date, time, or datetime, styled like a native picker                       | `lt-datepicker`                  | Thin styled wrapper around native `<input type="date/time/datetime-local">`                                        |
+| A date picked from a visual grid, or a date range                          | `lt-calendar`                    | Interactive grid; supports range selection and quick-pick presets ("Last 7 days", etc.) via the `presets` property |
+| One choice from a short, always-visible list (2–5 options)                 | `lt-radio-group` (of `lt-radio`) | All options visible at once — best when comparing options matters                                                  |
+| One choice from a longer list                                              | `lt-select`                      | Closed dropdown, opens on interaction                                                                              |
+| One choice from a long or searchable list                                  | `lt-combobox`                    | Adds keyboard filtering on top of `lt-select`'s pattern                                                            |
+| Several choices from a list                                                | `lt-select`                      | Set `multiple`; selections summarize as a comma-joined label                                                       |
+| Several choices from a searchable list, summarized as removable chips      | `lt-combobox`                    | Set `multiple`; adds the search filter `lt-select` doesn't have                                                    |
+| Pick from a list, or add a new value not already in it                     | `lt-combobox`                    | Set `creatable`; fires `create` for free-text that matches no option                                               |
+| A single yes/no or multi-select checkbox                                   | `lt-checkbox`                    | Supports an indeterminate state for "some selected"                                                                |
+| A binary setting that takes effect immediately (not part of a form submit) | `lt-switch`                      | Toggle semantics, not form-submission semantics                                                                    |
+| A numeric value within a bounded range                                     | `lt-slider`                      |                                                                                                                    |
+| A color value                                                              | `lt-color-input`                 | Opens the native OS color picker, shows a live swatch                                                              |
 
 ## Showing status or metadata
 
@@ -66,14 +69,16 @@ Organized by UI intent rather than alphabetically. See [`components.md`](./compo
 
 ## Data display
 
-| Need                                                       | Component                  | Notes                                                |
-| ---------------------------------------------------------- | -------------------------- | ---------------------------------------------------- |
-| Tabular data with sorting                                  | `lt-table`                 | Supports sortable columns, striped rows, hover state |
-| A vertical list of items                                   | `lt-list` / `lt-list-item` | Supports icons, dividers, and marker options         |
-| Typography for headings, subheadings, body text, or labels | `lt-text`                  | Semantic type scale with variant-based font handling |
-| Standalone vector icon                                     | `lt-icon`                  | Vector icon from `@latty-ds/icons` registry          |
-| A user or entity image                                     | `lt-avatar`                | Falls back to initials if no image                   |
-| A responsive image                                         | `lt-image`                 | Lazy loading + aspect-ratio control built in         |
+| Need                                                       | Component                  | Notes                                                                            |
+| ---------------------------------------------------------- | -------------------------- | -------------------------------------------------------------------------------- |
+| Tabular data with sorting                                  | `lt-table`                 | Supports sortable/resizable columns, striped rows, hover state                   |
+| A large data set that would be slow to render all at once  | `lt-table`                 | Enable row virtualization; pairs with `lt-pagination` for page-based loading too |
+| Letting the user select one or more rows                   | `lt-table`                 | Built-in row selection; fires `selectionchange`                                  |
+| A vertical list of items                                   | `lt-list` / `lt-list-item` | Supports icons, dividers, and marker options                                     |
+| Typography for headings, subheadings, body text, or labels | `lt-text`                  | Semantic type scale with variant-based font handling                             |
+| Standalone vector icon                                     | `lt-icon`                  | Vector icon from `@latty-ds/icons` registry                                      |
+| A user or entity image                                     | `lt-avatar`                | Falls back to initials if no image                                               |
+| A responsive image                                         | `lt-image`                 | Lazy loading + aspect-ratio control built in                                     |
 
 ## Actions
 
