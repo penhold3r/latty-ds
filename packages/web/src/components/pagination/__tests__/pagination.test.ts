@@ -114,6 +114,46 @@ describe('<lt-pagination>', () => {
     expect(pageButtons.length).toBe(5);
   });
 
+  describe('constant control count (PGN-2)', () => {
+    const slotCount = () => el.shadowRoot!.querySelectorAll('button[aria-label^="Page"], .ellipsis').length;
+
+    it.each([1, 2, 3, 4, 5, 50, 97, 98, 99, 100])(
+      'renders exactly 7 page/ellipsis slots at page %i of 100, never more or fewer',
+      async (page) => {
+        el.totalPages = 100;
+        el.page = page;
+        await el.updateComplete;
+        expect(slotCount()).toBe(7);
+      }
+    );
+
+    it.each([1, 2, 3, 4, 5, 50, 97, 98, 99, 100])(
+      'always includes the current page itself (page %i of 100)',
+      async (page) => {
+        el.totalPages = 100;
+        el.page = page;
+        await el.updateComplete;
+        const current = el.shadowRoot!.querySelector('button[aria-current="page"]');
+        expect(current?.textContent?.trim()).toBe(String(page));
+      }
+    );
+
+    it('collapses a single hidden page into its own number instead of a pointless ellipsis', async () => {
+      // total=8: page 2's sibling window is [2,3] by the raw algorithm, leaving boundary page 1 and page 2
+      // one apart — no page is actually hidden between them, so there should be no leading ellipsis, just
+      // page 2 shown plainly.
+      el.totalPages = 8;
+      el.page = 2;
+      await el.updateComplete;
+      const labels = Array.from(el.shadowRoot!.querySelectorAll('button[aria-label^="Page"], .ellipsis')).map((b) =>
+        b.textContent?.trim()
+      );
+      expect(labels[0]).toBe('1');
+      expect(labels[1]).toBe('2');
+      expect(labels[1]).not.toBe('…');
+    });
+  });
+
   describe('out-of-range input', () => {
     const current = () => el.shadowRoot!.querySelector('button[aria-current="page"]')?.textContent?.trim();
 

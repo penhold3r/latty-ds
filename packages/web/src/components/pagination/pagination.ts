@@ -74,25 +74,41 @@ export class Pagination extends ThemeableElement {
     dispatch(this, 'change', { page });
   }
 
+  /**
+   * Builds the page-number/ellipsis row at a FIXED width (always `2*BOUNDARY + 2*SIBLINGS + 3` items once
+   * `total` exceeds that, 7 with the constants below) regardless of where `current` sits — PGN-2: the
+   * original window (1 boundary page either side + up to 1 sibling either side of current) rendered a
+   * different number of items depending on position (4 near an edge, 7 in the middle), making the control's
+   * own width jump as the user pages through. Standard fix (the same approach used by e.g. MUI's
+   * `usePagination`): clamp the sibling window so it can't cross the boundary, then when that leaves an
+   * ellipsis with nothing actually hidden behind it (no gap, or a 1-page gap not worth collapsing), absorb
+   * its slot into an extra page on that side instead of just shrinking the total count.
+   */
   private _pages(): (number | '…')[] {
     const total = this._total;
     const current = this._current;
+    const SIBLINGS = 1;
+    const BOUNDARY = 1;
+    const maxSlots = 2 * BOUNDARY + 2 * SIBLINGS + 3;
 
-    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+    if (total <= maxSlots) return Array.from({ length: total }, (_, i) => i + 1);
 
-    const pages: (number | '…')[] = [1];
+    const range = (start: number, end: number): number[] =>
+      Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
-    if (current > 3) pages.push('…');
+    const siblingsStart = Math.max(Math.min(current - SIBLINGS, total - BOUNDARY - 2 * SIBLINGS - 1), BOUNDARY + 2);
+    const siblingsEnd = Math.min(Math.max(current + SIBLINGS, BOUNDARY + 2 * SIBLINGS + 2), total - BOUNDARY - 1);
 
-    const start = Math.max(2, current - 1);
-    const end = Math.min(total - 1, current + 1);
+    const leadingGap = siblingsStart > BOUNDARY + 2;
+    const trailingGap = siblingsEnd < total - BOUNDARY - 1;
 
-    for (let i = start; i <= end; i++) pages.push(i);
-
-    if (current < total - 2) pages.push('…');
-
-    pages.push(total);
-    return pages;
+    return [
+      ...range(1, BOUNDARY),
+      ...(leadingGap ? ['…' as const] : BOUNDARY + 1 < total - BOUNDARY ? [BOUNDARY + 1] : []),
+      ...range(siblingsStart, siblingsEnd),
+      ...(trailingGap ? ['…' as const] : total - BOUNDARY > BOUNDARY ? [total - BOUNDARY] : []),
+      ...range(total - BOUNDARY + 1, total)
+    ];
   }
 
   render() {
