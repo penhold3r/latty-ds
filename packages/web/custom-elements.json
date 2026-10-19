@@ -8467,7 +8467,7 @@
           "type": {
             "text": "CSSResult"
           },
-          "default": "css` [popover] { border: 0; inset: unset; margin: 0; overflow: visible; padding: 0; position: fixed; } `"
+          "default": "css` [popover] { background: transparent; border: 0; inset: unset; margin: 0; overflow: visible; padding: 0; position: fixed; } `"
         }
       ],
       "exports": [

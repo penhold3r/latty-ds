@@ -46,6 +46,7 @@ export function closeFloating(floating: HTMLElement, cleanup: (() => void) | nul
 
 export const floatingPanelReset: CSSResult = css`
   [popover] {
+    background: transparent;
     border: 0;
     inset: unset;
     margin: 0;
