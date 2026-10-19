@@ -3,10 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.0.0](https://github.com/penhold3r/latty-ds/compare/v1.1.0...v2.0.0) (2026-10-19)
-
-**Note:** Version bump only for package @latty-ds/icons
-
 # [1.1.0](https://github.com/penhold3r/latty-ds/compare/v1.0.0...v1.1.0) (2026-10-19)
 
 ### Bug Fixes
