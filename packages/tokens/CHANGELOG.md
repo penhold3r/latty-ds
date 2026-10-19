@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/penhold3r/latty-ds/compare/v1.0.0...v1.1.0) (2026-10-19)
+
+### Bug Fixes
+
+- **tokens:** bump dark-mode border-input to neutral-600 ([a55ece8](https://github.com/penhold3r/latty-ds/commit/a55ece8c4d6456f3e79057e8210cd55f5569b32a))
+- **tokens:** give border-input its own step, bump light mode to neutral-300 ([2157dc6](https://github.com/penhold3r/latty-ds/commit/2157dc641f87db2db8b604afab8acdd9464e60cb))
+- **tokens:** standardize the focus ring to 2px width, 2px offset ([c65e1a4](https://github.com/penhold3r/latty-ds/commit/c65e1a401729369b477b1da7bcdb694a9b37cd5d))
+
+### Features
+
+- **tokens:** add --lt-shadow-rgb token, clear remaining raw-color ratchet ([088afa2](https://github.com/penhold3r/latty-ds/commit/088afa2dc164a7cf2daa0f0564764882a20fdef1))
+
 # [1.0.0](https://github.com/penhold3r/latty-ds/compare/v0.10.4...v1.0.0) (2026-10-09)
 
 ### Features

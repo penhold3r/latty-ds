@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/penhold3r/latty-ds/compare/v1.0.0...v1.1.0) (2026-10-19)
+
+### Bug Fixes
+
+- **icons:** scope the blanket stroke rule to exclude filled shapes ([c7cc0ca](https://github.com/penhold3r/latty-ds/commit/c7cc0ca72fef22cf86a4e6d91201b053892d5eb8))
+
 # [1.0.0](https://github.com/penhold3r/latty-ds/compare/v0.10.4...v1.0.0) (2026-10-09)
 
 ### Bug Fixes

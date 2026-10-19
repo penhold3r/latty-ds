@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/penhold3r/latty-ds/compare/v1.0.0...v1.1.0) (2026-10-19)
+
+### Bug Fixes
+
+- **react:** fix SSR/hydration attribute casing, boolean removal, and missing Icon export ([c6f6959](https://github.com/penhold3r/latty-ds/commit/c6f69590576cf0c39e115b9c7b4c388d67d068e4))
+
+### Features
+
+- **web:** add autocomplete, prefix/suffix and autosize to lt-textfield ([7a3dd90](https://github.com/penhold3r/latty-ds/commit/7a3dd90a099bb6d0ee0c070c8388806b851fa2cd))
+- **web:** add autofocus to lt-textfield ([3f67471](https://github.com/penhold3r/latty-ds/commit/3f67471715e4a3b208ce2f9d594ef83823821cd4))
+- **web:** add caption and sticky-header to lt-table ([a7431b8](https://github.com/penhold3r/latty-ds/commit/a7431b8e61d62a6b37538426959ef0d20a6a8494))
+- **web:** add clearable to lt-select and lt-combobox ([b7b4731](https://github.com/penhold3r/latty-ds/commit/b7b4731273c3d0b406843778e86110cbbe04a82b))
+- **web:** add click-to-scroll buttons to lt-tab-group ([b0c83a9](https://github.com/penhold3r/latty-ds/commit/b0c83a99b9f92242653d54525751a93796a34e19))
+- **web:** add column resize to lt-table ([992798c](https://github.com/penhold3r/latty-ds/commit/992798c567f41977c4486d237a76a0c87cf46ef0))
+- **web:** add creatable (create-new) to lt-combobox ([7062f02](https://github.com/penhold3r/latty-ds/commit/7062f02c17bf17390a3551b1202fe0ee93f57414))
+- **web:** add default slot and max (count overflow) to lt-badge ([e4390ec](https://github.com/penhold3r/latty-ds/commit/e4390ec0ee03832d2c8e22f5b00bc0e91e66bce9))
+- **web:** add delay to lt-tooltip ([1d66c15](https://github.com/penhold3r/latty-ds/commit/1d66c155612a87d188fe0db7d412b67b79914589))
+- **web:** add hoverable to lt-tooltip ([1758c75](https://github.com/penhold3r/latty-ds/commit/1758c75e0326484b2d9462601b2dd84edfe448cb))
+- **web:** add loading state to lt-select and lt-combobox ([da862ed](https://github.com/penhold3r/latty-ds/commit/da862ed9ab0d0c6f5f15ad753c99bb4fde2d084e))
+- **web:** add lt-accordion-group for exclusive/multiple accordion groups ([adbbee3](https://github.com/penhold3r/latty-ds/commit/adbbee33fcfe88545314b905f970b43d2aba9366))
+- **web:** add lt-avatar-group for overlapping avatar stacks ([3fe81f8](https://github.com/penhold3r/latty-ds/commit/3fe81f83b5cc7fd033af6af8de5cf6a07fc773bc))
+- **web:** add lt-snackbar-group for queued/stacked toasts ([f8f8cb1](https://github.com/penhold3r/latty-ds/commit/f8f8cb17b71468a3944d3786696c5c01e67bc88d))
+- **web:** add multiple/tags mode to lt-combobox ([7437778](https://github.com/penhold3r/latty-ds/commit/74377780a239ec3e8cf2346643f322241734a590))
+- **web:** add pagination coupling to lt-table ([6eaf7db](https://github.com/penhold3r/latty-ds/commit/6eaf7db7c23fbe23aa2fc5f9f7af1a57b897784f))
+- **web:** add presence status dot to lt-avatar ([9032bb4](https://github.com/penhold3r/latty-ds/commit/9032bb48d51a0df18a4c869e9bfaa73f54bf5c85))
+- **web:** add presets to lt-calendar ([8980cc4](https://github.com/penhold3r/latty-ds/commit/8980cc420224937f7865a03e0cf3c1de537c5a53))
+- **web:** add rich label content and helper-text to checkbox, switch, radio ([def0803](https://github.com/penhold3r/latty-ds/commit/def08037f566dd93babb437eb13114f40c37c7df))
+- **web:** add row selection to lt-table ([71fd09b](https://github.com/penhold3r/latty-ds/commit/71fd09b83d0ab4abb019806f7949c6f94868519f))
+- **web:** add row virtualization to lt-table ([3f6da43](https://github.com/penhold3r/latty-ds/commit/3f6da43f5b4249bf72cee8529b3a35a09a7a8633))
+- **web:** add rowclick event to lt-table ([3386c16](https://github.com/penhold3r/latty-ds/commit/3386c16bfccd8650afaa5df78119322705ccb685))
+- **web:** add selectable (filter-chip) mode and Backspace-to-delete to lt-chip ([8be1081](https://github.com/penhold3r/latty-ds/commit/8be10816062d8ec284023eeede5c1e35e4c9bb83))
+- **web:** add srcset, sizes, and aspect-ratio to lt-image ([244b819](https://github.com/penhold3r/latty-ds/commit/244b819e58f4c7676d29b9c4563597c98ba81d1f))
+- **web:** add toggle mode and loading-label to lt-button ([bf276c1](https://github.com/penhold3r/latty-ds/commit/bf276c1f56409f2585bcb5afa7b39e5fa907abf4))
+- **web:** add touch to lt-tooltip ([e556a57](https://github.com/penhold3r/latty-ds/commit/e556a57ff7e8ef7d879ce1952efd108f188b4226))
+- **web:** add underline, target, rel, and download to lt-link ([8fb6098](https://github.com/penhold3r/latty-ds/commit/8fb6098c9c1f810cdfc1978e53e581e325f38c11))
+- **web:** add vertical orientation to lt-tab-group ([5a2b8e1](https://github.com/penhold3r/latty-ds/commit/5a2b8e14046a526b1e00b29b7a11b011939feea0))
+- **web:** add week numbers to lt-calendar ([a146f5b](https://github.com/penhold3r/latty-ds/commit/a146f5b2f4aaa509f0b9f73e5e58a0a5ce877c3a))
+
 # [1.0.0](https://github.com/penhold3r/latty-ds/compare/v0.10.4...v1.0.0) (2026-10-09)
 
 ### Bug Fixes
