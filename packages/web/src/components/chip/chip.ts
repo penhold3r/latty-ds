@@ -51,7 +51,7 @@ export class Chip extends ThemeableElement {
   /** Disables the chip and its delete button. */
   @property({ type: Boolean, reflect: true }) disabled = false;
 
-  /** Shows a delete/dismiss button that fires `lt-delete` when clicked. */
+  /** Shows a delete/dismiss button that fires `delete` when clicked. */
   @property({ type: Boolean, reflect: true }) deletable = false;
 
   /**

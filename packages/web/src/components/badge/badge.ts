@@ -17,11 +17,11 @@ import { SlottedContentController } from '../shared/slotted-content';
  *
  * @example
  * ```html
- * <lt-badge variant="success" content="Active" />
- * <lt-badge variant="error" appearance="solid" content="Failed" />
- * <lt-badge variant="primary" content="New" dot />
- * <lt-badge variant="warning" />
- * <lt-badge variant="error" appearance="solid" content="150" max="99" />
+ * <lt-badge variant="success" content="Active"></lt-badge>
+ * <lt-badge variant="error" appearance="solid" content="Failed"></lt-badge>
+ * <lt-badge variant="primary" content="New" dot></lt-badge>
+ * <lt-badge variant="warning"></lt-badge>
+ * <lt-badge variant="error" appearance="solid" content="150" max="99"></lt-badge>
  * ```
  */
 @customElement('lt-badge')

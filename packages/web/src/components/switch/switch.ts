@@ -135,13 +135,6 @@ export class Switch extends ThemeableElement {
     return { ...DEFAULT_LABELS, ...this.labels };
   }
 
-  /**
-   * Handles switch change events.
-   * Updates the checked state and dispatches a custom change event.
-   *
-   * @param e - The native change event
-   * @private
-   */
   updated() {
     this._internals.setFormValue(this.checked ? this.value : null);
     const input = this.shadowRoot?.querySelector<HTMLElement>('input');
