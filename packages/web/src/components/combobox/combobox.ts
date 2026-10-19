@@ -14,6 +14,7 @@ import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 import { groupConsecutive } from '../shared/option-groups';
+import { nextListboxIndex } from '../shared/listbox-nav';
 
 let comboboxCount = 0;
 
@@ -332,6 +333,14 @@ export class Combobox extends ThemeableElement {
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       this.activeIndex = Math.max(this.activeIndex - 1, 0);
+    } else if (e.key === 'Home' || e.key === 'End' || e.key === 'PageDown' || e.key === 'PageUp') {
+      // Arrow Up/Down deliberately clamp at the edges rather than wrap (a text-input-first component, unlike
+      // lt-select) — these follow the same convention, so `nextListboxIndex`'s own clamping for these four
+      // keys already matches without needing anything extra here.
+      if (maxIndex >= 0) {
+        e.preventDefault();
+        this.activeIndex = nextListboxIndex(e.key, this.activeIndex, maxIndex + 1);
+      }
     } else if (e.key === 'Enter' && this.activeIndex >= 0) {
       e.preventDefault();
       if (showCreate && this.activeIndex === opts.length) {
@@ -384,7 +393,7 @@ export class Combobox extends ThemeableElement {
     if (this.multiple && !Array.isArray(this.value)) this.value = this._selected;
   }
 
-  updated() {
+  updated(changedProperties: Map<string, unknown>) {
     if (this.multiple) {
       const formData = new FormData();
       if (this.name) for (const v of this._selected) formData.append(this.name, v);
@@ -397,6 +406,10 @@ export class Combobox extends ThemeableElement {
       this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, input);
     } else {
       this._internals.setValidity({});
+    }
+
+    if (changedProperties.has('activeIndex') && this.open) {
+      this.shadowRoot?.querySelector('[data-active="true"]')?.scrollIntoView({ block: 'nearest' });
     }
   }
 
@@ -502,6 +515,7 @@ export class Combobox extends ThemeableElement {
           aria-autocomplete="list"
           aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           aria-required=${this.required}
+          aria-invalid=${this.variant === 'error' ? 'true' : nothing}
           aria-controls=${this.open ? `${this._uid}-listbox` : nothing}
           aria-activedescendant=${this.open && activeOption
             ? this._idFor(activeOption)
@@ -574,7 +588,9 @@ export class Combobox extends ThemeableElement {
             `
           : nothing}
         ${this.helperText
-          ? html`<span id=${this._fieldIds.helper} class="helper-text">${this.helperText}</span>`
+          ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
+              >${this.helperText}</lt-text
+            >`
           : nothing}
       </div>
     `;

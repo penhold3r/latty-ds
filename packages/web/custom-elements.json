@@ -3287,7 +3287,7 @@
           "type": {
             "text": "array"
           },
-          "default": "[ floatingPanelReset, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-text-error); margin-inline-start: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); } :host([variant='error']) .input-wrap { border-color: var(--lt-text-error); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-border-success-strong); } :host([variant='warning']) .input-wrap { border-color: var(--lt-border-warning-strong); } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .input-wrap, :host(:disabled) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-text-muted)); } :host([disabled]) input, :host(:disabled) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } /* Multiple mode: tags replace the fixed single-line height with a wrapping row, min-height per size instead. */ :host([multiple]) .input-wrap { flex-wrap: wrap; height: auto; overflow: visible; padding-block: var(--lt-spacing-1); } :host([multiple][size='sm']) .input-wrap { min-height: 32px; } :host([multiple][size='md']) .input-wrap, :host([multiple]:not([size])) .input-wrap { min-height: 40px; } :host([multiple][size='lg']) .input-wrap { min-height: 48px; } :host([multiple]) input { min-width: 80px; } .clear-button { align-items: center; background: none; border-radius: var(--lt-border-radius, 4px); border: 0; color: var(--lt-text-subtle); cursor: pointer; display: flex; flex-shrink: 0; padding: 0; } .clear-button:hover { color: var(--lt-text-default); } .clear-button:focus-visible { outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color); outline-offset: var(--lt-border-focusRingOffset); } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform var(--lt-duration-fast) var(--lt-ease-standard); } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); box-shadow: var(--lt-elevation-2); max-height: 240px; overflow-y: auto; z-index: var(--lt-z-overlay); } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; gap: var(--lt-spacing-2); padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: start; width: 100%; } .option-icon { color: var(--lt-text-subtle); flex-shrink: 0; } .option-content { display: flex; flex-direction: column; min-width: 0; overflow: hidden; } .option-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-description { color: var(--lt-text-subtle); font-size: 0.8125em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-create, .option-create .option-icon { color: var(--lt-text-primary); } .option-group-label { color: var(--lt-text-subtle); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; padding: var(--lt-spacing-2) var(--lt-spacing-3) var(--lt-spacing-1); text-transform: uppercase; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[data-active='true'] { background: var(--lt-bg-neutral-subtle); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .loading-state { align-items: center; color: var(--lt-text-subtle); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-4) var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .input-wrap, .chevron { transition: none; } } ` ]"
+          "default": "[ floatingPanelReset, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-text-error); margin-inline-start: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); } :host([variant='error']) .input-wrap { border-color: var(--lt-text-error); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-border-success-strong); } :host([variant='warning']) .input-wrap { border-color: var(--lt-border-warning-strong); } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .input-wrap, :host(:disabled) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-text-muted)); } :host([disabled]) input, :host(:disabled) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } /* Multiple mode: tags replace the fixed single-line height with a wrapping row, min-height per size instead. */ :host([multiple]) .input-wrap { flex-wrap: wrap; height: auto; overflow: visible; padding-block: var(--lt-spacing-1); } :host([multiple][size='sm']) .input-wrap { min-height: 32px; } :host([multiple][size='md']) .input-wrap, :host([multiple]:not([size])) .input-wrap { min-height: 40px; } :host([multiple][size='lg']) .input-wrap { min-height: 48px; } :host([multiple]) input { min-width: 80px; } .clear-button { align-items: center; background: none; border-radius: var(--lt-border-radius, 4px); border: 0; color: var(--lt-text-subtle); cursor: pointer; display: flex; flex-shrink: 0; padding: 0; } .clear-button:hover { color: var(--lt-text-default); } .clear-button:focus-visible { outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color); outline-offset: var(--lt-border-focusRingOffset); } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform var(--lt-duration-fast) var(--lt-ease-standard); } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); box-shadow: var(--lt-elevation-2); max-height: 240px; overflow-y: auto; z-index: var(--lt-z-overlay); } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; gap: var(--lt-spacing-2); padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: start; width: 100%; } .option-icon { color: var(--lt-text-subtle); flex-shrink: 0; } .option-content { display: flex; flex-direction: column; min-width: 0; overflow: hidden; } .option-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-description { color: var(--lt-text-subtle); font-size: 0.8125em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-create, .option-create .option-icon { color: var(--lt-text-primary); } .option-group-label { color: var(--lt-text-subtle); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; padding: var(--lt-spacing-2) var(--lt-spacing-3) var(--lt-spacing-1); text-transform: uppercase; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[data-active='true'] { background: var(--lt-bg-neutral-subtle); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .loading-state { align-items: center; color: var(--lt-text-subtle); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-4) var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); } .helper-text::part(base) { font-weight: 200; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .input-wrap, .chevron { transition: none; } } ` ]"
         }
       ],
       "exports": [
@@ -3772,7 +3772,15 @@
             },
             {
               "kind": "method",
-              "name": "updated"
+              "name": "updated",
+              "parameters": [
+                {
+                  "name": "changedProperties",
+                  "type": {
+                    "text": "Map<string, unknown>"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
@@ -8055,6 +8063,13 @@
             },
             {
               "kind": "field",
+              "name": "_typeahead",
+              "privacy": "private",
+              "readonly": true,
+              "default": "new ListboxTypeahead()"
+            },
+            {
+              "kind": "field",
               "name": "_fieldIds",
               "privacy": "private",
               "readonly": true
@@ -8123,6 +8138,11 @@
             },
             {
               "kind": "method",
+              "name": "_focusTrigger",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
               "name": "toggleDropdown",
               "privacy": "private",
               "description": "Toggles the dropdown open/closed state."
@@ -8161,7 +8181,7 @@
                   "description": "The keyboard event"
                 }
               ],
-              "description": "Handles keyboard navigation in the dropdown.\nSupports Arrow Up/Down for navigation, Enter/Space for selection, and Escape to close."
+              "description": "Handles keyboard navigation in the dropdown.\nSupports Arrow Up/Down/Home/End/Page Up/Page Down for navigation, typeahead, Enter/Space for selection,\nand Escape to close."
             },
             {
               "kind": "method",
@@ -8652,6 +8672,125 @@
           "declaration": {
             "name": "toValidityFlags",
             "module": "src/components/shared/form-validity.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/listbox-nav.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "nextListboxIndex",
+          "return": {
+            "type": {
+              "text": "number"
+            }
+          },
+          "parameters": [
+            {
+              "name": "key",
+              "type": {
+                "text": "ListboxNavKey"
+              }
+            },
+            {
+              "name": "currentIndex",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "name": "length",
+              "type": {
+                "text": "number"
+              }
+            }
+          ],
+          "description": "Computes the next active index for a listbox keyboard interaction, wrapping Up/Down at the ends (Home/End/\nPage Up/Down clamp instead — jumping to \"the other end\" on a page press would be surprising). Returns `-1`\nwhen `length` is 0 (nothing to be active)."
+        },
+        {
+          "kind": "class",
+          "description": "Stateful typeahead matcher for a listbox (the standard WAI-ARIA \"type to jump to an option\" pattern):\naccumulates printable characters typed within `timeoutMs` of each other into a buffer, and matches the next\noption (after `afterIndex`, wrapping around) whose label starts with it, case-insensitively. Create ONE\ninstance per listbox — it holds its own buffer/timer across calls — and call `match()` on every printable\nkeydown while the listbox is open.\n\nDeliberately does NOT special-case repeating a single letter to cycle through every option that starts with\nit (e.g. pressing \"j\" repeatedly to step through \"John\", \"Jake\", \"Julia\") — that's a real native `<select>`\nrefinement, but matching is already a genuine improvement over no typeahead at all, and adding it would need\nto distinguish \"repeated single letter\" from \"a genuinely repeated letter inside a real typed word\" (e.g.\n\"ll\" in \"Allison\"), which isn't worth the complexity this pass.",
+          "name": "ListboxTypeahead",
+          "members": [
+            {
+              "kind": "field",
+              "name": "buffer",
+              "type": {
+                "text": "string"
+              },
+              "privacy": "private",
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "timer",
+              "type": {
+                "text": "ReturnType<typeof setTimeout> | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "method",
+              "name": "match",
+              "return": {
+                "type": {
+                  "text": "number | null"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "char",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "labels",
+                  "type": {
+                    "text": "readonly string[]"
+                  }
+                },
+                {
+                  "name": "afterIndex",
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Returns the matched index, or null if nothing in `labels` starts with the accumulated buffer."
+            },
+            {
+              "kind": "method",
+              "name": "dispose",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Clears any pending reset timer — call from `disconnectedCallback` so it doesn't fire after teardown."
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "nextListboxIndex",
+          "declaration": {
+            "name": "nextListboxIndex",
+            "module": "src/components/shared/listbox-nav.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ListboxTypeahead",
+          "declaration": {
+            "name": "ListboxTypeahead",
+            "module": "src/components/shared/listbox-nav.ts"
           }
         }
       ]

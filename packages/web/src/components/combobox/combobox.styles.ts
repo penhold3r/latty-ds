@@ -270,7 +270,10 @@ export const comboboxStyles = [
 
     .helper-text {
       color: var(--lt-text-subtle);
-      font-size: 0.8125rem;
+    }
+
+    .helper-text::part(base) {
+      font-weight: 200;
     }
 
     :host([variant='error']) .helper-text {

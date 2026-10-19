@@ -14,6 +14,7 @@ import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 import { groupConsecutive } from '../shared/option-groups';
+import { nextListboxIndex, ListboxTypeahead } from '../shared/listbox-nav';
 
 let selectCount = 0;
 
@@ -179,6 +180,7 @@ export class Select extends ThemeableElement {
 
   private _cleanupClickOutside: (() => void) | null = null;
   private _floatingCleanup: (() => void) | null = null;
+  private readonly _typeahead = new ListboxTypeahead();
 
   private readonly _fieldIds = createFieldIds();
 
@@ -210,6 +212,14 @@ export class Select extends ThemeableElement {
     e.stopPropagation();
     this.value = this.multiple ? [] : '';
     dispatch(this, 'change', { value: this.value });
+  }
+
+  // SEL-4: the trigger is a <div role="combobox">, not a real labelable element (<input>/<button>/<select>/
+  // <textarea>) — a native <label for="..."> only auto-forwards a click to one of those, so pointing `for` at
+  // this div would silently do nothing. Forwarding the click by hand is the standard workaround for a custom
+  // ARIA widget's own label.
+  private _focusTrigger() {
+    this.shadowRoot?.querySelector<HTMLElement>('.select-trigger')?.focus();
   }
 
   /**
@@ -257,7 +267,8 @@ export class Select extends ThemeableElement {
 
   /**
    * Handles keyboard navigation in the dropdown.
-   * Supports Arrow Up/Down for navigation, Enter/Space for selection, and Escape to close.
+   * Supports Arrow Up/Down/Home/End/Page Up/Page Down for navigation, typeahead, Enter/Space for selection,
+   * and Escape to close.
    *
    * @param e - The keyboard event
    * @private
@@ -276,24 +287,44 @@ export class Select extends ThemeableElement {
     }
 
     const enabled = this.enabledOptions;
+
+    if (
+      key === 'ArrowDown' ||
+      key === 'ArrowUp' ||
+      key === 'Home' ||
+      key === 'End' ||
+      key === 'PageDown' ||
+      key === 'PageUp'
+    ) {
+      e.preventDefault();
+      this.activeIndex = nextListboxIndex(key, this.activeIndex, enabled.length);
+      return;
+    }
+
     switch (key) {
       case 'Escape':
         e.preventDefault();
         this.closeDropdown();
-        break;
-      case 'ArrowDown':
-        e.preventDefault();
-        if (enabled.length > 0) this.activeIndex = this.activeIndex < enabled.length - 1 ? this.activeIndex + 1 : 0;
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        if (enabled.length > 0) this.activeIndex = this.activeIndex > 0 ? this.activeIndex - 1 : enabled.length - 1;
         break;
       case 'Enter':
       case ' ':
         e.preventDefault();
         if (enabled[this.activeIndex]) this.selectOption(enabled[this.activeIndex]);
         break;
+      default:
+        // Typeahead: a single printable character (no modifier combo) jumps to the next option whose label
+        // starts with what's been typed so far.
+        if (key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          const match = this._typeahead.match(
+            key,
+            enabled.map((o) => o.label),
+            this.activeIndex
+          );
+          if (match !== null) {
+            e.preventDefault();
+            this.activeIndex = match;
+          }
+        }
     }
   }
 
@@ -308,6 +339,7 @@ export class Select extends ThemeableElement {
     this._cleanupClickOutside = null;
     this._floatingCleanup?.();
     this._floatingCleanup = null;
+    this._typeahead.dispose();
   }
 
   /**
@@ -328,6 +360,15 @@ export class Select extends ThemeableElement {
   override willUpdate(changed: PropertyValues<this>) {
     super.willUpdate(changed);
     if (this.multiple && !Array.isArray(this.value)) this.value = this._selected;
+    // Start the active option at whichever one is already selected (if any), not always the top — so Arrow
+    // keys move relative to the real selection on reopen, matching a native <select> (SEL-5). Set here, not in
+    // updated(), so it lands in the SAME render pass as `isOpen` flipping, rather than scheduling a second one.
+    // `isOpen` is a private @state field — PropertyValues<this>.has() only accepts public property keys, same
+    // cast table.ts's own willUpdate already uses for its own private state.
+    const changedAny = changed as ReadonlyMap<PropertyKey, unknown>;
+    if (changedAny.has('isOpen') && this.isOpen) {
+      this.activeIndex = this.enabledOptions.findIndex((o) => this._selected.includes(o.value));
+    }
   }
 
   updated(changedProperties: Map<string, unknown>) {
@@ -345,9 +386,12 @@ export class Select extends ThemeableElement {
       this._internals.setValidity({});
     }
 
+    if (changedProperties.has('activeIndex') && this.isOpen) {
+      this.shadowRoot?.querySelector('[data-active="true"]')?.scrollIntoView({ block: 'nearest' });
+    }
+
     if (!changedProperties.has('isOpen')) return;
     if (this.isOpen) {
-      this.activeIndex = -1;
       this.setAttribute('open', '');
       const selectTrigger = this.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!;
       const listbox = this.shadowRoot!.querySelector<HTMLElement>('lt-surface.dropdown')!;
@@ -413,13 +457,14 @@ export class Select extends ThemeableElement {
     const hasValue = Boolean(this._selected.length && selectedLabel);
     const activeOption = this.enabledOptions[this.activeIndex];
     const listboxId = `${this._uid}-listbox`;
+    const triggerId = `${this._uid}-trigger`;
     const showClear = this._showClear;
 
     return html`
       <div class="wrapper">
         ${this.label
           ? html`
-              <label>
+              <label @click=${this._focusTrigger}>
                 <lt-text variant="label" as="span">${this.label}</lt-text>
                 ${this.required ? html`<span class="required-indicator">*</span>` : ''}
               </label>
@@ -427,11 +472,14 @@ export class Select extends ThemeableElement {
           : ''}
         <div class="select-container">
           <div
+            id=${triggerId}
             class="select-trigger"
             role="combobox"
             aria-haspopup="listbox"
             aria-expanded=${this.isOpen}
             aria-disabled=${this._isDisabled}
+            aria-required=${this.required}
+            aria-invalid=${this.variant === 'error' ? 'true' : nothing}
             aria-label=${this.label || this.placeholder}
             aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
             aria-controls=${this.isOpen ? listboxId : nothing}

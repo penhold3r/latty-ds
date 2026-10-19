@@ -255,6 +255,31 @@ describe('<lt-select>', () => {
     expect(helperText?.textContent).toBe('Select your favorite fruit');
   });
 
+  it("clicking the label focuses the trigger, since it isn't a native labelable element for `for`/`id` to forward to (SEL-4)", async () => {
+    el.label = 'Choose a fruit';
+    await el.updateComplete;
+    const label = el.shadowRoot!.querySelector('label')!;
+    const trigger = el.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!;
+    label.click();
+    expect(el.shadowRoot!.activeElement).toBe(trigger);
+  });
+
+  it('sets aria-required to match the required property (SEL-4)', async () => {
+    const trigger = el.shadowRoot!.querySelector('.select-trigger')!;
+    expect(trigger.getAttribute('aria-required')).toBe('false');
+    el.required = true;
+    await el.updateComplete;
+    expect(trigger.getAttribute('aria-required')).toBe('true');
+  });
+
+  it('sets aria-invalid only when variant is error (SEL-4)', async () => {
+    const trigger = el.shadowRoot!.querySelector('.select-trigger')!;
+    expect(trigger.hasAttribute('aria-invalid')).toBe(false);
+    el.variant = 'error';
+    await el.updateComplete;
+    expect(trigger.getAttribute('aria-invalid')).toBe('true');
+  });
+
   it('opens dropdown with Enter key', async () => {
     const trigger = el.shadowRoot!.querySelector('.select-trigger') as HTMLElement;
     expect(el.hasAttribute('open')).toBe(false);
@@ -340,6 +365,51 @@ describe('<lt-select>', () => {
       const active = el.shadowRoot!.querySelector('[data-active="true"]')!;
       expect(active.id).toBeTruthy();
       expect(trigger.getAttribute('aria-activedescendant')).toBe(active.id);
+    });
+
+    const activeLabel = () => el.shadowRoot!.querySelector('[data-active="true"]')?.textContent?.trim();
+
+    it('Home jumps to the first enabled option (SEL-5)', async () => {
+      await arrow('ArrowDown');
+      await arrow('ArrowDown');
+      await arrow('Home');
+      expect(activeLabel()).toBe('Apple');
+    });
+
+    it('End jumps to the last enabled option, skipping a disabled one at the real end (SEL-5)', async () => {
+      await arrow('End');
+      expect(activeLabel()).toBe('Orange');
+    });
+
+    it('PageDown/PageUp move by a page, clamped rather than wrapping (SEL-5)', async () => {
+      await arrow('PageDown');
+      expect(activeLabel()).toBe('Orange'); // only 3 enabled options — clamps to the last
+      await arrow('PageUp');
+      expect(activeLabel()).toBe('Apple'); // clamps to the first
+    });
+
+    it('typeahead jumps to the next option starting with the typed letter (SEL-5)', async () => {
+      await arrow('b'); // "banana" is the only option starting with b
+      expect(activeLabel()).toBe('Banana');
+    });
+
+    it('scrolls the newly-active option into view (SEL-5)', async () => {
+      const scrollIntoView = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
+      await arrow('ArrowDown');
+      expect(scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
+      scrollIntoView.mockRestore();
+    });
+
+    it('starts the active option at the already-selected one when reopened, not the top (SEL-5)', async () => {
+      el.value = 'orange';
+      await el.updateComplete;
+      trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', cancelable: true, bubbles: true }));
+      await el.updateComplete;
+      expect(el.hasAttribute('open')).toBe(false);
+
+      trigger.click();
+      await el.updateComplete;
+      expect(activeLabel()).toBe('Orange');
     });
 
     it('omits aria-activedescendant when nothing is highlighted yet', () => {

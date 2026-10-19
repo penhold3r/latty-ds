@@ -292,6 +292,33 @@ describe('<lt-combobox>', () => {
       const options = [...el.shadowRoot!.querySelectorAll('.option')] as HTMLButtonElement[];
       expect(options.every((o) => o.tabIndex === -1)).toBe(true);
     });
+
+    const activeLabel = () => el.shadowRoot!.querySelector('[data-active="true"]')?.textContent?.trim();
+
+    it('End jumps to the last enabled option, skipping the disabled one (CMB-5)', async () => {
+      await arrow('End');
+      expect(activeLabel()).toBe('Gamma');
+    });
+
+    it('Home jumps back to the first enabled option (CMB-5)', async () => {
+      await arrow('End');
+      await arrow('Home');
+      expect(activeLabel()).toBe('Alpha');
+    });
+
+    it('PageDown/PageUp clamp at the edges rather than wrapping, same as Arrow keys (CMB-5)', async () => {
+      await arrow('PageDown');
+      expect(activeLabel()).toBe('Gamma'); // only 2 enabled options — clamps to the last
+      await arrow('PageUp');
+      expect(activeLabel()).toBe('Alpha'); // clamps to the first
+    });
+
+    it('scrolls the newly-active option into view (CMB-5)', async () => {
+      const scrollIntoView = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
+      await arrow('ArrowDown');
+      expect(scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
+      scrollIntoView.mockRestore();
+    });
   });
 
   describe('value is not reflected, and formResetCallback restores the markup default (TFD-1)', () => {
@@ -994,5 +1021,43 @@ describe('helper text is described by its control (aria-describedby)', () => {
   it('omits aria-describedby when there is no helper text', () => {
     const control = el.shadowRoot!.querySelector('input')!;
     expect(control.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('renders helper text as lt-text, matching textfield/select, not a bare span (CMB-6)', async () => {
+    el.helperText = 'Pick one';
+    await el.updateComplete;
+    const helper = el.shadowRoot!.querySelector('.helper-text')!;
+    expect(helper.tagName.toLowerCase()).toBe('lt-text');
+    expect(helper.getAttribute('variant')).toBe('caption');
+  });
+});
+
+describe('<lt-combobox> required/invalid ARIA', () => {
+  let el: Combobox;
+
+  beforeEach(async () => {
+    el = document.createElement('lt-combobox') as Combobox;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('sets aria-required to match the required property', async () => {
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.getAttribute('aria-required')).toBe('false');
+    el.required = true;
+    await el.updateComplete;
+    expect(input.getAttribute('aria-required')).toBe('true');
+  });
+
+  it('sets aria-invalid only when variant is error (SEL-4/CMB-5 parity)', async () => {
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.hasAttribute('aria-invalid')).toBe(false);
+    el.variant = 'error';
+    await el.updateComplete;
+    expect(input.getAttribute('aria-invalid')).toBe('true');
   });
 });
