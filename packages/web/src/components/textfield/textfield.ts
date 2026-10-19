@@ -158,6 +158,14 @@ export class Textfield extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) readonly = false;
 
   /**
+   * Focuses the inner input/textarea once, on first render. Shadows the native `HTMLElement.autofocus` — setting
+   * the content attribute alone wouldn't help, since the host itself has no `delegatesFocus` and autofocusing it
+   * would be a no-op; this forwards the focus call into the real control instead.
+   * @default false
+   */
+  @property({ type: Boolean, reflect: true }) autofocus = false;
+
+  /**
    * Icon name to display at the start of the input.
    * @default ''
    */
@@ -419,6 +427,13 @@ export class Textfield extends ThemeableElement {
         return 'xmark-circle';
       default:
         return '';
+    }
+  }
+
+  override firstUpdated(changed: PropertyValues) {
+    super.firstUpdated(changed);
+    if (this.autofocus) {
+      this.shadowRoot!.querySelector<HTMLInputElement | HTMLTextAreaElement>('input, textarea')?.focus();
     }
   }
 

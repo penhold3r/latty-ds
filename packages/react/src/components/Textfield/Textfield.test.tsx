@@ -1,6 +1,9 @@
 import { render } from '@testing-library/react';
 import { createRef } from 'react';
 import { Textfield } from './Textfield';
+// Registers the real <lt-textfield> class, needed for the helperText test below to exercise its actual
+// `helperText` accessor rather than a plain, un-upgraded HTMLUnknownElement.
+import '@latty-ds/web';
 
 describe('Textfield', () => {
   it('renders lt-textfield', () => {
@@ -27,6 +30,28 @@ describe('Textfield', () => {
     const ref = createRef<any>();
     render(<Textfield ref={ref} />);
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-textfield');
+  });
+
+  // Regression guard for a bug found 2026-10-19: helperText's type (`string | ((error: boolean) => string)`)
+  // means a consumer can pass a function, and a function value can't safely go through a JSX attribute under any
+  // React version (React 18 always stringifies it via setAttribute for a custom element; React 19 only property-
+  // assigns when the *exact* JSX key already exists on the DOM node, which a kebab-cased key like `helper-text`
+  // never does). scripts/codegen-wrappers.mjs lists `helperText` in FUNCTION_CAPABLE_FIELDS so it's always
+  // assigned as a real property through the ref-based effect instead, bypassing JSX attributes entirely.
+  it('assigns a function helperText as a real property, not a stringified attribute', () => {
+    const fn = (error: boolean) => (error ? 'Invalid' : 'Looks good');
+    const { container } = render(<Textfield helperText={fn} />);
+    const el = container.querySelector('lt-textfield') as HTMLElement & { helperText: unknown };
+    expect(el.helperText).toBe(fn);
+    expect(el.getAttribute('helper-text')).toBeNull();
+  });
+
+  // Companion to Button's icon-start test — same bug, different field name on a different component.
+  it('sets icon-start (not iconstart/iconStart) so the inner lt-icon actually renders', () => {
+    const { container } = render(<Textfield iconStart="search" />);
+    const el = container.querySelector('lt-textfield')!;
+    expect(el.getAttribute('icon-start')).toBe('search');
+    expect(el.getAttribute('iconStart')).toBeNull();
   });
 
   it('calls onInput when input event fires', () => {

@@ -1220,6 +1220,32 @@ describe('autocomplete / inputmode / pattern', () => {
     expect(input.getAttribute('inputmode')).toBe('numeric');
   });
 
+  it('does not autofocus the input by default', async () => {
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(el.shadowRoot!.activeElement).not.toBe(input);
+  });
+
+  it('focuses the inner input on first render when autofocus is set', async () => {
+    const autofocused = document.createElement('lt-textfield') as Textfield;
+    autofocused.autofocus = true;
+    document.body.appendChild(autofocused);
+    await autofocused.updateComplete;
+    const input = autofocused.shadowRoot!.querySelector('input')!;
+    expect(autofocused.shadowRoot!.activeElement).toBe(input);
+    autofocused.remove();
+  });
+
+  it('focuses the inner textarea on first render when autofocus is set and type is multiline', async () => {
+    const autofocused = document.createElement('lt-textfield') as Textfield;
+    autofocused.type = 'multiline';
+    autofocused.autofocus = true;
+    document.body.appendChild(autofocused);
+    await autofocused.updateComplete;
+    const textarea = autofocused.shadowRoot!.querySelector('textarea')!;
+    expect(autofocused.shadowRoot!.activeElement).toBe(textarea);
+    autofocused.remove();
+  });
+
   // The host's own reflected attribute is kebab-case (input-mode), not inputmode — despite inputmode being this
   // property's native HTML spelling (forwarded as-is to the inner control above). The docs manifest generator
   // has no way to read an explicit Lit `attribute:` override; it derives a component's attribute name from its

@@ -14,6 +14,7 @@ export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onCh
   disabled?: boolean;
   required?: boolean;
   readonly?: boolean;
+  autofocus?: boolean;
   iconStart?: LattyIconName;
   rows?: number;
   autosize?: boolean;
@@ -33,7 +34,25 @@ export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onCh
 };
 
 export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfield(
-  { onInput, onChange, labels, children, ...props },
+  {
+    onInput,
+    onChange,
+    helperText,
+    labels,
+    formAssociated,
+    disabled,
+    required,
+    readonly,
+    autofocus,
+    iconStart,
+    autosize,
+    uppercase,
+    clearable,
+    counter,
+    inputMode,
+    children,
+    ...props
+  },
   forwardedRef
 ) {
   const innerRef = useRef<TextfieldEl>(null);
@@ -57,11 +76,26 @@ export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfi
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;
+    if (helperText !== undefined) el.helperText = helperText;
     if (labels !== undefined) el.labels = labels;
-  }, [labels]);
+  }, [helperText, labels]);
 
   return (
-    <lt-textfield ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-textfield
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      form-associated={formAssociated || undefined}
+      disabled={disabled || undefined}
+      required={required || undefined}
+      readonly={readonly || undefined}
+      autofocus={autofocus || undefined}
+      icon-start={iconStart}
+      autosize={autosize || undefined}
+      uppercase={uppercase || undefined}
+      clearable={clearable || undefined}
+      counter={counter || undefined}
+      input-mode={inputMode}
+    >
       {children}
     </lt-textfield>
   );

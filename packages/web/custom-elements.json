@@ -12730,6 +12730,15 @@
             },
             {
               "kind": "field",
+              "name": "autofocus",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Focuses the inner input/textarea once, on first render. Shadows the native `HTMLElement.autofocus` — setting\nthe content attribute alone wouldn't help, since the host itself has no `delegatesFocus` and autofocusing it\nwould be a no-op; this forwards the focus call into the real control instead."
+            },
+            {
+              "kind": "field",
               "name": "iconStart",
               "type": {
                 "text": "string"
@@ -13007,6 +13016,18 @@
                 }
               },
               "description": "Determines the appropriate end icon based on input type and variant.\n\nPassword inputs show eye/eye-off toggle icon.\nNon-default variants show their respective state icons.\nDefault variant shows no end icon."
+            },
+            {
+              "kind": "method",
+              "name": "firstUpdated",
+              "parameters": [
+                {
+                  "name": "changed",
+                  "type": {
+                    "text": "PropertyValues"
+                  }
+                }
+              ]
             },
             {
               "kind": "method",
