@@ -50,6 +50,7 @@ export const Datepicker = forwardRef<DatepickerEl, DatepickerProps>(function Dat
   return (
     <lt-datepicker
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       disabled={disabled || undefined}

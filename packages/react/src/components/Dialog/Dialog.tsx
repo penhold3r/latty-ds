@@ -61,6 +61,7 @@ export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(
   return (
     <lt-dialog
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       open={open || undefined}
       no-close-button={noCloseButton || undefined}

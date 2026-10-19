@@ -27,7 +27,12 @@ export const Avatar = forwardRef<AvatarEl, AvatarProps>(function Avatar(
   }, [status]);
 
   return (
-    <lt-avatar ref={innerRef} {...(props as Record<string, unknown>)} status-label={statusLabel}>
+    <lt-avatar
+      ref={innerRef}
+      suppressHydrationWarning
+      {...(props as Record<string, unknown>)}
+      status-label={statusLabel}
+    >
       {children}
     </lt-avatar>
   );

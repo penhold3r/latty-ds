@@ -12,7 +12,7 @@ export const Text = forwardRef<TextEl, TextProps>(function Text({ children, ...p
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-text ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-text ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
       {children}
     </lt-text>
   );

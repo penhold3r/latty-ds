@@ -32,7 +32,7 @@ export const TabGroup = forwardRef<TabGroupEl, TabGroupProps>(function TabGroup(
   }, [labels]);
 
   return (
-    <lt-tab-group ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-tab-group ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
       {children}
     </lt-tab-group>
   );

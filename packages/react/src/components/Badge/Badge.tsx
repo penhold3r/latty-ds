@@ -22,7 +22,7 @@ export const Badge = forwardRef<BadgeEl, BadgeProps>(function Badge({ max, dot, 
   }, [max]);
 
   return (
-    <lt-badge ref={innerRef} {...(props as Record<string, unknown>)} dot={dot || undefined}>
+    <lt-badge ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)} dot={dot || undefined}>
       {children}
     </lt-badge>
   );

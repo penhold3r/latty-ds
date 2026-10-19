@@ -69,6 +69,7 @@ export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
   return (
     <lt-calendar
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       value-start={valueStart}
       value-end={valueEnd}

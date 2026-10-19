@@ -247,6 +247,14 @@ ${complexFields.map((f) => `      if (${f.name} !== undefined) el.${f.name} = ${
     .map((f) => `        ${f.attrName}={${f.isBoolean ? `${f.name} || undefined` : f.name}}`)
     .join('\n');
 
+  // Lit reflects a property's default value as an HTML attribute the moment the element upgrades client-side
+  // (`elevation="1"`, `size="md"`, an empty `input-mode=""`, etc.) even when the wrapper correctly omitted that
+  // prop and the SSR'd markup never had the attribute — this is Lit doing exactly what it's supposed to, not a
+  // wrapper bug, so there's nothing to fix in the attribute/property logic above. Left alone, React's hydration
+  // diffing flags every one of these as a mismatch ("Hydration failed because the server rendered HTML didn't
+  // match the client"), which only clutters the console in dev — React doesn't abort or re-render over it, since
+  // these are plain attributes, not children. `suppressHydrationWarning` only silences the warning for this one
+  // element's own attributes (not its subtree), which is exactly the scope of the problem.
   const webImports = [`${name} as ${name}El`, ...(hasIconFields ? ['LattyIconName'] : [])].join(', ');
   const componentContent = `import { ${reactImports.join(', ')} } from 'react';
 import type { ${webImports} } from '@latty-ds/web';
@@ -262,6 +270,7 @@ ${hooks}
     return (
       <${tagName}
         ref={innerRef}
+        suppressHydrationWarning
         {...(props as Record<string, unknown>)}
 ${remapAttrsJsx}
       >

@@ -27,6 +27,7 @@ export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(functi
   return (
     <lt-dropdown-item
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       disabled={disabled || undefined}
       selected={selected || undefined}

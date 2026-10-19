@@ -14,7 +14,12 @@ export const SnackbarGroup = forwardRef<SnackbarGroupEl, SnackbarGroupProps>(fun
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-snackbar-group ref={innerRef} {...(props as Record<string, unknown>)} max-visible={maxVisible}>
+    <lt-snackbar-group
+      ref={innerRef}
+      suppressHydrationWarning
+      {...(props as Record<string, unknown>)}
+      max-visible={maxVisible}
+    >
       {children}
     </lt-snackbar-group>
   );

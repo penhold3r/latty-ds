@@ -26,6 +26,7 @@ export const IconButton = forwardRef<IconButtonEl, IconButtonProps>(function Ico
   return (
     <lt-icon-button
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       bordered={bordered || undefined}
       disabled={disabled || undefined}

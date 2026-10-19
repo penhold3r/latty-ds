@@ -13,7 +13,7 @@ export const Divider = forwardRef<DividerEl, DividerProps>(function Divider({ ch
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-divider ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-divider ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
       {children}
     </lt-divider>
   );

@@ -30,6 +30,7 @@ export const Accordion = forwardRef<AccordionEl, AccordionProps>(function Accord
   return (
     <lt-accordion
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       icon-start={iconStart}
       open={open || undefined}

@@ -40,6 +40,7 @@ export const Image = forwardRef<ImageEl, ImageProps>(function Image(
   return (
     <lt-image
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       aspect-ratio={aspectRatio}
       responsive={responsive || undefined}

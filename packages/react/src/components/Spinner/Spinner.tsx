@@ -12,7 +12,7 @@ export const Spinner = forwardRef<SpinnerEl, SpinnerProps>(function Spinner({ ch
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-spinner ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-spinner ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
       {children}
     </lt-spinner>
   );

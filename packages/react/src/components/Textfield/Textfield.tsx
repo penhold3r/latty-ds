@@ -83,6 +83,7 @@ export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfi
   return (
     <lt-textfield
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       disabled={disabled || undefined}

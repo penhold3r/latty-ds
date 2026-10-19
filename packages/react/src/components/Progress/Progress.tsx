@@ -22,6 +22,7 @@ export const Progress = forwardRef<ProgressEl, ProgressProps>(function Progress(
   return (
     <lt-progress
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       value-text={valueText}
       indeterminate={indeterminate || undefined}

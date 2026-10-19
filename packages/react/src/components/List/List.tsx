@@ -20,6 +20,7 @@ export const List = forwardRef<ListEl, ListProps>(function List(
   return (
     <lt-list
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       marker-color={markerColor}
       divider={divider || undefined}

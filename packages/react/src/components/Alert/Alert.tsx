@@ -39,6 +39,7 @@ export const Alert = forwardRef<AlertEl, AlertProps>(function Alert(
   return (
     <lt-alert
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       closable={closable || undefined}
       open={open || undefined}

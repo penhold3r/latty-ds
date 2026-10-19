@@ -72,6 +72,7 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
   return (
     <lt-combobox
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       clearable={clearable || undefined}

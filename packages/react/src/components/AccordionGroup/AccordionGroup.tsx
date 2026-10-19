@@ -14,7 +14,12 @@ export const AccordionGroup = forwardRef<AccordionGroupEl, AccordionGroupProps>(
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-accordion-group ref={innerRef} {...(props as Record<string, unknown>)} multiple={multiple || undefined}>
+    <lt-accordion-group
+      ref={innerRef}
+      suppressHydrationWarning
+      {...(props as Record<string, unknown>)}
+      multiple={multiple || undefined}
+    >
       {children}
     </lt-accordion-group>
   );

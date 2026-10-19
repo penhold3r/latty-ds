@@ -23,6 +23,7 @@ export const Tooltip = forwardRef<TooltipEl, TooltipProps>(function Tooltip(
   return (
     <lt-tooltip
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       disabled={disabled || undefined}
       hoverable={hoverable || undefined}

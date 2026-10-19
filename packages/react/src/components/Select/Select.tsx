@@ -61,6 +61,7 @@ export const Select = forwardRef<SelectEl, SelectProps>(function Select(
   return (
     <lt-select
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       multiple={multiple || undefined}

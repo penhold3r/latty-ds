@@ -55,6 +55,7 @@ export const Radio = forwardRef<RadioEl, RadioProps>(function Radio(
   return (
     <lt-radio
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       checked={checked || undefined}

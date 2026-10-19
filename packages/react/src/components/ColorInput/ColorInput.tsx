@@ -39,6 +39,7 @@ export const ColorInput = forwardRef<ColorInputEl, ColorInputProps>(function Col
   return (
     <lt-color-input
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       disabled={disabled || undefined}

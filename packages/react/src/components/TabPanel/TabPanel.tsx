@@ -15,7 +15,12 @@ export const TabPanel = forwardRef<TabPanelEl, TabPanelProps>(function TabPanel(
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-tab-panel ref={innerRef} {...(props as Record<string, unknown>)} active={active || undefined}>
+    <lt-tab-panel
+      ref={innerRef}
+      suppressHydrationWarning
+      {...(props as Record<string, unknown>)}
+      active={active || undefined}
+    >
       {children}
     </lt-tab-panel>
   );

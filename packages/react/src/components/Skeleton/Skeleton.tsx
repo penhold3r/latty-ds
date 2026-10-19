@@ -17,7 +17,12 @@ export const Skeleton = forwardRef<SkeletonEl, SkeletonProps>(function Skeleton(
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-skeleton ref={innerRef} {...(props as Record<string, unknown>)} animated={animated || undefined}>
+    <lt-skeleton
+      ref={innerRef}
+      suppressHydrationWarning
+      {...(props as Record<string, unknown>)}
+      animated={animated || undefined}
+    >
       {children}
     </lt-skeleton>
   );

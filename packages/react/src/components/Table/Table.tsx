@@ -105,6 +105,7 @@ export const Table = forwardRef<TableEl, TableProps>(function Table(
   return (
     <lt-table
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       responsive-mode={responsiveMode}
       hoverable={hoverable || undefined}

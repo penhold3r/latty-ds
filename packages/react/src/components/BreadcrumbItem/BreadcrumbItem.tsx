@@ -16,7 +16,12 @@ export const BreadcrumbItem = forwardRef<BreadcrumbItemEl, BreadcrumbItemProps>(
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-breadcrumb-item ref={innerRef} {...(props as Record<string, unknown>)} current={current || undefined}>
+    <lt-breadcrumb-item
+      ref={innerRef}
+      suppressHydrationWarning
+      {...(props as Record<string, unknown>)}
+      current={current || undefined}
+    >
       {children}
     </lt-breadcrumb-item>
   );

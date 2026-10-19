@@ -36,6 +36,7 @@ export const RadioGroup = forwardRef<RadioGroupEl, RadioGroupProps>(function Rad
   return (
     <lt-radio-group
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       error={error || undefined}
       required={required || undefined}

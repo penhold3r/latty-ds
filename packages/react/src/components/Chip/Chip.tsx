@@ -46,6 +46,7 @@ export const Chip = forwardRef<ChipEl, ChipProps>(function Chip(
   return (
     <lt-chip
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       disabled={disabled || undefined}
       deletable={deletable || undefined}

@@ -13,7 +13,7 @@ export const Surface = forwardRef<SurfaceEl, SurfaceProps>(function Surface({ ch
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-surface ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-surface ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
       {children}
     </lt-surface>
   );

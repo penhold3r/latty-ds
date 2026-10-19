@@ -27,7 +27,12 @@ export const Link = forwardRef<LinkEl, LinkProps>(function Link(
   }, [target, rel, download]);
 
   return (
-    <lt-link ref={innerRef} {...(props as Record<string, unknown>)} external={external || undefined}>
+    <lt-link
+      ref={innerRef}
+      suppressHydrationWarning
+      {...(props as Record<string, unknown>)}
+      external={external || undefined}
+    >
       {children}
     </lt-link>
   );

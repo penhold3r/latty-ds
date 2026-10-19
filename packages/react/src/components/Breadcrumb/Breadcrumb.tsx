@@ -21,7 +21,7 @@ export const Breadcrumb = forwardRef<BreadcrumbEl, BreadcrumbProps>(function Bre
   }, [labels]);
 
   return (
-    <lt-breadcrumb ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-breadcrumb ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
       {children}
     </lt-breadcrumb>
   );

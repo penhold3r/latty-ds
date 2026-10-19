@@ -32,7 +32,12 @@ export const Dropdown = forwardRef<DropdownEl, DropdownProps>(function Dropdown(
   }, [onClose]);
 
   return (
-    <lt-dropdown ref={innerRef} {...(props as Record<string, unknown>)} open={open || undefined}>
+    <lt-dropdown
+      ref={innerRef}
+      suppressHydrationWarning
+      {...(props as Record<string, unknown>)}
+      open={open || undefined}
+    >
       {children}
     </lt-dropdown>
   );

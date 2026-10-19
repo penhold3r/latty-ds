@@ -34,6 +34,7 @@ export const Pagination = forwardRef<PaginationEl, PaginationProps>(function Pag
   return (
     <lt-pagination
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       total-pages={totalPages}
       disabled={disabled || undefined}

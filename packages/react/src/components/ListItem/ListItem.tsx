@@ -22,6 +22,7 @@ export const ListItem = forwardRef<ListItemEl, ListItemProps>(function ListItem(
   return (
     <lt-list-item
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       icon-start={iconStart}
       icon-end={iconEnd}

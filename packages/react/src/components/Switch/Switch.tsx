@@ -42,6 +42,7 @@ export const Switch = forwardRef<SwitchEl, SwitchProps>(function Switch(
   return (
     <lt-switch
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       checked={checked || undefined}

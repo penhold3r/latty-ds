@@ -22,6 +22,7 @@ export const Tab = forwardRef<TabEl, TabProps>(function Tab(
   return (
     <lt-tab
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       icon-start={iconStart}
       active={active || undefined}

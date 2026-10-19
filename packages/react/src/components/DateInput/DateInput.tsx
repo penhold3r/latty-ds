@@ -49,6 +49,7 @@ export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateIn
   return (
     <lt-date-input
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       disabled={disabled || undefined}

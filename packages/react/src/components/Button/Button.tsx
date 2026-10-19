@@ -61,6 +61,7 @@ export const Button = forwardRef<ButtonEl, ButtonProps>(function Button(
   return (
     <lt-button
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       bordered={bordered || undefined}

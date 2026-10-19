@@ -55,6 +55,7 @@ export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(
   return (
     <lt-snackbar
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       open={open || undefined}
       closable={closable || undefined}

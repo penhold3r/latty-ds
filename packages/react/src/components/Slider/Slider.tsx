@@ -42,6 +42,7 @@ export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
   return (
     <lt-slider
       ref={innerRef}
+      suppressHydrationWarning
       {...(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       disabled={disabled || undefined}

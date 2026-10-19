@@ -23,7 +23,12 @@ export const AvatarGroup = forwardRef<AvatarGroupEl, AvatarGroupProps>(function 
   }, [size, max]);
 
   return (
-    <lt-avatar-group ref={innerRef} {...(props as Record<string, unknown>)} overflow-label={overflowLabel}>
+    <lt-avatar-group
+      ref={innerRef}
+      suppressHydrationWarning
+      {...(props as Record<string, unknown>)}
+      overflow-label={overflowLabel}
+    >
       {children}
     </lt-avatar-group>
   );

@@ -12,7 +12,7 @@ export const Nav = forwardRef<NavEl, NavProps>(function Nav({ children, ...props
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-nav ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-nav ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
       {children}
     </lt-nav>
   );
