@@ -68,7 +68,7 @@ export const dialogStyles = css`
     transform: translateY(16px);
     transition:
       opacity 220ms ease,
-      transform 220ms cubic-bezier(0.34, 1.2, 0.64, 1);
+      transform 220ms var(--lt-ease-emphasized);
     width: 100%;
   }
 

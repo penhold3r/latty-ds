@@ -19,7 +19,7 @@ export const tableStyles = css`
      nothing else inside it is focusable, e.g. a table with no interactive cells) needs its own visible focus
      indicator, same as any other focusable element in this codebase. */
   .table-container:focus-visible {
-    outline: 2px solid var(--lt-border-focus);
+    outline: 2px solid var(--lt-focus-ring-color);
     outline-offset: -2px;
   }
 
@@ -101,7 +101,7 @@ export const tableStyles = css`
     display: flex;
     font: inherit;
     gap: var(--lt-spacing-2);
-    transition: background-color 120ms ease;
+    transition: background-color var(--lt-duration-fast) ease;
     width: 100%;
   }
 
@@ -118,7 +118,7 @@ export const tableStyles = css`
     flex-shrink: 0;
     font-size: 0.875rem;
     opacity: 0;
-    transition: opacity 120ms ease;
+    transition: opacity var(--lt-duration-fast) ease;
   }
 
   th.sortable:hover .sort-icon,
@@ -166,7 +166,7 @@ export const tableStyles = css`
 
   /* Body */
   tbody tr {
-    transition: background-color 120ms ease;
+    transition: background-color var(--lt-duration-fast) ease;
   }
 
   tbody tr td {

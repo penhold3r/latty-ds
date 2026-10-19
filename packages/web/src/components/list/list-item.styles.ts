@@ -41,7 +41,7 @@ export const listItemStyles = css`
     padding: var(--lt-spacing-2);
     text-align: start;
     text-decoration: none;
-    transition: background-color 120ms ease;
+    transition: background-color var(--lt-duration-fast) ease;
     width: 100%;
   }
 
@@ -57,7 +57,7 @@ export const listItemStyles = css`
 
   a.inner:focus-visible,
   button.inner:focus-visible {
-    outline: 3px solid var(--lt-border-focus);
+    outline: 3px solid var(--lt-focus-ring-color);
     outline-offset: -3px;
   }
 

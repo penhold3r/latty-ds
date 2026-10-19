@@ -51,7 +51,7 @@ export const sliderStyles = css`
   }
 
   input[type='range']:focus-visible {
-    outline: 3px solid var(--lt-border-focus);
+    outline: 3px solid var(--lt-focus-ring-color);
     outline-offset: 3px;
   }
 
@@ -72,7 +72,7 @@ export const sliderStyles = css`
     box-shadow: 0 1px 4px rgb(var(--lt-shadow-rgb) / 0.25);
     cursor: pointer;
     height: var(--lt-slider-thumb-size, 18px);
-    transition: transform 100ms ease;
+    transition: transform var(--lt-duration-instant) ease;
     width: var(--lt-slider-thumb-size, 18px);
   }
 
@@ -93,7 +93,7 @@ export const sliderStyles = css`
     box-shadow: 0 1px 4px rgb(var(--lt-shadow-rgb) / 0.25);
     cursor: pointer;
     height: var(--lt-slider-thumb-size, 18px);
-    transition: transform 100ms ease;
+    transition: transform var(--lt-duration-instant) ease;
     width: var(--lt-slider-thumb-size, 18px);
   }
 

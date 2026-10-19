@@ -40,9 +40,9 @@ export const buttonStyles = css`
     position: relative;
     user-select: none;
     transition:
-      background-color 120ms ease,
-      border-color 120ms ease,
-      transform 50ms ease;
+      background-color var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease,
+      transform var(--lt-duration-instant) ease;
   }
 
   /* Wraps the icons/slot so it can be hidden (opacity, not display/visibility — that would drop it from the
@@ -69,7 +69,7 @@ export const buttonStyles = css`
   }
 
   [part='base']:focus-visible {
-    outline: 3px solid var(--lt-border-focus);
+    outline: 3px solid var(--lt-focus-ring-color);
     outline-offset: 2px;
   }
 

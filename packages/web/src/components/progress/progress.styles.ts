@@ -36,7 +36,7 @@ export const progressStyles = css`
     background: var(--lt-progress-color, var(--_fill-color));
     border-radius: 999px;
     height: 100%;
-    transition: width 300ms ease;
+    transition: width var(--lt-duration-slow) ease;
   }
 
   /* ── Sizes ──────────────────────────────────────────────────────────────── */

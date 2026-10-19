@@ -48,7 +48,7 @@ export const navItemStyles = css`
     font-family: inherit;
     text-decoration: none;
     text-align: start;
-    transition: background 120ms;
+    transition: background var(--lt-duration-fast);
     white-space: nowrap;
   }
 
@@ -85,7 +85,7 @@ export const navItemStyles = css`
     flex-shrink: 0;
     color: inherit;
     opacity: 0.6;
-    transition: transform 180ms ease;
+    transition: transform var(--lt-duration-fast) ease;
   }
 
   :host([open]) .chevron {
@@ -96,7 +96,7 @@ export const navItemStyles = css`
   .children {
     overflow: hidden;
     height: 0;
-    transition: height 200ms ease;
+    transition: height var(--lt-duration-moderate) ease;
   }
 
   .children-inner {

@@ -36,14 +36,14 @@ export const comboboxStyles = [
       overflow: hidden;
       position: relative;
       transition:
-        border-color 150ms ease,
-        box-shadow 150ms ease;
+        border-color var(--lt-duration-fast) ease,
+        box-shadow var(--lt-duration-fast) ease;
     }
 
     :host([open]) .input-wrap,
     .input-wrap:focus-within {
       border-color: var(--lt-border-primary);
-      box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle);
+      box-shadow: 0 0 0 3px var(--lt-focus-halo-color);
     }
 
     :host([variant='error']) .input-wrap {
@@ -155,7 +155,7 @@ export const comboboxStyles = [
       color: var(--lt-text-subtle);
       flex-shrink: 0;
       pointer-events: none;
-      transition: transform 150ms ease;
+      transition: transform var(--lt-duration-fast) ease;
     }
 
     :host([open]) .chevron {

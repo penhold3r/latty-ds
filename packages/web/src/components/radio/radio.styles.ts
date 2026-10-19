@@ -39,8 +39,8 @@ export const radioStyles = css`
     margin: 0;
     position: relative;
     transition:
-      background-color 120ms ease,
-      border-color 120ms ease;
+      background-color var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease;
   }
 
   input[type='radio']:hover:not(:disabled) {
@@ -48,7 +48,7 @@ export const radioStyles = css`
   }
 
   input[type='radio']:focus-visible {
-    outline: 3px solid var(--lt-border-focus);
+    outline: 3px solid var(--lt-focus-ring-color);
     outline-offset: 2px;
   }
 

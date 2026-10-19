@@ -11,8 +11,8 @@ export const surfaceStyles = css`
     border-radius: var(--lt-border-radius);
     box-sizing: border-box;
     transition:
-      box-shadow 120ms ease,
-      border-color 120ms ease;
+      box-shadow var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease;
   }
 
   /* Elevation variants */

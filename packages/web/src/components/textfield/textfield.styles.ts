@@ -54,7 +54,7 @@ export const textfieldStyles = css`
     font: inherit;
     padding: 0;
     pointer-events: auto;
-    transition: color 120ms ease;
+    transition: color var(--lt-duration-fast) ease;
   }
 
   .password-toggle:hover {
@@ -67,7 +67,7 @@ export const textfieldStyles = css`
   }
 
   .password-toggle:focus-visible {
-    outline: 2px solid var(--lt-border-focus);
+    outline: 2px solid var(--lt-focus-ring-color);
     outline-offset: 2px;
   }
 
@@ -111,8 +111,8 @@ export const textfieldStyles = css`
     padding-block: var(--lt-spacing-3);
     resize: vertical;
     transition:
-      border-color 120ms ease,
-      box-shadow 120ms ease;
+      border-color var(--lt-duration-fast) ease,
+      box-shadow var(--lt-duration-fast) ease;
     width: 100%;
   }
 
@@ -129,7 +129,7 @@ export const textfieldStyles = css`
 
   textarea:focus {
     border-color: var(--lt-interactive-primary-bg);
-    box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle);
+    box-shadow: 0 0 0 3px var(--lt-focus-halo-color);
     outline: none;
   }
 
@@ -149,8 +149,8 @@ export const textfieldStyles = css`
     border: var(--lt-border-width, 1px) solid var(--lt-border-input);
     box-sizing: border-box;
     transition:
-      border-color 120ms ease,
-      box-shadow 120ms ease;
+      border-color var(--lt-duration-fast) ease,
+      box-shadow var(--lt-duration-fast) ease;
   }
 
   .input-container:has(input):hover:not(:has(:disabled)) {
@@ -160,7 +160,7 @@ export const textfieldStyles = css`
   /* :focus-within, not :focus — focus always lands on the inner <input>, never the container itself. */
   .input-container:has(input):focus-within {
     border-color: var(--lt-interactive-primary-bg);
-    box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle);
+    box-shadow: 0 0 0 3px var(--lt-focus-halo-color);
   }
 
   .input-container:has(input):has(:disabled) {

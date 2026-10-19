@@ -32,15 +32,15 @@ export const datepickerStyles = css`
     font-size: 0.9375rem;
     outline: none;
     transition:
-      border-color 150ms ease,
-      box-shadow 150ms ease;
+      border-color var(--lt-duration-fast) ease,
+      box-shadow var(--lt-duration-fast) ease;
     width: 100%;
     box-sizing: border-box;
   }
 
   input:focus {
     border-color: var(--lt-border-primary);
-    box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle);
+    box-shadow: 0 0 0 3px var(--lt-focus-halo-color);
   }
 
   input:disabled {

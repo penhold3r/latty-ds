@@ -23,7 +23,7 @@ export const linkStyles = css`
 
   a[part='base']:focus-visible {
     border-radius: 2px;
-    outline: 2px solid var(--lt-border-focus);
+    outline: 2px solid var(--lt-focus-ring-color);
     outline-offset: 2px;
   }
 

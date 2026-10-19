@@ -51,8 +51,8 @@ export const calendarStyles = css`
     padding: var(--lt-spacing-1) var(--lt-spacing-2);
     text-align: start;
     transition:
-      background 100ms ease,
-      border-color 100ms ease;
+      background var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease;
     white-space: nowrap;
   }
 
@@ -102,8 +102,8 @@ export const calendarStyles = css`
     letter-spacing: 0.01em;
     padding: var(--lt-spacing-1) var(--lt-spacing-2);
     transition:
-      background 120ms ease,
-      border-color 120ms ease;
+      background var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease;
   }
 
   .month-label-btn:hover:not(:disabled) {
@@ -123,7 +123,7 @@ export const calendarStyles = css`
 
   .picker-chevron {
     color: var(--lt-text-subtle);
-    transition: transform 150ms ease;
+    transition: transform var(--lt-duration-fast) ease;
   }
 
   .month-label-btn--open .picker-chevron {
@@ -142,9 +142,9 @@ export const calendarStyles = css`
     justify-content: center;
     padding: 0;
     transition:
-      background 120ms ease,
-      border-color 120ms ease,
-      color 120ms ease;
+      background var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease,
+      color var(--lt-duration-fast) ease;
     width: 2rem;
   }
 
@@ -246,7 +246,7 @@ export const calendarStyles = css`
     min-width: 0;
     outline: none;
     padding: 0;
-    transition: background 100ms ease;
+    transition: background var(--lt-duration-fast) ease;
     width: 100%;
   }
 
@@ -279,9 +279,9 @@ export const calendarStyles = css`
     height: var(--_circle-size);
     justify-content: center;
     transition:
-      background 100ms ease,
-      border-color 100ms ease,
-      color 100ms ease;
+      background var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease,
+      color var(--lt-duration-fast) ease;
     width: var(--_circle-size);
   }
 
@@ -290,7 +290,7 @@ export const calendarStyles = css`
   }
 
   .day:focus-visible .day__inner {
-    outline: 2px solid var(--lt-border-focus);
+    outline: 2px solid var(--lt-focus-ring-color);
     outline-offset: 1px;
   }
 
@@ -443,8 +443,8 @@ export const calendarStyles = css`
     padding: var(--lt-spacing-2) 0;
     text-align: center;
     transition:
-      background 100ms ease,
-      border-color 100ms ease;
+      background var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease;
   }
 
   .picker-month-btn:hover:not(:disabled) {
@@ -489,9 +489,9 @@ export const calendarStyles = css`
     font-weight: 500;
     padding: var(--lt-spacing-1) var(--lt-spacing-2);
     transition:
-      background 120ms ease,
-      border-color 120ms ease,
-      color 120ms ease;
+      background var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease,
+      color var(--lt-duration-fast) ease;
   }
 
   .today-btn:hover:not(:disabled) {

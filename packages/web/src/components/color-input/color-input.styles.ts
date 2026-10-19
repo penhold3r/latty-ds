@@ -35,8 +35,8 @@ export const colorInputStyles = css`
     border-radius: var(--lt-border-radius);
     box-sizing: border-box;
     transition:
-      border-color 120ms ease,
-      box-shadow 120ms ease;
+      border-color var(--lt-duration-fast) ease,
+      box-shadow var(--lt-duration-fast) ease;
     width: 100%;
     overflow: hidden;
   }
@@ -47,7 +47,7 @@ export const colorInputStyles = css`
 
   .input-container:focus-within {
     border-color: var(--lt-interactive-primary-bg);
-    box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle);
+    box-shadow: 0 0 0 3px var(--lt-focus-halo-color);
     outline: none;
   }
 

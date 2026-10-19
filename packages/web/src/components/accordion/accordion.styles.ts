@@ -10,8 +10,8 @@ export const accordionStyles = css`
   details {
     border-radius: var(--lt-border-radius);
     transition:
-      background-color 120ms ease,
-      border-color 120ms ease;
+      background-color var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease;
   }
 
   summary {
@@ -54,7 +54,7 @@ export const accordionStyles = css`
     color: var(--lt-text-subtle);
     flex-shrink: 0;
     height: 20px;
-    transition: transform 200ms ease;
+    transition: transform var(--lt-duration-moderate) ease;
     width: 20px;
   }
 
@@ -67,7 +67,7 @@ export const accordionStyles = css`
   }
 
   summary:focus-visible {
-    outline: 2px solid var(--lt-border-focus);
+    outline: 2px solid var(--lt-focus-ring-color);
     outline-offset: 2px;
     border-radius: var(--lt-border-radius);
   }
@@ -75,7 +75,7 @@ export const accordionStyles = css`
   .content {
     height: 0;
     overflow: hidden;
-    transition: height 200ms ease;
+    transition: height var(--lt-duration-moderate) ease;
   }
 
   .content-inner {

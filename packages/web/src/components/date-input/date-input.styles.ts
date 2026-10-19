@@ -44,14 +44,14 @@ export const dateInputStyles = [
       outline: none;
       text-align: start;
       transition:
-        border-color 150ms ease,
-        box-shadow 150ms ease;
+        border-color var(--lt-duration-fast) ease,
+        box-shadow var(--lt-duration-fast) ease;
       width: 100%;
     }
 
     .field-btn:focus-visible {
       border-color: var(--lt-border-primary);
-      box-shadow: 0 0 0 3px var(--lt-bg-primary-subtle);
+      box-shadow: 0 0 0 3px var(--lt-focus-halo-color);
     }
 
     .field-btn:disabled {

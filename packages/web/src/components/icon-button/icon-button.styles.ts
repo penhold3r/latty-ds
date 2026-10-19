@@ -25,9 +25,9 @@ export const iconButtonStyles = css`
     justify-content: center;
     padding: 0;
     transition:
-      background-color 120ms ease,
-      border-color 120ms ease,
-      transform 50ms ease;
+      background-color var(--lt-duration-fast) ease,
+      border-color var(--lt-duration-fast) ease,
+      transform var(--lt-duration-instant) ease;
     user-select: none;
   }
 
@@ -45,7 +45,7 @@ export const iconButtonStyles = css`
   }
 
   [part='base']:focus-visible {
-    outline: 3px solid var(--lt-border-focus);
+    outline: 3px solid var(--lt-focus-ring-color);
     outline-offset: 2px;
   }
 

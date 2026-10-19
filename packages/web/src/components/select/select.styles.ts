@@ -42,8 +42,8 @@ export const selectStyles = [
       font-family: inherit;
       justify-content: space-between;
       transition:
-        border-color 120ms ease,
-        box-shadow 120ms ease;
+        border-color var(--lt-duration-fast) ease,
+        box-shadow var(--lt-duration-fast) ease;
       width: 100%;
     }
 
@@ -53,7 +53,7 @@ export const selectStyles = [
 
     .select-trigger:focus-visible {
       border-color: var(--lt-interactive-primary-bg);
-      box-shadow: 0 0 0 3px var(--lt-border-focus);
+      box-shadow: 0 0 0 3px var(--lt-focus-ring-color);
       outline: none;
     }
 
@@ -77,7 +77,7 @@ export const selectStyles = [
     .icon-end {
       color: var(--lt-text-subtle);
       flex-shrink: 0;
-      transition: transform 120ms ease;
+      transition: transform var(--lt-duration-fast) ease;
     }
 
     .clear-button {
@@ -134,7 +134,7 @@ export const selectStyles = [
       font-family: inherit;
       gap: var(--lt-spacing-2);
       text-align: start;
-      transition: background-color 80ms ease;
+      transition: background-color var(--lt-duration-fast) ease;
       width: 100%;
     }
 
