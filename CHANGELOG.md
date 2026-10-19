@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/penhold3r/latty-ds/compare/v1.1.0...v1.2.0) (2026-10-19)
+
+### Bug Fixes
+
+- **react:** suppress hydration warnings from Lit's reflected default attributes ([2ba7d51](https://github.com/penhold3r/latty-ds/commit/2ba7d513bc94f4dc3e048b40834aa926f25aa25e)), closes [#2](https://github.com/penhold3r/latty-ds/issues/2)
+- **web:** defer FormDisabledController's requestUpdate to a microtask ([72f55f6](https://github.com/penhold3r/latty-ds/commit/72f55f6316380d77daffa146e4c60c34b488e5d3)), closes [#3](https://github.com/penhold3r/latty-ds/issues/3)
+
+- feat(web)!: split lt-textfield's min/max into real native min/max/minLength/maxLength ([a5d7b4a](https://github.com/penhold3r/latty-ds/commit/a5d7b4a56b90b7c7ee9c6abb3e10a8d5c9a0779d)), closes [#6](https://github.com/penhold3r/latty-ds/issues/6)
+
+### Reverts
+
+- Revert "chore(release): publish v2.0.0" ([32f6ab2](https://github.com/penhold3r/latty-ds/commit/32f6ab263b9add1b40811cb7d5ecfebd526a26ed))
+
+### BREAKING CHANGES
+
+- a consumer using lt-textfield's `max` as a character-length
+  limit on a non-numeric type must migrate to `maxLength` (same for `min` ->
+  `minLength`). `min`/`max` themselves are unchanged for type="number".
+
+Also fixes a matching pre-existing gap this surfaced: `cem analyze` never
+records an explicit `attribute: '...'` override, so both the React wrapper
+codegen (scripts/codegen-wrappers.mjs) and the docs manifest generator
+(packages/web/scripts/build-manifest.mjs) guess a property's attribute name
+via kebab-case — wrong for any property deliberately given a true native
+spelling instead. The wrapper codegen already had an override table for
+button.ts's formAction; the manifest generator didn't, so the docs site's
+API table and Playground already mislabeled formaction's control, and the
+Playground's React-tab code generator (docs/src/components/
+ComponentPlayground/ComponentPlayground.script.ts) already emitted the
+wrong prop casing there too. Both now carry a matching override table,
+covering formAction and the two new properties.
+
 # [1.1.0](https://github.com/penhold3r/latty-ds/compare/v1.0.0...v1.1.0) (2026-10-19)
 
 ### Bug Fixes
