@@ -67,6 +67,11 @@ export const calendarStyles = css`
     opacity: 0.6;
   }
 
+  .preset-btn:focus-visible {
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
+  }
+
   /* Fixed, not flex: 1 — a flexed width would let the presets column eat into the day grid's own space (the
      original bug report: "squishes the grid"). This stays the single-month card's natural 17.25rem regardless
      of whether a presets sidebar sits beside it; .calendar--multi overrides it below, since a multi-month
@@ -121,6 +126,11 @@ export const calendarStyles = css`
     opacity: 0.6;
   }
 
+  .month-label-btn:focus-visible {
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
+  }
+
   .picker-chevron {
     color: var(--lt-text-subtle);
     transition: transform var(--lt-duration-fast) var(--lt-ease-standard);
@@ -152,6 +162,11 @@ export const calendarStyles = css`
     background: var(--lt-bg-neutral-subtle);
     border-color: var(--lt-border-default);
     color: var(--lt-text-default);
+  }
+
+  .nav-btn:focus-visible {
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   .nav-btn:disabled {
@@ -469,6 +484,11 @@ export const calendarStyles = css`
     opacity: 0.5;
   }
 
+  .picker-month-btn:focus-visible {
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
+  }
+
   /* ── Footer ── */
 
   .footer {
@@ -504,6 +524,11 @@ export const calendarStyles = css`
     color: var(--lt-text-disabled);
     cursor: not-allowed;
     opacity: 0.5;
+  }
+
+  .today-btn:focus-visible {
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   /* ── Reduced motion ─────────────────────────────────────────────────────── */

@@ -320,6 +320,11 @@ export const textfieldStyles = css`
     pointer-events: auto;
   }
 
+  .clear-button:focus-visible {
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
+  }
+
   .counter {
     color: var(--lt-text-subtle);
     display: block;

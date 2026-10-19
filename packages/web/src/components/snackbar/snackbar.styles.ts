@@ -135,6 +135,14 @@ export const snackbarStyles = css`
     text-decoration: underline;
   }
 
+  /* currentColor, not --lt-focus-ring-color — the snackbar's own background varies per variant (success/
+     warning/error/info fills), and currentColor already resolves to whatever on-color text is already proven
+     to contrast against that specific fill, the same reasoning .action/.close's own color: inherit relies on. */
+  .action:focus-visible {
+    outline: var(--lt-border-focusRingWidth) solid currentColor;
+    outline-offset: var(--lt-border-focusRingOffset);
+  }
+
   /* ── Close button ────────────────────────────────────────── */
 
   .close {
@@ -154,6 +162,12 @@ export const snackbarStyles = css`
 
   .close:hover {
     opacity: 1;
+  }
+
+  .close:focus-visible {
+    opacity: 1;
+    outline: var(--lt-border-focusRingWidth) solid currentColor;
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   /* ── Reduced motion ─────────────────────────────────────────────────────── */

@@ -97,6 +97,11 @@ export const selectStyles = [
       color: var(--lt-text-default);
     }
 
+    .clear-button:focus-visible {
+      outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+      outline-offset: var(--lt-border-focusRingOffset);
+    }
+
     :host([open]) .icon-end {
       transform: rotate(180deg);
     }

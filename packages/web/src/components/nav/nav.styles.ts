@@ -60,6 +60,14 @@ export const navItemStyles = css`
     background: color-mix(in srgb, currentColor 18%, transparent);
   }
 
+  /* Inward (negative) offset, not the usual outward ring — a nested item's trigger can sit inside .children,
+     which needs overflow:hidden for its own expand/collapse height animation; an outward ring there would get
+     clipped while the submenu is open. Inward works correctly whether the item is nested or not. */
+  .item-trigger:focus-visible {
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: calc(-1 * var(--lt-border-focusRingOffset));
+  }
+
   :host([active]) .item-trigger {
     background: var(--lt-nav-item-active-bg, color-mix(in srgb, currentColor 15%, transparent));
     color: var(--lt-nav-item-active-color, inherit);

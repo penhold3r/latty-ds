@@ -57,6 +57,11 @@ export const paginationStyles = css`
     border-color: var(--lt-border-default);
   }
 
+  button:focus-visible {
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
+  }
+
   button[aria-current='page'] {
     background: var(--lt-bg-primary-subtle);
     border-color: var(--lt-border-primary);

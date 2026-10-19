@@ -151,6 +151,11 @@ export const comboboxStyles = [
       color: var(--lt-text-default);
     }
 
+    .clear-button:focus-visible {
+      outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+      outline-offset: var(--lt-border-focusRingOffset);
+    }
+
     .chevron {
       color: var(--lt-text-subtle);
       flex-shrink: 0;
