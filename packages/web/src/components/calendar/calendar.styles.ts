@@ -51,8 +51,8 @@ export const calendarStyles = css`
     padding: var(--lt-spacing-1) var(--lt-spacing-2);
     text-align: start;
     transition:
-      background var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease;
+      background var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard);
     white-space: nowrap;
   }
 
@@ -102,8 +102,8 @@ export const calendarStyles = css`
     letter-spacing: 0.01em;
     padding: var(--lt-spacing-1) var(--lt-spacing-2);
     transition:
-      background var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease;
+      background var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   .month-label-btn:hover:not(:disabled) {
@@ -123,7 +123,7 @@ export const calendarStyles = css`
 
   .picker-chevron {
     color: var(--lt-text-subtle);
-    transition: transform var(--lt-duration-fast) ease;
+    transition: transform var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   .month-label-btn--open .picker-chevron {
@@ -142,9 +142,9 @@ export const calendarStyles = css`
     justify-content: center;
     padding: 0;
     transition:
-      background var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease,
-      color var(--lt-duration-fast) ease;
+      background var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard),
+      color var(--lt-duration-fast) var(--lt-ease-standard);
     width: 2rem;
   }
 
@@ -246,7 +246,7 @@ export const calendarStyles = css`
     min-width: 0;
     outline: none;
     padding: 0;
-    transition: background var(--lt-duration-fast) ease;
+    transition: background var(--lt-duration-fast) var(--lt-ease-standard);
     width: 100%;
   }
 
@@ -279,9 +279,9 @@ export const calendarStyles = css`
     height: var(--_circle-size);
     justify-content: center;
     transition:
-      background var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease,
-      color var(--lt-duration-fast) ease;
+      background var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard),
+      color var(--lt-duration-fast) var(--lt-ease-standard);
     width: var(--_circle-size);
   }
 
@@ -443,8 +443,8 @@ export const calendarStyles = css`
     padding: var(--lt-spacing-2) 0;
     text-align: center;
     transition:
-      background var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease;
+      background var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   .picker-month-btn:hover:not(:disabled) {
@@ -489,9 +489,9 @@ export const calendarStyles = css`
     font-weight: 500;
     padding: var(--lt-spacing-1) var(--lt-spacing-2);
     transition:
-      background var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease,
-      color var(--lt-duration-fast) ease;
+      background var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard),
+      color var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   .today-btn:hover:not(:disabled) {

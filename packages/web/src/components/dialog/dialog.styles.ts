@@ -50,7 +50,7 @@ export const dialogStyles = css`
   dialog::backdrop {
     background: rgb(var(--lt-shadow-rgb) / 0);
     transition:
-      background-color var(--lt-duration-moderate) ease,
+      background-color var(--lt-duration-moderate) var(--lt-ease-standard),
       display var(--lt-duration-moderate) allow-discrete,
       overlay var(--lt-duration-moderate) allow-discrete;
   }
@@ -67,7 +67,7 @@ export const dialogStyles = css`
     opacity: 0;
     transform: translateY(16px);
     transition:
-      opacity var(--lt-duration-moderate) ease,
+      opacity var(--lt-duration-moderate) var(--lt-ease-standard),
       transform var(--lt-duration-moderate) var(--lt-ease-emphasized);
     width: 100%;
   }

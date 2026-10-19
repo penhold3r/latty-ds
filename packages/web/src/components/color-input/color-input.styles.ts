@@ -35,8 +35,8 @@ export const colorInputStyles = css`
     border-radius: var(--lt-border-radius);
     box-sizing: border-box;
     transition:
-      border-color var(--lt-duration-fast) ease,
-      box-shadow var(--lt-duration-fast) ease;
+      border-color var(--lt-duration-fast) var(--lt-ease-standard),
+      box-shadow var(--lt-duration-fast) var(--lt-ease-standard);
     width: 100%;
     overflow: hidden;
   }

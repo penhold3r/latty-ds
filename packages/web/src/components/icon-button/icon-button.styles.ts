@@ -25,9 +25,9 @@ export const iconButtonStyles = css`
     justify-content: center;
     padding: 0;
     transition:
-      background-color var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease,
-      transform var(--lt-duration-instant) ease;
+      background-color var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard),
+      transform var(--lt-duration-instant) var(--lt-ease-standard);
     user-select: none;
   }
 
@@ -45,8 +45,8 @@ export const iconButtonStyles = css`
   }
 
   [part='base']:focus-visible {
-    outline: 3px solid var(--lt-focus-ring-color);
-    outline-offset: 2px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   [part='base'][disabled] {

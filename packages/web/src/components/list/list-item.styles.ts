@@ -41,7 +41,7 @@ export const listItemStyles = css`
     padding: var(--lt-spacing-2);
     text-align: start;
     text-decoration: none;
-    transition: background-color var(--lt-duration-fast) ease;
+    transition: background-color var(--lt-duration-fast) var(--lt-ease-standard);
     width: 100%;
   }
 

@@ -54,7 +54,7 @@ export const textfieldStyles = css`
     font: inherit;
     padding: 0;
     pointer-events: auto;
-    transition: color var(--lt-duration-fast) ease;
+    transition: color var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   .password-toggle:hover {
@@ -111,8 +111,8 @@ export const textfieldStyles = css`
     padding-block: var(--lt-spacing-3);
     resize: vertical;
     transition:
-      border-color var(--lt-duration-fast) ease,
-      box-shadow var(--lt-duration-fast) ease;
+      border-color var(--lt-duration-fast) var(--lt-ease-standard),
+      box-shadow var(--lt-duration-fast) var(--lt-ease-standard);
     width: 100%;
   }
 
@@ -149,8 +149,8 @@ export const textfieldStyles = css`
     border: var(--lt-border-width, 1px) solid var(--lt-border-input);
     box-sizing: border-box;
     transition:
-      border-color var(--lt-duration-fast) ease,
-      box-shadow var(--lt-duration-fast) ease;
+      border-color var(--lt-duration-fast) var(--lt-ease-standard),
+      box-shadow var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   .input-container:has(input):hover:not(:has(:disabled)) {

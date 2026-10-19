@@ -26,7 +26,7 @@ export const breadcrumbItemStyles = css`
   [part='link'] {
     color: var(--lt-text-primary);
     text-decoration: none;
-    transition: color var(--lt-duration-fast) ease;
+    transition: color var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   [part='link']:hover {

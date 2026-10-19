@@ -36,8 +36,8 @@ export const comboboxStyles = [
       overflow: hidden;
       position: relative;
       transition:
-        border-color var(--lt-duration-fast) ease,
-        box-shadow var(--lt-duration-fast) ease;
+        border-color var(--lt-duration-fast) var(--lt-ease-standard),
+        box-shadow var(--lt-duration-fast) var(--lt-ease-standard);
     }
 
     :host([open]) .input-wrap,
@@ -155,7 +155,7 @@ export const comboboxStyles = [
       color: var(--lt-text-subtle);
       flex-shrink: 0;
       pointer-events: none;
-      transition: transform var(--lt-duration-fast) ease;
+      transition: transform var(--lt-duration-fast) var(--lt-ease-standard);
     }
 
     :host([open]) .chevron {

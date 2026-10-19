@@ -42,8 +42,8 @@ export const selectStyles = [
       font-family: inherit;
       justify-content: space-between;
       transition:
-        border-color var(--lt-duration-fast) ease,
-        box-shadow var(--lt-duration-fast) ease;
+        border-color var(--lt-duration-fast) var(--lt-ease-standard),
+        box-shadow var(--lt-duration-fast) var(--lt-ease-standard);
       width: 100%;
     }
 
@@ -77,7 +77,7 @@ export const selectStyles = [
     .icon-end {
       color: var(--lt-text-subtle);
       flex-shrink: 0;
-      transition: transform var(--lt-duration-fast) ease;
+      transition: transform var(--lt-duration-fast) var(--lt-ease-standard);
     }
 
     .clear-button {
@@ -134,7 +134,7 @@ export const selectStyles = [
       font-family: inherit;
       gap: var(--lt-spacing-2);
       text-align: start;
-      transition: background-color var(--lt-duration-fast) ease;
+      transition: background-color var(--lt-duration-fast) var(--lt-ease-standard);
       width: 100%;
     }
 

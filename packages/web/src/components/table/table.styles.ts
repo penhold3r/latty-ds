@@ -101,7 +101,7 @@ export const tableStyles = css`
     display: flex;
     font: inherit;
     gap: var(--lt-spacing-2);
-    transition: background-color var(--lt-duration-fast) ease;
+    transition: background-color var(--lt-duration-fast) var(--lt-ease-standard);
     width: 100%;
   }
 
@@ -118,7 +118,7 @@ export const tableStyles = css`
     flex-shrink: 0;
     font-size: 0.875rem;
     opacity: 0;
-    transition: opacity var(--lt-duration-fast) ease;
+    transition: opacity var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   th.sortable:hover .sort-icon,
@@ -166,7 +166,7 @@ export const tableStyles = css`
 
   /* Body */
   tbody tr {
-    transition: background-color var(--lt-duration-fast) ease;
+    transition: background-color var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   tbody tr td {

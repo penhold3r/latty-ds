@@ -45,7 +45,7 @@ export const sidepanelStyles = css`
   dialog::backdrop {
     background: rgb(var(--lt-shadow-rgb) / 0);
     transition:
-      background-color var(--lt-duration-moderate) ease,
+      background-color var(--lt-duration-moderate) var(--lt-ease-standard),
       display var(--lt-duration-slow) allow-discrete,
       overlay var(--lt-duration-slow) allow-discrete;
   }

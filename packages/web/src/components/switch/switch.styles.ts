@@ -38,7 +38,7 @@ export const switchStyles = css`
     flex-shrink: 0;
     margin: 0;
     position: relative;
-    transition: background-color var(--lt-duration-moderate) ease;
+    transition: background-color var(--lt-duration-moderate) var(--lt-ease-standard);
   }
 
   input[type='checkbox']:hover:not(:disabled) {
@@ -46,8 +46,8 @@ export const switchStyles = css`
   }
 
   input[type='checkbox']:focus-visible {
-    outline: 3px solid var(--lt-focus-ring-color);
-    outline-offset: 2px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   input[type='checkbox']:disabled {
@@ -60,7 +60,7 @@ export const switchStyles = css`
     box-shadow: 0 2px 4px rgb(var(--lt-shadow-rgb) / 0.2);
     pointer-events: none;
     position: absolute;
-    transition: left var(--lt-duration-moderate) ease;
+    transition: left var(--lt-duration-moderate) var(--lt-ease-standard);
   }
 
   .label {

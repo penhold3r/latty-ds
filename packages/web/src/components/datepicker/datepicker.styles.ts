@@ -32,8 +32,8 @@ export const datepickerStyles = css`
     font-size: 0.9375rem;
     outline: none;
     transition:
-      border-color var(--lt-duration-fast) ease,
-      box-shadow var(--lt-duration-fast) ease;
+      border-color var(--lt-duration-fast) var(--lt-ease-standard),
+      box-shadow var(--lt-duration-fast) var(--lt-ease-standard);
     width: 100%;
     box-sizing: border-box;
   }

@@ -22,8 +22,8 @@ export const chipStyles = css`
     font-weight: 400;
     line-height: 1;
     transition:
-      background-color var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease;
+      background-color var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard);
     user-select: none;
     white-space: nowrap;
   }
@@ -37,8 +37,8 @@ export const chipStyles = css`
   }
 
   span[part='base']:focus-visible {
-    outline: 3px solid var(--lt-focus-ring-color);
-    outline-offset: 2px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   .delete {
@@ -58,8 +58,8 @@ export const chipStyles = css`
     opacity: 0.6;
     padding: 0;
     transition:
-      opacity var(--lt-duration-fast) ease,
-      background-color var(--lt-duration-fast) ease;
+      opacity var(--lt-duration-fast) var(--lt-ease-standard),
+      background-color var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   /* The large chip's icon is 16px rather than 12px, so it needs less negative margin to keep the same layout. */

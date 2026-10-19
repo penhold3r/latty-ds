@@ -25,9 +25,9 @@ export const paginationStyles = css`
     justify-content: center;
     line-height: 1;
     transition:
-      background var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease,
-      color var(--lt-duration-fast) ease;
+      background var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard),
+      color var(--lt-duration-fast) var(--lt-ease-standard);
     user-select: none;
   }
 

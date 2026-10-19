@@ -7,8 +7,8 @@ export const alertStyles = css`
     opacity: 1;
     transform: translateY(0);
     transition:
-      opacity var(--lt-duration-moderate) ease,
-      transform var(--lt-duration-moderate) ease;
+      opacity var(--lt-duration-moderate) var(--lt-ease-standard),
+      transform var(--lt-duration-moderate) var(--lt-ease-standard);
 
     /* Default variant tokens — public props override first, then variant defaults */
     --_bg-subtle: var(--lt-alert-bg, var(--lt-bg-neutral-subtle));

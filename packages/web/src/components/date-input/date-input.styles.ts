@@ -44,8 +44,8 @@ export const dateInputStyles = [
       outline: none;
       text-align: start;
       transition:
-        border-color var(--lt-duration-fast) ease,
-        box-shadow var(--lt-duration-fast) ease;
+        border-color var(--lt-duration-fast) var(--lt-ease-standard),
+        box-shadow var(--lt-duration-fast) var(--lt-ease-standard);
       width: 100%;
     }
 

@@ -10,8 +10,8 @@ export const accordionStyles = css`
   details {
     border-radius: var(--lt-border-radius);
     transition:
-      background-color var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease;
+      background-color var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   summary {
@@ -54,7 +54,7 @@ export const accordionStyles = css`
     color: var(--lt-text-subtle);
     flex-shrink: 0;
     height: 20px;
-    transition: transform var(--lt-duration-moderate) ease;
+    transition: transform var(--lt-duration-moderate) var(--lt-ease-standard);
     width: 20px;
   }
 
@@ -75,7 +75,7 @@ export const accordionStyles = css`
   .content {
     height: 0;
     overflow: hidden;
-    transition: height var(--lt-duration-moderate) ease;
+    transition: height var(--lt-duration-moderate) var(--lt-ease-standard);
   }
 
   .content-inner {

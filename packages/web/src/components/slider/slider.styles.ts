@@ -72,7 +72,7 @@ export const sliderStyles = css`
     box-shadow: 0 1px 4px rgb(var(--lt-shadow-rgb) / 0.25);
     cursor: pointer;
     height: var(--lt-slider-thumb-size, 18px);
-    transition: transform var(--lt-duration-instant) ease;
+    transition: transform var(--lt-duration-instant) var(--lt-ease-standard);
     width: var(--lt-slider-thumb-size, 18px);
   }
 
@@ -93,7 +93,7 @@ export const sliderStyles = css`
     box-shadow: 0 1px 4px rgb(var(--lt-shadow-rgb) / 0.25);
     cursor: pointer;
     height: var(--lt-slider-thumb-size, 18px);
-    transition: transform var(--lt-duration-instant) ease;
+    transition: transform var(--lt-duration-instant) var(--lt-ease-standard);
     width: var(--lt-slider-thumb-size, 18px);
   }
 

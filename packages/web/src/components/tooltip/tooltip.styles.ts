@@ -24,7 +24,7 @@ export const tooltipStyles = css`
     pointer-events: none;
     position: fixed;
     transition:
-      opacity var(--lt-duration-fast) ease,
+      opacity var(--lt-duration-fast) var(--lt-ease-standard),
       display var(--lt-duration-fast) allow-discrete,
       overlay var(--lt-duration-fast) allow-discrete;
     white-space: nowrap;

@@ -40,9 +40,9 @@ export const buttonStyles = css`
     position: relative;
     user-select: none;
     transition:
-      background-color var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease,
-      transform var(--lt-duration-instant) ease;
+      background-color var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard),
+      transform var(--lt-duration-instant) var(--lt-ease-standard);
   }
 
   /* Wraps the icons/slot so it can be hidden (opacity, not display/visibility — that would drop it from the
@@ -69,8 +69,8 @@ export const buttonStyles = css`
   }
 
   [part='base']:focus-visible {
-    outline: 3px solid var(--lt-focus-ring-color);
-    outline-offset: 2px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   [part='base'][disabled],

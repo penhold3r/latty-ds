@@ -39,8 +39,8 @@ export const checkboxStyles = css`
     margin: 0;
     position: relative;
     transition:
-      background-color var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease;
+      background-color var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   input[type='checkbox']:hover:not(:disabled) {
@@ -48,8 +48,8 @@ export const checkboxStyles = css`
   }
 
   input[type='checkbox']:focus-visible {
-    outline: 3px solid var(--lt-focus-ring-color);
-    outline-offset: 2px;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: var(--lt-border-focusRingOffset);
   }
 
   input[type='checkbox']:disabled {

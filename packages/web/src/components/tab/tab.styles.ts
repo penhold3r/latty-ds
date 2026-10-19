@@ -21,8 +21,8 @@ export const tabStyles = css`
     outline: none;
     padding: var(--lt-spacing-3) var(--lt-spacing-4);
     transition:
-      color var(--lt-duration-fast) ease,
-      border-color var(--lt-duration-fast) ease;
+      color var(--lt-duration-fast) var(--lt-ease-standard),
+      border-color var(--lt-duration-fast) var(--lt-ease-standard);
     user-select: none;
     white-space: nowrap;
   }
@@ -88,9 +88,9 @@ export const tabStyles = css`
     border-bottom: none;
     border-radius: var(--lt-border-radius);
     transition:
-      color var(--lt-duration-fast) ease,
-      background-color var(--lt-duration-fast) ease,
-      box-shadow var(--lt-duration-fast) ease;
+      color var(--lt-duration-fast) var(--lt-ease-standard),
+      background-color var(--lt-duration-fast) var(--lt-ease-standard),
+      box-shadow var(--lt-duration-fast) var(--lt-ease-standard);
   }
 
   :host([data-variant='pills'][active]) .tab {
