@@ -10,6 +10,12 @@ export const surfaceStyles = css`
     background: var(--lt-surface-bg, var(--lt-bg-subtle));
     border-radius: var(--lt-border-radius);
     box-sizing: border-box;
+    /* So lt-surface responds to a stretched flex/grid parent the way a plain
+       element would: a percentage height only resolves against a definite
+       height, so this is a no-op (computes to auto) for the common
+       content-sized host, and only takes effect when something actually
+       stretches :host — exactly a flex/grid "stretch" child's default. */
+    height: 100%;
     transition:
       box-shadow var(--lt-duration-fast) var(--lt-ease-standard),
       border-color var(--lt-duration-fast) var(--lt-ease-standard);
