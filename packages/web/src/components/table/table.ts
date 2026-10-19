@@ -52,17 +52,26 @@ const compareValues = (a: unknown, b: unknown): number => {
   return String(a).localeCompare(String(b), undefined, { numeric: true });
 };
 
-const jsonArrayConverter = {
+/**
+ * TBL-4: a malformed `columns`/`data` JSON-string attribute (the SSR/no-JS-property path, see this class's own
+ * JSDoc) used to fail silently — invalid JSON, or valid JSON that isn't an array, both collapsed to `[]` with no
+ * signal at all that the markup was wrong, not just empty. `attrName` is baked in per property so the warning
+ * names which one actually failed, since both share this same converter.
+ */
+const createJsonArrayConverter = (attrName: string) => ({
   fromAttribute(value: string | null): unknown[] {
     if (value === null) return [];
     try {
       const parsed = JSON.parse(value);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
+      if (Array.isArray(parsed)) return parsed;
+      devWarn('lt-table', `\`${attrName}\` attribute is valid JSON but not an array — ignoring it`);
+      return [];
+    } catch (e) {
+      devWarn('lt-table', `\`${attrName}\` attribute isn't valid JSON (${(e as Error).message}) — ignoring it`);
       return [];
     }
   }
-};
+});
 
 import '@latty-ds/icons';
 
@@ -138,14 +147,14 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * When passed as JSON, only serializable fields are supported (no `render` or `sortFn`).
    * @default []
    */
-  @property({ converter: jsonArrayConverter }) columns: TableColumn<T>[] = [];
+  @property({ converter: createJsonArrayConverter('columns') }) columns: TableColumn<T>[] = [];
 
   /**
    * Data rows for the table.
    * Accepts a JS array (`.data = [...]`) or a JSON string attribute (`data='[...]'`).
    * @default []
    */
-  @property({ converter: jsonArrayConverter }) data: T[] = [];
+  @property({ converter: createJsonArrayConverter('data') }) data: T[] = [];
 
   /**
    * Density/spacing of the table.
@@ -737,6 +746,15 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Renders the table header.
+   *
+   * TBL-4: every table/rowgroup/row/columnheader/cell element below carries its matching ARIA role explicitly,
+   * not just the real tag name — `responsive-mode="stack"` sets `display: block` on all of them (table.styles.ts),
+   * and Safari computes a cell's accessibility role from its *rendered display value*, not its tag name, so it
+   * silently drops the whole table's semantics the instant that CSS applies (Chrome/Firefox use the tag name
+   * regardless of display and are unaffected). An explicit role isn't subject to that at all. Stack mode also sets
+   * `thead { display: none }`, which removes the header row from every browser's accessibility tree, not just
+   * Safari's — renderBody()'s per-cell `aria-label` (column label only, not the value) is the companion fix for
+   * that, so stacked cells don't lose their column context entirely once sighted users can no longer see it either.
    */
   private renderHeader() {
     const allKeys = this.pagedEntries.map(({ row, index }) => this.getRowKey(row, index));
@@ -745,11 +763,11 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     const isVirtualized = this.virtualized && !!this.height;
 
     return html`
-      <thead>
-        <tr aria-rowindex=${isVirtualized ? 1 : nothing}>
+      <thead role="rowgroup">
+        <tr role="row" aria-rowindex=${isVirtualized ? 1 : nothing}>
           ${this.selectionMode === 'multiple'
             ? html`
-                <th class="selection-cell">
+                <th role="columnheader" class="selection-cell">
                   <input
                     type="checkbox"
                     aria-label=${this._labels.selectAll}
@@ -761,11 +779,12 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
                 </th>
               `
             : this.selectionMode === 'single'
-              ? html`<th class="selection-cell"></th>`
+              ? html`<th role="columnheader" class="selection-cell"></th>`
               : nothing}
           ${(this.columns ?? []).map(
             (column) => html`
               <th
+                role="columnheader"
                 class=${classMap({
                   sortable: !!column.sortable,
                   sorted: this.currentSort?.key === column.key,
@@ -833,9 +852,9 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     const selectionColumnCount = this.selectionMode === 'none' ? 0 : 1;
     if (this.sortedData.length === 0) {
       return html`
-        <tbody>
-          <tr>
-            <td colspan=${Math.max(columns.length + selectionColumnCount, 1)} class="empty-state">
+        <tbody role="rowgroup">
+          <tr role="row">
+            <td role="cell" colspan=${Math.max(columns.length + selectionColumnCount, 1)} class="empty-state">
               ${this.emptyMessage}
             </td>
           </tr>
@@ -856,6 +875,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
       return html`
         <tr
+          role="row"
           @click=${() => this.handleRowClick(row, index)}
           class=${classMap({ selected })}
           aria-rowindex=${ariaRowIndex}
@@ -863,7 +883,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
           ${this.selectionMode === 'none'
             ? nothing
             : html`
-                <td class="selection-cell" data-label="">
+                <td role="cell" class="selection-cell" data-label="">
                   <input
                     type=${this.selectionMode === 'single' ? 'radio' : 'checkbox'}
                     name=${this.selectionMode === 'single' ? this._selectionGroupName : nothing}
@@ -877,12 +897,14 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
           ${columns.map(
             (column) => html`
               <td
+                role="cell"
                 class=${classMap({
                   sticky: !!column.sticky,
                   'hide-on-mobile': !!column.hideOnMobile
                 })}
                 data-align=${column.align || 'start'}
                 data-label=${column.label}
+                aria-label=${this.responsiveMode === 'stack' ? column.label : nothing}
                 style=${styleMap({
                   ...(this.getColumnWidth(column) ? { width: this.getColumnWidth(column) } : {}),
                   ...(column.minWidth ? { minWidth: column.minWidth } : {})
@@ -912,7 +934,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
     if (!isVirtualized) {
       return html`
-        <tbody>
+        <tbody role="rowgroup">
           ${rows}
         </tbody>
       `;
@@ -938,7 +960,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
         : nothing;
 
     return html`
-      <tbody>
+      <tbody role="rowgroup">
         ${spacerRow(topSpacerRows)} ${rows} ${spacerRow(bottomSpacerRows)}
       </tbody>
     `;
@@ -954,6 +976,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
         tabindex="0"
       >
         <table
+          role="table"
           aria-label=${this.label || nothing}
           aria-rowcount=${isVirtualized ? this.pageRange.end - this.pageRange.start + 1 : nothing}
         >

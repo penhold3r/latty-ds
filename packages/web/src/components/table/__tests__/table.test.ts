@@ -724,6 +724,42 @@ describe('<lt-table>', () => {
     expect(firstCell.getAttribute('data-label')).toBe('ID');
   });
 
+  describe('explicit ARIA table roles (TBL-4)', () => {
+    // Safari computes a cell's accessibility role from its rendered display value, not its tag name — stack
+    // mode's display:block (table.styles.ts) silently drops the whole table's native semantics there, unlike
+    // Chrome/Firefox. An explicit role isn't display-dependent, so this must hold in BOTH responsive modes.
+    it.each(['scroll', 'stack'] as const)(
+      'carries explicit table/rowgroup/row/columnheader/cell roles in %s mode',
+      async (mode) => {
+        el.responsiveMode = mode;
+        await el.updateComplete;
+
+        expect(el.shadowRoot!.querySelector('table')?.getAttribute('role')).toBe('table');
+        expect(el.shadowRoot!.querySelector('thead')?.getAttribute('role')).toBe('rowgroup');
+        expect(el.shadowRoot!.querySelector('tbody')?.getAttribute('role')).toBe('rowgroup');
+        el.shadowRoot!.querySelectorAll('tr').forEach((tr) => expect(tr.getAttribute('role')).toBe('row'));
+        el.shadowRoot!.querySelectorAll('th').forEach((th) => expect(th.getAttribute('role')).toBe('columnheader'));
+        el.shadowRoot!.querySelectorAll('tbody td').forEach((td) => expect(td.getAttribute('role')).toBe('cell'));
+      }
+    );
+
+    it('does not set an aria-label on cells in scroll mode (the visible column header already provides it)', async () => {
+      el.responsiveMode = 'scroll';
+      await el.updateComplete;
+
+      const firstCell = el.shadowRoot!.querySelectorAll('tbody tr')[0].querySelectorAll('td')[0];
+      expect(firstCell.hasAttribute('aria-label')).toBe(false);
+    });
+
+    it("sets a cell's aria-label to its column's label in stack mode, since thead is display:none there and no longer exposed to assistive tech", async () => {
+      el.responsiveMode = 'stack';
+      await el.updateComplete;
+
+      const firstCell = el.shadowRoot!.querySelectorAll('tbody tr')[0].querySelectorAll('td')[0];
+      expect(firstCell.getAttribute('aria-label')).toBe('ID');
+    });
+  });
+
   describe('JSON string attribute initialization (SSR use case)', () => {
     it('renders columns from a JSON attribute string', async () => {
       const ssrEl = document.createElement('lt-table') as Table<TestData>;
@@ -758,7 +794,8 @@ describe('<lt-table>', () => {
       ssrEl.remove();
     });
 
-    it('falls back to empty array on malformed columns JSON', async () => {
+    it('falls back to empty array on malformed columns JSON, warning rather than failing silently (TBL-4)', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
       const ssrEl = document.createElement('lt-table') as Table<TestData>;
       ssrEl.setAttribute('columns', 'not valid json');
       ssrEl.setAttribute('data', JSON.stringify(data));
@@ -767,10 +804,13 @@ describe('<lt-table>', () => {
 
       const headers = ssrEl.shadowRoot!.querySelectorAll('th');
       expect(headers.length).toBe(0);
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining("[lt-table] `columns` attribute isn't valid JSON"));
       ssrEl.remove();
+      warn.mockRestore();
     });
 
-    it('falls back to empty array on malformed data JSON', async () => {
+    it('falls back to empty array on malformed data JSON, warning rather than failing silently (TBL-4)', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
       const ssrEl = document.createElement('lt-table') as Table<TestData>;
       ssrEl.setAttribute('columns', JSON.stringify(columns));
       ssrEl.setAttribute('data', '{bad json}');
@@ -779,7 +819,26 @@ describe('<lt-table>', () => {
 
       const emptyState = ssrEl.shadowRoot!.querySelector('.empty-state');
       expect(emptyState).toBeTruthy();
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining("[lt-table] `data` attribute isn't valid JSON"));
       ssrEl.remove();
+      warn.mockRestore();
+    });
+
+    it('falls back to empty array and warns when the JSON is valid but not an array (TBL-4)', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const ssrEl = document.createElement('lt-table') as Table<TestData>;
+      ssrEl.setAttribute('columns', JSON.stringify({ not: 'an array' }));
+      ssrEl.setAttribute('data', JSON.stringify(data));
+      document.body.appendChild(ssrEl);
+      await ssrEl.updateComplete;
+
+      const headers = ssrEl.shadowRoot!.querySelectorAll('th');
+      expect(headers.length).toBe(0);
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining('[lt-table] `columns` attribute is valid JSON but not an array')
+      );
+      ssrEl.remove();
+      warn.mockRestore();
     });
 
     it('supports sorting when initialized via JSON attributes', async () => {

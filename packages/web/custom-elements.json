@@ -6951,7 +6951,8 @@
                 "type": {
                   "text": "(number | '…')[]"
                 }
-              }
+              },
+              "description": "Builds the page-number/ellipsis row at a FIXED width (always `2*BOUNDARY + 2*SIBLINGS + 3` items once\n`total` exceeds that, 7 with the constants below) regardless of where `current` sits — PGN-2: the\noriginal window (1 boundary page either side + up to 1 sibling either side of current) rendered a\ndifferent number of items depending on position (4 near an edge, 7 in the middle), making the control's\nown width jump as the user pages through. Standard fix (the same approach used by e.g. MUI's\n`usePagination`): clamp the sibling window so it can't cross the boundary, then when that leaves an\nellipsis with nothing actually hidden behind it (no gap, or a 1-page gap not worth collapsing), absorb\nits slot into an extra page on that side instead of just shrinking the total count."
             },
             {
               "kind": "method",
@@ -12178,7 +12179,7 @@
               "kind": "method",
               "name": "renderHeader",
               "privacy": "private",
-              "description": "Renders the table header."
+              "description": "Renders the table header.\n\nTBL-4: every table/rowgroup/row/columnheader/cell element below carries its matching ARIA role explicitly,\nnot just the real tag name — `responsive-mode=\"stack\"` sets `display: block` on all of them (table.styles.ts),\nand Safari computes a cell's accessibility role from its *rendered display value*, not its tag name, so it\nsilently drops the whole table's semantics the instant that CSS applies (Chrome/Firefox use the tag name\nregardless of display and are unaffected). An explicit role isn't subject to that at all. Stack mode also sets\n`thead { display: none }`, which removes the header row from every browser's accessibility tree, not just\nSafari's — renderBody()'s per-cell `aria-label` (column label only, not the value) is the companion fix for\nthat, so stacked cells don't lose their column context entirely once sighted users can no longer see it either."
             },
             {
               "kind": "method",
