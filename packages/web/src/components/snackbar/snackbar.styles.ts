@@ -25,10 +25,10 @@ export const snackbarStyles = css`
     top: auto;
     transform: translateX(-50%) translateY(8px);
     transition:
-      opacity 200ms ease,
-      transform 200ms ease,
-      display 200ms allow-discrete,
-      overlay 200ms allow-discrete;
+      opacity var(--lt-duration-moderate) ease,
+      transform var(--lt-duration-moderate) ease,
+      display var(--lt-duration-moderate) allow-discrete,
+      overlay var(--lt-duration-moderate) allow-discrete;
     width: max-content;
   }
 

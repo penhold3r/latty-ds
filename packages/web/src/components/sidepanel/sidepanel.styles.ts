@@ -37,17 +37,17 @@ export const sidepanelStyles = css`
        doesn't remove the panel (and its ::backdrop) from rendering instantly, cutting the slide-out transform
        transition off partway through — same reasoning as lt-dialog. */
     transition:
-      transform 250ms var(--lt-ease-standard),
-      display 250ms allow-discrete,
-      overlay 250ms allow-discrete;
+      transform var(--lt-duration-slow) var(--lt-ease-standard),
+      display var(--lt-duration-slow) allow-discrete,
+      overlay var(--lt-duration-slow) allow-discrete;
   }
 
   dialog::backdrop {
     background: rgb(var(--lt-shadow-rgb) / 0);
     transition:
-      background-color 200ms ease,
-      display 250ms allow-discrete,
-      overlay 250ms allow-discrete;
+      background-color var(--lt-duration-moderate) ease,
+      display var(--lt-duration-slow) allow-discrete,
+      overlay var(--lt-duration-slow) allow-discrete;
   }
 
   dialog[open]::backdrop {

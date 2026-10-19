@@ -22,8 +22,8 @@ export const dialogStyles = css`
        close() would remove the dialog (and its ::backdrop) from rendering instantly, cutting that motion off
        partway through; allow-discrete keeps it rendered for the transition's duration instead, then removes it. */
     transition:
-      display 220ms allow-discrete,
-      overlay 220ms allow-discrete;
+      display var(--lt-duration-moderate) allow-discrete,
+      overlay var(--lt-duration-moderate) allow-discrete;
   }
 
   :host([size='sm']) dialog {
@@ -50,9 +50,9 @@ export const dialogStyles = css`
   dialog::backdrop {
     background: rgb(var(--lt-shadow-rgb) / 0);
     transition:
-      background-color 200ms ease,
-      display 220ms allow-discrete,
-      overlay 220ms allow-discrete;
+      background-color var(--lt-duration-moderate) ease,
+      display var(--lt-duration-moderate) allow-discrete,
+      overlay var(--lt-duration-moderate) allow-discrete;
   }
 
   dialog[open]::backdrop {
@@ -67,8 +67,8 @@ export const dialogStyles = css`
     opacity: 0;
     transform: translateY(16px);
     transition:
-      opacity 220ms ease,
-      transform 220ms var(--lt-ease-emphasized);
+      opacity var(--lt-duration-moderate) ease,
+      transform var(--lt-duration-moderate) var(--lt-ease-emphasized);
     width: 100%;
   }
 
