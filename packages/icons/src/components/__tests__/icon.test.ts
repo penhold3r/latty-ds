@@ -118,4 +118,12 @@ describe('<lt-icon>', () => {
     missing.remove();
     warn.mockRestore();
   });
+
+  // ICN-2's blanket `svg path, svg circle, ... { stroke: currentColor }` rule forced a stroke onto a
+  // shape's own `fill="currentColor"` accent dots/paths too (e.g. info-circle/lock/color-palette's center
+  // dots) — an unset stroke-width defaults to the SVG spec's 1px, so a visible ring painted around what
+  // should be a plain filled shape. Fixed by scoping the rule with `:not([fill])`. Not covered by a jsdom
+  // test here — jsdom's getComputedStyle doesn't implement the `stroke` CSS property at all (confirmed:
+  // it returns '' regardless of which rule matches), so this needs live-browser verification instead, per
+  // [[feedback-css-needs-live-verification]].
 });

@@ -98,12 +98,17 @@ export class Icon extends LitElement {
       color: currentColor;
     }
 
-    svg path,
-    svg circle,
-    svg rect,
-    svg line,
-    svg polyline,
-    svg polygon {
+    /* :not([fill]) — a shape with its own fill attribute (a solid accent dot/path inside an otherwise
+       outline icon, e.g. info-circle's center dot) is meant to render as a plain filled shape with no
+       outline; without this, it inherits an unset stroke-width's SVG-spec default of 1px, and forcing
+       stroke: currentColor on top of that paints a visible ring around it. An outline shape has no fill
+       attribute of its own (it inherits the root <svg>'s fill="none"), so this never affects it. */
+    svg path:not([fill]),
+    svg circle:not([fill]),
+    svg rect:not([fill]),
+    svg line:not([fill]),
+    svg polyline:not([fill]),
+    svg polygon:not([fill]) {
       stroke: currentColor;
     }
   `;
