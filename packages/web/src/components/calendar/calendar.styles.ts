@@ -140,40 +140,6 @@ export const calendarStyles = css`
     transform: rotate(180deg);
   }
 
-  .nav-btn {
-    align-items: center;
-    background: transparent;
-    border-radius: var(--lt-border-radius);
-    border: 1px solid transparent;
-    color: var(--lt-text-subtle);
-    cursor: pointer;
-    display: inline-flex;
-    height: 2rem;
-    justify-content: center;
-    padding: 0;
-    transition:
-      background var(--lt-duration-fast) var(--lt-ease-standard),
-      border-color var(--lt-duration-fast) var(--lt-ease-standard),
-      color var(--lt-duration-fast) var(--lt-ease-standard);
-    width: 2rem;
-  }
-
-  .nav-btn:hover:not(:disabled) {
-    background: var(--lt-bg-neutral-subtle);
-    border-color: var(--lt-border-default);
-    color: var(--lt-text-default);
-  }
-
-  .nav-btn:focus-visible {
-    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
-    outline-offset: var(--lt-border-focusRingOffset);
-  }
-
-  .nav-btn:disabled {
-    color: var(--lt-text-disabled);
-    cursor: not-allowed;
-  }
-
   /* ── Weekday headers ── */
 
   .weekdays {
@@ -495,40 +461,13 @@ export const calendarStyles = css`
     border-top: 1px solid var(--lt-border-subtle);
     display: flex;
     justify-content: flex-end;
-    padding-top: var(--lt-spacing-1);
+    padding-top: var(--lt-spacing-2);
   }
 
+  /* Compact footer action, not a full-width form button — the component default (88px) would look oversized next
+     to the day grid. */
   .today-btn {
-    background: transparent;
-    border-radius: var(--lt-border-radius);
-    border: var(--lt-border-width, 1px) solid var(--lt-border-default);
-    color: var(--lt-text-subtle);
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding: var(--lt-spacing-1) var(--lt-spacing-2);
-    transition:
-      background var(--lt-duration-fast) var(--lt-ease-standard),
-      border-color var(--lt-duration-fast) var(--lt-ease-standard),
-      color var(--lt-duration-fast) var(--lt-ease-standard);
-  }
-
-  .today-btn:hover:not(:disabled) {
-    background: var(--lt-bg-neutral-subtle);
-    border-color: var(--lt-border-strong);
-    color: var(--lt-text-default);
-  }
-
-  .today-btn:disabled {
-    color: var(--lt-text-disabled);
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  .today-btn:focus-visible {
-    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
-    outline-offset: var(--lt-border-focusRingOffset);
+    --lt-button-min-width: 0;
   }
 
   /* ── Reduced motion ─────────────────────────────────────────────────────── */
@@ -536,11 +475,9 @@ export const calendarStyles = css`
   @media (prefers-reduced-motion: reduce) {
     .month-label-btn,
     .picker-chevron,
-    .nav-btn,
     .day,
     .day__inner,
     .picker-month-btn,
-    .today-btn,
     .preset-btn {
       transition: none;
     }

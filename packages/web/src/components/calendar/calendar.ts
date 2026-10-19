@@ -2,6 +2,8 @@ import { html, nothing, type PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
 import '@latty-ds/icons';
+import '../icon-button/icon-button';
+import '../button/button';
 
 import { calendarStyles } from './calendar.styles';
 import type { CalendarDay, CalendarMode, CalendarWeekStart, CalendarLabels, CalendarPreset } from './calendar.types';
@@ -719,13 +721,16 @@ export class Calendar extends ThemeableElement {
 
     const footer = html`
       <div class="footer">
-        <button
+        <lt-button
           class="today-btn"
+          appearance="outlined"
+          variant="neutral"
+          size="sm"
           ?disabled=${this.disabled || this._isMonthOutOfRange(today.getFullYear(), today.getMonth())}
           @click=${this._goToToday}
         >
           ${this._labels.today}
-        </button>
+        </lt-button>
       </div>
     `;
 
@@ -760,14 +765,14 @@ export class Calendar extends ThemeableElement {
           ${presetsPanel}
           <div class="calendar-body">
             <div class="header">
-              <button
+              <lt-icon-button
                 class="nav-btn"
-                aria-label=${this._labels.previousMonth}
+                icon="arrow-left"
+                label=${this._labels.previousMonth}
+                size="sm"
                 ?disabled=${this.disabled || !this._canNavigateMonth(-1)}
                 @click=${() => this._navigate(-1)}
-              >
-                <lt-icon name="arrow-left" size="sm"></lt-icon>
-              </button>
+              ></lt-icon-button>
               <div class="month-label-row">
                 ${panelLabels.map(
                   (label, i) =>
@@ -776,14 +781,14 @@ export class Calendar extends ThemeableElement {
                     >`
                 )}
               </div>
-              <button
+              <lt-icon-button
                 class="nav-btn"
-                aria-label=${this._labels.nextMonth}
+                icon="arrow-right"
+                label=${this._labels.nextMonth}
+                size="sm"
                 ?disabled=${this.disabled || !this._canNavigateMonth(1)}
                 @click=${() => this._navigate(1)}
-              >
-                <lt-icon name="arrow-right" size="sm"></lt-icon>
-              </button>
+              ></lt-icon-button>
             </div>
             <div class="month-panels">
               ${Array.from(
@@ -820,14 +825,14 @@ export class Calendar extends ThemeableElement {
 
     const header = html`
       <div class="header">
-        <button
+        <lt-icon-button
           class="nav-btn"
-          aria-label=${prevLabel}
+          icon="arrow-left"
+          label=${prevLabel}
+          size="sm"
           ?disabled=${this.disabled || !canNavigatePrev}
           @click=${() => this._navigate(-1)}
-        >
-          <lt-icon name="arrow-left" size="sm"></lt-icon>
-        </button>
+        ></lt-icon-button>
         <button
           class="month-label-btn ${this._pickingMonthYear ? 'month-label-btn--open' : ''}"
           aria-expanded=${this._pickingMonthYear ? 'true' : 'false'}
@@ -838,14 +843,14 @@ export class Calendar extends ThemeableElement {
           <span aria-live="polite" aria-atomic="true">${monthYearVisibleText}</span>
           <lt-icon name="arrow-down" size="sm" class="picker-chevron"></lt-icon>
         </button>
-        <button
+        <lt-icon-button
           class="nav-btn"
-          aria-label=${nextLabel}
+          icon="arrow-right"
+          label=${nextLabel}
+          size="sm"
           ?disabled=${this.disabled || !canNavigateNext}
           @click=${() => this._navigate(1)}
-        >
-          <lt-icon name="arrow-right" size="sm"></lt-icon>
-        </button>
+        ></lt-icon-button>
       </div>
     `;
 

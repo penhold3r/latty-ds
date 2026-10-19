@@ -94,7 +94,7 @@ describe('<lt-calendar>', () => {
       monthChangeDetail = (e as CustomEvent<{ year: number; month: number }>).detail;
     });
 
-    const prevBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Previous month"]')!;
+    const prevBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[label="Previous month"]')!;
     prevBtn.click();
     await el.updateComplete;
 
@@ -108,7 +108,7 @@ describe('<lt-calendar>', () => {
     el.value = '2026-05-01';
     await el.updateComplete;
 
-    const nextBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Next month"]')!;
+    const nextBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[label="Next month"]')!;
     nextBtn.click();
     await el.updateComplete;
 
@@ -228,8 +228,8 @@ describe('<lt-calendar>', () => {
     el.disabled = true;
     await el.updateComplete;
 
-    const prevBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Previous month"]')!;
-    const nextBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Next month"]')!;
+    const prevBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[label="Previous month"]')!;
+    const nextBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[label="Next month"]')!;
     const todayBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('.today-btn')!;
 
     expect(prevBtn.disabled).toBe(true);
@@ -370,7 +370,7 @@ describe('<lt-calendar> month/year picker', () => {
     openBtn.click();
     await el.updateComplete;
 
-    const prevBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Previous year"]')!;
+    const prevBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[label="Previous year"]')!;
     prevBtn.click();
     await el.updateComplete;
 
@@ -383,7 +383,7 @@ describe('<lt-calendar> month/year picker', () => {
     openBtn.click();
     await el.updateComplete;
 
-    const prevBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Previous year"]')!;
+    const prevBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[label="Previous year"]')!;
     prevBtn.click();
     await el.updateComplete;
 
@@ -462,7 +462,7 @@ describe('<lt-calendar months="2"> multi-month', () => {
   });
 
   it('next button advances both panels by one month', async () => {
-    const nextBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Next month"]')!;
+    const nextBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[label="Next month"]')!;
     nextBtn.click();
     await el.updateComplete;
 
@@ -472,7 +472,7 @@ describe('<lt-calendar months="2"> multi-month', () => {
   });
 
   it('prev button moves both panels back one month', async () => {
-    const prevBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[aria-label="Previous month"]')!;
+    const prevBtn = el.shadowRoot!.querySelector<HTMLButtonElement>('[label="Previous month"]')!;
     prevBtn.click();
     await el.updateComplete;
 
@@ -685,7 +685,7 @@ describe('<lt-calendar> roving tabindex and keyboard nav after paging (CAL-1, CA
   const rovingCell = () => el.shadowRoot!.querySelector<HTMLButtonElement>('[role="gridcell"][tabindex="0"]');
 
   it('always has exactly one cell with tabindex=0, even after paging away from the selected month', async () => {
-    const navNext = el.shadowRoot!.querySelector<HTMLButtonElement>('.nav-btn[aria-label="Next month"]')!;
+    const navNext = el.shadowRoot!.querySelector<HTMLButtonElement>('.nav-btn[label="Next month"]')!;
     navNext.click();
     navNext.click();
     await el.updateComplete;
@@ -696,7 +696,7 @@ describe('<lt-calendar> roving tabindex and keyboard nav after paging (CAL-1, CA
   });
 
   it('ArrowRight from the fallback cell moves by one day, not by re-deriving a different date', async () => {
-    const navNext = el.shadowRoot!.querySelector<HTMLButtonElement>('.nav-btn[aria-label="Next month"]')!;
+    const navNext = el.shadowRoot!.querySelector<HTMLButtonElement>('.nav-btn[label="Next month"]')!;
     navNext.click();
     navNext.click();
     await el.updateComplete;
@@ -773,8 +773,8 @@ describe('<lt-calendar> labels (i18n, X5)', () => {
   it('defaults the footer, nav, and picker-toggle labels to English (single-month layout)', () => {
     const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
     expect(el.shadowRoot!.querySelector('.today-btn')?.textContent?.trim()).toBe('Today');
-    expect(navBtns[0].getAttribute('aria-label')).toBe('Previous month');
-    expect(navBtns[1].getAttribute('aria-label')).toBe('Next month');
+    expect(navBtns[0].getAttribute('label')).toBe('Previous month');
+    expect(navBtns[1].getAttribute('label')).toBe('Next month');
     const pickerBtn = el.shadowRoot!.querySelector('.month-label-btn')!;
     expect(pickerBtn.getAttribute('aria-label')).toBe('May 2026, choose month and year');
   });
@@ -789,8 +789,8 @@ describe('<lt-calendar> labels (i18n, X5)', () => {
     await el.updateComplete;
     const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
     expect(el.shadowRoot!.querySelector('.today-btn')?.textContent?.trim()).toBe("Aujourd'hui");
-    expect(navBtns[0].getAttribute('aria-label')).toBe('Mois précédent');
-    expect(navBtns[1].getAttribute('aria-label')).toBe('Mois suivant');
+    expect(navBtns[0].getAttribute('label')).toBe('Mois précédent');
+    expect(navBtns[1].getAttribute('label')).toBe('Mois suivant');
     const pickerBtn = el.shadowRoot!.querySelector('.month-label-btn')!;
     expect(pickerBtn.getAttribute('aria-label')).toBe("May 2026, choisir le mois et l'année");
   });
@@ -799,8 +799,8 @@ describe('<lt-calendar> labels (i18n, X5)', () => {
     el.shadowRoot!.querySelector<HTMLButtonElement>('.month-label-btn')!.click();
     await el.updateComplete;
     const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
-    expect(navBtns[0].getAttribute('aria-label')).toBe('Previous year');
-    expect(navBtns[1].getAttribute('aria-label')).toBe('Next year');
+    expect(navBtns[0].getAttribute('label')).toBe('Previous year');
+    expect(navBtns[1].getAttribute('label')).toBe('Next year');
   });
 
   it('overrides previous/next year labels via labels once the picker is open', async () => {
@@ -808,8 +808,8 @@ describe('<lt-calendar> labels (i18n, X5)', () => {
     el.shadowRoot!.querySelector<HTMLButtonElement>('.month-label-btn')!.click();
     await el.updateComplete;
     const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
-    expect(navBtns[0].getAttribute('aria-label')).toBe('Année précédente');
-    expect(navBtns[1].getAttribute('aria-label')).toBe('Année suivante');
+    expect(navBtns[0].getAttribute('label')).toBe('Année précédente');
+    expect(navBtns[1].getAttribute('label')).toBe('Année suivante');
   });
 });
 
@@ -830,16 +830,16 @@ describe('<lt-calendar months="2"> labels (i18n, X5)', () => {
 
   it('defaults the multi-month nav labels to English', () => {
     const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
-    expect(navBtns[0].getAttribute('aria-label')).toBe('Previous month');
-    expect(navBtns[1].getAttribute('aria-label')).toBe('Next month');
+    expect(navBtns[0].getAttribute('label')).toBe('Previous month');
+    expect(navBtns[1].getAttribute('label')).toBe('Next month');
   });
 
   it('overrides the multi-month nav labels via labels', async () => {
     el.labels = { previousMonth: 'Mois précédent', nextMonth: 'Mois suivant' };
     await el.updateComplete;
     const navBtns = el.shadowRoot!.querySelectorAll('.nav-btn');
-    expect(navBtns[0].getAttribute('aria-label')).toBe('Mois précédent');
-    expect(navBtns[1].getAttribute('aria-label')).toBe('Mois suivant');
+    expect(navBtns[0].getAttribute('label')).toBe('Mois précédent');
+    expect(navBtns[1].getAttribute('label')).toBe('Mois suivant');
   });
 });
 
