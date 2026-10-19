@@ -160,6 +160,10 @@ describe('<lt-textfield>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('disables the inner input without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
+      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
+      // updateComplete reflects it.
+      await Promise.resolve();
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('input')!.hasAttribute('disabled')).toBe(true);
       expect(el.disabled).toBe(false);
@@ -187,6 +191,10 @@ describe('<lt-textfield>', () => {
       el.type = 'password';
       await el.updateComplete;
       el.formDisabledCallback(true);
+      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
+      // updateComplete reflects it.
+      await Promise.resolve();
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('.password-toggle')!.hasAttribute('disabled')).toBe(true);
     });

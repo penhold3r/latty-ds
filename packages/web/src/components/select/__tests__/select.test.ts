@@ -77,6 +77,10 @@ describe('<lt-select>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('marks the trigger disabled without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
+      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
+      // updateComplete reflects it.
+      await Promise.resolve();
       await el.updateComplete;
       const trigger = el.shadowRoot!.querySelector('.select-trigger')!;
       expect(trigger.getAttribute('aria-disabled')).toBe('true');

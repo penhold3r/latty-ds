@@ -374,6 +374,10 @@ describe('<lt-date-input>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('disables the trigger button without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
+      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
+      // updateComplete reflects it.
+      await Promise.resolve();
       await el.updateComplete;
       const btn = el.shadowRoot!.querySelector('#field-btn') as HTMLButtonElement;
       expect(btn.disabled).toBe(true);

@@ -15,6 +15,19 @@ import type { ReactiveController, ReactiveControllerHost } from 'lit';
  * combine {@link fieldsetDisabled} with the component's own `disabled` wherever that gates interaction or the
  * inner native control's own `disabled`.
  *
+ * **`formDisabledCallback` also fires for the component's own `disabled`, not only an ancestor `<fieldset>`**
+ * (confirmed in Chromium — the spec's form-associated "disabled state" is the union of both, not fieldset-only
+ * as this controller originally assumed). That firing is always redundant with the reactive update the host's
+ * own `disabled` property change already schedules — but the *order* it happens in is the real hazard: setting
+ * `host.disabled = false` triggers Lit's reflection of the now-missing attribute, which synchronously fires this
+ * callback *from inside* that same update's commit phase, calling {@link setFieldsetDisabled} while the update
+ * that's supposed to pick up the new value is still in the middle of applying its previous one — a same-cycle
+ * `requestUpdate()` that reliably got dropped instead of scheduling a fresh pass, leaving a stale `disabled` on
+ * the rendered inner control after `host.disabled` had already flipped back to `false` (confirmed in Chromium: a
+ * button disabled then re-enabled right after stayed unclickable, its inner `<button disabled>` never cleared).
+ * Deferring to a microtask moves the request *after* the current update fully commits, so it always starts a
+ * genuinely new cycle instead of colliding with the one in flight.
+ *
  * @example
  * ```ts
  * class Textfield extends ThemeableElement {
@@ -52,6 +65,8 @@ export class FormDisabledController implements ReactiveController {
   setFieldsetDisabled(disabled: boolean) {
     if (this._fieldsetDisabled === disabled) return;
     this._fieldsetDisabled = disabled;
-    this._host.requestUpdate();
+    // Deferred — see the class doc comment. Must never be called synchronously here: `formDisabledCallback` can
+    // (and, for the component's own `disabled`, reliably does) fire from inside the host's own in-progress update.
+    queueMicrotask(() => this._host.requestUpdate());
   }
 }
