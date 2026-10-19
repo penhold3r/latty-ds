@@ -1,7 +1,9 @@
 /* Hanken Grotesk - Latin */
-/* Local copy, not `@latty-ds/web/css/font-face.css` — that file's `url('/HankenGrotesk-Variable.woff2')`
-   assumes the font sits at the consuming site's root, which doesn't match Docusaurus's
-   `static/fonts/` layout. See docs/src/styles/font-face.css for the same pattern in the Astro site. */
+/* Local copy, not `@latty-ds/web/css/font-face.css` — that file resolves its fonts relative to itself now
+   (fixed 2026-10-19, previously an absolute `/HankenGrotesk-Variable.woff2` that only worked if a consumer
+   happened to serve the font at their own domain root), but still assumes a bundler-resolved relative `url()`
+   pointing into `@latty-ds/web`'s own dist folder — simpler to just serve these from Docusaurus's own
+   `static/fonts/` layout directly. See docs/src/styles/font-face.css for the same pattern in the Astro site. */
 @font-face {
   font-family: 'Hanken Grotesk';
   font-style: normal;
