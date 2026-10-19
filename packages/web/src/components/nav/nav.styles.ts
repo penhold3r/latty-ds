@@ -8,7 +8,7 @@ export const navStyles = css`
   nav {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: var(--lt-nav-gap, var(--lt-spacing-1));
     list-style: none;
     margin: 0;
     padding: 0;
@@ -38,6 +38,13 @@ export const navItemStyles = css`
     align-items: center;
     gap: var(--lt-spacing-2);
     width: 100%;
+    /* box-sizing and line-height aren't set by the browser's UA stylesheet the same way for <a> (a link item's
+       trigger) and <button> (a group header's trigger, see nav-item.ts's _renderTrigger) — <a> defaults to
+       content-box with the page's inherited line-height, <button> to border-box with its own normal. Without
+       pinning both explicitly here, two items with identical padding render at genuinely different widths and
+       heights purely because of which tag they happened to use. */
+    box-sizing: border-box;
+    line-height: 1;
     padding: var(--lt-nav-item-padding, var(--lt-spacing-2) var(--lt-spacing-3));
     border-radius: 6px;
     border: none;
