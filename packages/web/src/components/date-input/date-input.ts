@@ -9,8 +9,7 @@ import '../text/text';
 
 import { dateInputStyles } from './date-input.styles';
 import type { DateInputSize, DateInputVariant, DateInputFormat, DateInputLabels } from './date-input.types';
-import type { Calendar } from '../calendar/calendar';
-import type { CalendarWeekStart } from '../calendar/calendar.types';
+import type { CalendarDisabledDates, CalendarWeekStart } from '../calendar/calendar.types';
 import { dispatch, createClickOutsideHandler, devWarn } from '../../utils';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
@@ -118,7 +117,7 @@ export class DateInput extends ThemeableElement {
    * Dates to disable in the calendar: an array of Date objects, or a predicate for a rule impractical to
    * enumerate (e.g. disabling every weekend). Set as a JS property (`.disabledDates`).
    */
-  @property({ attribute: false }) disabledDates: Calendar['disabledDates'] = [];
+  @property({ attribute: false }) disabledDates: CalendarDisabledDates = [];
 
   /** Overridable UI text (validation message, calendar popover's accessible label), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<DateInputLabels> = {};

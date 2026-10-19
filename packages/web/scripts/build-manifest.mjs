@@ -30,18 +30,82 @@ const cem = JSON.parse(readFileSync(cemPath, 'utf8'));
 cem.modules.sort((a, b) => a.path.localeCompare(b.path));
 writeFileSync(cemPath, JSON.stringify(cem, null, 2) + '\n', 'utf8');
 
+// Escape regex metacharacters — a type name below comes from a CEM type-text string, not a literal identifier,
+// so it isn't guaranteed regex-safe (an unescaped `|`, for instance, silently becomes alternation instead of a
+// literal character and can match a shorter, group-less prefix, leaving a capture group undefined).
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Which module path (as written in the source, e.g. `'../calendar/calendar.types'`) a component's own .ts file
+ * imports `typeName` from, if any — used to resolve a type alias that's reused across components (e.g.
+ * `date-input.ts` importing `CalendarWeekStart`/`CalendarDisabledDates` from calendar.types.ts, rather than
+ * redeclaring its own copy) back to the file that actually defines it, instead of assuming every type a
+ * component uses is declared in its own *.types.ts.
+ */
+function findTypeImportSource(typeName, componentDir) {
+  const mainFile = join(root, 'src/components', componentDir, `${componentDir}.ts`);
+  if (!existsSync(mainFile)) return null;
+  const src = readFileSync(mainFile, 'utf8');
+  const sourceFile = ts.createSourceFile(mainFile, src, ts.ScriptTarget.Latest, true);
+  let modulePath = null;
+  sourceFile.forEachChild((node) => {
+    if (
+      modulePath ||
+      !ts.isImportDeclaration(node) ||
+      !node.importClause?.namedBindings ||
+      !ts.isNamedImports(node.importClause.namedBindings)
+    ) {
+      return;
+    }
+    const hasType = node.importClause.namedBindings.elements.some((el) => el.name.text === typeName);
+    if (hasType) modulePath = node.moduleSpecifier.text;
+  });
+  return modulePath;
+}
+
+/**
+ * Resolves the *.types.ts file that actually declares `typeName`: the component's own file if it defines it
+ * there, otherwise wherever its own .ts file imports that name from (see `findTypeImportSource`). Returns null
+ * if neither finds it.
+ */
+function typesFileFor(typeName, componentDir) {
+  const localFile = join(root, 'src/components', componentDir, `${componentDir}.types.ts`);
+  const declPattern = new RegExp(`export type ${escapeRegex(typeName)}\\b`);
+  if (existsSync(localFile) && declPattern.test(readFileSync(localFile, 'utf8'))) return localFile;
+
+  const modulePath = findTypeImportSource(typeName, componentDir);
+  if (!modulePath) return null;
+  const resolved = resolve(join(root, 'src/components', componentDir), `${modulePath}.ts`);
+  return existsSync(resolved) ? resolved : null;
+}
+
 /** Parse union string literals from a *.types.ts source file. */
 function resolveUnion(typeName, componentDir) {
-  const typesFile = join(root, 'src/components', componentDir, `${componentDir}.types.ts`);
-  if (!existsSync(typesFile)) return null;
+  const typesFile = typesFileFor(typeName, componentDir);
+  if (!typesFile) return null;
   const src = readFileSync(typesFile, 'utf8');
-  // Escape regex metacharacters — typeName comes from a CEM type-text string, not a literal identifier, so it
-  // isn't guaranteed regex-safe (an unescaped `|`, for instance, silently becomes alternation instead of a
-  // literal character and can match a shorter, group-less prefix, leaving match[1] undefined).
-  const escaped = typeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const match = src.match(new RegExp(`export type ${escaped}\\s*=\\s*([^;]+);`));
+  const match = src.match(new RegExp(`export type ${escapeRegex(typeName)}\\s*=\\s*([^;]+);`));
   if (!match) return null;
   return [...match[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
+}
+
+/**
+ * Expands a bare type-alias reference (e.g. `CalendarDisabledDates`) to its own right-hand-side type text (e.g.
+ * `Date[] | ((date: Date) => boolean)`), searching the same file `resolveUnion` would. Lets the complex-type
+ * check below recognize an aliased array/function/object type the same way it already recognizes one written
+ * out inline — without this, a type reused from another component's *.types.ts (rather than redeclared locally)
+ * would fall all the way through to the free-text fallback, same failure shape as the `Partial<>` gap fixed
+ * earlier: the Playground renders a control bound to an attribute that doesn't do anything (worse still when the
+ * property is `attribute: false`, where no such attribute exists at all).
+ */
+function resolveTypeAliasRhs(typeName, componentDir) {
+  const typesFile = typesFileFor(typeName, componentDir);
+  if (!typesFile) return null;
+  const src = readFileSync(typesFile, 'utf8');
+  const match = src.match(new RegExp(`export type ${escapeRegex(typeName)}\\s*=\\s*([^;]+);`));
+  return match ? match[1].trim() : null;
 }
 
 /**
@@ -191,27 +255,45 @@ function toMember(field, componentDir) {
   // `label` control on components that have both, and typing into it set a string onto a property Lit expects
   // to JSON-parse as an object, silently doing nothing useful. `Partial<T>` is always object-shaped by
   // construction (TS makes every property of T optional), so this substring can never misfire on a primitive.
+  //
+  // A bare identifier (no `|`/`[]`/`(`/`{`/etc. of its own) that isn't a primitive keyword is a type-alias
+  // reference rather than an inline type — e.g. `date-input.ts` typing `disabledDates` as `CalendarDisabledDates`
+  // (imported from calendar.types.ts) instead of repeating calendar's own inline `Date[] | ((date: Date) =>
+  // boolean)`. The substring checks below only ever see the CEM type TEXT, which for an alias is just its bare
+  // name — so without expanding it first, an aliased array/function/object type silently falls through to the
+  // same free-text fallback as `Partial<>` did, and (worse, since a property reused this way is commonly
+  // `attribute: false`) binds the Playground's text control to an attribute that doesn't exist at all. Expanding
+  // is intentionally NOT applied to typeText itself (only to this local check): a bare alias that resolves to a
+  // plain string union (e.g. `CalendarWeekStart`) must keep flowing into resolveUnion()'s own name-based lookup
+  // below unchanged, which already resolves it (including cross-file, same as this expansion does).
+  const isBareIdentifier = /^[A-Za-z_$][\w$]*$/.test(typeText);
+  const isPrimitiveKeyword = ['string', 'number', 'boolean', 'any', 'unknown', 'void', 'undefined', 'null'].includes(
+    typeText
+  );
+  const complexCheckText =
+    isBareIdentifier && !isPrimitiveKeyword ? (resolveTypeAliasRhs(typeText, componentDir) ?? typeText) : typeText;
+
   if (
-    typeText.includes('[]') ||
-    typeText.includes('{') ||
-    typeText.includes('Partial<') ||
-    typeText.includes('Element') ||
-    typeText.includes('Event') ||
-    typeText.includes('Promise') ||
-    typeText.includes('Record') ||
-    typeText.includes('Map') ||
-    typeText.includes('HTMLElement')
+    complexCheckText.includes('[]') ||
+    complexCheckText.includes('{') ||
+    complexCheckText.includes('Partial<') ||
+    complexCheckText.includes('Element') ||
+    complexCheckText.includes('Event') ||
+    complexCheckText.includes('Promise') ||
+    complexCheckText.includes('Record') ||
+    complexCheckText.includes('Map') ||
+    complexCheckText.includes('HTMLElement')
   ) {
     // `Partial<XLabels>` (and `Partial<XLabels<T>>` for a generic interface like TableLabels) → resolve XLabels's
     // own shape so the API table can show what keys an i18n `labels` override actually accepts, not just the
     // bare "Partial<XLabels>" type text.
-    const interfaceMatch = typeText.match(/^Partial<(\w+)/);
+    const interfaceMatch = complexCheckText.match(/^Partial<(\w+)/);
     const shape = interfaceMatch ? resolveInterfaceShape(interfaceMatch[1], componentDir) : null;
     return {
       name: propName,
       description,
       type: 'complex',
-      valueType: typeText,
+      valueType: complexCheckText,
       default: parseDefault(rawDefault),
       ...(shape ? { shape } : {})
     };

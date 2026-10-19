@@ -6,7 +6,14 @@ import '../icon-button/icon-button';
 import '../button/button';
 
 import { calendarStyles } from './calendar.styles';
-import type { CalendarDay, CalendarMode, CalendarWeekStart, CalendarLabels, CalendarPreset } from './calendar.types';
+import type {
+  CalendarDay,
+  CalendarMode,
+  CalendarWeekStart,
+  CalendarLabels,
+  CalendarPreset,
+  CalendarDisabledDates
+} from './calendar.types';
 import { dispatch } from '../../utils';
 
 const DEFAULT_LABELS: CalendarLabels = {
@@ -156,7 +163,7 @@ export class Calendar extends ThemeableElement {
    * for a rule that would be impractical to enumerate as a fixed list. Set as a JS property (`.disabledDates`).
    * @default []
    */
-  @property({ attribute: false }) disabledDates: Date[] | ((date: Date) => boolean) = [];
+  @property({ attribute: false }) disabledDates: CalendarDisabledDates = [];
 
   /** Overridable UI text (nav button labels, the "Today" footer button, the month/year picker toggle), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<CalendarLabels> = {};

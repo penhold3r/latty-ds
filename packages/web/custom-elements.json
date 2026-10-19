@@ -1899,7 +1899,7 @@
               "kind": "field",
               "name": "disabledDates",
               "type": {
-                "text": "Date[] | ((date: Date) => boolean)"
+                "text": "CalendarDisabledDates"
               },
               "default": "[]",
               "description": "Dates to disable beyond `min`/`max`: either an explicit array of Date objects, or a predicate called with\neach candidate date (e.g. `(date) => date.getDay() === 0 || date.getDay() === 6` to disable every weekend) —\nfor a rule that would be impractical to enumerate as a fixed list. Set as a JS property (`.disabledDates`)."
@@ -2858,7 +2858,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Shows a delete/dismiss button that fires `lt-delete` when clicked."
+              "description": "Shows a delete/dismiss button that fires `delete` when clicked."
             },
             {
               "kind": "field",
@@ -4108,7 +4108,7 @@
               "kind": "field",
               "name": "disabledDates",
               "type": {
-                "text": "Calendar['disabledDates']"
+                "text": "CalendarDisabledDates"
               },
               "default": "[]",
               "description": "Dates to disable in the calendar: an array of Date objects, or a predicate for a rule impractical to\nenumerate (e.g. disabling every weekend). Set as a JS property (`.disabledDates`)."
@@ -10667,15 +10667,7 @@
             },
             {
               "kind": "method",
-              "name": "updated",
-              "description": "Handles switch change events.\nUpdates the checked state and dispatches a custom change event.",
-              "parameters": [
-                {
-                  "description": "The native change event",
-                  "name": "e"
-                }
-              ],
-              "privacy": "private"
+              "name": "updated"
             },
             {
               "kind": "method",

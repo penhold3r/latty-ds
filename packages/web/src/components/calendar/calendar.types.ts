@@ -2,6 +2,9 @@
 export type CalendarWeekStart = '0' | '1' | '2' | '3' | '4' | '5' | '6';
 export type CalendarMode = 'single' | 'range';
 
+/** An array of dates to disable, or a predicate for a rule impractical to enumerate as a fixed list. */
+export type CalendarDisabledDates = Date[] | ((date: Date) => boolean);
+
 /** A quick-select range button (`presets`, mode="range" only). `getRange` is called fresh on each click so the
  * range it returns — typically relative to "today" — can't go stale while the calendar stays open across a day
  * boundary. */
