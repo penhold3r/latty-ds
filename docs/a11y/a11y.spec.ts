@@ -9,6 +9,17 @@ import AxeBuilder from '@axe-core/playwright';
 const routes = [
   '/',
 
+  // The six category-index pages (docs/src/theme/DocCategoryGeneratedIndexPage):
+  // every `_category_.json` got a `"link": {"type": "generated-index"}` so the
+  // breadcrumb/sidebar category label has somewhere to go (was previously
+  // unclickable plain text — see docs/src/theme/DocBreadcrumbs's own comment).
+  '/category/getting-started',
+  '/category/components',
+  '/category/icons',
+  '/category/tokens',
+  '/category/recipes',
+  '/category/examples',
+
   '/getting-started/introduction',
   '/getting-started/installation',
   '/getting-started/usage',

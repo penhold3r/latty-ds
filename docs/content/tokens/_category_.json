@@ -1,4 +1,8 @@
 {
   "label": "Tokens",
-  "position": 4
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "The design tokens that generate every CSS variable, color palette, and spacing scale components consume."
+  }
 }

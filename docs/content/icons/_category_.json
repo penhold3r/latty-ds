@@ -1,4 +1,8 @@
 {
   "label": "Icons",
-  "position": 3
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Browse the icon gallery and learn how to use lt-icon with the pluggable provider system."
+  }
 }
