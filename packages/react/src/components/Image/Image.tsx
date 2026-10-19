@@ -15,7 +15,7 @@ export type ImageProps = Omit<HTMLAttributes<ImageEl>, 'onLoad' | 'onError'> & {
 };
 
 export const Image = forwardRef<ImageEl, ImageProps>(function Image(
-  { onLoad, onError, children, ...props },
+  { onLoad, onError, aspectRatio, responsive, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<ImageEl>(null);
@@ -38,7 +38,12 @@ export const Image = forwardRef<ImageEl, ImageProps>(function Image(
   }, [onError]);
 
   return (
-    <lt-image ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-image
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      aspect-ratio={aspectRatio}
+      responsive={responsive || undefined}
+    >
       {children}
     </lt-image>
   );

@@ -6,13 +6,16 @@ export type TabPanelProps = HTMLAttributes<TabPanelEl> & {
   active?: boolean;
 };
 
-export const TabPanel = forwardRef<TabPanelEl, TabPanelProps>(function TabPanel({ children, ...props }, forwardedRef) {
+export const TabPanel = forwardRef<TabPanelEl, TabPanelProps>(function TabPanel(
+  { active, children, ...props },
+  forwardedRef
+) {
   const innerRef = useRef<TabPanelEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-tab-panel ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-tab-panel ref={innerRef} {...(props as Record<string, unknown>)} active={active || undefined}>
       {children}
     </lt-tab-panel>
   );

@@ -21,7 +21,21 @@ export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
 };
 
 export const Select = forwardRef<SelectEl, SelectProps>(function Select(
-  { onChange, value, options, labels, children, ...props },
+  {
+    onChange,
+    value,
+    helperText,
+    options,
+    labels,
+    formAssociated,
+    multiple,
+    disabled,
+    required,
+    clearable,
+    loading,
+    children,
+    ...props
+  },
   forwardedRef
 ) {
   const innerRef = useRef<SelectEl>(null);
@@ -39,12 +53,22 @@ export const Select = forwardRef<SelectEl, SelectProps>(function Select(
     const el = innerRef.current;
     if (!el) return;
     if (value !== undefined) el.value = value;
+    if (helperText !== undefined) el.helperText = helperText;
     if (options !== undefined) el.options = options;
     if (labels !== undefined) el.labels = labels;
-  }, [value, options, labels]);
+  }, [value, helperText, options, labels]);
 
   return (
-    <lt-select ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-select
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      form-associated={formAssociated || undefined}
+      multiple={multiple || undefined}
+      disabled={disabled || undefined}
+      required={required || undefined}
+      clearable={clearable || undefined}
+      loading={loading || undefined}
+    >
       {children}
     </lt-select>
   );

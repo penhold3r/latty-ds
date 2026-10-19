@@ -19,7 +19,19 @@ export type DialogProps = HTMLAttributes<DialogEl> & {
 };
 
 export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(
-  { onOpen, onClose, labels, children, ...props },
+  {
+    onOpen,
+    onClose,
+    labels,
+    open,
+    noCloseButton,
+    closeOnBackdropClick,
+    closeOnEscape,
+    uppercase,
+    backdropBlur,
+    children,
+    ...props
+  },
   forwardedRef
 ) {
   const innerRef = useRef<DialogEl>(null);
@@ -47,7 +59,16 @@ export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(
   }, [labels]);
 
   return (
-    <lt-dialog ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-dialog
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      open={open || undefined}
+      no-close-button={noCloseButton || undefined}
+      close-on-backdrop-click={closeOnBackdropClick || undefined}
+      close-on-escape={closeOnEscape || undefined}
+      uppercase={uppercase || undefined}
+      backdrop-blur={backdropBlur || undefined}
+    >
       {children}
     </lt-dialog>
   );

@@ -12,7 +12,10 @@ export type AvatarProps = HTMLAttributes<AvatarEl> & {
   statusLabel?: string;
 };
 
-export const Avatar = forwardRef<AvatarEl, AvatarProps>(function Avatar({ status, children, ...props }, forwardedRef) {
+export const Avatar = forwardRef<AvatarEl, AvatarProps>(function Avatar(
+  { status, statusLabel, children, ...props },
+  forwardedRef
+) {
   const innerRef = useRef<AvatarEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
@@ -24,7 +27,7 @@ export const Avatar = forwardRef<AvatarEl, AvatarProps>(function Avatar({ status
   }, [status]);
 
   return (
-    <lt-avatar ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-avatar ref={innerRef} {...(props as Record<string, unknown>)} status-label={statusLabel}>
       {children}
     </lt-avatar>
   );

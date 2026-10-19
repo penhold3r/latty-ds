@@ -18,7 +18,7 @@ export type SwitchProps = Omit<HTMLAttributes<SwitchEl>, 'onChange'> & {
 };
 
 export const Switch = forwardRef<SwitchEl, SwitchProps>(function Switch(
-  { onChange, labels, children, ...props },
+  { onChange, helperText, labels, formAssociated, checked, disabled, required, labelPosition, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SwitchEl>(null);
@@ -35,11 +35,20 @@ export const Switch = forwardRef<SwitchEl, SwitchProps>(function Switch(
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;
+    if (helperText !== undefined) el.helperText = helperText;
     if (labels !== undefined) el.labels = labels;
-  }, [labels]);
+  }, [helperText, labels]);
 
   return (
-    <lt-switch ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-switch
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      form-associated={formAssociated || undefined}
+      checked={checked || undefined}
+      disabled={disabled || undefined}
+      required={required || undefined}
+      label-position={labelPosition}
+    >
       {children}
     </lt-switch>
   );

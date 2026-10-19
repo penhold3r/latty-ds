@@ -11,13 +11,22 @@ export type TabProps = HTMLAttributes<TabEl> & {
   orientation?: TabEl['orientation'];
 };
 
-export const Tab = forwardRef<TabEl, TabProps>(function Tab({ children, ...props }, forwardedRef) {
+export const Tab = forwardRef<TabEl, TabProps>(function Tab(
+  { iconStart, active, disabled, children, ...props },
+  forwardedRef
+) {
   const innerRef = useRef<TabEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-tab ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-tab
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      icon-start={iconStart}
+      active={active || undefined}
+      disabled={disabled || undefined}
+    >
       {children}
     </lt-tab>
   );

@@ -19,7 +19,19 @@ export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
 };
 
 export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
-  { onChange, labels, children, ...props },
+  {
+    onChange,
+    helperText,
+    labels,
+    formAssociated,
+    checked,
+    indeterminate,
+    disabled,
+    required,
+    labelPosition,
+    children,
+    ...props
+  },
   forwardedRef
 ) {
   const innerRef = useRef<CheckboxEl>(null);
@@ -36,11 +48,21 @@ export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;
+    if (helperText !== undefined) el.helperText = helperText;
     if (labels !== undefined) el.labels = labels;
-  }, [labels]);
+  }, [helperText, labels]);
 
   return (
-    <lt-checkbox ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-checkbox
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      form-associated={formAssociated || undefined}
+      checked={checked || undefined}
+      indeterminate={indeterminate || undefined}
+      disabled={disabled || undefined}
+      required={required || undefined}
+      label-position={labelPosition}
+    >
       {children}
     </lt-checkbox>
   );

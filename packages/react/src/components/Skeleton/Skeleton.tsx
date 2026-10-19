@@ -8,13 +8,16 @@ export type SkeletonProps = HTMLAttributes<SkeletonEl> & {
   animated?: boolean;
 };
 
-export const Skeleton = forwardRef<SkeletonEl, SkeletonProps>(function Skeleton({ children, ...props }, forwardedRef) {
+export const Skeleton = forwardRef<SkeletonEl, SkeletonProps>(function Skeleton(
+  { animated, children, ...props },
+  forwardedRef
+) {
   const innerRef = useRef<SkeletonEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-skeleton ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-skeleton ref={innerRef} {...(props as Record<string, unknown>)} animated={animated || undefined}>
       {children}
     </lt-skeleton>
   );

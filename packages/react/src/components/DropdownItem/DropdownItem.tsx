@@ -9,7 +9,7 @@ export type DropdownItemProps = Omit<HTMLAttributes<DropdownItemEl>, 'onSelect'>
 };
 
 export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(function DropdownItem(
-  { onSelect, children, ...props },
+  { onSelect, disabled, selected, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DropdownItemEl>(null);
@@ -25,7 +25,12 @@ export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(functi
   }, [onSelect]);
 
   return (
-    <lt-dropdown-item ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-dropdown-item
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      disabled={disabled || undefined}
+      selected={selected || undefined}
+    >
       {children}
     </lt-dropdown-item>
   );

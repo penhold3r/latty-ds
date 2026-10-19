@@ -12,7 +12,7 @@ export type AccordionProps = Omit<HTMLAttributes<AccordionEl>, 'onToggle'> & {
 };
 
 export const Accordion = forwardRef<AccordionEl, AccordionProps>(function Accordion(
-  { onToggle, children, ...props },
+  { onToggle, iconStart, open, disabled, uppercase, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<AccordionEl>(null);
@@ -28,7 +28,14 @@ export const Accordion = forwardRef<AccordionEl, AccordionProps>(function Accord
   }, [onToggle]);
 
   return (
-    <lt-accordion ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-accordion
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      icon-start={iconStart}
+      open={open || undefined}
+      disabled={disabled || undefined}
+      uppercase={uppercase || undefined}
+    >
       {children}
     </lt-accordion>
   );

@@ -11,7 +11,7 @@ export type PaginationProps = Omit<HTMLAttributes<PaginationEl>, 'onChange'> & {
 };
 
 export const Pagination = forwardRef<PaginationEl, PaginationProps>(function Pagination(
-  { onChange, labels, children, ...props },
+  { onChange, labels, totalPages, disabled, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<PaginationEl>(null);
@@ -32,7 +32,12 @@ export const Pagination = forwardRef<PaginationEl, PaginationProps>(function Pag
   }, [labels]);
 
   return (
-    <lt-pagination ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-pagination
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      total-pages={totalPages}
+      disabled={disabled || undefined}
+    >
       {children}
     </lt-pagination>
   );

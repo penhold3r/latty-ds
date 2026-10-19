@@ -8,7 +8,7 @@ export type BreadcrumbItemProps = HTMLAttributes<BreadcrumbItemEl> & {
 };
 
 export const BreadcrumbItem = forwardRef<BreadcrumbItemEl, BreadcrumbItemProps>(function BreadcrumbItem(
-  { children, ...props },
+  { current, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<BreadcrumbItemEl>(null);
@@ -16,7 +16,7 @@ export const BreadcrumbItem = forwardRef<BreadcrumbItemEl, BreadcrumbItemProps>(
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-breadcrumb-item ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-breadcrumb-item ref={innerRef} {...(props as Record<string, unknown>)} current={current || undefined}>
       {children}
     </lt-breadcrumb-item>
   );

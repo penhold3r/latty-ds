@@ -16,7 +16,7 @@ export type ColorInputProps = Omit<HTMLAttributes<ColorInputEl>, 'onChange'> & {
 };
 
 export const ColorInput = forwardRef<ColorInputEl, ColorInputProps>(function ColorInput(
-  { onChange, labels, children, ...props },
+  { onChange, labels, formAssociated, disabled, required, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<ColorInputEl>(null);
@@ -37,7 +37,13 @@ export const ColorInput = forwardRef<ColorInputEl, ColorInputProps>(function Col
   }, [labels]);
 
   return (
-    <lt-color-input ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-color-input
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      form-associated={formAssociated || undefined}
+      disabled={disabled || undefined}
+      required={required || undefined}
+    >
       {children}
     </lt-color-input>
   );

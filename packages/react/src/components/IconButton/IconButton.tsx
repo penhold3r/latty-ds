@@ -16,7 +16,7 @@ export type IconButtonProps = HTMLAttributes<IconButtonEl> & {
 };
 
 export const IconButton = forwardRef<IconButtonEl, IconButtonProps>(function IconButton(
-  { children, ...props },
+  { bordered, disabled, round, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<IconButtonEl>(null);
@@ -24,7 +24,13 @@ export const IconButton = forwardRef<IconButtonEl, IconButtonProps>(function Ico
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-icon-button ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-icon-button
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      bordered={bordered || undefined}
+      disabled={disabled || undefined}
+      round={round || undefined}
+    >
       {children}
     </lt-icon-button>
   );

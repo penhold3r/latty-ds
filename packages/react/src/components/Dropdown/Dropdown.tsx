@@ -9,7 +9,7 @@ export type DropdownProps = HTMLAttributes<DropdownEl> & {
 };
 
 export const Dropdown = forwardRef<DropdownEl, DropdownProps>(function Dropdown(
-  { onOpen, onClose, children, ...props },
+  { onOpen, onClose, open, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DropdownEl>(null);
@@ -32,7 +32,7 @@ export const Dropdown = forwardRef<DropdownEl, DropdownProps>(function Dropdown(
   }, [onClose]);
 
   return (
-    <lt-dropdown ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-dropdown ref={innerRef} {...(props as Record<string, unknown>)} open={open || undefined}>
       {children}
     </lt-dropdown>
   );

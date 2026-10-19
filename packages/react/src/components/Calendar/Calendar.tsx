@@ -22,7 +22,21 @@ export type CalendarProps = Omit<HTMLAttributes<CalendarEl>, 'onChange'> & {
 };
 
 export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
-  { onChange, onMonthChange, weekStart, disabledDates, labels, presets, children, ...props },
+  {
+    onChange,
+    onMonthChange,
+    weekStart,
+    disabledDates,
+    labels,
+    presets,
+    valueStart,
+    valueEnd,
+    showOutsideDays,
+    showWeekNumbers,
+    disabled,
+    children,
+    ...props
+  },
   forwardedRef
 ) {
   const innerRef = useRef<CalendarEl>(null);
@@ -53,7 +67,15 @@ export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
   }, [weekStart, disabledDates, labels, presets]);
 
   return (
-    <lt-calendar ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-calendar
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      value-start={valueStart}
+      value-end={valueEnd}
+      show-outside-days={showOutsideDays || undefined}
+      show-week-numbers={showWeekNumbers || undefined}
+      disabled={disabled || undefined}
+    >
       {children}
     </lt-calendar>
   );

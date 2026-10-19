@@ -10,7 +10,7 @@ export type BadgeProps = HTMLAttributes<BadgeEl> & {
   dot?: boolean;
 };
 
-export const Badge = forwardRef<BadgeEl, BadgeProps>(function Badge({ max, children, ...props }, forwardedRef) {
+export const Badge = forwardRef<BadgeEl, BadgeProps>(function Badge({ max, dot, children, ...props }, forwardedRef) {
   const innerRef = useRef<BadgeEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
@@ -22,7 +22,7 @@ export const Badge = forwardRef<BadgeEl, BadgeProps>(function Badge({ max, child
   }, [max]);
 
   return (
-    <lt-badge ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-badge ref={innerRef} {...(props as Record<string, unknown>)} dot={dot || undefined}>
       {children}
     </lt-badge>
   );

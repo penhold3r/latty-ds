@@ -18,7 +18,7 @@ export type SnackbarProps = HTMLAttributes<SnackbarEl> & {
 };
 
 export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(
-  { onShow, onHide, onAction, labels, children, ...props },
+  { onShow, onHide, onAction, labels, open, closable, actionLabel, managed, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SnackbarEl>(null);
@@ -53,7 +53,14 @@ export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(
   }, [labels]);
 
   return (
-    <lt-snackbar ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-snackbar
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      open={open || undefined}
+      closable={closable || undefined}
+      action-label={actionLabel}
+      managed={managed || undefined}
+    >
       {children}
     </lt-snackbar>
   );

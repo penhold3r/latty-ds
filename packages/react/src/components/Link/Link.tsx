@@ -11,7 +11,7 @@ export type LinkProps = HTMLAttributes<LinkEl> & {
 };
 
 export const Link = forwardRef<LinkEl, LinkProps>(function Link(
-  { target, rel, download, children, ...props },
+  { target, rel, download, external, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<LinkEl>(null);
@@ -27,7 +27,7 @@ export const Link = forwardRef<LinkEl, LinkProps>(function Link(
   }, [target, rel, download]);
 
   return (
-    <lt-link ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-link ref={innerRef} {...(props as Record<string, unknown>)} external={external || undefined}>
       {children}
     </lt-link>
   );

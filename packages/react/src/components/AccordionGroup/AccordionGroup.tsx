@@ -6,7 +6,7 @@ export type AccordionGroupProps = HTMLAttributes<AccordionGroupEl> & {
 };
 
 export const AccordionGroup = forwardRef<AccordionGroupEl, AccordionGroupProps>(function AccordionGroup(
-  { children, ...props },
+  { multiple, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<AccordionGroupEl>(null);
@@ -14,7 +14,7 @@ export const AccordionGroup = forwardRef<AccordionGroupEl, AccordionGroupProps>(
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-accordion-group ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-accordion-group ref={innerRef} {...(props as Record<string, unknown>)} multiple={multiple || undefined}>
       {children}
     </lt-accordion-group>
   );

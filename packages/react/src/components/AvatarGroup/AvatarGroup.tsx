@@ -8,7 +8,7 @@ export type AvatarGroupProps = HTMLAttributes<AvatarGroupEl> & {
 };
 
 export const AvatarGroup = forwardRef<AvatarGroupEl, AvatarGroupProps>(function AvatarGroup(
-  { size, max, children, ...props },
+  { size, max, overflowLabel, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<AvatarGroupEl>(null);
@@ -23,7 +23,7 @@ export const AvatarGroup = forwardRef<AvatarGroupEl, AvatarGroupProps>(function 
   }, [size, max]);
 
   return (
-    <lt-avatar-group ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-avatar-group ref={innerRef} {...(props as Record<string, unknown>)} overflow-label={overflowLabel}>
       {children}
     </lt-avatar-group>
   );

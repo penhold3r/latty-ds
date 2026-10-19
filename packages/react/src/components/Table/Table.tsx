@@ -42,6 +42,19 @@ export const Table = forwardRef<TableEl, TableProps>(function Table(
     selected,
     labels,
     sort,
+    responsiveMode,
+    hoverable,
+    striped,
+    bordered,
+    loading,
+    emptyMessage,
+    captionSide,
+    stickyHeader,
+    virtualized,
+    rowHeight,
+    rowKey,
+    selectionMode,
+    pageSize,
     children,
     ...props
   },
@@ -90,7 +103,23 @@ export const Table = forwardRef<TableEl, TableProps>(function Table(
   }, [columns, data, selected, labels, sort]);
 
   return (
-    <lt-table ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-table
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      responsive-mode={responsiveMode}
+      hoverable={hoverable || undefined}
+      striped={striped || undefined}
+      bordered={bordered || undefined}
+      loading={loading || undefined}
+      empty-message={emptyMessage}
+      caption-side={captionSide}
+      sticky-header={stickyHeader || undefined}
+      virtualized={virtualized || undefined}
+      row-height={rowHeight}
+      row-key={rowKey}
+      selection-mode={selectionMode}
+      page-size={pageSize}
+    >
       {children}
     </lt-table>
   );

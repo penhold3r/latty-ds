@@ -16,7 +16,7 @@ export type ChipProps = Omit<HTMLAttributes<ChipEl>, 'onChange'> & {
 };
 
 export const Chip = forwardRef<ChipEl, ChipProps>(function Chip(
-  { onDelete, onChange, labels, children, ...props },
+  { onDelete, onChange, labels, disabled, deletable, selectable, selected, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<ChipEl>(null);
@@ -44,7 +44,14 @@ export const Chip = forwardRef<ChipEl, ChipProps>(function Chip(
   }, [labels]);
 
   return (
-    <lt-chip ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-chip
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      disabled={disabled || undefined}
+      deletable={deletable || undefined}
+      selectable={selectable || undefined}
+      selected={selected || undefined}
+    >
       {children}
     </lt-chip>
   );

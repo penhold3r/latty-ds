@@ -17,7 +17,7 @@ export type SliderProps = Omit<HTMLAttributes<SliderEl>, 'onInput' | 'onChange'>
 };
 
 export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
-  { onInput, onChange, children, ...props },
+  { onInput, onChange, formAssociated, disabled, tooltip, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SliderEl>(null);
@@ -40,7 +40,13 @@ export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
   }, [onChange]);
 
   return (
-    <lt-slider ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-slider
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      form-associated={formAssociated || undefined}
+      disabled={disabled || undefined}
+      tooltip={tooltip || undefined}
+    >
       {children}
     </lt-slider>
   );

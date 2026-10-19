@@ -23,7 +23,23 @@ export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
 };
 
 export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
-  { onChange, onCreate, options, value, labels, children, ...props },
+  {
+    onChange,
+    onCreate,
+    options,
+    value,
+    helperText,
+    labels,
+    formAssociated,
+    clearable,
+    loading,
+    creatable,
+    multiple,
+    disabled,
+    required,
+    children,
+    ...props
+  },
   forwardedRef
 ) {
   const innerRef = useRef<ComboboxEl>(null);
@@ -49,11 +65,22 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
     if (!el) return;
     if (options !== undefined) el.options = options;
     if (value !== undefined) el.value = value;
+    if (helperText !== undefined) el.helperText = helperText;
     if (labels !== undefined) el.labels = labels;
-  }, [options, value, labels]);
+  }, [options, value, helperText, labels]);
 
   return (
-    <lt-combobox ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-combobox
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      form-associated={formAssociated || undefined}
+      clearable={clearable || undefined}
+      loading={loading || undefined}
+      creatable={creatable || undefined}
+      multiple={multiple || undefined}
+      disabled={disabled || undefined}
+      required={required || undefined}
+    >
       {children}
     </lt-combobox>
   );

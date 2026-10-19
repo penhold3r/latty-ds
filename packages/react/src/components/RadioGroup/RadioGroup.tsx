@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { RadioGroup as RadioGroupEl } from '@latty-ds/web';
 
 export type RadioGroupProps = Omit<HTMLAttributes<RadioGroupEl>, 'onChange'> & {
@@ -13,7 +13,7 @@ export type RadioGroupProps = Omit<HTMLAttributes<RadioGroupEl>, 'onChange'> & {
 };
 
 export const RadioGroup = forwardRef<RadioGroupEl, RadioGroupProps>(function RadioGroup(
-  { onChange, children, ...props },
+  { onChange, helperText, error, required, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<RadioGroupEl>(null);
@@ -27,9 +27,19 @@ export const RadioGroup = forwardRef<RadioGroupEl, RadioGroupProps>(function Rad
     el.addEventListener('change', h);
     return () => el.removeEventListener('change', h);
   }, [onChange]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (helperText !== undefined) el.helperText = helperText;
+  }, [helperText]);
 
   return (
-    <lt-radio-group ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-radio-group
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      error={error || undefined}
+      required={required || undefined}
+    >
       {children}
     </lt-radio-group>
   );

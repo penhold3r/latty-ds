@@ -1,4 +1,4 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Datepicker as DatepickerEl } from '@latty-ds/web';
 
 export type DatepickerProps = Omit<HTMLAttributes<DatepickerEl>, 'onChange' | 'onInput'> & {
@@ -20,7 +20,7 @@ export type DatepickerProps = Omit<HTMLAttributes<DatepickerEl>, 'onChange' | 'o
 };
 
 export const Datepicker = forwardRef<DatepickerEl, DatepickerProps>(function Datepicker(
-  { onChange, onInput, children, ...props },
+  { onChange, onInput, helperText, formAssociated, disabled, required, readonly, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DatepickerEl>(null);
@@ -41,9 +41,21 @@ export const Datepicker = forwardRef<DatepickerEl, DatepickerProps>(function Dat
     el.addEventListener('input', h);
     return () => el.removeEventListener('input', h);
   }, [onInput]);
+  useLayoutEffect(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    if (helperText !== undefined) el.helperText = helperText;
+  }, [helperText]);
 
   return (
-    <lt-datepicker ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-datepicker
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      form-associated={formAssociated || undefined}
+      disabled={disabled || undefined}
+      required={required || undefined}
+      readonly={readonly || undefined}
+    >
       {children}
     </lt-datepicker>
   );

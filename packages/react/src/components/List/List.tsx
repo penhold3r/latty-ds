@@ -9,13 +9,22 @@ export type ListProps = HTMLAttributes<ListEl> & {
   noMarker?: boolean;
 };
 
-export const List = forwardRef<ListEl, ListProps>(function List({ children, ...props }, forwardedRef) {
+export const List = forwardRef<ListEl, ListProps>(function List(
+  { markerColor, divider, noMarker, children, ...props },
+  forwardedRef
+) {
   const innerRef = useRef<ListEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-list ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-list
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      marker-color={markerColor}
+      divider={divider || undefined}
+      no-marker={noMarker || undefined}
+    >
       {children}
     </lt-list>
   );

@@ -20,6 +20,7 @@ export { Divider, type DividerProps } from './components/Divider';
 export { Dropdown, type DropdownProps } from './components/Dropdown';
 export { DropdownItem, type DropdownItemProps } from './components/DropdownItem';
 export { Header, type HeaderProps } from './components/Header';
+export { Icon, type IconProps } from './components/Icon';
 export { IconButton, type IconButtonProps } from './components/IconButton';
 export { Image, type ImageProps } from './components/Image';
 export { Link, type LinkProps } from './components/Link';

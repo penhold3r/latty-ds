@@ -27,7 +27,23 @@ export type ButtonProps = Omit<HTMLAttributes<ButtonEl>, 'onToggle'> & {
 };
 
 export const Button = forwardRef<ButtonEl, ButtonProps>(function Button(
-  { onToggle, children, ...props },
+  {
+    onToggle,
+    formAssociated,
+    bordered,
+    disabled,
+    loading,
+    loadingLabel,
+    toggle,
+    pressed,
+    iconStart,
+    iconEnd,
+    fullWidth,
+    uppercase,
+    formAction,
+    children,
+    ...props
+  },
   forwardedRef
 ) {
   const innerRef = useRef<ButtonEl>(null);
@@ -43,7 +59,22 @@ export const Button = forwardRef<ButtonEl, ButtonProps>(function Button(
   }, [onToggle]);
 
   return (
-    <lt-button ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-button
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      form-associated={formAssociated || undefined}
+      bordered={bordered || undefined}
+      disabled={disabled || undefined}
+      loading={loading || undefined}
+      loading-label={loadingLabel}
+      toggle={toggle || undefined}
+      pressed={pressed || undefined}
+      icon-start={iconStart}
+      icon-end={iconEnd}
+      full-width={fullWidth || undefined}
+      uppercase={uppercase || undefined}
+      formaction={formAction}
+    >
       {children}
     </lt-button>
   );

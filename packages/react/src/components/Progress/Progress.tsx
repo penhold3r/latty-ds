@@ -11,13 +11,21 @@ export type ProgressProps = HTMLAttributes<ProgressEl> & {
   indeterminate?: boolean;
 };
 
-export const Progress = forwardRef<ProgressEl, ProgressProps>(function Progress({ children, ...props }, forwardedRef) {
+export const Progress = forwardRef<ProgressEl, ProgressProps>(function Progress(
+  { valueText, indeterminate, children, ...props },
+  forwardedRef
+) {
   const innerRef = useRef<ProgressEl>(null);
 
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-progress ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-progress
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      value-text={valueText}
+      indeterminate={indeterminate || undefined}
+    >
       {children}
     </lt-progress>
   );

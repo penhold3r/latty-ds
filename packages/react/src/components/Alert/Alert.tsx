@@ -16,7 +16,7 @@ export type AlertProps = HTMLAttributes<AlertEl> & {
 };
 
 export const Alert = forwardRef<AlertEl, AlertProps>(function Alert(
-  { onClose, labels, children, ...props },
+  { onClose, labels, closable, open, uppercase, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<AlertEl>(null);
@@ -37,7 +37,13 @@ export const Alert = forwardRef<AlertEl, AlertProps>(function Alert(
   }, [labels]);
 
   return (
-    <lt-alert ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-alert
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      closable={closable || undefined}
+      open={open || undefined}
+      uppercase={uppercase || undefined}
+    >
       {children}
     </lt-alert>
   );

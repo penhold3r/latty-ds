@@ -19,7 +19,19 @@ export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
 };
 
 export const Radio = forwardRef<RadioEl, RadioProps>(function Radio(
-  { onChange, labels, children, ...props },
+  {
+    onChange,
+    helperText,
+    labels,
+    formAssociated,
+    checked,
+    disabled,
+    required,
+    labelPosition,
+    tabbable,
+    children,
+    ...props
+  },
   forwardedRef
 ) {
   const innerRef = useRef<RadioEl>(null);
@@ -36,11 +48,21 @@ export const Radio = forwardRef<RadioEl, RadioProps>(function Radio(
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;
+    if (helperText !== undefined) el.helperText = helperText;
     if (labels !== undefined) el.labels = labels;
-  }, [labels]);
+  }, [helperText, labels]);
 
   return (
-    <lt-radio ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-radio
+      ref={innerRef}
+      {...(props as Record<string, unknown>)}
+      form-associated={formAssociated || undefined}
+      checked={checked || undefined}
+      disabled={disabled || undefined}
+      required={required || undefined}
+      label-position={labelPosition}
+      tabbable={tabbable || undefined}
+    >
       {children}
     </lt-radio>
   );

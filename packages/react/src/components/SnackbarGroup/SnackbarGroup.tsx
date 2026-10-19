@@ -6,7 +6,7 @@ export type SnackbarGroupProps = HTMLAttributes<SnackbarGroupEl> & {
 };
 
 export const SnackbarGroup = forwardRef<SnackbarGroupEl, SnackbarGroupProps>(function SnackbarGroup(
-  { children, ...props },
+  { maxVisible, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SnackbarGroupEl>(null);
@@ -14,7 +14,7 @@ export const SnackbarGroup = forwardRef<SnackbarGroupEl, SnackbarGroupProps>(fun
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-snackbar-group ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-snackbar-group ref={innerRef} {...(props as Record<string, unknown>)} max-visible={maxVisible}>
       {children}
     </lt-snackbar-group>
   );
