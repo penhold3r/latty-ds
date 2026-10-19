@@ -60,7 +60,21 @@ const toPascalCase = (tagName: string): string =>
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
     .join('');
 
-const toReactProp = (attrName: string): string => attrName.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
+// A handful of attributes are deliberately given their true native HTML spelling instead of this codebase's usual
+// kebab-case (`button.ts`'s `formAction` -> `formaction`, `textfield.ts`'s `minLength`/`maxLength` ->
+// `minlength`/`maxlength`) — see the matching `ATTRIBUTE_NAME_OVERRIDES` tables in
+// packages/web/scripts/build-manifest.mjs (which produced the manifest member names this function receives) and
+// scripts/codegen-wrappers.mjs (the real source of truth for each wrapper's actual prop name). The regex below
+// only reverses a hyphen, so a hyphen-free native attribute like these passes through unchanged — this table
+// corrects exactly those, so the generated React snippet prop name actually matches the real component's.
+const REACT_PROP_OVERRIDES: Record<string, string> = {
+  formaction: 'formAction',
+  minlength: 'minLength',
+  maxlength: 'maxLength'
+};
+
+const toReactProp = (attrName: string): string =>
+  REACT_PROP_OVERRIDES[attrName] ?? attrName.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
 
 const formatTime = (d: Date): string =>
   d.toLocaleTimeString('en', {

@@ -189,18 +189,35 @@ export class Textfield extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) autosize = false;
 
   /**
-   * For type="number": minimum allowed value.
-   * For all other types: minimum character length.
+   * Native `min` — minimum allowed value. Only applies when `type="number"`, matching native `<input>`: `min`
+   * has no effect on any other input type this component supports (no `type="date"`/`"range"`/etc.). For a
+   * minimum character length on a text-like type, use `minLength` instead — that's a distinct native attribute,
+   * not a repurposing of this one.
    * @default null
    */
   @property({ type: Number }) min: number | null = null;
 
   /**
-   * For type="number": maximum allowed value.
-   * For all other types: maximum character length.
+   * Native `max` — maximum allowed value. Only applies when `type="number"`. See `min`; for a maximum character
+   * length on a text-like type, use `maxLength`.
    * @default null
    */
   @property({ type: Number }) max: number | null = null;
+
+  /**
+   * Native `minlength` — minimum character length required for the value to be valid. No effect when
+   * `type="number"` (same as native `<input type="number" minlength>`, which HTML itself ignores) — use `min`
+   * there instead.
+   * @default null
+   */
+  @property({ type: Number, attribute: 'minlength' }) minLength: number | null = null;
+
+  /**
+   * Native `maxlength` — maximum character length allowed for the value. No effect when `type="number"` — use
+   * `max` there instead. See `minLength`.
+   * @default null
+   */
+  @property({ type: Number, attribute: 'maxlength' }) maxLength: number | null = null;
 
   /**
    * Renders the label in small caps with wider letter spacing.
@@ -211,7 +228,7 @@ export class Textfield extends ThemeableElement {
   /** Shows a clear button while the field has a value. Not shown for password fields, which have their own toggle. */
   @property({ type: Boolean, reflect: true }) clearable = false;
 
-  /** Shows the character count as `length / max` below the field. Uses `max` as the limit, which is also enforced natively. */
+  /** Shows the character count as `length / maxLength` below the field. Uses `maxLength` as the limit, which is also enforced natively. */
   @property({ type: Boolean, reflect: true }) counter = false;
 
   /**
@@ -223,13 +240,15 @@ export class Textfield extends ThemeableElement {
 
   /**
    * Hints the on-screen keyboard a touch device should show, forwarded as the native `inputmode` attribute on
-   * the inner `<input>`/`<textarea>`. The host's own attribute is kebab-case (`input-mode`), matching this
-   * codebase's convention for every other multi-word attribute — not `inputmode`, despite that being this
-   * property's native HTML spelling: the docs manifest generator derives a component's attribute name from its
-   * property name via a kebab-case guess (it has no way to read an explicit `attribute:` override), so diverging
-   * from kebab-case here would silently desync the Playground/API-table's idea of this prop's attribute from
-   * the real one. Typed `| ''`, not optional — `HTMLElement` already declares its own `inputMode: string` (a
-   * real DOM property every element has), so this has to stay assignable to that rather than `string | undefined`.
+   * the inner `<input>`/`<textarea>`. The host's own attribute stays kebab-case (`input-mode`), not `inputmode`
+   * despite that being this property's native HTML spelling — changing it now would be a breaking rename for any
+   * existing consumer setting the attribute directly in markup, with no real upside (the generated React wrapper
+   * and the docs manifest generator both already know about the actual `input-mode` spelling via their respective
+   * `ATTRIBUTE_NAME_OVERRIDES` tables — see `scripts/codegen-wrappers.mjs` / `packages/web/scripts/build-
+   * manifest.mjs` — so nothing is silently desynced). A newly introduced property with no existing consumers
+   * (`minLength`/`maxLength`, above) uses the true native spelling instead, for exactly that reason: no rename to
+   * avoid. Typed `| ''`, not optional — `HTMLElement` already declares its own `inputMode: string` (a real DOM
+   * property every element has), so this has to stay assignable to that rather than `string | undefined`.
    * @default ''
    */
   @property({ reflect: true, attribute: 'input-mode' }) inputMode: TextfieldInputMode | '' = '';
@@ -303,8 +322,8 @@ export class Textfield extends ThemeableElement {
       if (this.min !== null && n < this.min) return false;
       if (this.max !== null && n > this.max) return false;
     } else {
-      if (this.min !== null && v.length < this.min) return false;
-      if (this.max !== null && v.length > this.max) return false;
+      if (this.minLength !== null && v.length < this.minLength) return false;
+      if (this.maxLength !== null && v.length > this.maxLength) return false;
     }
     return true;
   }
@@ -532,8 +551,8 @@ export class Textfield extends ThemeableElement {
                   name=${ifDefined(this.name || undefined)}
                   placeholder=${this.placeholder}
                   rows=${this.rows}
-                  minlength=${ifDefined(this.min !== null ? this.min : undefined)}
-                  maxlength=${ifDefined(this.max !== null ? this.max : undefined)}
+                  minlength=${ifDefined(this.minLength !== null ? this.minLength : undefined)}
+                  maxlength=${ifDefined(this.maxLength !== null ? this.maxLength : undefined)}
                   autocomplete=${ifDefined(this.autocomplete || undefined)}
                   inputmode=${ifDefined(this.inputMode || undefined)}
                   ?disabled=${this._isDisabled}
@@ -561,8 +580,8 @@ export class Textfield extends ThemeableElement {
                   placeholder=${this.placeholder}
                   min=${ifDefined(isNumber && this.min !== null ? this.min : undefined)}
                   max=${ifDefined(isNumber && this.max !== null ? this.max : undefined)}
-                  minlength=${ifDefined(!isNumber && this.min !== null ? this.min : undefined)}
-                  maxlength=${ifDefined(!isNumber && this.max !== null ? this.max : undefined)}
+                  minlength=${ifDefined(!isNumber && this.minLength !== null ? this.minLength : undefined)}
+                  maxlength=${ifDefined(!isNumber && this.maxLength !== null ? this.maxLength : undefined)}
                   autocomplete=${ifDefined(this.autocomplete || undefined)}
                   inputmode=${ifDefined(this.inputMode || undefined)}
                   pattern=${ifDefined(!isNumber && this.pattern ? this.pattern : undefined)}
@@ -614,8 +633,10 @@ export class Textfield extends ThemeableElement {
               >${resolvedHelperText}</lt-text
             >`
           : ''}
-        ${this.counter && !isNumber && this.max !== null
-          ? html`<lt-text variant="caption" as="span" class="counter">${this.value.length} / ${this.max}</lt-text>`
+        ${this.counter && !isNumber && this.maxLength !== null
+          ? html`<lt-text variant="caption" as="span" class="counter"
+              >${this.value.length} / ${this.maxLength}</lt-text
+            >`
           : ''}
       </div>
     `;

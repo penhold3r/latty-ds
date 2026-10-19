@@ -45,14 +45,15 @@ const FUNCTION_CAPABLE_FIELDS = new Set(['helperText']);
 // (X7: Icon, from @latty-ds/icons, went missing from @latty-ds/react this way).
 const MANUAL_EXTRA_EXPORTS = [{ name: 'Icon' }];
 
-// The one property across the whole web package whose configured HTML attribute name isn't the standard
-// kebab-case transform of its camelCase field name (`button.ts`'s `formAction` -> `attribute: 'formaction'`,
-// deliberately matching the native `<button formaction>` spelling, no hyphen). Every other multi-word property
-// has an explicit `attribute: '...'` override that *is* exactly the standard transform (verified by grepping every
-// `@property(` call lacking one: none are multi-word, so nothing relies on Lit's own default deriver either, which
-// is a plain `name.toLowerCase()` with no hyphen insertion — confirmed in `@lit/reactive-element`'s
-// `__attributeNameForProperty`). Extend this table if a future component ever adds another deliberate exception.
-const ATTRIBUTE_NAME_OVERRIDES = { formAction: 'formaction' };
+// Properties across the web package whose configured HTML attribute name isn't the standard kebab-case transform
+// of its camelCase field name — each deliberately matching a real native attribute's own spelling instead
+// (`button.ts`'s `formAction` -> `attribute: 'formaction'`, `textfield.ts`'s `minLength`/`maxLength` ->
+// `attribute: 'minlength'`/`'maxlength'`). Every other multi-word property has an explicit `attribute: '...'`
+// override that *is* exactly the standard transform (verified by grepping every `@property(` call lacking one:
+// none are multi-word, so nothing relies on Lit's own default deriver either, which is a plain
+// `name.toLowerCase()` with no hyphen insertion — confirmed in `@lit/reactive-element`'s
+// `__attributeNameForProperty`). Extend this table whenever a future component adds another deliberate exception.
+const ATTRIBUTE_NAME_OVERRIDES = { formAction: 'formaction', minLength: 'minlength', maxLength: 'maxlength' };
 
 function toAttrName(name) {
   return ATTRIBUTE_NAME_OVERRIDES[name] ?? name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();

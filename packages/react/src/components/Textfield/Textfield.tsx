@@ -20,6 +20,8 @@ export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onCh
   autosize?: boolean;
   min?: TextfieldEl['min'];
   max?: TextfieldEl['max'];
+  minLength?: TextfieldEl['minLength'];
+  maxLength?: TextfieldEl['maxLength'];
   uppercase?: boolean;
   clearable?: boolean;
   counter?: boolean;
@@ -46,6 +48,8 @@ export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfi
     autofocus,
     iconStart,
     autosize,
+    minLength,
+    maxLength,
     uppercase,
     clearable,
     counter,
@@ -92,6 +96,8 @@ export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfi
       autofocus={autofocus || undefined}
       icon-start={iconStart}
       autosize={autosize || undefined}
+      minlength={minLength}
+      maxlength={maxLength}
       uppercase={uppercase || undefined}
       clearable={clearable || undefined}
       counter={counter || undefined}

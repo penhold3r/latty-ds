@@ -12771,7 +12771,7 @@
                 "text": "number | null"
               },
               "default": "null",
-              "description": "For type=\"number\": minimum allowed value.\nFor all other types: minimum character length."
+              "description": "Native `min` — minimum allowed value. Only applies when `type=\"number\"`, matching native `<input>`: `min`\nhas no effect on any other input type this component supports (no `type=\"date\"`/`\"range\"`/etc.). For a\nminimum character length on a text-like type, use `minLength` instead — that's a distinct native attribute,\nnot a repurposing of this one."
             },
             {
               "kind": "field",
@@ -12780,7 +12780,25 @@
                 "text": "number | null"
               },
               "default": "null",
-              "description": "For type=\"number\": maximum allowed value.\nFor all other types: maximum character length."
+              "description": "Native `max` — maximum allowed value. Only applies when `type=\"number\"`. See `min`; for a maximum character\nlength on a text-like type, use `maxLength`."
+            },
+            {
+              "kind": "field",
+              "name": "minLength",
+              "type": {
+                "text": "number | null"
+              },
+              "default": "null",
+              "description": "Native `minlength` — minimum character length required for the value to be valid. No effect when\n`type=\"number\"` (same as native `<input type=\"number\" minlength>`, which HTML itself ignores) — use `min`\nthere instead."
+            },
+            {
+              "kind": "field",
+              "name": "maxLength",
+              "type": {
+                "text": "number | null"
+              },
+              "default": "null",
+              "description": "Native `maxlength` — maximum character length allowed for the value. No effect when `type=\"number\"` — use\n`max` there instead. See `minLength`."
             },
             {
               "kind": "field",
@@ -12807,7 +12825,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Shows the character count as `length / max` below the field. Uses `max` as the limit, which is also enforced natively."
+              "description": "Shows the character count as `length / maxLength` below the field. Uses `maxLength` as the limit, which is also enforced natively."
             },
             {
               "kind": "field",
@@ -12825,7 +12843,7 @@
                 "text": "TextfieldInputMode | ''"
               },
               "default": "''",
-              "description": "Hints the on-screen keyboard a touch device should show, forwarded as the native `inputmode` attribute on\nthe inner `<input>`/`<textarea>`. The host's own attribute is kebab-case (`input-mode`), matching this\ncodebase's convention for every other multi-word attribute — not `inputmode`, despite that being this\nproperty's native HTML spelling: the docs manifest generator derives a component's attribute name from its\nproperty name via a kebab-case guess (it has no way to read an explicit `attribute:` override), so diverging\nfrom kebab-case here would silently desync the Playground/API-table's idea of this prop's attribute from\nthe real one. Typed `| ''`, not optional — `HTMLElement` already declares its own `inputMode: string` (a\nreal DOM property every element has), so this has to stay assignable to that rather than `string | undefined`."
+              "description": "Hints the on-screen keyboard a touch device should show, forwarded as the native `inputmode` attribute on\nthe inner `<input>`/`<textarea>`. The host's own attribute stays kebab-case (`input-mode`), not `inputmode`\ndespite that being this property's native HTML spelling — changing it now would be a breaking rename for any\nexisting consumer setting the attribute directly in markup, with no real upside (the generated React wrapper\nand the docs manifest generator both already know about the actual `input-mode` spelling via their respective\n`ATTRIBUTE_NAME_OVERRIDES` tables — see `scripts/codegen-wrappers.mjs` / `packages/web/scripts/build-\nmanifest.mjs` — so nothing is silently desynced). A newly introduced property with no existing consumers\n(`minLength`/`maxLength`, above) uses the true native spelling instead, for exactly that reason: no rename to\navoid. Typed `| ''`, not optional — `HTMLElement` already declares its own `inputMode: string` (a real DOM\nproperty every element has), so this has to stay assignable to that rather than `string | undefined`."
             },
             {
               "kind": "field",

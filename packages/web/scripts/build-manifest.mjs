@@ -190,6 +190,14 @@ function toAttrName(propName) {
   return propName.replace(/([A-Z])/g, '-$1').toLowerCase();
 }
 
+// `cem analyze` never records a property's explicit `attribute: '...'` override (verified empirically against
+// custom-elements.json: `field.attribute` is always undefined, even for a property that configures one), so this
+// guesses via the standard kebab-case transform above — wrong for the handful of properties deliberately given a
+// non-kebab, real-native-HTML attribute spelling instead (`button.ts`'s `formAction` -> `formaction`,
+// `textfield.ts`'s `minLength`/`maxLength` -> `minlength`/`maxlength`). Kept in sync with the matching table in
+// scripts/codegen-wrappers.mjs, which has the same guess-from-CEM limitation for the React wrappers.
+const ATTRIBUTE_NAME_OVERRIDES = { formAction: 'formaction', minLength: 'minlength', maxLength: 'maxlength' };
+
 /** Strip surrounding quotes from a CEM default value like `"'primary'"`. */
 function parseDefault(raw) {
   if (raw === undefined || raw === null) return undefined;
@@ -208,7 +216,7 @@ function toMember(field, componentDir) {
     description,
     readonly
   } = field;
-  const name = attribute ?? toAttrName(propName);
+  const name = attribute ?? ATTRIBUTE_NAME_OVERRIDES[propName] ?? toAttrName(propName);
 
   if (isStatic) return null;
   if (privacy === 'private' || privacy === 'protected') return null;

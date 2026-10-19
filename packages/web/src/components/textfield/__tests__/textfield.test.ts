@@ -822,27 +822,27 @@ describe('<lt-textfield>', () => {
       });
     });
 
-    describe('min/max as length on text types', () => {
-      it('shows error when value is shorter than min', async () => {
+    describe('minLength/maxLength on text types', () => {
+      it('shows error when value is shorter than minLength', async () => {
         el.type = 'text';
-        el.min = 5;
+        el.minLength = 5;
         await el.updateComplete;
         await typeAndLeave('hi');
         expect(el.hasAttribute('data-invalid')).toBeTruthy();
       });
 
-      it('shows error when value is longer than max', async () => {
+      it('shows error when value is longer than maxLength', async () => {
         el.type = 'text';
-        el.max = 5;
+        el.maxLength = 5;
         await el.updateComplete;
         await typeAndLeave('toolongvalue');
         expect(el.hasAttribute('data-invalid')).toBeTruthy();
       });
 
-      it('no error when length is within min/max', async () => {
+      it('no error when length is within minLength/maxLength', async () => {
         el.type = 'text';
-        el.min = 2;
-        el.max = 10;
+        el.minLength = 2;
+        el.maxLength = 10;
         await el.updateComplete;
         await typeAndLeave('hello');
         expect(el.hasAttribute('data-invalid')).toBeFalsy();
@@ -850,12 +850,22 @@ describe('<lt-textfield>', () => {
 
       it('passes minlength/maxlength as native attributes', async () => {
         el.type = 'text';
-        el.min = 2;
-        el.max = 50;
+        el.minLength = 2;
+        el.maxLength = 50;
         await el.updateComplete;
         const input = el.shadowRoot!.querySelector('input');
         expect(input?.getAttribute('minlength')).toBe('2');
         expect(input?.getAttribute('maxlength')).toBe('50');
+      });
+
+      it('has no effect when type="number" (min/max apply there instead)', async () => {
+        el.type = 'number';
+        el.minLength = 5;
+        el.maxLength = 5;
+        await el.updateComplete;
+        const input = el.shadowRoot!.querySelector('input');
+        expect(input?.hasAttribute('minlength')).toBe(false);
+        expect(input?.hasAttribute('maxlength')).toBe(false);
       });
     });
 
@@ -1169,20 +1179,20 @@ describe('clearable and counter', () => {
     expect(clearBtn()!.getAttribute('aria-label')).toBe('Effacer');
   });
 
-  it('shows length / max when counter is set and max is the limit', async () => {
+  it('shows length / maxLength when counter is set and maxLength is the limit', async () => {
     el.counter = true;
-    el.max = 10;
+    el.maxLength = 10;
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('.counter')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5 / 10');
     expect(nativeInput().getAttribute('maxlength')).toBe('10');
   });
 
-  it('hides the counter unless counter is set and a max is given', async () => {
-    el.max = 10;
+  it('hides the counter unless counter is set and a maxLength is given', async () => {
+    el.maxLength = 10;
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('.counter')).toBeNull();
     el.counter = true;
-    el.max = null;
+    el.maxLength = null;
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('.counter')).toBeNull();
   });

@@ -42,7 +42,7 @@ type, instead of a fixed-height box with a manual resize handle.
 
 <!-- Clear button, and a character count against the native max length -->
 
-<lt-textfield label="Nickname" clearable counter max="20"></lt-textfield>
+<lt-textfield label="Nickname" clearable counter maxlength="20"></lt-textfield>
 
 <!-- Keyboard/autofill hints: a numeric keypad on touch devices, and a browser-suggested one-time code -->
 
@@ -69,7 +69,7 @@ import { Textfield } from '@latty-ds/react';
 
 // Clear button, and a character count against the native max length
 
-<Textfield label="Nickname" clearable counter max={20} />
+<Textfield label="Nickname" clearable counter maxLength={20} />
 
 // Keyboard/autofill hints: a numeric keypad on touch devices, and a browser-suggested one-time code
 
@@ -195,11 +195,13 @@ import { Textfield } from '@latty-ds/react';
 
 ### Length and range bounds
 
-The <code>min</code> and <code>max</code> props set bounds that are also checked on blur. For
-
-<code>type="number"</code> they constrain the numeric value; for all other types they constrain the character length.
-Both are passed through as native <code>min</code>/<code>max</code> or
-<code>minlength</code>/<code>maxlength</code> attributes so the browser's built-in tooltip also works.
+<code>min</code>/<code>max</code> and <code>minLength</code>/<code>maxLength</code> are distinct props, matching the
+real native <code>&lt;input&gt;</code> attributes of the same names — not one prop repurposed for both jobs.
+<code>min</code>/<code>max</code> only take effect on <code>type="number"</code> (same as HTML itself: a native
+<code>min</code>/<code>max</code> has no effect on any other input type). <code>minLength</code>/<code>maxLength</code>
+constrain the character length and apply to every other type. Both pairs are checked on blur and passed through as the
+matching native <code>min</code>/<code>max</code> or <code>minlength</code>/<code>maxlength</code> attributes, so the
+browser's built-in tooltip also works.
 
   <FrameworkTabs
     html={`
@@ -207,8 +209,8 @@ Both are passed through as native <code>min</code>/<code>max</code> or
 <lt-textfield
   type="text"
   label="Username"
-  min="8"
-  max="64"
+  minlength="8"
+  maxlength="64"
   helper-text="8–64 characters"></lt-textfield>
 
 <!-- Numeric range: 0–120 -->
@@ -225,7 +227,7 @@ import { Textfield } from '@latty-ds/react';
 
 {/* Character length: must be 8–64 chars */}
 
-<Textfield type="text" label="Username" min={8} max={64} helperText="8–64 characters" />
+<Textfield type="text" label="Username" minLength={8} maxLength={64} helperText="8–64 characters" />
 
 {/* Numeric range: 0–120 */}
 
@@ -243,8 +245,8 @@ import { Textfield } from '@latty-ds/react';
   <lt-textfield
     type="text"
     label="Username"
-    :min="8"
-    :max="64"
+    :minlength="8"
+    :maxlength="64"
     helper-text="8–64 characters"></lt-textfield>
 
   <!-- Numeric range: 0–120 -->
@@ -283,7 +285,7 @@ This is set as a JavaScript property, not an HTML attribute.
   import '@latty-ds/web';
   document.querySelector('#pw-field').helperText =
     (error) => error ? 'Password is too short' : 'Minimum 8 characters';
-  document.querySelector('#pw-field').min = 8;
+  document.querySelector('#pw-field').minLength = 8;
 </script>
 
     `}
@@ -302,7 +304,7 @@ import { Textfield } from '@latty-ds/react';
 <Textfield
   type="text"
   label="Password"
-  min={8}
+  minLength={8}
   helperText={(error) => error ? 'Password is too short' : 'Minimum 8 characters'}
 />
     `}
@@ -318,7 +320,7 @@ import { Textfield } from '@latty-ds/react';
 <lt-textfield
     type="text"
     label="Password"
-    :min="8"
+    :minlength="8"
     :helper-text="(error) => error ? 'Password is too short' : 'Minimum 8 characters'"></lt-textfield>
 
 </template>
