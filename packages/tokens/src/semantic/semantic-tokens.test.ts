@@ -117,8 +117,22 @@ describe('semantic tokens — neutral interactive contrast', () => {
 });
 
 describe('semantic tokens — border-input and focus-ring tokens', () => {
-  it.each(MODES)('border-input aliases border-default in %s', (mode) => {
-    expect(built.default[mode]['border-input']).toBe('border-default');
+  it('border-input is its own step in light mode, not an alias of border-default (X4(d))', () => {
+    expect(built.default.light['border-input']).toBe('color-neutral-300');
+    expect(built.default.light['border-input']).not.toBe(built.default.light['border-default']);
+  });
+
+  it('border-input stays an alias of border-default in dark mode (unchanged)', () => {
+    expect(built.default.dark['border-input']).toBe('border-default');
+  });
+
+  it("border-input's contrast against a white/neutral-50 field background improved but still falls short of WCAG 1.4.11's 3:1 non-text minimum", () => {
+    const hex = resolveHex('default', built.default.light['border-input']);
+    const against50 = contrastRatio(hex, resolveHex('default', 'color-neutral-50'));
+    const againstWhite = contrastRatio(hex, resolveHex('default', 'color-white'));
+    expect(against50).toBeGreaterThan(1.22); // was neutral-200's ratio
+    expect(againstWhite).toBeGreaterThan(1.27); // was neutral-200's ratio
+    expect(against50).toBeLessThan(3); // still short of 1.4.11 — documents the gap, not a pass
   });
 
   it.each(MODES)('focus-ring-color aliases border-focus in %s', (mode) => {

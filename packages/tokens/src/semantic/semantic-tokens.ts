@@ -26,10 +26,11 @@ export interface SemanticTokenOptions {
 // Neutral palette step per mode + contrast level for the three structural border tokens.
 // Dark mode shifts toward *lighter* steps for 'high' (more contrast against a dark background);
 // light mode shifts toward *darker* steps — opposite directions, both increasing contrast.
+// `input` is its own step, not derived from `default` — see border-input's own comment below for why.
 const BORDER_STEPS = {
   light: {
-    default: { default: '200', strong: '400', subtle: '100' },
-    high: { default: '400', strong: '600', subtle: '300' }
+    default: { default: '200', strong: '400', subtle: '100', input: '300' },
+    high: { default: '400', strong: '600', subtle: '300', input: '500' }
   },
   dark: {
     default: { default: '700', strong: '500', subtle: '800' },
@@ -89,7 +90,11 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap 
   map['border-strong'] = `color-neutral-${lightBorderSteps.strong}`;
   map['border-subtle'] = `color-neutral-${lightBorderSteps.subtle}`;
   map['border-focus'] = 'color-primary-200';
-  map['border-input'] = 'border-default';
+  // Its own step, not an alias of border-default (X4(d)): input chrome needs to read as an input, not blend
+  // into every other hairline border in the UI — neutral-300 is a first bump toward WCAG 1.4.11's 3:1 non-text
+  // minimum (still short of it, ~1.6:1 against a white/neutral-50 field background; neutral-500 is roughly where
+  // it would actually clear 3:1), kept as a deliberate incremental step rather than jumping straight there.
+  map['border-input'] = `color-neutral-${lightBorderSteps.input}`;
   map['focus-ring-color'] = 'border-focus';
   map['focus-halo-color'] = 'bg-primary-subtle';
 
