@@ -8,6 +8,7 @@ import { CheckboxSize, CheckboxVariant, CheckboxLabelPosition, type CheckboxLabe
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 import { SlottedContentController } from '../shared/slotted-content';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { createFieldIds } from '../shared/form-field';
 
 import '@latty-ds/icons';
@@ -67,6 +68,9 @@ export class Checkbox extends ThemeableElement {
   private _fieldsetDisabled = new FormDisabledController(this);
   private _slotted = new SlottedContentController(this);
   private readonly _fieldIds = createFieldIds();
+  private _nativeAttrs = new NativeAttrsController(this, () => this.input, {
+    exclude: ['aria-label', 'aria-checked', 'aria-describedby']
+  });
 
   constructor() {
     super();
@@ -124,12 +128,6 @@ export class Checkbox extends ThemeableElement {
    * @default 'right'
    */
   @property({ attribute: 'label-position', reflect: true }) labelPosition: CheckboxLabelPosition = 'right';
-
-  /**
-   * Name attribute for form submission.
-   * @default ''
-   */
-  @property({ reflect: true }) name = '';
 
   /**
    * Value attribute for form submission.
@@ -246,10 +244,9 @@ export class Checkbox extends ThemeableElement {
             .checked=${this.checked}
             ?disabled=${this._isDisabled}
             ?required=${this.required}
-            name=${this.name}
             value=${this.value}
             @change=${this.handleChange}
-            aria-label=${hasLabel ? nothing : 'checkbox'}
+            aria-label=${hasLabel ? nothing : this.getAttribute('aria-label') || 'checkbox'}
             aria-checked=${this.indeterminate ? 'mixed' : this.checked ? 'true' : 'false'}
             aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           />

@@ -13,6 +13,7 @@ import '../spinner/';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { groupConsecutive } from '../shared/option-groups';
 import { nextListboxIndex, ListboxTypeahead } from '../shared/listbox-nav';
 
@@ -64,6 +65,20 @@ export class Select extends ThemeableElement {
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
   private _fieldsetDisabled = new FormDisabledController(this);
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('.select-trigger'), {
+    exclude: [
+      'aria-haspopup',
+      'aria-expanded',
+      'aria-disabled',
+      'aria-required',
+      'aria-invalid',
+      'aria-label',
+      'aria-describedby',
+      'aria-controls',
+      'aria-activedescendant',
+      'open'
+    ]
+  });
 
   // Scopes generated option/listbox ids to this instance, so two selects on the same page don't collide.
   private readonly _uid = `lt-select-${selectCount++}`;
@@ -117,12 +132,6 @@ export class Select extends ThemeableElement {
    * @default ''
    */
   @property({ reflect: true }) label = '';
-
-  /**
-   * Name used when submitting a form.
-   * @default ''
-   */
-  @property({ reflect: true }) name = '';
 
   /**
    * Helper text displayed below the select. Color changes based on variant.
@@ -374,7 +383,8 @@ export class Select extends ThemeableElement {
   updated(changedProperties: Map<string, unknown>) {
     if (this.multiple) {
       const formData = new FormData();
-      if (this.name) for (const v of this._selected) formData.append(this.name, v);
+      const name = this.getAttribute('name');
+      if (name) for (const v of this._selected) formData.append(name, v);
       this._internals.setFormValue(formData);
     } else {
       this._internals.setFormValue(this._selected[0] || null);
@@ -480,7 +490,7 @@ export class Select extends ThemeableElement {
             aria-disabled=${this._isDisabled}
             aria-required=${this.required}
             aria-invalid=${this.variant === 'error' ? 'true' : nothing}
-            aria-label=${this.label || this.placeholder}
+            aria-label=${this.label || this.getAttribute('aria-label') || this.placeholder}
             aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
             aria-controls=${this.isOpen ? listboxId : nothing}
             aria-activedescendant=${this.isOpen && activeOption ? this._idFor(activeOption) : nothing}

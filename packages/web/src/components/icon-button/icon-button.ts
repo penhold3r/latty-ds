@@ -6,15 +6,14 @@ import { devWarn } from '../../utils';
 
 import { iconButtonStyles } from './icon-button.styles';
 import type { IconButtonVariant, IconButtonAppearance, IconButtonSize } from './icon-button.types';
-import { AriaForwardingController } from '../shared/aria-forwarding';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 import '@latty-ds/icons';
 
 /**
  * Icon-only button. Requires `label` for screen readers since there is no visible text.
  *
- * Forwards host `aria-pressed`, `aria-expanded`, `aria-haspopup`, `aria-controls`, and
- * `aria-current` onto the internal native control (e.g. for dropdown triggers).
+ * Automatically forwards native `<button>` / `<a>` and `aria-*` attributes onto the internal native control.
  *
  * @element lt-icon-button
  *
@@ -32,7 +31,9 @@ import '@latty-ds/icons';
 export class IconButton extends ThemeableElement {
   static styles = iconButtonStyles;
 
-  private _ariaForwarding = new AriaForwardingController(this, () => this.shadowRoot?.querySelector('[part="base"]'));
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('[part="base"]'), {
+    exclude: ['target', 'rel', 'aria-disabled', 'aria-label']
+  });
 
   /** Icon name from the icon library. */
   @property({ reflect: true }) icon = '';
@@ -69,7 +70,7 @@ export class IconButton extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) disabled = false;
 
   protected firstUpdated() {
-    if (!this.label && !this.textContent?.trim()) {
+    if (!this.label && !this.getAttribute('aria-label') && !this.textContent?.trim()) {
       devWarn('lt-icon-button', 'no label or visible text — set `label` so screen readers can name the button');
     }
   }
@@ -99,12 +100,6 @@ export class IconButton extends ThemeableElement {
   /** When set, renders an `<a>` tag instead of `<button>`. */
   @property() href = '';
 
-  /** Forwarded to the anchor's `target` attribute when `href` is set. */
-  @property() target = '';
-
-  /** Forwarded to the anchor's `rel` attribute when `href` is set. */
-  @property() rel = '';
-
   /** Renders as a circle instead of rounded-rectangle. */
   @property({ type: Boolean, reflect: true }) round = false;
 
@@ -113,15 +108,16 @@ export class IconButton extends ThemeableElement {
   }
 
   render() {
-    const label = this.label || undefined;
+    const label = this.label || this.getAttribute('aria-label') || undefined;
 
     if (this.href) {
-      const rel = this.rel || (this.target === '_blank' ? 'noopener noreferrer' : undefined);
+      const target = this.getAttribute('target') || undefined;
+      const rel = this.getAttribute('rel') || (target === '_blank' ? 'noopener noreferrer' : undefined);
       return html`
         <a
           part="base"
           href=${this.href}
-          target=${ifDefined(this.target || undefined)}
+          target=${ifDefined(target)}
           rel=${ifDefined(rel)}
           aria-label=${ifDefined(label)}
           aria-disabled=${this.disabled ? 'true' : nothing}

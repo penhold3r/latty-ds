@@ -4,6 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
 import { listItemStyles } from './list-item.styles';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 import '@latty-ds/icons';
 
@@ -21,7 +22,8 @@ import '@latty-ds/icons';
  *
  * Items can also be interactive: set `clickable` to render the row as a native
  * `<button>` (picker rows, settings rows), or `href` to render it as an `<a>`.
- * Interactive rows get hover/active/focus states and a disabled state.
+ * Interactive rows get hover/active/focus states and a disabled state, and
+ * forward native `<button>` / `<a>` attributes onto `[part="base"]`.
  *
  * @element lt-list-item
  *
@@ -61,6 +63,10 @@ import '@latty-ds/icons';
 export class ListItem extends ThemeableElement {
   static styles = listItemStyles;
 
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('[part="base"]'), {
+    exclude: ['target', 'rel', 'aria-disabled']
+  });
+
   override connectedCallback() {
     super.connectedCallback();
     if (!this.hasAttribute('role')) this.setAttribute('role', 'listitem');
@@ -82,15 +88,6 @@ export class ListItem extends ThemeableElement {
   /** When set, renders the row as an `<a>` with hover/active/focus states. */
   @property() href = '';
 
-  /** Forwarded to the anchor's `target` attribute when `href` is set. */
-  @property() target = '';
-
-  /**
-   * Forwarded to the anchor's `rel` attribute when `href` is set.
-   * Defaults to `noopener noreferrer` when `target="_blank"` and `rel` is not specified.
-   */
-  @property() rel = '';
-
   /**
    * Disables the interactive row. Only relevant with `clickable` or `href`.
    * @default false
@@ -105,13 +102,14 @@ export class ListItem extends ThemeableElement {
     `;
 
     if (this.href) {
-      const rel = this.rel || (this.target === '_blank' ? 'noopener noreferrer' : undefined);
+      const target = this.getAttribute('target') || undefined;
+      const rel = this.getAttribute('rel') || (target === '_blank' ? 'noopener noreferrer' : undefined);
       return html`
         <a
           class="inner"
           part="base"
           href=${this.href}
-          target=${ifDefined(this.target || undefined)}
+          target=${ifDefined(target)}
           rel=${ifDefined(rel)}
           aria-disabled=${this.disabled ? 'true' : nothing}
           tabindex=${this.disabled ? '-1' : nothing}

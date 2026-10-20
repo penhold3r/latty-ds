@@ -1,11 +1,11 @@
 import { html } from 'lit';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement, property } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
 import { colorInputStyles } from './color-input.styles';
 import { ColorInputFormat, ColorInputSize, type ColorInputLabels } from './color-input.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { NativeAttrsController } from '../shared/native-attrs';
 import '@latty-ds/icons';
 import '../text/text';
 
@@ -107,6 +107,9 @@ export class ColorInput extends ThemeableElement {
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
   private _fieldsetDisabled = new FormDisabledController(this);
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input[type="color"]'), {
+    exclude: ['aria-label']
+  });
 
   constructor() {
     super();
@@ -150,12 +153,6 @@ export class ColorInput extends ThemeableElement {
    * @default false
    */
   @property({ type: Boolean, reflect: true }) required = false;
-
-  /**
-   * Name used when submitting a form.
-   * @default ''
-   */
-  @property({ reflect: true }) name = '';
 
   /**
    * Size of the input — affects height and padding.
@@ -230,9 +227,8 @@ export class ColorInput extends ThemeableElement {
             type="color"
             class="native-picker"
             .value=${hex || '#000000'}
-            name=${ifDefined(this.name || undefined)}
             ?disabled=${this._isDisabled}
-            aria-label=${this.label || this.placeholder}
+            aria-label=${this.label || this.getAttribute('aria-label') || this.placeholder}
             @change=${this._handleChange}
           />
         </span>

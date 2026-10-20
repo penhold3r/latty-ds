@@ -198,7 +198,7 @@ describe('<lt-datepicker>', () => {
     });
 
     it('value before min: rangeUnderflow, via the native constraint', async () => {
-      el.min = '2026-01-01';
+      el.setAttribute('min', '2026-01-01');
       await el.updateComplete;
       const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
       el.value = '2025-12-31';
@@ -207,7 +207,7 @@ describe('<lt-datepicker>', () => {
     });
 
     it('value after max: rangeOverflow, via the native constraint', async () => {
-      el.max = '2026-01-01';
+      el.setAttribute('max', '2026-01-01');
       await el.updateComplete;
       const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
       el.value = '2026-01-02';
@@ -222,6 +222,23 @@ describe('<lt-datepicker>', () => {
       const input = el.shadowRoot!.querySelector('input');
       expect(spy.mock.lastCall?.[2]).toBe(input);
     });
+  });
+
+  it('forwards native attributes (min, max, step, readonly, name, autocomplete) to the inner input', async () => {
+    el.setAttribute('min', '2026-01-01');
+    el.setAttribute('max', '2026-12-31');
+    el.setAttribute('step', '7');
+    el.setAttribute('readonly', '');
+    el.setAttribute('name', 'start_date');
+    el.setAttribute('autocomplete', 'bday');
+    await el.updateComplete;
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.getAttribute('min')).toBe('2026-01-01');
+    expect(input.getAttribute('max')).toBe('2026-12-31');
+    expect(input.getAttribute('step')).toBe('7');
+    expect(input.hasAttribute('readonly')).toBe(true);
+    expect(input.getAttribute('name')).toBe('start_date');
+    expect(input.getAttribute('autocomplete')).toBe('bday');
   });
 });
 

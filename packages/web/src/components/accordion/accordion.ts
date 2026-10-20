@@ -4,6 +4,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 import { accordionStyles } from './accordion.styles';
 import { AccordionAppearance } from './accordion.types';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 import '@latty-ds/icons';
 import '../text/text';
@@ -81,6 +82,7 @@ export class Accordion extends ThemeableElement {
   @query('.content') private _content!: HTMLElement;
   @query('.content-inner') private _contentInner!: HTMLElement;
 
+  private _nativeAttrs = new NativeAttrsController(this, () => this._details);
   private _animating = false;
 
   protected updated(changedProperties: Map<string, unknown>) {

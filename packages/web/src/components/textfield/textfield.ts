@@ -5,16 +5,10 @@ import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { textfieldStyles } from './textfield.styles';
-import {
-  HelperText,
-  TextfieldInputMode,
-  TextfieldSize,
-  TextfieldType,
-  TextfieldVariant,
-  type TextfieldLabels
-} from './textfield.types';
+import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant, type TextfieldLabels } from './textfield.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { toValidityFlags } from '../shared/form-validity';
 import '@latty-ds/icons';
 import '../text/text';
@@ -30,7 +24,8 @@ const DEFAULT_LABELS: TextfieldLabels = {
 
 /**
  * A customizable text input component with support for multiple variants, sizes, and input types.
- * Supports both single-line inputs and multi-line textareas.
+ * Supports both single-line inputs and multi-line textareas, and automatically forwards native
+ * `<input>` / `<textarea>` HTML attributes onto the inner control.
  *
  * @element lt-textfield
  *
@@ -75,6 +70,16 @@ export class Textfield extends ThemeableElement {
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
   private _fieldsetDisabled = new FormDisabledController(this);
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input, textarea'), {
+    exclude: ['aria-label', 'aria-invalid', 'aria-describedby'],
+    aliases: { 'input-mode': 'inputmode' },
+    filter: (attr, target) => {
+      if (target.tagName === 'TEXTAREA') return attr !== 'pattern' && attr !== 'min' && attr !== 'max';
+      if (this.type === 'number') return attr !== 'minlength' && attr !== 'maxlength' && attr !== 'pattern';
+      return attr !== 'min' && attr !== 'max';
+    },
+    onSync: () => this._syncValidity()
+  });
   // Stable per-instance ids for `label for` and `aria-describedby` (TFD-4) — not the host's own `id` attribute,
   // which a consumer may set for their own purposes (or leave unset).
   private readonly _uid = `lt-textfield-${textfieldCount++}`;
@@ -114,22 +119,10 @@ export class Textfield extends ThemeableElement {
   @property() value = '';
 
   /**
-   * Placeholder text shown when input is empty.
-   * @default ''
-   */
-  @property({ reflect: true }) placeholder = '';
-
-  /**
    * Label text displayed above the input.
    * @default ''
    */
   @property({ reflect: true }) label = '';
-
-  /**
-   * Name used when submitting a form.
-   * @default ''
-   */
-  @property({ reflect: true }) name = '';
 
   /**
    * Helper text displayed below the input. Can be a static string or a function
@@ -150,20 +143,6 @@ export class Textfield extends ThemeableElement {
    * @default false
    */
   @property({ type: Boolean, reflect: true }) required = false;
-
-  /**
-   * Whether the input is readonly.
-   * @default false
-   */
-  @property({ type: Boolean, reflect: true }) readonly = false;
-
-  /**
-   * Focuses the inner input/textarea once, on first render. Shadows the native `HTMLElement.autofocus` — setting
-   * the content attribute alone wouldn't help, since the host itself has no `delegatesFocus` and autofocusing it
-   * would be a no-op; this forwards the focus call into the real control instead.
-   * @default false
-   */
-  @property({ type: Boolean, reflect: true }) autofocus = false;
 
   /**
    * Icon name to display at the start of the input.
@@ -189,37 +168,6 @@ export class Textfield extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) autosize = false;
 
   /**
-   * Native `min` — minimum allowed value. Only applies when `type="number"`, matching native `<input>`: `min`
-   * has no effect on any other input type this component supports (no `type="date"`/`"range"`/etc.). For a
-   * minimum character length on a text-like type, use `minLength` instead — that's a distinct native attribute,
-   * not a repurposing of this one.
-   * @default null
-   */
-  @property({ type: Number }) min: number | null = null;
-
-  /**
-   * Native `max` — maximum allowed value. Only applies when `type="number"`. See `min`; for a maximum character
-   * length on a text-like type, use `maxLength`.
-   * @default null
-   */
-  @property({ type: Number }) max: number | null = null;
-
-  /**
-   * Native `minlength` — minimum character length required for the value to be valid. No effect when
-   * `type="number"` (same as native `<input type="number" minlength>`, which HTML itself ignores) — use `min`
-   * there instead.
-   * @default null
-   */
-  @property({ type: Number, attribute: 'minlength' }) minLength: number | null = null;
-
-  /**
-   * Native `maxlength` — maximum character length allowed for the value. No effect when `type="number"` — use
-   * `max` there instead. See `minLength`.
-   * @default null
-   */
-  @property({ type: Number, attribute: 'maxlength' }) maxLength: number | null = null;
-
-  /**
    * Renders the label in small caps with wider letter spacing.
    * @default false
    */
@@ -228,37 +176,8 @@ export class Textfield extends ThemeableElement {
   /** Shows a clear button while the field has a value. Not shown for password fields, which have their own toggle. */
   @property({ type: Boolean, reflect: true }) clearable = false;
 
-  /** Shows the character count as `length / maxLength` below the field. Uses `maxLength` as the limit, which is also enforced natively. */
+  /** Shows the character count as `length / maxLength` below the field. Uses the native `maxlength` attribute as the limit, which is also enforced natively. */
   @property({ type: Boolean, reflect: true }) counter = false;
-
-  /**
-   * Native `autocomplete` hint (e.g. `'email'`, `'current-password'`, `'off'`), forwarded as-is to the inner
-   * `<input>`/`<textarea>`. Not validated or enumerated here — see the HTML spec for the full token list.
-   * @default ''
-   */
-  @property({ reflect: true }) autocomplete = '';
-
-  /**
-   * Hints the on-screen keyboard a touch device should show, forwarded as the native `inputmode` attribute on
-   * the inner `<input>`/`<textarea>`. The host's own attribute stays kebab-case (`input-mode`), not `inputmode`
-   * despite that being this property's native HTML spelling — changing it now would be a breaking rename for any
-   * existing consumer setting the attribute directly in markup, with no real upside (the generated React wrapper
-   * and the docs manifest generator both already know about the actual `input-mode` spelling via their respective
-   * `ATTRIBUTE_NAME_OVERRIDES` tables — see `scripts/codegen-wrappers.mjs` / `packages/web/scripts/build-
-   * manifest.mjs` — so nothing is silently desynced). A newly introduced property with no existing consumers
-   * (`minLength`/`maxLength`, above) uses the true native spelling instead, for exactly that reason: no rename to
-   * avoid. Typed `| ''`, not optional — `HTMLElement` already declares its own `inputMode: string` (a real DOM
-   * property every element has), so this has to stay assignable to that rather than `string | undefined`.
-   * @default ''
-   */
-  @property({ reflect: true, attribute: 'input-mode' }) inputMode: TextfieldInputMode | '' = '';
-
-  /**
-   * Native regex the value must match, forwarded as-is to the inner `<input>`. No effect on `type="multiline"`
-   * (textarea) or `type="number"` — `pattern` isn't a valid attribute on either in HTML.
-   * @default ''
-   */
-  @property({ reflect: true }) pattern = '';
 
   /**
    * Plain text shown before the input, inside the field's own border (e.g. a currency symbol). Deliberately a
@@ -298,10 +217,7 @@ export class Textfield extends ThemeableElement {
   };
 
   /**
-   * Handles input events from the native input or textarea element.
-   * Updates the component's value property and dispatches a custom input event.
-   *
-   * @param e - The native input event
+   * Validates the current value against format and constraint rules.
    * @private
    */
   private _validate(): boolean {
@@ -319,11 +235,15 @@ export class Textfield extends ThemeableElement {
     if (this.type === 'number') {
       const n = Number(v);
       if (isNaN(n)) return false;
-      if (this.min !== null && n < this.min) return false;
-      if (this.max !== null && n > this.max) return false;
+      const minAttr = this.getAttribute('min');
+      const maxAttr = this.getAttribute('max');
+      if (minAttr !== null && minAttr !== '' && n < Number(minAttr)) return false;
+      if (maxAttr !== null && maxAttr !== '' && n > Number(maxAttr)) return false;
     } else {
-      if (this.minLength !== null && v.length < this.minLength) return false;
-      if (this.maxLength !== null && v.length > this.maxLength) return false;
+      const minLenAttr = this.getAttribute('minlength');
+      const maxLenAttr = this.getAttribute('maxlength');
+      if (minLenAttr !== null && minLenAttr !== '' && v.length < Number(minLenAttr)) return false;
+      if (maxLenAttr !== null && maxLenAttr !== '' && v.length > Number(maxLenAttr)) return false;
     }
     return true;
   }
@@ -363,15 +283,10 @@ export class Textfield extends ThemeableElement {
     textarea.style.height = `${textarea.scrollHeight}px`;
   }
 
-  /**
-   * Handles change events from the native input or textarea element.
-   * Updates the component's value property and dispatches a custom change event.
-   *
-   * @param e - The native change event
-   * @private
-   */
   private get _showClear(): boolean {
-    return this.clearable && !!this.value && !this._isDisabled && !this.readonly && this.type !== 'password';
+    return (
+      this.clearable && !!this.value && !this._isDisabled && !this.hasAttribute('readonly') && this.type !== 'password'
+    );
   }
 
   private _clear() {
@@ -451,8 +366,27 @@ export class Textfield extends ThemeableElement {
 
   override firstUpdated(changed: PropertyValues) {
     super.firstUpdated(changed);
-    if (this.autofocus) {
+    if (this.autofocus || this.hasAttribute('autofocus')) {
       this.shadowRoot!.querySelector<HTMLInputElement | HTMLTextAreaElement>('input, textarea')?.focus();
+    }
+  }
+
+  private _syncValidity() {
+    const inner = (this.shadowRoot?.querySelector('input') ?? this.shadowRoot?.querySelector('textarea')) as
+      | HTMLInputElement
+      | HTMLTextAreaElement
+      | null;
+    if (!inner) return;
+    // The native `type`/`min`/`max`/`minlength`/`maxlength`/`required` attributes are forwarded onto
+    // the inner control (TFD-3), so its own `validity` already covers valueMissing, typeMismatch (email/url),
+    // rangeUnderflow/Overflow (number), and tooShort/tooLong for free — mirror that first. `_validate()`'s extra
+    // rules (such as the `tel` format, which HTML has no native constraint for) become `customError`.
+    if (!inner.validity.valid) {
+      this._internals.setValidity(toValidityFlags(inner.validity), inner.validationMessage, inner);
+    } else if (!this._validate()) {
+      this._internals.setValidity({ customError: true }, this._labels.validationMessage, inner);
+    } else {
+      this._internals.setValidity({});
     }
   }
 
@@ -476,17 +410,7 @@ export class Textfield extends ThemeableElement {
       if (this.autosize) this._resizeTextarea(inner as HTMLTextAreaElement);
       else inner.style.height = '';
     }
-    // The native `type`/`min`/`max`/`minlength`/`maxlength`/`required` attributes are already forwarded onto
-    // the inner control (TFD-3), so its own `validity` already covers valueMissing, typeMismatch (email/url),
-    // rangeUnderflow/Overflow (number), and tooShort/tooLong for free — mirror that first. `_validate()`'s extra
-    // rules (currently just the `tel` format, which HTML has no native constraint for) become `customError`.
-    if (!inner.validity.valid) {
-      this._internals.setValidity(toValidityFlags(inner.validity), inner.validationMessage, inner);
-    } else if (!this._validate()) {
-      this._internals.setValidity({ customError: true }, this._labels.validationMessage, inner);
-    } else {
-      this._internals.setValidity({});
-    }
+    this._syncValidity();
   }
 
   formResetCallback() {
@@ -525,10 +449,12 @@ export class Textfield extends ThemeableElement {
     const actualInputType = isPasswordField && this.isPasswordVisible ? 'text' : this.type;
     const isInvalid = this._autoError || this.variant === 'error';
     const resolvedHelperText = typeof this.helperText === 'function' ? this.helperText(isInvalid) : this.helperText;
+    const placeholder = this.getAttribute('placeholder') ?? '';
+    const maxLengthAttr = this.getAttribute('maxlength');
     // A real `<label for>` already gives the input its accessible name — an `aria-label` alongside it would
     // override that (aria-label always wins accessible-name computation) and hide the visible label text from
     // screen readers instead (TFD-4). Only fall back to `aria-label` when there's no visible label to associate.
-    const ariaLabel = this.label ? undefined : this.placeholder || undefined;
+    const ariaLabel = this.label ? undefined : this.getAttribute('aria-label') || placeholder || undefined;
 
     return html`
       <div class="wrapper">
@@ -548,16 +474,9 @@ export class Textfield extends ThemeableElement {
                 <textarea
                   id=${this._inputId}
                   .value=${this.value}
-                  name=${ifDefined(this.name || undefined)}
-                  placeholder=${this.placeholder}
                   rows=${this.rows}
-                  minlength=${ifDefined(this.minLength !== null ? this.minLength : undefined)}
-                  maxlength=${ifDefined(this.maxLength !== null ? this.maxLength : undefined)}
-                  autocomplete=${ifDefined(this.autocomplete || undefined)}
-                  inputmode=${ifDefined(this.inputMode || undefined)}
                   ?disabled=${this._isDisabled}
                   ?required=${this.required}
-                  ?readonly=${this.readonly}
                   @input=${this.handleInput}
                   @change=${this.handleChange}
                   @blur=${this._onBlur}
@@ -576,18 +495,8 @@ export class Textfield extends ThemeableElement {
                   id=${this._inputId}
                   type=${actualInputType}
                   .value=${this.value}
-                  name=${ifDefined(this.name || undefined)}
-                  placeholder=${this.placeholder}
-                  min=${ifDefined(isNumber && this.min !== null ? this.min : undefined)}
-                  max=${ifDefined(isNumber && this.max !== null ? this.max : undefined)}
-                  minlength=${ifDefined(!isNumber && this.minLength !== null ? this.minLength : undefined)}
-                  maxlength=${ifDefined(!isNumber && this.maxLength !== null ? this.maxLength : undefined)}
-                  autocomplete=${ifDefined(this.autocomplete || undefined)}
-                  inputmode=${ifDefined(this.inputMode || undefined)}
-                  pattern=${ifDefined(!isNumber && this.pattern ? this.pattern : undefined)}
                   ?disabled=${this._isDisabled}
                   ?required=${this.required}
-                  ?readonly=${this.readonly}
                   @input=${this.handleInput}
                   @change=${this.handleChange}
                   @blur=${this._onBlur}
@@ -633,10 +542,8 @@ export class Textfield extends ThemeableElement {
               >${resolvedHelperText}</lt-text
             >`
           : ''}
-        ${this.counter && !isNumber && this.maxLength !== null
-          ? html`<lt-text variant="caption" as="span" class="counter"
-              >${this.value.length} / ${this.maxLength}</lt-text
-            >`
+        ${this.counter && !isNumber && maxLengthAttr !== null && maxLengthAttr !== ''
+          ? html`<lt-text variant="caption" as="span" class="counter">${this.value.length} / ${maxLengthAttr}</lt-text>`
           : ''}
       </div>
     `;

@@ -8,6 +8,7 @@ import { RadioSize, RadioVariant, RadioLabelPosition, type RadioLabels } from '.
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 import { SlottedContentController } from '../shared/slotted-content';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { createFieldIds } from '../shared/form-field';
 
 import '../text/text';
@@ -94,6 +95,9 @@ export class Radio extends ThemeableElement {
   private _fieldsetDisabled = new FormDisabledController(this);
   private _slotted = new SlottedContentController(this);
   private readonly _fieldIds = createFieldIds();
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input'), {
+    exclude: ['aria-label', 'aria-describedby']
+  });
 
   constructor() {
     super();
@@ -286,7 +290,7 @@ export class Radio extends ThemeableElement {
             value=${this.value}
             tabindex=${this.tabbable ? '0' : '-1'}
             @change=${this.handleChange}
-            aria-label=${hasLabel ? nothing : 'radio'}
+            aria-label=${hasLabel ? nothing : this.getAttribute('aria-label') || 'radio'}
             aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           />
           <span class="dot"></span>

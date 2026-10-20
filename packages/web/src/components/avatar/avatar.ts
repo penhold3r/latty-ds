@@ -6,6 +6,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 import { avatarStyles } from './avatar.styles';
 import type { AvatarSize, AvatarShape, AvatarColor, AvatarStatus } from './avatar.types';
+import { NativeAttrsController } from '../shared/native-attrs';
 import '@latty-ds/icons';
 
 /**
@@ -22,6 +23,8 @@ import '@latty-ds/icons';
 @customElement('lt-avatar')
 export class Avatar extends ThemeableElement {
   static styles = avatarStyles;
+
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('img'));
 
   /** URL of the avatar image. */
   @property() src = '';

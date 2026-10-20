@@ -8,11 +8,14 @@ import type { DatepickerType, DatepickerSize, DatepickerVariant } from './datepi
 import { dispatch } from '../../utils';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { toValidityFlags } from '../shared/form-validity';
 import '../text/text';
 
 /**
  * Date and time picker wrapping the native browser date/time input with design-system styling.
+ * Automatically forwards native `<input>` attributes (`min`, `max`, `step`, `readonly`, `name`, `autocomplete`, etc.)
+ * onto the inner control.
  *
  * @element lt-datepicker
  *
@@ -37,6 +40,10 @@ export class Datepicker extends ThemeableElement {
   private _internals: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
   private _fieldsetDisabled = new FormDisabledController(this);
+  private _nativeAttrs = new NativeAttrsController(this, () => this.input, {
+    exclude: ['aria-describedby'],
+    onSync: () => this._syncValidity()
+  });
 
   constructor() {
     super();
@@ -50,12 +57,6 @@ export class Datepicker extends ThemeableElement {
    * Not reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of
    * `getAttribute('value')`/`[value]`. */
   @property() value = '';
-
-  /** Minimum allowed value. */
-  @property({ reflect: true }) min = '';
-
-  /** Maximum allowed value. */
-  @property({ reflect: true }) max = '';
 
   /** Field label displayed above the input. */
   @property({ reflect: true }) label = '';
@@ -77,25 +78,24 @@ export class Datepicker extends ThemeableElement {
   /** Whether the field is required. */
   @property({ type: Boolean, reflect: true }) required = false;
 
-  /** Whether the field is read-only. */
-  @property({ type: Boolean, reflect: true }) readonly = false;
-
-  /** Name used in form submission. */
-  @property({ reflect: true }) name = '';
-
   @query('input') private input!: HTMLInputElement;
 
-  protected updated(changed: PropertyValues) {
-    if (changed.has('value') || changed.has('required') || changed.has('min') || changed.has('max')) {
-      this._internals.setFormValue(this.value || null);
-      // `type`/`min`/`max`/`required` are already forwarded onto the inner input, so its own `validity` already
-      // covers valueMissing, rangeUnderflow and rangeOverflow (DTP-2) for free — mirror that directly.
-      if (!this.input.validity.valid) {
-        this._internals.setValidity(toValidityFlags(this.input.validity), this.input.validationMessage, this.input);
-      } else {
-        this._internals.setValidity({});
-      }
+  private _syncValidity() {
+    if (!this.input) return;
+    // `type`/`min`/`max`/`step`/`required` are forwarded onto the inner input, so its own `validity` already
+    // covers valueMissing, rangeUnderflow, rangeOverflow, and stepMismatch (DTP-2) for free — mirror that directly.
+    if (!this.input.validity.valid) {
+      this._internals.setValidity(toValidityFlags(this.input.validity), this.input.validationMessage, this.input);
+    } else {
+      this._internals.setValidity({});
     }
+  }
+
+  protected updated(changed: PropertyValues) {
+    if (changed.has('value') || changed.has('required')) {
+      this._internals.setFormValue(this.value || null);
+    }
+    this._syncValidity();
   }
 
   formResetCallback() {
@@ -139,12 +139,9 @@ export class Datepicker extends ThemeableElement {
       <input
         type=${this.type}
         .value=${this.value}
-        min=${this.min || nothing}
-        max=${this.max || nothing}
         ?disabled=${this._isDisabled}
         ?required=${this.required}
         aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
-        ?readonly=${this.readonly}
         @change=${this.handleChange}
         @input=${this.handleInput}
       />

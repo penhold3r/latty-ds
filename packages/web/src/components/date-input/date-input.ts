@@ -14,6 +14,7 @@ import { dispatch, createClickOutsideHandler, devWarn } from '../../utils';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
@@ -60,6 +61,9 @@ export class DateInput extends ThemeableElement {
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
   private _fieldsetDisabled = new FormDisabledController(this);
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('#field-btn'), {
+    exclude: ['aria-haspopup', 'aria-expanded', 'aria-describedby']
+  });
 
   constructor() {
     super();
@@ -109,9 +113,6 @@ export class DateInput extends ThemeableElement {
 
   /** Whether the field is required. */
   @property({ type: Boolean, reflect: true }) required = false;
-
-  /** Name used in form submission (through `ElementInternals`, so no hidden input is rendered). */
-  @property({ reflect: true }) name = '';
 
   /**
    * Dates to disable in the calendar: an array of Date objects, or a predicate for a rule impractical to

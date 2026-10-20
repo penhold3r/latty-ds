@@ -79,14 +79,14 @@ describe('target', () => {
   });
 
   it('forwards an explicit target', async () => {
-    el.target = '_parent';
+    el.setAttribute('target', '_parent');
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('a')!.getAttribute('target')).toBe('_parent');
   });
 
   it('an explicit target wins over external', async () => {
     el.external = true;
-    el.target = '_self';
+    el.setAttribute('target', '_self');
     await el.updateComplete;
     const a = el.shadowRoot!.querySelector('a')!;
     expect(a.getAttribute('target')).toBe('_self');
@@ -95,13 +95,13 @@ describe('target', () => {
   });
 
   it('does not default rel to noopener noreferrer for a non-_blank explicit target', async () => {
-    el.target = '_parent';
+    el.setAttribute('target', '_parent');
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('a')!.hasAttribute('rel')).toBe(false);
   });
 
   it('applies the safe rel default for an explicit target="_blank" too, not just external', async () => {
-    el.target = '_blank';
+    el.setAttribute('target', '_blank');
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('a')!.getAttribute('rel')).toBe('noopener noreferrer');
   });
@@ -122,20 +122,20 @@ describe('rel override', () => {
 
   it('overrides the computed rel', async () => {
     el.external = true;
-    el.rel = 'nofollow sponsor';
+    el.setAttribute('rel', 'nofollow sponsor');
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('a')!.getAttribute('rel')).toBe('nofollow sponsor');
   });
 
   it('an explicit empty-string rel suppresses the safe default entirely', async () => {
     el.external = true;
-    el.rel = '';
+    el.setAttribute('rel', '');
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('a')!.hasAttribute('rel')).toBe(false);
   });
 });
 
-describe('download', () => {
+describe('download and native anchor attributes', () => {
   let el: Link;
 
   beforeEach(async () => {
@@ -153,7 +153,7 @@ describe('download', () => {
   });
 
   it('sets a boolean-style download with an empty value', async () => {
-    el.download = '';
+    el.setAttribute('download', '');
     await el.updateComplete;
     const a = el.shadowRoot!.querySelector('a')!;
     expect(a.hasAttribute('download')).toBe(true);
@@ -161,9 +161,20 @@ describe('download', () => {
   });
 
   it('sets a suggested filename', async () => {
-    el.download = 'report.pdf';
+    el.setAttribute('download', 'report.pdf');
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('a')!.getAttribute('download')).toBe('report.pdf');
+  });
+
+  it('forwards arbitrary native anchor attributes (hreflang, referrerpolicy, ping)', async () => {
+    el.setAttribute('hreflang', 'es');
+    el.setAttribute('referrerpolicy', 'origin');
+    el.setAttribute('ping', 'https://example.com/track');
+    await el.updateComplete;
+    const a = el.shadowRoot!.querySelector('a')!;
+    expect(a.getAttribute('hreflang')).toBe('es');
+    expect(a.getAttribute('referrerpolicy')).toBe('origin');
+    expect(a.getAttribute('ping')).toBe('https://example.com/track');
   });
 });
 

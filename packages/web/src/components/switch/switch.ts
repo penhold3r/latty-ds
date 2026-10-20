@@ -8,6 +8,7 @@ import { SwitchSize, SwitchVariant, SwitchLabelPosition, type SwitchLabels } fro
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
 import { SlottedContentController } from '../shared/slotted-content';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { createFieldIds } from '../shared/form-field';
 
 import '../text/text';
@@ -59,6 +60,9 @@ export class Switch extends ThemeableElement {
   private _fieldsetDisabled = new FormDisabledController(this);
   private _slotted = new SlottedContentController(this);
   private readonly _fieldIds = createFieldIds();
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input'), {
+    exclude: ['aria-label', 'aria-checked', 'aria-describedby']
+  });
 
   constructor() {
     super();
@@ -109,12 +113,6 @@ export class Switch extends ThemeableElement {
    * @default 'right'
    */
   @property({ attribute: 'label-position', reflect: true }) labelPosition: SwitchLabelPosition = 'right';
-
-  /**
-   * Name attribute for form submission.
-   * @default ''
-   */
-  @property({ reflect: true }) name = '';
 
   /**
    * Value attribute for form submission.
@@ -199,10 +197,9 @@ export class Switch extends ThemeableElement {
             .checked=${this.checked}
             ?disabled=${this._isDisabled}
             ?required=${this.required}
-            name=${this.name}
             value=${this.value}
             @change=${this.handleChange}
-            aria-label=${hasLabel ? nothing : 'switch'}
+            aria-label=${hasLabel ? nothing : this.getAttribute('aria-label') || 'switch'}
             role="switch"
             aria-checked=${this.checked ? 'true' : 'false'}
             aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}

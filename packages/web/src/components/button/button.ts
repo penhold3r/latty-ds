@@ -7,14 +7,25 @@ import { dispatch } from '../../utils';
 
 import { buttonStyles } from './button.styles';
 import { ButtonAppearance, ButtonSize, ButtonType, ButtonVariant } from './button.types';
-import { AriaForwardingController } from '../shared/aria-forwarding';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { FormDisabledController } from '../shared/form-disabled';
 
 import '../spinner/';
 import '@latty-ds/icons';
 
+const SUBMITTER_ATTRS = [
+  'name',
+  'value',
+  'formaction',
+  'formenctype',
+  'formmethod',
+  'formnovalidate',
+  'formtarget'
+] as const;
+
 /**
  * Button component with multiple variants, sizes, appearances, and loading state support.
+ * Automatically forwards native `<button>` / `<a>` and `aria-*` attributes onto the inner control.
  *
  * @element lt-button
  *
@@ -26,8 +37,7 @@ import '@latty-ds/icons';
  * - Icon support at start and end positions
  * - Disabled state
  * - Accessible with aria-busy for loading state
- * - Forwards host `aria-pressed`, `aria-expanded`, `aria-haspopup`, `aria-controls`, and
- *   `aria-current` onto the internal native control (e.g. for toggle buttons)
+ * - Automatically forwards native `<button>` / `<a>` and `aria-*` attributes onto the internal control
  * - `toggle` mode: clicking flips `pressed`, dispatches `toggle`, and reflects `aria-pressed`
  * - Renders as `<a>` when `href` is provided (link button)
  * - Form-associated: `type="submit"` submits the containing form, `type="reset"` resets it
@@ -64,7 +74,9 @@ export class Button extends ThemeableElement {
 
   private _internals: ElementInternals;
 
-  private _ariaForwarding = new AriaForwardingController(this, () => this.shadowRoot?.querySelector('[part="base"]'));
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('[part="base"]'), {
+    exclude: ['target', 'rel', 'aria-disabled', 'aria-busy', 'aria-label']
+  });
   private _fieldsetDisabled = new FormDisabledController(this);
   // Tracks whether willUpdate() below is the one that set the host's aria-pressed, so it only ever cleans up its
   // own writes — a consumer managing aria-pressed directly (without `toggle`) must be left alone.
@@ -105,7 +117,7 @@ export class Button extends ThemeableElement {
     super.willUpdate(changed);
     // aria-pressed needs the literal ARIA strings 'true'/'false', not Lit's presence-based boolean reflection, so
     // it's written here as a host attribute instead of a `reflect: true` property — the existing
-    // AriaForwardingController (already wired up below) then mirrors it onto the inner control for free, the same
+    // NativeAttrsController (already wired up above) then mirrors it onto the inner control for free, the same
     // path a consumer's own `aria-pressed` would take. Set in willUpdate(), not updated(): a ReactiveController's
     // hostUpdated() runs *before* the element's own updated() (confirmed in Lit's source), so by the time
     // updated() could set this, the controller would already have copied this cycle's (stale) host value onto the
@@ -215,43 +227,11 @@ export class Button extends ThemeableElement {
   @property() href = '';
 
   /**
-   * Forwarded to the anchor's `target` attribute when `href` is set.
-   */
-  @property() target = '';
-
-  /**
-   * Forwarded to the anchor's `rel` attribute when `href` is set.
-   * Defaults to `noopener noreferrer` when `target="_blank"` and `rel` is not specified.
-   */
-  @property() rel = '';
-
-  /**
    * Form behaviour when the button is inside a `<form>`.
    * `submit` triggers form validation and submission; `reset` restores initial values.
    * @default 'button'
    */
   @property({ reflect: true }) type: ButtonType = 'button';
-
-  /**
-   * Name submitted alongside `value` when this button triggers a form submission (`type="submit"`), matching a
-   * native `<button name value>` — only included in the submitted data for the button that actually triggered
-   * the submission, not every submit button in the form.
-   * @default ''
-   */
-  @property({ reflect: true }) name = '';
-
-  /**
-   * Value submitted alongside `name`. See `name`.
-   * @default ''
-   */
-  @property({ reflect: true }) value = '';
-
-  /**
-   * Overrides the form's own `action` for a submission triggered by this button, matching a native
-   * `<button formaction>`. Only applies when `type="submit"`.
-   * @default ''
-   */
-  @property({ attribute: 'formaction' }) formAction = '';
 
   // Delegates the actual submission to a hidden native <button>, kept in sync and attached to the resolved form
   // only for the duration of the submission (BTN-3). Two platform constraints make this necessary rather than
@@ -292,12 +272,11 @@ export class Button extends ThemeableElement {
     if (this.type !== 'submit') return;
 
     const proxy = this._getProxySubmitBtn();
-    if (this.name) proxy.name = this.name;
-    else proxy.removeAttribute('name');
-    if (this.value) proxy.value = this.value;
-    else proxy.removeAttribute('value');
-    if (this.formAction) proxy.formAction = this.formAction;
-    else proxy.removeAttribute('formaction');
+    for (const attr of SUBMITTER_ATTRS) {
+      const val = this.getAttribute(attr);
+      if (val !== null) proxy.setAttribute(attr, val);
+      else proxy.removeAttribute(attr);
+    }
     form.appendChild(proxy);
     form.requestSubmit(proxy);
     proxy.remove();
@@ -305,6 +284,8 @@ export class Button extends ThemeableElement {
 
   render() {
     const isDisabled = this.disabled || this.loading || this._fieldsetDisabled.fieldsetDisabled;
+    const ariaLabel =
+      this.loading && this.loadingLabel ? this.loadingLabel : this.getAttribute('aria-label') || nothing;
     // The label stays in the DOM (and in the accessibility tree) while loading, just visually hidden with
     // opacity — not removed — so the button keeps its accessible name instead of reading as an unnamed busy
     // control, and keeps its width instead of shrinking to fit only the spinner.
@@ -318,15 +299,16 @@ export class Button extends ThemeableElement {
     `;
 
     if (this.href) {
-      const rel = this.rel || (this.target === '_blank' ? 'noopener noreferrer' : undefined);
+      const target = this.getAttribute('target') || undefined;
+      const rel = this.getAttribute('rel') || (target === '_blank' ? 'noopener noreferrer' : undefined);
       return html`
         <a
           part="base"
           href=${this.href}
-          target=${ifDefined(this.target || undefined)}
+          target=${ifDefined(target)}
           rel=${ifDefined(rel)}
           aria-disabled=${isDisabled ? 'true' : nothing}
-          aria-label=${this.loading && this.loadingLabel ? this.loadingLabel : nothing}
+          aria-label=${ariaLabel}
           tabindex=${isDisabled ? '-1' : nothing}
           >${inner}</a
         >
@@ -340,7 +322,7 @@ export class Button extends ThemeableElement {
         @click=${this._handleClick}
         ?disabled=${isDisabled}
         aria-busy=${this.loading ? 'true' : 'false'}
-        aria-label=${this.loading && this.loadingLabel ? this.loadingLabel : nothing}
+        aria-label=${ariaLabel}
       >
         ${inner}
       </button>

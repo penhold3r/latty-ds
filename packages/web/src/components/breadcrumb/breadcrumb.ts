@@ -1,9 +1,10 @@
-import { html, type PropertyValues } from 'lit';
+import { html, nothing, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { breadcrumbStyles, breadcrumbItemStyles } from './breadcrumb.styles';
 import type { BreadcrumbLabels } from './breadcrumb.types';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 const DEFAULT_LABELS: BreadcrumbLabels = {
   navigation: 'breadcrumb'
@@ -75,6 +76,10 @@ export class Breadcrumb extends ThemeableElement {
 export class BreadcrumbItem extends ThemeableElement {
   static styles = breadcrumbItemStyles;
 
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('a'), {
+    exclude: ['target', 'rel']
+  });
+
   /**
    * URL this item links to. Omit for the current (last) item.
    * @default ''
@@ -101,12 +106,14 @@ export class BreadcrumbItem extends ThemeableElement {
   render() {
     // Only apply local override if separator is explicitly provided and not nullish/empty
     const hasSeparatorOverride = this.separator !== null && this.separator !== undefined && this.separator !== '';
+    const target = this.getAttribute('target') || '';
+    const rel = this.getAttribute('rel') || (target === '_blank' ? 'noopener noreferrer' : '');
 
     return html`
       <div part="item">
         ${this.current || !this.href
           ? html`<span part="text" aria-current=${this.current ? 'page' : 'false'}><slot></slot></span>`
-          : html`<a part="link" href=${this.href}><slot></slot></a>`}
+          : html`<a part="link" href=${this.href} target=${target || nothing} rel=${rel || nothing}><slot></slot></a>`}
         <span
           part="separator"
           aria-hidden="true"

@@ -85,20 +85,20 @@ describe('<lt-list-item>', () => {
     });
 
     it('forwards target to the anchor', async () => {
-      el.target = '_blank';
+      el.setAttribute('target', '_blank');
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('a')!.getAttribute('target')).toBe('_blank');
     });
 
     it('auto-sets rel=noopener noreferrer when target=_blank', async () => {
-      el.target = '_blank';
+      el.setAttribute('target', '_blank');
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('a')!.getAttribute('rel')).toBe('noopener noreferrer');
     });
 
     it('uses explicit rel when provided', async () => {
-      el.target = '_blank';
-      el.rel = 'noopener';
+      el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener');
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('a')!.getAttribute('rel')).toBe('noopener');
     });

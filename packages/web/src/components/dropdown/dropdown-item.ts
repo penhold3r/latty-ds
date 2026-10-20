@@ -1,9 +1,10 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { dropdownItemStyles } from './dropdown-item.styles';
 import { dispatch } from '../../utils';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 /**
  * A menu item for use inside lt-dropdown.
@@ -17,6 +18,10 @@ export class DropdownItem extends ThemeableElement {
   static styles = dropdownItemStyles;
   static shadowRootOptions = { ...ThemeableElement.shadowRootOptions, delegatesFocus: true };
 
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('.item'), {
+    exclude: ['aria-disabled', 'target', 'rel']
+  });
+
   @property({ type: Boolean, reflect: true }) disabled = false;
   @property({ type: Boolean, reflect: true }) selected = false;
   @property() href = '';
@@ -28,10 +33,14 @@ export class DropdownItem extends ThemeableElement {
 
   render() {
     if (this.href) {
+      const target = this.getAttribute('target') || '';
+      const rel = this.getAttribute('rel') || (target === '_blank' ? 'noopener noreferrer' : '');
       return html`
         <a
           class="item"
           href=${this.href}
+          target=${target || nothing}
+          rel=${rel || nothing}
           role="menuitem"
           tabindex=${this.disabled ? '-1' : '0'}
           aria-disabled=${this.disabled}

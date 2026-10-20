@@ -1,14 +1,16 @@
-import { html, nothing, type PropertyValues } from 'lit';
+import { html, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 
 import { imageStyles } from './image.styles';
-import type { ImageLoading } from './image.types';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 /**
  * A thin wrapper around `<img>` with rounded corners, responsive fill support,
- * native lazy loading, and an error fallback mechanism.
+ * native lazy loading, and an error fallback mechanism. Automatically forwards
+ * native `<img>` attributes (`alt`, `srcset`, `sizes`, `loading`, `decoding`,
+ * `fetchpriority`, `crossorigin`, `referrerpolicy`, `width`, `height`, etc.)
+ * onto the inner `<img>` element.
  *
  * The inner `<img>`'s `load`/`error` events don't leave the shadow root, so they
  * are re-dispatched on the host under the same native names, with the `src` in
@@ -46,25 +48,10 @@ import type { ImageLoading } from './image.types';
 export class Image extends ThemeableElement {
   static styles = imageStyles;
 
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('img'));
+
   /** Image source URL. */
   @property() src = '';
-
-  /** Alt text for the image. */
-  @property() alt = '';
-
-  /**
-   * Forwarded to the underlying `<img srcset>` — a comma-separated list of candidate image URLs, each with a
-   * width (`800w`) or pixel-density (`2x`) descriptor, for the browser to pick the best fit. Pair with `sizes`
-   * when using width descriptors.
-   */
-  @property() srcset = '';
-
-  /**
-   * Forwarded to the underlying `<img sizes>` — a comma-separated list of media-condition/width pairs (e.g.
-   * `"(min-width: 768px) 50vw, 100vw"`) telling the browser how wide the image will render at each breakpoint.
-   * Only meaningful alongside a width-descriptor `srcset`.
-   */
-  @property() sizes = '';
 
   /**
    * Reserves the image's box before it loads, preventing layout shift. Any valid CSS `aspect-ratio` value (e.g.
@@ -84,12 +71,6 @@ export class Image extends ThemeableElement {
    * Size the `lt-image` element externally to define the crop box.
    */
   @property({ type: Boolean, reflect: true }) responsive = false;
-
-  /**
-   * Forwarded to the underlying `<img loading>` attribute.
-   * `lazy` defers loading until the image approaches the viewport.
-   */
-  @property({ reflect: true }) loading: ImageLoading | '' = '';
 
   /** Whether the current `src` failed to load — shows the `fallback` slot. */
   @state() private _errored = false;
@@ -133,10 +114,7 @@ export class Image extends ThemeableElement {
       <img
         part="image"
         src=${this.src}
-        alt=${this.alt}
-        srcset=${this.srcset || nothing}
-        sizes=${this.sizes || nothing}
-        loading=${ifDefined(this.loading || undefined)}
+        alt=${this.getAttribute('alt') ?? ''}
         style=${this._imgStyle}
         @load=${this._handleLoad}
         @error=${this._handleError}

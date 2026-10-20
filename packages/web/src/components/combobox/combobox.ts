@@ -13,6 +13,7 @@ import '../spinner/';
 import { openFloating, closeFloating } from '../shared/floating';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { groupConsecutive } from '../shared/option-groups';
 import { nextListboxIndex } from '../shared/listbox-nav';
 
@@ -72,6 +73,19 @@ export class Combobox extends ThemeableElement {
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
   private _fieldsetDisabled = new FormDisabledController(this);
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('#combobox-input'), {
+    exclude: [
+      'aria-expanded',
+      'aria-autocomplete',
+      'aria-describedby',
+      'aria-required',
+      'aria-invalid',
+      'aria-controls',
+      'aria-activedescendant',
+      'autocomplete',
+      'open'
+    ]
+  });
 
   // Scopes generated option/listbox ids to this instance, so two comboboxes on the same page don't collide.
   private readonly _uid = `lt-combobox-${comboboxCount++}`;
@@ -142,9 +156,6 @@ export class Combobox extends ThemeableElement {
 
   /** Whether the field is required. */
   @property({ type: Boolean, reflect: true }) required = false;
-
-  /** Name used in form submission. */
-  @property({ reflect: true }) name = '';
 
   /** Overridable UI text (validation message, "no results" text), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<ComboboxLabels> = {};
@@ -396,7 +407,8 @@ export class Combobox extends ThemeableElement {
   updated(changedProperties: Map<string, unknown>) {
     if (this.multiple) {
       const formData = new FormData();
-      if (this.name) for (const v of this._selected) formData.append(this.name, v);
+      const name = this.getAttribute('name');
+      if (name) for (const v of this._selected) formData.append(name, v);
       this._internals.setFormValue(formData);
     } else {
       this._internals.setFormValue((this.value as string) || null);

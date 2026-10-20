@@ -4,6 +4,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 
 import { navItemStyles } from './nav.styles';
 import { NavOrientation } from './nav.types';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 import '@latty-ds/icons';
 
@@ -46,6 +47,10 @@ import '@latty-ds/icons';
 @customElement('lt-nav-item')
 export class NavItem extends ThemeableElement {
   static styles = navItemStyles;
+
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('.item-trigger'), {
+    exclude: ['aria-current', 'aria-disabled', 'aria-expanded', 'aria-controls', 'target', 'rel']
+  });
 
   /** Destination URL. If omitted, the item acts as a group header. */
   @property() href = '';
@@ -161,9 +166,13 @@ export class NavItem extends ThemeableElement {
     const ariaCurrent = this.active ? 'page' : nothing;
 
     if (this.href && !this._hasChildren) {
+      const target = this.getAttribute('target') || '';
+      const rel = this.getAttribute('rel') || (target === '_blank' ? 'noopener noreferrer' : '');
       return html`<a
         class="item-trigger"
         href=${this.href}
+        target=${target || nothing}
+        rel=${rel || nothing}
         aria-current=${ariaCurrent}
         aria-disabled=${this.disabled ? 'true' : nothing}
         tabindex=${this.disabled ? '-1' : nothing}

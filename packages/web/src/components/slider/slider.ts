@@ -6,6 +6,7 @@ import { sliderStyles } from './slider.styles';
 import type { SliderSize } from './slider.types';
 import { FormDefaultController } from '../shared/form-default';
 import { FormDisabledController } from '../shared/form-disabled';
+import { NativeAttrsController } from '../shared/native-attrs';
 import '../tooltip/tooltip';
 import '../text/text';
 
@@ -24,6 +25,9 @@ export class Slider extends ThemeableElement {
   private _internals!: ElementInternals;
   private _default = new FormDefaultController(this, () => this.value);
   private _fieldsetDisabled = new FormDisabledController(this);
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input'), {
+    exclude: ['aria-label', 'aria-valuemin', 'aria-valuemax', 'aria-valuenow']
+  });
 
   constructor() {
     super();
@@ -44,8 +48,6 @@ export class Slider extends ThemeableElement {
 
   /** Label displayed above the track */
   @property({ reflect: true }) label = '';
-  /** Name attribute for form submission */
-  @property({ reflect: true }) name = '';
 
   // A unitless 0–1 ratio, not a percentage — CSS derives both the track's fill percentage and the tooltip's
   // thumb-following offset from it via calc() (SLD-1), so there's only one number to keep in sync.
@@ -137,8 +139,7 @@ export class Slider extends ThemeableElement {
         step=${this.step}
         .value=${String(this.value)}
         ?disabled=${this._isDisabled}
-        name=${this.name}
-        aria-label=${this.label || 'slider'}
+        aria-label=${this.label || this.getAttribute('aria-label') || 'slider'}
         aria-valuemin=${this.min}
         aria-valuemax=${this.max}
         aria-valuenow=${this.value}
