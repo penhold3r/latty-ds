@@ -1,7 +1,8 @@
 import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Alert as AlertEl, LattyIconName } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type AlertProps = HTMLAttributes<AlertEl> & {
+export type AlertProps = Omit<HTMLAttributes<AlertEl>, 'title' | 'open'> & {
   variant?: AlertEl['variant'];
   appearance?: AlertEl['appearance'];
   heading?: string;
@@ -40,7 +41,7 @@ export const Alert = forwardRef<AlertEl, AlertProps>(function Alert(
     <lt-alert
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       closable={closable || undefined}
       open={open || undefined}
       uppercase={uppercase || undefined}

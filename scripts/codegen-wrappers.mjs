@@ -71,6 +71,68 @@ const NATIVE_TO_REACT_HANDLER = {
   select: 'onSelect'
 };
 
+// Maps each Latty component to its underlying native HTML attribute interface(s) from 'react'.
+// Components not listed here default to ['HTMLAttributes'].
+const NATIVE_ATTR_MAP = {
+  Accordion: ['DetailsHTMLAttributes'],
+  Avatar: ['ImgHTMLAttributes'],
+  BreadcrumbItem: ['AnchorHTMLAttributes'],
+  Button: ['ButtonHTMLAttributes', 'AnchorHTMLAttributes'],
+  Checkbox: ['InputHTMLAttributes'],
+  ColorInput: ['InputHTMLAttributes'],
+  Combobox: ['InputHTMLAttributes'],
+  DateInput: ['InputHTMLAttributes'],
+  Datepicker: ['InputHTMLAttributes'],
+  Dialog: ['DialogHTMLAttributes'],
+  DropdownItem: ['ButtonHTMLAttributes', 'AnchorHTMLAttributes'],
+  IconButton: ['ButtonHTMLAttributes', 'AnchorHTMLAttributes'],
+  Image: ['ImgHTMLAttributes'],
+  Link: ['AnchorHTMLAttributes'],
+  ListItem: ['ButtonHTMLAttributes', 'AnchorHTMLAttributes'],
+  NavItem: ['ButtonHTMLAttributes', 'AnchorHTMLAttributes'],
+  Progress: ['ProgressHTMLAttributes'],
+  Radio: ['InputHTMLAttributes'],
+  Select: ['SelectHTMLAttributes'],
+  SidePanel: ['DialogHTMLAttributes'],
+  Slider: ['InputHTMLAttributes'],
+  Switch: ['InputHTMLAttributes'],
+  Tab: ['ButtonHTMLAttributes'],
+  Table: ['TableHTMLAttributes'],
+  Textfield: ['InputHTMLAttributes', 'TextareaHTMLAttributes']
+};
+
+// Custom field names that also exist on React's *HTMLAttributes interfaces with potentially narrower/wider types
+// (e.g. `size: number` on InputHTMLAttributes vs `'sm' | 'md' | 'lg'`). Omitted from the base native attribute
+// type whenever the component declares its own custom field of the same name.
+const NATIVE_OVERLAP_FIELDS = new Set([
+  'alt',
+  'checked',
+  'color',
+  'content',
+  'disabled',
+  'height',
+  'href',
+  'label',
+  'loading',
+  'max',
+  'min',
+  'multiple',
+  'name',
+  'open',
+  'placeholder',
+  'prefix',
+  'required',
+  'rows',
+  'selected',
+  'size',
+  'src',
+  'step',
+  'title',
+  'type',
+  'value',
+  'width'
+]);
+
 // ── Read CEM ──────────────────────────────────────────────────────────────────
 const cem = JSON.parse(readFileSync(CEM_PATH, 'utf8'));
 
@@ -230,16 +292,19 @@ ${complexFields.map((f) => `      if (${f.name} !== undefined) el.${f.name} = ${
 
   const hooks = `\n    useImperativeHandle(forwardedRef, () => innerRef.current!);\n${effectBlocks}${complexFieldEffect}\n`;
 
-  const reactImports = ['useRef', 'useImperativeHandle', 'forwardRef', 'type HTMLAttributes'];
+  const attrInterfaces = NATIVE_ATTR_MAP[name] ?? ['HTMLAttributes'];
+  const reactImports = ['useRef', 'useImperativeHandle', 'forwardRef', ...attrInterfaces.map((i) => `type ${i}`)];
   if (events.length > 0) reactImports.splice(1, 0, 'useEffect');
   if (complexFields.length > 0) reactImports.splice(1, 0, 'useLayoutEffect');
 
-  // Determine which React HTMLAttributes keys to Omit due to type conflicts with custom events.
-  const omitKeys = events
+  // Determine which React *HTMLAttributes keys to Omit due to type conflicts with custom events or custom fields.
+  const eventOmitKeys = events
     .filter((e) => NATIVE_TO_REACT_HANDLER[e.strippedName])
     .map((e) => `'${NATIVE_TO_REACT_HANDLER[e.strippedName]}'`);
-  const baseType =
-    omitKeys.length > 0 ? `Omit<HTMLAttributes<${name}El>, ${omitKeys.join(' | ')}>` : `HTMLAttributes<${name}El>`;
+  const fieldOmitKeys = fields.filter((f) => NATIVE_OVERLAP_FIELDS.has(f.name)).map((f) => `'${f.name}'`);
+  const omitKeys = [...new Set([...eventOmitKeys, ...fieldOmitKeys])];
+  const rawBaseType = attrInterfaces.map((i) => `${i}<${name}El>`).join(' & ');
+  const baseType = omitKeys.length > 0 ? `Omit<${rawBaseType}, ${omitKeys.join(' | ')}>` : rawBaseType;
 
   // Each remapped field becomes its own JSX attribute under its real HTML name. Booleans are coerced so `false`
   // omits the attribute entirely (React still omits `undefined`-valued attributes on any element, custom or not)
@@ -259,6 +324,7 @@ ${complexFields.map((f) => `      if (${f.name} !== undefined) el.${f.name} = ${
   const webImports = [`${name} as ${name}El`, ...(hasIconFields ? ['LattyIconName'] : [])].join(', ');
   const componentContent = `import { ${reactImports.join(', ')} } from 'react';
 import type { ${webImports} } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
 export type ${name}Props = ${baseType} & {
 ${[...fieldProps, ...eventProps].join('\n')}
@@ -272,7 +338,7 @@ ${hooks}
       <${tagName}
         ref={innerRef}
         suppressHydrationWarning
-        {...(props as Record<string, unknown>)}
+        {...normalizeNativeProps(props as Record<string, unknown>)}
 ${remapAttrsJsx}
       >
         {children}

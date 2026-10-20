@@ -1,33 +1,34 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import {
+  useRef,
+  useLayoutEffect,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+  type InputHTMLAttributes,
+  type TextareaHTMLAttributes
+} from 'react';
 import type { Textfield as TextfieldEl, LattyIconName } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type TextfieldProps = Omit<HTMLAttributes<TextfieldEl>, 'onInput' | 'onChange'> & {
+export type TextfieldProps = Omit<
+  InputHTMLAttributes<TextfieldEl> & TextareaHTMLAttributes<TextfieldEl>,
+  'onInput' | 'onChange' | 'size' | 'type' | 'value' | 'label' | 'disabled' | 'required' | 'rows' | 'prefix'
+> & {
   formAssociated?: boolean;
   variant?: TextfieldEl['variant'];
   size?: TextfieldEl['size'];
   type?: TextfieldEl['type'];
   value?: string;
-  placeholder?: string;
   label?: string;
-  name?: string;
   helperText?: TextfieldEl['helperText'];
   disabled?: boolean;
   required?: boolean;
-  readonly?: boolean;
-  autofocus?: boolean;
   iconStart?: LattyIconName;
   rows?: number;
   autosize?: boolean;
-  min?: TextfieldEl['min'];
-  max?: TextfieldEl['max'];
-  minLength?: TextfieldEl['minLength'];
-  maxLength?: TextfieldEl['maxLength'];
   uppercase?: boolean;
   clearable?: boolean;
   counter?: boolean;
-  autocomplete?: string;
-  inputMode?: TextfieldEl['inputMode'];
-  pattern?: string;
   prefix?: string;
   suffix?: string;
   labels?: TextfieldEl['labels'];
@@ -44,16 +45,11 @@ export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfi
     formAssociated,
     disabled,
     required,
-    readonly,
-    autofocus,
     iconStart,
     autosize,
-    minLength,
-    maxLength,
     uppercase,
     clearable,
     counter,
-    inputMode,
     children,
     ...props
   },
@@ -88,20 +84,15 @@ export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfi
     <lt-textfield
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       disabled={disabled || undefined}
       required={required || undefined}
-      readonly={readonly || undefined}
-      autofocus={autofocus || undefined}
       icon-start={iconStart}
       autosize={autosize || undefined}
-      minlength={minLength}
-      maxlength={maxLength}
       uppercase={uppercase || undefined}
       clearable={clearable || undefined}
       counter={counter || undefined}
-      input-mode={inputMode}
     >
       {children}
     </lt-textfield>

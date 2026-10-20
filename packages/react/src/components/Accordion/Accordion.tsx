@@ -1,7 +1,8 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type DetailsHTMLAttributes } from 'react';
 import type { Accordion as AccordionEl, LattyIconName } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type AccordionProps = Omit<HTMLAttributes<AccordionEl>, 'onToggle'> & {
+export type AccordionProps = Omit<DetailsHTMLAttributes<AccordionEl>, 'onToggle' | 'label' | 'open' | 'disabled'> & {
   label?: string;
   iconStart?: LattyIconName;
   appearance?: AccordionEl['appearance'];
@@ -31,7 +32,7 @@ export const Accordion = forwardRef<AccordionEl, AccordionProps>(function Accord
     <lt-accordion
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       icon-start={iconStart}
       open={open || undefined}
       disabled={disabled || undefined}

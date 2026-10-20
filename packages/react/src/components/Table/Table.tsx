@@ -1,7 +1,8 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type TableHTMLAttributes } from 'react';
 import type { Table as TableEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type TableProps = HTMLAttributes<TableEl> & {
+export type TableProps = Omit<TableHTMLAttributes<TableEl>, 'loading' | 'label' | 'height' | 'selected'> & {
   columns?: TableEl['columns'];
   data?: TableEl['data'];
   density?: TableEl['density'];
@@ -106,7 +107,7 @@ export const Table = forwardRef<TableEl, TableProps>(function Table(
     <lt-table
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       responsive-mode={responsiveMode}
       hoverable={hoverable || undefined}
       striped={striped || undefined}

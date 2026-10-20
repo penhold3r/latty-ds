@@ -1,7 +1,8 @@
 import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Pagination as PaginationEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type PaginationProps = Omit<HTMLAttributes<PaginationEl>, 'onChange'> & {
+export type PaginationProps = Omit<HTMLAttributes<PaginationEl>, 'onChange' | 'size' | 'disabled'> & {
   page?: number;
   totalPages?: number;
   size?: PaginationEl['size'];
@@ -35,7 +36,7 @@ export const Pagination = forwardRef<PaginationEl, PaginationProps>(function Pag
     <lt-pagination
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       total-pages={totalPages}
       disabled={disabled || undefined}
     >

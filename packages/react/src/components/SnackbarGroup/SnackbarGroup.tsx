@@ -1,5 +1,6 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { SnackbarGroup as SnackbarGroupEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
 export type SnackbarGroupProps = HTMLAttributes<SnackbarGroupEl> & {
   maxVisible?: number;
@@ -17,7 +18,7 @@ export const SnackbarGroup = forwardRef<SnackbarGroupEl, SnackbarGroupProps>(fun
     <lt-snackbar-group
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       max-visible={maxVisible}
     >
       {children}

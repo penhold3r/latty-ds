@@ -1,7 +1,11 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type InputHTMLAttributes } from 'react';
 import type { Radio as RadioEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
+export type RadioProps = Omit<
+  InputHTMLAttributes<RadioEl>,
+  'onChange' | 'size' | 'checked' | 'disabled' | 'required' | 'label' | 'name' | 'value'
+> & {
   formAssociated?: boolean;
   variant?: RadioEl['variant'];
   size?: RadioEl['size'];
@@ -56,7 +60,7 @@ export const Radio = forwardRef<RadioEl, RadioProps>(function Radio(
     <lt-radio
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       checked={checked || undefined}
       disabled={disabled || undefined}

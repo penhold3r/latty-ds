@@ -1,7 +1,11 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type InputHTMLAttributes } from 'react';
 import type { ColorInput as ColorInputEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type ColorInputProps = Omit<HTMLAttributes<ColorInputEl>, 'onChange'> & {
+export type ColorInputProps = Omit<
+  InputHTMLAttributes<ColorInputEl>,
+  'onChange' | 'value' | 'label' | 'placeholder' | 'disabled' | 'required' | 'size'
+> & {
   formAssociated?: boolean;
   value?: string;
   format?: ColorInputEl['format'];
@@ -9,7 +13,6 @@ export type ColorInputProps = Omit<HTMLAttributes<ColorInputEl>, 'onChange'> & {
   placeholder?: string;
   disabled?: boolean;
   required?: boolean;
-  name?: string;
   size?: ColorInputEl['size'];
   labels?: ColorInputEl['labels'];
   onChange?: (event: CustomEvent<{ value: string }>) => void;
@@ -40,7 +43,7 @@ export const ColorInput = forwardRef<ColorInputEl, ColorInputProps>(function Col
     <lt-color-input
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       disabled={disabled || undefined}
       required={required || undefined}

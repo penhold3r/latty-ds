@@ -1,7 +1,8 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Tooltip as TooltipEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type TooltipProps = HTMLAttributes<TooltipEl> & {
+export type TooltipProps = Omit<HTMLAttributes<TooltipEl>, 'content' | 'disabled' | 'color'> & {
   content?: string;
   placement?: TooltipEl['placement'];
   disabled?: boolean;
@@ -24,7 +25,7 @@ export const Tooltip = forwardRef<TooltipEl, TooltipProps>(function Tooltip(
     <lt-tooltip
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       disabled={disabled || undefined}
       hoverable={hoverable || undefined}
       touch={touch || undefined}

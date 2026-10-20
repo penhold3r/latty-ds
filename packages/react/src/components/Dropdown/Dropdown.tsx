@@ -1,7 +1,8 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Dropdown as DropdownEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type DropdownProps = HTMLAttributes<DropdownEl> & {
+export type DropdownProps = Omit<HTMLAttributes<DropdownEl>, 'open'> & {
   open?: boolean;
   placement?: DropdownEl['placement'];
   onOpen?: (event: CustomEvent) => void;
@@ -35,7 +36,7 @@ export const Dropdown = forwardRef<DropdownEl, DropdownProps>(function Dropdown(
     <lt-dropdown
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       open={open || undefined}
     >
       {children}

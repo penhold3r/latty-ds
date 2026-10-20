@@ -1,5 +1,6 @@
 import { useRef, useLayoutEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Breadcrumb as BreadcrumbEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
 export type BreadcrumbProps = HTMLAttributes<BreadcrumbEl> & {
   separator?: string;
@@ -21,7 +22,7 @@ export const Breadcrumb = forwardRef<BreadcrumbEl, BreadcrumbProps>(function Bre
   }, [labels]);
 
   return (
-    <lt-breadcrumb ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
+    <lt-breadcrumb ref={innerRef} suppressHydrationWarning {...normalizeNativeProps(props as Record<string, unknown>)}>
       {children}
     </lt-breadcrumb>
   );

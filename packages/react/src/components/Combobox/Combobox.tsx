@@ -1,7 +1,11 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type InputHTMLAttributes } from 'react';
 import type { Combobox as ComboboxEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
+export type ComboboxProps = Omit<
+  InputHTMLAttributes<ComboboxEl>,
+  'onChange' | 'loading' | 'value' | 'multiple' | 'label' | 'placeholder' | 'size' | 'disabled' | 'required'
+> & {
   formAssociated?: boolean;
   options?: ComboboxEl['options'];
   clearable?: boolean;
@@ -16,7 +20,6 @@ export type ComboboxProps = Omit<HTMLAttributes<ComboboxEl>, 'onChange'> & {
   size?: ComboboxEl['size'];
   disabled?: boolean;
   required?: boolean;
-  name?: string;
   labels?: ComboboxEl['labels'];
   onChange?: (event: CustomEvent<{ value: string | string[] }>) => void;
   onCreate?: (event: CustomEvent<{ value: string }>) => void;
@@ -73,7 +76,7 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
     <lt-combobox
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       clearable={clearable || undefined}
       loading={loading || undefined}

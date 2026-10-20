@@ -1,7 +1,18 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import {
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+  type ButtonHTMLAttributes,
+  type AnchorHTMLAttributes
+} from 'react';
 import type { Button as ButtonEl, LattyIconName } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type ButtonProps = Omit<HTMLAttributes<ButtonEl>, 'onToggle'> & {
+export type ButtonProps = Omit<
+  ButtonHTMLAttributes<ButtonEl> & AnchorHTMLAttributes<ButtonEl>,
+  'onToggle' | 'size' | 'disabled' | 'loading' | 'href' | 'type'
+> & {
   formAssociated?: boolean;
   variant?: ButtonEl['variant'];
   appearance?: ButtonEl['appearance'];
@@ -17,12 +28,7 @@ export type ButtonProps = Omit<HTMLAttributes<ButtonEl>, 'onToggle'> & {
   fullWidth?: boolean;
   uppercase?: boolean;
   href?: string;
-  target?: string;
-  rel?: string;
   type?: ButtonEl['type'];
-  name?: string;
-  value?: string;
-  formAction?: string;
   onToggle?: (event: CustomEvent<{ pressed: boolean }>) => void;
 };
 
@@ -40,7 +46,6 @@ export const Button = forwardRef<ButtonEl, ButtonProps>(function Button(
     iconEnd,
     fullWidth,
     uppercase,
-    formAction,
     children,
     ...props
   },
@@ -62,7 +67,7 @@ export const Button = forwardRef<ButtonEl, ButtonProps>(function Button(
     <lt-button
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       form-associated={formAssociated || undefined}
       bordered={bordered || undefined}
       disabled={disabled || undefined}
@@ -74,7 +79,6 @@ export const Button = forwardRef<ButtonEl, ButtonProps>(function Button(
       icon-end={iconEnd}
       full-width={fullWidth || undefined}
       uppercase={uppercase || undefined}
-      formaction={formAction}
     >
       {children}
     </lt-button>

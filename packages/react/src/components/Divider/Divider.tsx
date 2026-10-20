@@ -1,7 +1,8 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Divider as DividerEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type DividerProps = HTMLAttributes<DividerEl> & {
+export type DividerProps = Omit<HTMLAttributes<DividerEl>, 'label'> & {
   orientation?: DividerEl['orientation'];
   appearance?: DividerEl['appearance'];
   label?: string;
@@ -13,7 +14,7 @@ export const Divider = forwardRef<DividerEl, DividerProps>(function Divider({ ch
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-divider ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
+    <lt-divider ref={innerRef} suppressHydrationWarning {...normalizeNativeProps(props as Record<string, unknown>)}>
       {children}
     </lt-divider>
   );

@@ -1,7 +1,8 @@
 import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Calendar as CalendarEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type CalendarProps = Omit<HTMLAttributes<CalendarEl>, 'onChange'> & {
+export type CalendarProps = Omit<HTMLAttributes<CalendarEl>, 'onChange' | 'value' | 'min' | 'max' | 'disabled'> & {
   mode?: CalendarEl['mode'];
   value?: string;
   valueStart?: string;
@@ -70,7 +71,7 @@ export const Calendar = forwardRef<CalendarEl, CalendarProps>(function Calendar(
     <lt-calendar
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       value-start={valueStart}
       value-end={valueEnd}
       show-outside-days={showOutsideDays || undefined}
