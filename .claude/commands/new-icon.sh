@@ -38,10 +38,15 @@ TOP_INDEX="${ICONS_DIR}/index.ts"
 ICONS_PAGE="${REPO_ROOT}/docs/src/data/icons.ts"
 
 # ── Derive camelCase export variable name ─────────────────────────────────────
-# arrow-left → arrowLeftSvg
+# arrow-left → arrowLeftSvg, user-plus-2 → userPlus2Svg
 EXPORT_VAR=$(node -e "
-  const s = '${ICON_NAME}'.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-  process.stdout.write(s + 'Svg');
+  const s = '${ICON_NAME}'.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
+  const name = s + 'Svg';
+  if (!/^[A-Za-z_\$][\w\$]*\$/.test(name)) {
+    console.error('Cannot derive a valid JS identifier from icon name: ${ICON_NAME}');
+    process.exit(1);
+  }
+  process.stdout.write(name);
 ")
 
 # ── Derive docs group label ───────────────────────────────────────────────────
@@ -76,11 +81,12 @@ if [[ ! -d "$CATEGORY_DIR" ]]; then
   NEW_CATEGORY=true
   mkdir -p "$CATEGORY_DIR"
 
-  # Derive const name: category name → camelCase + "Icons" (e.g. my-cat → myCatIcons)
+  # Derive const name: category name → camelCase + "Icons" (e.g. my-cat → myCatIcons),
+  # matching the lowercase-first convention every existing category uses
+  # (filesIcons, dataIcons, …) rather than PascalCase.
   CAT_CONST=$(node -e "
     const s = '${CATEGORY}'.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-    const pascal = s[0].toUpperCase() + s.slice(1);
-    process.stdout.write(pascal + 'Icons');
+    process.stdout.write(s + 'Icons');
   ")
 
   # Write empty category index in as const format
@@ -98,10 +104,18 @@ STUB
 
     let out = src.trimEnd();
     out = out.replace(
-      /^(export const lattyIcons)/m,
-      importLine + '\n' + '\$1'
+      /^export const lattyIcons = \{/m,
+      importLine + '\n\$&'
     );
-    out = out.replace(/(\} as const;)$/, spreadLine + '\n\$1');
+    // Insert the spread inside the lattyIcons object, not at the end of the
+    // file — 'index.ts' declares the LattyIconName type after it, so an
+    // anchored /\} as const;\$/ used to miss and silently drop the spread.
+    // The preceding entry needs exactly one trailing comma, so strip whatever
+    // comma the captured body already ends with before appending ours.
+    out = out.replace(
+      /(export const lattyIcons = \{[\s\S]*?)(\n\} as const;)/,
+      (_, body, tail) => body.replace(/,\s*$/, '') + ',\n' + spreadLine + tail
+    );
 
     fs.writeFileSync('${TOP_INDEX}', out + '\n', 'utf8');
   "
@@ -120,9 +134,18 @@ STUB
     ]
   }\`;
 
-    // Insert before the closing ]; of the iconGroups array
-    src = src.replace(/^(\];)$/m, newGroup + ',\n\$1');
-    fs.writeFileSync('${ICONS_PAGE}', src, 'utf8');
+    // Find the last group before the closing ]; and terminate it with a
+    // comma so the appended group is valid. A bare '];' replace used to
+    // leave '}\\n  {...},\\n];' — a syntax error that webpack then choked on.
+    const closeRe = /(\n)(\];)/;
+    const closeMatch = closeRe.exec(src);
+    if (!closeMatch) {
+      console.error('Could not find the closing ]; of iconGroups');
+      process.exit(1);
+    }
+    const head = src.slice(0, closeMatch.index).replace(/(\n)(\s*\})\s*$/, '\$1\$2,');
+    const tail = src.slice(closeMatch.index).replace(closeRe, '\$1' + newGroup + ',\$1\$2');
+    fs.writeFileSync('${ICONS_PAGE}', head + tail, 'utf8');
     console.log(\"✅  Created new '${CATEGORY_LABEL}' group in docs gallery\");
   "
 fi
@@ -144,18 +167,22 @@ node -e "
   const src = fs.readFileSync('${CATEGORY_INDEX}', 'utf8');
 
   // Parse existing imports: filename → varName
-  const importRe = /^import \{ (\w+) \} from '\.\/(.+)';$/gm;
+  // Strip a trailing .js so re-running never compounds the extension into
+  // '.js.js.js' — the file key is the bare icon name, not a module specifier.
+  const importRe = /^import \{ (\w+) \} from '\.\/(.+?)';$/gm;
   const imports = {};
   let m;
   while ((m = importRe.exec(src)) !== null) {
-    imports[m[2]] = m[1];
+    imports[m[2].replace(/\.js$/, '')] = m[1];
   }
 
   // Parse existing record entries: 'icon-name': varName OR the unquoted
   // shorthand form (bareword: varName) that single-word icon names use —
   // matching only the quoted form here previously meant every unquoted
   // entry silently vanished from the rebuilt object on the next run.
-  const entryRe = /(?:'([^']+)'|([A-Za-z_\$][\w\$]*))\s*:\s*(\w+),?/g;
+  // Anchored to the start of a line so an entry can never match across
+  // lines (which previously let the trailing ',' belong to the next row).
+  const entryRe = /^\s*(?:'([^']+)'|([A-Za-z_$][\w$]*))\s*:\s*(\w+),?/gm;
   const entries = {};
   while ((m = entryRe.exec(src)) !== null) {
     const key = m[1] !== undefined ? m[1] : m[2];
