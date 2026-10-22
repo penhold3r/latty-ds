@@ -1,9 +1,11 @@
 import { awardSvg } from './award.js';
+import { banSvg } from './ban.js';
 import { bookmarkSvg } from './bookmark.js';
 import { chatSvg } from './chat.js';
 import { checkCircleSvg } from './check-circle.js';
 import { fireSvg } from './fire.js';
 import { flagSvg } from './flag.js';
+import { hourglassSvg } from './hourglass.js';
 import { infoCircleSvg } from './info-circle.js';
 import { lockSvg } from './lock.js';
 import { questionCircleSvg } from './question-circle.js';
@@ -18,22 +20,24 @@ import { warningTriangleSvg } from './warning-triangle.js';
 import { xmarkCircleSvg } from './xmark-circle.js';
 
 export const feedbackIcons = {
-  'info-circle': infoCircleSvg,
+  award: awardSvg,
+  ban: banSvg,
+  bookmark: bookmarkSvg,
+  chat: chatSvg,
   'check-circle': checkCircleSvg,
-  'xmark-circle': xmarkCircleSvg,
-  'warning-triangle': warningTriangleSvg,
+  fire: fireSvg,
+  flag: flagSvg,
+  hourglass: hourglassSvg,
+  'info-circle': infoCircleSvg,
+  lock: lockSvg,
   'question-circle': questionCircleSvg,
   shield: shieldSvg,
-  flag: flagSvg,
-  bookmark: bookmarkSvg,
-  'thumb-up': thumbUpSvg,
+  tag: tagSvg,
+  target: targetSvg,
   'thumb-down': thumbDownSvg,
-  fire: fireSvg,
-  lock: lockSvg,
+  'thumb-up': thumbUpSvg,
   unlock: unlockSvg,
   verified: verifiedSvg,
-  tag: tagSvg,
-  chat: chatSvg,
-  award: awardSvg,
-  target: targetSvg
+  'warning-triangle': warningTriangleSvg,
+  'xmark-circle': xmarkCircleSvg
 } as const;

@@ -34,6 +34,12 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./activity": {
+      "default": "./dist/entries/activity.js"
+    },
+    "./archive": {
+      "default": "./dist/entries/archive.js"
+    },
     "./arrow-down": {
       "default": "./dist/entries/arrow-down.js"
     },
@@ -55,8 +61,20 @@
     "./award": {
       "default": "./dist/entries/award.js"
     },
+    "./ban": {
+      "default": "./dist/entries/ban.js"
+    },
+    "./banknote": {
+      "default": "./dist/entries/banknote.js"
+    },
     "./bell": {
       "default": "./dist/entries/bell.js"
+    },
+    "./bell-off": {
+      "default": "./dist/entries/bell-off.js"
+    },
+    "./bike": {
+      "default": "./dist/entries/bike.js"
     },
     "./bluetooth": {
       "default": "./dist/entries/bluetooth.js"
@@ -64,11 +82,20 @@
     "./bookmark": {
       "default": "./dist/entries/bookmark.js"
     },
+    "./bug": {
+      "default": "./dist/entries/bug.js"
+    },
+    "./cake": {
+      "default": "./dist/entries/cake.js"
+    },
     "./calendar": {
       "default": "./dist/entries/calendar.js"
     },
     "./camera": {
       "default": "./dist/entries/camera.js"
+    },
+    "./car": {
+      "default": "./dist/entries/car.js"
     },
     "./caret-down": {
       "default": "./dist/entries/caret-down.js"
@@ -97,6 +124,9 @@
     "./circle": {
       "default": "./dist/entries/circle.js"
     },
+    "./clipboard": {
+      "default": "./dist/entries/clipboard.js"
+    },
     "./clock": {
       "default": "./dist/entries/clock.js"
     },
@@ -105,6 +135,12 @@
     },
     "./code": {
       "default": "./dist/entries/code.js"
+    },
+    "./coffee": {
+      "default": "./dist/entries/coffee.js"
+    },
+    "./coins": {
+      "default": "./dist/entries/coins.js"
     },
     "./collapse": {
       "default": "./dist/entries/collapse.js"
@@ -123,6 +159,9 @@
     },
     "./cpu": {
       "default": "./dist/entries/cpu.js"
+    },
+    "./credit-card": {
+      "default": "./dist/entries/credit-card.js"
     },
     "./crop": {
       "default": "./dist/entries/crop.js"
@@ -157,6 +196,9 @@
     "./dribbble": {
       "default": "./dist/entries/dribbble.js"
     },
+    "./drink": {
+      "default": "./dist/entries/drink.js"
+    },
     "./edit": {
       "default": "./dist/entries/edit.js"
     },
@@ -174,6 +216,12 @@
     },
     "./facebook": {
       "default": "./dist/entries/facebook.js"
+    },
+    "./file": {
+      "default": "./dist/entries/file.js"
+    },
+    "./file-text": {
+      "default": "./dist/entries/file-text.js"
     },
     "./film": {
       "default": "./dist/entries/film.js"
@@ -196,8 +244,20 @@
     "./folder": {
       "default": "./dist/entries/folder.js"
     },
+    "./folder-open": {
+      "default": "./dist/entries/folder-open.js"
+    },
+    "./food": {
+      "default": "./dist/entries/food.js"
+    },
     "./fullscreen": {
       "default": "./dist/entries/fullscreen.js"
+    },
+    "./gauge": {
+      "default": "./dist/entries/gauge.js"
+    },
+    "./gift": {
+      "default": "./dist/entries/gift.js"
     },
     "./github": {
       "default": "./dist/entries/github.js"
@@ -210,6 +270,9 @@
     },
     "./hand": {
       "default": "./dist/entries/hand.js"
+    },
+    "./hard-drive": {
+      "default": "./dist/entries/hard-drive.js"
     },
     "./hash": {
       "default": "./dist/entries/hash.js"
@@ -226,8 +289,20 @@
     "./home": {
       "default": "./dist/entries/home.js"
     },
+    "./hourglass": {
+      "default": "./dist/entries/hourglass.js"
+    },
+    "./ice-cream": {
+      "default": "./dist/entries/ice-cream.js"
+    },
+    "./id-card": {
+      "default": "./dist/entries/id-card.js"
+    },
     "./image": {
       "default": "./dist/entries/image.js"
+    },
+    "./inbox": {
+      "default": "./dist/entries/inbox.js"
     },
     "./infinity": {
       "default": "./dist/entries/infinity.js"
@@ -240,6 +315,9 @@
     },
     "./key": {
       "default": "./dist/entries/key.js"
+    },
+    "./laptop": {
+      "default": "./dist/entries/laptop.js"
     },
     "./layers": {
       "default": "./dist/entries/layers.js"
@@ -265,6 +343,12 @@
     "./lock": {
       "default": "./dist/entries/lock.js"
     },
+    "./log-in": {
+      "default": "./dist/entries/log-in.js"
+    },
+    "./log-out": {
+      "default": "./dist/entries/log-out.js"
+    },
     "./mail": {
       "default": "./dist/entries/mail.js"
     },
@@ -273,6 +357,9 @@
     },
     "./menu": {
       "default": "./dist/entries/menu.js"
+    },
+    "./message-circle": {
+      "default": "./dist/entries/message-circle.js"
     },
     "./microphone": {
       "default": "./dist/entries/microphone.js"
@@ -310,11 +397,23 @@
     "./pause": {
       "default": "./dist/entries/pause.js"
     },
+    "./percent": {
+      "default": "./dist/entries/percent.js"
+    },
     "./phone": {
       "default": "./dist/entries/phone.js"
     },
+    "./pie-chart": {
+      "default": "./dist/entries/pie-chart.js"
+    },
     "./pin": {
       "default": "./dist/entries/pin.js"
+    },
+    "./pizza": {
+      "default": "./dist/entries/pizza.js"
+    },
+    "./plane": {
+      "default": "./dist/entries/plane.js"
     },
     "./play": {
       "default": "./dist/entries/play.js"
@@ -328,8 +427,14 @@
     "./print": {
       "default": "./dist/entries/print.js"
     },
+    "./printer": {
+      "default": "./dist/entries/printer.js"
+    },
     "./question-circle": {
       "default": "./dist/entries/question-circle.js"
+    },
+    "./receipt": {
+      "default": "./dist/entries/receipt.js"
     },
     "./record": {
       "default": "./dist/entries/record.js"
@@ -348,6 +453,9 @@
     },
     "./route": {
       "default": "./dist/entries/route.js"
+    },
+    "./router": {
+      "default": "./dist/entries/router.js"
     },
     "./satellite": {
       "default": "./dist/entries/satellite.js"
@@ -379,6 +487,12 @@
     "./shield": {
       "default": "./dist/entries/shield.js"
     },
+    "./ship": {
+      "default": "./dist/entries/ship.js"
+    },
+    "./shopping-cart": {
+      "default": "./dist/entries/shopping-cart.js"
+    },
     "./sidebar": {
       "default": "./dist/entries/sidebar.js"
     },
@@ -406,6 +520,9 @@
     "./switch": {
       "default": "./dist/entries/switch.js"
     },
+    "./tablet": {
+      "default": "./dist/entries/tablet.js"
+    },
     "./tag": {
       "default": "./dist/entries/tag.js"
     },
@@ -430,8 +547,14 @@
     "./trash": {
       "default": "./dist/entries/trash.js"
     },
+    "./trending-up": {
+      "default": "./dist/entries/trending-up.js"
+    },
     "./triangle": {
       "default": "./dist/entries/triangle.js"
+    },
+    "./truck": {
+      "default": "./dist/entries/truck.js"
     },
     "./undo": {
       "default": "./dist/entries/undo.js"
@@ -445,8 +568,23 @@
     "./user": {
       "default": "./dist/entries/user.js"
     },
+    "./user-check": {
+      "default": "./dist/entries/user-check.js"
+    },
+    "./user-minus": {
+      "default": "./dist/entries/user-minus.js"
+    },
+    "./user-plus": {
+      "default": "./dist/entries/user-plus.js"
+    },
+    "./users": {
+      "default": "./dist/entries/users.js"
+    },
     "./verified": {
       "default": "./dist/entries/verified.js"
+    },
+    "./video": {
+      "default": "./dist/entries/video.js"
     },
     "./volume-high": {
       "default": "./dist/entries/volume-high.js"
@@ -456,6 +594,9 @@
     },
     "./volume-off": {
       "default": "./dist/entries/volume-off.js"
+    },
+    "./wallet": {
+      "default": "./dist/entries/wallet.js"
     },
     "./warning-triangle": {
       "default": "./dist/entries/warning-triangle.js"
