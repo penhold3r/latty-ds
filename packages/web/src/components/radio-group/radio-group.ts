@@ -102,6 +102,9 @@ export class RadioGroup extends ThemeableElement {
   // keyboard navigation immediately stop landing on it.
   private readonly _radioObserver = new MutationObserver(() => this._syncRadios());
 
+  // The form the group's radios belong to — the owner form whose `reset` event the group listens for.
+  private _ownerForm: HTMLFormElement | null = null;
+
   connectedCallback() {
     super.connectedCallback();
     this._radioObserver.observe(this, { attributes: true, attributeFilter: ['disabled'], subtree: true });
@@ -146,6 +149,53 @@ export class RadioGroup extends ThemeableElement {
       radio.addEventListener('change', this.handleRadioChange as EventListener);
       radio.addEventListener('keydown', this.handleRadioKeydown as EventListener);
     });
+
+    this._syncFormResetListener();
+  }
+
+  /**
+   * Keeps the group's `value` in step with a form reset.
+   *
+   * The radios are the form-associated elements here — each one restores its own default when the form
+   * resets — but the group itself is not form-associated, so nothing tells it that happened. Left alone,
+   * the group's `value` would keep pointing at a radio that is no longer checked, and the next
+   * `_syncRadios()` would re-check it, quietly undoing the reset.
+   *
+   * The `reset` event fires on the form *before* the browser restores the controls, so the radios still
+   * hold their pre-reset state while the handler runs; the re-derivation is deferred to a microtask, which
+   * runs once the browser's reset algorithm has finished.
+   * @private
+   */
+  private _handleFormReset = () => {
+    queueMicrotask(() => this._syncValueFromRadios());
+  };
+
+  /**
+   * Re-derives the group's `value` from the radios' current `checked` state.
+   * @private
+   */
+  private _syncValueFromRadios() {
+    const checked = this.radios?.find((radio) => radio.checked);
+    if (checked) {
+      if (checked.value !== this.value) this.value = checked.value;
+    } else if (this.value) {
+      this.value = '';
+    }
+  }
+
+  /**
+   * Attaches the form-reset listener to the form the group's radios belong to, re-targeting it if the
+   * radios moved to a different form (or out of one).
+   * @private
+   */
+  private _syncFormResetListener() {
+    const form = this.radios?.find((radio) => radio.form)?.form ?? null;
+    if (form === this._ownerForm) return;
+    this._ownerForm?.removeEventListener('reset', this._handleFormReset, true);
+    this._ownerForm = form;
+    // The `reset` event doesn't bubble, but it does propagate down the capture phase, and a listener on the
+    // form itself fires at the target — so this catches the reset however the group is nested in it.
+    form?.addEventListener('reset', this._handleFormReset, true);
   }
 
   /**
@@ -236,6 +286,8 @@ export class RadioGroup extends ThemeableElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     this._radioObserver.disconnect();
+    this._ownerForm?.removeEventListener('reset', this._handleFormReset, true);
+    this._ownerForm = null;
     if (this.radios) {
       this.radios.forEach((radio) => {
         radio.removeEventListener('change', this.handleRadioChange as EventListener);

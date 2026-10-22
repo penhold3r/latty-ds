@@ -6,7 +6,6 @@ export type ColorInputProps = Omit<
   InputHTMLAttributes<ColorInputEl>,
   'onChange' | 'value' | 'label' | 'placeholder' | 'disabled' | 'required' | 'size'
 > & {
-  formAssociated?: boolean;
   value?: string;
   format?: ColorInputEl['format'];
   label?: string;
@@ -19,7 +18,7 @@ export type ColorInputProps = Omit<
 };
 
 export const ColorInput = forwardRef<ColorInputEl, ColorInputProps>(function ColorInput(
-  { onChange, labels, formAssociated, disabled, required, children, ...props },
+  { onChange, labels, disabled, required, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<ColorInputEl>(null);
@@ -44,7 +43,6 @@ export const ColorInput = forwardRef<ColorInputEl, ColorInputProps>(function Col
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       disabled={disabled || undefined}
       required={required || undefined}
     >

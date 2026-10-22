@@ -6,7 +6,6 @@ export type DatepickerProps = Omit<
   InputHTMLAttributes<DatepickerEl>,
   'onChange' | 'onInput' | 'type' | 'value' | 'label' | 'size' | 'disabled' | 'required'
 > & {
-  formAssociated?: boolean;
   type?: DatepickerEl['type'];
   value?: string;
   label?: string;
@@ -20,7 +19,7 @@ export type DatepickerProps = Omit<
 };
 
 export const Datepicker = forwardRef<DatepickerEl, DatepickerProps>(function Datepicker(
-  { onChange, onInput, helperText, formAssociated, disabled, required, children, ...props },
+  { onChange, onInput, helperText, disabled, required, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DatepickerEl>(null);
@@ -52,7 +51,6 @@ export const Datepicker = forwardRef<DatepickerEl, DatepickerProps>(function Dat
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       disabled={disabled || undefined}
       required={required || undefined}
     >

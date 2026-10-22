@@ -6,7 +6,6 @@ export type SwitchProps = Omit<
   InputHTMLAttributes<SwitchEl>,
   'onChange' | 'size' | 'checked' | 'disabled' | 'required' | 'label' | 'value'
 > & {
-  formAssociated?: boolean;
   variant?: SwitchEl['variant'];
   size?: SwitchEl['size'];
   checked?: boolean;
@@ -21,7 +20,7 @@ export type SwitchProps = Omit<
 };
 
 export const Switch = forwardRef<SwitchEl, SwitchProps>(function Switch(
-  { onChange, helperText, labels, formAssociated, checked, disabled, required, labelPosition, children, ...props },
+  { onChange, helperText, labels, checked, disabled, required, labelPosition, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SwitchEl>(null);
@@ -47,7 +46,6 @@ export const Switch = forwardRef<SwitchEl, SwitchProps>(function Switch(
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       checked={checked || undefined}
       disabled={disabled || undefined}
       required={required || undefined}

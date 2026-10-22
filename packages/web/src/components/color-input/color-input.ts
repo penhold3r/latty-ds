@@ -1,10 +1,8 @@
 import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { colorInputStyles } from './color-input.styles';
 import { ColorInputFormat, ColorInputSize, type ColorInputLabels } from './color-input.types';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
 import { NativeAttrsController } from '../shared/native-attrs';
 import '@latty-ds/icons';
 import '../text/text';
@@ -100,21 +98,12 @@ const DEFAULT_LABELS: ColorInputLabels = {
  * ```
  */
 @customElement('lt-color-input')
-export class ColorInput extends ThemeableElement {
+export class ColorInput extends FormControlElement {
   static styles = colorInputStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
   private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input[type="color"]'), {
     exclude: ['aria-label']
   });
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
 
   /**
    * The current color value. Accepts hex (`#7c3aed`), rgb (`rgb(124, 58, 237)`),
@@ -168,7 +157,7 @@ export class ColorInput extends ThemeableElement {
   }
 
   updated() {
-    this._internals.setFormValue(this.value || null);
+    this._internals.setFormValue(this.value);
     const input = this.shadowRoot?.querySelector<HTMLElement>('input[type="color"]');
     if (this.required && !this.value && input) {
       this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, input);
@@ -177,25 +166,16 @@ export class ColorInput extends ThemeableElement {
     }
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  /**
+   * A text-like control's value is its `value` — what a form reset restores and what a browser
+   * state-restore repopulates.
+   */
+  protected override get _formValue(): string {
+    return this.value;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
-  }
-
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  protected override set _formValue(value: unknown) {
+    this.value = value == null ? '' : String(value);
   }
 
   private _handleChange(e: Event) {

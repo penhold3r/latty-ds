@@ -1,15 +1,13 @@
 import { html, nothing, PropertyValues } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { textfieldStyles } from './textfield.styles';
 import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant, type TextfieldLabels } from './textfield.types';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
 import { NativeAttrsController } from '../shared/native-attrs';
-import { toValidityFlags } from '../shared/form-validity';
+import { toValidityFlags } from '../../base';
 import '@latty-ds/icons';
 import '../text/text';
 
@@ -63,13 +61,9 @@ const DEFAULT_LABELS: TextfieldLabels = {
  * ```
  */
 @customElement('lt-textfield')
-export class Textfield extends ThemeableElement {
+export class Textfield extends FormControlElement {
   static styles = textfieldStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
   private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input, textarea'), {
     exclude: ['aria-label', 'aria-invalid', 'aria-describedby'],
     aliases: { 'input-mode': 'inputmode' },
@@ -85,11 +79,6 @@ export class Textfield extends ThemeableElement {
   private readonly _uid = `lt-textfield-${textfieldCount++}`;
   private readonly _inputId = `${this._uid}-input`;
   private readonly _helperId = `${this._uid}-helper`;
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
 
   /**
    * Visual variant that determines styling and automatic end icon.
@@ -393,7 +382,7 @@ export class Textfield extends ThemeableElement {
   override updated(changed: PropertyValues) {
     super.updated(changed);
     this.toggleAttribute('data-invalid', this._autoError);
-    this._internals.setFormValue(this.value || null);
+    this._internals.setFormValue(this.value);
     const inner = (this.shadowRoot!.querySelector('input') ?? this.shadowRoot!.querySelector('textarea')) as
       | HTMLInputElement
       | HTMLTextAreaElement
@@ -413,27 +402,27 @@ export class Textfield extends ThemeableElement {
     this._syncValidity();
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  /**
+   * A text-like control's value is its `value` — what a form reset restores and what a browser
+   * state-restore repopulates.
+   */
+  protected override get _formValue(): string {
+    return this.value;
+  }
+
+  protected override set _formValue(value: unknown) {
+    this.value = value == null ? '' : String(value);
+  }
+
+  /**
+   * Restores the textfield's value *and* the interaction state that goes with it — a reset puts the
+   * field back to its pristine state, so the touched flag and any auto-shown error have to go too
+   * (TFD-7), not just the text.
+   */
+  override formResetCallback(): void {
+    super.formResetCallback();
     this._touched = false;
     this._autoError = false;
-  }
-
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
-  }
-
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
   }
 
   render() {

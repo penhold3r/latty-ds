@@ -6,7 +6,6 @@ export type ComboboxProps = Omit<
   InputHTMLAttributes<ComboboxEl>,
   'onChange' | 'loading' | 'value' | 'multiple' | 'label' | 'placeholder' | 'size' | 'disabled' | 'required'
 > & {
-  formAssociated?: boolean;
   options?: ComboboxEl['options'];
   clearable?: boolean;
   loading?: boolean;
@@ -33,7 +32,6 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
     value,
     helperText,
     labels,
-    formAssociated,
     clearable,
     loading,
     creatable,
@@ -77,7 +75,6 @@ export const Combobox = forwardRef<ComboboxEl, ComboboxProps>(function Combobox(
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       clearable={clearable || undefined}
       loading={loading || undefined}
       creatable={creatable || undefined}

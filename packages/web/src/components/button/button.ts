@@ -1,5 +1,5 @@
 import { html, nothing, LitElement, type PropertyValues } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -8,7 +8,6 @@ import { dispatch } from '../../utils';
 import { buttonStyles } from './button.styles';
 import { ButtonAppearance, ButtonSize, ButtonType, ButtonVariant } from './button.types';
 import { NativeAttrsController } from '../shared/native-attrs';
-import { FormDisabledController } from '../shared/form-disabled';
 
 import '../spinner/';
 import '@latty-ds/icons';
@@ -64,28 +63,19 @@ const SUBMITTER_ATTRS = [
  * ```
  */
 @customElement('lt-button')
-export class Button extends ThemeableElement {
+export class Button extends FormControlElement {
   static styles = buttonStyles;
-  static formAssociated = true;
   // Makes host.focus() move focus into the shadow root (the inner <button>/<a>) instead of being a no-op —
   // without it, activeElement never leaves <body>, silently breaking autofocus and any focus restore that calls
   // .focus() on this element (a closed dialog/dropdown returning focus to its trigger, for example).
   static override shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
 
-  private _internals: ElementInternals;
-
   private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('[part="base"]'), {
     exclude: ['target', 'rel', 'aria-disabled', 'aria-busy', 'aria-label']
   });
-  private _fieldsetDisabled = new FormDisabledController(this);
   // Tracks whether willUpdate() below is the one that set the host's aria-pressed, so it only ever cleans up its
   // own writes — a consumer managing aria-pressed directly (without `toggle`) must be left alone.
   private _ownsAriaPressed = false;
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -109,8 +99,17 @@ export class Button extends ThemeableElement {
     }
   };
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  /**
+   * A button holds no value of its own: its `name`/`value` only matter for the submitter that was
+   * actually clicked, and the browser handles that itself. A form reset therefore has nothing to
+   * restore here, and there is no state for a browser restore to repopulate either.
+   */
+  protected override get _formValue(): undefined {
+    return undefined;
+  }
+
+  protected override set _formValue(_value: unknown) {
+    // Nothing to restore — a button holds no state of its own.
   }
 
   override willUpdate(changed: PropertyValues<this>) {

@@ -6,7 +6,6 @@ export type CheckboxProps = Omit<
   InputHTMLAttributes<CheckboxEl>,
   'onChange' | 'size' | 'checked' | 'disabled' | 'required' | 'label' | 'value'
 > & {
-  formAssociated?: boolean;
   variant?: CheckboxEl['variant'];
   size?: CheckboxEl['size'];
   checked?: boolean;
@@ -22,19 +21,7 @@ export type CheckboxProps = Omit<
 };
 
 export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
-  {
-    onChange,
-    helperText,
-    labels,
-    formAssociated,
-    checked,
-    indeterminate,
-    disabled,
-    required,
-    labelPosition,
-    children,
-    ...props
-  },
+  { onChange, helperText, labels, checked, indeterminate, disabled, required, labelPosition, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<CheckboxEl>(null);
@@ -60,7 +47,6 @@ export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       checked={checked || undefined}
       indeterminate={indeterminate || undefined}
       disabled={disabled || undefined}

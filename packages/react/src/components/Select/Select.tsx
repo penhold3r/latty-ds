@@ -6,7 +6,6 @@ export type SelectProps = Omit<
   SelectHTMLAttributes<SelectEl>,
   'onChange' | 'size' | 'value' | 'multiple' | 'placeholder' | 'label' | 'disabled' | 'required' | 'loading'
 > & {
-  formAssociated?: boolean;
   variant?: SelectEl['variant'];
   size?: SelectEl['size'];
   value?: SelectEl['value'];
@@ -30,7 +29,6 @@ export const Select = forwardRef<SelectEl, SelectProps>(function Select(
     helperText,
     options,
     labels,
-    formAssociated,
     multiple,
     disabled,
     required,
@@ -66,7 +64,6 @@ export const Select = forwardRef<SelectEl, SelectProps>(function Select(
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       multiple={multiple || undefined}
       disabled={disabled || undefined}
       required={required || undefined}

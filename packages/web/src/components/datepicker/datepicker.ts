@@ -1,15 +1,13 @@
 import { createFieldIds } from '../shared/form-field';
 import { html, nothing, type PropertyValues } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { datepickerStyles } from './datepicker.styles';
 import type { DatepickerType, DatepickerSize, DatepickerVariant } from './datepicker.types';
 import { dispatch } from '../../utils';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
 import { NativeAttrsController } from '../shared/native-attrs';
-import { toValidityFlags } from '../shared/form-validity';
+import { toValidityFlags } from '../../base';
 import '../text/text';
 
 /**
@@ -33,22 +31,13 @@ import '../text/text';
  * ```
  */
 @customElement('lt-datepicker')
-export class Datepicker extends ThemeableElement {
+export class Datepicker extends FormControlElement {
   static styles = datepickerStyles;
-  static formAssociated = true;
 
-  private _internals: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
   private _nativeAttrs = new NativeAttrsController(this, () => this.input, {
     exclude: ['aria-describedby'],
     onSync: () => this._syncValidity()
   });
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
 
   /** Native input type. */
   @property({ reflect: true }) type: DatepickerType = 'date';
@@ -93,30 +82,21 @@ export class Datepicker extends ThemeableElement {
 
   protected updated(changed: PropertyValues) {
     if (changed.has('value') || changed.has('required')) {
-      this._internals.setFormValue(this.value || null);
+      this._internals.setFormValue(this.value);
     }
     this._syncValidity();
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  /**
+   * A text-like control's value is its `value` — what a form reset restores and what a browser
+   * state-restore repopulates.
+   */
+  protected override get _formValue(): string {
+    return this.value;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
-  }
-
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  protected override set _formValue(value: unknown) {
+    this.value = value == null ? '' : String(value);
   }
 
   private handleChange(e: Event) {

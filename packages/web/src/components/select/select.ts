@@ -1,6 +1,6 @@
 import { createFieldIds } from '../shared/form-field';
 import { html, nothing, type PropertyValues } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { selectStyles } from './select.styles';
@@ -11,8 +11,6 @@ import '../surface/';
 import '../text/text';
 import '../spinner/';
 import { openFloating, closeFloating } from '../shared/floating';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
 import { NativeAttrsController } from '../shared/native-attrs';
 import { groupConsecutive } from '../shared/option-groups';
 import { nextListboxIndex, ListboxTypeahead } from '../shared/listbox-nav';
@@ -58,13 +56,9 @@ const DEFAULT_LABELS: SelectLabels = {
  * ```
  */
 @customElement('lt-select')
-export class Select extends ThemeableElement {
+export class Select extends FormControlElement {
   static styles = selectStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
   private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('.select-trigger'), {
     exclude: [
       'aria-haspopup',
@@ -82,11 +76,6 @@ export class Select extends ThemeableElement {
 
   // Scopes generated option/listbox ids to this instance, so two selects on the same page don't collide.
   private readonly _uid = `lt-select-${selectCount++}`;
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
 
   /**
    * Visual variant that determines styling.
@@ -419,25 +408,16 @@ export class Select extends ThemeableElement {
     }
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  /**
+   * A select's value is its `value` — a string for a single select, an array of the selected values for
+   * a `multiple` one. It's what a form reset restores and what a browser state-restore repopulates.
+   */
+  protected override get _formValue(): string | string[] {
+    return this.value;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
-  }
-
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  protected override set _formValue(value: unknown) {
+    this.value = Array.isArray(value) ? value.map(String) : value == null ? '' : String(value);
   }
 
   private _renderOption(option: SelectOption, activeOption: SelectOption | undefined) {

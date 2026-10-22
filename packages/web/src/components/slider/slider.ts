@@ -1,11 +1,9 @@
 import { html, type PropertyValues } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
 import { sliderStyles } from './slider.styles';
 import type { SliderSize } from './slider.types';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
 import { NativeAttrsController } from '../shared/native-attrs';
 import '../tooltip/tooltip';
 import '../text/text';
@@ -18,21 +16,12 @@ import '../text/text';
  * @fires {CustomEvent<{value: number}>} change - Dispatched when the user commits a value (mouseup/keyup)
  */
 @customElement('lt-slider')
-export class Slider extends ThemeableElement {
+export class Slider extends FormControlElement {
   static styles = sliderStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
   private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input'), {
     exclude: ['aria-label', 'aria-valuemin', 'aria-valuemax', 'aria-valuenow']
   });
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
 
   @property({ reflect: true }) size: SliderSize = 'md';
   @property({ type: Boolean, reflect: true }) disabled = false;
@@ -82,25 +71,16 @@ export class Slider extends ThemeableElement {
     this._internals.setValidity({});
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  /**
+   * A slider's value is its number — what a form reset restores and what a browser state-restore
+   * repopulates.
+   */
+  protected override get _formValue(): number {
+    return this.value;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
-  }
-
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  protected override set _formValue(value: unknown) {
+    this.value = Number(value ?? 0);
   }
 
   private _onInput(e: Event) {

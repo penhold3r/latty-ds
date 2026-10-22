@@ -6,7 +6,6 @@ export type DateInputProps = Omit<
   InputHTMLAttributes<DateInputEl>,
   'onChange' | 'value' | 'min' | 'max' | 'label' | 'placeholder' | 'size' | 'disabled' | 'required'
 > & {
-  formAssociated?: boolean;
   value?: string;
   min?: string;
   max?: string;
@@ -26,7 +25,7 @@ export type DateInputProps = Omit<
 };
 
 export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateInput(
-  { onChange, weekStart, helperText, disabledDates, labels, formAssociated, disabled, required, children, ...props },
+  { onChange, weekStart, helperText, disabledDates, labels, disabled, required, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DateInputEl>(null);
@@ -54,7 +53,6 @@ export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateIn
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       disabled={disabled || undefined}
       required={required || undefined}
     >

@@ -2,7 +2,7 @@ import { createFieldIds } from '../shared/form-field';
 import { html, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement, property, state } from 'lit/decorators.js';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import '@latty-ds/icons';
 import '../calendar/calendar';
 import '../text/text';
@@ -12,8 +12,6 @@ import type { DateInputSize, DateInputVariant, DateInputFormat, DateInputLabels 
 import type { CalendarDisabledDates, CalendarWeekStart } from '../calendar/calendar.types';
 import { dispatch, createClickOutsideHandler, devWarn } from '../../utils';
 import { openFloating, closeFloating } from '../shared/floating';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
 import { NativeAttrsController } from '../shared/native-attrs';
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
@@ -54,21 +52,12 @@ const parseIsoDate = (value: string): Date | null => {
  * ```
  */
 @customElement('lt-date-input')
-export class DateInput extends ThemeableElement {
+export class DateInput extends FormControlElement {
   static styles = dateInputStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
   private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('#field-btn'), {
     exclude: ['aria-haspopup', 'aria-expanded', 'aria-describedby']
   });
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
 
   /** Selected date in ISO format (YYYY-MM-DD). Not reflected as an attribute — read the property, or the
    * `change` event's `detail.value`, instead of `getAttribute('value')`/`[value]`. */
@@ -201,7 +190,7 @@ export class DateInput extends ThemeableElement {
     if (changed.has('value') && this.value && !parseIsoDate(this.value)) {
       devWarn('lt-date-input', `value "${this.value}" isn't a plain YYYY-MM-DD date — showing the placeholder instead`);
     }
-    this._internals.setFormValue(this.value || null);
+    this._internals.setFormValue(this.value);
     const btn = this.shadowRoot?.querySelector<HTMLElement>('#field-btn');
     if (this.required && !this.value && btn) {
       this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, btn);
@@ -210,25 +199,16 @@ export class DateInput extends ThemeableElement {
     }
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  /**
+   * A text-like control's value is its `value` — what a form reset restores and what a browser
+   * state-restore repopulates.
+   */
+  protected override get _formValue(): string {
+    return this.value;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
-  }
-
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  protected override set _formValue(value: unknown) {
+    this.value = value == null ? '' : String(value);
   }
 
   render() {

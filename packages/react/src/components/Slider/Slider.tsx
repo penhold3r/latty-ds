@@ -6,7 +6,6 @@ export type SliderProps = Omit<
   InputHTMLAttributes<SliderEl>,
   'onInput' | 'onChange' | 'size' | 'disabled' | 'min' | 'max' | 'step' | 'value' | 'label'
 > & {
-  formAssociated?: boolean;
   size?: SliderEl['size'];
   disabled?: boolean;
   tooltip?: boolean;
@@ -20,7 +19,7 @@ export type SliderProps = Omit<
 };
 
 export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
-  { onInput, onChange, formAssociated, disabled, tooltip, children, ...props },
+  { onInput, onChange, disabled, tooltip, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SliderEl>(null);
@@ -47,7 +46,6 @@ export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       disabled={disabled || undefined}
       tooltip={tooltip || undefined}
     >

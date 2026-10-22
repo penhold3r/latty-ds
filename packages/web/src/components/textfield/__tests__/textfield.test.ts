@@ -1479,3 +1479,35 @@ describe('autosize', () => {
     expect(input.style.height).toBe('');
   });
 });
+
+describe('the value published to the surrounding form (TFD-8)', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('publishes an empty string rather than null, so the field still submits its name', async () => {
+    // A native input always submits its name, even with an empty value (`name=`). Publishing `null`
+    // instead means "this control has no value", and the browser then drops the entry from the form
+    // data entirely — so an empty field silently disappeared from the submission.
+    const spy = vi.spyOn(ElementInternals.prototype, 'setFormValue');
+
+    const el = document.createElement('lt-textfield') as Textfield;
+    document.body.append(el);
+    await el.updateComplete;
+
+    expect(spy.mock.calls[spy.mock.calls.length - 1]?.[0]).toBe('');
+    el.remove();
+  });
+
+  it('publishes the value it holds', async () => {
+    const spy = vi.spyOn(ElementInternals.prototype, 'setFormValue');
+
+    const el = document.createElement('lt-textfield') as Textfield;
+    el.value = 'hello';
+    document.body.append(el);
+    await el.updateComplete;
+
+    expect(spy.mock.calls[spy.mock.calls.length - 1]?.[0]).toBe('hello');
+    el.remove();
+  });
+});

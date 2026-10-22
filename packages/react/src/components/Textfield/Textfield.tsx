@@ -14,7 +14,6 @@ export type TextfieldProps = Omit<
   InputHTMLAttributes<TextfieldEl> & TextareaHTMLAttributes<TextfieldEl>,
   'onInput' | 'onChange' | 'size' | 'type' | 'value' | 'label' | 'disabled' | 'required' | 'rows' | 'prefix'
 > & {
-  formAssociated?: boolean;
   variant?: TextfieldEl['variant'];
   size?: TextfieldEl['size'];
   type?: TextfieldEl['type'];
@@ -42,7 +41,6 @@ export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfi
     onChange,
     helperText,
     labels,
-    formAssociated,
     disabled,
     required,
     iconStart,
@@ -85,7 +83,6 @@ export const Textfield = forwardRef<TextfieldEl, TextfieldProps>(function Textfi
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       disabled={disabled || undefined}
       required={required || undefined}
       icon-start={iconStart}

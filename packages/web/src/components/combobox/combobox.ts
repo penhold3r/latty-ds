@@ -1,6 +1,6 @@
 import { createFieldIds } from '../shared/form-field';
 import { html, nothing, type PropertyValues } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { comboboxStyles } from './combobox.styles';
@@ -11,8 +11,6 @@ import '../text/text';
 import '../chip/';
 import '../spinner/';
 import { openFloating, closeFloating } from '../shared/floating';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
 import { NativeAttrsController } from '../shared/native-attrs';
 import { groupConsecutive } from '../shared/option-groups';
 import { nextListboxIndex } from '../shared/listbox-nav';
@@ -66,13 +64,9 @@ const DEFAULT_LABELS: ComboboxLabels = {
  * ```
  */
 @customElement('lt-combobox')
-export class Combobox extends ThemeableElement {
+export class Combobox extends FormControlElement {
   static styles = comboboxStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
   private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('#combobox-input'), {
     exclude: [
       'aria-expanded',
@@ -89,11 +83,6 @@ export class Combobox extends ThemeableElement {
 
   // Scopes generated option/listbox ids to this instance, so two comboboxes on the same page don't collide.
   private readonly _uid = `lt-combobox-${comboboxCount++}`;
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
 
   /** Array of selectable options. Set as a JS property (`.options`). */
   @property({ type: Array }) options: ComboboxOption[] = [];
@@ -411,7 +400,7 @@ export class Combobox extends ThemeableElement {
       if (name) for (const v of this._selected) formData.append(name, v);
       this._internals.setFormValue(formData);
     } else {
-      this._internals.setFormValue((this.value as string) || null);
+      this._internals.setFormValue(this.value as string);
     }
     const input = this.shadowRoot?.querySelector<HTMLElement>('input');
     if (this.required && this._selected.length === 0 && input) {
@@ -425,25 +414,16 @@ export class Combobox extends ThemeableElement {
     }
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  /**
+   * A select's value is its `value` — a string for a single select, an array of the selected values for
+   * a `multiple` one. It's what a form reset restores and what a browser state-restore repopulates.
+   */
+  protected override get _formValue(): string | string[] {
+    return this.value;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
-  }
-
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  protected override set _formValue(value: unknown) {
+    this.value = Array.isArray(value) ? value.map(String) : value == null ? '' : String(value);
   }
 
   private _renderOption(opt: ComboboxOption, activeOption: ComboboxOption | undefined) {

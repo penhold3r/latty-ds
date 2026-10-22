@@ -13,7 +13,6 @@ export type ButtonProps = Omit<
   ButtonHTMLAttributes<ButtonEl> & AnchorHTMLAttributes<ButtonEl>,
   'onToggle' | 'size' | 'disabled' | 'loading' | 'href' | 'type'
 > & {
-  formAssociated?: boolean;
   variant?: ButtonEl['variant'];
   appearance?: ButtonEl['appearance'];
   bordered?: boolean;
@@ -35,7 +34,6 @@ export type ButtonProps = Omit<
 export const Button = forwardRef<ButtonEl, ButtonProps>(function Button(
   {
     onToggle,
-    formAssociated,
     bordered,
     disabled,
     loading,
@@ -68,7 +66,6 @@ export const Button = forwardRef<ButtonEl, ButtonProps>(function Button(
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       bordered={bordered || undefined}
       disabled={disabled || undefined}
       loading={loading || undefined}

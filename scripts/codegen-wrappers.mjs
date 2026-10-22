@@ -150,6 +150,12 @@ for (const mod of cem.modules) {
           m.privacy !== 'private' &&
           !m.name.startsWith('_') &&
           !SKIP_FIELDS.has(m.name) &&
+          // A static field lives on the *class*, not on the element instance — it can never be set through
+          // JSX. Listing one as a prop produced a prop that did nothing at all: `formAssociated` (the flag
+          // that makes a custom element form-associated) became a `formAssociated?: boolean` prop that the
+          // wrapper dutifully set as the meaningless `form-associated` *attribute*, while the real switch
+          // stayed where the browser looks for it — on the class.
+          !m.static &&
           // A getter-only public field (cem marks it `readonly`) is derived state meant to be read via a ref
           // (`tableRef.current.totalPages`), never set — including it as a settable prop would either throw
           // (assigning to an accessor with no setter, under ES modules' always-strict mode) or silently no-op

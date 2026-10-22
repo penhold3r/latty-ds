@@ -6,7 +6,6 @@ export type RadioProps = Omit<
   InputHTMLAttributes<RadioEl>,
   'onChange' | 'size' | 'checked' | 'disabled' | 'required' | 'label' | 'name' | 'value'
 > & {
-  formAssociated?: boolean;
   variant?: RadioEl['variant'];
   size?: RadioEl['size'];
   checked?: boolean;
@@ -23,19 +22,7 @@ export type RadioProps = Omit<
 };
 
 export const Radio = forwardRef<RadioEl, RadioProps>(function Radio(
-  {
-    onChange,
-    helperText,
-    labels,
-    formAssociated,
-    checked,
-    disabled,
-    required,
-    labelPosition,
-    tabbable,
-    children,
-    ...props
-  },
+  { onChange, helperText, labels, checked, disabled, required, labelPosition, tabbable, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<RadioEl>(null);
@@ -61,7 +48,6 @@ export const Radio = forwardRef<RadioEl, RadioProps>(function Radio(
       ref={innerRef}
       suppressHydrationWarning
       {...normalizeNativeProps(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
       checked={checked || undefined}
       disabled={disabled || undefined}
       required={required || undefined}
