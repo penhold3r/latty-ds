@@ -1,51 +1,50 @@
 import { css } from 'lit';
+import { formFieldStyles } from '../shared/form-field';
 
-export const radioGroupStyles = css`
-  :host {
-    display: block;
-    font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
-  }
+export const radioGroupStyles = [
+  formFieldStyles,
+  css`
+    :host {
+      display: block;
+      font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
+    }
 
-  .radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--lt-spacing-2);
-  }
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--lt-spacing-2);
+    }
 
-  .label {
-    color: var(--lt-text-default);
-    margin-bottom: var(--lt-spacing-1);
-  }
+    .label {
+      color: var(--lt-text-default);
+      margin-bottom: var(--lt-spacing-1);
+    }
 
-  .required-indicator {
-    color: var(--lt-text-error);
-    margin-inline-start: var(--lt-spacing-1);
-  }
+    .radios-container {
+      display: flex;
+      gap: var(--lt-spacing-3);
+    }
 
-  .radios-container {
-    display: flex;
-    gap: var(--lt-spacing-3);
-  }
+    :host([orientation='vertical']) .radios-container {
+      flex-direction: column;
+    }
 
-  :host([orientation='vertical']) .radios-container {
-    flex-direction: column;
-  }
+    :host([orientation='horizontal']) .radios-container {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
 
-  :host([orientation='horizontal']) .radios-container {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
+    .helper-text {
+      color: var(--lt-text-subtle);
+      margin-top: var(--lt-spacing-1);
+    }
 
-  .helper-text {
-    color: var(--lt-text-subtle);
-    margin-top: var(--lt-spacing-1);
-  }
+    .helper-text::part(base) {
+      font-weight: 200;
+    }
 
-  .helper-text::part(base) {
-    font-weight: 200;
-  }
-
-  :host([error]) .helper-text {
-    color: var(--lt-text-error);
-  }
-`;
+    :host([error]) .helper-text {
+      color: var(--lt-text-error);
+    }
+  `
+];

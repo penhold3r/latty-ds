@@ -1,4 +1,4 @@
-import { createFieldIds } from '../shared/form-field';
+import { createFieldIds, renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { html, nothing, type PropertyValues } from 'lit';
 import { FormControlElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
@@ -129,15 +129,8 @@ export class Datepicker extends FormControlElement {
 
     return html`
       <div class="wrapper">
-        ${this.label
-          ? html`<label>
-              <lt-text variant="label" as="span">${this.label}</lt-text>
-              ${this.required ? html`<span class="required-indicator">*</span>` : nothing} ${inputEl}
-            </label>`
-          : inputEl}
-        ${this.helperText
-          ? html`<span id=${this._fieldIds.helper} class="helper-text">${this.helperText}</span>`
-          : nothing}
+        ${this.label ? html`<label> ${renderFieldLabel(this.label, this.required)} ${inputEl} </label>` : inputEl}
+        ${renderHelperText(this._fieldIds.helper, this.helperText)}
       </div>
     `;
   }

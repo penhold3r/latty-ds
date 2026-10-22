@@ -1,5 +1,5 @@
 import { enabledItems, rovingTargetOf, stepIndex } from '../shared/roving';
-import { createFieldIds } from '../shared/form-field';
+import { createFieldIds, renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, queryAssignedElements } from 'lit/decorators.js';
@@ -304,22 +304,11 @@ export class RadioGroup extends ThemeableElement {
         aria-label=${this.label || nothing}
         aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
       >
-        ${this.label
-          ? html`
-              <div class="label">
-                <lt-text variant="label" as="span">${this.label}</lt-text>
-                ${this.required ? html`<span class="required-indicator">*</span>` : ''}
-              </div>
-            `
-          : ''}
+        ${this.label ? html` <div class="label">${renderFieldLabel(this.label, this.required)}</div> ` : ''}
         <div class="radios-container">
           <slot @slotchange=${this.handleSlotChange}></slot>
         </div>
-        ${this.helperText
-          ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
-              >${this.helperText}</lt-text
-            >`
-          : ''}
+        ${renderHelperText(this._fieldIds.helper, this.helperText)}
       </div>
     `;
   }

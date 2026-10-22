@@ -1,4 +1,4 @@
-import { createFieldIds } from '../shared/form-field';
+import { createFieldIds, renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { html, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -217,12 +217,7 @@ export class DateInput extends FormControlElement {
 
     return html`
       <div class="wrapper">
-        ${this.label
-          ? html`<label for="field-btn">
-              <lt-text variant="label" as="span">${this.label}</lt-text>
-              ${this.required ? html`<span class="required-indicator" aria-hidden="true">*</span>` : nothing}
-            </label>`
-          : nothing}
+        ${this.label ? html`<label for="field-btn"> ${renderFieldLabel(this.label, this.required)} </label>` : nothing}
 
         <div class="field">
           <button
@@ -265,9 +260,7 @@ export class DateInput extends FormControlElement {
           </div>
         </div>
 
-        ${this.helperText
-          ? html`<span id=${this._fieldIds.helper} class="helper-text">${this.helperText}</span>`
-          : nothing}
+        ${renderHelperText(this._fieldIds.helper, this.helperText)}
       </div>
     `;
   }

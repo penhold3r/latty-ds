@@ -1,4 +1,4 @@
-import { createFieldIds } from '../shared/form-field';
+import { createFieldIds, renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { html, nothing, type PropertyValues } from 'lit';
 import { FormControlElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -453,12 +453,7 @@ export class Select extends FormControlElement {
     return html`
       <div class="wrapper">
         ${this.label
-          ? html`
-              <label @click=${this._focusTrigger}>
-                <lt-text variant="label" as="span">${this.label}</lt-text>
-                ${this.required ? html`<span class="required-indicator">*</span>` : ''}
-              </label>
-            `
+          ? html` <label @click=${this._focusTrigger}> ${renderFieldLabel(this.label, this.required)} </label> `
           : ''}
         <div class="select-container">
           <div
@@ -523,11 +518,7 @@ export class Select extends FormControlElement {
             </div>
           </lt-surface>
         </div>
-        ${this.helperText
-          ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
-              >${this.helperText}</lt-text
-            >`
-          : ''}
+        ${renderHelperText(this._fieldIds.helper, this.helperText)}
       </div>
     `;
   }

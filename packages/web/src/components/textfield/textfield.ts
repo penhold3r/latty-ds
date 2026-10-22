@@ -7,6 +7,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { textfieldStyles } from './textfield.styles';
 import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant, type TextfieldLabels } from './textfield.types';
 import { NativeAttrsController } from '../shared/native-attrs';
+import { renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { toValidityFlags } from '../../base';
 import '@latty-ds/icons';
 import '../text/text';
@@ -448,12 +449,7 @@ export class Textfield extends FormControlElement {
     return html`
       <div class="wrapper">
         ${this.label
-          ? html`
-              <label for=${this._inputId}>
-                <lt-text variant="label" as="span">${this.label}</lt-text>
-                ${this.required ? html`<span class="required-indicator">*</span>` : ''}
-              </label>
-            `
+          ? html` <label for=${this._inputId}> ${renderFieldLabel(this.label, this.required)} </label> `
           : ''}
         <div class=${classMap({ 'input-container': true, 'has-start-icon': hasStartIcon, 'has-end-icon': hasEndIcon })}>
           ${hasStartIcon ? html`<lt-icon class="icon-start" name=${this.iconStart}></lt-icon>` : ''}
@@ -526,11 +522,7 @@ export class Textfield extends FormControlElement {
               : html`<lt-icon class="icon-end variant-icon" name=${endIconName}></lt-icon>`
             : ''}
         </div>
-        ${resolvedHelperText
-          ? html`<lt-text id=${this._helperId} variant="caption" as="span" class="helper-text"
-              >${resolvedHelperText}</lt-text
-            >`
-          : ''}
+        ${renderHelperText(this._helperId, resolvedHelperText)}
         ${this.counter && !isNumber && maxLengthAttr !== null && maxLengthAttr !== ''
           ? html`<lt-text variant="caption" as="span" class="counter">${this.value.length} / ${maxLengthAttr}</lt-text>`
           : ''}

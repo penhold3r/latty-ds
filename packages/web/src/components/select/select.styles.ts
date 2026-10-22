@@ -1,8 +1,10 @@
 import { css } from 'lit';
 import { floatingPanelReset } from '../shared/floating';
+import { formFieldStyles } from '../shared/form-field';
 
 export const selectStyles = [
   floatingPanelReset,
+  formFieldStyles,
   css`
     :host {
       display: inline-block;
@@ -19,11 +21,6 @@ export const selectStyles = [
 
     label {
       color: var(--lt-text-default);
-    }
-
-    .required-indicator {
-      color: var(--lt-text-error);
-      margin-inline-start: var(--lt-spacing-1);
     }
 
     .select-container {

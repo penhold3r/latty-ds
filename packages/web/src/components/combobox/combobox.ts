@@ -1,4 +1,4 @@
-import { createFieldIds } from '../shared/form-field';
+import { createFieldIds, renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { html, nothing, type PropertyValues } from 'lit';
 import { FormControlElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -540,10 +540,7 @@ export class Combobox extends FormControlElement {
     return html`
       <div class="wrapper">
         ${this.label
-          ? html`<label for="combobox-input">
-              <lt-text variant="label" as="span">${this.label}</lt-text>
-              ${this.required ? html`<span class="required-indicator">*</span>` : nothing}
-            </label>`
+          ? html`<label for="combobox-input"> ${renderFieldLabel(this.label, this.required)} </label>`
           : nothing}
         ${inputRow}
         ${this.open
@@ -579,11 +576,7 @@ export class Combobox extends FormControlElement {
               </div>
             `
           : nothing}
-        ${this.helperText
-          ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
-              >${this.helperText}</lt-text
-            >`
-          : nothing}
+        ${renderHelperText(this._fieldIds.helper, this.helperText)}
       </div>
     `;
   }
