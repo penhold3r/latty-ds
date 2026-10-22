@@ -23,8 +23,12 @@ export default defineConfig([
     dts: false,
     clean: true,
     splitting: false,
-    external: ['lit', 'lit/*', '@lit/*', '@latty-ds/icons', '@latty-ds/tokens'],
-    noExternal: ['@floating-ui/dom'],
+    // `@floating-ui/dom` is a runtime dependency of this package, so it is left external like `lit` and
+    // `@latty-ds/icons`: the consumer's bundler resolves it once and shares that single copy between
+    // lt-select, lt-combobox, lt-dropdown and lt-date-input. Inlining it (as `noExternal` used to)
+    // shipped four copies of the same 16 kB inside the package — and four copies in the consumer's
+    // bundle too, since the inlined copy shadowed the installed one.
+    external: ['lit', 'lit/*', '@lit/*', '@latty-ds/icons', '@latty-ds/tokens', '@floating-ui/dom'],
     outExtension: () => ({ js: '.js' })
   },
   {

@@ -49,8 +49,19 @@ export abstract class FormControlElement extends ThemeableElement {
    * *not* relied on for the manifest: `cem analyze` only lists members declared on a component's own
    * class, so a control that wanted `formAssociated` in its manifest entry would still have to declare
    * it there.
+   *
+   * This is a getter rather than a `static formAssociated = true` field on purpose. A static *field*
+   * runs its initializer when the class is defined, and every bundler has to assume that could have
+   * side effects — so a class carrying one can never be dropped as unused. This class is re-exported
+   * from the `base` barrel, which every component imports for `ThemeableElement`, so a static field
+   * here meant every component in the package — `lt-spinner`, `lt-divider`, `lt-text` — shipped the
+   * whole form-association machinery (~1.3 kB raw, ~425 B gzip each) that none of them use. A static
+   * getter is side-effect free by definition, so the class tree-shakes away and only the eleven real
+   * form controls carry it. Do not "simplify" this back into a field.
    */
-  static formAssociated = true;
+  static get formAssociated(): true {
+    return true;
+  }
 
   /**
    * The element's form-associated internals — the platform API for a custom element's participation in
