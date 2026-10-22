@@ -5,12 +5,12 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 import { comboboxStyles } from './combobox.styles';
 import type { ComboboxOption, ComboboxSize, ComboboxVariant, ComboboxLabels } from './combobox.types';
-import { dispatch, createClickOutsideHandler } from '../../utils';
+import { dispatch } from '../../utils';
 import '@latty-ds/icons';
 import '../text/text';
 import '../chip/';
 import '../spinner/';
-import { openFloating, closeFloating } from '../shared/floating';
+import { PopupController } from '../shared/popup';
 import { NativeAttrsController } from '../shared/native-attrs';
 import { groupConsecutive } from '../shared/option-groups';
 import { nextListboxIndex } from '../shared/listbox-nav';
@@ -157,8 +157,13 @@ export class Combobox extends FormControlElement {
   @state() private open = false;
   @state() private activeIndex = -1;
 
-  private _cleanupClickOutside: (() => void) | null = null;
-  private _floatingCleanup: (() => void) | null = null;
+  private readonly _popup: PopupController = new PopupController(this, {
+    panel: () => this.shadowRoot?.querySelector<HTMLElement>('.dropdown') ?? null,
+    reference: () => this.shadowRoot?.querySelector<HTMLElement>('.input-wrap') ?? null,
+    floating: () => ({ matchWidth: true }),
+    outsideEvent: 'click',
+    onOutside: () => this.closeDropdown()
+  });
 
   private readonly _fieldIds = createFieldIds();
 
@@ -245,20 +250,14 @@ export class Combobox extends FormControlElement {
     this.query = '';
     this.activeIndex = -1;
     await this.updateComplete;
-    const inputWrap = this.shadowRoot!.querySelector<HTMLElement>('.input-wrap')!;
-    const dropdown = this.shadowRoot!.querySelector<HTMLElement>('.dropdown')!;
-    if (inputWrap && dropdown) {
-      const cleanup = await openFloating(inputWrap, dropdown, { matchWidth: true });
-      // Guard against a close during the await — otherwise the autoUpdate cleanup is orphaned.
-      if (this.open) this._floatingCleanup = cleanup;
-      else cleanup();
-    }
+    // Escape (or a selection) can close the dropdown while the render it asked for was still pending —
+    // opening it now would leave a panel on screen that nothing owns.
+    if (!this.open) return;
+    await this._popup.open();
   }
 
   private closeDropdown() {
-    const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
-    if (dropdown) closeFloating(dropdown, this._floatingCleanup);
-    this._floatingCleanup = null;
+    this._popup.close();
     this.open = false;
     this.removeAttribute('open');
   }
@@ -375,17 +374,13 @@ export class Combobox extends FormControlElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this._cleanupClickOutside = createClickOutsideHandler(this, () => this.closeDropdown(), { event: 'click' });
     this.addEventListener('focusout', this._onFocusOut);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('focusout', this._onFocusOut);
-    this._cleanupClickOutside?.();
-    this._cleanupClickOutside = null;
-    this._floatingCleanup?.();
-    this._floatingCleanup = null;
+    this._popup.destroy();
   }
 
   override willUpdate(changed: PropertyValues<this>) {

@@ -10,8 +10,8 @@ import '../text/text';
 import { dateInputStyles } from './date-input.styles';
 import type { DateInputSize, DateInputVariant, DateInputFormat, DateInputLabels } from './date-input.types';
 import type { CalendarDisabledDates, CalendarWeekStart } from '../calendar/calendar.types';
-import { dispatch, createClickOutsideHandler, devWarn } from '../../utils';
-import { openFloating, closeFloating } from '../shared/floating';
+import { dispatch, devWarn } from '../../utils';
+import { PopupController } from '../shared/popup';
 import { NativeAttrsController } from '../shared/native-attrs';
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
@@ -118,8 +118,12 @@ export class DateInput extends FormControlElement {
 
   @state() private _open = false;
 
-  private _cleanupClickOutside: (() => void) | null = null;
-  private _floatingCleanup: (() => void) | null = null;
+  private readonly _popup: PopupController = new PopupController(this, {
+    panel: () => this.shadowRoot?.querySelector<HTMLElement>('.dropdown') ?? null,
+    reference: () => this.shadowRoot?.querySelector<HTMLElement>('#field-btn') ?? null,
+    outsideEvent: 'pointerdown',
+    onOutside: () => this._closeDropdown()
+  });
 
   private readonly _fieldIds = createFieldIds();
 
@@ -138,33 +142,20 @@ export class DateInput extends FormControlElement {
     if (this._isDisabled || this._open) return;
     this._open = true;
     await this.updateComplete;
-    const btn = this.shadowRoot?.querySelector<HTMLElement>('#field-btn');
-    const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
-    if (btn && dropdown) {
-      const cleanup = await openFloating(btn, dropdown);
-      // Guard against a close during the await — otherwise the autoUpdate cleanup is orphaned.
-      if (this._open) this._floatingCleanup = cleanup;
-      else cleanup();
-    }
+    // Escape can close the dropdown while the render it asked for was still pending — opening it now
+    // would leave a calendar on screen that nothing owns.
     if (!this._open) return;
-    this._cleanupClickOutside = createClickOutsideHandler(this, () => this._closeDropdown());
+    await this._popup.open();
   }
 
   private _closeDropdown() {
-    const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
-    if (dropdown) closeFloating(dropdown, this._floatingCleanup);
-    this._floatingCleanup = null;
+    this._popup.close();
     this._open = false;
-    this._cleanupClickOutside?.();
-    this._cleanupClickOutside = null;
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback();
-    this._floatingCleanup?.();
-    this._floatingCleanup = null;
-    this._cleanupClickOutside?.();
-    this._cleanupClickOutside = null;
+    this._popup.destroy();
   }
 
   private _handleCalendarChange(e: CustomEvent<{ value: string }>) {

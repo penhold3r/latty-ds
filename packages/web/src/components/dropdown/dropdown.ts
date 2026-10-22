@@ -4,10 +4,10 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { dropdownStyles } from './dropdown.styles';
 import type { DropdownPlacement } from './dropdown.types';
-import { dispatch, createClickOutsideHandler } from '../../utils';
+import { dispatch } from '../../utils';
 import './dropdown-item';
 import '../surface/surface';
-import { openFloating, closeFloating } from '../shared/floating';
+import { PopupController } from '../shared/popup';
 
 /**
  * A floating menu anchored to a trigger element.
@@ -28,8 +28,15 @@ export class Dropdown extends ThemeableElement {
   @property({ type: Boolean, reflect: true }) open = false;
   @property({ reflect: true }) placement: DropdownPlacement = 'bottom-start';
 
-  private _cleanupClickOutside: (() => void) | null = null;
-  private _floatingCleanup: (() => void) | null = null;
+  private readonly _popup: PopupController = new PopupController(this, {
+    panel: () => this.shadowRoot?.querySelector<HTMLElement>('lt-surface.menu') ?? null,
+    reference: () => this._triggerEl() ?? this,
+    floating: () => ({ placement: this.placement }),
+    outsideEvent: 'click',
+    outsideCapture: true,
+    onOutside: () => this.hide()
+  });
+
   // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
   // ever opened. Without this, mounting a closed dropdown fired `close` and moved focus to the trigger on page
   // load (verified: activeElement jumped to a native <button> trigger). Ships with lt-button's `delegatesFocus`
@@ -49,10 +56,7 @@ export class Dropdown extends ThemeableElement {
     this.removeEventListener('keydown', this._onKeydown);
     this.removeEventListener('select', this.hide);
     this.removeEventListener('focusout', this._onFocusOut);
-    this._cleanupClickOutside?.();
-    this._cleanupClickOutside = null;
-    this._floatingCleanup?.();
-    this._floatingCleanup = null;
+    this._popup.destroy();
   }
 
   // The slotted trigger otherwise has no indication it opens a menu, or whether that menu is currently open.
@@ -82,25 +86,11 @@ export class Dropdown extends ThemeableElement {
       return;
     }
     if (this.open) {
-      this._cleanupClickOutside = createClickOutsideHandler(this, () => this.hide(), { event: 'click', capture: true });
-      const triggerEl = this._triggerEl() ?? this;
-      const menu = this.shadowRoot!.querySelector<HTMLElement>('lt-surface.menu')!;
-      if (menu) {
-        openFloating(triggerEl, menu, { placement: this.placement }).then((cleanup) => {
-          // Guard against a close that happened while openFloating was resolving —
-          // otherwise the autoUpdate cleanup is orphaned and runs forever on a hidden menu.
-          if (this.open) this._floatingCleanup = cleanup;
-          else cleanup();
-        });
-      }
+      void this._popup.open();
       requestAnimationFrame(() => this._items()[0]?.focus());
       dispatch(this, 'open');
     } else {
-      this._cleanupClickOutside?.();
-      this._cleanupClickOutside = null;
-      const menu = this.shadowRoot?.querySelector<HTMLElement>('lt-surface.menu');
-      if (menu) closeFloating(menu, this._floatingCleanup);
-      this._floatingCleanup = null;
+      this._popup.close();
       this._triggerEl()?.focus();
       dispatch(this, 'close');
     }

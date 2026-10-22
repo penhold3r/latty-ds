@@ -5,12 +5,12 @@ import { customElement, property, state } from 'lit/decorators.js';
 
 import { selectStyles } from './select.styles';
 import { SelectOption, SelectSize, SelectVariant, type SelectLabels } from './select.types';
-import { dispatch, createClickOutsideHandler } from '../../utils';
+import { dispatch } from '../../utils';
 import '@latty-ds/icons';
 import '../surface/';
 import '../text/text';
 import '../spinner/';
-import { openFloating, closeFloating } from '../shared/floating';
+import { PopupController } from '../shared/popup';
 import { NativeAttrsController } from '../shared/native-attrs';
 import { groupConsecutive } from '../shared/option-groups';
 import { nextListboxIndex, ListboxTypeahead } from '../shared/listbox-nav';
@@ -176,8 +176,14 @@ export class Select extends FormControlElement {
    */
   @state() private activeIndex = -1;
 
-  private _cleanupClickOutside: (() => void) | null = null;
-  private _floatingCleanup: (() => void) | null = null;
+  private readonly _popup: PopupController = new PopupController(this, {
+    panel: () => this.shadowRoot?.querySelector<HTMLElement>('lt-surface.dropdown') ?? null,
+    reference: () => this.shadowRoot?.querySelector<HTMLElement>('.select-trigger') ?? null,
+    floating: () => ({ matchWidth: true }),
+    outsideEvent: 'click',
+    onOutside: () => this.closeDropdown()
+  });
+
   private readonly _typeahead = new ListboxTypeahead();
 
   private readonly _fieldIds = createFieldIds();
@@ -326,17 +332,9 @@ export class Select extends FormControlElement {
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this._cleanupClickOutside = createClickOutsideHandler(this, () => this.closeDropdown(), { event: 'click' });
-  }
-
   disconnectedCallback() {
     super.disconnectedCallback();
-    this._cleanupClickOutside?.();
-    this._cleanupClickOutside = null;
-    this._floatingCleanup?.();
-    this._floatingCleanup = null;
+    this._popup.destroy();
     this._typeahead.dispose();
   }
 
@@ -392,19 +390,10 @@ export class Select extends FormControlElement {
     if (!changedProperties.has('isOpen')) return;
     if (this.isOpen) {
       this.setAttribute('open', '');
-      const selectTrigger = this.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!;
-      const listbox = this.shadowRoot!.querySelector<HTMLElement>('lt-surface.dropdown')!;
-      openFloating(selectTrigger, listbox, { matchWidth: true }).then((cleanup) => {
-        // Guard against a close that happened while openFloating was resolving —
-        // otherwise the autoUpdate cleanup is orphaned and runs forever on a hidden listbox.
-        if (this.isOpen) this._floatingCleanup = cleanup;
-        else cleanup();
-      });
+      void this._popup.open();
     } else {
       this.removeAttribute('open');
-      const listbox = this.shadowRoot?.querySelector<HTMLElement>('lt-surface.dropdown');
-      if (listbox) closeFloating(listbox, this._floatingCleanup);
-      this._floatingCleanup = null;
+      this._popup.close();
     }
   }
 

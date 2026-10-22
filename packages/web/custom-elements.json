@@ -3372,21 +3372,13 @@
             },
             {
               "kind": "field",
-              "name": "_cleanupClickOutside",
+              "name": "_popup",
               "type": {
-                "text": "(() => void) | null"
+                "text": "PopupController"
               },
               "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "_floatingCleanup",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
+              "readonly": true,
+              "default": "new PopupController(this, { panel: () => this.shadowRoot?.querySelector<HTMLElement>('.dropdown') ?? null, reference: () => this.shadowRoot?.querySelector<HTMLElement>('.input-wrap') ?? null, floating: () => ({ matchWidth: true }), outsideEvent: 'click', onOutside: () => this.closeDropdown() })"
             },
             {
               "kind": "field",
@@ -3913,21 +3905,13 @@
             },
             {
               "kind": "field",
-              "name": "_cleanupClickOutside",
+              "name": "_popup",
               "type": {
-                "text": "(() => void) | null"
+                "text": "PopupController"
               },
               "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "_floatingCleanup",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
+              "readonly": true,
+              "default": "new PopupController(this, { panel: () => this.shadowRoot?.querySelector<HTMLElement>('.dropdown') ?? null, reference: () => this.shadowRoot?.querySelector<HTMLElement>('#field-btn') ?? null, outsideEvent: 'pointerdown', onOutside: () => this._closeDropdown() })"
             },
             {
               "kind": "field",
@@ -5011,21 +4995,13 @@
             },
             {
               "kind": "field",
-              "name": "_cleanupClickOutside",
+              "name": "_popup",
               "type": {
-                "text": "(() => void) | null"
+                "text": "PopupController"
               },
               "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "_floatingCleanup",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
+              "readonly": true,
+              "default": "new PopupController(this, { panel: () => this.shadowRoot?.querySelector<HTMLElement>('lt-surface.menu') ?? null, reference: () => this._triggerEl() ?? this, floating: () => ({ placement: this.placement }), outsideEvent: 'click', outsideCapture: true, onOutside: () => this.hide() })"
             },
             {
               "kind": "field",
@@ -7616,21 +7592,13 @@
             },
             {
               "kind": "field",
-              "name": "_cleanupClickOutside",
+              "name": "_popup",
               "type": {
-                "text": "(() => void) | null"
+                "text": "PopupController"
               },
               "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "_floatingCleanup",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
+              "readonly": true,
+              "default": "new PopupController(this, { panel: () => this.shadowRoot?.querySelector<HTMLElement>('lt-surface.dropdown') ?? null, reference: () => this.shadowRoot?.querySelector<HTMLElement>('.select-trigger') ?? null, floating: () => ({ matchWidth: true }), outsideEvent: 'click', onOutside: () => this.closeDropdown() })"
             },
             {
               "kind": "field",
@@ -8442,6 +8410,134 @@
           "declaration": {
             "name": "groupConsecutive",
             "module": "src/components/shared/option-groups.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/popup.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "The open/close lifecycle every floating popup shares.\n\n`lt-select`, `lt-combobox`, `lt-dropdown` and `lt-date-input` each grew their own copy of the same\nsequence — position the panel with floating-ui, watch for a click outside, and tear the autoUpdate\nlistener down again — and the copies drifted apart: two of them held a document-level listener for\nthe element's whole lifetime, two held one only while the popup was open, and one of those\ninstalled it *after* awaiting the positioning.\n\nThis class owns the sequence. What stays with each component is what genuinely differs between them:\nwhich element the panel is positioned against, how it is positioned, which pointer event counts as\na click outside, and what closing means (a dropdown hands focus back to its trigger, a combobox\nkeeps it in its input).",
+          "name": "PopupController",
+          "members": [
+            {
+              "kind": "field",
+              "name": "#host",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "readonly": true,
+              "default": "host"
+            },
+            {
+              "kind": "field",
+              "name": "#options",
+              "privacy": "private",
+              "type": {
+                "text": "PopupOptions"
+              },
+              "readonly": true,
+              "default": "options"
+            },
+            {
+              "kind": "field",
+              "name": "#floatingCleanup",
+              "privacy": "private",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "#outsideCleanup",
+              "privacy": "private",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "#panel",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "#open",
+              "privacy": "private",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "#token",
+              "privacy": "private",
+              "type": {
+                "text": "symbol | null"
+              },
+              "default": "null",
+              "description": "Invalidated by every close, so a close that lands while `openFloating` is still resolving can be\ntold apart from an open that is still in flight."
+            },
+            {
+              "kind": "field",
+              "name": "isOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the popup is currently open.",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "open",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "description": "Positions the panel against its reference and starts watching for a click outside.\n\nSafe to call more than once: a second open would start a second floating autoUpdate and overwrite\nthe first one's cleanup, leaking a scroll/resize listener pair on every open."
+            },
+            {
+              "kind": "method",
+              "name": "close",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Hides the panel and stops watching for a click outside. Safe to call when the popup was never\nopen."
+            },
+            {
+              "kind": "method",
+              "name": "destroy",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Tears the popup down for good — the component is going away."
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PopupController",
+          "declaration": {
+            "name": "PopupController",
+            "module": "src/components/shared/popup.ts"
           }
         }
       ]
