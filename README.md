@@ -7,6 +7,7 @@
 Framework-agnostic design system built on design tokens and Web Components. One token change cascades through every component in every framework — no re-theming, no duplication.
 
 **Docs:** https://latty-ds.com
+**Design language:** [DESIGN.md](./DESIGN.md) — principles, foundations, component grammar, and contribution rules.
 
 ## Highlights
 
