@@ -28,6 +28,19 @@ export function nextListboxIndex(key: ListboxNavKey, currentIndex: number, lengt
 }
 
 /**
+ * Case- and diacritic-insensitive comparison key for listbox filtering (and for comparing a typed value
+ * against existing option labels) — "café" should match a query of "cafe". NFD decomposes a combined
+ * character (for example "é") into its base letter plus a separate combining mark, which the Unicode range
+ * `\u0300-\u036f` then strips; `toLowerCase()` runs first so a combining mark's own casing never factors in.
+ */
+export function normalizeSearchText(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+/**
  * Stateful typeahead matcher for a listbox (the standard WAI-ARIA "type to jump to an option" pattern):
  * accumulates printable characters typed within `timeoutMs` of each other into a buffer, and matches the next
  * option (after `afterIndex`, wrapping around) whose label starts with it, case-insensitively. Create ONE

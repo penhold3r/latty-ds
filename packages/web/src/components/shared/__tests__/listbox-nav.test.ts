@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { nextListboxIndex, ListboxTypeahead } from '../listbox-nav';
+import { ListboxTypeahead, nextListboxIndex, normalizeSearchText } from '../listbox-nav';
 
 describe('nextListboxIndex', () => {
   it('returns -1 for an empty list regardless of key', () => {
@@ -91,5 +91,15 @@ describe('ListboxTypeahead', () => {
     const t = new ListboxTypeahead();
     t.match('a', ['Apple'], -1);
     expect(() => t.dispose()).not.toThrow();
+  });
+});
+
+describe('normalizeSearchText', () => {
+  it('lowercases and strips diacritics', () => {
+    expect(normalizeSearchText('Café')).toBe('cafe');
+    expect(normalizeSearchText('Élégant')).toBe('elegant');
+  });
+  it('handles strings without diacritics', () => {
+    expect(normalizeSearchText('Apple')).toBe('apple');
   });
 });

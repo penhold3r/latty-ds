@@ -9,6 +9,13 @@ import { HelperText, TextfieldSize, TextfieldType, TextfieldVariant, type Textfi
 import { NativeAttrsController } from '../shared/native-attrs';
 import { renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { toValidityFlags } from '../../base';
+import { preventFocusSteal } from '../shared/focus';
+import {
+  getTextfieldEndIcon,
+  isValidTextfieldValue,
+  resolveTextfieldInputType,
+  shouldShowTextfieldClear
+} from './textfield-logic';
 import '@latty-ds/icons';
 import '../text/text';
 
@@ -206,31 +213,14 @@ export class Textfield extends FormControlElement {
    * @private
    */
   private _validate(): boolean {
-    const v = this.value;
-    if (!v) return true;
-    if (this.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return false;
-    if (this.type === 'url') {
-      try {
-        new URL(v);
-      } catch {
-        return false;
-      }
-    }
-    if (this.type === 'tel' && !/^[+\d][\d\s()\-.]{2,}$/.test(v)) return false;
-    if (this.type === 'number') {
-      const n = Number(v);
-      if (isNaN(n)) return false;
-      const minAttr = this.getAttribute('min');
-      const maxAttr = this.getAttribute('max');
-      if (minAttr !== null && minAttr !== '' && n < Number(minAttr)) return false;
-      if (maxAttr !== null && maxAttr !== '' && n > Number(maxAttr)) return false;
-    } else {
-      const minLenAttr = this.getAttribute('minlength');
-      const maxLenAttr = this.getAttribute('maxlength');
-      if (minLenAttr !== null && minLenAttr !== '' && v.length < Number(minLenAttr)) return false;
-      if (maxLenAttr !== null && maxLenAttr !== '' && v.length > Number(maxLenAttr)) return false;
-    }
-    return true;
+    return isValidTextfieldValue({
+      value: this.value,
+      type: this.type,
+      min: this.getAttribute('min'),
+      max: this.getAttribute('max'),
+      minlength: this.getAttribute('minlength'),
+      maxlength: this.getAttribute('maxlength')
+    });
   }
 
   private handleInput(e: Event) {
@@ -266,8 +256,12 @@ export class Textfield extends FormControlElement {
   }
 
   private get _showClear(): boolean {
-    return (
-      this.clearable && !!this.value && !this._isDisabled && !this.hasAttribute('readonly') && this.type !== 'password'
+    return shouldShowTextfieldClear(
+      this.clearable,
+      this.value,
+      this._isDisabled,
+      this.hasAttribute('readonly'),
+      this.type
     );
   }
 
@@ -311,37 +305,6 @@ export class Textfield extends FormControlElement {
    */
   private togglePasswordVisibility() {
     this.isPasswordVisible = !this.isPasswordVisible;
-  }
-
-  // Clicking the toggle would otherwise focus the button first (the default mousedown action), moving the
-  // caret out of the field. Suppressing just that default action leaves the click itself untouched, and the
-  // input stays focused throughout.
-  private _preventFocusSteal(e: MouseEvent) {
-    e.preventDefault();
-  }
-
-  /**
-   * Determines the appropriate end icon based on input type and variant.
-   *
-   * Password inputs show eye/eye-off toggle icon.
-   * Non-default variants show their respective state icons.
-   * Default variant shows no end icon.
-   * @returns The icon name to display, or empty string if no icon should be shown.
-   * @private
-   */
-  private getEndIconName(): string {
-    if (this.type === 'password') return this.isPasswordVisible ? 'eye-off' : 'eye';
-    const effectiveVariant = this._autoError ? 'error' : this.variant;
-    switch (effectiveVariant) {
-      case 'success':
-        return 'check-circle';
-      case 'warning':
-        return 'warning-triangle';
-      case 'error':
-        return 'xmark-circle';
-      default:
-        return '';
-    }
   }
 
   override firstUpdated(changed: PropertyValues) {
@@ -420,12 +383,12 @@ export class Textfield extends FormControlElement {
     const isPasswordField = this.type === 'password';
     const isMultiline = this.type === 'multiline';
     const isNumber = this.type === 'number';
-    const endIconName = this.getEndIconName();
+    const endIconName = getTextfieldEndIcon(this.type, this.variant, this._autoError, this.isPasswordVisible);
     const showClear = this._showClear;
     const hasEndIcon = Boolean(endIconName) || showClear;
     const hasPrefix = !isMultiline && Boolean(this.prefix);
     const hasSuffix = !isMultiline && Boolean(this.suffix);
-    const actualInputType = isPasswordField && this.isPasswordVisible ? 'text' : this.type;
+    const actualInputType = resolveTextfieldInputType(this.type, this.isPasswordVisible);
     const isInvalid = this._autoError || this.variant === 'error';
     const resolvedHelperText = typeof this.helperText === 'function' ? this.helperText(isInvalid) : this.helperText;
     const placeholder = this.getAttribute('placeholder') ?? '';
@@ -487,7 +450,7 @@ export class Textfield extends FormControlElement {
                 type="button"
                 class="icon-end clear-button"
                 aria-label=${this._labels.clear}
-                @mousedown=${this._preventFocusSteal}
+                @mousedown=${preventFocusSteal}
                 @click=${this._clear}
               >
                 <lt-icon name="xmark"></lt-icon>
@@ -502,7 +465,7 @@ export class Textfield extends FormControlElement {
                     ?disabled=${this._isDisabled}
                     aria-label=${this.isPasswordVisible ? this._labels.hidePassword : this._labels.showPassword}
                     aria-pressed=${this.isPasswordVisible ? 'true' : 'false'}
-                    @mousedown=${this._preventFocusSteal}
+                    @mousedown=${preventFocusSteal}
                     @click=${this.togglePasswordVisibility}
                   >
                     <lt-icon name=${endIconName}></lt-icon>

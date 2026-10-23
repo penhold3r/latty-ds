@@ -12,20 +12,19 @@ import '../chip/';
 import '../spinner/';
 import { PopupController } from '../shared/popup';
 import { NativeAttrsController } from '../shared/native-attrs';
-import { groupConsecutive } from '../shared/option-groups';
-import { nextListboxIndex } from '../shared/listbox-nav';
+import { nextListboxIndex, normalizeSearchText } from '../shared/listbox-nav';
+import { preventFocusSteal } from '../shared/focus';
+import { renderListboxGroups, renderListboxLoading, renderListboxOption } from '../shared/listbox-option';
+import {
+  clearValue,
+  coerceListboxValue,
+  normalizeSelection,
+  selectionFormData,
+  shouldShowClear,
+  toggleSelected
+} from '../shared/listbox-selection';
 
 let comboboxCount = 0;
-
-/**
- * Case- and diacritic-insensitive comparison key for the search filter below — "café" should match a query of
- * "cafe". NFD decomposes a combined character (e.g. "é") into its base letter plus a separate combining mark,
- * which the Unicode range ̀-ͯ then strips; toLowerCase() runs first so a combining mark's own casing
- * (irrelevant, marks have none) never factors in.
- */
-function normalizeForSearch(s: string): string {
-  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-}
 
 const DEFAULT_LABELS: ComboboxLabels = {
   validationMessage: 'Please select an option',
@@ -115,8 +114,7 @@ export class Combobox extends FormControlElement {
   @property({ type: Boolean, reflect: true }) multiple = false;
 
   private get _selected(): string[] {
-    if (Array.isArray(this.value)) return this.value;
-    return this.value ? [this.value] : [];
+    return normalizeSelection(this.value);
   }
 
   private _labelFor(value: string): string {
@@ -173,8 +171,8 @@ export class Combobox extends FormControlElement {
   }
 
   private get filtered(): ComboboxOption[] {
-    const q = normalizeForSearch(this.query);
-    return this.options.filter((o) => normalizeForSearch(o.label).includes(q));
+    const q = normalizeSearchText(this.query);
+    return this.options.filter((o) => normalizeSearchText(o.label).includes(q));
   }
 
   // `activeIndex` counts positions in this list (enabled options only) — using the same list here and in
@@ -198,9 +196,9 @@ export class Combobox extends FormControlElement {
     if (!this.creatable || this._isDisabled) return false;
     const q = this.query.trim();
     if (!q) return false;
-    const qn = normalizeForSearch(q);
-    if (this.options.some((o) => normalizeForSearch(o.label) === qn)) return false;
-    if (this.multiple && this._selected.some((v) => normalizeForSearch(v) === qn)) return false;
+    const qn = normalizeSearchText(q);
+    if (this.options.some((o) => normalizeSearchText(o.label) === qn)) return false;
+    if (this.multiple && this._selected.some((v) => normalizeSearchText(v) === qn)) return false;
     return true;
   }
 
@@ -220,21 +218,14 @@ export class Combobox extends FormControlElement {
     dispatch(this, 'change', { value });
   }
 
-  // Clicking an option button would otherwise focus it first (the default mousedown action) — a button that
-  // momentarily takes focus, then vanishes as the dropdown closes, drops focus off the input. Suppressing just
-  // that default action leaves the click itself (and selectOption) untouched, and the input stays focused.
-  private _preventFocusSteal(e: MouseEvent) {
-    e.preventDefault();
-  }
-
   private get _showClear(): boolean {
-    return this.clearable && this._selected.length > 0 && !this._isDisabled;
+    return shouldShowClear(this.clearable, this._selected, this._isDisabled);
   }
 
   // Stops propagation so clicking clear doesn't also open the dropdown via .input-wrap's own click handler.
   private _clear(e: MouseEvent) {
     e.stopPropagation();
-    this.value = this.multiple ? [] : '';
+    this.value = clearValue(this.multiple);
     this.query = '';
     dispatch(this, 'change', { value: this.value });
   }
@@ -263,8 +254,7 @@ export class Combobox extends FormControlElement {
   private selectOption(opt: ComboboxOption) {
     if (opt.disabled) return;
     if (this.multiple) {
-      const current = this._selected;
-      this.value = current.includes(opt.value) ? current.filter((v) => v !== opt.value) : [...current, opt.value];
+      this.value = toggleSelected(this._selected, opt.value);
       this.query = '';
       this.activeIndex = -1;
       dispatch(this, 'change', { value: this.value });
@@ -276,7 +266,7 @@ export class Combobox extends FormControlElement {
   }
 
   private _removeTag(value: string) {
-    this.value = this._selected.filter((v) => v !== value);
+    this.value = toggleSelected(this._selected, value);
     dispatch(this, 'change', { value: this.value });
   }
 
@@ -383,15 +373,12 @@ export class Combobox extends FormControlElement {
 
   override willUpdate(changed: PropertyValues<this>) {
     super.willUpdate(changed);
-    if (this.multiple && !Array.isArray(this.value)) this.value = this._selected;
+    if (this.multiple && !Array.isArray(this.value)) this.value = normalizeSelection(this.value);
   }
 
   updated(changedProperties: Map<string, unknown>) {
     if (this.multiple) {
-      const formData = new FormData();
-      const name = this.getAttribute('name');
-      if (name) for (const v of this._selected) formData.append(name, v);
-      this._internals.setFormValue(formData);
+      this._internals.setFormValue(selectionFormData(this.getAttribute('name'), this._selected));
     } else {
       this._internals.setFormValue(this.value as string);
     }
@@ -416,50 +403,34 @@ export class Combobox extends FormControlElement {
   }
 
   protected override set _formValue(value: unknown) {
-    this.value = Array.isArray(value) ? value.map(String) : value == null ? '' : String(value);
+    this.value = coerceListboxValue(value);
   }
 
   private _renderOption(opt: ComboboxOption, activeOption: ComboboxOption | undefined) {
-    return html`
-      <button
-        id=${this._idFor(opt)}
-        class="option"
-        role="option"
-        tabindex="-1"
-        aria-selected=${this._selected.includes(opt.value)}
-        ?disabled=${opt.disabled}
-        data-active=${opt === activeOption}
-        @mousedown=${this._preventFocusSteal}
-        @click=${() => this.selectOption(opt)}
-      >
-        ${opt.icon ? html`<lt-icon class="option-icon" name=${opt.icon} size="sm"></lt-icon>` : nothing}
-        <span class="option-content">
-          <span class="option-label">${opt.label}</span>
-          ${opt.description ? html`<span class="option-description">${opt.description}</span>` : nothing}
-        </span>
-      </button>
-    `;
+    return renderListboxOption({
+      id: this._idFor(opt),
+      label: opt.label,
+      description: opt.description,
+      icon: opt.icon,
+      selected: this._selected.includes(opt.value),
+      disabled: opt.disabled,
+      active: opt === activeOption,
+      onSelect: () => this.selectOption(opt)
+    });
   }
 
   private _renderCreateRow() {
     const onCreateRow = this.activeIndex === this.enabledOpts.length;
-    return html`
-      <button
-        id=${`${this._uid}-create`}
-        class="option option-create"
-        role="option"
-        tabindex="-1"
-        aria-selected="false"
-        data-active=${onCreateRow}
-        @mousedown=${this._preventFocusSteal}
-        @click=${() => this._createOption()}
-      >
-        <lt-icon class="option-icon" name="plus" size="sm"></lt-icon>
-        <span class="option-content">
-          <span class="option-label">${this._labels.create(this.query.trim())}</span>
-        </span>
-      </button>
-    `;
+    return renderListboxOption({
+      id: `${this._uid}-create`,
+      label: this._labels.create(this.query.trim()),
+      icon: 'plus',
+      selected: false,
+      disabled: false,
+      active: onCreateRow,
+      create: true,
+      onSelect: () => this._createOption()
+    });
   }
 
   render() {
@@ -520,7 +491,7 @@ export class Combobox extends FormControlElement {
               type="button"
               class="clear-button"
               aria-label=${this._labels.clear}
-              @mousedown=${this._preventFocusSteal}
+              @mousedown=${preventFocusSteal}
               @click=${this._clear}
             >
               <lt-icon name="xmark" size="sm"></lt-icon>
@@ -547,20 +518,10 @@ export class Combobox extends FormControlElement {
                 aria-busy=${this.loading ? 'true' : nothing}
               >
                 ${this.loading
-                  ? html`<div class="loading-state">
-                      <lt-spinner size="sm"></lt-spinner>
-                      <lt-text variant="caption" as="span">${this._labels.loading}</lt-text>
-                    </div>`
+                  ? renderListboxLoading(this._labels.loading)
                   : html`
                       ${opts.length > 0
-                        ? groupConsecutive(opts).map((run) =>
-                            run.group
-                              ? html`<div class="option-group" role="group" aria-label=${run.group}>
-                                  <div class="option-group-label" aria-hidden="true">${run.group}</div>
-                                  ${run.items.map((opt) => this._renderOption(opt, activeOption))}
-                                </div>`
-                              : run.items.map((opt) => this._renderOption(opt, activeOption))
-                          )
+                        ? renderListboxGroups(opts, (opt) => this._renderOption(opt, activeOption))
                         : showCreate
                           ? nothing
                           : html`<p class="no-results">${this._labels.noResults}</p>`}

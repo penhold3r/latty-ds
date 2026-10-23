@@ -1,0 +1,95 @@
+import type { TextfieldType, TextfieldVariant } from './textfield.types';
+
+export interface TextfieldValidationInput {
+  value: string;
+  type: TextfieldType;
+  /** The native attributes forwarded onto the inner control, read straight off the host. */
+  min?: string | null;
+  max?: string | null;
+  minlength?: string | null;
+  maxlength?: string | null;
+}
+
+/**
+ * The textfield's own format and constraint rules — the ones the native control either can't express at all
+ * (`tel`'s pattern) or that the component wants to report before the browser does.
+ *
+ * An empty value is always valid: `required` is left to the native control's own `valueMissing` validity, so
+ * treating "empty" as invalid here would double-report the same failure.
+ */
+export function isValidTextfieldValue(input: TextfieldValidationInput): boolean {
+  const { value, type } = input;
+  if (!value) return true;
+
+  if (type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return false;
+
+  if (type === 'url') {
+    try {
+      new URL(value);
+    } catch {
+      return false;
+    }
+  }
+
+  if (type === 'tel' && !/^[+\d][\d\s()\-.]{2,}$/.test(value)) return false;
+
+  if (type === 'number') {
+    const number = Number(value);
+    if (Number.isNaN(number)) return false;
+    if (hasValue(input.min) && number < Number(input.min)) return false;
+    if (hasValue(input.max) && number > Number(input.max)) return false;
+  } else {
+    if (hasValue(input.minlength) && value.length < Number(input.minlength)) return false;
+    if (hasValue(input.maxlength) && value.length > Number(input.maxlength)) return false;
+  }
+
+  return true;
+}
+
+const hasValue = (attribute: string | null | undefined): attribute is string =>
+  attribute !== null && attribute !== undefined && attribute !== '';
+
+/**
+ * The icon at the field's end, or `''` when it shows none. Password fields trade the variant icon for their
+ * visibility toggle; the other variants show the icon that matches their state.
+ */
+export function getTextfieldEndIcon(
+  type: TextfieldType,
+  variant: TextfieldVariant,
+  autoError: boolean,
+  passwordVisible: boolean
+): string {
+  if (type === 'password') return passwordVisible ? 'eye-off' : 'eye';
+
+  const effectiveVariant = autoError ? 'error' : variant;
+  switch (effectiveVariant) {
+    case 'success':
+      return 'check-circle';
+    case 'warning':
+      return 'warning-triangle';
+    case 'error':
+      return 'xmark-circle';
+    default:
+      return '';
+  }
+}
+
+/**
+ * Whether the field shows its clear button. Password fields are excluded on purpose — their own visibility
+ * toggle already occupies the end of the field, and a masking field clearing itself on a stray click is a
+ * worse trade than the convenience is worth.
+ */
+export function shouldShowTextfieldClear(
+  clearable: boolean,
+  value: string,
+  disabled: boolean,
+  readonly: boolean,
+  type: TextfieldType
+): boolean {
+  return clearable && !!value && !disabled && !readonly && type !== 'password';
+}
+
+/** The native input type actually rendered — a visible password is a plain text input. */
+export function resolveTextfieldInputType(type: TextfieldType, passwordVisible: boolean): TextfieldType {
+  return type === 'password' && passwordVisible ? 'text' : type;
+}

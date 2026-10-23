@@ -12,8 +12,17 @@ import '../text/text';
 import '../spinner/';
 import { PopupController } from '../shared/popup';
 import { NativeAttrsController } from '../shared/native-attrs';
-import { groupConsecutive } from '../shared/option-groups';
 import { nextListboxIndex, ListboxTypeahead } from '../shared/listbox-nav';
+import { preventFocusSteal } from '../shared/focus';
+import { renderListboxGroups, renderListboxLoading, renderListboxOption } from '../shared/listbox-option';
+import {
+  clearValue,
+  coerceListboxValue,
+  normalizeSelection,
+  selectionFormData,
+  shouldShowClear,
+  toggleSelected
+} from '../shared/listbox-selection';
 
 let selectCount = 0;
 
@@ -102,8 +111,7 @@ export class Select extends FormControlElement {
   @property({ type: Boolean, reflect: true }) multiple = false;
 
   private get _selected(): string[] {
-    if (Array.isArray(this.value)) return this.value;
-    return this.value ? [this.value] : [];
+    return normalizeSelection(this.value);
   }
 
   /**
@@ -194,23 +202,15 @@ export class Select extends FormControlElement {
     return `${this._uid}-option-${this.options.indexOf(option)}`;
   }
 
-  // Clicking an option button would otherwise focus it first (the default mousedown action) — a button that
-  // momentarily takes focus, then vanishes as the dropdown closes, drops focus to nothing sensible. Suppressing
-  // just that default action leaves the click itself (and selectOption) untouched, and the trigger — which
-  // never lost focus to begin with — stays the active element throughout.
-  private _preventFocusSteal(e: MouseEvent) {
-    e.preventDefault();
-  }
-
   private get _showClear(): boolean {
-    return this.clearable && this._selected.length > 0 && !this._isDisabled;
+    return shouldShowClear(this.clearable, this._selected, this._isDisabled);
   }
 
   // Stops propagation so clicking clear doesn't also toggle the dropdown open — the trigger's own click handler
   // would otherwise fire right after this one, since the clear button lives inside it.
   private _clear(e: MouseEvent) {
     e.stopPropagation();
-    this.value = this.multiple ? [] : '';
+    this.value = clearValue(this.multiple);
     dispatch(this, 'change', { value: this.value });
   }
 
@@ -250,10 +250,7 @@ export class Select extends FormControlElement {
     if (option.disabled) return;
 
     if (this.multiple) {
-      const current = this._selected;
-      this.value = current.includes(option.value)
-        ? current.filter((v) => v !== option.value)
-        : [...current, option.value];
+      this.value = toggleSelected(this._selected, option.value);
       dispatch(this, 'change', { value: this.value });
       return;
     }
@@ -349,7 +346,7 @@ export class Select extends FormControlElement {
 
   override willUpdate(changed: PropertyValues<this>) {
     super.willUpdate(changed);
-    if (this.multiple && !Array.isArray(this.value)) this.value = this._selected;
+    if (this.multiple && !Array.isArray(this.value)) this.value = normalizeSelection(this.value);
     // Start the active option at whichever one is already selected (if any), not always the top — so Arrow
     // keys move relative to the real selection on reopen, matching a native <select> (SEL-5). Set here, not in
     // updated(), so it lands in the SAME render pass as `isOpen` flipping, rather than scheduling a second one.
@@ -363,10 +360,7 @@ export class Select extends FormControlElement {
 
   updated(changedProperties: Map<string, unknown>) {
     if (this.multiple) {
-      const formData = new FormData();
-      const name = this.getAttribute('name');
-      if (name) for (const v of this._selected) formData.append(name, v);
-      this._internals.setFormValue(formData);
+      this._internals.setFormValue(selectionFormData(this.getAttribute('name'), this._selected));
     } else {
       this._internals.setFormValue(this._selected[0] || null);
     }
@@ -400,29 +394,20 @@ export class Select extends FormControlElement {
   }
 
   protected override set _formValue(value: unknown) {
-    this.value = Array.isArray(value) ? value.map(String) : value == null ? '' : String(value);
+    this.value = coerceListboxValue(value);
   }
 
   private _renderOption(option: SelectOption, activeOption: SelectOption | undefined) {
-    return html`
-      <button
-        id=${this._idFor(option)}
-        class="option"
-        role="option"
-        tabindex="-1"
-        aria-selected=${this._selected.includes(option.value)}
-        ?disabled=${option.disabled}
-        data-active=${option === activeOption}
-        @mousedown=${this._preventFocusSteal}
-        @click=${() => this.selectOption(option)}
-      >
-        ${option.icon ? html`<lt-icon class="option-icon" name=${option.icon} size="sm"></lt-icon>` : nothing}
-        <span class="option-content">
-          <span class="option-label">${option.label}</span>
-          ${option.description ? html`<span class="option-description">${option.description}</span>` : nothing}
-        </span>
-      </button>
-    `;
+    return renderListboxOption({
+      id: this._idFor(option),
+      label: option.label,
+      description: option.description,
+      icon: option.icon,
+      selected: this._selected.includes(option.value),
+      disabled: option.disabled,
+      active: option === activeOption,
+      onSelect: () => this.selectOption(option)
+    });
   }
 
   render() {
@@ -464,7 +449,7 @@ export class Select extends FormControlElement {
                   type="button"
                   class="clear-button"
                   aria-label=${this._labels.clear}
-                  @mousedown=${this._preventFocusSteal}
+                  @mousedown=${preventFocusSteal}
                   @click=${this._clear}
                 >
                   <lt-icon name="xmark" size="sm"></lt-icon>
@@ -486,18 +471,8 @@ export class Select extends FormControlElement {
           >
             <div class="options-container">
               ${this.loading
-                ? html`<div class="loading-state">
-                    <lt-spinner size="sm"></lt-spinner>
-                    <lt-text variant="caption" as="span">${this._labels.loading}</lt-text>
-                  </div>`
-                : groupConsecutive(this.options).map((run) =>
-                    run.group
-                      ? html`<div class="option-group" role="group" aria-label=${run.group}>
-                          <div class="option-group-label" aria-hidden="true">${run.group}</div>
-                          ${run.items.map((option) => this._renderOption(option, activeOption))}
-                        </div>`
-                      : run.items.map((option) => this._renderOption(option, activeOption))
-                  )}
+                ? renderListboxLoading(this._labels.loading)
+                : renderListboxGroups(this.options, (option) => this._renderOption(option, activeOption))}
             </div>
           </lt-surface>
         </div>
