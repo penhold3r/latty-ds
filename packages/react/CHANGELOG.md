@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/penhold3r/latty-ds/compare/v1.2.0...v1.3.0) (2026-10-23)
+
+### Features
+
+- **react:** expose native HTML attribute types and normalize props ([b68766d](https://github.com/penhold3r/latty-ds/commit/b68766dbc0e859701f6daf16f0af2b39d5e2e139))
+- **web:** move the form-association plumbing into a shared base class ([e5ef339](https://github.com/penhold3r/latty-ds/commit/e5ef3397261d552074f106b7b912a5a82025fb59))
+
 # [1.2.0](https://github.com/penhold3r/latty-ds/compare/v1.1.0...v1.2.0) (2026-10-19)
 
 ### Bug Fixes

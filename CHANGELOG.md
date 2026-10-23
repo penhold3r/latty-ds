@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/penhold3r/latty-ds/compare/v1.2.0...v1.3.0) (2026-10-23)
+
+### Bug Fixes
+
+- **scripts:** repair new-icon.sh import, docs-insert and wiring bugs ([0b0d12f](https://github.com/penhold3r/latty-ds/commit/0b0d12fd4b3c957335ba807572a1b37f58d264e7))
+
+### Features
+
+- **icons:** add 32 icons across 5 new categories, reaching 200 total ([2c729e7](https://github.com/penhold3r/latty-ds/commit/2c729e71780d571ceb291143b536bfcc6e80934e))
+- **react:** expose native HTML attribute types and normalize props ([b68766d](https://github.com/penhold3r/latty-ds/commit/b68766dbc0e859701f6daf16f0af2b39d5e2e139))
+- **web:** forward native HTML attributes via NativeAttrsController ([e484c89](https://github.com/penhold3r/latty-ds/commit/e484c89f2edb00683e7c8a1acdfee2177dc6d4d9))
+- **web:** move the form-association plumbing into a shared base class ([e5ef339](https://github.com/penhold3r/latty-ds/commit/e5ef3397261d552074f106b7b912a5a82025fb59))
+- **web:** share one field presentation across the six labelled controls ([9dbb574](https://github.com/penhold3r/latty-ds/commit/9dbb5747a3f5c6cd786c69a094fbae784c779e72))
+- **web:** share one popup lifecycle across the four floating panels ([bfb5679](https://github.com/penhold3r/latty-ds/commit/bfb567943a2b89350788aab5ba9bfbfba358360c))
+
+### Performance Improvements
+
+- **web:** share the floating-ui runtime and stop shipping unused form code ([f69d468](https://github.com/penhold3r/latty-ds/commit/f69d4688926ffdb4be517822f91f8b10a12df7df))
+
 # [1.2.0](https://github.com/penhold3r/latty-ds/compare/v1.1.0...v1.2.0) (2026-10-19)
 
 ### Bug Fixes

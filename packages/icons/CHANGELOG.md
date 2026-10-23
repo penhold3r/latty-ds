@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/penhold3r/latty-ds/compare/v1.2.0...v1.3.0) (2026-10-23)
+
+### Features
+
+- **icons:** add 32 icons across 5 new categories, reaching 200 total ([2c729e7](https://github.com/penhold3r/latty-ds/commit/2c729e71780d571ceb291143b536bfcc6e80934e))
+
 # [1.1.0](https://github.com/penhold3r/latty-ds/compare/v1.0.0...v1.1.0) (2026-10-19)
 
 ### Bug Fixes
