@@ -10,6 +10,8 @@ const VARIANTS = ['primary', 'secondary', 'success', 'warning', 'error', 'info']
  * near-white text that sits on it (button, solid badge) — neutral-600 is 5.3:1, and the hover/active
  * steps only get darker. Same steps in both themes: the on-text is fixed near-white either way, so
  * the "lighter steps for dark surfaces" rule doesn't apply.
+ * @param {SemanticTokenMap} map - The semantic token map to modify.
+ * @returns {void}
  */
 const addNeutralInteractive = (map: SemanticTokenMap): void => {
   map['interactive-neutral-bg'] = 'color-neutral-600';
@@ -44,10 +46,14 @@ const BORDER_STEPS = {
   }
 } as const;
 
-/*
+/**
  * Interactive fills and the text on them, for every variant. Picked from the real generated ramps rather than
  * hard-coded (white on the 500 step failed AA for success/error/info in light and for most variants in dark, and
  * primary's pressed state too), so text reaches WCAG AA on the resting, hover and pressed fills in both themes.
+ * @param {SemanticTokenMap} map - The semantic token map to modify.
+ * @param {ThemeMode} mode - The theme mode.
+ * @param {ColorPalettes} palettes - The color palettes.
+ * @returns {void}
  */
 const addInteractive = (map: SemanticTokenMap, mode: ThemeMode, palettes: ColorPalettes): void => {
   for (const v of VARIANTS) {
@@ -60,6 +66,11 @@ const addInteractive = (map: SemanticTokenMap, mode: ThemeMode, palettes: ColorP
   addNeutralInteractive(map);
 };
 
+/**
+ * Builds semantic tokens for light mode.
+ * @param {SemanticTokenOptions} opts - The semantic token options.
+ * @returns {SemanticTokenMap} The light mode semantic tokens.
+ */
 const buildLightSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap => {
   const map: SemanticTokenMap = {};
 
@@ -121,6 +132,11 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap 
   return map;
 };
 
+/**
+ * Builds semantic tokens for dark mode.
+ * @param {SemanticTokenOptions} opts - The semantic token options.
+ * @returns {SemanticTokenMap} The dark mode semantic tokens.
+ */
 const buildDarkSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap => {
   const map: SemanticTokenMap = {};
 
@@ -179,5 +195,11 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap =
   return map;
 };
 
+/**
+ * Builds semantic tokens for the specified mode.
+ * @param {ThemeMode} mode - The theme mode ('light' or 'dark').
+ * @param {SemanticTokenOptions} opts - The semantic token options.
+ * @returns {SemanticTokenMap} The semantic tokens.
+ */
 export const buildSemanticTokens = (mode: ThemeMode, opts: SemanticTokenOptions): SemanticTokenMap =>
   mode === 'dark' ? buildDarkSemanticTokens(opts) : buildLightSemanticTokens(opts);

@@ -9,7 +9,10 @@ export interface ResolvedFont {
 
 const FONT_FAMILY_SLOT_NAMES = ['Primary', 'Secondary', 'Tertiary', 'Quaternary'] as const;
 
-/** Maps a `font.family` array index to its typography token key, e.g. `0` → `fontFamilyPrimary`, `4` → `fontFamily5`. */
+/** Maps a `font.family` array index to its typography token key, e.g. `0` → `fontFamilyPrimary`, `4` → `fontFamily5`.
+ * @param {number} index - The array index.
+ * @returns {string} The typography token key.
+ */
 export const fontFamilySlot = (index: number): string =>
   `fontFamily${FONT_FAMILY_SLOT_NAMES[index] ?? String(index + 1)}`;
 
@@ -18,6 +21,8 @@ export const fontFamilySlot = (index: number): string =>
  * of a JS/CSS string literal example (`'https://...'` → `https://...`).
  * Leaves legitimate CSS values like `"Times New Roman", serif` alone, since
  * those don't start *and* end with the same quote character.
+ * @param {string} value - The value to unwrap.
+ * @returns {string} The unwrapped value.
  */
 const unwrapQuotes = (value: string): string => {
   const trimmed = value.trim();
@@ -30,7 +35,10 @@ const unwrapQuotes = (value: string): string => {
 
 const isUrl = (value: string): boolean => /^https?:\/\//i.test(value);
 
-/** Splits a single `family` query value on the legacy `|` separator, then strips the `:ital,wght@...` axis spec. */
+/** Splits a single `family` query value on the legacy `|` separator, then strips the `:ital,wght@...` axis spec.
+ * @param {string} raw - The raw family parameter.
+ * @returns {string[]} The extracted font names.
+ */
 const namesFromFamilyParam = (raw: string): string[] =>
   raw
     .split('|')
@@ -55,6 +63,8 @@ const quoteIfNeeded = (name: string): string => (/\s/.test(name) ? `"${name}"` :
  *
  * A single layer of wrapping quotes is stripped before any of the above —
  * easy to end up with when copying a URL out of a quoted JS/CSS example.
+ * @param {FontFamilyEntry} entry - The font family entry.
+ * @returns {ResolvedFont} The resolved font.
  */
 const resolveSingleFont = (entry: FontFamilyEntry): ResolvedFont => {
   const rawValue = typeof entry === 'string' ? entry : entry.url;
@@ -86,6 +96,8 @@ const resolveSingleFont = (entry: FontFamilyEntry): ResolvedFont => {
  * typography token via {@link fontFamilySlot} — the array isn't collapsed
  * into a single CSS fallback stack, so a consumer can reference each font
  * independently (e.g. A heading font vs. A body font).
+ * @param {FontFamilyEntry | FontFamilyEntry[]} value - The font family entry or array.
+ * @returns {ResolvedFont[]} Array of resolved fonts.
  */
 export const resolveFontFamilies = (value: FontFamilyEntry | FontFamilyEntry[]): ResolvedFont[] =>
   (Array.isArray(value) ? value : [value]).map(resolveSingleFont);

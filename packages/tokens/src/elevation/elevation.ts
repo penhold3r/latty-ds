@@ -14,6 +14,8 @@ export type ElevationTokens = Record<ElevationLevel, string>;
  * Converts a `#rrggbb` hex color into space-separated decimal RGB channels (e.g. `"27 27 27"`), the format CSS's
  * `rgb(<channels> / <alpha>)` syntax expects. Shared by `buildElevation` (below) and `buildShadow` (`../shadow/`),
  * which both derive a shadow-ink color from the same neutral-900 base.
+ * @param {string} hex - The hex color string.
+ * @returns {string} Space-separated RGB channels.
  */
 export const hexToRgbChannels = (hex: string): string => {
   const stripped = hex.replace('#', '');
@@ -29,8 +31,8 @@ export const hexToRgbChannels = (hex: string): string => {
  *
  * The shadows use the neutral palette to ensure they match the design system's
  * color scheme and maintain consistency across light/dark modes.
- * @param neutral - The neutral color palette from the token system.
- * @returns ElevationTokens object with shadow values for each level.
+ * @param {PaletteFlat} neutral - The neutral color palette from the token system.
+ * @returns {ElevationTokens} ElevationTokens object with shadow values for each level.
  * @example
  * ```typescript
  * const neutral = { "900": "#171717", "800": "#262626", ... };

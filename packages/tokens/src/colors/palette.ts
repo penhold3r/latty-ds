@@ -15,10 +15,10 @@ const toRgb = converter('rgb');
 
 /**
  * Clamps a number between minimum and maximum values.
- * @param n - Number to clamp.
- * @param min - Minimum allowed value.
- * @param max - Maximum allowed value.
- * @returns Clamped value.
+ * @param {number} n - Number to clamp.
+ * @param {number} min - Minimum allowed value.
+ * @param {number} max - Maximum allowed value.
+ * @returns {number} Clamped value.
  */
 const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
 
@@ -30,6 +30,14 @@ const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(ma
  * canonical dark anchor), with the pivot step landing exactly on `lPivot`.
  * This guarantees a full light-to-dark range regardless of where the brand
  * color sits in lightness space.
+ * @param {Oklch} base - The base OKLCH color.
+ * @param {object} [opts] - Optional parameters.
+ * @param {number} [opts.chromaScale] - Overall saturation multiplier.
+ * @param {number} [opts.lPivot] - Lightness to anchor at step 500 (defaults to L_BY_STEP[500]).
+ * @param {number} [opts.midBoost] - Extra saturation around 400–700 (0.0 = none).
+ * @param {number} [opts.darkClamp] - Max chroma for 800–900.
+ * @param {number} [opts.minChromaFactor] - CMin = cMax * this.
+ * @returns {Palette} The generated palette.
  */
 const rampFromBase = (
   base: Oklch,
@@ -99,9 +107,9 @@ const rampFromBase = (
 /**
  * Generates main and muted color palettes from a base hex color.
  * Uses OKLCH color space for perceptually uniform color generation.
- * @param hex - Base color in hex format (e.g., "#3b82f6").
- * @param useMuted - Whether to generate a muted variant (default: false).
- * @returns Object containing main palette and optional muted palette.
+ * @param {string} hex - Base color in hex format (e.g., "#3b82f6").
+ * @param {boolean} [useMuted] - Whether to generate a muted variant (default: false).
+ * @returns {{ main: Palette; muted: Palette | null }} Object containing main palette and optional muted palette.
  * @throws {Error} If the provided hex color is invalid.
  * @example
  * ```typescript
@@ -140,7 +148,7 @@ export const generatePalettes = (hex: string, useMuted?: boolean) => {
 /**
  * Generates the neutral (grayscale) color palette.
  * Creates a perceptually uniform gray scale from near-white to near-black.
- * @returns Palette with neutral colors across all steps.
+ * @returns {Palette} Palette with neutral colors across all steps.
  * @example
  * ```typescript
  * const neutral = generateNeutralScale();
@@ -162,7 +170,7 @@ export const generateNeutralScale = (): Palette => {
 /**
  * Generates pure black and white color values.
  * Used for absolute contrast and special cases.
- * @returns Object with white and black hex values.
+ * @returns {{ white: string; black: string }} Object with white and black hex values.
  */
 export const generateBWColors = () => {
   return {

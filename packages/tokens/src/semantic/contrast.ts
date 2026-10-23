@@ -31,6 +31,11 @@ export interface VariantColors {
   active: string;
 }
 
+/**
+ * Calculates the relative luminance of a color.
+ * @param {string} hex - The hex color string.
+ * @returns {number} The relative luminance.
+ */
 export const relativeLuminance = (hex: string): number => {
   const r = parseInt(hex.slice(1, 3), 16) / 255;
   const g = parseInt(hex.slice(3, 5), 16) / 255;
@@ -39,6 +44,12 @@ export const relativeLuminance = (hex: string): number => {
   return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
 };
 
+/**
+ * Calculates the contrast ratio between two colors.
+ * @param {string} a - The first hex color.
+ * @param {string} b - The second hex color.
+ * @returns {number} The contrast ratio.
+ */
 export const contrastRatio = (a: string, b: string): number => {
   const la = relativeLuminance(a);
   const lb = relativeLuminance(b);
@@ -62,6 +73,13 @@ const LADDER: Record<
   dark: { rest: 400, hover: { directions: [-1, 1], steps: 1 }, active: { directions: [1, -1], steps: 1 } }
 };
 
+/**
+ * Converts a palette value to a Palette object, throwing if invalid.
+ * @param {Palette | string | undefined} value - The palette value.
+ * @param {string} name - The palette name for error messages.
+ * @returns {Palette} The palette.
+ * @throws {Error} If the palette value is invalid or undefined.
+ */
 const asPalette = (value: Palette | string | undefined, name: string): Palette => {
   if (value === undefined || typeof value === 'string') throw new Error(`No colour ramp named "${name}"`);
   return value;
@@ -78,6 +96,11 @@ const asPalette = (value: Palette | string | undefined, name: string): Palette =
  *
  * Hover and pressed fills walk the ramp from the resting step in the theme's usual direction, flip if the text
  * would fail that way, and stay put if neither direction has room, so the text never drops below the target.
+ * @param {string} variant - The variant name.
+ * @param {ColorPalettes} palettes - The color palettes.
+ * @param {ThemeMode} mode - The theme mode.
+ * @param {number} [minContrast] - The minimum contrast ratio.
+ * @returns {VariantColors} The resolved variant colors.
  */
 export const resolveVariantColors = (
   variant: string,

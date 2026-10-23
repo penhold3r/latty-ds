@@ -19,7 +19,10 @@ const toInternalConfig = (userConfig: LattyConfig): Config => ({
   color: { ...DEFAULTS.colors, ...userConfig.colors }
 });
 
-/** Maps the named presets (thin/medium/thick) to px; any other CSS length passes through. */
+/** Maps the named presets (thin/medium/thick) to px; any other CSS length passes through.
+ * @param {BorderWidth} width - The border width.
+ * @returns {string} The resolved border width in px.
+ */
 const resolveBorderWidth = (width: BorderWidth): string =>
   BORDER_WIDTH_PRESETS[width as keyof typeof BORDER_WIDTH_PRESETS] ?? width;
 
@@ -27,6 +30,8 @@ const resolveBorderWidth = (width: BorderWidth): string =>
  * Generates a complete CSS stylesheet string (primitive + semantic tokens)
  * from the provided config. Useful for SSR — inject the returned string into
  * a `<style>` tag server-side.
+ * @param {LattyConfig} [userConfig] - Design system configuration.
+ * @returns {string} Complete CSS stylesheet string.
  */
 export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
   const cfg = toInternalConfig(userConfig);
@@ -121,6 +126,8 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
  * separate `<link>` tag needed). Array entries map to their own token in
  * order — `--lt-typography-fontFamilyPrimary`, `...Secondary`, `...Tertiary`,
  * etc. — so each font can be referenced independently in your own CSS.
+ * @param {LattyConfig} [userConfig] - Design system configuration.
+ * @returns {void}
  * @example
  * ```html
  * <script type="module">
