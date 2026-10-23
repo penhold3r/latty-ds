@@ -1,8 +1,9 @@
 // codegen:manual — extended to set no-close-button attribute directly (React 18 lowercases camelCase on custom elements)
-import { useRef, useEffect, useLayoutEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useEffect, useLayoutEffect, useImperativeHandle, forwardRef, type DialogHTMLAttributes } from 'react';
 import type { SidePanel as SidePanelEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type SidePanelProps = HTMLAttributes<SidePanelEl> & {
+export type SidePanelProps = Omit<DialogHTMLAttributes<SidePanelEl>, 'open' | 'size' | 'label'> & {
   open?: boolean;
   anchor?: SidePanelEl['anchor'];
   size?: string;
@@ -15,7 +16,7 @@ export type SidePanelProps = HTMLAttributes<SidePanelEl> & {
 };
 
 export const SidePanel = forwardRef<SidePanelEl, SidePanelProps>(function SidePanel(
-  { onClose, noCloseButton, labels, children, ...props },
+  { onClose, open, noCloseButton, backdropBlur, overlayOpacity, labels, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SidePanelEl>(null);
@@ -45,7 +46,15 @@ export const SidePanel = forwardRef<SidePanelEl, SidePanelProps>(function SidePa
   }, [labels]);
 
   return (
-    <lt-sidepanel ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-sidepanel
+      ref={innerRef}
+      suppressHydrationWarning
+      {...normalizeNativeProps(props as Record<string, unknown>)}
+      open={open || undefined}
+      no-close-button={noCloseButton || undefined}
+      backdrop-blur={backdropBlur || undefined}
+      overlay-opacity={overlayOpacity}
+    >
       {children}
     </lt-sidepanel>
   );

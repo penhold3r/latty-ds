@@ -1,15 +1,12 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type ImgHTMLAttributes } from 'react';
 import type { Image as ImageEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type ImageProps = Omit<HTMLAttributes<ImageEl>, 'onLoad' | 'onError'> & {
+export type ImageProps = Omit<ImgHTMLAttributes<ImageEl>, 'onLoad' | 'onError' | 'src'> & {
   src?: string;
-  alt?: string;
-  srcset?: string;
-  sizes?: string;
   aspectRatio?: string;
   rounded?: ImageEl['rounded'];
   responsive?: boolean;
-  loading?: ImageEl['loading'];
   onLoad?: (event: CustomEvent<{ src: string }>) => void;
   onError?: (event: CustomEvent<{ src: string }>) => void;
 };
@@ -41,7 +38,7 @@ export const Image = forwardRef<ImageEl, ImageProps>(function Image(
     <lt-image
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       aspect-ratio={aspectRatio}
       responsive={responsive || undefined}
     >

@@ -1,8 +1,11 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, type InputHTMLAttributes } from 'react';
 import type { Slider as SliderEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type SliderProps = Omit<HTMLAttributes<SliderEl>, 'onInput' | 'onChange'> & {
-  formAssociated?: boolean;
+export type SliderProps = Omit<
+  InputHTMLAttributes<SliderEl>,
+  'onInput' | 'onChange' | 'size' | 'disabled' | 'min' | 'max' | 'step' | 'value' | 'label'
+> & {
   size?: SliderEl['size'];
   disabled?: boolean;
   tooltip?: boolean;
@@ -11,13 +14,12 @@ export type SliderProps = Omit<HTMLAttributes<SliderEl>, 'onInput' | 'onChange'>
   step?: number;
   value?: number;
   label?: string;
-  name?: string;
   onInput?: (event: CustomEvent<{ value: number }>) => void;
   onChange?: (event: CustomEvent<{ value: number }>) => void;
 };
 
 export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
-  { onInput, onChange, formAssociated, disabled, tooltip, children, ...props },
+  { onInput, onChange, disabled, tooltip, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SliderEl>(null);
@@ -43,8 +45,7 @@ export const Slider = forwardRef<SliderEl, SliderProps>(function Slider(
     <lt-slider
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       disabled={disabled || undefined}
       tooltip={tooltip || undefined}
     >

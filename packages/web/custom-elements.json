@@ -236,6 +236,12 @@
             },
             {
               "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this._details)"
+            },
+            {
+              "kind": "field",
               "name": "_animating",
               "type": {
                 "text": "boolean"
@@ -783,6 +789,12 @@
             },
             {
               "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('img'))"
+            },
+            {
+              "kind": "field",
               "name": "src",
               "type": {
                 "text": "string"
@@ -1245,6 +1257,12 @@
             },
             {
               "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('a'), { exclude: ['target', 'rel'] })"
+            },
+            {
+              "kind": "field",
               "name": "href",
               "type": {
                 "text": "string"
@@ -1360,7 +1378,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "Button component with multiple variants, sizes, appearances, and loading state support.",
+          "description": "Button component with multiple variants, sizes, appearances, and loading state support.\nAutomatically forwards native `<button>` / `<a>` and `aria-*` attributes onto the inner control.",
           "name": "Button",
           "cssProperties": [
             {
@@ -1384,15 +1402,6 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
               "name": "shadowRootOptions",
               "type": {
                 "text": "object"
@@ -1402,23 +1411,9 @@
             },
             {
               "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_ariaForwarding",
+              "name": "_nativeAttrs",
               "privacy": "private",
-              "default": "new AriaForwardingController(this, () => this.shadowRoot?.querySelector('[part=\"base\"]'))"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('[part=\"base\"]'), { exclude: ['target', 'rel', 'aria-disabled', 'aria-busy', 'aria-label'] })"
             },
             {
               "kind": "field",
@@ -1435,16 +1430,13 @@
               "privacy": "private"
             },
             {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
+              "kind": "field",
+              "name": "_formValue",
+              "type": {
+                "text": "undefined"
+              },
+              "privacy": "protected",
+              "description": "A button holds no value of its own: its `name`/`value` only matter for the submitter that was\nactually clicked, and the browser handles that itself. A form reset therefore has nothing to\nrestore here, and there is no state for a browser restore to repopulate either."
             },
             {
               "kind": "method",
@@ -1586,57 +1578,12 @@
             },
             {
               "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the anchor's `target` attribute when `href` is set."
-            },
-            {
-              "kind": "field",
-              "name": "rel",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the anchor's `rel` attribute when `href` is set.\nDefaults to `noopener noreferrer` when `target=\"_blank\"` and `rel` is not specified."
-            },
-            {
-              "kind": "field",
               "name": "type",
               "type": {
                 "text": "ButtonType"
               },
               "default": "'button'",
               "description": "Form behaviour when the button is inside a `<form>`.\n`submit` triggers form validation and submission; `reset` restores initial values."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name submitted alongside `value` when this button triggers a form submission (`type=\"submit\"`), matching a\nnative `<button name value>` — only included in the submitted data for the button that actually triggered\nthe submission, not every submit button in the form."
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Value submitted alongside `name`. See `name`."
-            },
-            {
-              "kind": "field",
-              "name": "formAction",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Overrides the form's own `action` for a submission triggered by this button, matching a native\n`<button formaction>`. Only applies when `type=\"submit\"`."
             },
             {
               "kind": "field",
@@ -1677,7 +1624,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-button",
@@ -2460,35 +2407,6 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_default",
-              "privacy": "private",
-              "default": "new FormDefaultController(this, () => this.checked)"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
-            },
-            {
-              "kind": "field",
               "name": "_slotted",
               "privacy": "private",
               "default": "new SlottedContentController(this)"
@@ -2498,6 +2416,12 @@
               "name": "_fieldIds",
               "privacy": "private",
               "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.input, { exclude: ['aria-label', 'aria-checked', 'aria-describedby'] })"
             },
             {
               "kind": "field",
@@ -2573,15 +2497,6 @@
             },
             {
               "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
               "name": "value",
               "type": {
                 "text": "string"
@@ -2638,38 +2553,32 @@
               ]
             },
             {
-              "kind": "method",
-              "name": "formResetCallback"
-            },
-            {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "_isDisabled",
+              "name": "_formValue",
               "type": {
                 "text": "boolean"
               },
-              "privacy": "private",
-              "description": "`this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`).",
-              "readonly": true
+              "privacy": "protected",
+              "description": "A checkbox's value is its checked state — what a form reset restores and what a browser\nstate-restore repopulates. The value it *submits* is `this.value` while checked and nothing at all\nwhile not (see `updated()`), which is exactly how a native checkbox behaves."
             },
             {
               "kind": "method",
-              "name": "checkValidity"
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity"
+              "name": "_restoreFormState",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "File | string | FormData | null"
+                  }
+                }
+              ],
+              "description": "A toggleable control's saved state is its `value` string — or nothing at all, when it was\nunchecked — so restored checkedness means \"the saved value is this checkbox's own value\"."
             },
             {
               "kind": "method",
@@ -2712,7 +2621,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-checkbox",
@@ -3061,32 +2970,9 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_default",
+              "name": "_nativeAttrs",
               "privacy": "private",
-              "default": "new FormDefaultController(this, () => this.value)"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input[type=\"color\"]'), { exclude: ['aria-label'] })"
             },
             {
               "kind": "field",
@@ -3144,15 +3030,6 @@
             },
             {
               "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name used when submitting a form."
-            },
-            {
-              "kind": "field",
               "name": "size",
               "type": {
                 "text": "ColorInputSize"
@@ -3183,38 +3060,13 @@
               "name": "updated"
             },
             {
-              "kind": "method",
-              "name": "formResetCallback"
-            },
-            {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "_isDisabled",
+              "name": "_formValue",
               "type": {
-                "text": "boolean"
+                "text": "string"
               },
-              "privacy": "private",
-              "description": "`this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`).",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "checkValidity"
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity"
+              "privacy": "protected",
+              "description": "A text-like control's value is its `value` — what a form reset restores and what a browser\nstate-restore repopulates."
             },
             {
               "kind": "method",
@@ -3244,7 +3096,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-color-input",
@@ -3287,7 +3139,7 @@
           "type": {
             "text": "array"
           },
-          "default": "[ floatingPanelReset, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-text-error); margin-inline-start: 2px; } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); } :host([variant='error']) .input-wrap { border-color: var(--lt-text-error); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-border-success-strong); } :host([variant='warning']) .input-wrap { border-color: var(--lt-border-warning-strong); } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .input-wrap, :host(:disabled) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-text-muted)); } :host([disabled]) input, :host(:disabled) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } /* Multiple mode: tags replace the fixed single-line height with a wrapping row, min-height per size instead. */ :host([multiple]) .input-wrap { flex-wrap: wrap; height: auto; overflow: visible; padding-block: var(--lt-spacing-1); } :host([multiple][size='sm']) .input-wrap { min-height: 32px; } :host([multiple][size='md']) .input-wrap, :host([multiple]:not([size])) .input-wrap { min-height: 40px; } :host([multiple][size='lg']) .input-wrap { min-height: 48px; } :host([multiple]) input { min-width: 80px; } .clear-button { align-items: center; background: none; border-radius: var(--lt-border-radius, 4px); border: 0; color: var(--lt-text-subtle); cursor: pointer; display: flex; flex-shrink: 0; padding: 0; } .clear-button:hover { color: var(--lt-text-default); } .clear-button:focus-visible { outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color); outline-offset: var(--lt-border-focusRingOffset); } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform var(--lt-duration-fast) var(--lt-ease-standard); } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); box-shadow: var(--lt-elevation-2); max-height: 240px; overflow-y: auto; z-index: var(--lt-z-overlay); } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; gap: var(--lt-spacing-2); padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: start; width: 100%; } .option-icon { color: var(--lt-text-subtle); flex-shrink: 0; } .option-content { display: flex; flex-direction: column; min-width: 0; overflow: hidden; } .option-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-description { color: var(--lt-text-subtle); font-size: 0.8125em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-create, .option-create .option-icon { color: var(--lt-text-primary); } .option-group-label { color: var(--lt-text-subtle); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; padding: var(--lt-spacing-2) var(--lt-spacing-3) var(--lt-spacing-1); text-transform: uppercase; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[data-active='true'] { background: var(--lt-bg-neutral-subtle); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .loading-state { align-items: center; color: var(--lt-text-subtle); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-4) var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); } .helper-text::part(base) { font-weight: 200; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .input-wrap, .chevron { transition: none; } } ` ]"
+          "default": "[ floatingPanelReset, formFieldStyles, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); position: relative; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); } .input-wrap { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); cursor: text; display: flex; gap: var(--lt-spacing-2); overflow: hidden; position: relative; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); } :host([open]) .input-wrap, .input-wrap:focus-within { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); } :host([variant='error']) .input-wrap { border-color: var(--lt-text-error); } :host([variant='error'][open]) .input-wrap, :host([variant='error']) .input-wrap:focus-within { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } :host([variant='success']) .input-wrap { border-color: var(--lt-border-success-strong); } :host([variant='warning']) .input-wrap { border-color: var(--lt-border-warning-strong); } /* :host(:disabled) — the browser matches this automatically for a form-associated element inside a disabled <fieldset>, no JS required; :host([disabled]) covers the component's own explicit attribute. */ :host([disabled]) .input-wrap, :host(:disabled) .input-wrap { background: var(--lt-bg-neutral-subtle); cursor: not-allowed; pointer-events: none; } input { background: transparent; border: none; color: var(--lt-text-default); flex: 1; font-family: inherit; min-width: 0; outline: none; } input::placeholder { color: var(--lt-text-placeholder, var(--lt-text-muted)); } :host([disabled]) input, :host(:disabled) input { color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) .input-wrap { height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='sm']) input { font-size: 0.8125rem; } :host([size='md']) .input-wrap, :host(:not([size])) .input-wrap { height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; } :host([size='lg']) .input-wrap { height: 48px; padding: 0 var(--lt-spacing-4); } :host([size='lg']) input { font-size: 1rem; } /* Multiple mode: tags replace the fixed single-line height with a wrapping row, min-height per size instead. */ :host([multiple]) .input-wrap { flex-wrap: wrap; height: auto; overflow: visible; padding-block: var(--lt-spacing-1); } :host([multiple][size='sm']) .input-wrap { min-height: 32px; } :host([multiple][size='md']) .input-wrap, :host([multiple]:not([size])) .input-wrap { min-height: 40px; } :host([multiple][size='lg']) .input-wrap { min-height: 48px; } :host([multiple]) input { min-width: 80px; } .clear-button { align-items: center; background: none; border-radius: var(--lt-border-radius, 4px); border: 0; color: var(--lt-text-subtle); cursor: pointer; display: flex; flex-shrink: 0; padding: 0; } .clear-button:hover { color: var(--lt-text-default); } .clear-button:focus-visible { outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color); outline-offset: var(--lt-border-focusRingOffset); } .chevron { color: var(--lt-text-subtle); flex-shrink: 0; pointer-events: none; transition: transform var(--lt-duration-fast) var(--lt-ease-standard); } :host([open]) .chevron { transform: rotate(180deg); } .dropdown { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-default); box-shadow: var(--lt-elevation-2); max-height: 240px; overflow-y: auto; z-index: var(--lt-z-overlay); } .option { align-items: center; background: transparent; border: none; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; font-size: 0.9375rem; gap: var(--lt-spacing-2); padding: var(--lt-spacing-2) var(--lt-spacing-3); text-align: start; width: 100%; } .option-icon { color: var(--lt-text-subtle); flex-shrink: 0; } .option-content { display: flex; flex-direction: column; min-width: 0; overflow: hidden; } .option-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-description { color: var(--lt-text-subtle); font-size: 0.8125em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-create, .option-create .option-icon { color: var(--lt-text-primary); } .option-group-label { color: var(--lt-text-subtle); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; padding: var(--lt-spacing-2) var(--lt-spacing-3) var(--lt-spacing-1); text-transform: uppercase; } .option:hover { background: var(--lt-bg-neutral-subtle); } .option[data-active='true'] { background: var(--lt-bg-neutral-subtle); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 500; } .option[disabled] { color: var(--lt-text-subtle); cursor: not-allowed; pointer-events: none; } .no-results { color: var(--lt-text-subtle); font-size: 0.875rem; padding: var(--lt-spacing-3); text-align: center; } .loading-state { align-items: center; color: var(--lt-text-subtle); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-4) var(--lt-spacing-3); text-align: center; } .helper-text { color: var(--lt-text-subtle); } .helper-text::part(base) { font-weight: 200; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .input-wrap, .chevron { transition: none; } } ` ]"
         }
       ],
       "exports": [
@@ -3318,32 +3170,9 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_default",
+              "name": "_nativeAttrs",
               "privacy": "private",
-              "default": "new FormDefaultController(this, () => this.value)"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('#combobox-input'), { exclude: [ 'aria-expanded', 'aria-autocomplete', 'aria-describedby', 'aria-required', 'aria-invalid', 'aria-controls', 'aria-activedescendant', 'autocomplete', 'open' ] })"
             },
             {
               "kind": "field",
@@ -3498,15 +3327,6 @@
             },
             {
               "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name used in form submission."
-            },
-            {
-              "kind": "field",
               "name": "labels",
               "type": {
                 "text": "Partial<ComboboxLabels>"
@@ -3552,21 +3372,13 @@
             },
             {
               "kind": "field",
-              "name": "_cleanupClickOutside",
+              "name": "_popup",
               "type": {
-                "text": "(() => void) | null"
+                "text": "PopupController"
               },
               "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "_floatingCleanup",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
+              "readonly": true,
+              "default": "new PopupController(this, { panel: () => this.shadowRoot?.querySelector<HTMLElement>('.dropdown') ?? null, reference: () => this.shadowRoot?.querySelector<HTMLElement>('.input-wrap') ?? null, floating: () => ({ matchWidth: true }), outsideEvent: 'click', onOutside: () => this.closeDropdown() })"
             },
             {
               "kind": "field",
@@ -3783,38 +3595,13 @@
               ]
             },
             {
-              "kind": "method",
-              "name": "formResetCallback"
-            },
-            {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "_isDisabled",
+              "name": "_formValue",
               "type": {
-                "text": "boolean"
+                "text": "string | string[]"
               },
-              "privacy": "private",
-              "description": "`this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`).",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "checkValidity"
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity"
+              "privacy": "protected",
+              "description": "A select's value is its `value` — a string for a single select, an array of the selected values for\na `multiple` one. It's what a form reset restores and what a browser state-restore repopulates."
             },
             {
               "kind": "method",
@@ -3862,7 +3649,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-combobox",
@@ -3929,7 +3716,7 @@
           "type": {
             "text": "array"
           },
-          "default": "[ floatingPanelReset, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); cursor: default; } .required-indicator { color: var(--lt-text-error); margin-inline-start: 2px; } /* ── Field ── */ .field { position: relative; } .field-btn { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; outline: none; text-align: start; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); width: 100%; } .field-btn:focus-visible { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); } .field-btn:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } .display-value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .display-value--placeholder { color: var(--lt-text-muted); } .calendar-icon { color: var(--lt-text-subtle); flex-shrink: 0; line-height: 0; margin-inline-start: var(--lt-spacing-2); } /* ── Sizes ── */ :host([size='sm']) .field-btn { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) .field-btn, :host(:not([size])) .field-btn { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) .field-btn { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* ── Variants ── */ :host([variant='success']) .field-btn { border-color: var(--lt-border-success-strong); } :host([variant='success']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) .field-btn { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) .field-btn { border-color: var(--lt-text-error); } :host([variant='error']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } /* ── Dropdown ── */ .dropdown { display: none; filter: drop-shadow(0 4px 12px rgb(var(--lt-shadow-rgb) / 0.08)); z-index: var(--lt-z-overlay); } /* ── Helper text ── */ .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .field-btn { transition: none; } } ` ]"
+          "default": "[ floatingPanelReset, formFieldStyles, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); cursor: default; } /* ── Field ── */ .field { position: relative; } .field-btn { align-items: center; background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; outline: none; text-align: start; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); width: 100%; } .field-btn:focus-visible { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); } .field-btn:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } .display-value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .display-value--placeholder { color: var(--lt-text-muted); } .calendar-icon { color: var(--lt-text-subtle); flex-shrink: 0; line-height: 0; margin-inline-start: var(--lt-spacing-2); } /* ── Sizes ── */ :host([size='sm']) .field-btn { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) .field-btn, :host(:not([size])) .field-btn { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) .field-btn { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* ── Variants ── */ :host([variant='success']) .field-btn { border-color: var(--lt-border-success-strong); } :host([variant='success']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) .field-btn { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) .field-btn { border-color: var(--lt-text-error); } :host([variant='error']) .field-btn:focus-visible { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } /* ── Dropdown ── */ .dropdown { display: none; filter: drop-shadow(0 4px 12px rgb(var(--lt-shadow-rgb) / 0.08)); z-index: var(--lt-z-overlay); } /* ── Helper text ── */ .helper-text { color: var(--lt-text-subtle); } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .field-btn { transition: none; } } ` ]"
         }
       ],
       "exports": [
@@ -3960,32 +3747,9 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_default",
+              "name": "_nativeAttrs",
               "privacy": "private",
-              "default": "new FormDefaultController(this, () => this.value)"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('#field-btn'), { exclude: ['aria-haspopup', 'aria-expanded', 'aria-describedby'] })"
             },
             {
               "kind": "field",
@@ -4105,15 +3869,6 @@
             },
             {
               "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name used in form submission (through `ElementInternals`, so no hidden input is rendered)."
-            },
-            {
-              "kind": "field",
               "name": "disabledDates",
               "type": {
                 "text": "CalendarDisabledDates"
@@ -4150,21 +3905,13 @@
             },
             {
               "kind": "field",
-              "name": "_cleanupClickOutside",
+              "name": "_popup",
               "type": {
-                "text": "(() => void) | null"
+                "text": "PopupController"
               },
               "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "_floatingCleanup",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
+              "readonly": true,
+              "default": "new PopupController(this, { panel: () => this.shadowRoot?.querySelector<HTMLElement>('.dropdown') ?? null, reference: () => this.shadowRoot?.querySelector<HTMLElement>('#field-btn') ?? null, outsideEvent: 'pointerdown', onOutside: () => this._closeDropdown() })"
             },
             {
               "kind": "field",
@@ -4230,38 +3977,13 @@
               ]
             },
             {
-              "kind": "method",
-              "name": "formResetCallback"
-            },
-            {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "_isDisabled",
+              "name": "_formValue",
               "type": {
-                "text": "boolean"
+                "text": "string"
               },
-              "privacy": "private",
-              "description": "`this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`).",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "checkValidity"
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity"
+              "privacy": "protected",
+              "description": "A text-like control's value is its `value` — what a form reset restores and what a browser\nstate-restore repopulates."
             },
             {
               "kind": "method",
@@ -4278,7 +4000,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-date-input",
@@ -4342,7 +4064,10 @@
         {
           "kind": "variable",
           "name": "datepickerStyles",
-          "default": "css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); display: flex; flex-direction: column; gap: var(--lt-spacing-1); } .required-indicator { color: var(--lt-text-error); } input { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); color: var(--lt-text-default); font-family: inherit; font-size: 0.9375rem; outline: none; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); width: 100%; box-sizing: border-box; } input:focus { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); } input:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) input { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) input { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* Variants */ :host([variant='success']) input { border-color: var(--lt-border-success-strong); } :host([variant='success']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input { border-color: var(--lt-text-error); } :host([variant='error']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); font-size: 0.8125rem; } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { input { transition: none; } } `"
+          "type": {
+            "text": "array"
+          },
+          "default": "[ formFieldStyles, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); } label { color: var(--lt-text-default); display: flex; flex-direction: column; gap: var(--lt-spacing-1); } input { background: var(--lt-bg-surface); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); color: var(--lt-text-default); font-family: inherit; font-size: 0.9375rem; outline: none; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); width: 100%; box-sizing: border-box; } input:focus { border-color: var(--lt-border-primary); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); } input:disabled { background: var(--lt-bg-neutral-subtle); color: var(--lt-text-subtle); cursor: not-allowed; } /* Sizes */ :host([size='sm']) input { font-size: 0.8125rem; height: 32px; padding: 0 var(--lt-spacing-2); } :host([size='md']) input, :host(:not([size])) input { font-size: 0.9375rem; height: 40px; padding: 0 var(--lt-spacing-3); } :host([size='lg']) input { font-size: 1rem; height: 48px; padding: 0 var(--lt-spacing-4); } /* Variants */ :host([variant='success']) input { border-color: var(--lt-border-success-strong); } :host([variant='success']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) input { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) input { border-color: var(--lt-text-error); } :host([variant='error']) input:focus { box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { input { transition: none; } } ` ]"
         }
       ],
       "exports": [
@@ -4362,7 +4087,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "Date and time picker wrapping the native browser date/time input with design-system styling.",
+          "description": "Date and time picker wrapping the native browser date/time input with design-system styling.\nAutomatically forwards native `<input>` attributes (`min`, `max`, `step`, `readonly`, `name`, `autocomplete`, etc.)\nonto the inner control.",
           "name": "Datepicker",
           "members": [
             {
@@ -4373,32 +4098,9 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_default",
+              "name": "_nativeAttrs",
               "privacy": "private",
-              "default": "new FormDefaultController(this, () => this.value)"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
+              "default": "new NativeAttrsController(this, () => this.input, { exclude: ['aria-describedby'], onSync: () => this._syncValidity() })"
             },
             {
               "kind": "field",
@@ -4417,24 +4119,6 @@
               },
               "default": "''",
               "description": "Current value in the format required by the native input (`YYYY-MM-DD`, `HH:MM`, or `YYYY-MM-DDTHH:MM`).\nNot reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of\n`getAttribute('value')`/`[value]`."
-            },
-            {
-              "kind": "field",
-              "name": "min",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Minimum allowed value."
-            },
-            {
-              "kind": "field",
-              "name": "max",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Maximum allowed value."
             },
             {
               "kind": "field",
@@ -4498,28 +4182,15 @@
             },
             {
               "kind": "field",
-              "name": "readonly",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the field is read-only."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name used in form submission."
-            },
-            {
-              "kind": "field",
               "name": "input",
               "type": {
                 "text": "HTMLInputElement"
               },
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
+              "name": "_syncValidity",
               "privacy": "private"
             },
             {
@@ -4536,38 +4207,13 @@
               ]
             },
             {
-              "kind": "method",
-              "name": "formResetCallback"
-            },
-            {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "_isDisabled",
+              "name": "_formValue",
               "type": {
-                "text": "boolean"
+                "text": "string"
               },
-              "privacy": "private",
-              "description": "`this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`).",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "checkValidity"
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity"
+              "privacy": "protected",
+              "description": "A text-like control's value is its `value` — what a form reset restores and what a browser\nstate-restore repopulates."
             },
             {
               "kind": "method",
@@ -4617,7 +4263,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-datepicker",
@@ -4850,6 +4496,12 @@
                 "text": "HTMLDialogElement | undefined"
               },
               "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.dialogElement, { exclude: ['aria-labelledby'] })"
             },
             {
               "kind": "field",
@@ -5199,6 +4851,12 @@
             },
             {
               "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('.item'), { exclude: ['aria-disabled', 'target', 'rel'] })"
+            },
+            {
+              "kind": "field",
               "name": "disabled",
               "type": {
                 "text": "boolean"
@@ -5337,21 +4995,13 @@
             },
             {
               "kind": "field",
-              "name": "_cleanupClickOutside",
+              "name": "_popup",
               "type": {
-                "text": "(() => void) | null"
+                "text": "PopupController"
               },
               "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "_floatingCleanup",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
+              "readonly": true,
+              "default": "new PopupController(this, { panel: () => this.shadowRoot?.querySelector<HTMLElement>('lt-surface.menu') ?? null, reference: () => this._triggerEl() ?? this, floating: () => ({ placement: this.placement }), outsideEvent: 'click', outsideCapture: true, onOutside: () => this.hide() })"
             },
             {
               "kind": "field",
@@ -5629,7 +5279,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "Icon-only button. Requires `label` for screen readers since there is no visible text.\n\nForwards host `aria-pressed`, `aria-expanded`, `aria-haspopup`, `aria-controls`, and\n`aria-current` onto the internal native control (e.g. for dropdown triggers).",
+          "description": "Icon-only button. Requires `label` for screen readers since there is no visible text.\n\nAutomatically forwards native `<button>` / `<a>` and `aria-*` attributes onto the internal native control.",
           "name": "IconButton",
           "members": [
             {
@@ -5640,9 +5290,9 @@
             },
             {
               "kind": "field",
-              "name": "_ariaForwarding",
+              "name": "_nativeAttrs",
               "privacy": "private",
-              "default": "new AriaForwardingController(this, () => this.shadowRoot?.querySelector('[part=\"base\"]'))"
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('[part=\"base\"]'), { exclude: ['target', 'rel', 'aria-disabled', 'aria-label'] })"
             },
             {
               "kind": "field",
@@ -5728,24 +5378,6 @@
             },
             {
               "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the anchor's `target` attribute when `href` is set."
-            },
-            {
-              "kind": "field",
-              "name": "rel",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the anchor's `rel` attribute when `href` is set."
-            },
-            {
-              "kind": "field",
               "name": "round",
               "type": {
                 "text": "boolean"
@@ -5824,7 +5456,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A thin wrapper around `<img>` with rounded corners, responsive fill support,\nnative lazy loading, and an error fallback mechanism.\n\nThe inner `<img>`'s `load`/`error` events don't leave the shadow root, so they\nare re-dispatched on the host under the same native names, with the `src` in\n`detail`. Like the native ones they don't bubble, so listen on `<lt-image>`\nitself. When a load fails, the `fallback` slot is shown in place of the broken\nimage; setting a new `src` retries.",
+          "description": "A thin wrapper around `<img>` with rounded corners, responsive fill support,\nnative lazy loading, and an error fallback mechanism. Automatically forwards\nnative `<img>` attributes (`alt`, `srcset`, `sizes`, `loading`, `decoding`,\n`fetchpriority`, `crossorigin`, `referrerpolicy`, `width`, `height`, etc.)\nonto the inner `<img>` element.\n\nThe inner `<img>`'s `load`/`error` events don't leave the shadow root, so they\nare re-dispatched on the host under the same native names, with the `src` in\n`detail`. Like the native ones they don't bubble, so listen on `<lt-image>`\nitself. When a load fails, the `fallback` slot is shown in place of the broken\nimage; setting a new `src` retries.",
           "name": "Image",
           "cssParts": [
             {
@@ -5847,39 +5479,18 @@
             },
             {
               "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('img'))"
+            },
+            {
+              "kind": "field",
               "name": "src",
               "type": {
                 "text": "string"
               },
               "default": "''",
               "description": "Image source URL."
-            },
-            {
-              "kind": "field",
-              "name": "alt",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Alt text for the image."
-            },
-            {
-              "kind": "field",
-              "name": "srcset",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the underlying `<img srcset>` — a comma-separated list of candidate image URLs, each with a\nwidth (`800w`) or pixel-density (`2x`) descriptor, for the browser to pick the best fit. Pair with `sizes`\nwhen using width descriptors."
-            },
-            {
-              "kind": "field",
-              "name": "sizes",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the underlying `<img sizes>` — a comma-separated list of media-condition/width pairs (e.g.\n`\"(min-width: 768px) 50vw, 100vw\"`) telling the browser how wide the image will render at each breakpoint.\nOnly meaningful alongside a width-descriptor `srcset`."
             },
             {
               "kind": "field",
@@ -5907,15 +5518,6 @@
               },
               "default": "false",
               "description": "Makes the image fill its container using `object-fit: cover`.\nSize the `lt-image` element externally to define the crop box."
-            },
-            {
-              "kind": "field",
-              "name": "loading",
-              "type": {
-                "text": "ImageLoading | ''"
-              },
-              "default": "''",
-              "description": "Forwarded to the underlying `<img loading>` attribute.\n`lazy` defers loading until the image approaches the viewport."
             },
             {
               "kind": "field",
@@ -6064,7 +5666,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A styled anchor element. Uses the primary color by default with an underline on hover.\nSet `external` to open in a new tab and display a trailing external-link icon.",
+          "description": "A styled anchor element. Uses the primary color by default with an underline on hover.\nSet `external` to open in a new tab and display a trailing external-link icon.\nAutomatically forwards native `<a>` attributes (`target`, `rel`, `download`, `hreflang`, `referrerpolicy`, etc.)\nonto the underlying `<a>` element.",
           "name": "Link",
           "members": [
             {
@@ -6072,6 +5674,12 @@
               "name": "styles",
               "static": true,
               "default": "linkStyles"
+            },
+            {
+              "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('a'), { exclude: ['target', 'rel'] })"
             },
             {
               "kind": "field",
@@ -6090,30 +5698,6 @@
               },
               "default": "false",
               "description": "Opens the link in a new tab and appends an external-link icon. Equivalent to `target=\"_blank\"` with safe\n`rel` defaults, plus the icon — set `target` directly for a new tab without the icon."
-            },
-            {
-              "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "LinkTarget | undefined"
-              },
-              "description": "Explicit `target` for the underlying `<a>`. Defaults to `_blank` when `external` is set, otherwise the\nnative default (same tab)."
-            },
-            {
-              "kind": "field",
-              "name": "rel",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Overrides the computed `rel`. By default, `rel=\"noopener noreferrer\"` is applied whenever the resolved\ntarget is `_blank` (security best practice for new-tab links), and omitted otherwise."
-            },
-            {
-              "kind": "field",
-              "name": "download",
-              "type": {
-                "text": "string | undefined"
-              },
-              "description": "Marks the link for download instead of navigation, forwarded to the native `download` attribute. An empty\nstring (`<lt-link download>`) downloads with the browser's default suggested filename; a non-empty string\nsets the suggested filename."
             },
             {
               "kind": "field",
@@ -6232,7 +5816,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A list item that behaves like a native `<li>` without literally being one.\nThe host sets `display: list-item` and `role=\"listitem\"` on itself (a\ncustom element's tag can never actually be `<li>`), so it still renders a\nnative marker/counter via inherited `list-style-type`/`-position` and\nreads correctly to assistive tech, inside `lt-list`'s `<div role=\"list\">`.\n\nThis also solves the HTML parser issue where nesting a real `<li>` through\na `<lt-list>` boundary auto-closes a still-open ancestor `<li>` (see\n`lt-list`'s own tests) — `<lt-list-item>` isn't `<li>` at the raw-HTML-tag\nlevel, so it never triggers that parser behavior in the first place.\n\nItems can also be interactive: set `clickable` to render the row as a native\n`<button>` (picker rows, settings rows), or `href` to render it as an `<a>`.\nInteractive rows get hover/active/focus states and a disabled state.",
+          "description": "A list item that behaves like a native `<li>` without literally being one.\nThe host sets `display: list-item` and `role=\"listitem\"` on itself (a\ncustom element's tag can never actually be `<li>`), so it still renders a\nnative marker/counter via inherited `list-style-type`/`-position` and\nreads correctly to assistive tech, inside `lt-list`'s `<div role=\"list\">`.\n\nThis also solves the HTML parser issue where nesting a real `<li>` through\na `<lt-list>` boundary auto-closes a still-open ancestor `<li>` (see\n`lt-list`'s own tests) — `<lt-list-item>` isn't `<li>` at the raw-HTML-tag\nlevel, so it never triggers that parser behavior in the first place.\n\nItems can also be interactive: set `clickable` to render the row as a native\n`<button>` (picker rows, settings rows), or `href` to render it as an `<a>`.\nInteractive rows get hover/active/focus states and a disabled state, and\nforward native `<button>` / `<a>` attributes onto `[part=\"base\"]`.",
           "name": "ListItem",
           "cssParts": [
             {
@@ -6252,6 +5836,12 @@
               "name": "styles",
               "static": true,
               "default": "listItemStyles"
+            },
+            {
+              "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('[part=\"base\"]'), { exclude: ['target', 'rel', 'aria-disabled'] })"
             },
             {
               "kind": "field",
@@ -6288,24 +5878,6 @@
               },
               "default": "''",
               "description": "When set, renders the row as an `<a>` with hover/active/focus states."
-            },
-            {
-              "kind": "field",
-              "name": "target",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the anchor's `target` attribute when `href` is set."
-            },
-            {
-              "kind": "field",
-              "name": "rel",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Forwarded to the anchor's `rel` attribute when `href` is set.\nDefaults to `noopener noreferrer` when `target=\"_blank\"` and `rel` is not specified."
             },
             {
               "kind": "field",
@@ -6514,6 +6086,12 @@
               "name": "styles",
               "static": true,
               "default": "navItemStyles"
+            },
+            {
+              "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('.item-trigger'), { exclude: ['aria-current', 'aria-disabled', 'aria-expanded', 'aria-controls', 'target', 'rel'] })"
             },
             {
               "kind": "field",
@@ -7184,7 +6762,10 @@
         {
           "kind": "variable",
           "name": "radioGroupStyles",
-          "default": "css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .radio-group { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } .label { color: var(--lt-text-default); margin-bottom: var(--lt-spacing-1); } .required-indicator { color: var(--lt-text-error); margin-inline-start: var(--lt-spacing-1); } .radios-container { display: flex; gap: var(--lt-spacing-3); } :host([orientation='vertical']) .radios-container { flex-direction: column; } :host([orientation='horizontal']) .radios-container { flex-direction: row; flex-wrap: wrap; } .helper-text { color: var(--lt-text-subtle); margin-top: var(--lt-spacing-1); } .helper-text::part(base) { font-weight: 200; } :host([error]) .helper-text { color: var(--lt-text-error); } `"
+          "type": {
+            "text": "array"
+          },
+          "default": "[ formFieldStyles, css` :host { display: block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); } .radio-group { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } .label { color: var(--lt-text-default); margin-bottom: var(--lt-spacing-1); } .radios-container { display: flex; gap: var(--lt-spacing-3); } :host([orientation='vertical']) .radios-container { flex-direction: column; } :host([orientation='horizontal']) .radios-container { flex-direction: row; flex-wrap: wrap; } .helper-text { color: var(--lt-text-subtle); margin-top: var(--lt-spacing-1); } .helper-text::part(base) { font-weight: 200; } :host([error]) .helper-text { color: var(--lt-text-error); } ` ]"
         }
       ],
       "exports": [
@@ -7306,6 +6887,15 @@
               "default": "new MutationObserver(() => this._syncRadios())"
             },
             {
+              "kind": "field",
+              "name": "_ownerForm",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
               "kind": "method",
               "name": "firstUpdated"
             },
@@ -7314,6 +6904,24 @@
               "name": "_syncRadios",
               "privacy": "private",
               "description": "Wires each radio's `name`, roving tabindex, and listeners, and drives `checked` from this group's `value` —\nthe direction a consumer setting `group.value = '…'` needs, since that's a plain property assignment on the\ngroup, not a native input event any individual radio would otherwise react to."
+            },
+            {
+              "kind": "field",
+              "name": "_handleFormReset",
+              "privacy": "private",
+              "description": "Keeps the group's `value` in step with a form reset.\n\nThe radios are the form-associated elements here — each one restores its own default when the form\nresets — but the group itself is not form-associated, so nothing tells it that happened. Left alone,\nthe group's `value` would keep pointing at a radio that is no longer checked, and the next\n`_syncRadios()` would re-check it, quietly undoing the reset.\n\nThe `reset` event fires on the form *before* the browser restores the controls, so the radios still\nhold their pre-reset state while the handler runs; the re-derivation is deferred to a microtask, which\nruns once the browser's reset algorithm has finished."
+            },
+            {
+              "kind": "method",
+              "name": "_syncValueFromRadios",
+              "privacy": "private",
+              "description": "Re-derives the group's `value` from the radios' current `checked` state."
+            },
+            {
+              "kind": "method",
+              "name": "_syncFormResetListener",
+              "privacy": "private",
+              "description": "Attaches the form-reset listener to the form the group's radios belong to, re-targeting it if the\nradios moved to a different form (or out of one)."
             },
             {
               "kind": "method",
@@ -7483,29 +7091,12 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
               "name": "shadowRootOptions",
               "type": {
                 "text": "object"
               },
               "static": true,
               "default": "{ ...LitElement.shadowRootOptions, delegatesFocus: true }"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
             },
             {
               "kind": "field",
@@ -7518,18 +7109,6 @@
             },
             {
               "kind": "field",
-              "name": "_default",
-              "privacy": "private",
-              "default": "new FormDefaultController(this, () => this.checked)"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
-            },
-            {
-              "kind": "field",
               "name": "_slotted",
               "privacy": "private",
               "default": "new SlottedContentController(this)"
@@ -7539,6 +7118,12 @@
               "name": "_fieldIds",
               "privacy": "private",
               "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input'), { exclude: ['aria-label', 'aria-describedby'] })"
             },
             {
               "kind": "method",
@@ -7679,38 +7264,32 @@
               "name": "updated"
             },
             {
-              "kind": "method",
-              "name": "formResetCallback"
-            },
-            {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "_isDisabled",
+              "name": "_formValue",
               "type": {
                 "text": "boolean"
               },
-              "privacy": "private",
-              "description": "`this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`).",
-              "readonly": true
+              "privacy": "protected",
+              "description": "A toggleable control's value is its checked state — what a form reset restores and what a browser\nstate-restore repopulates. The value it *submits* is `this.value` while checked and nothing at all\nwhile not (see `updated()`), which is exactly how a native checkbox behaves."
             },
             {
               "kind": "method",
-              "name": "checkValidity"
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity"
+              "name": "_restoreFormState",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "File | string | FormData | null"
+                  }
+                }
+              ],
+              "description": "A toggleable control's saved state is its `value` string — or nothing at all, when it was\nunchecked — so restored checkedness means \"the saved value is this control's own value\"."
             },
             {
               "kind": "method",
@@ -7747,7 +7326,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-radio",
@@ -7814,7 +7393,7 @@
           "type": {
             "text": "array"
           },
-          "default": "[ floatingPanelReset, css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); position: relative; width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } label { color: var(--lt-text-default); } .required-indicator { color: var(--lt-text-error); margin-inline-start: var(--lt-spacing-1); } .select-container { position: relative; width: 100%; } .select-trigger { align-items: center; background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); box-sizing: border-box; cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); width: 100%; } .select-trigger:hover:not([aria-disabled='true']) { border-color: var(--lt-border-strong); } .select-trigger:focus-visible { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-focus-ring-color); outline: none; } .select-trigger[aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; } .select-value { color: var(--lt-text-default); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .select-value.placeholder { color: var(--lt-text-muted); } .icon-end { color: var(--lt-text-subtle); flex-shrink: 0; transition: transform var(--lt-duration-fast) var(--lt-ease-standard); } .clear-button { align-items: center; background: none; border-radius: var(--lt-border-radius, 4px); border: 0; color: var(--lt-text-subtle); cursor: pointer; display: flex; flex-shrink: 0; margin-inline-end: var(--lt-spacing-1); padding: 0; } .clear-button:hover { color: var(--lt-text-default); } .clear-button:focus-visible { outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color); outline-offset: var(--lt-border-focusRingOffset); } :host([open]) .icon-end { transform: rotate(180deg); } .dropdown { display: none; max-height: 300px; z-index: var(--lt-z-overlay); } .options-container { max-height: 300px; overflow: hidden auto; } .loading-state { align-items: center; color: var(--lt-text-subtle); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-5) var(--lt-spacing-4); text-align: center; } .option { align-items: center; background: transparent; border: none; border-radius: var(--lt-border-radius); box-sizing: border-box; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; gap: var(--lt-spacing-2); text-align: start; transition: background-color var(--lt-duration-fast) var(--lt-ease-standard); width: 100%; } .option-icon { color: var(--lt-text-subtle); flex-shrink: 0; } .option-content { display: flex; flex-direction: column; min-width: 0; overflow: hidden; } .option-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-description { color: var(--lt-text-subtle); font-size: 0.8125em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-group-label { color: var(--lt-text-subtle); font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; } :host([size='sm']) .option-group-label { font-size: 0.6875rem; padding: var(--lt-spacing-2) var(--lt-spacing-3) var(--lt-spacing-1); } :host([size='md']) .option-group-label { font-size: 0.75rem; padding: var(--lt-spacing-2) var(--lt-spacing-4) var(--lt-spacing-1); } :host([size='lg']) .option-group-label { font-size: 0.8125rem; padding: var(--lt-spacing-3) var(--lt-spacing-5) var(--lt-spacing-1); } .option:hover:not([disabled]) { background: var(--lt-bg-surface); } .option[data-active='true'] { background: var(--lt-bg-surface); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 600; } .option[disabled] { color: var(--lt-text-muted); cursor: not-allowed; opacity: 0.6; } .helper-text::part(base) { font-weight: 200; } /* Size variants */ :host([size='sm']) .select-trigger { font-size: 0.875rem; height: 32px; padding: 0 var(--lt-spacing-3); } :host([size='sm']) .option { font-size: 0.875rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([size='md']) .select-trigger { font-size: 1rem; height: 40px; padding: 0 var(--lt-spacing-4); } :host([size='md']) .option { font-size: 1rem; padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([size='lg']) .select-trigger { font-size: 1.0625rem; height: 48px; padding: 0 var(--lt-spacing-5); } :host([size='lg']) .option { font-size: 1.0625rem; padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* Variant styles */ :host([variant='success']) .select-trigger { border-color: var(--lt-border-success-strong); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .select-trigger { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .select-trigger { border-color: var(--lt-border-error-strong); } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='default']) .helper-text { color: var(--lt-text-subtle); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .select-trigger, .icon-end, .option { transition: none; } } ` ]"
+          "default": "[ floatingPanelReset, formFieldStyles, css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); position: relative; width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-2); } label { color: var(--lt-text-default); } .select-container { position: relative; width: 100%; } .select-trigger { align-items: center; background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); box-sizing: border-box; cursor: pointer; display: flex; font-family: inherit; justify-content: space-between; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); width: 100%; } .select-trigger:hover:not([aria-disabled='true']) { border-color: var(--lt-border-strong); } .select-trigger:focus-visible { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-focus-ring-color); outline: none; } .select-trigger[aria-disabled='true'] { cursor: not-allowed; opacity: 0.6; } .select-value { color: var(--lt-text-default); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .select-value.placeholder { color: var(--lt-text-muted); } .icon-end { color: var(--lt-text-subtle); flex-shrink: 0; transition: transform var(--lt-duration-fast) var(--lt-ease-standard); } .clear-button { align-items: center; background: none; border-radius: var(--lt-border-radius, 4px); border: 0; color: var(--lt-text-subtle); cursor: pointer; display: flex; flex-shrink: 0; margin-inline-end: var(--lt-spacing-1); padding: 0; } .clear-button:hover { color: var(--lt-text-default); } .clear-button:focus-visible { outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color); outline-offset: var(--lt-border-focusRingOffset); } :host([open]) .icon-end { transform: rotate(180deg); } .dropdown { display: none; max-height: 300px; z-index: var(--lt-z-overlay); } .options-container { max-height: 300px; overflow: hidden auto; } .loading-state { align-items: center; color: var(--lt-text-subtle); display: flex; flex-direction: column; gap: var(--lt-spacing-2); padding: var(--lt-spacing-5) var(--lt-spacing-4); text-align: center; } .option { align-items: center; background: transparent; border: none; border-radius: var(--lt-border-radius); box-sizing: border-box; color: var(--lt-text-default); cursor: pointer; display: flex; font-family: inherit; gap: var(--lt-spacing-2); text-align: start; transition: background-color var(--lt-duration-fast) var(--lt-ease-standard); width: 100%; } .option-icon { color: var(--lt-text-subtle); flex-shrink: 0; } .option-content { display: flex; flex-direction: column; min-width: 0; overflow: hidden; } .option-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-description { color: var(--lt-text-subtle); font-size: 0.8125em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .option-group-label { color: var(--lt-text-subtle); font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; } :host([size='sm']) .option-group-label { font-size: 0.6875rem; padding: var(--lt-spacing-2) var(--lt-spacing-3) var(--lt-spacing-1); } :host([size='md']) .option-group-label { font-size: 0.75rem; padding: var(--lt-spacing-2) var(--lt-spacing-4) var(--lt-spacing-1); } :host([size='lg']) .option-group-label { font-size: 0.8125rem; padding: var(--lt-spacing-3) var(--lt-spacing-5) var(--lt-spacing-1); } .option:hover:not([disabled]) { background: var(--lt-bg-surface); } .option[data-active='true'] { background: var(--lt-bg-surface); outline: 2px solid var(--lt-interactive-primary-bg); outline-offset: -2px; } .option[aria-selected='true'] { background: var(--lt-bg-primary-subtle); color: var(--lt-text-primary); font-weight: 600; } .option[disabled] { color: var(--lt-text-muted); cursor: not-allowed; opacity: 0.6; } .helper-text::part(base) { font-weight: 200; } /* Size variants */ :host([size='sm']) .select-trigger { font-size: 0.875rem; height: 32px; padding: 0 var(--lt-spacing-3); } :host([size='sm']) .option { font-size: 0.875rem; padding: var(--lt-spacing-2) var(--lt-spacing-3); } :host([size='md']) .select-trigger { font-size: 1rem; height: 40px; padding: 0 var(--lt-spacing-4); } :host([size='md']) .option { font-size: 1rem; padding: var(--lt-spacing-3) var(--lt-spacing-4); } :host([size='lg']) .select-trigger { font-size: 1.0625rem; height: 48px; padding: 0 var(--lt-spacing-5); } :host([size='lg']) .option { font-size: 1.0625rem; padding: var(--lt-spacing-4) var(--lt-spacing-5); } /* Variant styles */ :host([variant='success']) .select-trigger { border-color: var(--lt-border-success-strong); } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .select-trigger { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .select-trigger { border-color: var(--lt-border-error-strong); } :host([variant='error']) .helper-text { color: var(--lt-text-error); } :host([variant='default']) .helper-text { color: var(--lt-text-subtle); } /* ── Reduced motion ───────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .select-trigger, .icon-end, .option { transition: none; } } ` ]"
         }
       ],
       "exports": [
@@ -7845,32 +7424,9 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_default",
+              "name": "_nativeAttrs",
               "privacy": "private",
-              "default": "new FormDefaultController(this, () => this.value)"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('.select-trigger'), { exclude: [ 'aria-haspopup', 'aria-expanded', 'aria-disabled', 'aria-required', 'aria-invalid', 'aria-label', 'aria-describedby', 'aria-controls', 'aria-activedescendant', 'open' ] })"
             },
             {
               "kind": "field",
@@ -7941,15 +7497,6 @@
               },
               "default": "''",
               "description": "Label text displayed above the select."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name used when submitting a form."
             },
             {
               "kind": "field",
@@ -8045,21 +7592,13 @@
             },
             {
               "kind": "field",
-              "name": "_cleanupClickOutside",
+              "name": "_popup",
               "type": {
-                "text": "(() => void) | null"
+                "text": "PopupController"
               },
               "privacy": "private",
-              "default": "null"
-            },
-            {
-              "kind": "field",
-              "name": "_floatingCleanup",
-              "type": {
-                "text": "(() => void) | null"
-              },
-              "privacy": "private",
-              "default": "null"
+              "readonly": true,
+              "default": "new PopupController(this, { panel: () => this.shadowRoot?.querySelector<HTMLElement>('lt-surface.dropdown') ?? null, reference: () => this.shadowRoot?.querySelector<HTMLElement>('.select-trigger') ?? null, floating: () => ({ matchWidth: true }), outsideEvent: 'click', onOutside: () => this.closeDropdown() })"
             },
             {
               "kind": "field",
@@ -8219,38 +7758,13 @@
               ]
             },
             {
-              "kind": "method",
-              "name": "formResetCallback"
-            },
-            {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "_isDisabled",
+              "name": "_formValue",
               "type": {
-                "text": "boolean"
+                "text": "string | string[]"
               },
-              "privacy": "private",
-              "description": "`this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`).",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "checkValidity"
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity"
+              "privacy": "protected",
+              "description": "A select's value is its `value` — a string for a single select, an array of the selected values for\na `multiple` one. It's what a form reset restores and what a browser state-restore repopulates."
             },
             {
               "kind": "method",
@@ -8286,7 +7800,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-select",
@@ -8315,53 +7829,7 @@
             "text": "[\n  'aria-pressed',\n  'aria-expanded',\n  'aria-haspopup',\n  'aria-controls',\n  'aria-current',\n  'aria-description'\n]"
           },
           "default": "[ 'aria-pressed', 'aria-expanded', 'aria-haspopup', 'aria-controls', 'aria-current', 'aria-description' ]",
-          "description": "Host `aria-*` attributes forwarded onto the internal native control.\n\nInteractive components render their semantics on a native element inside the\nshadow DOM, so ARIA attributes set on the host (`<lt-button aria-pressed=\"true\">`)\nnever reach the element screen readers actually interact with. Components that\ninstall an AriaForwardingController mirror this documented subset onto\ntheir internal control and keep it in sync as the host attributes change.\n\nNote: `aria-controls` contains an idref — it can only resolve when the referenced\nelement lives in the same tree as the internal control, so cross-shadow references\nare forwarded but may be ignored by assistive technology."
-        },
-        {
-          "kind": "class",
-          "description": "Reactive controller that forwards FORWARDED_ARIA_ATTRIBUTES from the\nhost element onto an internal target element (typically the native `<button>`\nor `<a>` rendered in the shadow DOM).\n\nA `MutationObserver` watches the host so dynamic changes (e.g. a framework\ntoggling `aria-pressed`) are re-forwarded after every update. Attributes\nremoved from the host are removed from the target — components should not\nrender any of the forwarded attributes themselves.",
-          "name": "AriaForwardingController",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_host",
-              "type": {
-                "text": "AriaForwardingHost"
-              },
-              "privacy": "private",
-              "default": "host"
-            },
-            {
-              "kind": "field",
-              "name": "_getTarget",
-              "type": {
-                "text": "() => Element | null | undefined"
-              },
-              "privacy": "private",
-              "default": "getTarget"
-            },
-            {
-              "kind": "field",
-              "name": "_observer",
-              "type": {
-                "text": "MutationObserver"
-              },
-              "privacy": "private",
-              "default": "new MutationObserver(() => this._host.requestUpdate())"
-            },
-            {
-              "kind": "method",
-              "name": "hostConnected"
-            },
-            {
-              "kind": "method",
-              "name": "hostDisconnected"
-            },
-            {
-              "kind": "method",
-              "name": "hostUpdated"
-            }
-          ]
+          "description": "Host `aria-*` attributes forwarded onto the internal native control.\nKept for backwards compatibility — `NativeAttrsController` now forwards all\n`aria-*` and native attributes not owned by the component."
         }
       ],
       "exports": [
@@ -8375,9 +7843,17 @@
         },
         {
           "kind": "js",
+          "name": "NativeAttrsController",
+          "declaration": {
+            "name": "NativeAttrsController",
+            "module": "src/components/shared/aria-forwarding.ts"
+          }
+        },
+        {
+          "kind": "js",
           "name": "AriaForwardingController",
           "declaration": {
-            "name": "AriaForwardingController",
+            "name": "NativeAttrsController",
             "module": "src/components/shared/aria-forwarding.ts"
           }
         }
@@ -8499,125 +7975,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/components/shared/form-default.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Captures a form-associated control's initial value the first time it connects — before any user interaction,\nor the control's own reflection, can overwrite it — so `formResetCallback` can restore what the markup\nactually asked for, the way a native `<input>`/`<select>` resets to its `defaultValue`/`defaultChecked`\ninstead of a hard-coded empty one.\n\nA reconnect (an already-upgraded element moved in the DOM) does not recapture: only the very first connect\ncounts as \"the default\", matching a real form control, which keeps its `defaultValue` fixed for its whole\nlifetime regardless of how many times it's detached and reattached.",
-          "name": "FormDefaultController",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_get",
-              "type": {
-                "text": "() => T"
-              },
-              "privacy": "private",
-              "default": "get"
-            },
-            {
-              "kind": "field",
-              "name": "_captured",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "type": {
-                "text": "T"
-              },
-              "description": "The captured default. Only meaningful once the host has connected at least once."
-            },
-            {
-              "kind": "method",
-              "name": "hostConnected"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FormDefaultController",
-          "declaration": {
-            "name": "FormDefaultController",
-            "module": "src/components/shared/form-default.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/shared/form-disabled.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Tracks whether this form control is disabled because it's a descendant of a disabled `<fieldset>` — kept\nseparate from the component's own explicit `disabled` property/attribute, which a consumer controls directly\nand which the fieldset toggling on or off must never overwrite in either direction. This mirrors how a native\n`<input>`'s `.disabled` IDL property only ever reflects its own attribute: a disabled fieldset makes it match\n`:disabled` and stop responding, but never touches the attribute itself, so re-enabling the fieldset can't\naccidentally un-disable an input the page explicitly disabled.\n\nThe browser already makes the host match the `:disabled`/`:enabled` CSS pseudo-classes automatically for any\nform-associated custom element the moment a fieldset ancestor's `disabled` changes — nothing has to be done\nfor that (verified in Chromium). This controller is for the *functional* side, which the platform does not\nwire up on its own: call setFieldsetDisabled from the component's own `formDisabledCallback`, and\ncombine fieldsetDisabled with the component's own `disabled` wherever that gates interaction or the\ninner native control's own `disabled`.\n\n**`formDisabledCallback` also fires for the component's own `disabled`, not only an ancestor `<fieldset>`**\n(confirmed in Chromium — the spec's form-associated \"disabled state\" is the union of both, not fieldset-only\nas this controller originally assumed). That firing is always redundant with the reactive update the host's\nown `disabled` property change already schedules — but the *order* it happens in is the real hazard: setting\n`host.disabled = false` triggers Lit's reflection of the now-missing attribute, which synchronously fires this\ncallback *from inside* that same update's commit phase, calling setFieldsetDisabled while the update\nthat's supposed to pick up the new value is still in the middle of applying its previous one — a same-cycle\n`requestUpdate()` that reliably got dropped instead of scheduling a fresh pass, leaving a stale `disabled` on\nthe rendered inner control after `host.disabled` had already flipped back to `false` (confirmed in Chromium: a\nbutton disabled then re-enabled right after stayed unclickable, its inner `<button disabled>` never cleared).\nDeferring to a microtask moves the request *after* the current update fully commits, so it always starts a\ngenuinely new cycle instead of colliding with the one in flight.",
-          "name": "FormDisabledController",
-          "members": [
-            {
-              "kind": "field",
-              "name": "_host",
-              "type": {
-                "text": "ReactiveControllerHost"
-              },
-              "privacy": "private",
-              "default": "host"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "type": {
-                "text": "boolean"
-              },
-              "privacy": "private",
-              "default": "false"
-            },
-            {
-              "kind": "method",
-              "name": "hostConnected"
-            },
-            {
-              "kind": "field",
-              "name": "fieldsetDisabled",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether an ancestor `<fieldset>` is currently disabled.",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "setFieldsetDisabled",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FormDisabledController",
-          "declaration": {
-            "name": "FormDisabledController",
-            "module": "src/components/shared/form-disabled.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/components/shared/form-field.ts",
       "declarations": [
         {
@@ -8629,6 +7986,81 @@
             }
           },
           "description": "Stable id for a field's helper text, so the control can point `aria-describedby` at it. Ids only need to be\nunique within one shadow root, but a counter keeps them unique across the page too."
+        },
+        {
+          "kind": "variable",
+          "name": "formFieldStyles",
+          "type": {
+            "text": "CSSResult"
+          },
+          "default": "css` .required-indicator { color: var(--lt-text-error); margin-inline-start: var(--lt-spacing-1); } `",
+          "description": "The presentation every form control shares: the required marker that sits next to a field's label.\n\nSix controls used to carry their own copy of this rule, with three different gaps before the marker —\n`2px` on two of them, `var(--lt-spacing-1)` on two more, and none at all on the last two — so the same\nasterisk sat at a different distance from its label depending on which control you were looking at. One\nrule, on the design system's own 4px spacing grid, for all of them."
+        },
+        {
+          "kind": "function",
+          "name": "renderRequiredIndicator",
+          "return": {
+            "type": {
+              "text": "TemplateResult | typeof nothing"
+            }
+          },
+          "parameters": [
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "description": "The marker that says a field is required.\n\nIt is deliberately left in the accessibility tree. Most controls also expose the required state\nprogrammatically — `required` on a native input, `aria-required` on a select or a combobox — but\n`lt-date-input`'s trigger is a plain `<button>`, and `aria-required` is not a property `role=\"button\"`\nallows, so for that control the marker is the *only* signal that the field is required. Hiding it from\nassistive technology would take information away rather than take noise out."
+        },
+        {
+          "kind": "function",
+          "name": "renderFieldLabel",
+          "return": {
+            "type": {
+              "text": "TemplateResult"
+            }
+          },
+          "parameters": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              }
+            }
+          ],
+          "description": "A field's label — the visible label text, followed by the required marker when the field is required.\n\nThis renders the label's *contents*, not its wrapper: what a label points at (`for`), whether it needs a\nclick handler to focus a custom trigger, and whether it is a `<label>` at all (a radio group uses a plain\n`<div>`, because a `<label>` can only ever label one control) are each control's own business. The caller\nsupplies the wrapper; this renders what goes inside it.\n\nThe label text and the marker are wrapped in a single element rather than left as two siblings, because a\ncontrol whose label is laid out as a column would otherwise split them: `lt-datepicker`'s label is a\nflex column, and the marker used to end up on a line of its own, below the label text, while every other\ncontrol put it right next to the text. One element keeps the pair together whatever the label's layout."
+        },
+        {
+          "kind": "function",
+          "name": "renderHelperText",
+          "return": {
+            "type": {
+              "text": "TemplateResult | typeof nothing"
+            }
+          },
+          "parameters": [
+            {
+              "name": "id",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "text",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "description": "The helper text below a field — the element the control points `aria-describedby` at.\n\nEvery control renders it through the design system's own text component now, so the caption typography\nis the same everywhere."
         }
       ],
       "exports": [
@@ -8639,39 +8071,37 @@
             "name": "createFieldIds",
             "module": "src/components/shared/form-field.ts"
           }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/components/shared/form-validity.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "toValidityFlags",
-          "return": {
-            "type": {
-              "text": "ValidityStateFlags"
-            }
-          },
-          "parameters": [
-            {
-              "name": "validity",
-              "type": {
-                "text": "ValidityState"
-              }
-            }
-          ],
-          "description": "Copies a live `ValidityState` into a plain object with its own enumerable properties, suitable for passing to\n`ElementInternals.setValidity()`.\n\n`ValidityState`'s flags (`valueMissing`, `typeMismatch`, etc.) are getters on its prototype, not own properties\non the instance — spreading it (`{ ...validity }`) or `Object.keys(validity)` sees none of them. Real browsers'\nWebIDL dictionary conversion reads each named member individually, so passing the live object to `setValidity`\nhappens to work there; jsdom's implementation enumerates instead, so it silently sees an empty flags object and\ntreats the control as always valid. Converting explicitly avoids relying on which enumeration strategy the\nruntime uses, and is correct either way."
-        }
-      ],
-      "exports": [
+        },
         {
           "kind": "js",
-          "name": "toValidityFlags",
+          "name": "formFieldStyles",
           "declaration": {
-            "name": "toValidityFlags",
-            "module": "src/components/shared/form-validity.ts"
+            "name": "formFieldStyles",
+            "module": "src/components/shared/form-field.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "renderRequiredIndicator",
+          "declaration": {
+            "name": "renderRequiredIndicator",
+            "module": "src/components/shared/form-field.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "renderFieldLabel",
+          "declaration": {
+            "name": "renderFieldLabel",
+            "module": "src/components/shared/form-field.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "renderHelperText",
+          "declaration": {
+            "name": "renderHelperText",
+            "module": "src/components/shared/form-field.ts"
           }
         }
       ]
@@ -8797,6 +8227,161 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/components/shared/native-attrs.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "HOST_ONLY_ATTRIBUTES",
+          "default": "new Set([ 'id', 'class', 'style', 'slot', 'part', 'exportparts', 'hidden', 'dir', 'lang', 'inert', 'popover', 'tabindex', 'theme', 'role' ])",
+          "description": "Global attributes that belong strictly to the `<lt-*>` host element itself\nand must never be copied onto an inner shadow element:\n- `id`: copying would create a duplicate ID and clobber internal `<label for>` wiring\n- `class`, `style`, `part`, `exportparts`, `theme`: host styling/layout concerns\n- `slot`, `hidden`, `inert`, `popover`, `dir`, `lang`, `tabindex`: host-level DOM/focus semantics\n- `role`: host-level ARIA role when explicitly set on a host (e.g. `lt-breadcrumb-item`)"
+        },
+        {
+          "kind": "class",
+          "description": "Reactive controller that automatically forwards native HTML attributes and\n`aria-*` attributes from the `<lt-*>` custom element host onto its internal\nshadow DOM control (`<input>`, `<textarea>`, `<button>`, `<a>`, `<img>`,\n`<dialog>`, `<details>`, `<table>`, etc.).\n\nOnly attributes that `NativeAttrsController` itself set on a given target\nelement are ever removed when removed from the host — attributes bound by\nthe component's own Lit `render()` template (`id`, `class`, `part`, `type`,\n`aria-invalid`, etc.) are never clobbered.",
+          "name": "NativeAttrsController",
+          "members": [
+            {
+              "kind": "field",
+              "name": "_host",
+              "type": {
+                "text": "NativeAttrsHost"
+              },
+              "privacy": "private",
+              "default": "host"
+            },
+            {
+              "kind": "field",
+              "name": "_getTarget",
+              "type": {
+                "text": "() => Element | null | undefined"
+              },
+              "privacy": "private",
+              "default": "getTarget"
+            },
+            {
+              "kind": "field",
+              "name": "_options",
+              "type": {
+                "text": "NativeAttrsOptions"
+              },
+              "privacy": "private",
+              "default": "options"
+            },
+            {
+              "kind": "field",
+              "name": "_exclude",
+              "type": {
+                "text": "Set<string>"
+              },
+              "privacy": "private",
+              "default": "new Set(Array.from(options.exclude ?? [], (a) => a.toLowerCase()))"
+            },
+            {
+              "kind": "field",
+              "name": "_ownedAttrs",
+              "type": {
+                "text": "Set<string> | null"
+              },
+              "privacy": "private",
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "_forwardedByTarget",
+              "privacy": "private",
+              "default": "new WeakMap<Element, Set<string>>()"
+            },
+            {
+              "kind": "field",
+              "name": "_observer",
+              "type": {
+                "text": "MutationObserver"
+              },
+              "privacy": "private",
+              "default": "new MutationObserver((records) => { // Request a Lit update so any host getter reading `getAttribute(...)` / `hasAttribute(...)` // (such as `placeholder`, `readonly`, `maxlength`, `target`, `rel`) re-renders, and sync // the inner target immediately if it already exists. const relevant = records.some((r) => r.attributeName && !this._isIgnoredHostAttr(r.attributeName.toLowerCase())); if (relevant) { this._sync(); this._host.requestUpdate(); } })"
+            },
+            {
+              "kind": "method",
+              "name": "_patchAttributeMethods",
+              "privacy": "private",
+              "parameters": [
+                {
+                  "name": "host",
+                  "type": {
+                    "text": "NativeAttrsHost"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "_getOwned",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "Set<string>"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "_isIgnoredHostAttr",
+              "privacy": "private",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "attr",
+                  "type": {
+                    "text": "string"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "hostConnected"
+            },
+            {
+              "kind": "method",
+              "name": "hostDisconnected"
+            },
+            {
+              "kind": "method",
+              "name": "hostUpdated"
+            },
+            {
+              "kind": "method",
+              "name": "_sync",
+              "privacy": "private"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "HOST_ONLY_ATTRIBUTES",
+          "declaration": {
+            "name": "HOST_ONLY_ATTRIBUTES",
+            "module": "src/components/shared/native-attrs.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "NativeAttrsController",
+          "declaration": {
+            "name": "NativeAttrsController",
+            "module": "src/components/shared/native-attrs.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/components/shared/option-groups.ts",
       "declarations": [
         {
@@ -8825,6 +8410,134 @@
           "declaration": {
             "name": "groupConsecutive",
             "module": "src/components/shared/option-groups.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/components/shared/popup.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "The open/close lifecycle every floating popup shares.\n\n`lt-select`, `lt-combobox`, `lt-dropdown` and `lt-date-input` each grew their own copy of the same\nsequence — position the panel with floating-ui, watch for a click outside, and tear the autoUpdate\nlistener down again — and the copies drifted apart: two of them held a document-level listener for\nthe element's whole lifetime, two held one only while the popup was open, and one of those\ninstalled it *after* awaiting the positioning.\n\nThis class owns the sequence. What stays with each component is what genuinely differs between them:\nwhich element the panel is positioned against, how it is positioned, which pointer event counts as\na click outside, and what closing means (a dropdown hands focus back to its trigger, a combobox\nkeeps it in its input).",
+          "name": "PopupController",
+          "members": [
+            {
+              "kind": "field",
+              "name": "#host",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement"
+              },
+              "readonly": true,
+              "default": "host"
+            },
+            {
+              "kind": "field",
+              "name": "#options",
+              "privacy": "private",
+              "type": {
+                "text": "PopupOptions"
+              },
+              "readonly": true,
+              "default": "options"
+            },
+            {
+              "kind": "field",
+              "name": "#floatingCleanup",
+              "privacy": "private",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "#outsideCleanup",
+              "privacy": "private",
+              "type": {
+                "text": "(() => void) | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "#panel",
+              "privacy": "private",
+              "type": {
+                "text": "HTMLElement | null"
+              },
+              "default": "null"
+            },
+            {
+              "kind": "field",
+              "name": "#open",
+              "privacy": "private",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false"
+            },
+            {
+              "kind": "field",
+              "name": "#token",
+              "privacy": "private",
+              "type": {
+                "text": "symbol | null"
+              },
+              "default": "null",
+              "description": "Invalidated by every close, so a close that lands while `openFloating` is still resolving can be\ntold apart from an open that is still in flight."
+            },
+            {
+              "kind": "field",
+              "name": "isOpen",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the popup is currently open.",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "open",
+              "return": {
+                "type": {
+                  "text": "Promise<void>"
+                }
+              },
+              "description": "Positions the panel against its reference and starts watching for a click outside.\n\nSafe to call more than once: a second open would start a second floating autoUpdate and overwrite\nthe first one's cleanup, leaking a scroll/resize listener pair on every open."
+            },
+            {
+              "kind": "method",
+              "name": "close",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Hides the panel and stops watching for a click outside. Safe to call when the popup was never\nopen."
+            },
+            {
+              "kind": "method",
+              "name": "destroy",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Tears the popup down for good — the component is going away."
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PopupController",
+          "declaration": {
+            "name": "PopupController",
+            "module": "src/components/shared/popup.ts"
           }
         }
       ]
@@ -9211,6 +8924,12 @@
             },
             {
               "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.dialogElement, { exclude: ['aria-labelledby'] })"
+            },
+            {
+              "kind": "field",
               "name": "_scrollLocked",
               "type": {
                 "text": "boolean"
@@ -9528,32 +9247,9 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_default",
+              "name": "_nativeAttrs",
               "privacy": "private",
-              "default": "new FormDefaultController(this, () => this.value)"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input'), { exclude: ['aria-label', 'aria-valuemin', 'aria-valuemax', 'aria-valuenow'] })"
             },
             {
               "kind": "field",
@@ -9624,15 +9320,6 @@
             },
             {
               "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute for form submission"
-            },
-            {
-              "kind": "field",
               "name": "_fillRatio",
               "type": {
                 "text": "number"
@@ -9676,38 +9363,13 @@
               "name": "updated"
             },
             {
-              "kind": "method",
-              "name": "formResetCallback"
-            },
-            {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "_isDisabled",
+              "name": "_formValue",
               "type": {
-                "text": "boolean"
+                "text": "number"
               },
-              "privacy": "private",
-              "description": "`this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`).",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "checkValidity"
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity"
+              "privacy": "protected",
+              "description": "A slider's value is its number — what a form reset restores and what a browser state-restore\nrepopulates."
             },
             {
               "kind": "method",
@@ -9757,7 +9419,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-slider",
@@ -10658,35 +10320,6 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_default",
-              "privacy": "private",
-              "default": "new FormDefaultController(this, () => this.checked)"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
-            },
-            {
-              "kind": "field",
               "name": "_slotted",
               "privacy": "private",
               "default": "new SlottedContentController(this)"
@@ -10696,6 +10329,12 @@
               "name": "_fieldIds",
               "privacy": "private",
               "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input'), { exclude: ['aria-label', 'aria-checked', 'aria-describedby'] })"
             },
             {
               "kind": "field",
@@ -10762,15 +10401,6 @@
             },
             {
               "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name attribute for form submission."
-            },
-            {
-              "kind": "field",
               "name": "value",
               "type": {
                 "text": "string"
@@ -10810,38 +10440,32 @@
               "name": "updated"
             },
             {
-              "kind": "method",
-              "name": "formResetCallback"
-            },
-            {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "_isDisabled",
+              "name": "_formValue",
               "type": {
                 "text": "boolean"
               },
-              "privacy": "private",
-              "description": "`this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`).",
-              "readonly": true
+              "privacy": "protected",
+              "description": "A toggleable control's value is its checked state — what a form reset restores and what a browser\nstate-restore repopulates. The value it *submits* is `this.value` while checked and nothing at all\nwhile not (see `updated()`), which is exactly how a native checkbox behaves."
             },
             {
               "kind": "method",
-              "name": "checkValidity"
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity"
+              "name": "_restoreFormState",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "state",
+                  "type": {
+                    "text": "File | string | FormData | null"
+                  }
+                }
+              ],
+              "description": "A toggleable control's saved state is its `value` string — or nothing at all, when it was\nunchecked — so restored checkedness means \"the saved value is this control's own value\"."
             },
             {
               "kind": "method",
@@ -10876,7 +10500,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-switch",
@@ -11612,6 +11236,12 @@
               "name": "styles",
               "static": true,
               "default": "tableStyles"
+            },
+            {
+              "kind": "field",
+              "name": "_nativeAttrs",
+              "privacy": "private",
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('table'), { exclude: ['aria-label', 'aria-rowcount'] })"
             },
             {
               "kind": "field",
@@ -12550,7 +12180,10 @@
         {
           "kind": "variable",
           "name": "textfieldStyles",
-          "default": "css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); width: 100%; } label { color: var(--lt-text-subtle); } .input-container { position: relative; width: 100%; display: flex; align-items: center; gap: var(--lt-spacing-2); } .icon-start, .icon-end { color: var(--lt-text-muted); flex-shrink: 0; position: absolute; pointer-events: none; } .icon-start { inset-inline-start: var(--lt-spacing-3); } .icon-end { inset-inline-end: var(--lt-spacing-3); } /* Unlike .variant-icon (a decorative lt-icon), the password toggle is a real <button> — reset the native chrome so it reads as an inline icon, and re-declare align-items since it's no longer a plain absolutely- positioned element inheriting the .icon-start/.icon-end flex-adjacent layout by accident. */ .password-toggle { align-items: center; background: none; border: none; cursor: pointer; display: inline-flex; font: inherit; padding: 0; pointer-events: auto; transition: color var(--lt-duration-fast) var(--lt-ease-standard); } .password-toggle:hover { color: var(--lt-text-default); } .password-toggle:disabled { cursor: not-allowed; opacity: 0.6; } .password-toggle:focus-visible { outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color); outline-offset: var(--lt-border-focusRingOffset); } .variant-icon { pointer-events: none; } :host([variant='success']) .variant-icon { color: var(--lt-interactive-success-bg); } :host([variant='warning']) .variant-icon { color: var(--lt-interactive-warning-bg); } :host([variant='error']) .variant-icon, :host([data-invalid]) .variant-icon { color: var(--lt-interactive-error-bg); } input, textarea { color: var(--lt-text-default); font-family: inherit; font-weight: 400; } input::placeholder, textarea::placeholder { color: var(--lt-text-muted); } /* ── Multiline (textarea) — unchanged box model. prefix/suffix never apply here (see their own JSDoc), so the textarea itself stays the visible field, same as before those existed. ── */ textarea { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); box-sizing: border-box; min-height: 80px; padding-block: var(--lt-spacing-3); resize: vertical; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); width: 100%; } /* The manual drag handle would just get silently overwritten by the next keystroke's auto-grow — removed entirely rather than left to visually mislead the user into thinking a manual resize will stick. */ textarea.autosize { overflow: hidden; resize: none; } textarea:hover:not(:disabled) { border-color: var(--lt-border-strong); } textarea:focus { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); outline: none; } textarea:disabled { background: var(--lt-bg-surface); color: var(--lt-text-muted); cursor: not-allowed; } /* ── Single-line (input) — .input-container itself is the visible field box, not the <input>. prefix/suffix render as real flex siblings of the input (so a longer label like \"USD\" sizes itself naturally, rather than needing a hardcoded padding offset the way the fixed-size icon overlays below do) — an input with its own separate border/background layered inside that row would look like two stacked boxes instead of one field. */ .input-container:has(input) { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); box-sizing: border-box; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); } .input-container:has(input):hover:not(:has(:disabled)) { border-color: var(--lt-border-strong); } /* :focus-within, not :focus — focus always lands on the inner <input>, never the container itself. */ .input-container:has(input):focus-within { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); } .input-container:has(input):has(:disabled) { background: var(--lt-bg-surface); cursor: not-allowed; } input.field { background: transparent; border: none; flex: 1; height: 100%; min-width: 0; outline: none; padding: 0; } input.field:disabled { color: var(--lt-text-muted); cursor: not-allowed; } .prefix, .suffix { color: var(--lt-text-muted); flex-shrink: 0; white-space: nowrap; } /* sizes — split between textarea (box model lives on the element itself, unchanged) and input (box model lives on .input-container now — see the comment above .input-container:has(input)). */ :host([size='sm']) input.field, :host([size='sm']) textarea { font-size: 0.875rem; } :host([size='sm']) textarea, :host([size='sm']) .input-container:has(input) { height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='sm']) textarea.has-start-icon, :host([size='sm']) .input-container:has(input).has-start-icon { padding-inline-start: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='sm']) textarea.has-end-icon, :host([size='sm']) .input-container:has(input).has-end-icon { padding-inline-end: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='md']) input.field, :host([size='md']) textarea { font-size: 1rem; } :host([size='md']) textarea, :host([size='md']) .input-container:has(input) { height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='md']) textarea.has-start-icon, :host([size='md']) .input-container:has(input).has-start-icon { padding-inline-start: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='md']) textarea.has-end-icon, :host([size='md']) .input-container:has(input).has-end-icon { padding-inline-end: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='lg']) input.field, :host([size='lg']) textarea { font-size: 1.0625rem; } :host([size='lg']) textarea, :host([size='lg']) .input-container:has(input) { height: 48px; padding-inline: var(--lt-spacing-5); } :host([size='lg']) textarea.has-start-icon, :host([size='lg']) .input-container:has(input).has-start-icon { padding-inline-start: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) textarea.has-end-icon, :host([size='lg']) .input-container:has(input).has-end-icon { padding-inline-end: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) .icon-start, :host([size='lg']) .icon-end { width: 24px; height: 24px; } /* variants */ :host([variant='success']) textarea, :host([variant='success']) .input-container:has(input) { border-color: var(--lt-border-success-strong); } :host([variant='success']) textarea:focus, :host([variant='success']) .input-container:has(input):focus-within { border-color: var(--lt-interactive-success-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) textarea, :host([variant='warning']) .input-container:has(input) { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) textarea:focus, :host([variant='warning']) .input-container:has(input):focus-within { border-color: var(--lt-interactive-warning-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) textarea, :host([variant='error']) .input-container:has(input), :host([data-invalid]) textarea, :host([data-invalid]) .input-container:has(input) { border-color: var(--lt-border-error-strong); } :host([variant='error']) textarea:focus, :host([variant='error']) .input-container:has(input):focus-within, :host([data-invalid]) textarea:focus, :host([data-invalid]) .input-container:has(input):focus-within { border-color: var(--lt-interactive-error-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); } .helper-text::part(base) { font-weight: 200; } /* .icon-end disables pointer events so decorative icons never swallow clicks; the clear button is the one real control in that slot, so it opts back in and resets native button chrome. */ .clear-button { align-items: center; background: none; border: 0; border-radius: var(--lt-border-radius, 4px); cursor: pointer; display: flex; padding: 0; pointer-events: auto; } .clear-button:focus-visible { outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color); outline-offset: var(--lt-border-focusRingOffset); } .counter { color: var(--lt-text-subtle); display: block; text-align: end; } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .helper-text, :host([data-invalid]) .helper-text { color: var(--lt-text-error); } .required-indicator { color: var(--lt-text-error); } :host([uppercase]) label lt-text::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .password-toggle, .input-container, input, textarea { transition: none; } } `"
+          "type": {
+            "text": "array"
+          },
+          "default": "[ formFieldStyles, css` :host { display: inline-block; font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif); width: 100%; } .wrapper { display: flex; flex-direction: column; gap: var(--lt-spacing-1); width: 100%; } label { color: var(--lt-text-subtle); } .input-container { position: relative; width: 100%; display: flex; align-items: center; gap: var(--lt-spacing-2); } .icon-start, .icon-end { color: var(--lt-text-muted); flex-shrink: 0; position: absolute; pointer-events: none; } .icon-start { inset-inline-start: var(--lt-spacing-3); } .icon-end { inset-inline-end: var(--lt-spacing-3); } /* Unlike .variant-icon (a decorative lt-icon), the password toggle is a real <button> — reset the native chrome so it reads as an inline icon, and re-declare align-items since it's no longer a plain absolutely- positioned element inheriting the .icon-start/.icon-end flex-adjacent layout by accident. */ .password-toggle { align-items: center; background: none; border: none; cursor: pointer; display: inline-flex; font: inherit; padding: 0; pointer-events: auto; transition: color var(--lt-duration-fast) var(--lt-ease-standard); } .password-toggle:hover { color: var(--lt-text-default); } .password-toggle:disabled { cursor: not-allowed; opacity: 0.6; } .password-toggle:focus-visible { outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color); outline-offset: var(--lt-border-focusRingOffset); } .variant-icon { pointer-events: none; } :host([variant='success']) .variant-icon { color: var(--lt-interactive-success-bg); } :host([variant='warning']) .variant-icon { color: var(--lt-interactive-warning-bg); } :host([variant='error']) .variant-icon, :host([data-invalid]) .variant-icon { color: var(--lt-interactive-error-bg); } input, textarea { color: var(--lt-text-default); font-family: inherit; font-weight: 400; } input::placeholder, textarea::placeholder { color: var(--lt-text-muted); } /* ── Multiline (textarea) — unchanged box model. prefix/suffix never apply here (see their own JSDoc), so the textarea itself stays the visible field, same as before those existed. ── */ textarea { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); box-sizing: border-box; min-height: 80px; padding-block: var(--lt-spacing-3); resize: vertical; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); width: 100%; } /* The manual drag handle would just get silently overwritten by the next keystroke's auto-grow — removed entirely rather than left to visually mislead the user into thinking a manual resize will stick. */ textarea.autosize { overflow: hidden; resize: none; } textarea:hover:not(:disabled) { border-color: var(--lt-border-strong); } textarea:focus { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); outline: none; } textarea:disabled { background: var(--lt-bg-surface); color: var(--lt-text-muted); cursor: not-allowed; } /* ── Single-line (input) — .input-container itself is the visible field box, not the <input>. prefix/suffix render as real flex siblings of the input (so a longer label like \"USD\" sizes itself naturally, rather than needing a hardcoded padding offset the way the fixed-size icon overlays below do) — an input with its own separate border/background layered inside that row would look like two stacked boxes instead of one field. */ .input-container:has(input) { background: var(--lt-bg-subtle); border-radius: var(--lt-border-radius); border: var(--lt-border-width, 1px) solid var(--lt-border-input); box-sizing: border-box; transition: border-color var(--lt-duration-fast) var(--lt-ease-standard), box-shadow var(--lt-duration-fast) var(--lt-ease-standard); } .input-container:has(input):hover:not(:has(:disabled)) { border-color: var(--lt-border-strong); } /* :focus-within, not :focus — focus always lands on the inner <input>, never the container itself. */ .input-container:has(input):focus-within { border-color: var(--lt-interactive-primary-bg); box-shadow: 0 0 0 3px var(--lt-focus-halo-color); } .input-container:has(input):has(:disabled) { background: var(--lt-bg-surface); cursor: not-allowed; } input.field { background: transparent; border: none; flex: 1; height: 100%; min-width: 0; outline: none; padding: 0; } input.field:disabled { color: var(--lt-text-muted); cursor: not-allowed; } .prefix, .suffix { color: var(--lt-text-muted); flex-shrink: 0; white-space: nowrap; } /* sizes — split between textarea (box model lives on the element itself, unchanged) and input (box model lives on .input-container now — see the comment above .input-container:has(input)). */ :host([size='sm']) input.field, :host([size='sm']) textarea { font-size: 0.875rem; } :host([size='sm']) textarea, :host([size='sm']) .input-container:has(input) { height: 32px; padding-inline: var(--lt-spacing-3); } :host([size='sm']) textarea.has-start-icon, :host([size='sm']) .input-container:has(input).has-start-icon { padding-inline-start: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='sm']) textarea.has-end-icon, :host([size='sm']) .input-container:has(input).has-end-icon { padding-inline-end: calc(var(--lt-spacing-3) + 20px + var(--lt-spacing-2)); } :host([size='md']) input.field, :host([size='md']) textarea { font-size: 1rem; } :host([size='md']) textarea, :host([size='md']) .input-container:has(input) { height: 40px; padding-inline: var(--lt-spacing-4); } :host([size='md']) textarea.has-start-icon, :host([size='md']) .input-container:has(input).has-start-icon { padding-inline-start: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='md']) textarea.has-end-icon, :host([size='md']) .input-container:has(input).has-end-icon { padding-inline-end: calc(var(--lt-spacing-4) + 20px + var(--lt-spacing-2)); } :host([size='lg']) input.field, :host([size='lg']) textarea { font-size: 1.0625rem; } :host([size='lg']) textarea, :host([size='lg']) .input-container:has(input) { height: 48px; padding-inline: var(--lt-spacing-5); } :host([size='lg']) textarea.has-start-icon, :host([size='lg']) .input-container:has(input).has-start-icon { padding-inline-start: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) textarea.has-end-icon, :host([size='lg']) .input-container:has(input).has-end-icon { padding-inline-end: calc(var(--lt-spacing-5) + 24px + var(--lt-spacing-2)); } :host([size='lg']) .icon-start, :host([size='lg']) .icon-end { width: 24px; height: 24px; } /* variants */ :host([variant='success']) textarea, :host([variant='success']) .input-container:has(input) { border-color: var(--lt-border-success-strong); } :host([variant='success']) textarea:focus, :host([variant='success']) .input-container:has(input):focus-within { border-color: var(--lt-interactive-success-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-success-subtle); } :host([variant='warning']) textarea, :host([variant='warning']) .input-container:has(input) { border-color: var(--lt-border-warning-strong); } :host([variant='warning']) textarea:focus, :host([variant='warning']) .input-container:has(input):focus-within { border-color: var(--lt-interactive-warning-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-warning-subtle); } :host([variant='error']) textarea, :host([variant='error']) .input-container:has(input), :host([data-invalid]) textarea, :host([data-invalid]) .input-container:has(input) { border-color: var(--lt-border-error-strong); } :host([variant='error']) textarea:focus, :host([variant='error']) .input-container:has(input):focus-within, :host([data-invalid]) textarea:focus, :host([data-invalid]) .input-container:has(input):focus-within { border-color: var(--lt-interactive-error-bg-hover); box-shadow: 0 0 0 3px var(--lt-bg-error-subtle); } .helper-text { color: var(--lt-text-subtle); } .helper-text::part(base) { font-weight: 200; } /* .icon-end disables pointer events so decorative icons never swallow clicks; the clear button is the one real control in that slot, so it opts back in and resets native button chrome. */ .clear-button { align-items: center; background: none; border: 0; border-radius: var(--lt-border-radius, 4px); cursor: pointer; display: flex; padding: 0; pointer-events: auto; } .clear-button:focus-visible { outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color); outline-offset: var(--lt-border-focusRingOffset); } .counter { color: var(--lt-text-subtle); display: block; text-align: end; } :host([variant='success']) .helper-text { color: var(--lt-text-success); } :host([variant='warning']) .helper-text { color: var(--lt-text-warning); } :host([variant='error']) .helper-text, :host([data-invalid]) .helper-text { color: var(--lt-text-error); } :host([uppercase]) label lt-text::part(base) { font-variant-caps: small-caps; letter-spacing: 0.05rem; text-transform: lowercase; } /* ── Reduced motion ─────────────────────────────────────────────────────── */ @media (prefers-reduced-motion: reduce) { .password-toggle, .input-container, input, textarea { transition: none; } } ` ]"
         }
       ],
       "exports": [
@@ -12570,7 +12203,7 @@
       "declarations": [
         {
           "kind": "class",
-          "description": "A customizable text input component with support for multiple variants, sizes, and input types.\nSupports both single-line inputs and multi-line textareas.",
+          "description": "A customizable text input component with support for multiple variants, sizes, and input types.\nSupports both single-line inputs and multi-line textareas, and automatically forwards native\n`<input>` / `<textarea>` HTML attributes onto the inner control.",
           "name": "Textfield",
           "members": [
             {
@@ -12581,32 +12214,9 @@
             },
             {
               "kind": "field",
-              "name": "formAssociated",
-              "type": {
-                "text": "boolean"
-              },
-              "static": true,
-              "default": "true"
-            },
-            {
-              "kind": "field",
-              "name": "_internals",
-              "type": {
-                "text": "ElementInternals"
-              },
-              "privacy": "private"
-            },
-            {
-              "kind": "field",
-              "name": "_default",
+              "name": "_nativeAttrs",
               "privacy": "private",
-              "default": "new FormDefaultController(this, () => this.value)"
-            },
-            {
-              "kind": "field",
-              "name": "_fieldsetDisabled",
-              "privacy": "private",
-              "default": "new FormDisabledController(this)"
+              "default": "new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input, textarea'), { exclude: ['aria-label', 'aria-invalid', 'aria-describedby'], aliases: { 'input-mode': 'inputmode' }, filter: (attr, target) => { if (target.tagName === 'TEXTAREA') return attr !== 'pattern' && attr !== 'min' && attr !== 'max'; if (this.type === 'number') return attr !== 'minlength' && attr !== 'maxlength' && attr !== 'pattern'; return attr !== 'min' && attr !== 'max'; }, onSync: () => this._syncValidity() })"
             },
             {
               "kind": "field",
@@ -12667,30 +12277,12 @@
             },
             {
               "kind": "field",
-              "name": "placeholder",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Placeholder text shown when input is empty."
-            },
-            {
-              "kind": "field",
               "name": "label",
               "type": {
                 "text": "string"
               },
               "default": "''",
               "description": "Label text displayed above the input."
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Name used when submitting a form."
             },
             {
               "kind": "field",
@@ -12721,24 +12313,6 @@
             },
             {
               "kind": "field",
-              "name": "readonly",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Whether the input is readonly."
-            },
-            {
-              "kind": "field",
-              "name": "autofocus",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Focuses the inner input/textarea once, on first render. Shadows the native `HTMLElement.autofocus` — setting\nthe content attribute alone wouldn't help, since the host itself has no `delegatesFocus` and autofocusing it\nwould be a no-op; this forwards the focus call into the real control instead."
-            },
-            {
-              "kind": "field",
               "name": "iconStart",
               "type": {
                 "text": "string"
@@ -12766,42 +12340,6 @@
             },
             {
               "kind": "field",
-              "name": "min",
-              "type": {
-                "text": "number | null"
-              },
-              "default": "null",
-              "description": "Native `min` — minimum allowed value. Only applies when `type=\"number\"`, matching native `<input>`: `min`\nhas no effect on any other input type this component supports (no `type=\"date\"`/`\"range\"`/etc.). For a\nminimum character length on a text-like type, use `minLength` instead — that's a distinct native attribute,\nnot a repurposing of this one."
-            },
-            {
-              "kind": "field",
-              "name": "max",
-              "type": {
-                "text": "number | null"
-              },
-              "default": "null",
-              "description": "Native `max` — maximum allowed value. Only applies when `type=\"number\"`. See `min`; for a maximum character\nlength on a text-like type, use `maxLength`."
-            },
-            {
-              "kind": "field",
-              "name": "minLength",
-              "type": {
-                "text": "number | null"
-              },
-              "default": "null",
-              "description": "Native `minlength` — minimum character length required for the value to be valid. No effect when\n`type=\"number\"` (same as native `<input type=\"number\" minlength>`, which HTML itself ignores) — use `min`\nthere instead."
-            },
-            {
-              "kind": "field",
-              "name": "maxLength",
-              "type": {
-                "text": "number | null"
-              },
-              "default": "null",
-              "description": "Native `maxlength` — maximum character length allowed for the value. No effect when `type=\"number\"` — use\n`max` there instead. See `minLength`."
-            },
-            {
-              "kind": "field",
               "name": "uppercase",
               "type": {
                 "text": "boolean"
@@ -12825,34 +12363,7 @@
                 "text": "boolean"
               },
               "default": "false",
-              "description": "Shows the character count as `length / maxLength` below the field. Uses `maxLength` as the limit, which is also enforced natively."
-            },
-            {
-              "kind": "field",
-              "name": "autocomplete",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Native `autocomplete` hint (e.g. `'email'`, `'current-password'`, `'off'`), forwarded as-is to the inner\n`<input>`/`<textarea>`. Not validated or enumerated here — see the HTML spec for the full token list."
-            },
-            {
-              "kind": "field",
-              "name": "inputMode",
-              "type": {
-                "text": "TextfieldInputMode | ''"
-              },
-              "default": "''",
-              "description": "Hints the on-screen keyboard a touch device should show, forwarded as the native `inputmode` attribute on\nthe inner `<input>`/`<textarea>`. The host's own attribute stays kebab-case (`input-mode`), not `inputmode`\ndespite that being this property's native HTML spelling — changing it now would be a breaking rename for any\nexisting consumer setting the attribute directly in markup, with no real upside (the generated React wrapper\nand the docs manifest generator both already know about the actual `input-mode` spelling via their respective\n`ATTRIBUTE_NAME_OVERRIDES` tables — see `scripts/codegen-wrappers.mjs` / `packages/web/scripts/build-\nmanifest.mjs` — so nothing is silently desynced). A newly introduced property with no existing consumers\n(`minLength`/`maxLength`, above) uses the true native spelling instead, for exactly that reason: no rename to\navoid. Typed `| ''`, not optional — `HTMLElement` already declares its own `inputMode: string` (a real DOM\nproperty every element has), so this has to stay assignable to that rather than `string | undefined`."
-            },
-            {
-              "kind": "field",
-              "name": "pattern",
-              "type": {
-                "text": "string"
-              },
-              "default": "''",
-              "description": "Native regex the value must match, forwarded as-is to the inner `<input>`. No effect on `type=\"multiline\"`\n(textarea) or `type=\"number\"` — `pattern` isn't a valid attribute on either in HTML."
+              "description": "Shows the character count as `length / maxLength` below the field. Uses the native `maxlength` attribute as the limit, which is also enforced natively."
             },
             {
               "kind": "field",
@@ -12931,13 +12442,7 @@
                   "text": "boolean"
                 }
               },
-              "description": "Handles input events from the native input or textarea element.\nUpdates the component's value property and dispatches a custom input event.",
-              "parameters": [
-                {
-                  "description": "The native input event",
-                  "name": "e"
-                }
-              ]
+              "description": "Validates the current value against format and constraint rules."
             },
             {
               "kind": "method",
@@ -12973,13 +12478,6 @@
                 "text": "boolean"
               },
               "privacy": "private",
-              "description": "Handles change events from the native input or textarea element.\nUpdates the component's value property and dispatches a custom change event.",
-              "parameters": [
-                {
-                  "description": "The native change event",
-                  "name": "e"
-                }
-              ],
               "readonly": true
             },
             {
@@ -13049,6 +12547,11 @@
             },
             {
               "kind": "method",
+              "name": "_syncValidity",
+              "privacy": "private"
+            },
+            {
+              "kind": "method",
               "name": "updated",
               "parameters": [
                 {
@@ -13060,38 +12563,23 @@
               ]
             },
             {
-              "kind": "method",
-              "name": "formResetCallback"
-            },
-            {
-              "kind": "method",
-              "name": "formDisabledCallback",
-              "parameters": [
-                {
-                  "name": "disabled",
-                  "type": {
-                    "text": "boolean"
-                  }
-                }
-              ]
-            },
-            {
               "kind": "field",
-              "name": "_isDisabled",
+              "name": "_formValue",
               "type": {
-                "text": "boolean"
+                "text": "string"
               },
-              "privacy": "private",
-              "description": "`this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`).",
-              "readonly": true
+              "privacy": "protected",
+              "description": "A text-like control's value is its `value` — what a form reset restores and what a browser\nstate-restore repopulates."
             },
             {
               "kind": "method",
-              "name": "checkValidity"
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity"
+              "name": "formResetCallback",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Restores the textfield's value *and* the interaction state that goes with it — a reset puts the\nfield back to its pristine state, so the touched flag and any auto-shown error have to go too\n(TFD-7), not just the text."
             },
             {
               "kind": "method",
@@ -13115,7 +12603,7 @@
             }
           ],
           "superclass": {
-            "name": "ThemeableElement",
+            "name": "FormControlElement",
             "module": "/src/base"
           },
           "tagName": "lt-textfield",

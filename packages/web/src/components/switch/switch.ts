@@ -1,13 +1,12 @@
 import { html, nothing } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { devWarn } from '../../utils';
 import { customElement, property } from 'lit/decorators.js';
 
 import { switchStyles } from './switch.styles';
 import { SwitchSize, SwitchVariant, SwitchLabelPosition, type SwitchLabels } from './switch.types';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
 import { SlottedContentController } from '../shared/slotted-content';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { createFieldIds } from '../shared/form-field';
 
 import '../text/text';
@@ -50,20 +49,14 @@ const DEFAULT_LABELS: SwitchLabels = {
  * ```
  */
 @customElement('lt-switch')
-export class Switch extends ThemeableElement {
+export class Switch extends FormControlElement {
   static styles = switchStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.checked);
-  private _fieldsetDisabled = new FormDisabledController(this);
   private _slotted = new SlottedContentController(this);
   private readonly _fieldIds = createFieldIds();
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input'), {
+    exclude: ['aria-label', 'aria-checked', 'aria-describedby']
+  });
 
   /**
    * Visual variant that determines the color when checked.
@@ -111,12 +104,6 @@ export class Switch extends ThemeableElement {
   @property({ attribute: 'label-position', reflect: true }) labelPosition: SwitchLabelPosition = 'right';
 
   /**
-   * Name attribute for form submission.
-   * @default ''
-   */
-  @property({ reflect: true }) name = '';
-
-  /**
    * Value attribute for form submission.
    * @default 'on'
    */
@@ -145,25 +132,25 @@ export class Switch extends ThemeableElement {
     }
   }
 
-  formResetCallback() {
-    this.checked = this._default.value;
+  /**
+   * A toggleable control's value is its checked state — what a form reset restores and what a browser
+   * state-restore repopulates. The value it *submits* is `this.value` while checked and nothing at all
+   * while not (see `updated()`), which is exactly how a native checkbox behaves.
+   */
+  protected override get _formValue(): boolean {
+    return this.checked;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  protected override set _formValue(value: unknown) {
+    this.checked = Boolean(value);
   }
 
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  /**
+   * A toggleable control's saved state is its `value` string — or nothing at all, when it was
+   * unchecked — so restored checkedness means "the saved value is this control's own value".
+   */
+  protected override _restoreFormState(state: File | string | FormData | null): void {
+    this.checked = typeof state === 'string' && state === this.value;
   }
 
   private handleChange(e: Event) {
@@ -199,10 +186,9 @@ export class Switch extends ThemeableElement {
             .checked=${this.checked}
             ?disabled=${this._isDisabled}
             ?required=${this.required}
-            name=${this.name}
             value=${this.value}
             @change=${this.handleChange}
-            aria-label=${hasLabel ? nothing : 'switch'}
+            aria-label=${hasLabel ? nothing : this.getAttribute('aria-label') || 'switch'}
             role="switch"
             aria-checked=${this.checked ? 'true' : 'false'}
             aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}

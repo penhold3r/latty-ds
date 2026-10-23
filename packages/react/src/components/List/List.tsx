@@ -1,7 +1,8 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { List as ListEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type ListProps = HTMLAttributes<ListEl> & {
+export type ListProps = Omit<HTMLAttributes<ListEl>, 'type' | 'size'> & {
   type?: ListEl['type'];
   size?: ListEl['size'];
   markerColor?: string;
@@ -21,7 +22,7 @@ export const List = forwardRef<ListEl, ListProps>(function List(
     <lt-list
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       marker-color={markerColor}
       divider={divider || undefined}
       no-marker={noMarker || undefined}

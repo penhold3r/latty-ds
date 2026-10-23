@@ -1,8 +1,11 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type InputHTMLAttributes } from 'react';
 import type { Radio as RadioEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
-  formAssociated?: boolean;
+export type RadioProps = Omit<
+  InputHTMLAttributes<RadioEl>,
+  'onChange' | 'size' | 'checked' | 'disabled' | 'required' | 'label' | 'name' | 'value'
+> & {
   variant?: RadioEl['variant'];
   size?: RadioEl['size'];
   checked?: boolean;
@@ -19,19 +22,7 @@ export type RadioProps = Omit<HTMLAttributes<RadioEl>, 'onChange'> & {
 };
 
 export const Radio = forwardRef<RadioEl, RadioProps>(function Radio(
-  {
-    onChange,
-    helperText,
-    labels,
-    formAssociated,
-    checked,
-    disabled,
-    required,
-    labelPosition,
-    tabbable,
-    children,
-    ...props
-  },
+  { onChange, helperText, labels, checked, disabled, required, labelPosition, tabbable, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<RadioEl>(null);
@@ -56,8 +47,7 @@ export const Radio = forwardRef<RadioEl, RadioProps>(function Radio(
     <lt-radio
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       checked={checked || undefined}
       disabled={disabled || undefined}
       required={required || undefined}

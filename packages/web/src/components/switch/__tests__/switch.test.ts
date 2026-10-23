@@ -145,7 +145,7 @@ describe('<lt-switch>', () => {
   });
 
   it('supports name attribute', async () => {
-    el.name = 'test-switch';
+    el.setAttribute('name', 'test-switch');
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input[type="checkbox"]') as HTMLInputElement;
     expect(input.name).toBe('test-switch');

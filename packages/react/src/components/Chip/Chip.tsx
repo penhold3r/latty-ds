@@ -1,7 +1,8 @@
 import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Chip as ChipEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type ChipProps = Omit<HTMLAttributes<ChipEl>, 'onChange'> & {
+export type ChipProps = Omit<HTMLAttributes<ChipEl>, 'onChange' | 'size' | 'disabled' | 'selected'> & {
   appearance?: ChipEl['appearance'];
   variant?: ChipEl['variant'];
   size?: ChipEl['size'];
@@ -47,7 +48,7 @@ export const Chip = forwardRef<ChipEl, ChipProps>(function Chip(
     <lt-chip
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       disabled={disabled || undefined}
       deletable={deletable || undefined}
       selectable={selectable || undefined}

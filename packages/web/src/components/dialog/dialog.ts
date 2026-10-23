@@ -8,6 +8,7 @@ import { backdropFeatureStyles } from '../shared/backdrop.styles';
 import { DialogSize, type DialogLabels } from './dialog.types';
 import type { SurfaceElevation, SurfaceAppearance } from '../surface/surface.types';
 import { lockBodyScroll, unlockBodyScroll } from '../shared/scroll-lock';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 const DEFAULT_LABELS: DialogLabels = {
   close: 'Close dialog'
@@ -149,6 +150,9 @@ export class Dialog extends ThemeableElement {
   }
 
   @query('dialog') private dialogElement?: HTMLDialogElement;
+  private _nativeAttrs = new NativeAttrsController(this, () => this.dialogElement, {
+    exclude: ['aria-labelledby']
+  });
   private previouslyFocusedElement?: HTMLElement;
   private _scrollLocked = false;
   // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
@@ -296,7 +300,7 @@ export class Dialog extends ThemeableElement {
     return html`
       <dialog
         part="dialog"
-        aria-labelledby="dialog-title"
+        aria-labelledby=${this.heading ? 'dialog-title' : this.getAttribute('aria-labelledby') || 'dialog-title'}
         @cancel=${this._handleCancel}
         @close=${this._handleNativeClose}
         @click=${this._handleDialogClick}

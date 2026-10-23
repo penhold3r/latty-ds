@@ -1,8 +1,8 @@
-import { createFieldIds } from '../shared/form-field';
+import { createFieldIds, renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { html, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement, property, state } from 'lit/decorators.js';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import '@latty-ds/icons';
 import '../calendar/calendar';
 import '../text/text';
@@ -10,10 +10,9 @@ import '../text/text';
 import { dateInputStyles } from './date-input.styles';
 import type { DateInputSize, DateInputVariant, DateInputFormat, DateInputLabels } from './date-input.types';
 import type { CalendarDisabledDates, CalendarWeekStart } from '../calendar/calendar.types';
-import { dispatch, createClickOutsideHandler, devWarn } from '../../utils';
-import { openFloating, closeFloating } from '../shared/floating';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
+import { dispatch, devWarn } from '../../utils';
+import { PopupController } from '../shared/popup';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
@@ -53,18 +52,12 @@ const parseIsoDate = (value: string): Date | null => {
  * ```
  */
 @customElement('lt-date-input')
-export class DateInput extends ThemeableElement {
+export class DateInput extends FormControlElement {
   static styles = dateInputStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('#field-btn'), {
+    exclude: ['aria-haspopup', 'aria-expanded', 'aria-describedby']
+  });
 
   /** Selected date in ISO format (YYYY-MM-DD). Not reflected as an attribute — read the property, or the
    * `change` event's `detail.value`, instead of `getAttribute('value')`/`[value]`. */
@@ -110,9 +103,6 @@ export class DateInput extends ThemeableElement {
   /** Whether the field is required. */
   @property({ type: Boolean, reflect: true }) required = false;
 
-  /** Name used in form submission (through `ElementInternals`, so no hidden input is rendered). */
-  @property({ reflect: true }) name = '';
-
   /**
    * Dates to disable in the calendar: an array of Date objects, or a predicate for a rule impractical to
    * enumerate (e.g. disabling every weekend). Set as a JS property (`.disabledDates`).
@@ -128,8 +118,12 @@ export class DateInput extends ThemeableElement {
 
   @state() private _open = false;
 
-  private _cleanupClickOutside: (() => void) | null = null;
-  private _floatingCleanup: (() => void) | null = null;
+  private readonly _popup: PopupController = new PopupController(this, {
+    panel: () => this.shadowRoot?.querySelector<HTMLElement>('.dropdown') ?? null,
+    reference: () => this.shadowRoot?.querySelector<HTMLElement>('#field-btn') ?? null,
+    outsideEvent: 'pointerdown',
+    onOutside: () => this._closeDropdown()
+  });
 
   private readonly _fieldIds = createFieldIds();
 
@@ -148,33 +142,20 @@ export class DateInput extends ThemeableElement {
     if (this._isDisabled || this._open) return;
     this._open = true;
     await this.updateComplete;
-    const btn = this.shadowRoot?.querySelector<HTMLElement>('#field-btn');
-    const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
-    if (btn && dropdown) {
-      const cleanup = await openFloating(btn, dropdown);
-      // Guard against a close during the await — otherwise the autoUpdate cleanup is orphaned.
-      if (this._open) this._floatingCleanup = cleanup;
-      else cleanup();
-    }
+    // Escape can close the dropdown while the render it asked for was still pending — opening it now
+    // would leave a calendar on screen that nothing owns.
     if (!this._open) return;
-    this._cleanupClickOutside = createClickOutsideHandler(this, () => this._closeDropdown());
+    await this._popup.open();
   }
 
   private _closeDropdown() {
-    const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
-    if (dropdown) closeFloating(dropdown, this._floatingCleanup);
-    this._floatingCleanup = null;
+    this._popup.close();
     this._open = false;
-    this._cleanupClickOutside?.();
-    this._cleanupClickOutside = null;
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback();
-    this._floatingCleanup?.();
-    this._floatingCleanup = null;
-    this._cleanupClickOutside?.();
-    this._cleanupClickOutside = null;
+    this._popup.destroy();
   }
 
   private _handleCalendarChange(e: CustomEvent<{ value: string }>) {
@@ -200,7 +181,7 @@ export class DateInput extends ThemeableElement {
     if (changed.has('value') && this.value && !parseIsoDate(this.value)) {
       devWarn('lt-date-input', `value "${this.value}" isn't a plain YYYY-MM-DD date — showing the placeholder instead`);
     }
-    this._internals.setFormValue(this.value || null);
+    this._internals.setFormValue(this.value);
     const btn = this.shadowRoot?.querySelector<HTMLElement>('#field-btn');
     if (this.required && !this.value && btn) {
       this._internals.setValidity({ valueMissing: true }, this._labels.validationMessage, btn);
@@ -209,25 +190,16 @@ export class DateInput extends ThemeableElement {
     }
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  /**
+   * A text-like control's value is its `value` — what a form reset restores and what a browser
+   * state-restore repopulates.
+   */
+  protected override get _formValue(): string {
+    return this.value;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
-  }
-
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  protected override set _formValue(value: unknown) {
+    this.value = value == null ? '' : String(value);
   }
 
   render() {
@@ -236,12 +208,7 @@ export class DateInput extends ThemeableElement {
 
     return html`
       <div class="wrapper">
-        ${this.label
-          ? html`<label for="field-btn">
-              <lt-text variant="label" as="span">${this.label}</lt-text>
-              ${this.required ? html`<span class="required-indicator" aria-hidden="true">*</span>` : nothing}
-            </label>`
-          : nothing}
+        ${this.label ? html`<label for="field-btn"> ${renderFieldLabel(this.label, this.required)} </label>` : nothing}
 
         <div class="field">
           <button
@@ -284,9 +251,7 @@ export class DateInput extends ThemeableElement {
           </div>
         </div>
 
-        ${this.helperText
-          ? html`<span id=${this._fieldIds.helper} class="helper-text">${this.helperText}</span>`
-          : nothing}
+        ${renderHelperText(this._fieldIds.helper, this.helperText)}
       </div>
     `;
   }

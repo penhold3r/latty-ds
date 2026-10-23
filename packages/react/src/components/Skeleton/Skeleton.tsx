@@ -1,7 +1,8 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Skeleton as SkeletonEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type SkeletonProps = HTMLAttributes<SkeletonEl> & {
+export type SkeletonProps = Omit<HTMLAttributes<SkeletonEl>, 'width' | 'height'> & {
   shape?: SkeletonEl['shape'];
   width?: string;
   height?: string;
@@ -20,7 +21,7 @@ export const Skeleton = forwardRef<SkeletonEl, SkeletonProps>(function Skeleton(
     <lt-skeleton
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       animated={animated || undefined}
     >
       {children}

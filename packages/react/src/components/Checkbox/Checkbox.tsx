@@ -1,8 +1,11 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type InputHTMLAttributes } from 'react';
 import type { Checkbox as CheckboxEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
-  formAssociated?: boolean;
+export type CheckboxProps = Omit<
+  InputHTMLAttributes<CheckboxEl>,
+  'onChange' | 'size' | 'checked' | 'disabled' | 'required' | 'label' | 'value'
+> & {
   variant?: CheckboxEl['variant'];
   size?: CheckboxEl['size'];
   checked?: boolean;
@@ -11,7 +14,6 @@ export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
   required?: boolean;
   label?: string;
   labelPosition?: CheckboxEl['labelPosition'];
-  name?: string;
   value?: string;
   helperText?: string;
   labels?: CheckboxEl['labels'];
@@ -19,19 +21,7 @@ export type CheckboxProps = Omit<HTMLAttributes<CheckboxEl>, 'onChange'> & {
 };
 
 export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
-  {
-    onChange,
-    helperText,
-    labels,
-    formAssociated,
-    checked,
-    indeterminate,
-    disabled,
-    required,
-    labelPosition,
-    children,
-    ...props
-  },
+  { onChange, helperText, labels, checked, indeterminate, disabled, required, labelPosition, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<CheckboxEl>(null);
@@ -56,8 +46,7 @@ export const Checkbox = forwardRef<CheckboxEl, CheckboxProps>(function Checkbox(
     <lt-checkbox
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       checked={checked || undefined}
       indeterminate={indeterminate || undefined}
       disabled={disabled || undefined}

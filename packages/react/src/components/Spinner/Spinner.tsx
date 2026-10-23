@@ -1,7 +1,8 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Spinner as SpinnerEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type SpinnerProps = HTMLAttributes<SpinnerEl> & {
+export type SpinnerProps = Omit<HTMLAttributes<SpinnerEl>, 'size'> & {
   size?: SpinnerEl['size'];
   variant?: SpinnerEl['variant'];
 };
@@ -12,7 +13,7 @@ export const Spinner = forwardRef<SpinnerEl, SpinnerProps>(function Spinner({ ch
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-spinner ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
+    <lt-spinner ref={innerRef} suppressHydrationWarning {...normalizeNativeProps(props as Record<string, unknown>)}>
       {children}
     </lt-spinner>
   );

@@ -1,8 +1,10 @@
 import { css } from 'lit';
 import { floatingPanelReset } from '../shared/floating';
+import { formFieldStyles } from '../shared/form-field';
 
 export const dateInputStyles = [
   floatingPanelReset,
+  formFieldStyles,
   css`
     :host {
       display: block;
@@ -18,11 +20,6 @@ export const dateInputStyles = [
     label {
       color: var(--lt-text-default);
       cursor: default;
-    }
-
-    .required-indicator {
-      color: var(--lt-text-error);
-      margin-inline-start: 2px;
     }
 
     /* ── Field ── */
@@ -137,7 +134,6 @@ export const dateInputStyles = [
 
     .helper-text {
       color: var(--lt-text-subtle);
-      font-size: 0.8125rem;
     }
 
     :host([variant='error']) .helper-text {

@@ -158,6 +158,41 @@ describe('<lt-radio-group>', () => {
     otherParent.remove();
   });
 
+  describe('following a form reset (RDG-2)', () => {
+    // The radios are the form-associated elements — each one restores its own default when the form
+    // resets — but the group is not form-associated, so nothing used to tell it that had happened and
+    // its `value` kept pointing at a radio that was no longer checked.
+    it('re-derives its value from the radios once the browser has reset them', async () => {
+      const form = document.createElement('form');
+      document.body.append(form);
+      form.append(el);
+      await el.updateComplete;
+
+      const [radio1, radio2] = el.querySelectorAll('lt-radio') as NodeListOf<Radio>;
+      expect(el.value).toBe('option2');
+
+      // The user picks a different radio…
+      radio1.checked = true;
+      radio2.checked = false;
+      radio1.dispatchEvent(new CustomEvent('change', { detail: { checked: true }, bubbles: true }));
+      await el.updateComplete;
+      expect(el.value).toBe('option1');
+
+      // …and the browser resets the form. jsdom never runs the form-associated reset lifecycle, so the
+      // radios' own `formResetCallback` is called by hand, in the order the browser would.
+      form.reset();
+      radio1.formResetCallback();
+      radio2.formResetCallback();
+      await Promise.resolve();
+      await el.updateComplete;
+
+      expect(radio2.checked).toBe(true);
+      expect(el.value).toBe('option2');
+
+      form.remove();
+    });
+  });
+
   describe('roving tabindex and arrow-key navigation (RAD-2)', () => {
     const input = (radio: Radio) => radio.shadowRoot!.querySelector('input') as HTMLInputElement;
     const arrow = (radio: Radio, key: string) =>

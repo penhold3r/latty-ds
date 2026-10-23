@@ -1,7 +1,8 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type DialogHTMLAttributes } from 'react';
 import type { Dialog as DialogEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type DialogProps = HTMLAttributes<DialogEl> & {
+export type DialogProps = Omit<DialogHTMLAttributes<DialogEl>, 'size' | 'open' | 'title'> & {
   size?: DialogEl['size'];
   open?: boolean;
   heading?: string;
@@ -62,7 +63,7 @@ export const Dialog = forwardRef<DialogEl, DialogProps>(function Dialog(
     <lt-dialog
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       open={open || undefined}
       no-close-button={noCloseButton || undefined}
       close-on-backdrop-click={closeOnBackdropClick || undefined}

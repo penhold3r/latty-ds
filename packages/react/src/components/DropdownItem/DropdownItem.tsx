@@ -1,7 +1,18 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import {
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+  type ButtonHTMLAttributes,
+  type AnchorHTMLAttributes
+} from 'react';
 import type { DropdownItem as DropdownItemEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type DropdownItemProps = Omit<HTMLAttributes<DropdownItemEl>, 'onSelect'> & {
+export type DropdownItemProps = Omit<
+  ButtonHTMLAttributes<DropdownItemEl> & AnchorHTMLAttributes<DropdownItemEl>,
+  'onSelect' | 'disabled' | 'selected' | 'href'
+> & {
   disabled?: boolean;
   selected?: boolean;
   href?: string;
@@ -28,7 +39,7 @@ export const DropdownItem = forwardRef<DropdownItemEl, DropdownItemProps>(functi
     <lt-dropdown-item
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       disabled={disabled || undefined}
       selected={selected || undefined}
     >

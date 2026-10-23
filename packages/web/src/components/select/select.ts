@@ -1,18 +1,17 @@
-import { createFieldIds } from '../shared/form-field';
+import { createFieldIds, renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { html, nothing, type PropertyValues } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { selectStyles } from './select.styles';
 import { SelectOption, SelectSize, SelectVariant, type SelectLabels } from './select.types';
-import { dispatch, createClickOutsideHandler } from '../../utils';
+import { dispatch } from '../../utils';
 import '@latty-ds/icons';
 import '../surface/';
 import '../text/text';
 import '../spinner/';
-import { openFloating, closeFloating } from '../shared/floating';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
+import { PopupController } from '../shared/popup';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { groupConsecutive } from '../shared/option-groups';
 import { nextListboxIndex, ListboxTypeahead } from '../shared/listbox-nav';
 
@@ -57,21 +56,26 @@ const DEFAULT_LABELS: SelectLabels = {
  * ```
  */
 @customElement('lt-select')
-export class Select extends ThemeableElement {
+export class Select extends FormControlElement {
   static styles = selectStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('.select-trigger'), {
+    exclude: [
+      'aria-haspopup',
+      'aria-expanded',
+      'aria-disabled',
+      'aria-required',
+      'aria-invalid',
+      'aria-label',
+      'aria-describedby',
+      'aria-controls',
+      'aria-activedescendant',
+      'open'
+    ]
+  });
 
   // Scopes generated option/listbox ids to this instance, so two selects on the same page don't collide.
   private readonly _uid = `lt-select-${selectCount++}`;
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
 
   /**
    * Visual variant that determines styling.
@@ -117,12 +121,6 @@ export class Select extends ThemeableElement {
    * @default ''
    */
   @property({ reflect: true }) label = '';
-
-  /**
-   * Name used when submitting a form.
-   * @default ''
-   */
-  @property({ reflect: true }) name = '';
 
   /**
    * Helper text displayed below the select. Color changes based on variant.
@@ -178,8 +176,14 @@ export class Select extends ThemeableElement {
    */
   @state() private activeIndex = -1;
 
-  private _cleanupClickOutside: (() => void) | null = null;
-  private _floatingCleanup: (() => void) | null = null;
+  private readonly _popup: PopupController = new PopupController(this, {
+    panel: () => this.shadowRoot?.querySelector<HTMLElement>('lt-surface.dropdown') ?? null,
+    reference: () => this.shadowRoot?.querySelector<HTMLElement>('.select-trigger') ?? null,
+    floating: () => ({ matchWidth: true }),
+    outsideEvent: 'click',
+    onOutside: () => this.closeDropdown()
+  });
+
   private readonly _typeahead = new ListboxTypeahead();
 
   private readonly _fieldIds = createFieldIds();
@@ -328,17 +332,9 @@ export class Select extends ThemeableElement {
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this._cleanupClickOutside = createClickOutsideHandler(this, () => this.closeDropdown(), { event: 'click' });
-  }
-
   disconnectedCallback() {
     super.disconnectedCallback();
-    this._cleanupClickOutside?.();
-    this._cleanupClickOutside = null;
-    this._floatingCleanup?.();
-    this._floatingCleanup = null;
+    this._popup.destroy();
     this._typeahead.dispose();
   }
 
@@ -374,7 +370,8 @@ export class Select extends ThemeableElement {
   updated(changedProperties: Map<string, unknown>) {
     if (this.multiple) {
       const formData = new FormData();
-      if (this.name) for (const v of this._selected) formData.append(this.name, v);
+      const name = this.getAttribute('name');
+      if (name) for (const v of this._selected) formData.append(name, v);
       this._internals.setFormValue(formData);
     } else {
       this._internals.setFormValue(this._selected[0] || null);
@@ -393,41 +390,23 @@ export class Select extends ThemeableElement {
     if (!changedProperties.has('isOpen')) return;
     if (this.isOpen) {
       this.setAttribute('open', '');
-      const selectTrigger = this.shadowRoot!.querySelector<HTMLElement>('.select-trigger')!;
-      const listbox = this.shadowRoot!.querySelector<HTMLElement>('lt-surface.dropdown')!;
-      openFloating(selectTrigger, listbox, { matchWidth: true }).then((cleanup) => {
-        // Guard against a close that happened while openFloating was resolving —
-        // otherwise the autoUpdate cleanup is orphaned and runs forever on a hidden listbox.
-        if (this.isOpen) this._floatingCleanup = cleanup;
-        else cleanup();
-      });
+      void this._popup.open();
     } else {
       this.removeAttribute('open');
-      const listbox = this.shadowRoot?.querySelector<HTMLElement>('lt-surface.dropdown');
-      if (listbox) closeFloating(listbox, this._floatingCleanup);
-      this._floatingCleanup = null;
+      this._popup.close();
     }
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  /**
+   * A select's value is its `value` — a string for a single select, an array of the selected values for
+   * a `multiple` one. It's what a form reset restores and what a browser state-restore repopulates.
+   */
+  protected override get _formValue(): string | string[] {
+    return this.value;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
-  }
-
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  protected override set _formValue(value: unknown) {
+    this.value = Array.isArray(value) ? value.map(String) : value == null ? '' : String(value);
   }
 
   private _renderOption(option: SelectOption, activeOption: SelectOption | undefined) {
@@ -463,12 +442,7 @@ export class Select extends ThemeableElement {
     return html`
       <div class="wrapper">
         ${this.label
-          ? html`
-              <label @click=${this._focusTrigger}>
-                <lt-text variant="label" as="span">${this.label}</lt-text>
-                ${this.required ? html`<span class="required-indicator">*</span>` : ''}
-              </label>
-            `
+          ? html` <label @click=${this._focusTrigger}> ${renderFieldLabel(this.label, this.required)} </label> `
           : ''}
         <div class="select-container">
           <div
@@ -480,7 +454,7 @@ export class Select extends ThemeableElement {
             aria-disabled=${this._isDisabled}
             aria-required=${this.required}
             aria-invalid=${this.variant === 'error' ? 'true' : nothing}
-            aria-label=${this.label || this.placeholder}
+            aria-label=${this.label || this.getAttribute('aria-label') || this.placeholder}
             aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
             aria-controls=${this.isOpen ? listboxId : nothing}
             aria-activedescendant=${this.isOpen && activeOption ? this._idFor(activeOption) : nothing}
@@ -533,11 +507,7 @@ export class Select extends ThemeableElement {
             </div>
           </lt-surface>
         </div>
-        ${this.helperText
-          ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
-              >${this.helperText}</lt-text
-            >`
-          : ''}
+        ${renderHelperText(this._fieldIds.helper, this.helperText)}
       </div>
     `;
   }

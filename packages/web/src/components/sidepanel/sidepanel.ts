@@ -7,6 +7,7 @@ import { backdropFeatureStyles } from '../shared/backdrop.styles';
 import type { SidePanelAnchor, SidePanelLabels } from './sidepanel.types';
 import { dispatch } from '../../utils';
 import { lockBodyScroll, unlockBodyScroll } from '../shared/scroll-lock';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 import '../icon-button/icon-button';
 import '../text/text';
@@ -75,6 +76,9 @@ export class SidePanel extends ThemeableElement {
   }
 
   @query('dialog') private dialogElement?: HTMLDialogElement;
+  private _nativeAttrs = new NativeAttrsController(this, () => this.dialogElement, {
+    exclude: ['aria-labelledby']
+  });
   private _scrollLocked = false;
   // Same first-update guard, for the same reason, as lt-dialog (DLG-2), lt-dropdown (DDN-1) and lt-snackbar
   // (SNK-1): `updated()` also runs after the very first render, where `changed.has('open')` is true even though
@@ -237,7 +241,7 @@ export class SidePanel extends ThemeableElement {
       <dialog
         part="panel"
         style=${this._panelStyle}
-        aria-labelledby=${this._hasLabel ? 'sidepanel-label' : nothing}
+        aria-labelledby=${this._hasLabel ? 'sidepanel-label' : this.getAttribute('aria-labelledby') || nothing}
         @close=${this._handleNativeClose}
         @click=${this._handleDialogClick}
       >

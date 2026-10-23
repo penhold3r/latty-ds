@@ -1,13 +1,12 @@
 import { html, nothing, LitElement, type PropertyValues } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { devWarn } from '../../utils';
 import { customElement, property } from 'lit/decorators.js';
 
 import { radioStyles } from './radio.styles';
 import { RadioSize, RadioVariant, RadioLabelPosition, type RadioLabels } from './radio.types';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
 import { SlottedContentController } from '../shared/slotted-content';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { createFieldIds } from '../shared/form-field';
 
 import '../text/text';
@@ -80,25 +79,19 @@ const radioGroupFor = (radio: Radio): Set<Radio> | null => {
  * ```
  */
 @customElement('lt-radio')
-export class Radio extends ThemeableElement {
+export class Radio extends FormControlElement {
   static styles = radioStyles;
-  static formAssociated = true;
   // Makes host.focus() move focus into the shadow root (the inner <input>) — lt-radio-group needs this to move
   // focus programmatically for arrow-key navigation (RAD-2), the same way lt-button's delegatesFocus (BTN-4)
   // lets lt-dropdown do the same for its trigger.
   static override shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
 
-  private _internals!: ElementInternals;
   private _group: Set<Radio> | null = null;
-  private _default = new FormDefaultController(this, () => this.checked);
-  private _fieldsetDisabled = new FormDisabledController(this);
   private _slotted = new SlottedContentController(this);
   private readonly _fieldIds = createFieldIds();
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input'), {
+    exclude: ['aria-label', 'aria-describedby']
+  });
 
   connectedCallback() {
     super.connectedCallback();
@@ -213,25 +206,25 @@ export class Radio extends ThemeableElement {
     }
   }
 
-  formResetCallback() {
-    this.checked = this._default.value;
+  /**
+   * A toggleable control's value is its checked state — what a form reset restores and what a browser
+   * state-restore repopulates. The value it *submits* is `this.value` while checked and nothing at all
+   * while not (see `updated()`), which is exactly how a native checkbox behaves.
+   */
+  protected override get _formValue(): boolean {
+    return this.checked;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  protected override set _formValue(value: unknown) {
+    this.checked = Boolean(value);
   }
 
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  /**
+   * A toggleable control's saved state is its `value` string — or nothing at all, when it was
+   * unchecked — so restored checkedness means "the saved value is this control's own value".
+   */
+  protected override _restoreFormState(state: File | string | FormData | null): void {
+    this.checked = typeof state === 'string' && state === this.value;
   }
 
   /**
@@ -286,7 +279,7 @@ export class Radio extends ThemeableElement {
             value=${this.value}
             tabindex=${this.tabbable ? '0' : '-1'}
             @change=${this.handleChange}
-            aria-label=${hasLabel ? nothing : 'radio'}
+            aria-label=${hasLabel ? nothing : this.getAttribute('aria-label') || 'radio'}
             aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           />
           <span class="dot"></span>

@@ -1,18 +1,19 @@
-import { createFieldIds } from '../shared/form-field';
+import { createFieldIds, renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { html, nothing, type PropertyValues } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { datepickerStyles } from './datepicker.styles';
 import type { DatepickerType, DatepickerSize, DatepickerVariant } from './datepicker.types';
 import { dispatch } from '../../utils';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
-import { toValidityFlags } from '../shared/form-validity';
+import { NativeAttrsController } from '../shared/native-attrs';
+import { toValidityFlags } from '../../base';
 import '../text/text';
 
 /**
  * Date and time picker wrapping the native browser date/time input with design-system styling.
+ * Automatically forwards native `<input>` attributes (`min`, `max`, `step`, `readonly`, `name`, `autocomplete`, etc.)
+ * onto the inner control.
  *
  * @element lt-datepicker
  *
@@ -30,18 +31,13 @@ import '../text/text';
  * ```
  */
 @customElement('lt-datepicker')
-export class Datepicker extends ThemeableElement {
+export class Datepicker extends FormControlElement {
   static styles = datepickerStyles;
-  static formAssociated = true;
 
-  private _internals: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
+  private _nativeAttrs = new NativeAttrsController(this, () => this.input, {
+    exclude: ['aria-describedby'],
+    onSync: () => this._syncValidity()
+  });
 
   /** Native input type. */
   @property({ reflect: true }) type: DatepickerType = 'date';
@@ -50,12 +46,6 @@ export class Datepicker extends ThemeableElement {
    * Not reflected as an attribute — read the property, or the `change` event's `detail.value`, instead of
    * `getAttribute('value')`/`[value]`. */
   @property() value = '';
-
-  /** Minimum allowed value. */
-  @property({ reflect: true }) min = '';
-
-  /** Maximum allowed value. */
-  @property({ reflect: true }) max = '';
 
   /** Field label displayed above the input. */
   @property({ reflect: true }) label = '';
@@ -77,46 +67,36 @@ export class Datepicker extends ThemeableElement {
   /** Whether the field is required. */
   @property({ type: Boolean, reflect: true }) required = false;
 
-  /** Whether the field is read-only. */
-  @property({ type: Boolean, reflect: true }) readonly = false;
-
-  /** Name used in form submission. */
-  @property({ reflect: true }) name = '';
-
   @query('input') private input!: HTMLInputElement;
 
-  protected updated(changed: PropertyValues) {
-    if (changed.has('value') || changed.has('required') || changed.has('min') || changed.has('max')) {
-      this._internals.setFormValue(this.value || null);
-      // `type`/`min`/`max`/`required` are already forwarded onto the inner input, so its own `validity` already
-      // covers valueMissing, rangeUnderflow and rangeOverflow (DTP-2) for free — mirror that directly.
-      if (!this.input.validity.valid) {
-        this._internals.setValidity(toValidityFlags(this.input.validity), this.input.validationMessage, this.input);
-      } else {
-        this._internals.setValidity({});
-      }
+  private _syncValidity() {
+    if (!this.input) return;
+    // `type`/`min`/`max`/`step`/`required` are forwarded onto the inner input, so its own `validity` already
+    // covers valueMissing, rangeUnderflow, rangeOverflow, and stepMismatch (DTP-2) for free — mirror that directly.
+    if (!this.input.validity.valid) {
+      this._internals.setValidity(toValidityFlags(this.input.validity), this.input.validationMessage, this.input);
+    } else {
+      this._internals.setValidity({});
     }
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  protected updated(changed: PropertyValues) {
+    if (changed.has('value') || changed.has('required')) {
+      this._internals.setFormValue(this.value);
+    }
+    this._syncValidity();
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  /**
+   * A text-like control's value is its `value` — what a form reset restores and what a browser
+   * state-restore repopulates.
+   */
+  protected override get _formValue(): string {
+    return this.value;
   }
 
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  protected override set _formValue(value: unknown) {
+    this.value = value == null ? '' : String(value);
   }
 
   private handleChange(e: Event) {
@@ -139,12 +119,9 @@ export class Datepicker extends ThemeableElement {
       <input
         type=${this.type}
         .value=${this.value}
-        min=${this.min || nothing}
-        max=${this.max || nothing}
         ?disabled=${this._isDisabled}
         ?required=${this.required}
         aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
-        ?readonly=${this.readonly}
         @change=${this.handleChange}
         @input=${this.handleInput}
       />
@@ -152,15 +129,8 @@ export class Datepicker extends ThemeableElement {
 
     return html`
       <div class="wrapper">
-        ${this.label
-          ? html`<label>
-              <lt-text variant="label" as="span">${this.label}</lt-text>
-              ${this.required ? html`<span class="required-indicator">*</span>` : nothing} ${inputEl}
-            </label>`
-          : inputEl}
-        ${this.helperText
-          ? html`<span id=${this._fieldIds.helper} class="helper-text">${this.helperText}</span>`
-          : nothing}
+        ${this.label ? html`<label> ${renderFieldLabel(this.label, this.required)} ${inputEl} </label>` : inputEl}
+        ${renderHelperText(this._fieldIds.helper, this.helperText)}
       </div>
     `;
   }

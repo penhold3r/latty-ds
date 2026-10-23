@@ -1,7 +1,8 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { TabPanel as TabPanelEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type TabPanelProps = HTMLAttributes<TabPanelEl> & {
+export type TabPanelProps = Omit<HTMLAttributes<TabPanelEl>, 'value'> & {
   value?: string;
   active?: boolean;
 };
@@ -18,7 +19,7 @@ export const TabPanel = forwardRef<TabPanelEl, TabPanelProps>(function TabPanel(
     <lt-tab-panel
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       active={active || undefined}
     >
       {children}

@@ -5,11 +5,14 @@ import { customElement, property } from 'lit/decorators.js';
 import '@latty-ds/icons';
 
 import { linkStyles } from './link.styles';
-import type { LinkTarget, LinkUnderline } from './link.types';
+import type { LinkUnderline } from './link.types';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 /**
  * A styled anchor element. Uses the primary color by default with an underline on hover.
  * Set `external` to open in a new tab and display a trailing external-link icon.
+ * Automatically forwards native `<a>` attributes (`target`, `rel`, `download`, `hreflang`, `referrerpolicy`, etc.)
+ * onto the underlying `<a>` element.
  *
  * @element lt-link
  *
@@ -26,6 +29,10 @@ import type { LinkTarget, LinkUnderline } from './link.types';
 export class Link extends ThemeableElement {
   static styles = linkStyles;
 
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('a'), {
+    exclude: ['target', 'rel']
+  });
+
   /** Destination URL forwarded to the underlying `<a>` element. */
   @property({ reflect: true }) href = '';
 
@@ -33,40 +40,22 @@ export class Link extends ThemeableElement {
    * `rel` defaults, plus the icon — set `target` directly for a new tab without the icon. */
   @property({ type: Boolean, reflect: true }) external = false;
 
-  /** Explicit `target` for the underlying `<a>`. Defaults to `_blank` when `external` is set, otherwise the
-   * native default (same tab). */
-  @property({ reflect: true }) target?: LinkTarget;
-
-  /** Overrides the computed `rel`. By default, `rel="noopener noreferrer"` is applied whenever the resolved
-   * target is `_blank` (security best practice for new-tab links), and omitted otherwise. */
-  @property({ reflect: true }) rel?: string;
-
-  /** Marks the link for download instead of navigation, forwarded to the native `download` attribute. An empty
-   * string (`<lt-link download>`) downloads with the browser's default suggested filename; a non-empty string
-   * sets the suggested filename. */
-  @property({ reflect: true }) download?: string;
-
   /** Controls when the underline shows. @default 'hover' */
   @property({ reflect: true }) underline: LinkUnderline = 'hover';
 
   private get _target(): string {
-    return this.target || (this.external ? '_blank' : '');
+    return this.getAttribute('target') || (this.external ? '_blank' : '');
   }
 
   private get _rel(): string {
-    if (this.rel !== undefined) return this.rel;
+    const rel = this.getAttribute('rel');
+    if (rel !== null) return rel;
     return this._target === '_blank' ? 'noopener noreferrer' : '';
   }
 
   render() {
     return html`
-      <a
-        part="base"
-        href=${this.href || nothing}
-        target=${this._target || nothing}
-        rel=${this._rel || nothing}
-        download=${this.download ?? nothing}
-      >
+      <a part="base" href=${this.href || nothing} target=${this._target || nothing} rel=${this._rel || nothing}>
         <slot></slot>
         ${this.external ? html`<lt-icon name="external" size="xs" part="icon"></lt-icon>` : nothing}
       </a>

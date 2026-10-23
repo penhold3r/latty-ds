@@ -25,7 +25,7 @@ describe('<lt-image>', () => {
 
   it('reflects src and alt onto the img', async () => {
     el.src = 'image.png';
-    el.alt = 'A photo';
+    el.setAttribute('alt', 'A photo');
     await el.updateComplete;
     const img = el.shadowRoot!.querySelector('img')!;
     expect(img.getAttribute('src')).toBe('image.png');
@@ -65,13 +65,13 @@ describe('<lt-image>', () => {
   });
 
   it.each(['lazy', 'eager'] as const)('forwards loading="%s" to the img', async (loading) => {
-    el.loading = loading;
+    el.setAttribute('loading', loading);
     await el.updateComplete;
     const img = el.shadowRoot!.querySelector('img')!;
     expect(img.getAttribute('loading')).toBe(loading);
   });
 
-  describe('srcset and sizes', () => {
+  describe('srcset, sizes, and native img attributes', () => {
     it('does not set srcset or sizes on the img by default', () => {
       const img = el.shadowRoot!.querySelector('img')!;
       expect(img.hasAttribute('srcset')).toBe(false);
@@ -79,15 +79,32 @@ describe('<lt-image>', () => {
     });
 
     it('forwards srcset to the img', async () => {
-      el.srcset = '/a.jpg 400w, /b.jpg 800w';
+      el.setAttribute('srcset', '/a.jpg 400w, /b.jpg 800w');
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('img')!.getAttribute('srcset')).toBe('/a.jpg 400w, /b.jpg 800w');
     });
 
     it('forwards sizes to the img', async () => {
-      el.sizes = '(min-width: 768px) 50vw, 100vw';
+      el.setAttribute('sizes', '(min-width: 768px) 50vw, 100vw');
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('img')!.getAttribute('sizes')).toBe('(min-width: 768px) 50vw, 100vw');
+    });
+
+    it('forwards arbitrary native img attributes (decoding, fetchpriority, crossorigin, referrerpolicy, width, height)', async () => {
+      el.setAttribute('decoding', 'async');
+      el.setAttribute('fetchpriority', 'high');
+      el.setAttribute('crossorigin', 'anonymous');
+      el.setAttribute('referrerpolicy', 'no-referrer');
+      el.setAttribute('width', '400');
+      el.setAttribute('height', '300');
+      await el.updateComplete;
+      const img = el.shadowRoot!.querySelector('img')!;
+      expect(img.getAttribute('decoding')).toBe('async');
+      expect(img.getAttribute('fetchpriority')).toBe('high');
+      expect(img.getAttribute('crossorigin')).toBe('anonymous');
+      expect(img.getAttribute('referrerpolicy')).toBe('no-referrer');
+      expect(img.getAttribute('width')).toBe('400');
+      expect(img.getAttribute('height')).toBe('300');
     });
   });
 

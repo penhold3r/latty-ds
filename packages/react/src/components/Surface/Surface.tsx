@@ -1,5 +1,6 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Surface as SurfaceEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
 export type SurfaceProps = HTMLAttributes<SurfaceEl> & {
   elevation?: SurfaceEl['elevation'];
@@ -13,7 +14,7 @@ export const Surface = forwardRef<SurfaceEl, SurfaceProps>(function Surface({ ch
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-surface ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
+    <lt-surface ref={innerRef} suppressHydrationWarning {...normalizeNativeProps(props as Record<string, unknown>)}>
       {children}
     </lt-surface>
   );

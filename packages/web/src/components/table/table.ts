@@ -74,6 +74,7 @@ const createJsonArrayConverter = (attrName: string) => ({
 });
 
 import '@latty-ds/icons';
+import { NativeAttrsController } from '../shared/native-attrs';
 
 /**
  * Table component with sorting, responsive modes, and extensive customization.
@@ -140,6 +141,10 @@ import '@latty-ds/icons';
 @customElement('lt-table')
 export class Table<T = Record<string, unknown>> extends ThemeableElement {
   static styles = tableStyles;
+
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('table'), {
+    exclude: ['aria-label', 'aria-rowcount']
+  });
 
   /**
    * Column definitions for the table.
@@ -977,7 +982,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
       >
         <table
           role="table"
-          aria-label=${this.label || nothing}
+          aria-label=${this.label || this.getAttribute('aria-label') || nothing}
           aria-rowcount=${isVirtualized ? this.pageRange.end - this.pageRange.start + 1 : nothing}
         >
           ${this.caption

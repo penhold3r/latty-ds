@@ -972,7 +972,7 @@ describe('multiple (tags)', () => {
 
   it('submits one form entry per selected value', async () => {
     const spy = vi.spyOn(ElementInternals.prototype, 'setFormValue');
-    el.name = 'skills';
+    el.setAttribute('name', 'skills');
     el.value = ['us', 'ca'];
     await el.updateComplete;
     const data = spy.mock.lastCall?.[0] as FormData;

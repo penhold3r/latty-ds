@@ -1,7 +1,8 @@
 import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { TabGroup as TabGroupEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type TabGroupProps = Omit<HTMLAttributes<TabGroupEl>, 'onChange'> & {
+export type TabGroupProps = Omit<HTMLAttributes<TabGroupEl>, 'onChange' | 'value' | 'size'> & {
   value?: string;
   appearance?: TabGroupEl['appearance'];
   size?: TabGroupEl['size'];
@@ -32,7 +33,7 @@ export const TabGroup = forwardRef<TabGroupEl, TabGroupProps>(function TabGroup(
   }, [labels]);
 
   return (
-    <lt-tab-group ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
+    <lt-tab-group ref={innerRef} suppressHydrationWarning {...normalizeNativeProps(props as Record<string, unknown>)}>
       {children}
     </lt-tab-group>
   );

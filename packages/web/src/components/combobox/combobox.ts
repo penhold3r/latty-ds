@@ -1,18 +1,17 @@
-import { createFieldIds } from '../shared/form-field';
+import { createFieldIds, renderFieldLabel, renderHelperText } from '../shared/form-field';
 import { html, nothing, type PropertyValues } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import { comboboxStyles } from './combobox.styles';
 import type { ComboboxOption, ComboboxSize, ComboboxVariant, ComboboxLabels } from './combobox.types';
-import { dispatch, createClickOutsideHandler } from '../../utils';
+import { dispatch } from '../../utils';
 import '@latty-ds/icons';
 import '../text/text';
 import '../chip/';
 import '../spinner/';
-import { openFloating, closeFloating } from '../shared/floating';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
+import { PopupController } from '../shared/popup';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { groupConsecutive } from '../shared/option-groups';
 import { nextListboxIndex } from '../shared/listbox-nav';
 
@@ -65,21 +64,25 @@ const DEFAULT_LABELS: ComboboxLabels = {
  * ```
  */
 @customElement('lt-combobox')
-export class Combobox extends ThemeableElement {
+export class Combobox extends FormControlElement {
   static styles = comboboxStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.value);
-  private _fieldsetDisabled = new FormDisabledController(this);
+  private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('#combobox-input'), {
+    exclude: [
+      'aria-expanded',
+      'aria-autocomplete',
+      'aria-describedby',
+      'aria-required',
+      'aria-invalid',
+      'aria-controls',
+      'aria-activedescendant',
+      'autocomplete',
+      'open'
+    ]
+  });
 
   // Scopes generated option/listbox ids to this instance, so two comboboxes on the same page don't collide.
   private readonly _uid = `lt-combobox-${comboboxCount++}`;
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
 
   /** Array of selectable options. Set as a JS property (`.options`). */
   @property({ type: Array }) options: ComboboxOption[] = [];
@@ -143,9 +146,6 @@ export class Combobox extends ThemeableElement {
   /** Whether the field is required. */
   @property({ type: Boolean, reflect: true }) required = false;
 
-  /** Name used in form submission. */
-  @property({ reflect: true }) name = '';
-
   /** Overridable UI text (validation message, "no results" text), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<ComboboxLabels> = {};
 
@@ -157,8 +157,13 @@ export class Combobox extends ThemeableElement {
   @state() private open = false;
   @state() private activeIndex = -1;
 
-  private _cleanupClickOutside: (() => void) | null = null;
-  private _floatingCleanup: (() => void) | null = null;
+  private readonly _popup: PopupController = new PopupController(this, {
+    panel: () => this.shadowRoot?.querySelector<HTMLElement>('.dropdown') ?? null,
+    reference: () => this.shadowRoot?.querySelector<HTMLElement>('.input-wrap') ?? null,
+    floating: () => ({ matchWidth: true }),
+    outsideEvent: 'click',
+    onOutside: () => this.closeDropdown()
+  });
 
   private readonly _fieldIds = createFieldIds();
 
@@ -245,20 +250,14 @@ export class Combobox extends ThemeableElement {
     this.query = '';
     this.activeIndex = -1;
     await this.updateComplete;
-    const inputWrap = this.shadowRoot!.querySelector<HTMLElement>('.input-wrap')!;
-    const dropdown = this.shadowRoot!.querySelector<HTMLElement>('.dropdown')!;
-    if (inputWrap && dropdown) {
-      const cleanup = await openFloating(inputWrap, dropdown, { matchWidth: true });
-      // Guard against a close during the await — otherwise the autoUpdate cleanup is orphaned.
-      if (this.open) this._floatingCleanup = cleanup;
-      else cleanup();
-    }
+    // Escape (or a selection) can close the dropdown while the render it asked for was still pending —
+    // opening it now would leave a panel on screen that nothing owns.
+    if (!this.open) return;
+    await this._popup.open();
   }
 
   private closeDropdown() {
-    const dropdown = this.shadowRoot?.querySelector<HTMLElement>('.dropdown');
-    if (dropdown) closeFloating(dropdown, this._floatingCleanup);
-    this._floatingCleanup = null;
+    this._popup.close();
     this.open = false;
     this.removeAttribute('open');
   }
@@ -375,17 +374,13 @@ export class Combobox extends ThemeableElement {
 
   connectedCallback() {
     super.connectedCallback();
-    this._cleanupClickOutside = createClickOutsideHandler(this, () => this.closeDropdown(), { event: 'click' });
     this.addEventListener('focusout', this._onFocusOut);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('focusout', this._onFocusOut);
-    this._cleanupClickOutside?.();
-    this._cleanupClickOutside = null;
-    this._floatingCleanup?.();
-    this._floatingCleanup = null;
+    this._popup.destroy();
   }
 
   override willUpdate(changed: PropertyValues<this>) {
@@ -396,10 +391,11 @@ export class Combobox extends ThemeableElement {
   updated(changedProperties: Map<string, unknown>) {
     if (this.multiple) {
       const formData = new FormData();
-      if (this.name) for (const v of this._selected) formData.append(this.name, v);
+      const name = this.getAttribute('name');
+      if (name) for (const v of this._selected) formData.append(name, v);
       this._internals.setFormValue(formData);
     } else {
-      this._internals.setFormValue((this.value as string) || null);
+      this._internals.setFormValue(this.value as string);
     }
     const input = this.shadowRoot?.querySelector<HTMLElement>('input');
     if (this.required && this._selected.length === 0 && input) {
@@ -413,25 +409,16 @@ export class Combobox extends ThemeableElement {
     }
   }
 
-  formResetCallback() {
-    this.value = this._default.value;
+  /**
+   * A select's value is its `value` — a string for a single select, an array of the selected values for
+   * a `multiple` one. It's what a form reset restores and what a browser state-restore repopulates.
+   */
+  protected override get _formValue(): string | string[] {
+    return this.value;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
-  }
-
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  protected override set _formValue(value: unknown) {
+    this.value = Array.isArray(value) ? value.map(String) : value == null ? '' : String(value);
   }
 
   private _renderOption(opt: ComboboxOption, activeOption: ComboboxOption | undefined) {
@@ -548,10 +535,7 @@ export class Combobox extends ThemeableElement {
     return html`
       <div class="wrapper">
         ${this.label
-          ? html`<label for="combobox-input">
-              <lt-text variant="label" as="span">${this.label}</lt-text>
-              ${this.required ? html`<span class="required-indicator">*</span>` : nothing}
-            </label>`
+          ? html`<label for="combobox-input"> ${renderFieldLabel(this.label, this.required)} </label>`
           : nothing}
         ${inputRow}
         ${this.open
@@ -587,11 +571,7 @@ export class Combobox extends ThemeableElement {
               </div>
             `
           : nothing}
-        ${this.helperText
-          ? html`<lt-text id=${this._fieldIds.helper} variant="caption" as="span" class="helper-text"
-              >${this.helperText}</lt-text
-            >`
-          : nothing}
+        ${renderHelperText(this._fieldIds.helper, this.helperText)}
       </div>
     `;
   }

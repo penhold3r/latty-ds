@@ -758,7 +758,7 @@ describe('multiple selection (value becomes an array)', () => {
 
   it('submits one form entry per selected value', async () => {
     const spy = vi.spyOn(ElementInternals.prototype, 'setFormValue');
-    el.name = 'fruit';
+    el.setAttribute('name', 'fruit');
     el.value = ['a', 'b'];
     await el.updateComplete;
     const data = spy.mock.lastCall?.[0] as FormData;

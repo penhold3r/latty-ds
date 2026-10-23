@@ -1,8 +1,11 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type InputHTMLAttributes } from 'react';
 import type { DateInput as DateInputEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type DateInputProps = Omit<HTMLAttributes<DateInputEl>, 'onChange'> & {
-  formAssociated?: boolean;
+export type DateInputProps = Omit<
+  InputHTMLAttributes<DateInputEl>,
+  'onChange' | 'value' | 'min' | 'max' | 'label' | 'placeholder' | 'size' | 'disabled' | 'required'
+> & {
   value?: string;
   min?: string;
   max?: string;
@@ -16,14 +19,13 @@ export type DateInputProps = Omit<HTMLAttributes<DateInputEl>, 'onChange'> & {
   size?: DateInputEl['size'];
   disabled?: boolean;
   required?: boolean;
-  name?: string;
   disabledDates?: DateInputEl['disabledDates'];
   labels?: DateInputEl['labels'];
   onChange?: (event: CustomEvent<{ value: string }>) => void;
 };
 
 export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateInput(
-  { onChange, weekStart, helperText, disabledDates, labels, formAssociated, disabled, required, children, ...props },
+  { onChange, weekStart, helperText, disabledDates, labels, disabled, required, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<DateInputEl>(null);
@@ -50,8 +52,7 @@ export const DateInput = forwardRef<DateInputEl, DateInputProps>(function DateIn
     <lt-date-input
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       disabled={disabled || undefined}
       required={required || undefined}
     >

@@ -303,8 +303,8 @@ describe('<lt-button>', () => {
       });
 
       el.type = 'submit';
-      el.name = 'intent';
-      el.value = 'save';
+      el.setAttribute('name', 'intent');
+      el.setAttribute('value', 'save');
       await el.updateComplete;
       el.shadowRoot!.querySelector('button')!.click();
 
@@ -502,24 +502,34 @@ describe('<lt-button>', () => {
 
     it('forwards target to anchor', async () => {
       el.href = '/dashboard';
-      el.target = '_blank';
+      el.setAttribute('target', '_blank');
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('a')!.getAttribute('target')).toBe('_blank');
     });
 
     it('auto-sets rel=noopener noreferrer when target=_blank', async () => {
       el.href = '/dashboard';
-      el.target = '_blank';
+      el.setAttribute('target', '_blank');
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('a')!.getAttribute('rel')).toBe('noopener noreferrer');
     });
 
     it('uses explicit rel when provided', async () => {
       el.href = '/dashboard';
-      el.target = '_blank';
-      el.rel = 'noopener';
+      el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener');
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('a')!.getAttribute('rel')).toBe('noopener');
+    });
+
+    it('forwards native anchor attributes like download and hreflang', async () => {
+      el.href = '/report.pdf';
+      el.setAttribute('download', 'report.pdf');
+      el.setAttribute('hreflang', 'en');
+      await el.updateComplete;
+      const a = el.shadowRoot!.querySelector('a')!;
+      expect(a.getAttribute('download')).toBe('report.pdf');
+      expect(a.getAttribute('hreflang')).toBe('en');
     });
 
     it('sets aria-disabled on anchor when disabled', async () => {

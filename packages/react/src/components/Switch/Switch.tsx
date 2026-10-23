@@ -1,8 +1,11 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type InputHTMLAttributes } from 'react';
 import type { Switch as SwitchEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type SwitchProps = Omit<HTMLAttributes<SwitchEl>, 'onChange'> & {
-  formAssociated?: boolean;
+export type SwitchProps = Omit<
+  InputHTMLAttributes<SwitchEl>,
+  'onChange' | 'size' | 'checked' | 'disabled' | 'required' | 'label' | 'value'
+> & {
   variant?: SwitchEl['variant'];
   size?: SwitchEl['size'];
   checked?: boolean;
@@ -10,7 +13,6 @@ export type SwitchProps = Omit<HTMLAttributes<SwitchEl>, 'onChange'> & {
   required?: boolean;
   label?: string;
   labelPosition?: SwitchEl['labelPosition'];
-  name?: string;
   value?: string;
   helperText?: string;
   labels?: SwitchEl['labels'];
@@ -18,7 +20,7 @@ export type SwitchProps = Omit<HTMLAttributes<SwitchEl>, 'onChange'> & {
 };
 
 export const Switch = forwardRef<SwitchEl, SwitchProps>(function Switch(
-  { onChange, helperText, labels, formAssociated, checked, disabled, required, labelPosition, children, ...props },
+  { onChange, helperText, labels, checked, disabled, required, labelPosition, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<SwitchEl>(null);
@@ -43,8 +45,7 @@ export const Switch = forwardRef<SwitchEl, SwitchProps>(function Switch(
     <lt-switch
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       checked={checked || undefined}
       disabled={disabled || undefined}
       required={required || undefined}

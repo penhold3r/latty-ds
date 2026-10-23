@@ -1,8 +1,10 @@
 import { css } from 'lit';
 import { floatingPanelReset } from '../shared/floating';
+import { formFieldStyles } from '../shared/form-field';
 
 export const comboboxStyles = [
   floatingPanelReset,
+  formFieldStyles,
   css`
     :host {
       display: block;
@@ -18,11 +20,6 @@ export const comboboxStyles = [
 
     label {
       color: var(--lt-text-default);
-    }
-
-    .required-indicator {
-      color: var(--lt-text-error);
-      margin-inline-start: 2px;
     }
 
     .input-wrap {

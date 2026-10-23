@@ -20,7 +20,7 @@ describe('<lt-color-input>', () => {
   });
 
   it('forwards name to the native color picker', async () => {
-    el.name = 'brand-color';
+    el.setAttribute('name', 'brand-color');
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input[type="color"]')!;
     expect(input.getAttribute('name')).toBe('brand-color');

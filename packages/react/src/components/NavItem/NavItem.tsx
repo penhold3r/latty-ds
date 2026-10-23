@@ -1,8 +1,19 @@
 // codegen:manual — extended to set icon-start attribute directly (React 18 lowercases camelCase on custom elements)
-import { useRef, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import {
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+  type ButtonHTMLAttributes,
+  type AnchorHTMLAttributes
+} from 'react';
 import type { NavItem as NavItemEl, LattyIconName } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type NavItemProps = Omit<HTMLAttributes<NavItemEl>, 'onToggle'> & {
+export type NavItemProps = Omit<
+  ButtonHTMLAttributes<NavItemEl> & AnchorHTMLAttributes<NavItemEl>,
+  'onToggle' | 'href' | 'label' | 'disabled' | 'open'
+> & {
   href?: string;
   label?: string;
   iconStart?: LattyIconName;
@@ -14,7 +25,7 @@ export type NavItemProps = Omit<HTMLAttributes<NavItemEl>, 'onToggle'> & {
 };
 
 export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
-  { onToggle, iconStart, children, ...props },
+  { onToggle, iconStart, active, disabled, open, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<NavItemEl>(null);
@@ -37,7 +48,15 @@ export const NavItem = forwardRef<NavItemEl, NavItemProps>(function NavItem(
   }, [iconStart]);
 
   return (
-    <lt-nav-item ref={innerRef} {...(props as Record<string, unknown>)}>
+    <lt-nav-item
+      ref={innerRef}
+      suppressHydrationWarning
+      {...normalizeNativeProps(props as Record<string, unknown>)}
+      icon-start={iconStart}
+      active={active || undefined}
+      disabled={disabled || undefined}
+      open={open || undefined}
+    >
       {children}
     </lt-nav-item>
   );

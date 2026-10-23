@@ -1,7 +1,8 @@
-import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type ProgressHTMLAttributes } from 'react';
 import type { Progress as ProgressEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type ProgressProps = HTMLAttributes<ProgressEl> & {
+export type ProgressProps = Omit<ProgressHTMLAttributes<ProgressEl>, 'value' | 'size' | 'label' | 'max'> & {
   value?: number;
   variant?: ProgressEl['variant'];
   size?: ProgressEl['size'];
@@ -23,7 +24,7 @@ export const Progress = forwardRef<ProgressEl, ProgressProps>(function Progress(
     <lt-progress
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       value-text={valueText}
       indeterminate={indeterminate || undefined}
     >

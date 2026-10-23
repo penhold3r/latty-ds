@@ -1,7 +1,11 @@
 import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { RadioGroup as RadioGroupEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type RadioGroupProps = Omit<HTMLAttributes<RadioGroupEl>, 'onChange'> & {
+export type RadioGroupProps = Omit<
+  HTMLAttributes<RadioGroupEl>,
+  'onChange' | 'label' | 'name' | 'value' | 'required'
+> & {
   label?: string;
   name?: string;
   value?: string;
@@ -37,7 +41,7 @@ export const RadioGroup = forwardRef<RadioGroupEl, RadioGroupProps>(function Rad
     <lt-radio-group
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       error={error || undefined}
       required={required || undefined}
     >

@@ -1,5 +1,6 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Text as TextEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
 export type TextProps = HTMLAttributes<TextEl> & {
   variant?: TextEl['variant'];
@@ -12,7 +13,7 @@ export const Text = forwardRef<TextEl, TextProps>(function Text({ children, ...p
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-text ref={innerRef} suppressHydrationWarning {...(props as Record<string, unknown>)}>
+    <lt-text ref={innerRef} suppressHydrationWarning {...normalizeNativeProps(props as Record<string, unknown>)}>
       {children}
     </lt-text>
   );

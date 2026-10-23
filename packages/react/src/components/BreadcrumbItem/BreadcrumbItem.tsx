@@ -1,7 +1,8 @@
-import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type AnchorHTMLAttributes } from 'react';
 import type { BreadcrumbItem as BreadcrumbItemEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type BreadcrumbItemProps = HTMLAttributes<BreadcrumbItemEl> & {
+export type BreadcrumbItemProps = Omit<AnchorHTMLAttributes<BreadcrumbItemEl>, 'href'> & {
   href?: string;
   current?: boolean;
   separator?: string;
@@ -19,7 +20,7 @@ export const BreadcrumbItem = forwardRef<BreadcrumbItemEl, BreadcrumbItemProps>(
     <lt-breadcrumb-item
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       current={current || undefined}
     >
       {children}

@@ -1,7 +1,8 @@
-import { useRef, useLayoutEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useImperativeHandle, forwardRef, type ImgHTMLAttributes } from 'react';
 import type { Avatar as AvatarEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type AvatarProps = HTMLAttributes<AvatarEl> & {
+export type AvatarProps = Omit<ImgHTMLAttributes<AvatarEl>, 'src' | 'name' | 'alt' | 'size' | 'color'> & {
   src?: string;
   name?: string;
   alt?: string;
@@ -30,7 +31,7 @@ export const Avatar = forwardRef<AvatarEl, AvatarProps>(function Avatar(
     <lt-avatar
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       status-label={statusLabel}
     >
       {children}

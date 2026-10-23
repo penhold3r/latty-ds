@@ -1,7 +1,8 @@
 import { useRef, useLayoutEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { AvatarGroup as AvatarGroupEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type AvatarGroupProps = HTMLAttributes<AvatarGroupEl> & {
+export type AvatarGroupProps = Omit<HTMLAttributes<AvatarGroupEl>, 'size' | 'max'> & {
   size?: AvatarGroupEl['size'];
   max?: AvatarGroupEl['max'];
   overflowLabel?: string;
@@ -26,7 +27,7 @@ export const AvatarGroup = forwardRef<AvatarGroupEl, AvatarGroupProps>(function 
     <lt-avatar-group
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       overflow-label={overflowLabel}
     >
       {children}

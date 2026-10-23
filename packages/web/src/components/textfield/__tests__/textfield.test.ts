@@ -28,7 +28,7 @@ describe('<lt-textfield>', () => {
   });
 
   it('forwards name to the native input', async () => {
-    el.name = 'email';
+    el.setAttribute('name', 'email');
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input')!;
     expect(input.getAttribute('name')).toBe('email');
@@ -41,7 +41,7 @@ describe('<lt-textfield>', () => {
 
   it('forwards name to the native textarea for multiline type', async () => {
     el.type = 'multiline';
-    el.name = 'bio';
+    el.setAttribute('name', 'bio');
     await el.updateComplete;
     const textarea = el.shadowRoot!.querySelector('textarea')!;
     expect(textarea.getAttribute('name')).toBe('bio');
@@ -144,7 +144,7 @@ describe('<lt-textfield>', () => {
   });
 
   it('sets placeholder attribute', async () => {
-    el.placeholder = 'Enter text...';
+    el.setAttribute('placeholder', 'Enter text...');
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input');
     expect(input?.placeholder).toBe('Enter text...');
@@ -201,7 +201,7 @@ describe('<lt-textfield>', () => {
   });
 
   it('can be readonly', async () => {
-    el.readonly = true;
+    el.setAttribute('readonly', '');
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input');
     expect(input?.hasAttribute('readonly')).toBe(true);
@@ -293,7 +293,7 @@ describe('<lt-textfield>', () => {
   });
 
   it('falls back to aria-label from the placeholder when there is no visible label', async () => {
-    el.placeholder = 'you@example.com';
+    el.setAttribute('placeholder', 'you@example.com');
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input');
     expect(input?.getAttribute('aria-label')).toBe('you@example.com');
@@ -788,7 +788,7 @@ describe('<lt-textfield>', () => {
     describe('min/max on number type', () => {
       it('shows error when value is below min', async () => {
         el.type = 'number';
-        el.min = 10;
+        el.setAttribute('min', '10');
         await el.updateComplete;
         await typeAndLeave('5');
         expect(el.hasAttribute('data-invalid')).toBeTruthy();
@@ -796,7 +796,7 @@ describe('<lt-textfield>', () => {
 
       it('shows error when value is above max', async () => {
         el.type = 'number';
-        el.max = 100;
+        el.setAttribute('max', '100');
         await el.updateComplete;
         await typeAndLeave('150');
         expect(el.hasAttribute('data-invalid')).toBeTruthy();
@@ -804,8 +804,8 @@ describe('<lt-textfield>', () => {
 
       it('no error when value is within min/max', async () => {
         el.type = 'number';
-        el.min = 10;
-        el.max = 100;
+        el.setAttribute('min', '10');
+        el.setAttribute('max', '100');
         await el.updateComplete;
         await typeAndLeave('50');
         expect(el.hasAttribute('data-invalid')).toBeFalsy();
@@ -813,8 +813,8 @@ describe('<lt-textfield>', () => {
 
       it('passes min/max as native attributes', async () => {
         el.type = 'number';
-        el.min = 1;
-        el.max = 99;
+        el.setAttribute('min', '1');
+        el.setAttribute('max', '99');
         await el.updateComplete;
         const input = el.shadowRoot!.querySelector('input');
         expect(input?.getAttribute('min')).toBe('1');
@@ -822,27 +822,27 @@ describe('<lt-textfield>', () => {
       });
     });
 
-    describe('minLength/maxLength on text types', () => {
-      it('shows error when value is shorter than minLength', async () => {
+    describe('minlength/maxlength on text types', () => {
+      it('shows error when value is shorter than minlength', async () => {
         el.type = 'text';
-        el.minLength = 5;
+        el.setAttribute('minlength', '5');
         await el.updateComplete;
         await typeAndLeave('hi');
         expect(el.hasAttribute('data-invalid')).toBeTruthy();
       });
 
-      it('shows error when value is longer than maxLength', async () => {
+      it('shows error when value is longer than maxlength', async () => {
         el.type = 'text';
-        el.maxLength = 5;
+        el.setAttribute('maxlength', '5');
         await el.updateComplete;
         await typeAndLeave('toolongvalue');
         expect(el.hasAttribute('data-invalid')).toBeTruthy();
       });
 
-      it('no error when length is within minLength/maxLength', async () => {
+      it('no error when length is within minlength/maxlength', async () => {
         el.type = 'text';
-        el.minLength = 2;
-        el.maxLength = 10;
+        el.setAttribute('minlength', '2');
+        el.setAttribute('maxlength', '10');
         await el.updateComplete;
         await typeAndLeave('hello');
         expect(el.hasAttribute('data-invalid')).toBeFalsy();
@@ -850,8 +850,8 @@ describe('<lt-textfield>', () => {
 
       it('passes minlength/maxlength as native attributes', async () => {
         el.type = 'text';
-        el.minLength = 2;
-        el.maxLength = 50;
+        el.setAttribute('minlength', '2');
+        el.setAttribute('maxlength', '50');
         await el.updateComplete;
         const input = el.shadowRoot!.querySelector('input');
         expect(input?.getAttribute('minlength')).toBe('2');
@@ -860,8 +860,8 @@ describe('<lt-textfield>', () => {
 
       it('has no effect when type="number" (min/max apply there instead)', async () => {
         el.type = 'number';
-        el.minLength = 5;
-        el.maxLength = 5;
+        el.setAttribute('minlength', '5');
+        el.setAttribute('maxlength', '5');
         await el.updateComplete;
         const input = el.shadowRoot!.querySelector('input');
         expect(input?.hasAttribute('minlength')).toBe(false);
@@ -909,7 +909,7 @@ describe('<lt-textfield>', () => {
 
       it('number over max: rangeOverflow, via the native constraint', async () => {
         el.type = 'number';
-        el.max = 10;
+        el.setAttribute('max', '10');
         await el.updateComplete;
         const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
         await typeOnly('99');
@@ -1021,7 +1021,7 @@ describe('<lt-textfield>', () => {
 
     it('can be readonly', async () => {
       el.type = 'multiline';
-      el.readonly = true;
+      el.setAttribute('readonly', '');
       await el.updateComplete;
       const textarea = el.shadowRoot!.querySelector('textarea');
       expect(textarea?.hasAttribute('readonly')).toBe(true);
@@ -1037,7 +1037,7 @@ describe('<lt-textfield>', () => {
 
     it('sets placeholder on textarea', async () => {
       el.type = 'multiline';
-      el.placeholder = 'Enter text...';
+      el.setAttribute('placeholder', 'Enter text...');
       await el.updateComplete;
       const textarea = el.shadowRoot!.querySelector('textarea');
       expect(textarea?.placeholder).toBe('Enter text...');
@@ -1142,7 +1142,7 @@ describe('clearable and counter', () => {
     await el.updateComplete;
     expect(clearBtn()).toBeNull();
     el.disabled = false;
-    el.readonly = true;
+    el.setAttribute('readonly', '');
     await el.updateComplete;
     expect(clearBtn()).toBeNull();
   });
@@ -1179,26 +1179,26 @@ describe('clearable and counter', () => {
     expect(clearBtn()!.getAttribute('aria-label')).toBe('Effacer');
   });
 
-  it('shows length / maxLength when counter is set and maxLength is the limit', async () => {
+  it('shows length / maxlength when counter is set and maxlength is the limit', async () => {
     el.counter = true;
-    el.maxLength = 10;
+    el.setAttribute('maxlength', '10');
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('.counter')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('5 / 10');
     expect(nativeInput().getAttribute('maxlength')).toBe('10');
   });
 
-  it('hides the counter unless counter is set and a maxLength is given', async () => {
-    el.maxLength = 10;
+  it('hides the counter unless counter is set and a maxlength is given', async () => {
+    el.setAttribute('maxlength', '10');
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('.counter')).toBeNull();
     el.counter = true;
-    el.maxLength = null;
+    el.removeAttribute('maxlength');
     await el.updateComplete;
     expect(el.shadowRoot!.querySelector('.counter')).toBeNull();
   });
 });
 
-describe('autocomplete / inputmode / pattern', () => {
+describe('native attribute forwarding (autocomplete / inputmode / pattern / step / etc.)', () => {
   let el: Textfield;
 
   beforeEach(async () => {
@@ -1212,7 +1212,7 @@ describe('autocomplete / inputmode / pattern', () => {
   });
 
   it('forwards autocomplete to the input', async () => {
-    el.autocomplete = 'email';
+    el.setAttribute('autocomplete', 'email');
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input')!;
     expect(input.getAttribute('autocomplete')).toBe('email');
@@ -1225,17 +1225,22 @@ describe('autocomplete / inputmode / pattern', () => {
 
   it('forwards autocomplete to the textarea', async () => {
     el.type = 'multiline';
-    el.autocomplete = 'street-address';
+    el.setAttribute('autocomplete', 'street-address');
     await el.updateComplete;
     const textarea = el.shadowRoot!.querySelector('textarea')!;
     expect(textarea.getAttribute('autocomplete')).toBe('street-address');
   });
 
-  it('forwards inputmode to the input', async () => {
-    el.inputMode = 'numeric';
+  it('forwards inputmode to the input (both native inputmode and legacy input-mode alias)', async () => {
+    el.setAttribute('inputmode', 'numeric');
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input')!;
     expect(input.getAttribute('inputmode')).toBe('numeric');
+
+    el.removeAttribute('inputmode');
+    el.setAttribute('input-mode', 'decimal');
+    await el.updateComplete;
+    expect(input.getAttribute('inputmode')).toBe('decimal');
   });
 
   it('does not autofocus the input by default', async () => {
@@ -1264,20 +1269,6 @@ describe('autocomplete / inputmode / pattern', () => {
     autofocused.remove();
   });
 
-  // The host's own reflected attribute is kebab-case (input-mode), not inputmode — despite inputmode being this
-  // property's native HTML spelling (forwarded as-is to the inner control above). The docs manifest generator
-  // has no way to read an explicit Lit `attribute:` override; it derives a component's attribute name from its
-  // property name via a kebab-case guess, so this property's own host attribute has to follow that convention
-  // or the Playground/API table silently desync from the real attribute (confirmed live: the Playground's
-  // generated "input-mode" control set an attribute the component never declared, leaving the real `inputmode`
-  // attribute always empty).
-  it('reflects as the kebab-case input-mode attribute on the host, not inputmode', async () => {
-    el.inputMode = 'numeric';
-    await el.updateComplete;
-    expect(el.getAttribute('input-mode')).toBe('numeric');
-    expect(el.hasAttribute('inputmode')).toBe(false);
-  });
-
   it('omits inputmode from the input when unset', async () => {
     const input = el.shadowRoot!.querySelector('input')!;
     expect(input.hasAttribute('inputmode')).toBe(false);
@@ -1285,14 +1276,14 @@ describe('autocomplete / inputmode / pattern', () => {
 
   it('forwards inputmode to the textarea', async () => {
     el.type = 'multiline';
-    el.inputMode = 'decimal';
+    el.setAttribute('inputmode', 'decimal');
     await el.updateComplete;
     const textarea = el.shadowRoot!.querySelector('textarea')!;
     expect(textarea.getAttribute('inputmode')).toBe('decimal');
   });
 
   it('forwards pattern to the input', async () => {
-    el.pattern = '[0-9]{3}';
+    el.setAttribute('pattern', '[0-9]{3}');
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input')!;
     expect(input.getAttribute('pattern')).toBe('[0-9]{3}');
@@ -1305,7 +1296,7 @@ describe('autocomplete / inputmode / pattern', () => {
 
   it('omits pattern on type="number" — not a valid attribute there', async () => {
     el.type = 'number';
-    el.pattern = '[0-9]{3}';
+    el.setAttribute('pattern', '[0-9]{3}');
     await el.updateComplete;
     const input = el.shadowRoot!.querySelector('input')!;
     expect(input.hasAttribute('pattern')).toBe(false);
@@ -1313,10 +1304,29 @@ describe('autocomplete / inputmode / pattern', () => {
 
   it('never renders pattern on the textarea — not a valid attribute there', async () => {
     el.type = 'multiline';
-    el.pattern = '[0-9]{3}';
+    el.setAttribute('pattern', '[0-9]{3}');
     await el.updateComplete;
     const textarea = el.shadowRoot!.querySelector('textarea')!;
     expect(textarea.hasAttribute('pattern')).toBe(false);
+  });
+
+  it('forwards arbitrary native attributes (step, enterkeyhint, spellcheck, cols, wrap) without re-declaring them', async () => {
+    el.setAttribute('step', '0.01');
+    el.setAttribute('enterkeyhint', 'search');
+    el.setAttribute('spellcheck', 'false');
+    await el.updateComplete;
+    const input = el.shadowRoot!.querySelector('input')!;
+    expect(input.getAttribute('step')).toBe('0.01');
+    expect(input.getAttribute('enterkeyhint')).toBe('search');
+    expect(input.getAttribute('spellcheck')).toBe('false');
+
+    el.type = 'multiline';
+    el.setAttribute('cols', '40');
+    el.setAttribute('wrap', 'hard');
+    await el.updateComplete;
+    const textarea = el.shadowRoot!.querySelector('textarea')!;
+    expect(textarea.getAttribute('cols')).toBe('40');
+    expect(textarea.getAttribute('wrap')).toBe('hard');
   });
 });
 
@@ -1467,5 +1477,37 @@ describe('autosize', () => {
     const input = el.shadowRoot!.querySelector('input')!;
     expect(input.classList.contains('autosize')).toBe(false);
     expect(input.style.height).toBe('');
+  });
+});
+
+describe('the value published to the surrounding form (TFD-8)', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('publishes an empty string rather than null, so the field still submits its name', async () => {
+    // A native input always submits its name, even with an empty value (`name=`). Publishing `null`
+    // instead means "this control has no value", and the browser then drops the entry from the form
+    // data entirely — so an empty field silently disappeared from the submission.
+    const spy = vi.spyOn(ElementInternals.prototype, 'setFormValue');
+
+    const el = document.createElement('lt-textfield') as Textfield;
+    document.body.append(el);
+    await el.updateComplete;
+
+    expect(spy.mock.calls[spy.mock.calls.length - 1]?.[0]).toBe('');
+    el.remove();
+  });
+
+  it('publishes the value it holds', async () => {
+    const spy = vi.spyOn(ElementInternals.prototype, 'setFormValue');
+
+    const el = document.createElement('lt-textfield') as Textfield;
+    el.value = 'hello';
+    document.body.append(el);
+    await el.updateComplete;
+
+    expect(spy.mock.calls[spy.mock.calls.length - 1]?.[0]).toBe('hello');
+    el.remove();
   });
 });

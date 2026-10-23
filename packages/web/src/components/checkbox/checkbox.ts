@@ -1,13 +1,12 @@
 import { html, nothing } from 'lit';
-import { ThemeableElement } from '../../base';
+import { FormControlElement } from '../../base';
 import { devWarn } from '../../utils';
 import { customElement, property, query } from 'lit/decorators.js';
 
 import { checkboxStyles } from './checkbox.styles';
 import { CheckboxSize, CheckboxVariant, CheckboxLabelPosition, type CheckboxLabels } from './checkbox.types';
-import { FormDefaultController } from '../shared/form-default';
-import { FormDisabledController } from '../shared/form-disabled';
 import { SlottedContentController } from '../shared/slotted-content';
+import { NativeAttrsController } from '../shared/native-attrs';
 import { createFieldIds } from '../shared/form-field';
 
 import '@latty-ds/icons';
@@ -58,20 +57,14 @@ const DEFAULT_LABELS: CheckboxLabels = {
  * ```
  */
 @customElement('lt-checkbox')
-export class Checkbox extends ThemeableElement {
+export class Checkbox extends FormControlElement {
   static styles = checkboxStyles;
-  static formAssociated = true;
 
-  private _internals!: ElementInternals;
-  private _default = new FormDefaultController(this, () => this.checked);
-  private _fieldsetDisabled = new FormDisabledController(this);
   private _slotted = new SlottedContentController(this);
   private readonly _fieldIds = createFieldIds();
-
-  constructor() {
-    super();
-    this._internals = this.attachInternals();
-  }
+  private _nativeAttrs = new NativeAttrsController(this, () => this.input, {
+    exclude: ['aria-label', 'aria-checked', 'aria-describedby']
+  });
 
   /**
    * Visual variant that determines the color when checked.
@@ -126,12 +119,6 @@ export class Checkbox extends ThemeableElement {
   @property({ attribute: 'label-position', reflect: true }) labelPosition: CheckboxLabelPosition = 'right';
 
   /**
-   * Name attribute for form submission.
-   * @default ''
-   */
-  @property({ reflect: true }) name = '';
-
-  /**
    * Value attribute for form submission.
    * @default 'on'
    */
@@ -168,25 +155,25 @@ export class Checkbox extends ThemeableElement {
     }
   }
 
-  formResetCallback() {
-    this.checked = this._default.value;
+  /**
+   * A checkbox's value is its checked state — what a form reset restores and what a browser
+   * state-restore repopulates. The value it *submits* is `this.value` while checked and nothing at all
+   * while not (see `updated()`), which is exactly how a native checkbox behaves.
+   */
+  protected override get _formValue(): boolean {
+    return this.checked;
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this._fieldsetDisabled.setFieldsetDisabled(disabled);
+  protected override set _formValue(value: unknown) {
+    this.checked = Boolean(value);
   }
 
-  /** `this.disabled` combined with an ancestor `<fieldset>`'s own disabled state (see `FormDisabledController`). */
-  private get _isDisabled(): boolean {
-    return this.disabled || this._fieldsetDisabled.fieldsetDisabled;
-  }
-
-  checkValidity() {
-    return this._internals.checkValidity();
-  }
-
-  reportValidity() {
-    return this._internals.reportValidity();
+  /**
+   * A toggleable control's saved state is its `value` string — or nothing at all, when it was
+   * unchecked — so restored checkedness means "the saved value is this checkbox's own value".
+   */
+  protected override _restoreFormState(state: File | string | FormData | null): void {
+    this.checked = typeof state === 'string' && state === this.value;
   }
 
   /**
@@ -246,10 +233,9 @@ export class Checkbox extends ThemeableElement {
             .checked=${this.checked}
             ?disabled=${this._isDisabled}
             ?required=${this.required}
-            name=${this.name}
             value=${this.value}
             @change=${this.handleChange}
-            aria-label=${hasLabel ? nothing : 'checkbox'}
+            aria-label=${hasLabel ? nothing : this.getAttribute('aria-label') || 'checkbox'}
             aria-checked=${this.indeterminate ? 'mixed' : this.checked ? 'true' : 'false'}
             aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           />

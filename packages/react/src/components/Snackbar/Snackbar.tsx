@@ -1,7 +1,8 @@
 import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { Snackbar as SnackbarEl, LattyIconName } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type SnackbarProps = HTMLAttributes<SnackbarEl> & {
+export type SnackbarProps = Omit<HTMLAttributes<SnackbarEl>, 'open'> & {
   variant?: SnackbarEl['variant'];
   duration?: number;
   open?: boolean;
@@ -56,7 +57,7 @@ export const Snackbar = forwardRef<SnackbarEl, SnackbarProps>(function Snackbar(
     <lt-snackbar
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       open={open || undefined}
       closable={closable || undefined}
       action-label={actionLabel}

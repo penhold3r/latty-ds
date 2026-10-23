@@ -1,8 +1,9 @@
 // codegen:manual
-import { useRef, useImperativeHandle, forwardRef, type ReactNode } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import type { Header as HeaderEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type HeaderProps = {
+export type HeaderProps = HTMLAttributes<HeaderEl> & {
   background?: HeaderEl['background'];
   /** Far-left area — hamburger menu, back button, etc. */
   before?: ReactNode;
@@ -15,14 +16,19 @@ export type HeaderProps = {
 };
 
 export const Header = forwardRef<HeaderEl, HeaderProps>(function Header(
-  { background, before, logo, after, children },
+  { background, before, logo, after, children, ...props },
   forwardedRef
 ) {
   const innerRef = useRef<HeaderEl>(null);
   useImperativeHandle(forwardedRef, () => innerRef.current!);
 
   return (
-    <lt-header ref={innerRef} background={background}>
+    <lt-header
+      ref={innerRef}
+      suppressHydrationWarning
+      {...normalizeNativeProps(props as Record<string, unknown>)}
+      background={background}
+    >
       {before && <span slot="before">{before}</span>}
       {logo && <span slot="logo">{logo}</span>}
       {children && <span slot="content">{children}</span>}

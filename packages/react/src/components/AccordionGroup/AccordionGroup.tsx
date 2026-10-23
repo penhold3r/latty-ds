@@ -1,7 +1,8 @@
 import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
 import type { AccordionGroup as AccordionGroupEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type AccordionGroupProps = HTMLAttributes<AccordionGroupEl> & {
+export type AccordionGroupProps = Omit<HTMLAttributes<AccordionGroupEl>, 'multiple'> & {
   multiple?: boolean;
 };
 
@@ -17,7 +18,7 @@ export const AccordionGroup = forwardRef<AccordionGroupEl, AccordionGroupProps>(
     <lt-accordion-group
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       multiple={multiple || undefined}
     >
       {children}

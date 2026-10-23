@@ -1,13 +1,15 @@
-import { useRef, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useImperativeHandle, forwardRef, type ButtonHTMLAttributes, type AnchorHTMLAttributes } from 'react';
 import type { ListItem as ListItemEl, LattyIconName } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type ListItemProps = HTMLAttributes<ListItemEl> & {
+export type ListItemProps = Omit<
+  ButtonHTMLAttributes<ListItemEl> & AnchorHTMLAttributes<ListItemEl>,
+  'href' | 'disabled'
+> & {
   iconStart?: LattyIconName;
   iconEnd?: LattyIconName;
   clickable?: boolean;
   href?: string;
-  target?: string;
-  rel?: string;
   disabled?: boolean;
 };
 
@@ -23,7 +25,7 @@ export const ListItem = forwardRef<ListItemEl, ListItemProps>(function ListItem(
     <lt-list-item
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       icon-start={iconStart}
       icon-end={iconEnd}
       clickable={clickable || undefined}

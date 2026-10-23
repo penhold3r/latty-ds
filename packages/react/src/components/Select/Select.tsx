@@ -1,15 +1,17 @@
-import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type HTMLAttributes } from 'react';
+import { useRef, useLayoutEffect, useEffect, useImperativeHandle, forwardRef, type SelectHTMLAttributes } from 'react';
 import type { Select as SelectEl } from '@latty-ds/web';
+import { normalizeNativeProps } from '../../normalize-props';
 
-export type SelectProps = Omit<HTMLAttributes<SelectEl>, 'onChange'> & {
-  formAssociated?: boolean;
+export type SelectProps = Omit<
+  SelectHTMLAttributes<SelectEl>,
+  'onChange' | 'size' | 'value' | 'multiple' | 'placeholder' | 'label' | 'disabled' | 'required' | 'loading'
+> & {
   variant?: SelectEl['variant'];
   size?: SelectEl['size'];
   value?: SelectEl['value'];
   multiple?: boolean;
   placeholder?: string;
   label?: string;
-  name?: string;
   helperText?: string;
   disabled?: boolean;
   required?: boolean;
@@ -27,7 +29,6 @@ export const Select = forwardRef<SelectEl, SelectProps>(function Select(
     helperText,
     options,
     labels,
-    formAssociated,
     multiple,
     disabled,
     required,
@@ -62,8 +63,7 @@ export const Select = forwardRef<SelectEl, SelectProps>(function Select(
     <lt-select
       ref={innerRef}
       suppressHydrationWarning
-      {...(props as Record<string, unknown>)}
-      form-associated={formAssociated || undefined}
+      {...normalizeNativeProps(props as Record<string, unknown>)}
       multiple={multiple || undefined}
       disabled={disabled || undefined}
       required={required || undefined}
