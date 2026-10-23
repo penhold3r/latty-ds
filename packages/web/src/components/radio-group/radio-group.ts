@@ -207,6 +207,8 @@ export class RadioGroup extends ThemeableElement {
 
   /**
    * Selects a radio (used by both the native-change and keyboard-navigation handlers below).
+   * @param {Radio} radio - The radio to select.
+   * @returns {void}
    * @private
    */
   private _select(radio: Radio) {
@@ -225,7 +227,8 @@ export class RadioGroup extends ThemeableElement {
 
   /**
    * Handles change events from individual radio buttons.
-   * @param e - The change event from a radio button.
+   * @param {CustomEvent} e - The change event from a radio button.
+   * @returns {void}
    * @private
    */
   private handleRadioChange = (e: CustomEvent) => {
@@ -246,6 +249,8 @@ export class RadioGroup extends ThemeableElement {
    * radio moved to — matching a real `<input type="radio">` group, where arrowing both moves focus and checks
    * the newly-focused button. All four directions move (Right/Down forward, Left/Up back), disabled radios are
    * skipped entirely, and it wraps at both ends.
+   * @param {KeyboardEvent} e - The keyboard event.
+   * @returns {void}
    * @private
    */
   private handleRadioKeydown = (e: KeyboardEvent) => {
@@ -282,6 +287,8 @@ export class RadioGroup extends ThemeableElement {
   /**
    * A group `value` set by the consumer (`group.value = '…'`) is a plain property assignment — it doesn't pass
    * through any radio's own change handling, so this is what drives `checked` on the radios to match it.
+   * @param {Map<string, unknown>} changed - The changed properties.
+   * @returns {void}
    */
   protected updated(changed: Map<string, unknown>) {
     super.updated(changed);

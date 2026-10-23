@@ -51,6 +51,8 @@ let selectionGroupCounter = 0;
  * JSDoc) used to fail silently — invalid JSON, or valid JSON that isn't an array, both collapsed to `[]` with no
  * signal at all that the markup was wrong, not just empty. `attrName` is baked in per property so the warning
  * names which one actually failed, since both share this same converter.
+ * @param {string} attrName - The attribute name for warning messages.
+ * @returns {{ fromAttribute: (value: string | null) => unknown[] }} The JSON array converter object.
  */
 const createJsonArrayConverter = (attrName: string) => ({
   fromAttribute(value: string | null): unknown[] {
@@ -352,6 +354,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Gets the current effective sort state.
+   * @returns {SortState | null} The current sort state.
    */
   private get currentSort(): SortState | null {
     return this.sort ?? this.internalSort;
@@ -359,6 +362,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Gets the current effective selection.
+   * @returns {RowKey[]} The current selected row keys.
    */
   private get currentSelected(): RowKey[] {
     return this.selected ?? this.internalSelected;
@@ -366,6 +370,8 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * A column's effective width: a live resize override when one exists, otherwise its configured `width`.
+   * @param {TableColumn<T>} column - The column to get the width for.
+   * @returns {string | undefined} The column width.
    */
   private getColumnWidth(column: TableColumn<T>): string | undefined {
     return this.columnWidthOverrides[column.key] ?? column.width;
@@ -375,12 +381,16 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * Total number of pages given the current sorted data and `pageSize`. `1` whenever pagination is disabled
    * (`pageSize` unset or less than 1). Public so a consumer can feed it straight into `lt-pagination`'s own
    * `total-pages`.
+   * @returns {number} The total number of pages.
    */
   get totalPages(): number {
     return getTotalPages({ pageSize: this.pageSize, page: this.page, sortedDataLength: this.sortedData.length });
   }
 
-  /** `page`, clamped into `1..totalPages`. */
+  /**
+   * `page`, clamped into `1..totalPages`.
+   * @returns {number} The current page number.
+   */
   private get currentPage(): number {
     return getCurrentPage({ pageSize: this.pageSize, page: this.page, sortedDataLength: this.sortedData.length });
   }
@@ -388,17 +398,22 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   /**
    * The current page's row range as plain indices into `sortedData` — computed without materializing any rows,
    * so callers that only need the count (e.g. A virtualized render's spacer-row math) stay O(1).
+   * @returns {{ start: number; end: number }} The page range.
    */
   private get pageRange(): { start: number; end: number } {
     return getPageRange(this.sortedData.length, this.pageSize, this.currentPage);
   }
 
-  /** Every row on the current page, paired with its index within `sortedData`. */
+  /** Every row on the current page, paired with its index within `sortedData`.
+   * @returns {RowEntry<T>[]} The paged entries.
+   */
   private get pagedEntries(): RowEntry<T>[] {
     return getPagedEntries(this.sortedData, this.pageRange);
   }
 
-  /** The rows actually rendered into the DOM: the current page, further windowed when virtualized. */
+  /** The rows actually rendered into the DOM: the current page, further windowed when virtualized.
+   * @returns {RowEntry<T>[]} The visible entries.
+   */
   private get visibleEntries(): RowEntry<T>[] {
     return getVisibleEntries(this.sortedData, this.pageRange, this._virtualizationConfig);
   }
@@ -449,6 +464,8 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Tracks `.table-container`'s scroll position while virtualized, driving `visibleEntries`'s windowing math.
+   * @param {Event} e - The scroll event.
+   * @returns {void}
    */
   private handleScroll(e: Event) {
     if (!this.virtualized) return;
@@ -457,6 +474,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Updates the sorted data based on current sort state.
+   * @returns {void}
    */
   private updateSortedData() {
     this.sortedData = sortData(this.data ?? [], this.columns ?? [], this.currentSort);
@@ -464,6 +482,8 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Handles header click for sorting.
+   * @param {TableColumn<T>} column - The column that was clicked.
+   * @returns {void}
    */
   private handleHeaderClick(column: TableColumn<T>) {
     if (!column.sortable) return;
@@ -488,6 +508,9 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   /**
    * Tells the consumer a column's width change is final — once per drag (on release), or once per keyboard step
    * (each press is already a discrete, complete action with no "in progress" state to speak of).
+   * @param {string} key - The column key.
+   * @param {string} width - The new column width.
+   * @returns {void}
    */
   private dispatchColumnResize(key: string, width: string) {
     this.dispatchEvent(
@@ -502,6 +525,9 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   /**
    * Starts a pointer-drag resize of a column. Delegates the whole gesture to `startColumnResize`, which tracks
    * start position/width as closure state and pushes live/committed widths back through `_resizeHandlers`.
+   * @param {PointerEvent} e - The pointer event.
+   * @param {TableColumn<T>} column - The column being resized.
+   * @returns {void}
    */
   private handleResizeStart(e: PointerEvent, column: TableColumn<T>) {
     startColumnResize(e, column, this._resizeHandlers);
@@ -509,6 +535,9 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Keyboard alternative to dragging (WCAG 2.5.1 — a pointer-only drag gesture needs a non-pointer equivalent).
+   * @param {KeyboardEvent} e - The keyboard event.
+   * @param {TableColumn<T>} column - The column being resized.
+   * @returns {void}
    */
   private handleResizeKeydown(e: KeyboardEvent, column: TableColumn<T>) {
     const th = (e.currentTarget as HTMLElement).closest('th') as HTMLElement;
@@ -518,6 +547,9 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Handles a click on a body row.
+   * @param {T} row - The row data.
+   * @param {number} index - The row index.
+   * @returns {void}
    */
   private handleRowClick(row: T, index: number) {
     this.dispatchEvent(
@@ -533,6 +565,9 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * Toggles a single row's selection. In `single` mode this always replaces the selection (matching native radio
    * behavior — clicking the already-selected one is a no-op, not a way to clear it); in `multiple` mode it adds
    * or removes just that row's key.
+   * @param {T} row - The row data.
+   * @param {number} index - The row index.
+   * @returns {void}
    */
   private toggleRowSelection(row: T, index: number) {
     const key = getRowKey(row, index, this.rowKey);
@@ -552,6 +587,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   /**
    * Toggles selection of every currently visible row (the current page, when paginated) — selects all if any
    * are unselected, otherwise clears the selection. Multiple mode only.
+   * @returns {void}
    */
   private toggleSelectAll() {
     const allKeys = this.pagedEntries.map(({ row, index }) => getRowKey(row, index, this.rowKey));
@@ -570,6 +606,10 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Renders a cell's content.
+   * @param {TableColumn<T>} column - The column definition.
+   * @param {T} row - The row data.
+   * @param {number} rowIndex - The row index.
+   * @returns {unknown} The rendered cell content.
    */
   private renderCell(column: TableColumn<T>, row: T, rowIndex: number): unknown {
     const value = getCellValue(row, column.key);
@@ -583,6 +623,8 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Renders the sort icon for a column header.
+   * @param {TableColumn<T>} column - The column definition.
+   * @returns {TemplateResult | typeof nothing} The sort icon template.
    */
   private renderSortIcon(column: TableColumn<T>) {
     if (!column.sortable) return nothing;
@@ -605,6 +647,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * `thead { display: none }`, which removes the header row from every browser's accessibility tree, not just
    * Safari's — renderBody()'s per-cell `aria-label` (column label only, not the value) is the companion fix for
    * that, so stacked cells don't lose their column context entirely once sighted users can no longer see it either.
+   * @returns {TemplateResult} The header template.
    */
   private renderHeader() {
     const allKeys = this.pagedEntries.map(({ row, index }) => getRowKey(row, index, this.rowKey));
@@ -696,6 +739,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Renders the table body.
+   * @returns {TemplateResult} The body template.
    */
   private renderBody() {
     const columns = this.columns ?? [];

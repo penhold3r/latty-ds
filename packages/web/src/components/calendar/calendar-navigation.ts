@@ -5,6 +5,13 @@ import { addMonths, isMonthOutOfRange, isYearOutOfRange } from './calendar-date'
  * multi-month layout, navigating shifts every panel by one month — the relevant boundary is whichever edge
  * panel moves further from what's already visible: the new base month going backward, or the last panel
  * (base + months - 1) going forward. For `months === 1` both reduce to the same single month either way.
+ * @param {number} viewYear - The current view year.
+ * @param {number} viewMonth - The current view month.
+ * @param {number} months - Number of months visible.
+ * @param {number} delta - The navigation delta.
+ * @param {Date | null} min - The minimum date.
+ * @param {Date | null} max - The maximum date.
+ * @returns {boolean} True if navigation is allowed.
  */
 export function canNavigateMonth(
   viewYear: number,
@@ -19,7 +26,13 @@ export function canNavigateMonth(
   return !isMonthOutOfRange(edge.year, edge.month, min, max);
 }
 
-/** Same idea as `canNavigateMonth`, for the year-picker's own prev/next-year buttons. */
+/** Same idea as `canNavigateMonth`, for the year-picker's own prev/next-year buttons.
+ * @param {number} pickerYear - The current picker year.
+ * @param {number} delta - The navigation delta.
+ * @param {Date | null} min - The minimum date.
+ * @param {Date | null} max - The maximum date.
+ * @returns {boolean} True if navigation is allowed.
+ */
 export function canNavigateYear(pickerYear: number, delta: number, min: Date | null, max: Date | null): boolean {
   return !isYearOutOfRange(pickerYear + delta, min, max);
 }
@@ -27,6 +40,11 @@ export function canNavigateYear(pickerYear: number, delta: number, min: Date | n
 /**
  * Whether `date` falls in one of the visible month panels — used to decide if a candidate can be the roving
  * tab stop, since a cell outside every rendered panel would match nothing and leave no Tab stop at all.
+ * @param {Date} date - The date to check.
+ * @param {number} viewYear - The current view year.
+ * @param {number} viewMonth - The current view month.
+ * @param {number} months - Number of months visible.
+ * @returns {boolean} True if date is in view.
  */
 export function isDateInView(date: Date, viewYear: number, viewMonth: number, months: number): boolean {
   if (months <= 1) return date.getFullYear() === viewYear && date.getMonth() === viewMonth;
@@ -41,6 +59,10 @@ export function isDateInView(date: Date, viewYear: number, viewMonth: number, mo
  * The date keyboard navigation moves focus to for an arrow/Home/End key, or `null` for any other key (the
  * caller handles page navigation and activation itself). Home/End move to the first/last day of the current
  * `weekStart`-relative week, matching how the grid is laid out.
+ * @param {Date} date - The current date.
+ * @param {string} key - The arrow key pressed.
+ * @param {number} weekStart - The week start day (0-6).
+ * @returns {Date | null} The new focus date or null.
  */
 export function getArrowFocusDate(date: Date, key: string, weekStart: number): Date | null {
   const next = new Date(date);

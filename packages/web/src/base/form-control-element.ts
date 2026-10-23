@@ -57,6 +57,7 @@ export abstract class FormControlElement extends ThemeableElement {
    * whole form-association machinery (~1.3 kB raw, ~425 B gzip each) that none of them use. A static
    * getter is side-effect free by definition, so the class tree-shakes away and only the eleven real
    * form controls carry it. Do not "simplify" this back into a field.
+   * @returns {true} Always returns true.
    */
   static get formAssociated(): true {
     return true;
@@ -92,6 +93,7 @@ export abstract class FormControlElement extends ThemeableElement {
    * For a text-like control this is its `value`; for a toggleable one it is `this.value` while checked
    * and `null` while not — the exact shape `setFormValue()` publishes, so restoring it means the same
    * thing in both directions.
+   * @returns {unknown} The form value.
    */
   protected abstract get _formValue(): unknown;
 
@@ -105,6 +107,7 @@ export abstract class FormControlElement extends ThemeableElement {
    * the custom-elements manifest the docs, the Playground, and the React wrappers are generated from
    * lists only the properties declared on the component's own class (`cem analyze` doesn't inherit
    * base-class members) — a `disabled` that lived only here would silently vanish from all three.
+   * @returns {boolean} The own disabled state.
    */
   protected get _ownDisabled(): boolean {
     return (this as unknown as { disabled?: boolean }).disabled ?? false;
@@ -113,6 +116,7 @@ export abstract class FormControlElement extends ThemeableElement {
   /**
    * Whether the control is disabled — its own `disabled` property combined with an ancestor
    * `<fieldset>`'s disabled state.
+   * @returns {boolean} Whether the control is disabled.
    */
   protected get _isDisabled(): boolean {
     return this._ownDisabled || this._fieldsetDisabled.fieldsetDisabled;
@@ -123,6 +127,7 @@ export abstract class FormControlElement extends ThemeableElement {
    *
    * Mirrors the native `HTMLInputElement.form` property: the owner is the nearest ancestor `<form>`,
    * unless the element carries a `form="id"` attribute pointing at a different one.
+   * @returns {HTMLFormElement | null} The owner form.
    */
   get form(): HTMLFormElement | null {
     return this._internals.form;
@@ -133,6 +138,7 @@ export abstract class FormControlElement extends ThemeableElement {
    *
    * Subclasses that keep extra state alongside their value (the textfield's touched/error flags) override
    * this and call `super.formResetCallback()`.
+   * @returns {void}
    */
   formResetCallback(): void {
     this._formValue = this._default.value;
@@ -141,6 +147,8 @@ export abstract class FormControlElement extends ThemeableElement {
   /**
    * Called by the browser when the control's disabled state changes — its own `disabled` property, or an
    * ancestor `<fieldset>` becoming disabled.
+   * @param {boolean} disabled - The disabled state.
+   * @returns {void}
    */
   formDisabledCallback(disabled: boolean): void {
     this._fieldsetDisabled.setFieldsetDisabled(disabled);
@@ -152,6 +160,9 @@ export abstract class FormControlElement extends ThemeableElement {
    *
    * `state` is the value the control published through `setFormValue()` (a string for a single-value
    * control, a `FormData` for a multi-value one), or `null` when the control had no value to save.
+   * @param {File | string | FormData | null} state - The restored form state.
+   * @param {'restore' | 'autocomplete'} mode - The restore mode.
+   * @returns {void}
    */
   /*
    * The browser always calls this with two arguments — the state and the mode it is restoring in
@@ -170,6 +181,8 @@ export abstract class FormControlElement extends ThemeableElement {
    *
    * The default implementation restores a single value; a multi-value control (a `multiple` select or
    * combobox) overrides it to restore the whole set.
+   * @param {File | string | FormData | null} state - The restored form state.
+   * @returns {void}
    */
   protected _restoreFormState(state: File | string | FormData | null): void {
     if (state instanceof File) return;
@@ -186,12 +199,16 @@ export abstract class FormControlElement extends ThemeableElement {
     this._formValue = state;
   }
 
-  /** Whether the control currently satisfies its own constraints. */
+  /** Whether the control currently satisfies its own constraints.
+   * @returns {boolean} True if valid.
+   */
   checkValidity(): boolean {
     return this._internals.checkValidity();
   }
 
-  /** Whether the control currently satisfies its own constraints, reporting any failure to the user. */
+  /** Whether the control currently satisfies its own constraints, reporting any failure to the user.
+   * @returns {boolean} True if valid.
+   */
   reportValidity(): boolean {
     return this._internals.reportValidity();
   }

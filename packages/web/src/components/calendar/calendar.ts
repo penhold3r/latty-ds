@@ -90,7 +90,9 @@ export class Calendar extends ThemeableElement {
    */
   @property({ attribute: 'week-start', reflect: true }) weekStart?: CalendarWeekStart;
 
-  /** `weekStart` if explicitly set, otherwise derived from `locale`. Internal code should always read this, never `weekStart` directly. */
+  /** `weekStart` if explicitly set, otherwise derived from `locale`. Internal code should always read this, never `weekStart` directly.
+   * @returns {CalendarWeekStart} The week start day.
+   */
   private get _weekStart(): CalendarWeekStart {
     return this.weekStart ?? deriveWeekStart(this.locale);
   }
@@ -163,12 +165,16 @@ export class Calendar extends ThemeableElement {
     }
   }
 
-  /** Parsed `min`, or `null` when unset/invalid. */
+  /** Parsed `min`, or `null` when unset/invalid.
+   * @returns {Date | null} The parsed min date.
+   */
   private get _minDate(): Date | null {
     return parseIsoDate(this.min);
   }
 
-  /** Parsed `max`, or `null` when unset/invalid. */
+  /** Parsed `max`, or `null` when unset/invalid.
+   * @returns {Date | null} The parsed max date.
+   */
   private get _maxDate(): Date | null {
     return parseIsoDate(this.max);
   }

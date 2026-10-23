@@ -8,6 +8,10 @@ const PAGE_SIZE = 10;
  * Computes the next active index for a listbox keyboard interaction, wrapping Up/Down at the ends (Home/End/
  * Page Up/Down clamp instead — jumping to "the other end" on a page press would be surprising). Returns `-1`
  * when `length` is 0 (nothing to be active).
+ * @param {ListboxNavKey} key - The navigation key pressed.
+ * @param {number} currentIndex - The currently active index (-1 if none).
+ * @param {number} length - The total number of options.
+ * @returns {number} The next active index, or -1 if length is 0.
  */
 export function nextListboxIndex(key: ListboxNavKey, currentIndex: number, length: number): number {
   if (length === 0) return -1;
@@ -32,6 +36,8 @@ export function nextListboxIndex(key: ListboxNavKey, currentIndex: number, lengt
  * against existing option labels) — "café" should match a query of "cafe". NFD decomposes a combined
  * character (for example "é") into its base letter plus a separate combining mark, which the Unicode range
  * `\u0300-\u036f` then strips; `toLowerCase()` runs first so a combining mark's own casing never factors in.
+ * @param {string} text - The text to normalize.
+ * @returns {string} The normalized text with lowercase, NFD decomposition, and combining marks removed.
  */
 export function normalizeSearchText(text: string): string {
   return text
@@ -52,6 +58,7 @@ export function normalizeSearchText(text: string): string {
  * refinement, but matching is already a genuine improvement over no typeahead at all, and adding it would need
  * to distinguish "repeated single letter" from "a genuinely repeated letter inside a real typed word" (e.g.
  * "ll" in "Allison"), which isn't worth the complexity this pass.
+ * @param {number} timeoutMs - Time in milliseconds before the typeahead buffer resets (default: 500).
  */
 export class ListboxTypeahead {
   private buffer = '';
@@ -59,7 +66,13 @@ export class ListboxTypeahead {
 
   constructor(private readonly timeoutMs = 500) {}
 
-  /** Returns the matched index, or null if nothing in `labels` starts with the accumulated buffer. */
+  /**
+   * Matches the next option whose label starts with the accumulated buffer.
+   * @param {string} char - The character typed.
+   * @param {readonly string[]} labels - The list of option labels to search.
+   * @param {number} afterIndex - The index to start searching after (wraps around).
+   * @returns {number | null} The matched index, or null if no match.
+   */
   match(char: string, labels: readonly string[], afterIndex: number): number | null {
     this.buffer += char.toLowerCase();
     if (this.timer) clearTimeout(this.timer);
@@ -75,7 +88,10 @@ export class ListboxTypeahead {
     return null;
   }
 
-  /** Clears any pending reset timer — call from `disconnectedCallback` so it doesn't fire after teardown. */
+  /**
+   * Clears any pending reset timer — call from `disconnectedCallback` so it doesn't fire after teardown.
+   * @returns {void}
+   */
   dispose(): void {
     if (this.timer) clearTimeout(this.timer);
     this.timer = null;

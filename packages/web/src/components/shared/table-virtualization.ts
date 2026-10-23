@@ -32,6 +32,10 @@ export interface RowEntry<T> {
  * The page's row range as plain indices into the sorted data — computed without materializing any
  * rows, so callers that only need the count (for example a virtualized render's spacer-row math)
  * stay O(1).
+ * @param {number} sortedDataLength - The total length of sorted data.
+ * @param {number} pageSize - The page size.
+ * @param {number} currentPage - The current page number.
+ * @returns {PageRange} The page range.
  */
 export function getPageRange(sortedDataLength: number, pageSize: number, currentPage: number): PageRange {
   if (!pageSize || pageSize < 1) return { start: 0, end: sortedDataLength };
@@ -44,6 +48,9 @@ export function getPageRange(sortedDataLength: number, pageSize: number, current
  * preserved (not re-based to the page) so `rowIndex` in `column.render`, `rowclick`'s detail, and
  * row-selection keys all keep meaning "position within the full sorted data". Slices `sortedData`
  * before mapping, so this costs O(page size), not O(total rows).
+ * @param {readonly T[]} sortedData - The sorted data.
+ * @param {PageRange} pageRange - The page range.
+ * @returns {RowEntry<T>[]} The paged entries.
  */
 export function getPagedEntries<T>(sortedData: readonly T[], pageRange: PageRange): RowEntry<T>[] {
   const { start, end } = pageRange;
@@ -56,6 +63,10 @@ export function getPagedEntries<T>(sortedData: readonly T[], pageRange: PageRang
  * Slices `sortedData` directly for the visible window rather than materializing the whole page
  * first, so scrolling a virtualized table costs O(visible rows) — the entire point, since a
  * scroll event recomputes this on every tick.
+ * @param {readonly T[]} sortedData - The sorted data.
+ * @param {PageRange} pageRange - The page range.
+ * @param {VirtualizationConfig} config - The virtualization configuration.
+ * @returns {RowEntry<T>[]} The visible entries.
  */
 export function getVisibleEntries<T>(
   sortedData: readonly T[],
@@ -82,6 +93,9 @@ export function getVisibleEntries<T>(
  * Number of spacer rows needed above and below the rendered window in a virtualized table. Rows
  * scrolled out of view still need to occupy their own vertical space, or the scrollbar's range
  * would be wrong.
+ * @param {readonly RowEntry<unknown>[]} visibleEntries - The visible entries.
+ * @param {PageRange} pageRange - The page range.
+ * @returns {{ topSpacerRows: number; bottomSpacerRows: number }} The spacer rows.
  */
 export function getVirtualSpacers(
   visibleEntries: readonly RowEntry<unknown>[],
@@ -103,6 +117,8 @@ export function getVirtualSpacers(
 /**
  * Dev-mode warning for a table configured with `virtualized` but no `height`. Returns the message
  * (for the caller to pass to `devWarn`) or `null` when the config is fine.
+ * @param {Pick<VirtualizationConfig, 'virtualized' | 'height'>} config - The virtualization config.
+ * @returns {string | null} The warning message or null.
  */
 export function virtualizationWarning(config: Pick<VirtualizationConfig, 'virtualized' | 'height'>): string | null {
   if (config.virtualized && !config.height) {

@@ -5,6 +5,7 @@ let fieldCount = 0;
 /**
  * Stable id for a field's helper text, so the control can point `aria-describedby` at it. Ids only need to be
  * unique within one shadow root, but a counter keeps them unique across the page too.
+ * @returns {{ helper: string }} The field IDs.
  */
 export const createFieldIds = (): { helper: string } => ({ helper: `lt-field-${fieldCount++}-helper` });
 
@@ -31,6 +32,8 @@ export const formFieldStyles: CSSResult = css`
  * `lt-date-input`'s trigger is a plain `<button>`, and `aria-required` is not a property `role="button"`
  * allows, so for that control the marker is the *only* signal that the field is required. Hiding it from
  * assistive technology would take information away rather than take noise out.
+ * @param {boolean} required - Whether the field is required.
+ * @returns {TemplateResult | typeof nothing} The required indicator template.
  */
 export const renderRequiredIndicator = (required: boolean): TemplateResult | typeof nothing =>
   required ? html`<span class="required-indicator">*</span>` : nothing;
@@ -47,6 +50,9 @@ export const renderRequiredIndicator = (required: boolean): TemplateResult | typ
  * control whose label is laid out as a column would otherwise split them: `lt-datepicker`'s label is a
  * flex column, and the marker used to end up on a line of its own, below the label text, while every other
  * control put it right next to the text. One element keeps the pair together whatever the label's layout.
+ * @param {string} label - The label text.
+ * @param {boolean} required - Whether the field is required.
+ * @returns {TemplateResult} The field label template.
  */
 export const renderFieldLabel = (label: string, required: boolean): TemplateResult => html`
   <span class="label-text">
@@ -59,6 +65,9 @@ export const renderFieldLabel = (label: string, required: boolean): TemplateResu
  *
  * Every control renders it through the design system's own text component now, so the caption typography
  * is the same everywhere.
+ * @param {string} id - The element ID.
+ * @param {string} text - The helper text.
+ * @returns {TemplateResult | typeof nothing} The helper text template.
  */
 export const renderHelperText = (id: string, text: string): TemplateResult | typeof nothing =>
   text ? html`<lt-text id=${id} variant="caption" as="span" class="helper-text">${text}</lt-text>` : nothing;

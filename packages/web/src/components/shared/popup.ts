@@ -73,7 +73,9 @@ export class PopupController {
     this.#options = options;
   }
 
-  /** Whether the popup is currently open. */
+  /** Whether the popup is currently open.
+   * @returns {boolean} True if open.
+   */
   get isOpen(): boolean {
     return this.#open;
   }

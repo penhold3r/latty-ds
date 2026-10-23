@@ -88,6 +88,7 @@ export class Datepicker extends FormControlElement {
   /**
    * A text-like control's value is its `value` — what a form reset restores and what a browser
    * state-restore repopulates.
+   * @returns {string} The form value.
    */
   protected override get _formValue(): string {
     return this.value;

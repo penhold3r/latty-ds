@@ -29,6 +29,8 @@ export interface ListboxOptionView {
 /**
  * One option row in a listbox dropdown (`lt-select`, `lt-combobox`) — the same markup in both, so an option
  * looks and behaves identically wherever it is rendered.
+ * @param {ListboxOptionView} view - The option view data to render.
+ * @returns {TemplateResult} The rendered option template.
  */
 export function renderListboxOption(view: ListboxOptionView): TemplateResult {
   return html`
@@ -55,6 +57,9 @@ export function renderListboxOption(view: ListboxOptionView): TemplateResult {
 /**
  * Renders a flat option list as contiguous groups (mirroring `<optgroup>`) around whichever option markup
  * the caller supplies for each item.
+ * @param {readonly T[]} items - The flat list of items, each optionally carrying a `group` property.
+ * @param {(item: T) => TemplateResult} renderItem - A function that renders a single item.
+ * @returns {TemplateResult[]} An array of template results with group wrappers inserted.
  */
 export function renderListboxGroups<T extends { group?: string }>(
   items: readonly T[],
@@ -72,7 +77,11 @@ export function renderListboxGroups<T extends { group?: string }>(
   );
 }
 
-/** The loading state that replaces a listbox's options while an async fetch is in flight. */
+/**
+ * The loading state that replaces a listbox's options while an async fetch is in flight.
+ * @param {string} message - The message to display while loading.
+ * @returns {TemplateResult} The rendered loading state template.
+ */
 export function renderListboxLoading(message: string): TemplateResult {
   return html`
     <div class="loading-state">

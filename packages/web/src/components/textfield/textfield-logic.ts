@@ -16,6 +16,8 @@ export interface TextfieldValidationInput {
  *
  * An empty value is always valid: `required` is left to the native control's own `valueMissing` validity, so
  * treating "empty" as invalid here would double-report the same failure.
+ * @param {TextfieldValidationInput} input - The validation input containing value, type, and constraint attributes.
+ * @returns {boolean} True if the value passes all format and constraint checks.
  */
 export function isValidTextfieldValue(input: TextfieldValidationInput): boolean {
   const { value, type } = input;
@@ -52,6 +54,11 @@ const hasValue = (attribute: string | null | undefined): attribute is string =>
 /**
  * The icon at the field's end, or `''` when it shows none. Password fields trade the variant icon for their
  * visibility toggle; the other variants show the icon that matches their state.
+ * @param {TextfieldType} type - The field's input type.
+ * @param {TextfieldVariant} variant - The field's visual variant.
+ * @param {boolean} autoError - Whether auto-error mode is enabled (shows error icon on invalid).
+ * @param {boolean} passwordVisible - Whether the password is currently visible.
+ * @returns {string} The icon name to display, or empty string for none.
  */
 export function getTextfieldEndIcon(
   type: TextfieldType,
@@ -78,6 +85,12 @@ export function getTextfieldEndIcon(
  * Whether the field shows its clear button. Password fields are excluded on purpose — their own visibility
  * toggle already occupies the end of the field, and a masking field clearing itself on a stray click is a
  * worse trade than the convenience is worth.
+ * @param {boolean} clearable - Whether the field is clearable.
+ * @param {string} value - The current field value.
+ * @param {boolean} disabled - Whether the field is disabled.
+ * @param {boolean} readonly - Whether the field is readonly.
+ * @param {TextfieldType} type - The field's input type.
+ * @returns {boolean} True if the clear button should be shown.
  */
 export function shouldShowTextfieldClear(
   clearable: boolean,
@@ -89,7 +102,12 @@ export function shouldShowTextfieldClear(
   return clearable && !!value && !disabled && !readonly && type !== 'password';
 }
 
-/** The native input type actually rendered — a visible password is a plain text input. */
+/**
+ * The native input type actually rendered — a visible password is a plain text input.
+ * @param {TextfieldType} type - The field's declared input type.
+ * @param {boolean} passwordVisible - Whether the password is currently visible.
+ * @returns {TextfieldType} The resolved native input type.
+ */
 export function resolveTextfieldInputType(type: TextfieldType, passwordVisible: boolean): TextfieldType {
   return type === 'password' && passwordVisible ? 'text' : type;
 }

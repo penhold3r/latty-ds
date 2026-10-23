@@ -91,6 +91,8 @@ export class Accordion extends ThemeableElement {
 
   /**
    * Handles click on summary to animate the accordion.
+   * @param {Event} e - The click event.
+   * @returns {void}
    * @private
    */
   private handleSummaryClick(e: Event) {
@@ -135,6 +137,8 @@ export class Accordion extends ThemeableElement {
 
   /**
    * Handles the end of the transition to clear inline styles.
+   * @param {TransitionEvent} e - The transition event.
+   * @returns {void}
    * @private
    */
   private handleTransitionEnd(e: TransitionEvent) {

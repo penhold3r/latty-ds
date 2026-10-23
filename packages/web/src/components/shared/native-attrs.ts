@@ -42,6 +42,8 @@ type NativeAttrsHost = ReactiveControllerHost & Element;
  * Collects the HTML attribute names owned by `@property()` declarations on a
  * Lit `ReactiveElement` class so `NativeAttrsController` never overwrites or
  * duplicates attributes the component already manages in its own template.
+ * @param {Element} host - The host element.
+ * @returns {Set<string>} The set of declared property attribute names.
  */
 function getDeclaredPropertyAttributes(host: Element): Set<string> {
   const ctor = host.constructor as typeof ReactiveElement | undefined;

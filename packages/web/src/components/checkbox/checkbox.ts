@@ -152,6 +152,7 @@ export class Checkbox extends FormControlElement {
    * A checkbox's value is its checked state — what a form reset restores and what a browser
    * state-restore repopulates. The value it *submits* is `this.value` while checked and nothing at all
    * while not (see `updated()`), which is exactly how a native checkbox behaves.
+   * @returns {boolean} The form value (checked state).
    */
   protected override get _formValue(): boolean {
     return this.checked;
@@ -164,6 +165,8 @@ export class Checkbox extends FormControlElement {
   /**
    * A toggleable control's saved state is its `value` string — or nothing at all, when it was
    * unchecked — so restored checkedness means "the saved value is this checkbox's own value".
+   * @param {File | string | FormData | null} state - The saved form state.
+   * @returns {void}
    */
   protected override _restoreFormState(state: File | string | FormData | null): void {
     this.checked = typeof state === 'string' && state === this.value;
@@ -172,7 +175,8 @@ export class Checkbox extends FormControlElement {
   /**
    * Handles checkbox change events.
    * Updates the checked state and dispatches a custom change event.
-   * @param e - The native change event.
+   * @param {Event} e - The native change event.
+   * @returns {void}
    * @private
    */
   private handleChange(e: Event) {
@@ -198,6 +202,7 @@ export class Checkbox extends FormControlElement {
   /**
    * Renders the checkbox icon based on state.
    * Shows checkmark when checked, minus when indeterminate.
+   * @returns {TemplateResult} The checkmark template.
    * @private
    */
   private renderCheckmark() {

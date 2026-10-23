@@ -240,7 +240,8 @@ export class Select extends FormControlElement {
   /**
    * Handles option selection.
    * Updates the value, dispatches change event, and closes dropdown.
-   * @param option - The selected option.
+   * @param {SelectOption} option - The selected option.
+   * @returns {void}
    * @private
    */
   private selectOption(option: SelectOption) {
@@ -262,7 +263,8 @@ export class Select extends FormControlElement {
    * Handles keyboard navigation in the dropdown.
    * Supports Arrow Up/Down/Home/End/Page Up/Page Down for navigation, typeahead, Enter/Space for selection,
    * and Escape to close.
-   * @param e - The keyboard event.
+   * @param {KeyboardEvent} e - The keyboard event.
+   * @returns {void}
    * @private
    */
   private handleKeydown(e: KeyboardEvent) {
@@ -326,6 +328,7 @@ export class Select extends FormControlElement {
 
   /**
    * Gets the display label for the currently selected value.
+   * @returns {string} The selected label.
    * @private
    */
   private getSelectedLabel(): string {
@@ -378,6 +381,7 @@ export class Select extends FormControlElement {
   /**
    * A select's value is its `value` — a string for a single select, an array of the selected values for
    * a `multiple` one. It's what a form reset restores and what a browser state-restore repopulates.
+   * @returns {string | string[]} The form value.
    */
   protected override get _formValue(): string | string[] {
     return this.value;

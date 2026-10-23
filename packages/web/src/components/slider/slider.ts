@@ -50,7 +50,10 @@ export class Slider extends FormControlElement {
    * sanitizes its own value — including when `value`/`min`/`max`/`step` are set programmatically, which a native
    * range input clamps on its own internal value but this component didn't mirror onto its own `value` property.
    * Without this, `value=150` with `max=100` produced a 150% fill and submitted "150" to the form
-   * even though the visible thumb was pinned at the end. */
+   * even though the visible thumb was pinned at the end.
+   * @param {number} value - The value to sanitize.
+   * @returns {number} The sanitized value.
+   */
   private _sanitize(value: number): number {
     if (this.min === this.max) return this.min;
     const clamped = Math.min(this.max, Math.max(this.min, value));
@@ -75,6 +78,7 @@ export class Slider extends FormControlElement {
   /**
    * A slider's value is its number — what a form reset restores and what a browser state-restore
    * repopulates.
+   * @returns {number} The form value.
    */
   protected override get _formValue(): number {
     return this.value;

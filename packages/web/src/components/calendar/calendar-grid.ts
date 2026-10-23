@@ -32,6 +32,8 @@ export interface CalendarGridOptions {
  * Builds every day cell for one month panel, including the filler days from the adjacent months that complete
  * the first and last weeks. In `range` mode with only a start date selected, `hoverDate` also produces the
  * hover-preview flags (normalized so the preview start always precedes the preview end).
+ * @param {CalendarGridOptions} options - The grid options.
+ * @returns {CalendarDay[]} The calendar days.
  */
 export function buildCalendarDays(options: CalendarGridOptions): CalendarDay[] {
   const { year, month, weekStart, mode, selectedDate, rangeStart, rangeEnd, hoverDate, today, isDisabled } = options;
@@ -103,7 +105,10 @@ export function buildCalendarDays(options: CalendarGridOptions): CalendarDay[] {
   return days;
 }
 
-/** Groups a flat month's day cells into rows of exactly seven, one row per calendar week. */
+/** Groups a flat month's day cells into rows of exactly seven, one row per calendar week.
+ * @param {readonly CalendarDay[]} days - The days to group.
+ * @returns {CalendarDay[][]} The weeks.
+ */
 export function groupDaysIntoWeeks(days: readonly CalendarDay[]): CalendarDay[][] {
   const weeks: CalendarDay[][] = [];
   for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7));
@@ -116,6 +121,9 @@ export function groupDaysIntoWeeks(days: readonly CalendarDay[]): CalendarDay[][
  * - re-activating the start day clears the range;
  * - activating a day before the start swaps the two (keeping `valueStart <= valueEnd`);
  * - otherwise it completes the range.
+ * @param {CalendarRangeSelection} current - The current range selection.
+ * @param {Date} date - The activated date.
+ * @returns {CalendarRangeSelection} The new range selection.
  */
 export function selectRangeDate(current: CalendarRangeSelection, date: Date): CalendarRangeSelection {
   const iso = toIsoDate(date);
@@ -127,7 +135,11 @@ export function selectRangeDate(current: CalendarRangeSelection, date: Date): Ca
   return { valueStart: current.valueStart, valueEnd: iso };
 }
 
-/** Normalizes a preset's two dates into ascending `[start, end]` order regardless of how the preset returned them. */
+/** Normalizes a preset's two dates into ascending `[start, end]` order regardless of how the preset returned them.
+ * @param {Date} a - The first date.
+ * @param {Date} b - The second date.
+ * @returns {{ start: Date; end: Date }} The normalized range.
+ */
 export function normalizeRange(a: Date, b: Date): { start: Date; end: Date } {
   return a <= b ? { start: a, end: b } : { start: b, end: a };
 }

@@ -208,6 +208,7 @@ export class Textfield extends FormControlElement {
 
   /**
    * Validates the current value against format and constraint rules.
+   * @returns {boolean} True if the value is valid.
    * @private
    */
   private _validate(): boolean {
@@ -246,6 +247,8 @@ export class Textfield extends FormControlElement {
    * reading `scrollHeight` against whatever height is already set) is required for the textarea to ever shrink
    * back down, not just grow — `scrollHeight` on an element with an explicit fixed height reports at least that
    * height regardless of how little content is actually in it.
+   * @param {HTMLTextAreaElement} textarea - The textarea element to resize.
+   * @returns {void}
    */
   private _resizeTextarea(textarea: HTMLTextAreaElement) {
     textarea.style.height = 'auto';
@@ -342,6 +345,7 @@ export class Textfield extends FormControlElement {
   /**
    * A text-like control's value is its `value` — what a form reset restores and what a browser
    * state-restore repopulates.
+   * @returns {string} The form value.
    */
   protected override get _formValue(): string {
     return this.value;

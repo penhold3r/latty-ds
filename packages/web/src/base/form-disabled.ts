@@ -51,18 +51,26 @@ export class FormDisabledController implements ReactiveController {
     host.addController(this);
   }
 
-  /*
+  /**
    * No-op — this controller has no connect-time work of its own (formDisabledCallback drives it instead), but
    * ReactiveController's members are all optional, and a class satisfying an all-optional interface with no
    * members in common is a TS error (TS2559); this gives it one.
+   * @returns {void}
    */
   hostConnected() {}
 
-  /** Whether an ancestor `<fieldset>` is currently disabled. */
+  /** Whether an ancestor `<fieldset>` is currently disabled.
+   * @returns {boolean} Whether fieldset is disabled.
+   */
   get fieldsetDisabled(): boolean {
     return this._fieldsetDisabled;
   }
 
+  /**
+   * Sets the fieldset disabled state and requests a host update.
+   * @param {boolean} disabled - The disabled state.
+   * @returns {void}
+   */
   setFieldsetDisabled(disabled: boolean) {
     if (this._fieldsetDisabled === disabled) return;
     this._fieldsetDisabled = disabled;

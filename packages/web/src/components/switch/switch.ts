@@ -130,6 +130,7 @@ export class Switch extends FormControlElement {
    * A toggleable control's value is its checked state — what a form reset restores and what a browser
    * state-restore repopulates. The value it *submits* is `this.value` while checked and nothing at all
    * while not (see `updated()`), which is exactly how a native checkbox behaves.
+   * @returns {boolean} The form value (checked state).
    */
   protected override get _formValue(): boolean {
     return this.checked;
@@ -142,6 +143,8 @@ export class Switch extends FormControlElement {
   /**
    * A toggleable control's saved state is its `value` string — or nothing at all, when it was
    * unchecked — so restored checkedness means "the saved value is this control's own value".
+   * @param {File | string | FormData | null} state - The saved form state.
+   * @returns {void}
    */
   protected override _restoreFormState(state: File | string | FormData | null): void {
     this.checked = typeof state === 'string' && state === this.value;

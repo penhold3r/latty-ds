@@ -102,6 +102,7 @@ export class Button extends FormControlElement {
    * A button holds no value of its own: its `name`/`value` only matter for the submitter that was
    * actually clicked, and the browser handles that itself. A form reset therefore has nothing to
    * restore here, and there is no state for a browser restore to repopulate either.
+   * @returns {undefined} Always undefined.
    */
   protected override get _formValue(): undefined {
     return undefined;

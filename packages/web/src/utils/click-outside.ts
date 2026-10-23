@@ -1,12 +1,11 @@
+// eslint-disable-next-line jsdoc/require-param -- options.event and options.capture are properties of the options object, not separate parameters
 /**
  * Creates a click-outside handler that executes a callback when a click (or pointer) event
  * occurs outside the specified host element.
- * @param host - The element to detect clicks outside of.
- * @param onOutside - The callback function to execute when a click outside occurs.
- * @param options - Optional configuration for the handler.
- * @param options.event - The event type to listen for (defaults to 'pointerdown').
- * @param options.capture - Whether to use event capture (defaults to false).
- * @returns A cleanup function to remove the event listener.
+ * @param {Element} host - The element to detect clicks outside of.
+ * @param {() => void} onOutside - The callback function to execute when a click outside occurs.
+ * @param {{ event?: 'click' | 'pointerdown'; capture?: boolean }} [options] - Optional configuration for the handler.
+ * @returns {() => void} A cleanup function to remove the event listener.
  * @example
  * ```ts
  * const cleanup = createClickOutsideHandler(element, () => console.log('clicked outside'));

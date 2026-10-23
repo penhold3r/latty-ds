@@ -52,7 +52,7 @@ export class Alert extends ThemeableElement {
    * over the alert show a browser tooltip, and assistive tech could read it as a duplicate description (ALR-3).
    * This alias keeps existing markup/JS working; the native `title` attribute is always stripped as soon as
    * it's read, so the tooltip never appears.
-   * @returns The current heading value.
+   * @returns {string} The current heading value.
    */
   get title(): string {
     return this.heading;

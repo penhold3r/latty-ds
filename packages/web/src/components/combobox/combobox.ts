@@ -361,6 +361,7 @@ export class Combobox extends FormControlElement {
   /**
    * A select's value is its `value` — a string for a single select, an array of the selected values for
    * a `multiple` one. It's what a form reset restores and what a browser state-restore repopulates.
+   * @returns {string | string[]} The form value.
    */
   protected override get _formValue(): string | string[] {
     return this.value;

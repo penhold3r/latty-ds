@@ -148,20 +148,16 @@ export default defineConfig([
       'jsdoc/require-description-complete-sentence': 'error',
       'jsdoc/require-hyphen-before-param-description': 'error',
 
-      // Allow missing JSDoc on private members and void functions
-      'jsdoc/require-param': 'off',
-      'jsdoc/require-param-description': 'off',
-      'jsdoc/require-param-name': 'off',
-      'jsdoc/require-param-type': 'off',
-      'jsdoc/require-property': 'off',
-      'jsdoc/require-property-description': 'off',
-      'jsdoc/require-property-name': 'off',
-      'jsdoc/require-property-type': 'off',
-      'jsdoc/require-returns': 'off',
-      'jsdoc/require-returns-check': 'off',
-      'jsdoc/require-returns-description': 'off',
-      'jsdoc/require-returns-type': 'off',
-      'jsdoc/require-throws': 'off',
+      // Require JSDoc for parameters and returns
+      'jsdoc/require-param': 'error',
+      'jsdoc/require-param-description': 'error',
+      'jsdoc/require-param-name': 'error',
+      'jsdoc/require-param-type': 'error',
+      'jsdoc/require-returns': 'error',
+      'jsdoc/require-returns-check': 'error',
+      'jsdoc/require-returns-description': 'error',
+      'jsdoc/require-returns-type': 'error',
+      'jsdoc/require-throws': 'error',
 
       // Disabled (too strict for this codebase)
       'jsdoc/check-alignment': 'off',

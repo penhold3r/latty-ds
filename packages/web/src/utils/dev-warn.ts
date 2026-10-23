@@ -3,6 +3,9 @@
 /**
  * Logs a developer-facing warning, stripped in production. The `typeof process` guard keeps an unbundled browser
  * (no `process` global) silent instead of throwing; bundlers replace `process.env.NODE_ENV` and drop the branch.
+ * @param {string} tag - The warning tag/prefix.
+ * @param {string} message - The warning message.
+ * @returns {void}
  */
 export const devWarn = (tag: string, message: string): void => {
   if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'production') {

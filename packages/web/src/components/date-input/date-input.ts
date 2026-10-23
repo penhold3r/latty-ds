@@ -25,6 +25,8 @@ const DEFAULT_LABELS: DateInputLabels = {
  * Parses a plain `YYYY-MM-DD` string into a local date, or `null` when it isn't one — including real-looking
  * but impossible dates such as `2026-02-31`. A value like `2026-06-15T10:00` (a datetime from an API) is not
  * a plain date either; showing the placeholder is safer than guessing.
+ * @param {string} value - The date string to parse.
+ * @returns {Date | null} The parsed date or null.
  */
 const parseIsoDate = (value: string): Date | null => {
   const match = ISO_DATE.exec(value);
@@ -193,6 +195,7 @@ export class DateInput extends FormControlElement {
   /**
    * A text-like control's value is its `value` — what a form reset restores and what a browser
    * state-restore repopulates.
+   * @returns {string} The form value.
    */
   protected override get _formValue(): string {
     return this.value;

@@ -9,13 +9,18 @@ export const RESIZE_KEY_STEP = 10;
 /**
  * A column's minimum width in pixels, as a plain number — its own `minWidth` when it parses as one,
  * otherwise the shared floor every resizable column gets regardless.
+ * @param {TableColumn<T>} column - The column definition.
+ * @returns {number} The minimum width in pixels.
  */
 export function getColumnMinWidthPx<T>(column: TableColumn<T>): number {
   const parsed = column.minWidth ? parseFloat(column.minWidth) : NaN;
   return Number.isFinite(parsed) ? Math.max(parsed, DEFAULT_MIN_COLUMN_WIDTH) : DEFAULT_MIN_COLUMN_WIDTH;
 }
 
-/** Formats a pixel width for a column style. */
+/** Formats a pixel width for a column style.
+ * @param {number} widthPx - The width in pixels.
+ * @returns {string} The formatted width string.
+ */
 export function formatColumnWidth(widthPx: number): string {
   return `${Math.round(widthPx)}px`;
 }
@@ -32,6 +37,10 @@ export interface ColumnResizeHandlers {
  * a fast movement past the handle's own bounds doesn't drop the gesture) and tracks start
  * position/width as plain closure state. Widths are pushed through the supplied handlers: `update`
  * on every move, `commit` once on release.
+ * @param {PointerEvent} e - The pointer event.
+ * @param {TableColumn<T>} column - The column definition.
+ * @param {ColumnResizeHandlers} handlers - The resize handlers.
+ * @returns {void}
  */
 export function startColumnResize<T>(e: PointerEvent, column: TableColumn<T>, handlers: ColumnResizeHandlers): void {
   if (e.button !== 0 && e.pointerType === 'mouse') return;
@@ -81,6 +90,11 @@ export function startColumnResize<T>(e: PointerEvent, column: TableColumn<T>, ha
  * `<input type="range">`'s own increment keys — unlike the mouse drag, this doesn't flip for RTL,
  * since "right arrow increases" is the more universally understood convention for a plain
  * magnitude control.
+ * @param {KeyboardEvent} e - The keyboard event.
+ * @param {TableColumn<T>} column - The column definition.
+ * @param {number} currentWidthPx - The current width in pixels.
+ * @param {ColumnResizeHandlers} handlers - The resize handlers.
+ * @returns {void}
  */
 export function handleColumnResizeKeydown<T>(
   e: KeyboardEvent,

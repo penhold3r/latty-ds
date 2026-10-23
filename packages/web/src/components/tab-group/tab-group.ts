@@ -258,6 +258,8 @@ export class TabGroup extends ThemeableElement {
    * Scrolls the tab list by ~80% of its own visible size in the scrolling axis — far enough to feel like real
    * progress, short enough to keep context with what was already visible. Instant instead of smooth for anyone
    * who's asked the OS/browser to reduce motion.
+   * @param {1 | -1} direction - The scroll direction (-1 for previous, 1 for next).
+   * @returns {void}
    * @private
    */
   private _scrollBy(direction: 1 | -1) {
@@ -306,6 +308,8 @@ export class TabGroup extends ThemeableElement {
 
   /**
    * Selects a tab (used by both the click and keyboard-navigation handlers below).
+   * @param {Tab} tab - The tab to select.
+   * @returns {void}
    * @private
    */
   private _select(tab: Tab) {
@@ -326,6 +330,8 @@ export class TabGroup extends ThemeableElement {
 
   /**
    * Handles click events from tabs.
+   * @param {Event} e - The click event.
+   * @returns {void}
    * @private
    */
   private handleTabClick = (e: Event) => {
@@ -337,6 +343,8 @@ export class TabGroup extends ThemeableElement {
    * roving tab stop (and, per the automatic-activation model, select the tab); Home/End jump to the first/last
    * enabled tab. Disabled tabs are skipped entirely, matching the radiogroup/listbox patterns elsewhere in the
    * DS.
+   * @param {KeyboardEvent} e - The keyboard event.
+   * @returns {void}
    * @private
    */
   private handleTabKeydown = (e: KeyboardEvent) => {
@@ -395,6 +403,8 @@ export class TabGroup extends ThemeableElement {
 
   /**
    * Watch for value changes.
+   * @param {Map<string, unknown>} changedProperties - The properties that changed.
+   * @returns {void}
    */
   protected updated(changedProperties: Map<string, unknown>) {
     super.updated(changedProperties);

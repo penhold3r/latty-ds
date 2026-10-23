@@ -88,7 +88,7 @@ export class Dialog extends ThemeableElement {
    * over the dialog show a browser tooltip, and assistive tech could read it as a duplicate description.
    * This alias keeps existing markup/JS working; the native `title` attribute is always stripped as soon as
    * it's read, so the tooltip never appears.
-   * @returns The current heading value.
+   * @returns {string} The current heading value.
    */
   get title(): string {
     return this.heading;
@@ -161,6 +161,7 @@ export class Dialog extends ThemeableElement {
 
   /**
    * Opens the dialog.
+   * @returns {void}
    */
   public show() {
     this.open = true;
@@ -168,6 +169,7 @@ export class Dialog extends ThemeableElement {
 
   /**
    * Closes the dialog.
+   * @returns {void}
    */
   public hide() {
     this.open = false;
@@ -175,6 +177,7 @@ export class Dialog extends ThemeableElement {
 
   /**
    * Toggles the dialog open/closed state.
+   * @returns {void}
    */
   public toggle() {
     this.open = !this.open;
@@ -223,7 +226,7 @@ export class Dialog extends ThemeableElement {
     }
   }
 
-  private handleOpen() {
+  private handleOpen(): void {
     /*
      * Store currently focused element to restore later. This is the shadow-rooted host itself when the opener
      * delegates focus (e.g. lt-button) — its own .focus() now correctly moves focus back into its shadow
@@ -248,7 +251,7 @@ export class Dialog extends ThemeableElement {
     this.dispatchEvent(new CustomEvent('open', { bubbles: true, composed: true }));
   }
 
-  private handleClose() {
+  private handleClose(): void {
     if (this._scrollLocked) {
       unlockBodyScroll();
       this._scrollLocked = false;
@@ -267,7 +270,7 @@ export class Dialog extends ThemeableElement {
     this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
   }
 
-  private restoreFocus() {
+  private restoreFocus(): void {
     if (this.previouslyFocusedElement) {
       this.previouslyFocusedElement.focus();
       this.previouslyFocusedElement = undefined;

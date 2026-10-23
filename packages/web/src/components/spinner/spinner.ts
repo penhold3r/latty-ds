@@ -52,6 +52,7 @@ export class Spinner extends ThemeableElement {
   /**
    * Renders the spinner element.
    * Hidden from assistive technologies with aria-hidden.
+   * @returns {TemplateResult} The spinner template.
    */
   render() {
     return html`<span class="spinner" aria-hidden="true"></span>`;

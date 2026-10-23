@@ -51,6 +51,8 @@ export class SnackbarGroup extends ThemeableElement {
   /**
    * Creates and shows a snackbar (or queues it if `max-visible` is already reached). Returns the created
    * `lt-snackbar` instance — call `.hide()` on it directly to dismiss early, or listen for its own events.
+   * @param {SnackbarShowOptions} options - The snackbar options.
+   * @returns {Snackbar} The created snackbar instance.
    */
   public show(options: SnackbarShowOptions): Snackbar {
     const sb = this._build(options);

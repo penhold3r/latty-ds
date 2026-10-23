@@ -11,6 +11,8 @@ export interface OptionGroupRun<T> {
  * (or a different group) become two separate runs, each rendered with its own heading, rather than being
  * merged — consistent with how a native `<select>` renders two `<optgroup label="X">` blocks that aren't
  * adjacent.
+ * @param {readonly T[]} items - The flat list of items, each optionally carrying a `group` property.
+ * @returns {OptionGroupRun<T>[]} An array of contiguous group runs.
  */
 export function groupConsecutive<T extends { group?: string }>(items: readonly T[]): OptionGroupRun<T>[] {
   const runs: OptionGroupRun<T>[] = [];

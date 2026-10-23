@@ -5,6 +5,8 @@
  * option — and a plain press on one of those would pull focus out of the control (in the dropdown case, off
  * it entirely, since the option disappears as the dropdown closes). Preventing just the default action leaves
  * the click itself, and the handler it fires, untouched.
+ * @param {MouseEvent} e - The mouse event to prevent the default action for.
+ * @returns {void}
  */
 export function preventFocusSteal(e: MouseEvent): void {
   e.preventDefault();

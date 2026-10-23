@@ -52,13 +52,17 @@ export class Pagination extends ThemeableElement {
     return { ...DEFAULT_LABELS, ...this.labels };
   }
 
-  /** `total-pages` as a whole number >= 1: NaN, zero and negatives collapse to a single page. */
+  /** `total-pages` as a whole number >= 1: NaN, zero and negatives collapse to a single page.
+   * @returns {number} The total number of pages.
+   */
   private get _total(): number {
     const total = Math.floor(Number(this.totalPages));
     return Number.isFinite(total) && total >= 1 ? total : 1;
   }
 
-  /** `page` clamped into 1.._total, so `page="99"` on a 10-page set is the last page, not "no page selected". */
+  /** `page` clamped into 1.._total, so `page="99"` on a 10-page set is the last page, not "no page selected".
+   * @returns {number} The current page.
+   */
   private get _current(): number {
     const page = Math.floor(Number(this.page));
     return Number.isFinite(page) ? Math.min(Math.max(page, 1), this._total) : 1;
@@ -79,6 +83,7 @@ export class Pagination extends ThemeableElement {
    * `usePagination`): clamp the sibling window so it can't cross the boundary, then when that leaves an
    * ellipsis with nothing actually hidden behind it (no gap, or a 1-page gap not worth collapsing), absorb
    * its slot into an extra page on that side instead of just shrinking the total count.
+   * @returns {(number | '…')[]} The page items.
    */
   private _pages(): (number | '…')[] {
     const total = this._total;

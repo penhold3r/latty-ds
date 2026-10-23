@@ -9,6 +9,8 @@ import '../text/text';
 
 /**
  * Color conversion helpers.
+ * @param {string} hex - The hex color string.
+ * @returns {[number, number, number] | null} The RGB tuple or null.
  */
 function hexToRgbTuple(hex: string): [number, number, number] | null {
   const m = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -45,7 +47,10 @@ function hslToHex(h: number, s: number, l: number): string {
   return `#${toHexByte(f(0))}${toHexByte(f(8))}${toHexByte(f(4))}`;
 }
 
-/** Normalise any supported color string to `#rrggbb`. Returns `''` if unrecognised. */
+/** Normalise any supported color string to `#rrggbb`. Returns `''` if unrecognised.
+ * @param {string} value - The color value.
+ * @returns {string} The normalized hex string.
+ */
 function toHex(value: string): string {
   value = value.trim();
   if (!value) return '';
@@ -64,7 +69,11 @@ function toHex(value: string): string {
   return '';
 }
 
-/** Format a `#rrggbb` hex string into the requested display format. */
+/** Format a `#rrggbb` hex string into the requested display format.
+ * @param {string} hex - The hex color string.
+ * @param {ColorInputFormat} format - The output format.
+ * @returns {string} The formatted color string.
+ */
 function formatColor(hex: string, format: ColorInputFormat): string {
   if (format === 'rgb') {
     const t = hexToRgbTuple(hex);
@@ -165,6 +174,7 @@ export class ColorInput extends FormControlElement {
   /**
    * A text-like control's value is its `value` — what a form reset restores and what a browser
    * state-restore repopulates.
+   * @returns {string} The form value.
    */
   protected override get _formValue(): string {
     return this.value;
