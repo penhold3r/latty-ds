@@ -1,7 +1,7 @@
 /**
  * Converts camel, pascal, snake, or kebab case strings to Title Case.
  * @param {string} str - String to convert.
- * @returns {string}
+ * @returns {string} Title case string.
  */
 export const toTitleCase = (str: string): string => {
   if (!str) return '';

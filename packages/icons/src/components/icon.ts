@@ -172,8 +172,8 @@ export class Icon extends LitElement {
    * Cleans SVG markup for consistent rendering.
    * Removes fixed width/height/stroke-width attributes to allow CSS control.
    * Preserves viewBox for proper scaling.
-   * @param svg - Raw SVG string.
-   * @returns Cleaned SVG string.
+   * @param {string} svg - Raw SVG string.
+   * @returns {string} Cleaned SVG string.
    * @private
    */
   private cleanSVG(svg: string): string {
@@ -193,6 +193,7 @@ export class Icon extends LitElement {
   /**
    * Renders the icon SVG.
    * Returns empty template if no content is available.
+   * @returns {TemplateResult} The icon SVG template.
    */
   render() {
     if (!this.svgContent) {

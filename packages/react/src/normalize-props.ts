@@ -69,6 +69,8 @@ const ENUMERATED_BOOLEAN_ATTRS = new Set(['autocorrect', 'contenteditable', 'dra
  * or omit `false` boolean attributes (`readOnly={false}`, `formNoValidate={false}`) on custom
  * elements the way it does on built-in HTML tags. This helper ensures both client-side rendering
  * and SSR (`renderToString`) emit standard HTML attribute names and semantics.
+ * @param {Record<string, unknown>} props - The React props to normalize.
+ * @returns {Record<string, unknown>} The normalized props with HTML attribute names.
  */
 export function normalizeNativeProps(props: Record<string, unknown>): Record<string, unknown> {
   const normalized: Record<string, unknown> = {};

@@ -46,7 +46,7 @@ class Logger {
 
   /**
    * Generates a formatted timestamp string.
-   * @returns Colored timestamp in [HH:MM:SS] format.
+   * @returns {string} Colored timestamp in [HH:MM:SS] format.
    * @private
    */
   #getTimestamp() {
@@ -55,11 +55,11 @@ class Logger {
 
   /**
    * Formats a log message with timestamp, level, icon, and color.
-   * @param level - Log level name.
-   * @param color - ANSI color code.
-   * @param icon - Unicode icon character.
-   * @param message - Message to log.
-   * @returns Formatted log string.
+   * @param {string} level - Log level name.
+   * @param {string} color - ANSI color code.
+   * @param {string} icon - Unicode icon character.
+   * @param {string} message - Message to log.
+   * @returns {string} Formatted log string.
    * @private
    */
   #format(level: string, color: string, icon: string, message: string) {
@@ -70,7 +70,8 @@ class Logger {
   /**
    * Logs an informational message (cyan).
    * Suppressed when LATTY_SILENT=true.
-   * @param msg - Message to log.
+   * @param {string} msg - Message to log.
+   * @returns {void}
    */
   info(msg: string) {
     if (SILENT) return;
@@ -81,7 +82,8 @@ class Logger {
   /**
    * Logs a warning message (yellow).
    * Always shown regardless of SILENT mode.
-   * @param msg - Message to log.
+   * @param {string} msg - Message to log.
+   * @returns {void}
    */
   warn(msg: string) {
     console.warn(this.#format('warn', Logger.colors.warn, Logger.icons.warn, msg));
@@ -90,7 +92,8 @@ class Logger {
   /**
    * Logs an error message (red).
    * Always shown regardless of SILENT mode.
-   * @param msg - Message to log.
+   * @param {string} msg - Message to log.
+   * @returns {void}
    */
   error(msg: string) {
     console.error(this.#format('error', Logger.colors.error, Logger.icons.error, msg));
@@ -98,7 +101,8 @@ class Logger {
 
   /**
    * Logs a success message (green).
-   * @param msg - Message to log.
+   * @param {string} msg - Message to log.
+   * @returns {void}
    */
   success(msg: string) {
     console.log(this.#format('success', Logger.colors.success, Logger.icons.success, msg));
