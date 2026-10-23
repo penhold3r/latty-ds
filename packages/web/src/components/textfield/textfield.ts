@@ -77,8 +77,6 @@ export class Textfield extends FormControlElement {
     },
     onSync: () => this._syncValidity()
   });
-  // Stable per-instance ids for `label for` and `aria-describedby` — not the host's own `id` attribute,
-  // which a consumer may set for their own purposes (or leave unset).
   private readonly _uid = `lt-textfield-${textfieldCount++}`;
   private readonly _inputId = `${this._uid}-input`;
   private readonly _helperId = `${this._uid}-helper`;
@@ -231,9 +229,6 @@ export class Textfield extends FormControlElement {
     const input = e.target as HTMLInputElement | HTMLTextAreaElement;
     this.value = input.value;
     if (this._touched) this._autoError = !this._validate();
-    // Called directly here (not just in updated()) for instant autosize — Lit's update cycle is async,
-    // so waiting would show a one-frame lag between keystroke and textarea growing.
-    // The double call from updated() is a cheap, idempotent no-op.
     if (this.autosize && this.type === 'multiline') this._resizeTextarea(input as HTMLTextAreaElement);
     this.dispatchEvent(
       new CustomEvent('input', {
@@ -289,9 +284,6 @@ export class Textfield extends FormControlElement {
     );
   }
 
-  // A native single-line <input> inside a <form> implicitly submits on Enter; the inner input here is
-  // in the shadow DOM, so the browser never wires that up on its own. Not on the multiline textarea —
-  // a native <textarea> never implicit-submits on Enter either, since Enter there means "new line".
   private _onKeydown = (e: KeyboardEvent) => {
     if (e.key !== 'Enter' || e.isComposing || this._isDisabled) return;
     const form = this.closest('form') as HTMLFormElement | null;
@@ -320,10 +312,6 @@ export class Textfield extends FormControlElement {
       | HTMLTextAreaElement
       | null;
     if (!inner) return;
-    // The native `type`/`min`/`max`/`minlength`/`maxlength`/`required` attributes are forwarded onto
-    // the inner control, so its own `validity` already covers valueMissing, typeMismatch (email/url),
-    // rangeUnderflow/Overflow (number), and tooShort/tooLong for free — mirror that first.
-    // `_validate()`'s extra rules (such as the `tel` format, which HTML has no native constraint for) become `customError`.
     if (!inner.validity.valid) {
       this._internals.setValidity(toValidityFlags(inner.validity), inner.validationMessage, inner);
     } else if (!this._validate()) {
@@ -342,13 +330,6 @@ export class Textfield extends FormControlElement {
       | HTMLTextAreaElement
       | null;
     if (!inner) return;
-    // Covers every autosize-relevant change NOT already handled by handleInput()'s own direct call: the initial
-    // render with a pre-filled value, and value/rows/autosize changed from outside the user's own typing (e.g. a
-    // consumer sets `el.value` programmatically). No ResizeObserver, no guessed-at `changed.has(...)` gating on
-    // specific props — just unconditionally re-measure on every update while autosize+multiline are both active,
-    // since the call itself is cheap and idempotent; when either is off, clear any leftover inline height
-    // instead, so toggling autosize off restores plain CSS-driven sizing rather than leaving it stuck at
-    // whatever height it last grew to.
     if (this.type === 'multiline') {
       if (this.autosize) this._resizeTextarea(inner as HTMLTextAreaElement);
       else inner.style.height = '';

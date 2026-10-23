@@ -78,7 +78,6 @@ export class Combobox extends FormControlElement {
     ]
   });
 
-  // Scopes generated option/listbox ids to this instance, so two comboboxes on the same page don't collide.
   private readonly _uid = `lt-combobox-${comboboxCount++}`;
 
   /** Array of selectable options. Set as a JS property (`.options`). */
@@ -163,8 +162,6 @@ export class Combobox extends FormControlElement {
 
   private readonly _fieldIds = createFieldIds();
 
-  // Falls back to the raw value when it isn't found in `options` (e.g. a `creatable` value the consumer hasn't
-  // added to `options`) — same fallback `_labelFor` already uses for multiple mode's tags, kept consistent here.
   private get selectedLabel(): string {
     if (Array.isArray(this.value) || !this.value) return '';
     return this.options.find((o) => o.value === this.value)?.label ?? this.value;
@@ -175,23 +172,14 @@ export class Combobox extends FormControlElement {
     return this.options.filter((o) => normalizeSearchText(o.label).includes(q));
   }
 
-  // `activeIndex` counts positions in this list (enabled options only) — using the same list here and in
-  // handleKeydown for both is what keeps the highlighted option and the one Enter selects in agreement (they
-  // used to disagree once any option was disabled: the index came from this list, but the id/highlight below
-  // used to come from the unfiltered one).
   private get enabledOpts(): ComboboxOption[] {
     return this.filtered.filter((o) => !o.disabled);
   }
 
-  // Ids are derived from position in the unfiltered (but query-filtered) list, since that's what's actually
-  // rendered — every option, enabled or not, gets one.
   private _idFor(opt: ComboboxOption): string {
     return `${this._uid}-option-${this.filtered.indexOf(opt)}`;
   }
 
-  // Shown only when the typed text would actually create something new — not already a real option's label,
-  // and (in `multiple` mode) not already one of the selected tags, so re-typing an already-created ad hoc tag
-  // doesn't offer to "create" a duplicate of itself.
   private get _showCreate(): boolean {
     if (!this.creatable || this._isDisabled) return false;
     const q = this.query.trim();
@@ -222,7 +210,6 @@ export class Combobox extends FormControlElement {
     return shouldShowClear(this.clearable, this._selected, this._isDisabled);
   }
 
-  // Stops propagation so clicking clear doesn't also open the dropdown via .input-wrap's own click handler.
   private _clear(e: MouseEvent) {
     e.stopPropagation();
     this.value = clearValue(this.multiple);
@@ -231,16 +218,12 @@ export class Combobox extends FormControlElement {
   }
 
   private async openDropdown() {
-    // A click on the field fires both `focus` and `click`; a second call would start a second floating autoUpdate
-    // and overwrite the first one's cleanup, leaking a scroll/resize listener pair on every open.
     if (this._isDisabled || this.open) return;
     this.open = true;
     this.setAttribute('open', '');
     this.query = '';
     this.activeIndex = -1;
     await this.updateComplete;
-    // Escape (or a selection) can close the dropdown while the render it asked for was still pending —
-    // opening it now would leave a panel on screen that nothing owns.
     if (!this.open) return;
     await this._popup.open();
   }
@@ -281,26 +264,18 @@ export class Combobox extends FormControlElement {
   }
 
   private handleKeydown(e: KeyboardEvent) {
-    // Backspace in an empty field removes the last tag — the same affordance `lt-chip` itself just gained,
-    // and the standard tag-input convention (Gmail's "To" field, GitHub's label picker). Guarded on an empty
-    // query so backspacing through typed text never also eats a tag.
     if (this.multiple && e.key === 'Backspace' && this.query === '' && this._selected.length > 0) {
       e.preventDefault();
       this._removeTag(this._selected[this._selected.length - 1]);
       return;
     }
     if (e.key === 'Escape') {
-      // Only claim the keypress if there's actually something here to close — otherwise an ancestor (an open
-      // <lt-dialog>, which closes itself on Escape unless something else already prevented the keydown's
-      // default) should still see it and close on its own.
       if (this.open) {
         e.preventDefault();
         this.closeDropdown();
       }
       return;
     }
-    // Closed, arrow keys only ever reopen it — the list itself only opened on focus/click/typing, so once
-    // Escape closed it, arrowing (a natural first instinct) silently did nothing.
     if (!this.open) {
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
@@ -311,8 +286,6 @@ export class Combobox extends FormControlElement {
 
     const opts = this.enabledOpts;
     const showCreate = this._showCreate;
-    // The create row, when shown, is one extra nav position past the last real option — so Up/Down treat it
-    // as just one more item to land on, and Enter branches on whether that's where the index landed.
     const maxIndex = showCreate ? opts.length : opts.length - 1;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -321,9 +294,6 @@ export class Combobox extends FormControlElement {
       e.preventDefault();
       this.activeIndex = Math.max(this.activeIndex - 1, 0);
     } else if (e.key === 'Home' || e.key === 'End' || e.key === 'PageDown' || e.key === 'PageUp') {
-      // Arrow Up/Down deliberately clamp at the edges rather than wrap (a text-input-first component, unlike
-      // lt-select) — these follow the same convention, so `nextListboxIndex`'s own clamping for these four
-      // keys already matches without needing anything extra here.
       if (maxIndex >= 0) {
         e.preventDefault();
         this.activeIndex = nextListboxIndex(e.key, this.activeIndex, maxIndex + 1);
@@ -338,9 +308,6 @@ export class Combobox extends FormControlElement {
     }
   }
 
-  // `Node.contains()` is plain tree order, not shadow-including — it doesn't cross into a descendant's own
-  // shadow root. A removable tag's delete button lives inside `lt-chip`'s own shadow root, nested inside this
-  // component's, so checking containment means walking up through each shadow root's host in turn.
   private _isWithin(node: Node): boolean {
     let current: Node | null = node;
     while (current) {
@@ -350,9 +317,6 @@ export class Combobox extends FormControlElement {
     return false;
   }
 
-  // Options are tabindex="-1" (see SEL-3/CMB-1), but `multiple`'s removable tags are real focusable buttons —
-  // so focus can legitimately move within the component without leaving it, the same check `lt-dropdown`
-  // needs for its own (light DOM) children. relatedTarget is the element focus is moving *to*.
   private _onFocusOut = (e: FocusEvent) => {
     if (!this.open) return;
     const next = e.relatedTarget as Node | null;

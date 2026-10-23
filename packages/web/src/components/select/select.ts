@@ -79,7 +79,6 @@ export class Select extends FormControlElement {
     ]
   });
 
-  // Scopes generated option/listbox ids to this instance, so two selects on the same page don't collide.
   private readonly _uid = `lt-select-${selectCount++}`;
 
   /**
@@ -196,8 +195,6 @@ export class Select extends FormControlElement {
     return this.options.filter((o) => !o.disabled);
   }
 
-  // Ids are derived from position in the full option list (disabled options included), since that's what's
-  // actually rendered.
   private _idFor(option: SelectOption): string {
     return `${this._uid}-option-${this.options.indexOf(option)}`;
   }
@@ -206,8 +203,6 @@ export class Select extends FormControlElement {
     return shouldShowClear(this.clearable, this._selected, this._isDisabled);
   }
 
-  // Stops propagation so clicking clear doesn't also toggle the dropdown open — the trigger's own click handler
-  // would otherwise fire right after this one, since the clear button lives inside it.
   private _clear(e: MouseEvent) {
     e.stopPropagation();
     this.value = clearValue(this.multiple);
@@ -307,8 +302,6 @@ export class Select extends FormControlElement {
         if (enabled[this.activeIndex]) this.selectOption(enabled[this.activeIndex]);
         break;
       default:
-        // Typeahead: a single printable character (no modifier combo) jumps to the next option whose label
-        // starts with what's been typed so far.
         if (key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
           const match = this._typeahead.match(
             key,
@@ -347,11 +340,6 @@ export class Select extends FormControlElement {
   override willUpdate(changed: PropertyValues<this>) {
     super.willUpdate(changed);
     if (this.multiple && !Array.isArray(this.value)) this.value = normalizeSelection(this.value);
-    // Start the active option at whichever one is already selected (if any), not always the top — so Arrow
-    // keys move relative to the real selection on reopen, matching a native <select> (SEL-5). Set here, not in
-    // updated(), so it lands in the SAME render pass as `isOpen` flipping, rather than scheduling a second one.
-    // `isOpen` is a private @state field — PropertyValues<this>.has() only accepts public property keys, same
-    // cast table.ts's own willUpdate already uses for its own private state.
     const changedAny = changed as ReadonlyMap<PropertyKey, unknown>;
     if (changedAny.has('isOpen') && this.isOpen) {
       this.activeIndex = this.enabledOptions.findIndex((o) => this._selected.includes(o.value));
