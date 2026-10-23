@@ -7,6 +7,13 @@ import { shapeIcons } from './shapes/index.js';
 import { socialIcons } from './social/index.js';
 import { mediaIcons } from './media/index.js';
 import { techIcons } from './tech/index.js';
+import { foodIcons } from './food/index.js';
+import { commerceIcons } from './commerce/index.js';
+import { transportationIcons } from './transportation/index.js';
+import { filesIcons } from './files/index.js';
+import { communicationIcons } from './communication/index.js';
+import { peopleIcons } from './people/index.js';
+import { dataIcons } from './data/index.js';
 
 export const lattyIcons = {
   ...navigationIcons,
@@ -17,7 +24,14 @@ export const lattyIcons = {
   ...shapeIcons,
   ...socialIcons,
   ...mediaIcons,
-  ...techIcons
+  ...techIcons,
+  ...foodIcons,
+  ...commerceIcons,
+  ...transportationIcons,
+  ...filesIcons,
+  ...communicationIcons,
+  ...peopleIcons,
+  ...dataIcons
 } as const;
 
 export type LattyIconName = keyof typeof lattyIcons;
