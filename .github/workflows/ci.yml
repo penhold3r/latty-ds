@@ -36,6 +36,8 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
+      - uses: microsoft/playwright-github-action@v1
+        with:
+          browsers: chromium
       - run: pnpm --filter './packages/**' -r build
       - run: pnpm a11y
