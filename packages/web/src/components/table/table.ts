@@ -21,36 +21,30 @@ import {
   ColumnResizeDetail
 } from './table.types';
 
+import '@latty-ds/icons';
+import { NativeAttrsController } from '../shared/native-attrs';
+import {
+  getPageRange,
+  getPagedEntries,
+  getVisibleEntries,
+  getVirtualSpacers,
+  virtualizationWarning,
+  DEFAULT_ROW_HEIGHT,
+  type RowEntry,
+  type VirtualizationConfig
+} from '../shared/table-virtualization';
+import { sortData, nextSortState, createSortChangeDetail, getCellValue } from '../shared/table-sort';
+import { getTotalPages, getCurrentPage } from '../shared/table-pagination';
+import { getRowKey, nextRowSelection, nextSelectAllSelection, getSelectAllState } from '../shared/table-selection';
+import { startColumnResize, handleColumnResizeKeydown, type ColumnResizeHandlers } from '../shared/column-resize';
+
 const DEFAULT_LABELS: TableLabels<unknown> = {
   selectRow: (_row, index) => `Select row ${index + 1}`,
   selectAll: 'Select all rows',
   resizeColumn: (column) => `Resize ${column.label} column`
 };
 
-/** Smallest width a column can be dragged/keyed down to, when it has no explicit `minWidth` of its own. */
-const DEFAULT_MIN_COLUMN_WIDTH = 40;
-
-/** Pixels a keyboard arrow-key press grows/shrinks a resizable column by. */
-const RESIZE_KEY_STEP = 10;
-
-/** `rowHeight` fallback when `virtualized` is set but `rowHeight` itself is unset or not a positive number. */
-const DEFAULT_ROW_HEIGHT = 44;
-
-/** Extra rows rendered beyond the strictly-visible range on each side, so a fast scroll doesn't flash blank. */
-const VIRTUAL_OVERSCAN = 4;
-
 let selectionGroupCounter = 0;
-
-/**
- * Default sort comparison. Dates compare by time (their string form sorts "Fri Jan 02" before "Mon Jan 05" but after
- * "Fri Jan 30"), numbers numerically, and everything else as text with natural ordering so "2" precedes "10".
- */
-const compareValues = (a: unknown, b: unknown): number => {
-  if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
-  if (typeof a === 'number' && typeof b === 'number') return a - b;
-  if (typeof a === 'bigint' && typeof b === 'bigint') return a < b ? -1 : a > b ? 1 : 0;
-  return String(a).localeCompare(String(b), undefined, { numeric: true });
-};
 
 /**
  * TBL-4: a malformed `columns`/`data` JSON-string attribute (the SSR/no-JS-property path, see this class's own
@@ -72,9 +66,6 @@ const createJsonArrayConverter = (attrName: string) => ({
     }
   }
 });
-
-import '@latty-ds/icons';
-import { NativeAttrsController } from '../shared/native-attrs';
 
 /**
  * Table component with sorting, responsive modes, and extensive customization.
@@ -351,6 +342,14 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    */
   @state() private sortedData: T[] = [];
 
+  /** Resize handlers routed into this instance's own state + `columnresize` event. */
+  private readonly _resizeHandlers: ColumnResizeHandlers = {
+    update: (key, width) => {
+      this.columnWidthOverrides = { ...this.columnWidthOverrides, [key]: width };
+    },
+    commit: (key, width) => this.dispatchColumnResize(key, width)
+  };
+
   /**
    * Gets the current effective sort state.
    */
@@ -366,27 +365,10 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   }
 
   /**
-   * Resolves a row's selection/rendering identity key: the `row-key` field's value when `row-key` is set,
-   * otherwise the row's index within the sorted data.
-   */
-  private getRowKey(row: T, index: number): RowKey {
-    return this.rowKey ? ((row as Record<string, unknown>)[this.rowKey] as RowKey) : index;
-  }
-
-  /**
    * A column's effective width: a live resize override when one exists, otherwise its configured `width`.
    */
   private getColumnWidth(column: TableColumn<T>): string | undefined {
     return this.columnWidthOverrides[column.key] ?? column.width;
-  }
-
-  /**
-   * A column's minimum width in pixels, as a plain number — its own `minWidth` when it parses as one, otherwise
-   * the shared floor every resizable column gets regardless.
-   */
-  private getColumnMinWidthPx(column: TableColumn<T>): number {
-    const parsed = column.minWidth ? parseFloat(column.minWidth) : NaN;
-    return Number.isFinite(parsed) ? Math.max(parsed, DEFAULT_MIN_COLUMN_WIDTH) : DEFAULT_MIN_COLUMN_WIDTH;
   }
 
   /**
@@ -395,17 +377,12 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * `total-pages`.
    */
   get totalPages(): number {
-    if (!this.pageSize || this.pageSize < 1) return 1;
-    return Math.max(1, Math.ceil(this.sortedData.length / this.pageSize));
+    return getTotalPages({ pageSize: this.pageSize, page: this.page, sortedDataLength: this.sortedData.length });
   }
 
-  /**
-   * `page`, clamped into `1..totalPages` — matches `lt-pagination`'s own `_current` clamping, so an out-of-range
-   * `page` (e.g. The data shrank after a fetch) never renders an empty page.
-   */
+  /** `page`, clamped into `1..totalPages`. */
   private get currentPage(): number {
-    const raw = Math.floor(Number(this.page));
-    return Number.isFinite(raw) ? Math.min(Math.max(raw, 1), this.totalPages) : 1;
+    return getCurrentPage({ pageSize: this.pageSize, page: this.page, sortedDataLength: this.sortedData.length });
   }
 
   /**
@@ -413,43 +390,27 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * so callers that only need the count (e.g. A virtualized render's spacer-row math) stay O(1).
    */
   private get pageRange(): { start: number; end: number } {
-    if (!this.pageSize || this.pageSize < 1) return { start: 0, end: this.sortedData.length };
-    const start = (this.currentPage - 1) * this.pageSize;
-    return { start, end: Math.min(start + this.pageSize, this.sortedData.length) };
+    return getPageRange(this.sortedData.length, this.pageSize, this.currentPage);
   }
 
-  /**
-   * Every row on the current page, paired with its index within `sortedData` — the index is preserved (not
-   * re-based to the page) so `rowIndex` in `column.render`, `rowclick`'s detail, and row-selection keys all keep
-   * meaning "position within the full sorted data", not "position within this page". Slices `sortedData` before
-   * mapping (not after), so this costs O(page size), not O(total rows), regardless of dataset size.
-   */
-  private get pagedEntries(): Array<{ row: T; index: number }> {
-    const { start, end } = this.pageRange;
-    return this.sortedData.slice(start, end).map((row, i) => ({ row, index: start + i }));
+  /** Every row on the current page, paired with its index within `sortedData`. */
+  private get pagedEntries(): RowEntry<T>[] {
+    return getPagedEntries(this.sortedData, this.pageRange);
   }
 
-  /**
-   * The rows actually rendered into the DOM: `pagedEntries` as-is, unless `virtualized` (with `height` set) further
-   * windows it down to just the current page's visible range plus a small overscan buffer. Unlike `pagedEntries`,
-   * this slices `sortedData` directly for the visible window rather than materializing the whole page first, so
-   * scrolling a virtualized table costs O(visible rows), never O(page size) or O(total rows) — the entire point,
-   * since a scroll event recomputes this on every tick.
-   */
-  private get visibleEntries(): Array<{ row: T; index: number }> {
-    const { start: pageStart, end: pageEnd } = this.pageRange;
-    if (!this.virtualized || !this.height) return this.pagedEntries;
+  /** The rows actually rendered into the DOM: the current page, further windowed when virtualized. */
+  private get visibleEntries(): RowEntry<T>[] {
+    return getVisibleEntries(this.sortedData, this.pageRange, this._virtualizationConfig);
+  }
 
-    const pageRowCount = pageEnd - pageStart;
-    const rowHeightPx = this.rowHeight > 0 ? this.rowHeight : DEFAULT_ROW_HEIGHT;
-    const windowStart = Math.max(0, Math.floor(this._scrollTop / rowHeightPx) - VIRTUAL_OVERSCAN);
-    const windowEnd = Math.min(
-      pageRowCount,
-      Math.ceil((this._scrollTop + this._viewportHeight) / rowHeightPx) + VIRTUAL_OVERSCAN
-    );
-    const absoluteStart = pageStart + windowStart;
-    const absoluteEnd = pageStart + windowEnd;
-    return this.sortedData.slice(absoluteStart, absoluteEnd).map((row, i) => ({ row, index: absoluteStart + i }));
+  private get _virtualizationConfig(): VirtualizationConfig {
+    return {
+      virtualized: this.virtualized,
+      height: this.height,
+      rowHeight: this.rowHeight,
+      scrollTop: this._scrollTop,
+      viewportHeight: this._viewportHeight
+    };
   }
 
   override willUpdate(changedProperties: PropertyValues<this>) {
@@ -478,11 +439,9 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   override updated(changedProperties: PropertyValues<this>) {
     super.updated(changedProperties);
-    if ((changedProperties.has('virtualized') || changedProperties.has('height')) && this.virtualized && !this.height) {
-      devWarn(
-        'lt-table',
-        '`virtualized` has no effect without `height` — give the table a bounded height so there is a viewport to compute visible rows against'
-      );
+    if (changedProperties.has('virtualized') || changedProperties.has('height')) {
+      const warning = virtualizationWarning({ virtualized: this.virtualized, height: this.height });
+      if (warning) devWarn('lt-table', warning);
     }
   }
 
@@ -498,40 +457,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * Updates the sorted data based on current sort state.
    */
   private updateSortedData() {
-    const data = this.data ?? [];
-    if (!this.currentSort) {
-      this.sortedData = [...data];
-      return;
-    }
-
-    const columns = this.columns ?? [];
-    const column = columns.find((col) => col.key === this.currentSort!.key);
-    if (!column) {
-      this.sortedData = [...data];
-      return;
-    }
-
-    const sorted = [...data].sort((a, b) => {
-      // Use custom sort function if provided
-      if (column.sortFn) {
-        return column.sortFn(a, b, this.currentSort!.direction);
-      }
-
-      // Default sorting
-      const aValue = this.getCellValue(a, column.key);
-      const bValue = this.getCellValue(b, column.key);
-
-      // Handle null/undefined
-      if (aValue == null && bValue == null) return 0;
-      if (aValue == null) return 1;
-      if (bValue == null) return -1;
-
-      const comparison = compareValues(aValue, bValue);
-
-      return this.currentSort!.direction === 'asc' ? comparison : -comparison;
-    });
-
-    this.sortedData = sorted;
+    this.sortedData = sortData(this.data ?? [], this.columns ?? [], this.currentSort);
   }
 
   /**
@@ -541,45 +467,20 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     if (!column.sortable) return;
 
     const previousSort = this.currentSort;
-    let newDirection: 'asc' | 'desc' = 'asc';
-
-    // Toggle sort direction
-    if (previousSort?.key === column.key) {
-      newDirection = previousSort.direction === 'asc' ? 'desc' : 'asc';
-    }
-
-    const newSort: SortState = {
-      key: column.key,
-      direction: newDirection
-    };
+    const newSort = nextSortState(column, previousSort);
 
     // Update internal state if not controlled
     if (this.sort === undefined) {
       this.internalSort = newSort;
     }
 
-    // Dispatch event
     this.dispatchEvent(
       new CustomEvent<SortChangeDetail>('sortchange', {
         bubbles: true,
         composed: true,
-        detail: {
-          key: column.key,
-          direction: newDirection,
-          previousSort
-        }
+        detail: createSortChangeDetail(column, newSort.direction, previousSort)
       })
     );
-  }
-
-  /**
-   * Updates a column's width live, without telling the consumer yet — used for every step of an in-progress
-   * drag, where firing `columnresize` on each pixel of movement would be excessive. Returns the applied width.
-   */
-  private updateColumnWidth(column: TableColumn<T>, widthPx: number): string {
-    const width = `${Math.round(widthPx)}px`;
-    this.columnWidthOverrides = { ...this.columnWidthOverrides, [column.key]: width };
-    return width;
   }
 
   /**
@@ -597,60 +498,20 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   }
 
   /**
-   * Starts a pointer-drag resize of a column. The handle captures the pointer for the whole drag (so a fast
-   * movement past the handle's own bounds doesn't drop the gesture) and tracks start position/width as plain
-   * closure state — simpler than threading per-drag fields through the instance for something this self-contained.
+   * Starts a pointer-drag resize of a column. Delegates the whole gesture to `startColumnResize`, which tracks
+   * start position/width as closure state and pushes live/committed widths back through `_resizeHandlers`.
    */
   private handleResizeStart(e: PointerEvent, column: TableColumn<T>) {
-    if (e.button !== 0 && e.pointerType === 'mouse') return;
-    e.preventDefault();
-
-    const handle = e.currentTarget as HTMLElement;
-    const th = handle.closest('th') as HTMLElement;
-    const startX = e.clientX;
-    const startWidth = th.getBoundingClientRect().width;
-    const minWidth = this.getColumnMinWidthPx(column);
-    // A physical drag must track the cursor correctly regardless of reading direction: the handle sits at the
-    // column's trailing (inset-inline-end) edge, which is the column's *left* edge under RTL — so "dragging
-    // further away from the column" is a *negative* clientX delta there, the opposite of LTR.
-    const isRtl = getComputedStyle(this).direction === 'rtl';
-
-    handle.setPointerCapture(e.pointerId);
-
-    const onMove = (moveEvent: PointerEvent) => {
-      const rawDelta = moveEvent.clientX - startX;
-      const delta = isRtl ? -rawDelta : rawDelta;
-      this.updateColumnWidth(column, Math.max(minWidth, startWidth + delta));
-    };
-
-    const onUp = (upEvent: PointerEvent) => {
-      handle.removeEventListener('pointermove', onMove);
-      handle.removeEventListener('pointerup', onUp);
-      handle.releasePointerCapture(upEvent.pointerId);
-      const width = this.columnWidthOverrides[column.key];
-      if (width) this.dispatchColumnResize(column.key, width);
-    };
-
-    handle.addEventListener('pointermove', onMove);
-    handle.addEventListener('pointerup', onUp);
+    startColumnResize(e, column, this._resizeHandlers);
   }
 
   /**
    * Keyboard alternative to dragging (WCAG 2.5.1 — a pointer-only drag gesture needs a non-pointer equivalent).
-   * Arrow-right always grows and arrow-left always shrinks, the same as a native `<input type="range">`'s own
-   * increment keys — unlike the mouse drag, this doesn't flip for RTL, since "right arrow increases" is the
-   * more universally understood convention for a plain magnitude control.
    */
   private handleResizeKeydown(e: KeyboardEvent, column: TableColumn<T>) {
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-    e.preventDefault();
-
     const th = (e.currentTarget as HTMLElement).closest('th') as HTMLElement;
     const currentWidth = th.getBoundingClientRect().width;
-    const minWidth = this.getColumnMinWidthPx(column);
-    const step = e.key === 'ArrowRight' ? RESIZE_KEY_STEP : -RESIZE_KEY_STEP;
-    const width = this.updateColumnWidth(column, Math.max(minWidth, currentWidth + step));
-    this.dispatchColumnResize(column.key, width);
+    handleColumnResizeKeydown(e, column, currentWidth, this._resizeHandlers);
   }
 
   /**
@@ -672,14 +533,9 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * or removes just that row's key.
    */
   private toggleRowSelection(row: T, index: number) {
-    const key = this.getRowKey(row, index);
+    const key = getRowKey(row, index, this.rowKey);
     const previousSelected = this.currentSelected;
-    const next =
-      this.selectionMode === 'single'
-        ? [key]
-        : previousSelected.includes(key)
-          ? previousSelected.filter((k) => k !== key)
-          : [...previousSelected, key];
+    const next = nextRowSelection(previousSelected, key, this.selectionMode);
 
     if (this.selected === undefined) this.internalSelected = next;
     this.dispatchEvent(
@@ -696,10 +552,9 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * are unselected, otherwise clears the selection. Multiple mode only.
    */
   private toggleSelectAll() {
-    const allKeys = this.pagedEntries.map(({ row, index }) => this.getRowKey(row, index));
+    const allKeys = this.pagedEntries.map(({ row, index }) => getRowKey(row, index, this.rowKey));
     const previousSelected = this.currentSelected;
-    const allSelected = allKeys.length > 0 && allKeys.every((key) => previousSelected.includes(key));
-    const next = allSelected ? [] : allKeys;
+    const next = nextSelectAllSelection(previousSelected, allKeys);
 
     if (this.selected === undefined) this.internalSelected = next;
     this.dispatchEvent(
@@ -712,19 +567,10 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   }
 
   /**
-   * Gets a cell value from a row using a key (supports nested keys).
-   */
-  private getCellValue(row: unknown, key: string): unknown {
-    return key
-      .split('.')
-      .reduce((obj: Record<string, unknown>, k) => obj?.[k] as Record<string, unknown>, row as Record<string, unknown>);
-  }
-
-  /**
    * Renders a cell's content.
    */
   private renderCell(column: TableColumn<T>, row: T, rowIndex: number): unknown {
-    const value = this.getCellValue(row, column.key);
+    const value = getCellValue(row, column.key);
 
     if (column.render) {
       return column.render(value, row, rowIndex);
@@ -759,8 +605,8 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
    * that, so stacked cells don't lose their column context entirely once sighted users can no longer see it either.
    */
   private renderHeader() {
-    const allKeys = this.pagedEntries.map(({ row, index }) => this.getRowKey(row, index));
-    const selectedCount = allKeys.filter((key) => this.currentSelected.includes(key)).length;
+    const allKeys = this.pagedEntries.map(({ row, index }) => getRowKey(row, index, this.rowKey));
+    const selectAll = getSelectAllState(this.currentSelected, allKeys);
 
     const isVirtualized = this.virtualized && !!this.height;
 
@@ -773,8 +619,8 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
                   <input
                     type="checkbox"
                     aria-label=${this._labels.selectAll}
-                    .checked=${selectedCount > 0 && selectedCount === allKeys.length}
-                    .indeterminate=${selectedCount > 0 && selectedCount < allKeys.length}
+                    .checked=${selectAll.checked}
+                    .indeterminate=${selectAll.indeterminate}
                     @click=${(e: Event) => e.stopPropagation()}
                     @change=${() => this.toggleSelectAll()}
                   />
@@ -865,11 +711,10 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     }
 
     const isVirtualized = this.virtualized && !!this.height;
-    const { start: pageStart, end: pageEnd } = this.pageRange;
-    const pageRowCount = pageEnd - pageStart;
+    const { start: pageStart } = this.pageRange;
 
     const renderRow = (row: T, index: number) => {
-      const key = this.getRowKey(row, index);
+      const key = getRowKey(row, index, this.rowKey);
       const selected = this.currentSelected.includes(key);
       // +2, not +1: row-index 1 is the header, matching the ARIA Grid pattern's row numbering, so a row's own
       // position within the page (0-based) needs to shift by one more than usual to land after it.
@@ -929,7 +774,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     const rows = this.rowKey
       ? repeat(
           entries,
-          ({ row, index }) => this.getRowKey(row, index),
+          ({ row, index }) => getRowKey(row, index, this.rowKey),
           ({ row, index }) => renderRow(row, index)
         )
       : entries.map(({ row, index }) => renderRow(row, index));
@@ -947,10 +792,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     // sized to stand in for however many rows aren't currently rendered on each side, do that without needing
     // any non-table layout. aria-hidden since they carry no real content, just filler height.
     const rowHeightPx = this.rowHeight > 0 ? this.rowHeight : DEFAULT_ROW_HEIGHT;
-    const firstRenderedOffset = entries.length ? entries[0].index - pageStart : 0;
-    const lastRenderedOffset = entries.length ? entries[entries.length - 1].index - pageStart : -1;
-    const topSpacerRows = firstRenderedOffset;
-    const bottomSpacerRows = pageRowCount - 1 - lastRenderedOffset;
+    const { topSpacerRows, bottomSpacerRows } = getVirtualSpacers(entries, this.pageRange);
     const colCount = Math.max(columns.length + selectionColumnCount, 1);
     const spacerRow = (rowCount: number) =>
       rowCount > 0
