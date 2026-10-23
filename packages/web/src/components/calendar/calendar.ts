@@ -15,6 +15,19 @@ import type {
   CalendarDisabledDates
 } from './calendar.types';
 import { dispatch } from '../../utils';
+import {
+  deriveWeekStart,
+  safeDateTimeFormat,
+  getIsoWeekNumber,
+  parseIsoDate,
+  toIsoDate,
+  isSameDay,
+  addMonths,
+  isMonthOutOfRange,
+  getWeekdayLabels
+} from './calendar-date';
+import { buildCalendarDays, groupDaysIntoWeeks, selectRangeDate, normalizeRange } from './calendar-grid';
+import { canNavigateMonth, canNavigateYear, isDateInView, getArrowFocusDate } from './calendar-navigation';
 
 const DEFAULT_LABELS: CalendarLabels = {
   today: 'Today',
@@ -26,60 +39,6 @@ const DEFAULT_LABELS: CalendarLabels = {
   weekNumberHeader: 'Wk',
   weekNumber: (week) => `Week ${week}`
 };
-/**
- * `Intl.Locale.prototype.getWeekInfo` isn't in this project's configured `lib` (adding it would pull in
- * the unrelated, much larger Temporal proposal's ambient types via lib.esnext.intl.d.ts) — declare just
- * the one method shape we actually use instead of widening the global lib for every package.
- */
-interface LocaleWithWeekInfo {
-  getWeekInfo?(): { firstDay: number };
-}
-
-/**
- * The locale's own first day of the week (`getWeekInfo().firstDay` is 1 = Monday … 7 = Sunday per spec; `% 7`
- * converts it to this component's `Date#getDay()`-style convention, 0 = Sunday … 6 = Saturday). Falls back to
- * Sunday for an invalid locale string or a runtime with no `getWeekInfo` support.
- */
-function deriveWeekStart(locale: string): CalendarWeekStart {
-  try {
-    const info = (new Intl.Locale(locale) as unknown as LocaleWithWeekInfo).getWeekInfo?.();
-    if (info) return String(info.firstDay % 7) as CalendarWeekStart;
-  } catch {
-    // Invalid/unsupported locale string — Intl.Locale's constructor throws a RangeError for these.
-  }
-  return '0';
-}
-
-/**
- * `Intl.DateTimeFormat`'s constructor throws a RangeError for a malformed or incomplete locale string — not just
- * a programming mistake to guard against defensively, but a state `locale` can genuinely pass through for real:
- * it's a plain reflected attribute, and e.g. The docs Playground's text control sets it live on every keystroke,
- * so a user typing "es-US" character by character briefly has it set to "e-US", "es-", etc. Every render() call
- * site below goes through this instead of constructing `Intl.DateTimeFormat` directly, falling back to the
- * 'en-US' default rather than letting a transient bad value crash the whole component's render.
- */
-function safeDateTimeFormat(locale: string, options: Intl.DateTimeFormatOptions): Intl.DateTimeFormat {
-  try {
-    return new Intl.DateTimeFormat(locale, options);
-  } catch {
-    return new Intl.DateTimeFormat('en-US', options);
-  }
-}
-
-/**
- * The ISO 8601 week number (1-53) for the week containing `date`, computed off that week's Thursday — the day
- * ISO 8601 uses to decide which year (and so which week-1) a week spanning a year boundary belongs to. Shown
- * against each row's own first day regardless of `week-start`: like most calendar UIs that offer week numbers,
- * this component doesn't re-derive a locale-relative week numbering scheme, just the one standard everyone
- * recognizes.
- */
-function getIsoWeekNumber(date: Date): number {
-  const thursday = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-  const isoDayOfWeek = thursday.getUTCDay() || 7; // Sunday (0) becomes 7, so Monday=1..Sunday=7
-  thursday.setUTCDate(thursday.getUTCDate() + 4 - isoDayOfWeek);
-  const yearStart = new Date(Date.UTC(thursday.getUTCFullYear(), 0, 1));
-  return Math.ceil(((thursday.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-}
 
 /**
  * A visual calendar grid for single-date or date-range selection.
@@ -186,14 +145,14 @@ export class Calendar extends ThemeableElement {
   override willUpdate(changed: PropertyValues<this>) {
     super.willUpdate(changed);
     if (changed.has('value') && this.value) {
-      const d = this._parseDate(this.value);
+      const d = parseIsoDate(this.value);
       if (d) {
         this._viewYear = d.getFullYear();
         this._viewMonth = d.getMonth();
       }
     }
     if (changed.has('valueStart') && this.valueStart) {
-      const d = this._parseDate(this.valueStart);
+      const d = parseIsoDate(this.valueStart);
       if (d) {
         this._viewYear = d.getFullYear();
         this._viewMonth = d.getMonth();
@@ -204,224 +163,56 @@ export class Calendar extends ThemeableElement {
     }
   }
 
-  /**
-   * Whether every day of the given month falls outside `[min, max]` — not just the 1st, so a month that's only
-   * partially in range (the common case right at a boundary) still counts as navigable.
-   */
-  private _isMonthOutOfRange(year: number, month: number): boolean {
-    const firstOfMonth = new Date(year, month, 1);
-    const lastOfMonth = new Date(year, month + 1, 0);
-    if (this.min) {
-      const min = this._parseDate(this.min);
-      if (min && lastOfMonth < min) return true;
-    }
-    if (this.max) {
-      const max = this._parseDate(this.max);
-      if (max && firstOfMonth > max) return true;
-    }
-    return false;
+  /** Parsed `min`, or `null` when unset/invalid. */
+  private get _minDate(): Date | null {
+    return parseIsoDate(this.min);
   }
 
-  /** Same idea as `_isMonthOutOfRange`, for the year-picker's own prev/next-year navigation. */
-  private _isYearOutOfRange(year: number): boolean {
-    if (this.min) {
-      const min = this._parseDate(this.min);
-      if (min && new Date(year, 11, 31) < min) return true;
-    }
-    if (this.max) {
-      const max = this._parseDate(this.max);
-      if (max && new Date(year, 0, 1) > max) return true;
-    }
-    return false;
-  }
-
-  private _monthAtOffset(offset: number): { year: number; month: number } {
-    let m = this._viewMonth + offset;
-    let y = this._viewYear;
-    while (m > 11) {
-      m -= 12;
-      y++;
-    }
-    return { year: y, month: m };
-  }
-
-  private _parseDate(iso: string): Date | null {
-    if (!iso) return null;
-    // Append T00:00:00 to prevent UTC offset shifting the date
-    const d = new Date(`${iso}T00:00:00`);
-    return isNaN(d.getTime()) ? null : d;
-  }
-
-  private _toIso(date: Date): string {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  }
-
-  private _isSameDay(a: Date, b: Date): boolean {
-    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  /** Parsed `max`, or `null` when unset/invalid. */
+  private get _maxDate(): Date | null {
+    return parseIsoDate(this.max);
   }
 
   private _isDisabled(date: Date): boolean {
     if (this.disabled) return true;
-    if (this.min) {
-      const min = this._parseDate(this.min);
-      if (min && date < min) return true;
-    }
-    if (this.max) {
-      const max = this._parseDate(this.max);
-      if (max && date > max) return true;
-    }
+    const min = this._minDate;
+    if (min && date < min) return true;
+    const max = this._maxDate;
+    if (max && date > max) return true;
     return typeof this.disabledDates === 'function'
       ? this.disabledDates(date)
-      : this.disabledDates.some((d) => this._isSameDay(d, date));
+      : this.disabledDates.some((d) => isSameDay(d, date));
   }
 
   private _buildDays(year = this._viewYear, month = this._viewMonth): CalendarDay[] {
-    const today = new Date();
-    const selected = this._parseDate(this.value);
-    const weekStart = Number(this._weekStart);
-
-    const rangeStart = this.mode === 'range' ? this._parseDate(this.valueStart) : null;
-    const rangeEnd = this.mode === 'range' ? this._parseDate(this.valueEnd) : null;
-
-    // Hover preview: normalize so visHoverStart <= visHoverEnd
-    let visHoverStart: Date | null = null;
-    let visHoverEnd: Date | null = null;
-    if (rangeStart && !rangeEnd && this._hoverDate) {
-      if (this._hoverDate >= rangeStart) {
-        visHoverStart = rangeStart;
-        visHoverEnd = this._hoverDate;
-      } else {
-        visHoverStart = this._hoverDate;
-        visHoverEnd = rangeStart;
-      }
-    }
-
-    const firstOfMonth = new Date(year, month, 1);
-    const lastOfMonth = new Date(year, month + 1, 0);
-
-    const startOffset = (firstOfMonth.getDay() - weekStart + 7) % 7;
-    const totalCurrent = startOffset + lastOfMonth.getDate();
-    const endOffset = totalCurrent % 7 === 0 ? 0 : 7 - (totalCurrent % 7);
-
-    const days: CalendarDay[] = [];
-
-    const buildDay = (date: Date, isCurrentMonth: boolean): CalendarDay => {
-      const isRangeStart = !!rangeStart && this._isSameDay(date, rangeStart);
-      const isRangeEnd = !!rangeEnd && this._isSameDay(date, rangeEnd);
-      const isInRange =
-        !!rangeStart &&
-        !!rangeEnd &&
-        date > rangeStart &&
-        date < rangeEnd &&
-        !this._isSameDay(date, rangeStart) &&
-        !this._isSameDay(date, rangeEnd);
-
-      const isRangeHoverStart = !!visHoverStart && this._isSameDay(date, visHoverStart);
-      const isRangeHoverEnd =
-        !!visHoverEnd && !this._isSameDay(visHoverStart!, visHoverEnd) && this._isSameDay(date, visHoverEnd);
-      const isInHoverRange = !!visHoverStart && !!visHoverEnd && date > visHoverStart && date < visHoverEnd;
-
-      return {
-        date,
-        isCurrentMonth,
-        isToday: this._isSameDay(date, today),
-        isSelected: this.mode === 'single' && selected ? this._isSameDay(date, selected) : false,
-        isDisabled: this._isDisabled(date),
-        isRangeStart,
-        isRangeEnd,
-        isInRange,
-        isRangeHoverStart,
-        isRangeHoverEnd,
-        isInHoverRange
-      };
-    };
-
-    for (let i = startOffset; i > 0; i--) {
-      days.push(buildDay(new Date(year, month, 1 - i), false));
-    }
-
-    for (let d = 1; d <= lastOfMonth.getDate(); d++) {
-      days.push(buildDay(new Date(year, month, d), true));
-    }
-
-    for (let d = 1; d <= endOffset; d++) {
-      days.push(buildDay(new Date(year, month + 1, d), false));
-    }
-
-    return days;
-  }
-
-  private _getWeekdayLabels(): string[] {
-    const weekStart = Number(this._weekStart);
-    const fmt = safeDateTimeFormat(this.locale, { weekday: 'narrow' });
-    // Jan 4 2026 is a Sunday — use as reference
-    const refSunday = new Date(2026, 0, 4);
-    return Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(refSunday);
-      date.setDate(refSunday.getDate() + weekStart + i);
-      return fmt.format(date);
+    return buildCalendarDays({
+      year,
+      month,
+      weekStart: Number(this._weekStart),
+      mode: this.mode,
+      selectedDate: parseIsoDate(this.value),
+      rangeStart: this.mode === 'range' ? parseIsoDate(this.valueStart) : null,
+      rangeEnd: this.mode === 'range' ? parseIsoDate(this.valueEnd) : null,
+      hoverDate: this._hoverDate,
+      today: new Date(),
+      isDisabled: (date) => this._isDisabled(date)
     });
-  }
-
-  /**
-   * Whether navigating the month view by `delta` months would land on a view with at least one in-range day. In
-   * multi-month layout, navigating shifts every panel by one month — the relevant boundary is whichever edge
-   * panel moves further from what's already visible: the new base month going backward, or the last panel
-   * (base + months - 1) going forward. For `months === 1` both reduce to the same single month either way.
-   */
-  private _canNavigateMonth(delta: number): boolean {
-    let month = this._viewMonth + delta;
-    let year = this._viewYear;
-    while (month < 0) {
-      month += 12;
-      year--;
-    }
-    while (month > 11) {
-      month -= 12;
-      year++;
-    }
-
-    let edgeMonth = delta < 0 ? month : month + (this.months - 1);
-    let edgeYear = year;
-    while (edgeMonth > 11) {
-      edgeMonth -= 12;
-      edgeYear++;
-    }
-    return !this._isMonthOutOfRange(edgeYear, edgeMonth);
-  }
-
-  /** Same idea as `_canNavigateMonth`, for the year-picker's own prev/next-year buttons. */
-  private _canNavigateYear(delta: number): boolean {
-    return !this._isYearOutOfRange(this._pickerYear + delta);
   }
 
   private _navigate(delta: number) {
     if (this._pickingMonthYear) {
-      if (!this._canNavigateYear(delta)) return;
+      if (!canNavigateYear(this._pickerYear, delta, this._minDate, this._maxDate)) return;
       this._pickerYear += delta;
       return;
     }
 
     // Guarded here too, not just on the rendered buttons' `disabled` attribute, since PageUp/PageDown calls this
     // directly from the keyboard.
-    if (!this._canNavigateMonth(delta)) return;
+    if (!canNavigateMonth(this._viewYear, this._viewMonth, this.months, delta, this._minDate, this._maxDate)) return;
 
-    let month = this._viewMonth + delta;
-    let year = this._viewYear;
-    while (month < 0) {
-      month += 12;
-      year--;
-    }
-    while (month > 11) {
-      month -= 12;
-      year++;
-    }
-
-    this._viewMonth = month;
-    this._viewYear = year;
+    const next = addMonths(this._viewYear, this._viewMonth, delta);
+    this._viewYear = next.year;
+    this._viewMonth = next.month;
     this._focusedDate = null;
     dispatch(this, 'monthchange', { year: this._viewYear, month: this._viewMonth });
   }
@@ -452,37 +243,22 @@ export class Calendar extends ThemeableElement {
     }
 
     if (this.mode === 'range') {
-      const iso = this._toIso(day.date);
-      const hasStart = !!this.valueStart;
-      const hasEnd = !!this.valueEnd;
+      const current = { valueStart: this.valueStart, valueEnd: this.valueEnd };
+      const next = selectRangeDate(current, day.date);
+      const startingNew = !current.valueStart || !!current.valueEnd;
 
-      if (!hasStart || hasEnd) {
-        // Begin a new range selection
-        this.valueStart = iso;
-        this.valueEnd = '';
-        this._hoverDate = null;
-      } else {
-        const startDate = this._parseDate(this.valueStart)!;
-        if (this._isSameDay(day.date, startDate)) {
-          // Clicked same day as start — clear
-          this.valueStart = '';
-        } else if (day.date < startDate) {
-          // Clicked before start — swap
-          this.valueEnd = this.valueStart;
-          this.valueStart = iso;
-        } else {
-          this.valueEnd = iso;
-        }
+      this.valueStart = next.valueStart;
+      this.valueEnd = next.valueEnd;
+      if (startingNew) this._hoverDate = null;
 
-        if (this.valueStart && this.valueEnd) {
-          dispatch(this, 'change', { valueStart: this.valueStart, valueEnd: this.valueEnd });
-        }
+      if (this.valueStart && this.valueEnd) {
+        dispatch(this, 'change', { valueStart: this.valueStart, valueEnd: this.valueEnd });
       }
       this._focusedDate = day.date;
       return;
     }
 
-    const iso = this._toIso(day.date);
+    const iso = toIsoDate(day.date);
     this.value = iso;
     this._focusedDate = day.date;
     dispatch(this, 'change', { value: iso });
@@ -490,9 +266,9 @@ export class Calendar extends ThemeableElement {
 
   private _selectPreset(preset: CalendarPreset) {
     const [a, b] = preset.getRange();
-    const [start, end] = a <= b ? [a, b] : [b, a];
-    this.valueStart = this._toIso(start);
-    this.valueEnd = this._toIso(end);
+    const { start, end } = normalizeRange(a, b);
+    this.valueStart = toIsoDate(start);
+    this.valueEnd = toIsoDate(end);
     this._hoverDate = null;
     this._focusedDate = start;
     dispatch(this, 'change', { valueStart: this.valueStart, valueEnd: this.valueEnd });
@@ -500,7 +276,7 @@ export class Calendar extends ThemeableElement {
 
   private _goToToday() {
     const today = new Date();
-    if (this._isMonthOutOfRange(today.getFullYear(), today.getMonth())) return;
+    if (isMonthOutOfRange(today.getFullYear(), today.getMonth(), this._minDate, this._maxDate)) return;
     this._viewYear = today.getFullYear();
     this._viewMonth = today.getMonth();
     this._focusedDate = null;
@@ -534,8 +310,8 @@ export class Calendar extends ThemeableElement {
     if (this.mode !== 'range' || this.valueEnd) return;
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-date]');
     if (btn?.dataset.date) {
-      const d = this._parseDate(btn.dataset.date);
-      if (d && (!this._hoverDate || !this._isSameDay(d, this._hoverDate))) {
+      const d = parseIsoDate(btn.dataset.date);
+      if (d && (!this._hoverDate || !isSameDay(d, this._hoverDate))) {
         this._hoverDate = d;
       }
     }
@@ -550,52 +326,23 @@ export class Calendar extends ThemeableElement {
     // somewhere else entirely (e.g. today's date, while the cell that's really focused, and rendered as the
     // roving tab stop, is the 1st of whatever month is in view).
     const currentIso = (e.currentTarget as HTMLElement).dataset.date ?? '';
-    const focusedDate = this._parseDate(currentIso) ?? new Date(this._viewYear, this._viewMonth, 1);
-    const next = new Date(focusedDate);
-    const weekStart = Number(this._weekStart);
+    const focusedDate = parseIsoDate(currentIso) ?? new Date(this._viewYear, this._viewMonth, 1);
 
-    switch (e.key) {
-      case 'ArrowRight':
-        next.setDate(next.getDate() + 1);
-        break;
-      case 'ArrowLeft':
-        next.setDate(next.getDate() - 1);
-        break;
-      case 'ArrowDown':
-        next.setDate(next.getDate() + 7);
-        break;
-      case 'ArrowUp':
-        next.setDate(next.getDate() - 7);
-        break;
-      case 'Home': {
-        const offset = (next.getDay() - weekStart + 7) % 7;
-        next.setDate(next.getDate() - offset);
-        break;
-      }
-      case 'End': {
-        const offset = (next.getDay() - weekStart + 7) % 7;
-        next.setDate(next.getDate() + (6 - offset));
-        break;
-      }
-      case 'PageUp':
-        e.preventDefault();
-        this._navigate(-1);
-        return;
-      case 'PageDown':
-        e.preventDefault();
-        this._navigate(1);
-        return;
-      case 'Enter':
-      case ' ': {
-        e.preventDefault();
-        const days = this._buildDays();
-        const day = days.find((d) => this._isSameDay(d.date, focusedDate));
-        if (day && !day.isDisabled) this._selectDay(day);
-        return;
-      }
-      default:
-        return;
+    if (e.key === 'PageUp' || e.key === 'PageDown') {
+      e.preventDefault();
+      this._navigate(e.key === 'PageUp' ? -1 : 1);
+      return;
     }
+
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const day = this._buildDays().find((d) => isSameDay(d.date, focusedDate));
+      if (day && !day.isDisabled) this._selectDay(day);
+      return;
+    }
+
+    const next = getArrowFocusDate(focusedDate, e.key, Number(this._weekStart));
+    if (!next) return;
 
     e.preventDefault();
 
@@ -605,7 +352,7 @@ export class Calendar extends ThemeableElement {
     }
 
     this._focusedDate = next;
-    this._focusCell(this._toIso(next));
+    this._focusCell(toIsoDate(next));
   };
 
   private _renderDay(day: CalendarDay, rovingDate: Date) {
@@ -633,7 +380,7 @@ export class Calendar extends ThemeableElement {
       .filter(Boolean)
       .join(' ');
 
-    const iso = this._toIso(day.date);
+    const iso = toIsoDate(day.date);
     const isSelected = day.isSelected || day.isRangeStart || day.isRangeEnd;
 
     return html`
@@ -644,7 +391,7 @@ export class Calendar extends ThemeableElement {
         aria-disabled=${day.isDisabled ? 'true' : nothing}
         aria-selected=${isSelected ? 'true' : 'false'}
         aria-label=${this._dayAriaLabel(day.date)}
-        tabindex=${this._isSameDay(day.date, rovingDate) ? 0 : -1}
+        tabindex=${isSameDay(day.date, rovingDate) ? 0 : -1}
         @click=${() => this._selectDay(day)}
         @keydown=${this._handleKeyDown}
       >
@@ -655,9 +402,8 @@ export class Calendar extends ThemeableElement {
 
   private _renderMonthGrid(year: number, month: number, gridLabel: string, rovingDate: Date) {
     const days = this._buildDays(year, month);
-    const weekdayLabels = this._getWeekdayLabels();
-    const weeks: CalendarDay[][] = [];
-    for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7));
+    const weekdayLabels = getWeekdayLabels(this.locale, Number(this._weekStart));
+    const weeks = groupDaysIntoWeeks(days);
 
     return html`
       <div class="month-grid">
@@ -705,17 +451,10 @@ export class Calendar extends ThemeableElement {
     // A candidate for the roving tab stop only counts if it actually falls in one of the visible months —
     // otherwise no rendered cell matches it and nothing ends up as a Tab stop at all (e.g. the selected date's
     // month has been paged away from).
-    const isInView = (date: Date): boolean => {
-      if (!isMulti) return date.getFullYear() === this._viewYear && date.getMonth() === this._viewMonth;
-      for (let i = 0; i < this.months; i++) {
-        const { year, month } = this._monthAtOffset(i);
-        if (date.getFullYear() === year && date.getMonth() === month) return true;
-      }
-      return false;
-    };
+    const isInView = (date: Date): boolean => isDateInView(date, this._viewYear, this._viewMonth, this.months);
 
     // Roving tabindex anchor — shared across all panels
-    const rovingAnchor = this._parseDate(this.mode === 'range' ? this.valueStart : this.value);
+    const rovingAnchor = parseIsoDate(this.mode === 'range' ? this.valueStart : this.value);
     const rovingDate =
       (this._focusedDate && isInView(this._focusedDate) ? this._focusedDate : null) ??
       (rovingAnchor && isInView(rovingAnchor) ? rovingAnchor : null) ??
@@ -729,7 +468,8 @@ export class Calendar extends ThemeableElement {
           appearance="outlined"
           variant="neutral"
           size="sm"
-          ?disabled=${this.disabled || this._isMonthOutOfRange(today.getFullYear(), today.getMonth())}
+          ?disabled=${this.disabled ||
+          isMonthOutOfRange(today.getFullYear(), today.getMonth(), this._minDate, this._maxDate)}
           @click=${this._goToToday}
         >
           ${this._labels.today}
@@ -755,7 +495,7 @@ export class Calendar extends ThemeableElement {
     // ── Multi-month layout ──────────────────────────────────────────────
     if (isMulti) {
       const panelLabels = Array.from({ length: this.months }, (_, i) => {
-        const { year, month } = this._monthAtOffset(i);
+        const { year, month } = addMonths(this._viewYear, this._viewMonth, i);
         return safeDateTimeFormat(this.locale, { month: 'long', year: 'numeric' }).format(new Date(year, month));
       });
 
@@ -773,7 +513,8 @@ export class Calendar extends ThemeableElement {
                 icon="arrow-left"
                 label=${this._labels.previousMonth}
                 size="sm"
-                ?disabled=${this.disabled || !this._canNavigateMonth(-1)}
+                ?disabled=${this.disabled ||
+                !canNavigateMonth(this._viewYear, this._viewMonth, this.months, -1, this._minDate, this._maxDate)}
                 @click=${() => this._navigate(-1)}
               ></lt-icon-button>
               <div class="month-label-row">
@@ -789,7 +530,8 @@ export class Calendar extends ThemeableElement {
                 icon="arrow-right"
                 label=${this._labels.nextMonth}
                 size="sm"
-                ?disabled=${this.disabled || !this._canNavigateMonth(1)}
+                ?disabled=${this.disabled ||
+                !canNavigateMonth(this._viewYear, this._viewMonth, this.months, 1, this._minDate, this._maxDate)}
                 @click=${() => this._navigate(1)}
               ></lt-icon-button>
             </div>
@@ -799,8 +541,8 @@ export class Calendar extends ThemeableElement {
                 (_, i) => html`
                   <div class="month-col">
                     ${this._renderMonthGrid(
-                      this._monthAtOffset(i).year,
-                      this._monthAtOffset(i).month,
+                      addMonths(this._viewYear, this._viewMonth, i).year,
+                      addMonths(this._viewYear, this._viewMonth, i).month,
                       panelLabels[i],
                       rovingDate
                     )}
@@ -820,8 +562,12 @@ export class Calendar extends ThemeableElement {
     );
     const prevLabel = this._pickingMonthYear ? this._labels.previousYear : this._labels.previousMonth;
     const nextLabel = this._pickingMonthYear ? this._labels.nextYear : this._labels.nextMonth;
-    const canNavigatePrev = this._pickingMonthYear ? this._canNavigateYear(-1) : this._canNavigateMonth(-1);
-    const canNavigateNext = this._pickingMonthYear ? this._canNavigateYear(1) : this._canNavigateMonth(1);
+    const canNavigatePrev = this._pickingMonthYear
+      ? canNavigateYear(this._pickerYear, -1, this._minDate, this._maxDate)
+      : canNavigateMonth(this._viewYear, this._viewMonth, this.months, -1, this._minDate, this._maxDate);
+    const canNavigateNext = this._pickingMonthYear
+      ? canNavigateYear(this._pickerYear, 1, this._minDate, this._maxDate)
+      : canNavigateMonth(this._viewYear, this._viewMonth, this.months, 1, this._minDate, this._maxDate);
     // WCAG 2.5.3 Label in Name: the visible text (a live-updating month/year) has to be part of the accessible
     // name, not replaced by it — otherwise a speech-input user saying what they see on the button can't match it.
     const monthYearVisibleText = this._pickingMonthYear ? String(this._pickerYear) : monthLabel;
@@ -866,7 +612,7 @@ export class Calendar extends ThemeableElement {
               return html`
                 <button
                   class="picker-month-btn ${isCurrent ? 'picker-month-btn--current' : ''}"
-                  ?disabled=${this.disabled || this._isMonthOutOfRange(this._pickerYear, i)}
+                  ?disabled=${this.disabled || isMonthOutOfRange(this._pickerYear, i, this._minDate, this._maxDate)}
                   @click=${() => this._selectPickerMonth(i)}
                 >
                   ${label}
