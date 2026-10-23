@@ -42,11 +42,13 @@ export function startColumnResize<T>(e: PointerEvent, column: TableColumn<T>, ha
   const startX = e.clientX;
   const startWidth = th.getBoundingClientRect().width;
   const minWidth = getColumnMinWidthPx(column);
-  // A physical drag must track the cursor correctly regardless of reading direction: the handle sits
-  // at the column's trailing (inset-inline-end) edge, which is the column's *left* edge under RTL — so
-  // "dragging further away from the column" is a *negative* clientX delta there, the opposite of LTR.
-  // `direction` is inherited, and the resolve-on-read elements are the host + its shadow tree, so read it from the
-  // shadow host when there is one (a bare descendant's computed style isn't guaranteed to expose the inherited value).
+  /*
+   * A physical drag must track the cursor correctly regardless of reading direction: the handle sits
+   * at the column's trailing (inset-inline-end) edge, which is the column's left edge under RTL — so
+   * dragging further away from the column is a negative clientX delta there, the opposite of LTR.
+   * direction is inherited, and the resolve-on-read elements are the host + its shadow tree, so read it from the
+   * shadow host when there is one (a bare descendant's computed style isn't guaranteed to expose the inherited value).
+   */
   const root = handle.getRootNode();
   const directionSource = root instanceof ShadowRoot ? (root.host as Element) : handle;
   const isRtl = getComputedStyle(directionSource).direction === 'rtl';
