@@ -11,13 +11,11 @@ import { PopupController } from '../shared/popup';
 
 /**
  * A floating menu anchored to a trigger element.
- *
  * @element lt-dropdown
  * @slot trigger - The element that opens/closes the menu (e.g. lt-button)
  * @slot - Menu items (lt-dropdown-item elements)
  * @fires {CustomEvent} open - Fired when the menu opens
  * @fires {CustomEvent} close - Fired when the menu closes
- *
  * @cssprop [--lt-dropdown-menu-padding] - Overrides the menu surface's default vertical padding.
  * @cssprop [--lt-dropdown-max-height=min(24rem, 60vh)] - Tallest the menu grows before it scrolls.
  */
@@ -40,7 +38,7 @@ export class Dropdown extends ThemeableElement {
   // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
   // ever opened. Without this, mounting a closed dropdown fired `close` and moved focus to the trigger on page
   // load (verified: activeElement jumped to a native <button> trigger). Ships with lt-button's `delegatesFocus`
-  // (BTN-4) — before that, the same first-update run was a no-op for an `lt-button` trigger anyway, since its
+  // — before that, the same first-update run was a no-op for an `lt-button` trigger anyway, since its
   // `.focus()` did nothing.
   private _skipNextOpenChange = true;
 

@@ -2,7 +2,7 @@
  * Responsive behavior of the table on small screens.
  *
  * - `scroll`: Horizontal scroll (default)
- * - `stack`: Stack columns vertically as cards
+ * - `stack`: Stack columns vertically as cards.
  */
 export type TableResponsiveMode = 'scroll' | 'stack';
 
@@ -11,7 +11,7 @@ export type TableResponsiveMode = 'scroll' | 'stack';
  *
  * - `compact`: Reduced padding for dense data
  * - `normal`: Standard padding (default)
- * - `comfortable`: Increased padding for better readability
+ * - `comfortable`: Increased padding for better readability.
  */
 export type TableDensity = 'compact' | 'normal' | 'comfortable';
 
@@ -146,7 +146,7 @@ export interface RowClickDetail<T = Record<string, unknown>> {
  *
  * - `none`: no selection UI (default)
  * - `single`: one row selectable at a time, rendered as a radio button per row
- * - `multiple`: any number of rows selectable, rendered as a checkbox per row plus a "select all" checkbox
+ * - `multiple`: any number of rows selectable, rendered as a checkbox per row plus a "select all" checkbox.
  */
 export type TableSelectionMode = 'none' | 'single' | 'multiple';
 

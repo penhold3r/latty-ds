@@ -4,11 +4,11 @@ import type { SnackbarVariant, SnackbarLabels } from '../snackbar/snackbar.types
 export interface SnackbarShowOptions {
   /** Notification text. Plain text only (set via `textContent`) — for rich/slotted content, use a standalone `<lt-snackbar>` directly instead. */
   message: string;
-  /** Visual style. @default 'default' */
+  /** Visual style. @default 'default'. */
   variant?: SnackbarVariant;
-  /** Auto-dismiss delay in milliseconds. Set to 0 to disable auto-dismiss. @default 4000 */
+  /** Auto-dismiss delay in milliseconds. Set to 0 to disable auto-dismiss. @default 4000. */
   duration?: number;
-  /** Show a dismiss button. @default true */
+  /** Show a dismiss button. @default true. */
   closable?: boolean;
   /** Label for the optional action button. */
   actionLabel?: string;

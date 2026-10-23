@@ -8,9 +8,7 @@ import type { DividerOrientation, DividerAppearance } from './divider.types';
 /**
  * A visual separator between content sections.
  * Supports horizontal and vertical orientations, an optional centered label, and line styles.
- *
  * @element lt-divider
- *
  * @example
  * ```html
  * <lt-divider></lt-divider>

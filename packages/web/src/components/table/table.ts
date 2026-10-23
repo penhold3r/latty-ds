@@ -78,7 +78,6 @@ import { NativeAttrsController } from '../shared/native-attrs';
 
 /**
  * Table component with sorting, responsive modes, and extensive customization.
- *
  * @element lt-table
  *
  * Features:
@@ -99,12 +98,10 @@ import { NativeAttrsController } from '../shared/native-attrs';
  * - Pagination coupling via `page-size`/`page`/`totalPages`, for pairing with a standalone `lt-pagination`
  * - Per-column resize (`column.resizable`) via pointer drag or, for keyboard users, arrow keys on the same handle
  * - Row virtualization (`virtualized` + `height`) for rendering only the visible rows of a large dataset
- *
  * @fires sortchange - Fired when sort changes
  * @fires rowclick - Fired when a body row is clicked, with `{ row, index }` detail
  * @fires selectionchange - Fired when row selection changes, with `{ selected, previousSelected }` detail
  * @fires columnresize - Fired when a column's width changes via its resize handle, with `{ key, width }` detail
- *
  * @example
  * ```typescript
  * const columns = [
@@ -236,7 +233,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * Bounds `.table-container` to this fixed height with its own vertical scroll, instead of growing to fit all
-   * rows and leaving the ambient page to scroll past it. General-purpose (e.g. pairs well with `sticky-header`
+   * rows and leaving the ambient page to scroll past it. General-purpose (e.g. Pairs well with `sticky-header`
    * even without `virtualized`), but `virtualized` requires it — windowing needs a known viewport size to compute
    * which rows are actually visible.
    * @default ''
@@ -276,7 +273,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   /**
    * Number of rows to show per page. `0` disables pagination (every row renders, the default). The table renders
    * no pagination controls itself — pair it with a standalone `lt-pagination`, reading `page`/`totalPages` from
-   * this table and writing its own `change` event's `page` back onto `this.page`:
+   * this table and writing its own `change` event's `page` back onto `this.page`:.
    * ```js
    * pager.totalPages = table.totalPages;
    * pager.addEventListener('change', (e) => (table.page = e.detail.page));
@@ -301,7 +298,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
   @property({ type: Array }) selected?: RowKey[];
 
   /**
-   * i18n overrides for the row-selection controls' accessible labels.
+   * I18n overrides for the row-selection controls' accessible labels.
    * @default {}
    */
   @property({ type: Object }) labels: Partial<TableLabels<T>> = {};
@@ -404,7 +401,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * `page`, clamped into `1..totalPages` — matches `lt-pagination`'s own `_current` clamping, so an out-of-range
-   * `page` (e.g. the data shrank after a fetch) never renders an empty page.
+   * `page` (e.g. The data shrank after a fetch) never renders an empty page.
    */
   private get currentPage(): number {
     const raw = Math.floor(Number(this.page));
@@ -413,7 +410,7 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   /**
    * The current page's row range as plain indices into `sortedData` — computed without materializing any rows,
-   * so callers that only need the count (e.g. a virtualized render's spacer-row math) stay O(1).
+   * so callers that only need the count (e.g. A virtualized render's spacer-row math) stay O(1).
    */
   private get pageRange(): { start: number; end: number } {
     if (!this.pageSize || this.pageSize < 1) return { start: 0, end: this.sortedData.length };

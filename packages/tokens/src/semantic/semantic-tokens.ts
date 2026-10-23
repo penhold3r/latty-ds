@@ -4,11 +4,13 @@ export type SemanticTokenMap = Record<string, string>;
 
 const VARIANTS = ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const;
 
-// Neutral isn't one of VARIANTS (its ramp has no on-color/text steps of its own), so its interactive
-// tokens are explicit. The generic rule would give neutral-500, which is only 3.5:1 against the
-// near-white text that sits on it (button, solid badge) — neutral-600 is 5.3:1, and the hover/active
-// steps only get darker. Same steps in both themes: the on-text is fixed near-white either way, so
-// the "lighter steps for dark surfaces" rule doesn't apply.
+/**
+ * Neutral isn't one of VARIANTS (its ramp has no on-color/text steps of its own), so its interactive
+ * tokens are explicit. The generic rule would give neutral-500, which is only 3.5:1 against the
+ * near-white text that sits on it (button, solid badge) — neutral-600 is 5.3:1, and the hover/active
+ * steps only get darker. Same steps in both themes: the on-text is fixed near-white either way, so
+ * the "lighter steps for dark surfaces" rule doesn't apply.
+ */
 const addNeutralInteractive = (map: SemanticTokenMap): void => {
   map['interactive-neutral-bg'] = 'color-neutral-600';
   map['interactive-neutral-bg-hover'] = 'color-neutral-700';
@@ -23,10 +25,12 @@ export interface SemanticTokenOptions {
   borderContrast?: 'default' | 'high';
 }
 
-// Neutral palette step per mode + contrast level for the three structural border tokens.
-// Dark mode shifts toward *lighter* steps for 'high' (more contrast against a dark background);
-// light mode shifts toward *darker* steps — opposite directions, both increasing contrast.
-// `input` is its own step, not derived from `default` — see border-input's own comment below for why.
+/**
+ * Neutral palette step per mode + contrast level for the three structural border tokens.
+ * Dark mode shifts toward *lighter* steps for 'high' (more contrast against a dark background);
+ * light mode shifts toward *darker* steps — opposite directions, both increasing contrast.
+ * `input` is its own step, not derived from `default` — see border-input's own comment below for why.
+ */
 const BORDER_STEPS = {
   light: {
     default: { default: '200', strong: '400', subtle: '100', input: '300' },

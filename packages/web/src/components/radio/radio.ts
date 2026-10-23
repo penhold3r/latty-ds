@@ -42,20 +42,15 @@ const radioGroupFor = (radio: Radio): Set<Radio> | null => {
 
 /**
  * A customizable radio button component with support for multiple variants and sizes.
- *
  * @element lt-radio
- *
  * @slot - Rich label content, in place of the `label` attribute. Falls back to `label` when nothing is slotted.
- *
  * @fires {CustomEvent<{value: string, checked: boolean}>} change - Dispatched when the radio is selected
- *
  * @example
  * ```html
  * <lt-radio name="size" value="small" label="Small"></lt-radio>
  * <lt-radio name="size" value="medium" label="Medium" checked></lt-radio>
  * <lt-radio name="size" value="large" label="Large"></lt-radio>
  * ```
- *
  * @example
  * ```html
  * <lt-radio
@@ -66,7 +61,6 @@ const radioGroupFor = (radio: Radio): Set<Radio> | null => {
  *   checked
  * ></lt-radio>
  * ```
- *
  * @example
  * ```html
  * <lt-radio
@@ -82,7 +76,7 @@ const radioGroupFor = (radio: Radio): Set<Radio> | null => {
 export class Radio extends FormControlElement {
   static styles = radioStyles;
   // Makes host.focus() move focus into the shadow root (the inner <input>) — lt-radio-group needs this to move
-  // focus programmatically for arrow-key navigation (RAD-2), the same way lt-button's delegatesFocus (BTN-4)
+  // focus programmatically for arrow-key navigation, the same way lt-button's delegatesFocus
   // lets lt-dropdown do the same for its trigger.
   static override shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
 
@@ -230,8 +224,7 @@ export class Radio extends FormControlElement {
   /**
    * Handles radio change events.
    * Updates the checked state and dispatches a custom change event.
-   *
-   * @param e - The native change event
+   * @param e - The native change event.
    * @private
    */
   private handleChange(e: Event) {

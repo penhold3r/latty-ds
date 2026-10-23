@@ -10,11 +10,8 @@ import './list-item';
 
 /**
  * A customizable list component supporting both ordered and unordered lists.
- *
  * @element lt-list
- *
  * @slot - Default slot for list items (`<li>` elements)
- *
  * @csspart list - The underlying list container. Renders as a `<div
  *   role="list">` rather than a real `<ul>`/`<ol>` — a custom element like
  *   `<lt-list-item>` can never itself be a valid `<li>`, so a real
@@ -23,9 +20,7 @@ import './list-item';
  *   is still set here and inherited down, so real `<li>` children (and
  *   `<lt-list-item>`, which sets `display: list-item` on itself) render
  *   their native marker/counter exactly as they would inside a real list.
- *
  * @cssprop --list-marker-color - Color of the bullet points or numbers (default: neutral-500)
- *
  * @example
  * ```html
  * <lt-list>
@@ -34,7 +29,6 @@ import './list-item';
  *   <li>Third item</li>
  * </lt-list>
  * ```
- *
  * @example
  * ```html
  * <lt-list type="ordered" size="lg">
@@ -43,7 +37,6 @@ import './list-item';
  *   <li>Step three</li>
  * </lt-list>
  * ```
- *
  * @example
  * ```html
  * <lt-list marker-color="var(--lt-color-primary-500)">
@@ -51,7 +44,6 @@ import './list-item';
  *   <li>Another item</li>
  * </lt-list>
  * ```
- *
  * @example
  * Nested lists:
  * ```html

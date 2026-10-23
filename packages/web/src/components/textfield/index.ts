@@ -1,7 +1,6 @@
 /**
  * Textfield component module.
  * Exports the Textfield web component and related type definitions.
- *
  * @module components/textfield
  */
 

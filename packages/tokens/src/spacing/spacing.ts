@@ -4,9 +4,7 @@ import type { SpaceIndex, SpaceScale, SpacingTokens } from '../types/';
 /**
  * Generates the complete spacing scale in both px and rem units.
  * Creates a consistent spacing system based on a 4px grid (0-96px in 4px increments).
- *
- * @returns SpacingTokens object with both px and rem scales
- *
+ * @returns SpacingTokens object with both px and rem scales.
  * @example
  * ```typescript
  * const spacing = buildSpacing();

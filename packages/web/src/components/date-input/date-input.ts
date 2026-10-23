@@ -36,16 +36,12 @@ const parseIsoDate = (value: string): Date | null => {
 
 /**
  * A text field that opens an `lt-calendar` popover for visual date selection.
- *
  * @element lt-date-input
- *
  * @fires {CustomEvent<{value: string}>} change - Fired when the user selects a date.
- *
  * @example
  * ```html
  * <lt-date-input label="Start date"></lt-date-input>
  * ```
- *
  * @example
  * ```html
  * <lt-date-input value="2026-06-15" min="2026-01-01" max="2026-12-31"></lt-date-input>
@@ -105,7 +101,7 @@ export class DateInput extends FormControlElement {
 
   /**
    * Dates to disable in the calendar: an array of Date objects, or a predicate for a rule impractical to
-   * enumerate (e.g. disabling every weekend). Set as a JS property (`.disabledDates`).
+   * enumerate (e.g. Disabling every weekend). Set as a JS property (`.disabledDates`).
    */
   @property({ attribute: false }) disabledDates: CalendarDisabledDates = [];
 

@@ -9,16 +9,12 @@ import '@latty-ds/icons';
 
 /**
  * A tab component that represents a single tab within a tab group.
- *
  * @element lt-tab
- *
  * @slot - The label/content of the tab
- *
  * @example
  * ```html
  * <lt-tab value="profile" active>Profile</lt-tab>
  * ```
- *
  * @example
  * ```html
  * <lt-tab value="settings" icon-start="settings">Settings</lt-tab>

@@ -5,6 +5,7 @@ import json from '@eslint/json';
 import markdown from '@eslint/markdown';
 import css from '@eslint/css';
 import vitest from '@vitest/eslint-plugin';
+import jsdoc from 'eslint-plugin-jsdoc';
 import { defineConfig } from 'eslint/config';
 import lattyComponentColors from './eslint-rules/no-raw-component-colors.mjs';
 
@@ -118,6 +119,64 @@ export default defineConfig([
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
       'vitest/prefer-each': 'error'
+    }
+  },
+  {
+    // Strict JSDoc validation for all source files (excluding tests and generated files)
+    files: ['packages/**/*.ts', 'packages/**/*.tsx'],
+    ignores: ['**/*.test.ts', '**/*.test.tsx', '**/*.d.ts', 'packages/utils/src/*.js', '**/dist/**'],
+    plugins: { jsdoc },
+    rules: {
+      // Structure & syntax
+      'jsdoc/check-syntax': 'error',
+      'jsdoc/check-tag-names': [
+        'error',
+        { definedTags: ['element', 'cssprop', 'fires', 'slot', 'example', 'part', 'csspart', 'deprecated'] }
+      ],
+      'jsdoc/empty-tags': 'error',
+      'jsdoc/no-bad-blocks': 'error',
+      'jsdoc/no-multi-asterisks': 'error',
+      'jsdoc/tag-lines': 'error',
+      'jsdoc/valid-types': 'off',
+
+      // Type checking (informative, not strict)
+      'jsdoc/check-types': 'warn',
+      'jsdoc/no-undefined-types': 'warn',
+
+      // Require JSDoc for public API (classes, public methods, public properties)
+      'jsdoc/require-description': 'error',
+      'jsdoc/require-description-complete-sentence': 'error',
+      'jsdoc/require-hyphen-before-param-description': 'error',
+
+      // Allow missing JSDoc on private members and void functions
+      'jsdoc/require-param': 'off',
+      'jsdoc/require-param-description': 'off',
+      'jsdoc/require-param-name': 'off',
+      'jsdoc/require-param-type': 'off',
+      'jsdoc/require-property': 'off',
+      'jsdoc/require-property-description': 'off',
+      'jsdoc/require-property-name': 'off',
+      'jsdoc/require-property-type': 'off',
+      'jsdoc/require-returns': 'off',
+      'jsdoc/require-returns-check': 'off',
+      'jsdoc/require-returns-description': 'off',
+      'jsdoc/require-returns-type': 'off',
+      'jsdoc/require-throws': 'off',
+
+      // Disabled (too strict for this codebase)
+      'jsdoc/check-alignment': 'off',
+      'jsdoc/check-indentation': 'off',
+      'jsdoc/check-line-alignment': 'off',
+      'jsdoc/check-param-names': 'off',
+      'jsdoc/check-property-names': 'off',
+      'jsdoc/check-values': 'off',
+      'jsdoc/implements-on-classes': 'off',
+      'jsdoc/multiline-blocks': 'off',
+      'jsdoc/no-defaults': 'off',
+      'jsdoc/no-restricted-syntax': 'off',
+      'jsdoc/no-types': 'off',
+      'jsdoc/require-example': 'off',
+      'jsdoc/sort-tags': 'off'
     }
   },
   {

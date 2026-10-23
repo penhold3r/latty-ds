@@ -12,21 +12,16 @@ import '../text/text';
 /**
  * An accordion component using native details/summary elements.
  * Provides collapsible content sections with smooth animations.
- *
  * @element lt-accordion
- *
  * @fires {CustomEvent<{open: boolean}>} toggle - Dispatched when the accordion is opened or closed
- *
  * @slot - Content to display when accordion is expanded
  * @slot summary - Custom content for the summary/header (defaults to label property)
- *
  * @example
  * ```html
  * <lt-accordion label="What is Latty?">
  *   Latty is a design system built with Web Components.
  * </lt-accordion>
  * ```
- *
  * @example
  * ```html
  * <lt-accordion appearance="filled" label="Features" icon-start="settings" open>

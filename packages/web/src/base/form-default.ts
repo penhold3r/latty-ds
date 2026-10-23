@@ -9,7 +9,6 @@ import type { ReactiveController, ReactiveControllerHost } from 'lit';
  * A reconnect (an already-upgraded element moved in the DOM) does not recapture: only the very first connect
  * counts as "the default", matching a real form control, which keeps its `defaultValue` fixed for its whole
  * lifetime regardless of how many times it's detached and reattached.
- *
  * @example
  * ```ts
  * class Textfield extends ThemeableElement {

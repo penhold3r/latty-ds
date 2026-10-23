@@ -14,7 +14,6 @@ const DEFAULT_LABELS: ChipLabels = {
 
 /**
  * Compact label element for tags, filters, and attributes.
- *
  * @element lt-chip
  * @slot - Label content
  * @slot icon - Leading icon or avatar
@@ -22,13 +21,11 @@ const DEFAULT_LABELS: ChipLabels = {
  *   button has focus (only when `deletable`)
  * @fires {CustomEvent<{selected: boolean}>} change - Fires when `selectable` is set and the chip is activated
  *   (click, or Enter/Space while the chip itself has focus)
- *
  * @example
  * ```html
  * <lt-chip variant="primary">Design</lt-chip>
  * <lt-chip variant="success" deletable>Active</lt-chip>
  * ```
- *
  * @example
  * ```html
  * <!-- Filter chip: clicking toggles `selected` and dispatches `change` -->

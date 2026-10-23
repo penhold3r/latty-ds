@@ -115,7 +115,6 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
  * separate `<link>` tag needed). Array entries map to their own token in
  * order — `--lt-typography-fontFamilyPrimary`, `...Secondary`, `...Tertiary`,
  * etc. — so each font can be referenced independently in your own CSS.
- *
  * @example
  * ```html
  * <script type="module">

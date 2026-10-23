@@ -26,10 +26,11 @@ const DEFAULT_LABELS: CalendarLabels = {
   weekNumberHeader: 'Wk',
   weekNumber: (week) => `Week ${week}`
 };
-
-// `Intl.Locale.prototype.getWeekInfo` isn't in this project's configured `lib` (adding it would pull in the
-// unrelated, much larger Temporal proposal's ambient types via lib.esnext.intl.d.ts) — declare just the one
-// method shape we actually use instead of widening the global lib for every package.
+/**
+ * `Intl.Locale.prototype.getWeekInfo` isn't in this project's configured `lib` (adding it would pull in
+ * the unrelated, much larger Temporal proposal's ambient types via lib.esnext.intl.d.ts) — declare just
+ * the one method shape we actually use instead of widening the global lib for every package.
+ */
 interface LocaleWithWeekInfo {
   getWeekInfo?(): { firstDay: number };
 }
@@ -52,7 +53,7 @@ function deriveWeekStart(locale: string): CalendarWeekStart {
 /**
  * `Intl.DateTimeFormat`'s constructor throws a RangeError for a malformed or incomplete locale string — not just
  * a programming mistake to guard against defensively, but a state `locale` can genuinely pass through for real:
- * it's a plain reflected attribute, and e.g. the docs Playground's text control sets it live on every keystroke,
+ * it's a plain reflected attribute, and e.g. The docs Playground's text control sets it live on every keystroke,
  * so a user typing "es-US" character by character briefly has it set to "e-US", "es-", etc. Every render() call
  * site below goes through this instead of constructing `Intl.DateTimeFormat` directly, falling back to the
  * 'en-US' default rather than letting a transient bad value crash the whole component's render.
@@ -82,23 +83,18 @@ function getIsoWeekNumber(date: Date): number {
 
 /**
  * A visual calendar grid for single-date or date-range selection.
- *
  * @element lt-calendar
- *
  * @fires {CustomEvent<{value: string} | {valueStart: string, valueEnd: string}>} change - Fired when a date is selected
  *   (mode="single", detail `{ value }`) or when a full range is selected (mode="range", detail `{ valueStart, valueEnd }`).
  * @fires {CustomEvent<{year: number, month: number}>} monthchange - Fired when the viewed month changes.
- *
  * @example
  * ```html
  * <lt-calendar value="2026-05-19"></lt-calendar>
  * ```
- *
  * @example
  * ```html
  * <lt-calendar mode="range" value-start="2026-05-10" value-end="2026-05-20"></lt-calendar>
  * ```
- *
  * @example
  * ```html
  * <lt-calendar locale="fr-FR" week-start="1" min="2026-01-01" max="2026-12-31"></lt-calendar>

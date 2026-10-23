@@ -8,7 +8,7 @@ import type { ReactiveController, ReactiveControllerHost } from 'lit';
  * Checked synchronously on connect — not only via `slotchange` — so markup present at parse/upgrade time is
  * correct on the very first render; `slotchange` fires after the browser resolves initial slot assignment, which
  * would otherwise cause a one-frame layout flash for slotted-only content with no fallback. Re-checked on
- * `slotchange` for content added or removed later (e.g. a framework setting `textContent` after construction).
+ * `slotchange` for content added or removed later (e.g. A framework setting `textContent` after construction).
  */
 export class SlottedContentController implements ReactiveController {
   private _host: ReactiveControllerHost & Element;

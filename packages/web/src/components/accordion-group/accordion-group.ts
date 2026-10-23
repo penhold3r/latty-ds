@@ -14,11 +14,8 @@ import '../accordion/accordion';
  * `lt-accordion` itself has no concept of siblings (each is a standalone, self-contained disclosure widget); this
  * is what adds cross-panel coordination, listening for each child's own `toggle` event rather than tracking a
  * single `value` (unlike `lt-tab-group`, more than one child can be open at once when `multiple` is set).
- *
  * @element lt-accordion-group
- *
  * @slot - `lt-accordion` elements
- *
  * @example
  * ```html
  * <lt-accordion-group>
@@ -26,7 +23,6 @@ import '../accordion/accordion';
  *   <lt-accordion label="How do I install it?">pnpm add @latty-ds/tokens @latty-ds/web</lt-accordion>
  * </lt-accordion-group>
  * ```
- *
  * @example
  * ```html
  * <lt-accordion-group multiple>

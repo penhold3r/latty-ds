@@ -25,12 +25,9 @@ const DEFAULT_LABELS: TextfieldLabels = {
  * A customizable text input component with support for multiple variants, sizes, and input types.
  * Supports both single-line inputs and multi-line textareas, and automatically forwards native
  * `<input>` / `<textarea>` HTML attributes onto the inner control.
- *
  * @element lt-textfield
- *
  * @fires {CustomEvent<{value: string}>} input - Dispatched when the input value changes
  * @fires {CustomEvent<{value: string}>} change - Dispatched when the input loses focus after a value change
- *
  * @example
  * ```html
  * <lt-textfield
@@ -40,7 +37,6 @@ const DEFAULT_LABELS: TextfieldLabels = {
  *   required
  * ></lt-textfield>
  * ```
- *
  * @example
  * ```html
  * <lt-textfield
@@ -50,7 +46,6 @@ const DEFAULT_LABELS: TextfieldLabels = {
  *   helper-text="Password must be at least 8 characters"
  * ></lt-textfield>
  * ```
- *
  * @example
  * ```html
  * <lt-textfield
@@ -75,7 +70,7 @@ export class Textfield extends FormControlElement {
     },
     onSync: () => this._syncValidity()
   });
-  // Stable per-instance ids for `label for` and `aria-describedby` (TFD-4) — not the host's own `id` attribute,
+  // Stable per-instance ids for `label for` and `aria-describedby` — not the host's own `id` attribute,
   // which a consumer may set for their own purposes (or leave unset).
   private readonly _uid = `lt-textfield-${textfieldCount++}`;
   private readonly _inputId = `${this._uid}-input`;
@@ -170,7 +165,7 @@ export class Textfield extends FormControlElement {
   @property({ type: Boolean, reflect: true }) counter = false;
 
   /**
-   * Plain text shown before the input, inside the field's own border (e.g. a currency symbol). Deliberately a
+   * Plain text shown before the input, inside the field's own border (e.g. A currency symbol). Deliberately a
    * string, not a slot — arbitrary slotted markup could vary in height/width enough to break the field's fixed
    * row layout, which a plain text label can't. Rendered via an explicit `String()` coercion rather than
    * interpolated directly, so a consumer bypassing the type system (plain JS, an `as any` cast) and assigning a
@@ -182,7 +177,7 @@ export class Textfield extends FormControlElement {
    */
   @property({ reflect: true }) prefix = '';
 
-  /** Plain text shown after the input, inside the field's own border (e.g. a unit like "kg"). Same reasoning
+  /** Plain text shown after the input, inside the field's own border (e.g. A unit like "kg"). Same reasoning
    * and `type="multiline"` exception as `prefix`.
    * @default ''
    */
@@ -246,12 +241,9 @@ export class Textfield extends FormControlElement {
     const input = e.target as HTMLInputElement | HTMLTextAreaElement;
     this.value = input.value;
     if (this._touched) this._autoError = !this._validate();
-    // Called directly here, not left to the updated() hook alone (which also calls it, for the "value changed
-    // from outside typing" case below) — Lit's own update cycle is asynchronous, so waiting for it would show a
-    // one-frame-or-more lag between a keystroke and the textarea actually growing. Calling it synchronously,
-    // right where the native element's own content (and so its real scrollHeight) just changed, keeps it
-    // feeling instant. The resulting double call from updated() afterwards is a cheap, idempotent no-op, not a
-    // correctness issue — not worth a skip-next-call flag to avoid.
+    // Called directly here (not just in updated()) for instant autosize — Lit's update cycle is async,
+    // so waiting would show a one-frame lag between keystroke and textarea growing.
+    // The double call from updated() is a cheap, idempotent no-op.
     if (this.autosize && this.type === 'multiline') this._resizeTextarea(input as HTMLTextAreaElement);
     this.dispatchEvent(
       new CustomEvent('input', {
@@ -303,8 +295,8 @@ export class Textfield extends FormControlElement {
     );
   }
 
-  // A native single-line <input> inside a <form> implicitly submits the form on Enter; the inner input here is
-  // in the shadow DOM, so the browser never wires that up on its own (TFD-2). Not on the multiline textarea —
+  // A native single-line <input> inside a <form> implicitly submits on Enter; the inner input here is
+  // in the shadow DOM, so the browser never wires that up on its own. Not on the multiline textarea —
   // a native <textarea> never implicit-submits on Enter either, since Enter there means "new line".
   private _onKeydown = (e: KeyboardEvent) => {
     if (e.key !== 'Enter' || e.isComposing || this._isDisabled) return;
@@ -315,7 +307,6 @@ export class Textfield extends FormControlElement {
   /**
    * Toggles password visibility for password-type inputs.
    * Switches between showing plain text and masked password.
-   *
    * @private
    */
   private togglePasswordVisibility() {
@@ -335,8 +326,7 @@ export class Textfield extends FormControlElement {
    * Password inputs show eye/eye-off toggle icon.
    * Non-default variants show their respective state icons.
    * Default variant shows no end icon.
-   *
-   * @returns The icon name to display, or empty string if no icon should be shown
+   * @returns The icon name to display, or empty string if no icon should be shown.
    * @private
    */
   private getEndIconName(): string {
@@ -368,9 +358,9 @@ export class Textfield extends FormControlElement {
       | null;
     if (!inner) return;
     // The native `type`/`min`/`max`/`minlength`/`maxlength`/`required` attributes are forwarded onto
-    // the inner control (TFD-3), so its own `validity` already covers valueMissing, typeMismatch (email/url),
-    // rangeUnderflow/Overflow (number), and tooShort/tooLong for free — mirror that first. `_validate()`'s extra
-    // rules (such as the `tel` format, which HTML has no native constraint for) become `customError`.
+    // the inner control, so its own `validity` already covers valueMissing, typeMismatch (email/url),
+    // rangeUnderflow/Overflow (number), and tooShort/tooLong for free — mirror that first.
+    // `_validate()`'s extra rules (such as the `tel` format, which HTML has no native constraint for) become `customError`.
     if (!inner.validity.valid) {
       this._internals.setValidity(toValidityFlags(inner.validity), inner.validationMessage, inner);
     } else if (!this._validate()) {
@@ -417,8 +407,7 @@ export class Textfield extends FormControlElement {
 
   /**
    * Restores the textfield's value *and* the interaction state that goes with it — a reset puts the
-   * field back to its pristine state, so the touched flag and any auto-shown error have to go too
-   * (TFD-7), not just the text.
+   * field back to its pristine state, so the touched flag and any auto-shown error have to go too.
    */
   override formResetCallback(): void {
     super.formResetCallback();
@@ -443,7 +432,7 @@ export class Textfield extends FormControlElement {
     const maxLengthAttr = this.getAttribute('maxlength');
     // A real `<label for>` already gives the input its accessible name — an `aria-label` alongside it would
     // override that (aria-label always wins accessible-name computation) and hide the visible label text from
-    // screen readers instead (TFD-4). Only fall back to `aria-label` when there's no visible label to associate.
+    // screen readers instead. Only fall back to `aria-label` when there's no visible label to associate.
     const ariaLabel = this.label ? undefined : this.getAttribute('aria-label') || placeholder || undefined;
 
     return html`

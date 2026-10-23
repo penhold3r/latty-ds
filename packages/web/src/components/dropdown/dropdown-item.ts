@@ -8,7 +8,6 @@ import { NativeAttrsController } from '../shared/native-attrs';
 
 /**
  * A menu item for use inside lt-dropdown.
- *
  * @element lt-dropdown-item
  * @slot - Item label / content
  * @fires {CustomEvent} select - Fired when the item is activated (click or Enter/Space)

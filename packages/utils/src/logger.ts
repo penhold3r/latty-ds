@@ -10,8 +10,7 @@ const SILENT = process.env.LATTY_SILENT === 'true';
  * - info: General information (cyan, can be silenced)
  * - warn: Warnings (yellow)
  * - error: Errors (red)
- * - success: Success messages (green)
- *
+ * - success: Success messages (green).
  * @example
  * ```typescript
  * import { logger } from '@latty-ds/utils';
@@ -47,7 +46,7 @@ class Logger {
 
   /**
    * Generates a formatted timestamp string.
-   * @returns Colored timestamp in [HH:MM:SS] format
+   * @returns Colored timestamp in [HH:MM:SS] format.
    * @private
    */
   #getTimestamp() {
@@ -56,12 +55,11 @@ class Logger {
 
   /**
    * Formats a log message with timestamp, level, icon, and color.
-   *
-   * @param level - Log level name
-   * @param color - ANSI color code
-   * @param icon - Unicode icon character
-   * @param message - Message to log
-   * @returns Formatted log string
+   * @param level - Log level name.
+   * @param color - ANSI color code.
+   * @param icon - Unicode icon character.
+   * @param message - Message to log.
+   * @returns Formatted log string.
    * @private
    */
   #format(level: string, color: string, icon: string, message: string) {
@@ -72,8 +70,7 @@ class Logger {
   /**
    * Logs an informational message (cyan).
    * Suppressed when LATTY_SILENT=true.
-   *
-   * @param msg - Message to log
+   * @param msg - Message to log.
    */
   info(msg: string) {
     if (SILENT) return;
@@ -84,8 +81,7 @@ class Logger {
   /**
    * Logs a warning message (yellow).
    * Always shown regardless of SILENT mode.
-   *
-   * @param msg - Message to log
+   * @param msg - Message to log.
    */
   warn(msg: string) {
     console.warn(this.#format('warn', Logger.colors.warn, Logger.icons.warn, msg));
@@ -94,8 +90,7 @@ class Logger {
   /**
    * Logs an error message (red).
    * Always shown regardless of SILENT mode.
-   *
-   * @param msg - Message to log
+   * @param msg - Message to log.
    */
   error(msg: string) {
     console.error(this.#format('error', Logger.colors.error, Logger.icons.error, msg));
@@ -103,8 +98,7 @@ class Logger {
 
   /**
    * Logs a success message (green).
-   *
-   * @param msg - Message to log
+   * @param msg - Message to log.
    */
   success(msg: string) {
     console.log(this.#format('success', Logger.colors.success, Logger.icons.success, msg));
@@ -114,7 +108,6 @@ class Logger {
 /**
  * Singleton logger instance.
  * Import and use this instance throughout the application.
- *
  * @example
  * ```typescript
  * import { logger } from '@latty-ds/utils';

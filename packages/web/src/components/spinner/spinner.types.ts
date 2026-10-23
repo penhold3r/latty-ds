@@ -4,7 +4,7 @@
  *
  * - `sm`: 0.75rem (12px)
  * - `md`: 1rem (16px) - default
- * - `lg`: 1.5rem (24px)
+ * - `lg`: 1.5rem (24px).
  */
 export type SpinnerSize = 'sm' | 'md' | 'lg';
 
@@ -14,6 +14,6 @@ export type SpinnerSize = 'sm' | 'md' | 'lg';
  * - `primary`: Primary brand color
  * - `secondary`: Secondary brand color
  * - `neutral`: Neutral gray color
- * - `current`: Inherits color from parent (default)
+ * - `current`: Inherits color from parent (default).
  */
 export type SpinnerVariant = 'primary' | 'secondary' | 'neutral' | 'current';

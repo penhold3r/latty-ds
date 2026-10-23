@@ -11,13 +11,9 @@ import '../text/text';
 
 /**
  * A container component that manages a group of radio buttons.
- *
  * @element lt-radio-group
- *
  * @fires {CustomEvent<{value: string}>} change - Dispatched when a radio in the group is selected
- *
  * @slot - Radio buttons to be managed by this group
- *
  * @example
  * ```html
  * <lt-radio-group label="Choose a plan" name="plan">
@@ -26,7 +22,6 @@ import '../text/text';
  *   <lt-radio value="enterprise" label="Enterprise"></lt-radio>
  * </lt-radio-group>
  * ```
- *
  * @example
  * ```html
  * <lt-radio-group
@@ -218,8 +213,7 @@ export class RadioGroup extends ThemeableElement {
 
   /**
    * Handles change events from individual radio buttons.
-   *
-   * @param e - The change event from a radio button
+   * @param e - The change event from a radio button.
    * @private
    */
   private handleRadioChange = (e: CustomEvent) => {

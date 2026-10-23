@@ -21,20 +21,15 @@ import '@latty-ds/icons';
  * `event.target.closest('lt-nav-item')` (its `href` and `label`). Modifier keys (`event.metaKey`, …) come
  * through as on any link. Drive the highlighted item via the `active` property (which also sets
  * `aria-current="page"`).
- *
  * @element lt-nav-item
- *
  * @fires {CustomEvent<{ open: boolean }>} toggle - Fired when a collapsible item is opened or
  *   closed, like the native `toggle` of `<details>`.
- *
  * @slot - Nested `<lt-nav-item>` children (makes this item a collapsible group)
- *
  * @example
  * ```html
  * <!-- Simple link -->
  * <lt-nav-item href="/dashboard" label="Dashboard" icon-start="home"></lt-nav-item>
  * ```
- *
  * @example
  * ```html
  * <!-- Collapsible group -->

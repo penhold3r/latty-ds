@@ -17,22 +17,17 @@ import { NativeAttrsController } from '../shared/native-attrs';
  * `detail`. Like the native ones they don't bubble, so listen on `<lt-image>`
  * itself. When a load fails, the `fallback` slot is shown in place of the broken
  * image; setting a new `src` retries.
- *
  * @element lt-image
  * @part image - The underlying `<img>` element
- *
  * @slot fallback - Content shown in place of the image when loading fails
- *
  * @fires {CustomEvent<{ src: string }>} load - Fired when the image loads successfully
  * @fires {CustomEvent<{ src: string }>} error - Fired when the image fails to load
- *
  * @example
  * ```html
  * <lt-image src="/cover.jpg" alt="Album cover" loading="lazy" rounded>
  *   <div slot="fallback">No cover available</div>
  * </lt-image>
  * ```
- *
  * @example
  * ```html
  * <lt-image

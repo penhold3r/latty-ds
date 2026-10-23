@@ -13,9 +13,7 @@ const DEFAULT_LABELS: BreadcrumbLabels = {
 /**
  * Navigation breadcrumb trail container.
  * Place `lt-breadcrumb-item` elements inside as direct children.
- *
  * @element lt-breadcrumb
- *
  * @example
  * ```html
  * <lt-breadcrumb separator=">">
@@ -69,7 +67,6 @@ export class Breadcrumb extends ThemeableElement {
 /**
  * A single step in a breadcrumb trail.
  * Renders as a link when `href` is provided, or as plain text when `current`.
- *
  * @element lt-breadcrumb-item
  */
 @customElement('lt-breadcrumb-item')

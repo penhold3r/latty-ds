@@ -8,7 +8,7 @@
  * - `success`: Green color for positive actions
  * - `warning`: Yellow/orange color for caution
  * - `error`: Red color for destructive actions
- * - `info`: Blue color for informational actions
+ * - `info`: Blue color for informational actions.
  */
 export type ButtonVariant = 'primary' | 'secondary' | 'neutral' | 'success' | 'warning' | 'error' | 'info';
 
@@ -18,7 +18,7 @@ export type ButtonVariant = 'primary' | 'secondary' | 'neutral' | 'success' | 'w
  *
  * - `filled`: Solid background with the variant color (default)
  * - `outlined`: Transparent background with colored border and text
- * - `ghost`: Transparent background with colored text and no border (low-emphasis text button)
+ * - `ghost`: Transparent background with colored text and no border (low-emphasis text button).
  */
 export type ButtonAppearance = 'filled' | 'outlined' | 'ghost';
 
@@ -28,7 +28,7 @@ export type ButtonAppearance = 'filled' | 'outlined' | 'ghost';
  *
  * - `sm`: 32px height, 0.875rem font size
  * - `md`: 40px height, 1rem font size (default)
- * - `lg`: 48px height, 1.0625rem font size
+ * - `lg`: 48px height, 1.0625rem font size.
  */
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
@@ -37,6 +37,6 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
  *
  * - `button`: No form interaction (default)
  * - `submit`: Submits the associated form (runs constraint validation)
- * - `reset`: Resets all controls in the associated form to their initial values
+ * - `reset`: Resets all controls in the associated form to their initial values.
  */
 export type ButtonType = 'button' | 'submit' | 'reset';

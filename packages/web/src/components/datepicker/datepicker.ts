@@ -14,17 +14,13 @@ import '../text/text';
  * Date and time picker wrapping the native browser date/time input with design-system styling.
  * Automatically forwards native `<input>` attributes (`min`, `max`, `step`, `readonly`, `name`, `autocomplete`, etc.)
  * onto the inner control.
- *
  * @element lt-datepicker
- *
  * @fires {CustomEvent<{value: string}>} change - Fired when the value changes (on blur).
  * @fires {CustomEvent<{value: string}>} input - Fired on every keystroke / picker selection.
- *
  * @example
  * ```html
  * <lt-datepicker label="Start date" type="date"></lt-datepicker>
  * ```
- *
  * @example
  * ```html
  * <lt-datepicker label="Meeting time" type="datetime-local" required></lt-datepicker>

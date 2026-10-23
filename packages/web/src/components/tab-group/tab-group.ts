@@ -20,14 +20,10 @@ const DEFAULT_LABELS: TabGroupLabels = {
 
 /**
  * A container component that manages a group of tabs.
- *
  * @element lt-tab-group
- *
  * @fires {CustomEvent<{value: string}>} change - Dispatched when a tab is selected
- *
  * @slot - Tab elements
  * @slot panel - Tab panel content (use multiple panels with matching values)
- *
  * @example
  * ```html
  * <lt-tab-group value="profile">
@@ -38,7 +34,6 @@ const DEFAULT_LABELS: TabGroupLabels = {
  *   <div slot="panel" data-value="settings">Settings content</div>
  * </lt-tab-group>
  * ```
- *
  * @example
  * ```html
  * <lt-tab-group appearance="pills" value="home">

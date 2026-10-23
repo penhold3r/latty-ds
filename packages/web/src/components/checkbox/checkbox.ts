@@ -18,26 +18,20 @@ const DEFAULT_LABELS: CheckboxLabels = {
 
 /**
  * A customizable checkbox component with support for multiple variants and sizes.
- *
  * @element lt-checkbox
- *
  * @slot - Rich label content, in place of the `label` attribute (e.g. a link inside the label text). Falls back
  *   to `label` when nothing is slotted.
- *
  * @fires {CustomEvent<{checked: boolean}>} change - Dispatched when the checked state changes
- *
  * @example
  * ```html
  * <lt-checkbox label="Accept terms and conditions"></lt-checkbox>
  * ```
- *
  * @example
  * ```html
  * <lt-checkbox name="terms" required>
  *   I agree to the <a href="/terms">terms of service</a>
  * </lt-checkbox>
  * ```
- *
  * @example
  * ```html
  * <lt-checkbox
@@ -46,7 +40,6 @@ const DEFAULT_LABELS: CheckboxLabels = {
  *   checked
  * ></lt-checkbox>
  * ```
- *
  * @example
  * ```html
  * <lt-checkbox
@@ -179,8 +172,7 @@ export class Checkbox extends FormControlElement {
   /**
    * Handles checkbox change events.
    * Updates the checked state and dispatches a custom change event.
-   *
-   * @param e - The native change event
+   * @param e - The native change event.
    * @private
    */
   private handleChange(e: Event) {
@@ -204,7 +196,6 @@ export class Checkbox extends FormControlElement {
   /**
    * Renders the checkbox icon based on state.
    * Shows checkmark when checked, minus when indeterminate.
-   *
    * @private
    */
   private renderCheckmark() {

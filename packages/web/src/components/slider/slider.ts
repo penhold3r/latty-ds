@@ -10,7 +10,6 @@ import '../text/text';
 
 /**
  * A range slider component for selecting a numeric value within a range.
- *
  * @element lt-slider
  * @fires {CustomEvent<{value: number}>} input - Dispatched on every value change while dragging
  * @fires {CustomEvent<{value: number}>} change - Dispatched when the user commits a value (mouseup/keyup)
@@ -35,21 +34,21 @@ export class Slider extends FormControlElement {
    * `getAttribute('value')`/`[value]`. */
   @property({ type: Number }) value = 0;
 
-  /** Label displayed above the track */
+  /** Label displayed above the track. */
   @property({ reflect: true }) label = '';
 
   // A unitless 0–1 ratio, not a percentage — CSS derives both the track's fill percentage and the tooltip's
-  // thumb-following offset from it via calc() (SLD-1), so there's only one number to keep in sync.
+  // thumb-following offset from it via calc(), so there's only one number to keep in sync.
   private get _fillRatio(): number {
-    if (this.max === this.min) return 0; // avoid dividing by zero (SLD-1: min === max used to give NaN%)
+    if (this.max === this.min) return 0; // avoid dividing by zero
     return (this.value - this.min) / (this.max - this.min);
   }
 
   /** Clamps to [min, max] and snaps to the nearest step from min, matching how a native <input type="range">
    * sanitizes its own value — including when `value`/`min`/`max`/`step` are set programmatically, which a native
-   * range input clamps on its own internal value but this component didn't mirror onto its own `value` property
-   * (SLD-1: `value` wasn't clamped/stepped, so e.g. `value=150` with `max=100` produced a 150% fill and
-   * submitted "150" to the form even though the visible thumb was pinned at the end). */
+   * range input clamps on its own internal value but this component didn't mirror onto its own `value` property.
+   * Without this, `value=150` with `max=100` produced a 150% fill and submitted "150" to the form
+   * even though the visible thumb was pinned at the end. */
   private _sanitize(value: number): number {
     if (this.min === this.max) return this.min;
     const clamped = Math.min(this.max, Math.max(this.min, value));

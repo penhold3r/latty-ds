@@ -24,13 +24,9 @@ import '@latty-ds/icons';
  * `<button>` (picker rows, settings rows), or `href` to render it as an `<a>`.
  * Interactive rows get hover/active/focus states and a disabled state, and
  * forward native `<button>` / `<a>` attributes onto `[part="base"]`.
- *
  * @element lt-list-item
- *
  * @slot - Default slot for list item content
- *
  * @csspart base - The row container (`<div>`, `<button>` when `clickable`, or `<a>` when `href` is set)
- *
  * @example
  * ```html
  * <lt-list>
@@ -39,7 +35,6 @@ import '@latty-ds/icons';
  *   <lt-list-item>Third item</lt-list-item>
  * </lt-list>
  * ```
- *
  * @example
  * With icons:
  * ```html
@@ -49,7 +44,6 @@ import '@latty-ds/icons';
  *   <lt-list-item icon-start="info" icon-end="arrow-right">Details</lt-list-item>
  * </lt-list>
  * ```
- *
  * @example
  * Interactive rows:
  * ```html

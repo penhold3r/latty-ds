@@ -7,7 +7,7 @@
  * - `2`: Medium shadow (card-like elevation)
  * - `3`: High shadow (prominent elevation)
  * - `4`: Very high shadow (floating elements)
- * - `5`: Maximum shadow (modals, overlays)
+ * - `5`: Maximum shadow (modals, overlays).
  */
 export type SurfaceElevation = '0' | '1' | '2' | '3' | '4' | '5';
 
@@ -16,6 +16,6 @@ export type SurfaceElevation = '0' | '1' | '2' | '3' | '4' | '5';
  * Determines the border and background styling.
  *
  * - `filled`: Solid background with no border
- * - `outlined`: Transparent background with border
+ * - `outlined`: Transparent background with border.
  */
 export type SurfaceAppearance = 'filled' | 'outlined';

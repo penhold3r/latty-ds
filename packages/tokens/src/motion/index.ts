@@ -1,7 +1,6 @@
 /**
  * Motion token generation.
  * Provides transition duration and easing scales shared across components.
- *
  * @module motion
  */
 

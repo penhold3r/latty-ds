@@ -45,9 +45,11 @@ export const contrastRatio = (a: string, b: string): number => {
   return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
 };
 
-// Where each theme rests on the ramp and which way it moves for hover / pressed. Light fills darken on interaction;
-// dark fills (which start lighter, for visibility on dark surfaces) lighten on hover and deepen when pressed. When
-// the chosen text can't hold its contrast one way, the picker tries the other direction before giving up.
+/**
+ * Where each theme rests on the ramp and which way it moves for hover / pressed. Light fills darken on interaction;
+ * dark fills (which start lighter, for visibility on dark surfaces) lighten on hover and deepen when pressed. When
+ * the chosen text can't hold its contrast one way, the picker tries the other direction before giving up.
+ */
 const LADDER: Record<
   ThemeMode,
   {

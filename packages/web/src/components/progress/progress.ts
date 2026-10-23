@@ -9,9 +9,7 @@ import type { ProgressSize, ProgressVariant } from './progress.types';
 /**
  * A horizontal bar that shows how far along a process is.
  * Supports determinate (0–100 value) and indeterminate modes.
- *
  * @element lt-progress
- *
  * @example
  * ```html
  * <lt-progress value="40"></lt-progress>

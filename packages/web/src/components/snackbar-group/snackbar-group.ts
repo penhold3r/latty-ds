@@ -11,15 +11,13 @@ import '../snackbar/snackbar';
 /**
  * Coordinates multiple `lt-snackbar`s shown imperatively: queues excess ones past `max-visible` instead of
  * letting them overlap at the same spot, and stacks simultaneously-visible ones vertically. Place one instance
- * once (e.g. at the end of `<body>`); every other part of the app calls its `show()` method.
+ * once (e.g. At the end of `<body>`); every other part of the app calls its `show()` method.
  *
  * Renders as a native "manual" popover on its own host (same reasoning as `lt-snackbar` itself used to have
  * alone, before this component existed) so the whole stack always appears in the top layer, above an open
  * `lt-dialog`/`lt-sidepanel` regardless of z-index — shown only while at least one snackbar is actually visible,
  * so it has zero top-layer presence otherwise.
- *
  * @element lt-snackbar-group
- *
  * @example
  * ```html
  * <lt-snackbar-group id="snackbars"></lt-snackbar-group>
@@ -30,7 +28,6 @@ import '../snackbar/snackbar';
  *   });
  * </script>
  * ```
- *
  * @example
  * ```html
  * <!-- Shows up to 3 at once; a 4th show() call queues until one of the first 3 closes -->

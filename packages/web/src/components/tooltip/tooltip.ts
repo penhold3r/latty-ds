@@ -10,28 +10,26 @@ import '../text/text';
 
 let _tooltipIdCounter = 0;
 
-// A short, fixed grace period (not configurable — `hoverable` is a boolean, not a second delay knob) between
-// losing hover/focus and actually hiding, when `hoverable` is set. The trigger and the bubble are visually
-// separated by `--lt-tooltip-offset` (8px by default) — without this, a real mouse movement from one to the
-// other passes over that gap, which isn't part of either element, firing a `pointerleave` that hides the
-// tooltip before the pointer ever reaches it. Long enough to cross a typical small gap deliberately, short
-// enough to read as instant to anyone not heading for the bubble.
+/**
+ * A short, fixed grace period (not configurable — `hoverable` is a boolean, not a second delay knob)
+ * between losing hover/focus and actually hiding when `hoverable` is set.
+ * The trigger and the bubble are visually separated by `--lt-tooltip-offset` (8px by default) —
+ * without this, a real mouse movement from one to the other passes over that gap, which isn't part of
+ * either element, firing a `pointerleave` that hides the tooltip before the pointer ever reaches it.
+ * Long enough to cross a typical small gap deliberately, short enough to read as instant.
+ */
 const HOVER_GRACE_MS = 150;
 
 /**
  * Floating label that appears on hover or focus of its trigger element.
- *
  * @element lt-tooltip
- *
  * @slot - The trigger element the tooltip is anchored to.
- *
  * @example
  * ```html
  * <lt-tooltip content="Save document">
  *   <lt-button>Save</lt-button>
  * </lt-tooltip>
  * ```
- *
  * @example
  * ```html
  * <lt-tooltip content="Opens in a new tab" placement="bottom"
@@ -39,7 +37,6 @@ const HOVER_GRACE_MS = 150;
  *   <a href="#">Learn more</a>
  * </lt-tooltip>
  * ```
- *
  * @example
  * ```html
  * <!-- Waits 500ms before showing, so a fast mouse pass-through never flashes it -->
@@ -47,7 +44,6 @@ const HOVER_GRACE_MS = 150;
  *   <lt-icon-button icon="trash" label="Delete"></lt-icon-button>
  * </lt-tooltip>
  * ```
- *
  * @example
  * ```html
  * <!-- Lets the pointer reach the bubble itself (e.g. to select and copy a long value) without it vanishing
@@ -56,7 +52,6 @@ const HOVER_GRACE_MS = 150;
  *   <code>ID</code>
  * </lt-tooltip>
  * ```
- *
  * @example
  * ```html
  * <!-- A tap shows it immediately; tap again, tap elsewhere, or press Escape to dismiss -->
@@ -103,7 +98,7 @@ export class Tooltip extends ThemeableElement {
 
   /**
    * Keeps the tooltip open briefly when the pointer leaves the trigger, giving it time to reach the tooltip
-   * bubble itself (e.g. to select and copy its text) instead of dismissing instantly. Hovering the bubble then
+   * bubble itself (e.g. To select and copy its text) instead of dismissing instantly. Hovering the bubble then
    * keeps it open for as long as the pointer stays there. Has no effect on focus-driven showing/hiding, which
    * stays immediate either way — there's no equivalent "hover the bubble" for keyboard users.
    * @default false

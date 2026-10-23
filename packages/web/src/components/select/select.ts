@@ -25,12 +25,9 @@ const DEFAULT_LABELS: SelectLabels = {
 
 /**
  * A customizable select dropdown component with support for multiple variants and sizes.
- *
  * @element lt-select
- *
  * @fires {CustomEvent<{value: string | string[]}>} change - Dispatched when the selected value changes. With `multiple`,
  *   `value` is the array of selected values.
- *
  * @example
  * ```html
  * <lt-select
@@ -43,7 +40,6 @@ const DEFAULT_LABELS: SelectLabels = {
  *   ]}
  * ></lt-select>
  * ```
- *
  * @example
  * ```html
  * <lt-select
@@ -247,8 +243,7 @@ export class Select extends FormControlElement {
   /**
    * Handles option selection.
    * Updates the value, dispatches change event, and closes dropdown.
-   *
-   * @param option - The selected option
+   * @param option - The selected option.
    * @private
    */
   private selectOption(option: SelectOption) {
@@ -273,8 +268,7 @@ export class Select extends FormControlElement {
    * Handles keyboard navigation in the dropdown.
    * Supports Arrow Up/Down/Home/End/Page Up/Page Down for navigation, typeahead, Enter/Space for selection,
    * and Escape to close.
-   *
-   * @param e - The keyboard event
+   * @param e - The keyboard event.
    * @private
    */
   private handleKeydown(e: KeyboardEvent) {

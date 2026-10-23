@@ -15,14 +15,13 @@ export type SpaceKey = `${SpaceIndex}`;
 
 /**
  * Complete spacing scale mapping indices to CSS values.
- * Example: { "0": "0px", "1": "4px", "2": "8px", ... }
+ * Example: { "0": "0px", "1": "4px", "2": "8px", ... }.
  */
 export type SpaceScale = Record<SpaceKey, string>;
 
 /**
  * Design system spacing tokens in both rem and px units.
  * Provides a consistent spacing scale based on a 4px grid system.
- *
  * @example
  * ```typescript
  * const spacing: SpacingTokens = {

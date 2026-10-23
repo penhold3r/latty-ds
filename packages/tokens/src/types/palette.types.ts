@@ -15,13 +15,13 @@ export type StepStr = `${Step}`;
 
 /**
  * Color palette mapping numeric steps to hex color values.
- * Example: { 50: "#fef2f2", 100: "#fee2e2", ..., 900: "#7f1d1d" }
+ * Example: { 50: "#fef2f2", 100: "#fee2e2", ..., 900: "#7f1d1d" }.
  */
 export type Palette = Record<Step, string>;
 
 /**
  * Flattened color palette with string keys.
- * Example: { "50": "#fef2f2", "100": "#fee2e2", ..., "900": "#7f1d1d" }
+ * Example: { "50": "#fef2f2", "100": "#fee2e2", ..., "900": "#7f1d1d" }.
  */
 export type PaletteFlat = Record<StepStr, string>;
 
@@ -32,13 +32,13 @@ export type PaletteFlat = Record<StepStr, string>;
  * - `primary`: Primary brand color
  * - `secondary`: Secondary brand color
  * - `success`: Success states
- * - `warning`: Warning/caution states
+ * - `warning`: Warning/caution states.
  */
 export type ColorName = (typeof COLOR_NAMES)[number];
 
 /**
  * Muted (desaturated) variant of a semantic color.
- * Example: "primary-muted", "error-muted"
+ * Example: "primary-muted", "error-muted".
  */
 export type MutedColorName = `${ColorName}-muted`;
 
@@ -57,7 +57,6 @@ export type TokenColorName = ColorName | MutedColorName | SystemColorName;
 /**
  * Design system configuration for color generation.
  * Maps semantic color names to base hex values.
- *
  * @example
  * ```typescript
  * const config: Config = {
@@ -79,12 +78,10 @@ export type Config = {
 /**
  * OKLCH color space representation.
  * Perceptually uniform color model for generating accessible color palettes.
- *
- * @property mode - Color space identifier (always "oklch")
- * @property l - Lightness (0-1)
- * @property c - Chroma/saturation (0-0.5 typically)
- * @property h - Hue angle in degrees (0-360)
- *
+ * @property mode - Color space identifier (always "oklch").
+ * @property l - Lightness (0-1).
+ * @property c - Chroma/saturation (0-0.5 typically).
+ * @property h - Hue angle in degrees (0-360).
  * @see https://oklch.com/
  */
 export type Oklch = {

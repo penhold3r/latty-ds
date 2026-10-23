@@ -10,25 +10,20 @@ import { resolveColorValue } from '../../utils';
 /**
  * A container component that provides elevation and surface styling.
  * Used for cards, dropdowns, modals, and other elevated UI elements.
- *
  * @element lt-surface
- *
  * @slot - Content to be displayed within the surface
- *
  * @example
  * ```html
  * <lt-surface elevation="2">
  *   <p>This is a card with medium elevation</p>
  * </lt-surface>
  * ```
- *
  * @example
  * ```html
  * <lt-surface appearance="outlined" elevation="0">
  *   <p>This is an outlined surface with no shadow</p>
  * </lt-surface>
  * ```
- *
  * @example
  * ```html
  * <lt-surface elevation="4">

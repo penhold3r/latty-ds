@@ -9,15 +9,12 @@ import type { AvatarSize } from '../avatar/avatar.types';
 import '../avatar/avatar';
 
 /**
- * An overlapping stack of `lt-avatar` elements — e.g. a list of collaborators. Set `max` to cap how many are
+ * An overlapping stack of `lt-avatar` elements — e.g. A list of collaborators. Set `max` to cap how many are
  * shown, with a "+N" indicator standing in for the rest. Set `size` to force every avatar (and the indicator) to
- * the same size — overlap only reads correctly when every circle is the same diameter.
- *
+ * the same size — overlap only reads correctly when every circle is the same diameter..
  * @element lt-avatar-group
  * @part overflow - The "+N" indicator shown when `max` hides some avatars
- *
  * @slot - `lt-avatar` elements
- *
  * @example
  * ```html
  * <lt-avatar-group max="3" size="sm">

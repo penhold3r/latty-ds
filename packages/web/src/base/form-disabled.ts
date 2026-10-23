@@ -27,7 +27,6 @@ import type { ReactiveController, ReactiveControllerHost } from 'lit';
  * button disabled then re-enabled right after stayed unclickable, its inner `<button disabled>` never cleared).
  * Deferring to a microtask moves the request *after* the current update fully commits, so it always starts a
  * genuinely new cycle instead of colliding with the one in flight.
- *
  * @example
  * ```ts
  * class Textfield extends ThemeableElement {

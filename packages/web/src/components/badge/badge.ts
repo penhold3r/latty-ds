@@ -9,12 +9,9 @@ import { SlottedContentController } from '../shared/slotted-content';
 
 /**
  * A compact status label for categories, counts, and states.
- *
  * @element lt-badge
- *
  * @slot - Rich content, in place of the `content` attribute (icons, multiple text runs). `content`/`max` are
  *   ignored when anything is slotted.
- *
  * @example
  * ```html
  * <lt-badge variant="success" content="Active"></lt-badge>

@@ -1,5 +1,5 @@
 /**
- * @latty-ds/web - Web components for the Latty Design System
+ * @latty-ds/web - Web components for the Latty Design System.
  *
  * A collection of reusable, accessible web components built with Lit.
  *
@@ -7,9 +7,7 @@
  * `export *` list below for the full set). Each component also has its own
  * module under `./components/<name>` for granular imports. Per-component docs
  * live at https://latty-ds — and in each component's source JSDoc.
- *
  * @packageDocumentation
- *
  * @example
  * Import and use components:
  * ```typescript

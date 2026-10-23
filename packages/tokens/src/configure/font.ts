@@ -14,7 +14,7 @@ export const fontFamilySlot = (index: number): string =>
   `fontFamily${FONT_FAMILY_SLOT_NAMES[index] ?? String(index + 1)}`;
 
 /**
- * Strips one layer of matching wrapping quotes, e.g. from a value copied out
+ * Strips one layer of matching wrapping quotes, e.g. From a value copied out
  * of a JS/CSS string literal example (`'https://...'` → `https://...`).
  * Leaves legitimate CSS values like `"Times New Roman", serif` alone, since
  * those don't start *and* end with the same quote character.
@@ -85,7 +85,7 @@ const resolveSingleFont = (entry: FontFamilyEntry): ResolvedFont => {
  * {@link ResolvedFont} per entry, in order. Each entry maps to its own
  * typography token via {@link fontFamilySlot} — the array isn't collapsed
  * into a single CSS fallback stack, so a consumer can reference each font
- * independently (e.g. a heading font vs. a body font).
+ * independently (e.g. A heading font vs. A body font).
  */
 export const resolveFontFamilies = (value: FontFamilyEntry | FontFamilyEntry[]): ResolvedFont[] =>
   (Array.isArray(value) ? value : [value]).map(resolveSingleFont);

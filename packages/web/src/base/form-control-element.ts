@@ -22,7 +22,6 @@ import { FormDisabledController } from './form-disabled';
  * `_formValue` accessor pair. A text-like control's value is its `value` string; a toggleable
  * control's is its `checked` state expressed the way the form sees it (`this.value` when checked,
  * `null` when not) — the same shape `setFormValue()` publishes.
- *
  * @example
  * ```ts
  * @customElement('lt-example')
@@ -46,7 +45,7 @@ export abstract class FormControlElement extends ThemeableElement {
    *
    * Declared here so every control inherits it (a static is inherited through the prototype chain, so
    * `attachInternals()` below can never fail on a subclass that forgot to opt in). It is deliberately
-   * *not* relied on for the manifest: `cem analyze` only lists members declared on a component's own
+   * not* relied on for the manifest: `cem analyze` only lists members declared on a component's own
    * class, so a control that wanted `formAssociated` in its manifest entry would still have to declare
    * it there.
    *

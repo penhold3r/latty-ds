@@ -15,11 +15,10 @@ const toRgb = converter('rgb');
 
 /**
  * Clamps a number between minimum and maximum values.
- *
- * @param n - Number to clamp
- * @param min - Minimum allowed value
- * @param max - Maximum allowed value
- * @returns Clamped value
+ * @param n - Number to clamp.
+ * @param min - Minimum allowed value.
+ * @param max - Maximum allowed value.
+ * @returns Clamped value.
  */
 const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
 
@@ -98,13 +97,10 @@ const rampFromBase = (
 /**
  * Generates main and muted color palettes from a base hex color.
  * Uses OKLCH color space for perceptually uniform color generation.
- *
- * @param hex - Base color in hex format (e.g., "#3b82f6")
- * @param useMuted - Whether to generate a muted variant (default: false)
- * @returns Object containing main palette and optional muted palette
- *
- * @throws {Error} If the provided hex color is invalid
- *
+ * @param hex - Base color in hex format (e.g., "#3b82f6").
+ * @param useMuted - Whether to generate a muted variant (default: false).
+ * @returns Object containing main palette and optional muted palette.
+ * @throws {Error} If the provided hex color is invalid.
  * @example
  * ```typescript
  * const { main, muted } = generatePalettes("#3b82f6", true);
@@ -142,9 +138,7 @@ export const generatePalettes = (hex: string, useMuted?: boolean) => {
 /**
  * Generates the neutral (grayscale) color palette.
  * Creates a perceptually uniform gray scale from near-white to near-black.
- *
- * @returns Palette with neutral colors across all steps
- *
+ * @returns Palette with neutral colors across all steps.
  * @example
  * ```typescript
  * const neutral = generateNeutralScale();
@@ -166,8 +160,7 @@ export const generateNeutralScale = (): Palette => {
 /**
  * Generates pure black and white color values.
  * Used for absolute contrast and special cases.
- *
- * @returns Object with white and black hex values
+ * @returns Object with white and black hex values.
  */
 export const generateBWColors = () => {
   return {

@@ -1,7 +1,6 @@
 /**
  * Spinner component module.
  * Exports the Spinner web component and related type definitions.
- *
  * @module components/spinner
  */
 

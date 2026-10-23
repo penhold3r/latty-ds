@@ -1,6 +1,5 @@
 /**
  * Design system constants for color and spacing token generation.
- *
  * @module constants
  */
 

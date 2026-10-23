@@ -16,20 +16,15 @@ const DEFAULT_LABELS: AlertLabels = {
 
 /**
  * Inline notification for persistent contextual feedback.
- *
  * @element lt-alert
- *
  * @slot - Alert body. Accepts any HTML — bold, links, lists, etc.
- *
  * @fires close - Fired when the dismiss button is clicked, just before the element is hidden. Cancelable.
- *
  * @example
  * ```html
  * <lt-alert variant="success" heading="Upload complete">
  *   Your file has been processed and is ready to download.
  * </lt-alert>
  * ```
- *
  * @example
  * ```html
  * <lt-alert variant="error" closable>
@@ -51,11 +46,13 @@ export class Alert extends ThemeableElement {
   @property({ reflect: true }) heading = '';
 
   /**
+   * Alias for `heading`.
    * @deprecated Use `heading` instead. `title` collides with the browser's own native tooltip attribute — every
    * HTML element has one regardless of custom-element status, so `<lt-alert title="…">` made hovering anywhere
    * over the alert show a browser tooltip, and assistive tech could read it as a duplicate description (ALR-3).
    * This alias keeps existing markup/JS working; the native `title` attribute is always stripped as soon as
    * it's read, so the tooltip never appears.
+   * @returns The current heading value.
    */
   get title(): string {
     return this.heading;

@@ -18,15 +18,13 @@ const DEFAULT_LABELS: SidePanelLabels = {
 
 /**
  * A slide-in panel anchored to any edge of the viewport, built on the native `<dialog>` element — the same
- * migration `lt-dialog` went through (DLG-1..4), applied here to fix the equivalent gaps (SPL-1/2/3): a closed
+ * migration `lt-dialog` went through applied here to fix equivalent gaps: a closed
  * panel is no longer just transformed off-screen while staying focusable and exposed to assistive tech
  * (`display: none` when closed is native, automatic, and absolute); focus trap and restore on close both come
- * from `showModal()`/`close()` for free — no manual focus-tracking code needed here at all, unlike `lt-dialog`,
- * which still carries its own from before that component's migration; Escape closes only the panel that was
+ * from `showModal()`/`close()` for free — no manual focus-tracking code needed here at all; Escape closes only the panel that was
  * actually focused, not every open panel on the page (no more `window`-level keydown listener); and `close`
  * fires consistently from `updated()` whenever `open` becomes `false`, however it happened — not only when
  * `hide()` was called directly.
- *
  * @element lt-sidepanel
  * @slot - Content rendered inside the panel body
  * @fires open - Fired when the panel opens
@@ -38,7 +36,6 @@ const DEFAULT_LABELS: SidePanelLabels = {
  * @part header - The header bar (contains label and close button)
  * @part close-button - The close button inside the header
  * @part body - The scrollable content area wrapping the default slot
- *
  * @cssprop [--lt-sidepanel-shadow] - Overrides the panel's box-shadow, for all anchor positions.
  * @cssprop [--lt-sidepanel-overlay-opacity] - Backdrop darkness. Set via the `overlay-opacity` property/attribute
  * instead of this custom property directly, unless you're overriding it from outside the component.
@@ -80,9 +77,8 @@ export class SidePanel extends ThemeableElement {
     exclude: ['aria-labelledby']
   });
   private _scrollLocked = false;
-  // Same first-update guard, for the same reason, as lt-dialog (DLG-2), lt-dropdown (DDN-1) and lt-snackbar
-  // (SNK-1): `updated()` also runs after the very first render, where `changed.has('open')` is true even though
-  // nothing was ever shown.
+  // Same first-update guard as lt-dialog, lt-dropdown, and lt-snackbar: `updated()` runs after the very first
+  // render where `changed.has('open')` is true even though nothing was ever shown.
   private _skipNextOpenChange = true;
 
   /** Open the panel. */
@@ -102,8 +98,7 @@ export class SidePanel extends ThemeableElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    // A panel removed from the DOM while still open must still release its scroll lock (same reasoning as
-    // lt-dialog, DLG-3's other half).
+    // A panel removed from the DOM while still open must still release its scroll lock.
     if (this._scrollLocked) {
       unlockBodyScroll();
       this._scrollLocked = false;
@@ -144,8 +139,7 @@ export class SidePanel extends ThemeableElement {
       lockBodyScroll();
       this._scrollLocked = true;
     }
-    // Guard against calling showModal() on an already-open dialog — throws InvalidStateError (same as lt-dialog,
-    // DLG-1). Initial focus placement and, on close, focus restoration to whatever had focus beforehand are both
+    // Guard against calling showModal() on an already-open dialog — throws InvalidStateError. Initial focus placement and, on close, focus restoration to whatever had focus beforehand are both
     // native showModal()/close() behavior — nothing to implement here for either (confirmed in the investigation's
     // spike: "Focus returns to a shadow-rooted opener on close" works with no manual tracking at all).
     if (this.dialogElement && !this.dialogElement.open) {
@@ -169,7 +163,7 @@ export class SidePanel extends ThemeableElement {
 
   // Unlike lt-dialog, this has no close-on-escape toggle, so there's nothing to preventDefault() on 'cancel' —
   // Escape is left entirely to the native element, now scoped to whichever panel actually has focus, not a
-  // window-level listener that closed every open panel on one keypress regardless of which was focused (SPL-3).
+  // window-level listener that closed every open panel on one keypress regardless of which was focused.
 
   // The native element's own 'close' event fires whenever IT closes, for any reason — sync `open` back so the
   // two never drift apart. If we're the ones who just called close() (inside _handleClose(), above), `open` is

@@ -18,16 +18,12 @@ const DEFAULT_LABELS: PaginationLabels = {
 
 /**
  * Page navigation control for paged data sets.
- *
  * @element lt-pagination
- *
  * @fires {CustomEvent<{page: number}>} change - Fired when the user navigates to a different page.
- *
  * @example
  * ```html
  * <lt-pagination page="1" total-pages="10"></lt-pagination>
  * ```
- *
  * @example
  * ```html
  * <lt-pagination page="5" total-pages="20" size="sm"></lt-pagination>

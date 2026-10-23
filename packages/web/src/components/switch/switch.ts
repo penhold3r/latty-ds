@@ -18,18 +18,13 @@ const DEFAULT_LABELS: SwitchLabels = {
 /**
  * A toggle switch component with sliding animation.
  * Internally uses a checkbox input with custom toggle styling.
- *
  * @element lt-switch
- *
  * @slot - Rich label content, in place of the `label` attribute. Falls back to `label` when nothing is slotted.
- *
  * @fires {CustomEvent<{checked: boolean}>} change - Dispatched when the switch state changes
- *
  * @example
  * ```html
  * <lt-switch label="Enable notifications"></lt-switch>
  * ```
- *
  * @example
  * ```html
  * <lt-switch
@@ -38,7 +33,6 @@ const DEFAULT_LABELS: SwitchLabels = {
  *   checked
  * ></lt-switch>
  * ```
- *
  * @example
  * ```html
  * <lt-switch

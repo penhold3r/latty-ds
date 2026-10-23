@@ -1,12 +1,12 @@
 import type { PaletteFlat } from '../types/';
 
 /**
- * Elevation level type (0-5)
+ * Elevation level type (0-5).
  */
 export type ElevationLevel = '0' | '1' | '2' | '3' | '4' | '5';
 
 /**
- * Elevation tokens mapping levels to box-shadow values
+ * Elevation tokens mapping levels to box-shadow values.
  */
 export type ElevationTokens = Record<ElevationLevel, string>;
 
@@ -29,10 +29,8 @@ export const hexToRgbChannels = (hex: string): string => {
  *
  * The shadows use the neutral palette to ensure they match the design system's
  * color scheme and maintain consistency across light/dark modes.
- *
- * @param neutral - The neutral color palette from the token system
- * @returns ElevationTokens object with shadow values for each level
- *
+ * @param neutral - The neutral color palette from the token system.
+ * @returns ElevationTokens object with shadow values for each level.
  * @example
  * ```typescript
  * const neutral = { "900": "#171717", "800": "#262626", ... };

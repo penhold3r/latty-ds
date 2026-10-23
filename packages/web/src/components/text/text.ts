@@ -7,8 +7,10 @@ import { textStyles } from './text.styles';
 import type { TextVariant, TextTag } from './text.types';
 import { devWarn } from '../../utils';
 
-// `as` reaches the template through unsafeStatic, so anything not on this list (an attribute can hold any string,
-// including markup) must never get there.
+/**
+ * `as` reaches the template through unsafeStatic, so anything not on this list (an attribute can hold any string,
+ * including markup) must never get there.
+ */
 const ALLOWED_TAGS: ReadonlySet<string> = new Set<TextTag>([
   'h1',
   'h2',
@@ -48,15 +50,13 @@ const VARIANT_TAG: Record<TextVariant, TextTag> = {
  * minimum and a desktop maximum. The rendered HTML tag matches the variant by
  * default but can be overridden with the `as` attribute.
  *
- * Override font-weight on any variant with `--lt-text-weight`:
+ * Override font-weight on any variant with `--lt-text-weight`:.
  * ```css
  * lt-text { --lt-text-weight: 700; }
  * ```
- *
  * @element lt-text
  * @cssprop [--lt-text-weight] - Overrides the default font-weight for the variant.
  * @cssprop [--lt-text-tracking] - Overrides the default letter-spacing for the variant.
- *
  * @example
  * ```html
  * <lt-text variant="display-lg" as="h1">Hero heading</lt-text>

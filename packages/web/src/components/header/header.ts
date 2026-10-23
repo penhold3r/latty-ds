@@ -8,9 +8,7 @@ import type { HeaderBackground } from './header.types';
 /**
  * A layout component that organises content into a sticky app bar.
  * Renders a native `<header>` element for semantics and the ARIA `banner` landmark.
- *
  * @element lt-header
- *
  * @slot before - Far-left area, typically a hamburger menu or back button
  * @slot logo - Logo or brand mark, placed to the right of `before`
  * @slot content - Main content area (nav links, search…); stretches to fill available space

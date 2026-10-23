@@ -17,10 +17,12 @@ import { nextListboxIndex } from '../shared/listbox-nav';
 
 let comboboxCount = 0;
 
-// Case- and diacritic-insensitive comparison key for the search filter below — "café" should match a query of
-// "cafe". NFD decomposes a combined character (e.g. "é") into its base letter plus a separate combining mark,
-// which the Unicode range ̀-ͯ then strips; toLowerCase() runs first so a combining mark's own casing
-// (irrelevant, marks have none) never factors in.
+/**
+ * Case- and diacritic-insensitive comparison key for the search filter below — "café" should match a query of
+ * "cafe". NFD decomposes a combined character (e.g. "é") into its base letter plus a separate combining mark,
+ * which the Unicode range ̀-ͯ then strips; toLowerCase() runs first so a combining mark's own casing
+ * (irrelevant, marks have none) never factors in.
+ */
 function normalizeForSearch(s: string): string {
   return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 }
@@ -35,15 +37,12 @@ const DEFAULT_LABELS: ComboboxLabels = {
 
 /**
  * Searchable single-select combobox. The user types to filter options; selecting an option sets the value.
- *
  * @element lt-combobox
- *
  * @fires {CustomEvent<{value: string | string[]}>} change - Fired when the selected value changes. With
  *   `multiple`, `value` is the array of selected values.
  * @fires {CustomEvent<{value: string}>} create - Fired when `creatable` is set and the user selects the
  *   "create new" row for free-text that matches no existing option. Does not modify `options` itself — the
  *   consumer decides whether/how to persist the new option.
- *
  * @example
  * ```html
  * <lt-combobox
@@ -52,7 +51,6 @@ const DEFAULT_LABELS: ComboboxLabels = {
  *   .options=${[{ value: 'us', label: 'United States' }, { value: 'ca', label: 'Canada' }]}
  * ></lt-combobox>
  * ```
- *
  * @example
  * ```html
  * <lt-combobox

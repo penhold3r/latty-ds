@@ -25,7 +25,6 @@ const SUBMITTER_ATTRS = [
 /**
  * Button component with multiple variants, sizes, appearances, and loading state support.
  * Automatically forwards native `<button>` / `<a>` and `aria-*` attributes onto the inner control.
- *
  * @element lt-button
  *
  * Features:
@@ -40,23 +39,17 @@ const SUBMITTER_ATTRS = [
  * - `toggle` mode: clicking flips `pressed`, dispatches `toggle`, and reflects `aria-pressed`
  * - Renders as `<a>` when `href` is provided (link button)
  * - Form-associated: `type="submit"` submits the containing form, `type="reset"` resets it
- *
  * @fires {CustomEvent<{pressed: boolean}>} toggle - Fired when `toggle` is set and the button is clicked.
- *
  * @slot - Button label/content
- *
  * @cssprop [--lt-button-min-width=88px] - Minimum width of the button; set to `0` for compact/inline buttons
- *
  * @example
  * ```html
  * <lt-button variant="primary" size="md">Click me</lt-button>
  * ```
- *
  * @example
  * ```html
  * <lt-button href="/dashboard" variant="primary">Go to dashboard</lt-button>
  * ```
- *
  * @example
  * ```html
  * <lt-button href="https://example.com" target="_blank" variant="secondary">Open link</lt-button>
@@ -233,7 +226,7 @@ export class Button extends FormControlElement {
   @property({ reflect: true }) type: ButtonType = 'button';
 
   // Delegates the actual submission to a hidden native <button>, kept in sync and attached to the resolved form
-  // only for the duration of the submission (BTN-3). Two platform constraints make this necessary rather than
+  // only for the duration of the submission. Two platform constraints make this necessary rather than
   // calling form.requestSubmit() directly on the host or passing it as the submitter: a form-associated custom
   // element can't itself be `requestSubmit()`'s submitter (Chromium: "the specified element is not a submit
   // button"), and name/value/formaction submitter semantics only apply to the specific button that triggered the
@@ -260,7 +253,7 @@ export class Button extends FormControlElement {
     }
 
     // this._internals.form (not this.closest('form')) so a button placed outside its form via form="id", or one
-    // whose form is across a shadow root, still works — closest('form') can never resolve either (BTN-3).
+    // whose form is across a shadow root, still works — closest('form') can never resolve either.
     const form = this._internals.form;
     if (!form) return;
 

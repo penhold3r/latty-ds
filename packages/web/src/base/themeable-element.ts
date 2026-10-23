@@ -7,7 +7,6 @@ export class ThemeableElement extends LitElement {
   /**
    * Forces the component into a specific theme regardless of the page theme.
    * `'dark'` | `'light'` — if unset, the component inherits the global scope theme.
-   *
    * @example
    * ```html
    * <!-- Always dark, even on a light page -->

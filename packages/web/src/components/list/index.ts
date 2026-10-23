@@ -1,7 +1,6 @@
 /**
  * List component module.
  * Exports the List web component and related type definitions.
- *
  * @module components/list
  */
 

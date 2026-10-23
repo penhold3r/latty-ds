@@ -1,7 +1,6 @@
 /**
  * Tab group component module.
  * Exports the TabGroup web component and related type definitions.
- *
  * @module components/tab-group
  */
 

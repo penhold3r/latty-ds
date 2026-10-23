@@ -6,7 +6,7 @@ import type { ReactiveController, ReactiveControllerHost, ReactiveElement } from
  * - `id`: copying would create a duplicate ID and clobber internal `<label for>` wiring
  * - `class`, `style`, `part`, `exportparts`, `theme`: host styling/layout concerns
  * - `slot`, `hidden`, `inert`, `popover`, `dir`, `lang`, `tabindex`: host-level DOM/focus semantics
- * - `role`: host-level ARIA role when explicitly set on a host (e.g. `lt-breadcrumb-item`)
+ * - `role`: host-level ARIA role when explicitly set on a host (e.g. `lt-breadcrumb-item`).
  */
 export const HOST_ONLY_ATTRIBUTES = new Set([
   'id',
@@ -32,7 +32,7 @@ export interface NativeAttrsOptions {
   aliases?: Record<string, string>;
   /** Optional predicate to filter which attributes apply to the current inner target element. */
   filter?: (attr: string, target: Element) => boolean;
-  /** Optional hook called after attributes are synced onto the target element (e.g. to re-check `inner.validity`). */
+  /** Optional hook called after attributes are synced onto the target element (e.g. To re-check `inner.validity`). */
   onSync?: (target: Element) => void;
 }
 

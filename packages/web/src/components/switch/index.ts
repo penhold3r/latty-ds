@@ -1,7 +1,6 @@
 /**
  * Switch component module.
  * Exports the Switch web component and related type definitions.
- *
  * @module components/switch
  */
 

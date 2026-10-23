@@ -11,11 +11,8 @@ import './nav-item';
  * Navigation container. Renders a `<nav>` element wrapping a list of `<lt-nav-item>` links.
  * Supports horizontal or vertical orientation and propagates the orientation to all
  * `<lt-nav-item>` children so nested items behave correctly.
- *
  * @element lt-nav
- *
  * @slot - Slot for `<lt-nav-item>` elements
- *
  * @example
  * ```html
  * <!-- Vertical (default) -->
@@ -24,7 +21,6 @@ import './nav-item';
  *   <lt-nav-item href="/about" label="About"></lt-nav-item>
  * </lt-nav>
  * ```
- *
  * @example
  * ```html
  * <!-- Horizontal with nested dropdown -->

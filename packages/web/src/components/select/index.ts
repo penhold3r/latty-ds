@@ -1,7 +1,6 @@
 /**
  * Select component module.
  * Exports the Select web component and related type definitions.
- *
  * @module components/select
  */
 

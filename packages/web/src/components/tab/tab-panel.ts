@@ -7,11 +7,8 @@ import { tabPanelStyles } from './tab-panel.styles';
 /**
  * A panel associated with a tab. Shown when the matching tab is active.
  * Place inside `lt-tab-group` using `slot="panel"`.
- *
  * @element lt-tab-panel
- *
  * @slot - Panel content
- *
  * @example
  * ```html
  * <lt-tab-group value="overview">

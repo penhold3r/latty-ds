@@ -14,14 +14,11 @@ import '@latty-ds/icons';
  * Icon-only button. Requires `label` for screen readers since there is no visible text.
  *
  * Automatically forwards native `<button>` / `<a>` and `aria-*` attributes onto the internal native control.
- *
  * @element lt-icon-button
- *
  * @example
  * ```html
  * <lt-icon-button icon="xmark" label="Close dialog"></lt-icon-button>
  * ```
- *
  * @example
  * ```html
  * <lt-icon-button icon="plus" label="Add item" variant="primary" appearance="filled"></lt-icon-button>

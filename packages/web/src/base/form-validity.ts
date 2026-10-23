@@ -8,7 +8,6 @@
  * happens to work there; jsdom's implementation enumerates instead, so it silently sees an empty flags object and
  * treats the control as always valid. Converting explicitly avoids relying on which enumeration strategy the
  * runtime uses, and is correct either way.
- *
  * @example
  * ```ts
  * this._internals.setValidity(toValidityFlags(input.validity), input.validationMessage, input);

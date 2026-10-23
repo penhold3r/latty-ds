@@ -7,7 +7,6 @@ import type { SpinnerSize, SpinnerVariant } from './spinner.types';
 
 /**
  * Spinner component for indicating loading states.
- *
  * @element lt-spinner
  *
  * Features:
@@ -16,12 +15,10 @@ import type { SpinnerSize, SpinnerVariant } from './spinner.types';
  * - Color variants or inherits parent color
  * - Respects reduced motion preferences
  * - Hidden from screen readers (aria-hidden)
- *
  * @example
  * ```html
  * <lt-spinner size="md" variant="primary"></lt-spinner>
  * ```
- *
  * @example
  * ```html
  * <!-- Inherits text color from parent -->
@@ -29,7 +26,6 @@ import type { SpinnerSize, SpinnerVariant } from './spinner.types';
  *   <lt-spinner variant="current"></lt-spinner>
  * </div>
  * ```
- *
  * @example
  * ```html
  * <!-- Large spinner with success color -->

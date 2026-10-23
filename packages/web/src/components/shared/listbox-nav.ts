@@ -35,7 +35,7 @@ export function nextListboxIndex(key: ListboxNavKey, currentIndex: number, lengt
  * keydown while the listbox is open.
  *
  * Deliberately does NOT special-case repeating a single letter to cycle through every option that starts with
- * it (e.g. pressing "j" repeatedly to step through "John", "Jake", "Julia") — that's a real native `<select>`
+ * it (e.g. Pressing "j" repeatedly to step through "John", "Jake", "Julia") — that's a real native `<select>`
  * refinement, but matching is already a genuine improvement over no typeahead at all, and adding it would need
  * to distinguish "repeated single letter" from "a genuinely repeated letter inside a real typed word" (e.g.
  * "ll" in "Allison"), which isn't worth the complexity this pass.

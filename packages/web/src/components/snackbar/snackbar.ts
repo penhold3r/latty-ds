@@ -19,22 +19,18 @@ const DEFAULT_LABELS: SnackbarLabels = {
  *
  * Renders as a native "manual" popover on its own host, so it always appears in the top layer — above an open
  * `lt-dialog`/`lt-sidepanel`, regardless of z-index, since top-layer content always wins over non-top-layer
- * content no matter how high (SNK-companion to §6.1's `<dialog>` migration). Confirmed live: fully visible and
+ * content no matter how high. Confirmed live: fully visible and
  * readable above an open modal. One narrower, unavoidable limitation (confirmed live too, not fixable from this
  * component's side): a native `showModal()` makes everything **outside the dialog's own subtree** inert,
  * including a sibling popover — explicitly setting `inert = false` on the snackbar does not override it. A
  * snackbar shown while a dialog is open is visible but not clickable until the dialog closes; its own
  * `duration` timer still fires normally regardless (a plain `setTimeout`, unaffected by inertness), so only a
  * `duration="0"` snackbar with a close/action button would be briefly stuck non-interactive in that scenario.
- *
  * @element lt-snackbar
- *
  * @slot - Notification content. Accepts any HTML — bold, links, etc.
- *
  * @fires show - Fired when the snackbar becomes visible.
  * @fires hide - Fired when the snackbar is dismissed.
  * @fires action - Fired when the action button is clicked.
- *
  * @example
  * ```html
  * <lt-snackbar id="sb" variant="success">Changes saved</lt-snackbar>
@@ -42,7 +38,6 @@ const DEFAULT_LABELS: SnackbarLabels = {
  *   document.getElementById('sb').show();
  * </script>
  * ```
- *
  * @example
  * ```html
  * <lt-snackbar action-label="Undo" duration="6000">
@@ -116,7 +111,7 @@ export class Snackbar extends ThemeableElement {
   private _focused = false;
   // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
   // was ever shown — `open` starts false, so the else branch ran, dispatching a `hide` for a snackbar that was
-  // never visible (SNK-1). Same fix and reasoning as lt-dropdown's `_skipNextOpenChange` (DDN-1). This guards
+  // never visible. Same fix as lt-dropdown. This guards
   // only the timer/event side effects, not the popover sync below — a snackbar mounted already open (markup
   // `open=""`) still needs `showPopover()` called once, or it stays in the native `display: none` state despite
   // `open` being true.

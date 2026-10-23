@@ -11,7 +11,6 @@ import type { ZIndexLayer } from '../zindex/';
  *
  * Elevation is automatically generated from the neutral color palette to ensure
  * consistent shadows that match the design system's color scheme.
- *
  * @example
  * ```typescript
  * const tokens: Tokens = {
@@ -79,7 +78,7 @@ export type FontFallback = 'sans-serif' | 'serif' | 'monospace' | 'cursive' | 'f
 /**
  * A single `font.family` entry: a plain CSS value, a Google Fonts CSS2 URL, or
  * a URL paired with a custom generic fallback (default `'sans-serif'`) for
- * when the derived family isn't sans-serif — e.g. a serif display font.
+ * when the derived family isn't sans-serif — e.g. A serif display font.
  */
 export type FontFamilyEntry = string | { url: string; fallback?: FontFallback };
 
@@ -102,7 +101,7 @@ export interface LattyConfig {
      * A bare URL string always falls back to the generic `sans-serif` family
      * if the font itself fails to load. Use the `{ url, fallback }` object
      * form to pick a different generic fallback (e.g. `'serif'` for a serif
-     * display font):
+     * display font):.
      * ```ts
      * family: { url: 'https://fonts.googleapis.com/css2?family=Playfair+Display', fallback: 'serif' }
      * ```
@@ -110,7 +109,7 @@ export interface LattyConfig {
      * When an array is passed, each entry maps to its own token in order —
      * `--lt-typography-fontFamilyPrimary`, `...Secondary`, `...Tertiary`,
      * etc. — rather than being combined into a single CSS fallback stack, so
-     * multiple fonts (e.g. a heading font and a body font) can each be
+     * multiple fonts (e.g. A heading font and a body font) can each be
      * referenced independently in your own CSS.
      */
     family?: FontFamilyEntry | FontFamilyEntry[];
@@ -145,7 +144,7 @@ export interface LattyConfig {
    * - `'light'` (default) — light tokens only; ignores OS preference
    * - `'dark'`   — dark tokens only; ignores OS preference
    * - `'system'` — light at `:root`, dark inside `@media (prefers-color-scheme: dark)` + `[data-theme]` overrides
-   * - `'auto'`   — alias for `'system'`, deprecated
+   * - `'auto'`   — alias for `'system'`, deprecated.
    */
   theme?: 'light' | 'dark' | 'system' | 'auto';
 }

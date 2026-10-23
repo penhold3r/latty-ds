@@ -5,7 +5,7 @@
  * - `md`: 20px (default)
  * - `lg`: 24px
  * - `xl`: 32px
- * - `inherit`: 1em — scales with the surrounding `font-size`
+ * - `inherit`: 1em — scales with the surrounding `font-size`.
  */
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'inherit';
 
@@ -14,8 +14,8 @@ export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'inherit';
  * Represents a single icon with its name and SVG content.
  */
 export interface IconDefinition {
-  /** Unique identifier for the icon */
+  /** Unique identifier for the icon. */
   name: string;
-  /** SVG markup string */
+  /** SVG markup string. */
   svg: string;
 }

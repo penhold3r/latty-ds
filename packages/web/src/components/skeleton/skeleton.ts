@@ -8,9 +8,7 @@ import type { SkeletonShape } from './skeleton.types';
 
 /**
  * A loading placeholder that mimics the shape of content while data is being fetched.
- *
  * @element lt-skeleton
- *
  * @example
  * ```html
  * <lt-skeleton></lt-skeleton>

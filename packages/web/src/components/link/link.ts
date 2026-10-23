@@ -13,9 +13,7 @@ import { NativeAttrsController } from '../shared/native-attrs';
  * Set `external` to open in a new tab and display a trailing external-link icon.
  * Automatically forwards native `<a>` attributes (`target`, `rel`, `download`, `hreflang`, `referrerpolicy`, etc.)
  * onto the underlying `<a>` element.
- *
  * @element lt-link
- *
  * @example
  * ```html
  * <lt-link href="https://example.com">Visit site</lt-link>
@@ -40,7 +38,7 @@ export class Link extends ThemeableElement {
    * `rel` defaults, plus the icon — set `target` directly for a new tab without the icon. */
   @property({ type: Boolean, reflect: true }) external = false;
 
-  /** Controls when the underline shows. @default 'hover' */
+  /** Controls when the underline shows. @default 'hover'. */
   @property({ reflect: true }) underline: LinkUnderline = 'hover';
 
   private get _target(): string {

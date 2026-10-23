@@ -7,8 +7,9 @@ import { NativeAttrsController } from '../shared/native-attrs';
 import '@latty-ds/icons';
 import '../text/text';
 
-// ── Color conversion helpers ──────────────────────────────────────────────────
-
+/**
+ * Color conversion helpers.
+ */
 function hexToRgbTuple(hex: string): [number, number, number] | null {
   const m = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : null;
@@ -76,8 +77,6 @@ function formatColor(hex: string, format: ColorInputFormat): string {
   return hex;
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
 const DEFAULT_LABELS: ColorInputLabels = {
   validationMessage: 'Please select a color'
 };
@@ -86,11 +85,8 @@ const DEFAULT_LABELS: ColorInputLabels = {
  * A read-only textfield that opens the native browser color picker on click.
  * Displays the selected color value and a live color swatch preview.
  * Accepts and emits colors in hex, rgb, or hsl format via the `format` prop.
- *
  * @element lt-color-input
- *
  * @fires {CustomEvent<{value: string}>} change - Dispatched when the user picks a new color
- *
  * @example
  * ```html
  * <lt-color-input label="Brand color" value="#7c3aed"></lt-color-input>

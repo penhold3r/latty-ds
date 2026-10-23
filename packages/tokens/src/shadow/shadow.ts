@@ -13,10 +13,8 @@ export type ShadowTokens = { rgb: string };
 /**
  * Generates the shadow RGB-channel token from the neutral color palette, so a custom shadow/scrim/tinted-border
  * color stays in step with the rest of the design system's neutral palette instead of hard-coding pure black.
- *
- * @param neutral - The neutral color palette from the token system
- * @returns `{ rgb: "27 27 27" }` (neutral-900's channels, space-separated)
- *
+ * @param neutral - The neutral color palette from the token system.
+ * @returns `{ rgb: "27 27 27" }` (neutral-900's channels, space-separated).
  * @example
  * ```typescript
  * const neutral = { "900": "#171717", ... };

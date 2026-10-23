@@ -21,10 +21,9 @@ import '../text/text';
 /**
  * Dialog component (modal) built on the native `<dialog>` element, with a backdrop, animations, and full
  * accessibility features for free — top-layer stacking, a real focus trap, an inert page background, and
- * Escape-to-close all come from the platform (`showModal()`), not from anything this component builds itself
- * (DLG-1). Body scroll locking is the one thing native `<dialog>` doesn't do on its own — this component keeps
- * its own ref-counted lock for that (DLG-3, see `shared/scroll-lock.ts`).
- *
+ * Escape-to-close all come from the platform (`showModal()`), not from anything this component builds itself.
+ * Body scroll locking is the one thing native `<dialog>` doesn't do on its own — this component keeps
+ * its own ref-counted lock for that (see `shared/scroll-lock.ts`).
  * @element lt-dialog
  *
  * Features:
@@ -37,15 +36,12 @@ import '../text/text';
  * - Native focus trap and restoration
  * - `open` / `close` events
  * - Accessible via the native `<dialog>` element's own implicit modal semantics
- *
  * @slot - Dialog body content
  * @slot header - Custom header content (overrides heading prop)
  * @slot footer - Footer content (typically for action buttons)
- *
  * @fires open - Fired when dialog opens
  * @fires close - Fired when dialog closes (however it closed — the close button, Escape, a backdrop click, or
  * setting `open` to `false` directly)
- *
  * @example
  * ```html
  * <lt-dialog open heading="Confirm Action">
@@ -56,7 +52,6 @@ import '../text/text';
  *   </div>
  * </lt-dialog>
  * ```
- *
  * @example
  * ```html
  * <lt-dialog size="lg" open heading="Settings" no-close-button>
@@ -87,11 +82,13 @@ export class Dialog extends ThemeableElement {
   @property() heading = '';
 
   /**
+   * Alias for `heading`.
    * @deprecated Use `heading` instead. `title` collides with the browser's own native tooltip attribute — every
    * HTML element has one regardless of custom-element status, so `<lt-dialog title="…">` made hovering anywhere
-   * over the dialog show a browser tooltip, and assistive tech could read it as a duplicate description (DLG-6).
+   * over the dialog show a browser tooltip, and assistive tech could read it as a duplicate description.
    * This alias keeps existing markup/JS working; the native `title` attribute is always stripped as soon as
    * it's read, so the tooltip never appears.
+   * @returns The current heading value.
    */
   get title(): string {
     return this.heading;
@@ -157,8 +154,7 @@ export class Dialog extends ThemeableElement {
   private _scrollLocked = false;
   // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
   // was ever shown — `open` starts false, so the else branch ran, firing a spurious `close` and clobbering
-  // `document.body.style.overflow` on page load (DLG-2). Same fix as lt-dropdown's `_skipNextOpenChange` (DDN-1)
-  // and lt-snackbar's (SNK-1).
+  // `document.body.style.overflow` on page load. Same fix as lt-dropdown and lt-snackbar.
   private _skipNextOpenChange = true;
 
   /**
@@ -201,7 +197,7 @@ export class Dialog extends ThemeableElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     // A dialog removed from the DOM while still open (rather than closed first) must still release its lock —
-    // otherwise the page is left permanently unscrollable (DLG-3's other half).
+    // otherwise the page is left permanently unscrollable.
     if (this._scrollLocked) {
       unlockBodyScroll();
       this._scrollLocked = false;
@@ -223,8 +219,8 @@ export class Dialog extends ThemeableElement {
 
   private handleOpen() {
     // Store currently focused element to restore later. This is the shadow-rooted host itself when the opener
-    // delegates focus (e.g. lt-button, BTN-4) — its own .focus() now correctly moves focus back into its shadow
-    // root on restore, which is what fixed DLG-4 (no dialog-side change needed for that part).
+    // delegates focus (e.g. lt-button) — its own .focus() now correctly moves focus back into its shadow
+    // root on restore.
     this.previouslyFocusedElement = document.activeElement as HTMLElement;
 
     if (!this._scrollLocked) {

@@ -13,7 +13,7 @@ import {
  * - `instant`: micro feedback — press/active transforms
  * - `fast`: default interactive transition — hover/focus color, border, box-shadow
  * - `moderate`: structural movement — expand/collapse, enter/exit fades
- * - `slow`: large/attention movement — panel slides, progress fill
+ * - `slow`: large/attention movement — panel slides, progress fill.
  */
 export type DurationToken = 'instant' | 'fast' | 'moderate' | 'slow';
 
@@ -21,7 +21,7 @@ export type DurationToken = 'instant' | 'fast' | 'moderate' | 'slow';
  * Easing curve scale.
  *
  * - `standard`: deceleration curve for elements entering/settling on screen
- * - `emphasized`: overshoot curve for entrances that should draw attention
+ * - `emphasized`: overshoot curve for entrances that should draw attention.
  */
 export type EaseToken = 'standard' | 'emphasized';
 

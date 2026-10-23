@@ -11,10 +11,8 @@ import '@latty-ds/icons';
 
 /**
  * Displays a user avatar — image, initials fallback, or icon fallback.
- *
  * @element lt-avatar
  * @part status - The presence-indicator dot, when `status` is set.
- *
  * @example
  * ```html
  * <lt-avatar name="Jane Doe" status="online"></lt-avatar>
