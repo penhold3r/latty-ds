@@ -23,17 +23,21 @@ export default defineConfig([
     dts: false,
     clean: true,
     splitting: false,
-    // `@floating-ui/dom` is a runtime dependency of this package, so it is left external like `lit` and
-    // `@latty-ds/icons`: the consumer's bundler resolves it once and shares that single copy between
-    // lt-select, lt-combobox, lt-dropdown and lt-date-input. Inlining it (as `noExternal` used to)
-    // shipped four copies of the same 16 kB inside the package — and four copies in the consumer's
-    // bundle too, since the inlined copy shadowed the installed one.
+    /*
+     * `@floating-ui/dom` is a runtime dependency of this package, so it is left external like `lit` and
+     * `@latty-ds/icons`: the consumer's bundler resolves it once and shares that single copy between
+     * lt-select, lt-combobox, lt-dropdown and lt-date-input. Inlining it (as `noExternal` used to)
+     * shipped four copies of the same 16 kB inside the package — and four copies in the consumer's
+     * bundle too, since the inlined copy shadowed the installed one.
+     */
     external: ['lit', 'lit/*', '@lit/*', '@latty-ds/icons', '@latty-ds/tokens', '@floating-ui/dom'],
     outExtension: () => ({ js: '.js' })
   },
   {
-    // CJS build: fully self-contained so webpack/CJS consumers don't need lit installed.
-    // Lit is ESM-only and cannot be require()'d, so we bundle it in here.
+    /*
+     * CJS build: fully self-contained so webpack/CJS consumers don't need lit installed.
+     * Lit is ESM-only and cannot be require()'d, so we bundle it in here.
+     */
     entry: { index: 'src/index.ts' },
     format: ['cjs'],
     dts: false,

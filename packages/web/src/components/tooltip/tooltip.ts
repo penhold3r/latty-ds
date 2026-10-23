@@ -134,10 +134,12 @@ export class Tooltip extends ThemeableElement {
     this._hideTimer = undefined;
   }
 
-  // aria-describedby's id lookup only works within one tree: the tooltip bubble lives in this element's own
-  // shadow root, but the trigger the id is set on is the slotted (light DOM) element — an id reference can't
-  // cross that boundary, so no AT ever actually announces it (verified: resolves to nothing in the accessibility
-  // tree). aria-description carries the text itself, so there's no id, and nothing to fail to resolve.
+  /*
+   * aria-describedby's id lookup only works within one tree: the tooltip bubble lives in this element's own
+   * shadow root, but the trigger the id is set on is the slotted (light DOM) element — an id reference can't
+   * cross that boundary, so no AT ever actually announces it (verified: resolves to nothing in the accessibility
+   * tree). aria-description carries the text itself, so there's no id, and nothing to fail to resolve.
+   */
   private _describeTrigger() {
     const trigger = this._slot?.assignedElements()[0];
     trigger?.setAttribute('aria-description', this.content);
@@ -164,8 +166,10 @@ export class Tooltip extends ThemeableElement {
         return;
       }
 
-      // A delay is already running — let it finish rather than restarting the clock on every
-      // pointermove-driven re-sync.
+      /*
+       * A delay is already running — let it finish rather than restarting the clock on every
+       * pointermove-driven re-sync.
+       */
       if (this._showTimer === undefined) {
         this._showTimer = setTimeout(() => {
           this._showTimer = undefined;
@@ -175,13 +179,17 @@ export class Tooltip extends ThemeableElement {
       return;
     }
 
-    // Ends a pending delay before it ever shows — a hover that ends before `delay` elapses never shows the
-    // tooltip at all, only a completed wait schedules it.
+    /*
+     * Ends a pending delay before it ever shows — a hover that ends before `delay` elapses never shows the
+     * tooltip at all, only a completed wait schedules it.
+     */
     this._clearShowTimer();
 
     if (this.hoverable && this._isShown() && this._hideTimer === undefined) {
-      // Grace period: gives the pointer time to cross the gap between the trigger and the bubble before
-      // actually hiding — see HOVER_GRACE_MS.
+      /*
+       * Grace period: gives the pointer time to cross the gap between the trigger and the bubble before
+       * actually hiding — see HOVER_GRACE_MS.
+       */
       this._hideTimer = setTimeout(() => {
         this._hideTimer = undefined;
         this._hide();
@@ -208,9 +216,11 @@ export class Tooltip extends ThemeableElement {
     window.removeEventListener('resize', this._reposition);
   }
 
-  // A top-layer popover is positioned against the viewport, not the host, so the bubble's fixed coordinates are
-  // computed here from the host's rect. Fixed coordinates need a physical side, so the logical start/end placements
-  // are resolved against the host's computed direction (start is the left side in LTR, the right side in RTL).
+  /*
+   * A top-layer popover is positioned against the viewport, not the host, so the bubble's fixed coordinates are
+   * computed here from the host's rect. Fixed coordinates need a physical side, so the logical start/end placements
+   * are resolved against the host's computed direction (start is the left side in LTR, the right side in RTL).
+   */
   private _reposition = () => {
     if (!this._isShown()) return;
     const host = this.getBoundingClientRect();
@@ -242,8 +252,10 @@ export class Tooltip extends ThemeableElement {
   };
 
   private _onPointerEnter = (e: PointerEvent) => {
-    // In touch mode, a tap drives `_touchOpen` instead (see _onPointerUp) — the pointerenter/pointerleave pair
-    // a touch tap also fires would otherwise flash the tooltip via the hover path before the finger even lifts.
+    /*
+     * In touch mode, a tap drives `_touchOpen` instead (see _onPointerUp) — the pointerenter/pointerleave pair
+     * a touch tap also fires would otherwise flash the tooltip via the hover path before the finger even lifts.
+     */
     if (this.touch && e.pointerType === 'touch') return;
     this._hovered = true;
     this._sync();

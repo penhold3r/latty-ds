@@ -35,11 +35,13 @@ export class Dropdown extends ThemeableElement {
     onOutside: () => this.hide()
   });
 
-  // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
-  // ever opened. Without this, mounting a closed dropdown fired `close` and moved focus to the trigger on page
-  // load (verified: activeElement jumped to a native <button> trigger). Ships with lt-button's `delegatesFocus`
-  // — before that, the same first-update run was a no-op for an `lt-button` trigger anyway, since its
-  // `.focus()` did nothing.
+  /*
+   * `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
+   * ever opened. Without this, mounting a closed dropdown fired `close` and moved focus to the trigger on page
+   * load (verified: activeElement jumped to a native <button> trigger). Ships with lt-button's `delegatesFocus`
+   * — before that, the same first-update run was a no-op for an `lt-button` trigger anyway, since its
+   * `.focus()` did nothing.
+   */
   private _skipNextOpenChange = true;
 
   connectedCallback() {
@@ -65,10 +67,12 @@ export class Dropdown extends ThemeableElement {
     trigger.setAttribute('aria-expanded', this.open ? 'true' : 'false');
   }
 
-  // Tab away from the trigger/menu (as opposed to Escape, or a click outside, which are already handled) left
-  // the menu open — nothing closed it once focus moved on. relatedTarget is the element focus is moving *to*;
-  // if that's still somewhere inside this dropdown (the trigger, or an item — both light DOM children of this
-  // element), there's nothing to do.
+  /*
+   * Tab away from the trigger/menu (as opposed to Escape, or a click outside, which are already handled) left
+   * the menu open — nothing closed it once focus moved on. relatedTarget is the element focus is moving *to*;
+   * if that's still somewhere inside this dropdown (the trigger, or an item — both light DOM children of this
+   * element), there's nothing to do.
+   */
   private _onFocusOut = (e: FocusEvent) => {
     if (!this.open) return;
     const next = e.relatedTarget as Node | null;

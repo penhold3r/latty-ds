@@ -3,8 +3,10 @@ import { lockBodyScroll, unlockBodyScroll } from '../scroll-lock';
 
 describe('scroll-lock (DLG-3)', () => {
   afterEach(() => {
-    // The lock count is module-level state, shared across every test in this file — leave it exactly as found
-    // (locked, since body.style.overflow is a real, observable side effect on the shared jsdom document).
+    /*
+     * The lock count is module-level state, shared across every test in this file — leave it exactly as found
+     * (locked, since body.style.overflow is a real, observable side effect on the shared jsdom document).
+     */
     document.body.style.overflow = '';
   });
 
@@ -52,8 +54,10 @@ describe('scroll-lock (DLG-3)', () => {
   it('an unpaired unlock() is a no-op, never goes negative', () => {
     unlockBodyScroll();
     unlockBodyScroll();
-    // If the count had gone negative, a single lock()/unlock() pair afterward would incorrectly still show
-    // "locked" (count > 0) after the unlock, since it would only bring a very-negative count up to -1 or so.
+    /*
+     * If the count had gone negative, a single lock()/unlock() pair afterward would incorrectly still show
+     * "locked" (count > 0) after the unlock, since it would only bring a very-negative count up to -1 or so.
+     */
     lockBodyScroll();
     unlockBodyScroll();
     expect(document.body.style.overflow).toBe('');

@@ -138,8 +138,10 @@ export class DateInput extends FormControlElement {
     if (this._isDisabled || this._open) return;
     this._open = true;
     await this.updateComplete;
-    // Escape can close the dropdown while the render it asked for was still pending — opening it now
-    // would leave a calendar on screen that nothing owns.
+    /*
+     * Escape can close the dropdown while the render it asked for was still pending — opening it now
+     * would leave a calendar on screen that nothing owns.
+     */
     if (!this._open) return;
     await this._popup.open();
   }
@@ -164,8 +166,10 @@ export class DateInput extends FormControlElement {
 
   private _handleDropdownKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
-      // preventDefault(), not just stopPropagation() — an ancestor <lt-dialog> closes itself on Escape unless
-      // something already prevented the keydown's default, independent of DOM event bubbling.
+      /*
+       * preventDefault(), not just stopPropagation() — an ancestor <lt-dialog> closes itself on Escape unless
+       * something already prevented the keydown's default, independent of DOM event bubbling.
+       */
       e.preventDefault();
       e.stopPropagation();
       this._closeDropdown();

@@ -894,8 +894,10 @@ describe('<lt-calendar> week-start derived from locale (X5)', () => {
     const weekdayFmt = new Intl.DateTimeFormat('en-US', { weekday: 'narrow' });
     expect(firstWeekdayLabel()).toBe(weekdayFmt.format(new Date(2026, 0, 4))); // Sunday, en-US's own week start
 
-    // Covers the separate new Intl.DateTimeFormat(this.locale, ...) call sites in render() itself (month label,
-    // day aria-label), not just _getWeekdayLabels() above — all five used to be unguarded.
+    /*
+     * Covers the separate new Intl.DateTimeFormat(this.locale, ...) call sites in render() itself (month label,
+     * day aria-label), not just _getWeekdayLabels() above — all five used to be unguarded.
+     */
     const monthLabel = el.shadowRoot!.querySelector('.month-label-btn')!;
     expect(monthLabel.textContent).toContain(
       new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(2026, 4))
@@ -1013,8 +1015,10 @@ describe('<lt-calendar> min/max-aware navigation', () => {
   });
 
   it("disables the picker's own prev/next-year buttons once the whole neighboring year is out of range", async () => {
-    // min is 2026-04-01 and max is now 2026-12-31 (set in beforeEach/this test) — 2025 is entirely before min,
-    // 2027 is entirely after max, so from the 2026 picker both neighboring years should be unreachable.
+    /*
+     * min is 2026-04-01 and max is now 2026-12-31 (set in beforeEach/this test) — 2025 is entirely before min,
+     * 2027 is entirely after max, so from the 2026 picker both neighboring years should be unreachable.
+     */
     el.max = '2026-12-31';
     await el.updateComplete;
 
@@ -1048,8 +1052,10 @@ describe('<lt-calendar months="2"> min/max-aware navigation', () => {
   const navButtons = () => el.shadowRoot!.querySelectorAll('.nav-btn') as NodeListOf<HTMLButtonElement>;
 
   it('checks the LAST visible panel (not the first) for next-button availability', async () => {
-    // Panels are May + June. max excludes July — the panel that would newly come into view going forward —
-    // but May and June themselves are still fully in range, so next should stay enabled.
+    /*
+     * Panels are May + June. max excludes July — the panel that would newly come into view going forward —
+     * but May and June themselves are still fully in range, so next should stay enabled.
+     */
     const [, next] = navButtons();
     expect(next.disabled).toBe(false);
   });
@@ -1061,8 +1067,10 @@ describe('<lt-calendar months="2"> min/max-aware navigation', () => {
   });
 
   it('checks the FIRST visible panel (not the last) for prev-button availability', async () => {
-    // Panels are May + June; min excludes everything before April. Going back one panel shows April + May —
-    // April is the new first panel, and April is still in range, so prev should stay enabled.
+    /*
+     * Panels are May + June; min excludes everything before April. Going back one panel shows April + May —
+     * April is the new first panel, and April is still in range, so prev should stay enabled.
+     */
     const [prev] = navButtons();
     expect(prev.disabled).toBe(false);
   });
@@ -1109,17 +1117,21 @@ describe('<lt-calendar> week numbers', () => {
     const numbers = [...el.shadowRoot!.querySelectorAll('[role="row"] > .week-number')].map((c) =>
       c.textContent?.trim()
     );
-    // Row 0 is Sun Apr 26 - Sat May 2 2026 — 6 of those 7 days fall in ISO week 18 (only the leading Sunday is
-    // still week 17), so the row reports 18, the week most of its own dates actually belong to. Rows increment
-    // weekly through row 5 (Sun May 31 - Sat Jun 6, week 23).
+    /*
+     * Row 0 is Sun Apr 26 - Sat May 2 2026 — 6 of those 7 days fall in ISO week 18 (only the leading Sunday is
+     * still week 17), so the row reports 18, the week most of its own dates actually belong to. Rows increment
+     * weekly through row 5 (Sun May 31 - Sat Jun 6, week 23).
+     */
     expect(numbers).toEqual(['18', '19', '20', '21', '22', '23']);
   });
 
   it("reports the week that covers most of a row's days, not just its first day — a real bug a non-Monday week-start exposes", async () => {
-    // Regression test: a first version computed the row's number from its first day alone. For a Sunday-start
-    // row spanning two ISO weeks (the common case, since ISO weeks are Monday-Sunday), that mislabeled the
-    // *whole* row with the single leading Sunday's own (different, "stale") week number — caught via a live
-    // screenshot showing Oct 15 2026 (a Thursday, unambiguously ISO week 42) rendered in a row labeled "41".
+    /*
+     * Regression test: a first version computed the row's number from its first day alone. For a Sunday-start
+     * row spanning two ISO weeks (the common case, since ISO weeks are Monday-Sunday), that mislabeled the
+     * *whole* row with the single leading Sunday's own (different, "stale") week number — caught via a live
+     * screenshot showing Oct 15 2026 (a Thursday, unambiguously ISO week 42) rendered in a row labeled "41".
+     */
     el.value = '2026-10-15';
     el.showWeekNumbers = true;
     await el.updateComplete;

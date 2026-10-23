@@ -154,8 +154,10 @@ describe('<lt-snackbar-group>', () => {
     sb.hide();
     await sb.updateComplete;
 
-    // The same CSS also transitions display/overlay (for allow-discrete) — a real browser may fire their own
-    // transitionend events too, not necessarily after opacity's. Only opacity should trigger removal.
+    /*
+     * The same CSS also transitions display/overlay (for allow-discrete) — a real browser may fire their own
+     * transitionend events too, not necessarily after opacity's. Only opacity should trigger removal.
+     */
     sb.dispatchEvent(new TransitionEvent('transitionend', { propertyName: 'display' }));
     expect(sb.isConnected).toBe(true);
 

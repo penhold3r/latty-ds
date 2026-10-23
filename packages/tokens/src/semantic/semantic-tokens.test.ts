@@ -11,10 +11,12 @@ const AA = 4.5;
 
 const everyVariant = (hex: string): Record<string, string> => Object.fromEntries(VARIANTS.map((v) => [v, hex]));
 
-// Base colours a consumer might configure. The picker has to hold AA whatever it is given, so alongside the default
-// palette and the docs' theme-playground presets this includes adversarial inputs: a pale primary, near-black and
-// pure white/black, saturated hues, and a grey sweep that walks the luminance crossover (~0.18) where neither white
-// nor black text has much room.
+/*
+ * Base colours a consumer might configure. The picker has to hold AA whatever it is given, so alongside the default
+ * palette and the docs' theme-playground presets this includes adversarial inputs: a pale primary, near-black and
+ * pure white/black, saturated hues, and a grey sweep that walks the luminance crossover (~0.18) where neither white
+ * nor black text has much room.
+ */
 const CONFIGS: Record<string, Record<string, string>> = {
   default: {},
   ocean: { primary: '#0284c7', secondary: '#0d9488' },
@@ -99,8 +101,10 @@ describe('semantic tokens — text on interactive fills', () => {
 });
 
 describe('semantic tokens — neutral interactive contrast', () => {
-  // Neutral has no on-color token; components put near-white text on it (button: neutral-50, solid badge:
-  // white). Regression guard for the filled neutral button, which used neutral-500 (3.48:1).
+  /*
+   * Neutral has no on-color token; components put near-white text on it (button: neutral-50, solid badge:
+   * white). Regression guard for the filled neutral button, which used neutral-500 (3.48:1).
+   */
   it.each([
     ['light', 'interactive-neutral-bg'],
     ['light', 'interactive-neutral-bg-hover'],

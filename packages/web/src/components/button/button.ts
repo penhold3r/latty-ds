@@ -58,25 +58,31 @@ const SUBMITTER_ATTRS = [
 @customElement('lt-button')
 export class Button extends FormControlElement {
   static styles = buttonStyles;
-  // Makes host.focus() move focus into the shadow root (the inner <button>/<a>) instead of being a no-op —
-  // without it, activeElement never leaves <body>, silently breaking autofocus and any focus restore that calls
-  // .focus() on this element (a closed dialog/dropdown returning focus to its trigger, for example).
+  /*
+   * Makes host.focus() move focus into the shadow root (the inner <button>/<a>) instead of being a no-op —
+   * without it, activeElement never leaves <body>, silently breaking autofocus and any focus restore that calls
+   * .focus() on this element (a closed dialog/dropdown returning focus to its trigger, for example).
+   */
   static override shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
 
   private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('[part="base"]'), {
     exclude: ['target', 'rel', 'aria-disabled', 'aria-busy', 'aria-label']
   });
-  // Tracks whether willUpdate() below is the one that set the host's aria-pressed, so it only ever cleans up its
-  // own writes — a consumer managing aria-pressed directly (without `toggle`) must be left alone.
+  /*
+   * Tracks whether willUpdate() below is the one that set the host's aria-pressed, so it only ever cleans up its
+   * own writes — a consumer managing aria-pressed directly (without `toggle`) must be left alone.
+   */
   private _ownsAriaPressed = false;
 
   connectedCallback() {
     super.connectedCallback();
-    // Capture phase, so it runs before the event reaches anything — including a consumer's own listener on this
-    // element. Needed because the native disabled attribute on the inner button doesn't reliably stop every click
-    // from reaching the host: content it renders while busy (the spinner, or an icon) can end up as the browser's
-    // actual click target instead of the disabled <button> itself, slipping past the native block (verified in
-    // Chromium: a loading button's host listener still fires once per click). This closes that gap unconditionally.
+    /*
+     * Capture phase, so it runs before the event reaches anything — including a consumer's own listener on this
+     * element. Needed because the native disabled attribute on the inner button doesn't reliably stop every click
+     * from reaching the host: content it renders while busy (the spinner, or an icon) can end up as the browser's
+     * actual click target instead of the disabled <button> itself, slipping past the native block (verified in
+     * Chromium: a loading button's host listener still fires once per click). This closes that gap unconditionally.
+     */
     this.addEventListener('click', this._blockClickWhileBusy, { capture: true });
   }
 
@@ -107,22 +113,26 @@ export class Button extends FormControlElement {
 
   override willUpdate(changed: PropertyValues<this>) {
     super.willUpdate(changed);
-    // aria-pressed needs the literal ARIA strings 'true'/'false', not Lit's presence-based boolean reflection, so
-    // it's written here as a host attribute instead of a `reflect: true` property — the existing
-    // NativeAttrsController (already wired up above) then mirrors it onto the inner control for free, the same
-    // path a consumer's own `aria-pressed` would take. Set in willUpdate(), not updated(): a ReactiveController's
-    // hostUpdated() runs *before* the element's own updated() (confirmed in Lit's source), so by the time
-    // updated() could set this, the controller would already have copied this cycle's (stale) host value onto the
-    // inner control — willUpdate() runs before render, so the controller's hostUpdated() picks up the new value
-    // in the same pass instead of needing an extra MutationObserver-triggered re-render. Only meaningful in
-    // `toggle` mode; href makes this a link, and links don't have toggle-button semantics.
+    /*
+     * aria-pressed needs the literal ARIA strings 'true'/'false', not Lit's presence-based boolean reflection, so
+     * it's written here as a host attribute instead of a `reflect: true` property — the existing
+     * NativeAttrsController (already wired up above) then mirrors it onto the inner control for free, the same
+     * path a consumer's own `aria-pressed` would take. Set in willUpdate(), not updated(): a ReactiveController's
+     * hostUpdated() runs *before* the element's own updated() (confirmed in Lit's source), so by the time
+     * updated() could set this, the controller would already have copied this cycle's (stale) host value onto the
+     * inner control — willUpdate() runs before render, so the controller's hostUpdated() picks up the new value
+     * in the same pass instead of needing an extra MutationObserver-triggered re-render. Only meaningful in
+     * `toggle` mode; href makes this a link, and links don't have toggle-button semantics.
+     */
     if (changed.has('toggle') || changed.has('pressed') || changed.has('href')) {
       if (this.toggle && !this.href) {
         this.setAttribute('aria-pressed', this.pressed ? 'true' : 'false');
         this._ownsAriaPressed = true;
       } else if (this._ownsAriaPressed) {
-        // Only remove what this logic itself set — a consumer managing aria-pressed directly (not via `toggle`)
-        // must keep working, same as before `toggle` existed.
+        /*
+         * Only remove what this logic itself set — a consumer managing aria-pressed directly (not via `toggle`)
+         * must keep working, same as before `toggle` existed.
+         */
         this.removeAttribute('aria-pressed');
         this._ownsAriaPressed = false;
       }
@@ -225,14 +235,16 @@ export class Button extends FormControlElement {
    */
   @property({ reflect: true }) type: ButtonType = 'button';
 
-  // Delegates the actual submission to a hidden native <button>, kept in sync and attached to the resolved form
-  // only for the duration of the submission. Two platform constraints make this necessary rather than
-  // calling form.requestSubmit() directly on the host or passing it as the submitter: a form-associated custom
-  // element can't itself be `requestSubmit()`'s submitter (Chromium: "the specified element is not a submit
-  // button"), and name/value/formaction submitter semantics only apply to the specific button that triggered the
-  // submission — setting this element's own form value unconditionally would submit name/value even when a
-  // *different* button (or an Enter keypress) triggered the submit. This is the same workaround other
-  // form-associated custom element implementations use for the same gap.
+  /*
+   * Delegates the actual submission to a hidden native <button>, kept in sync and attached to the resolved form
+   * only for the duration of the submission. Two platform constraints make this necessary rather than
+   * calling form.requestSubmit() directly on the host or passing it as the submitter: a form-associated custom
+   * element can't itself be `requestSubmit()`'s submitter (Chromium: "the specified element is not a submit
+   * button"), and name/value/formaction submitter semantics only apply to the specific button that triggered the
+   * submission — setting this element's own form value unconditionally would submit name/value even when a
+   * *different* button (or an Enter keypress) triggered the submit. This is the same workaround other
+   * form-associated custom element implementations use for the same gap.
+   */
   private _proxySubmitBtn: HTMLButtonElement | null = null;
 
   private _getProxySubmitBtn(): HTMLButtonElement {
@@ -252,8 +264,10 @@ export class Button extends FormControlElement {
       dispatch(this, 'toggle', { pressed: this.pressed });
     }
 
-    // this._internals.form (not this.closest('form')) so a button placed outside its form via form="id", or one
-    // whose form is across a shadow root, still works — closest('form') can never resolve either.
+    /*
+     * this._internals.form (not this.closest('form')) so a button placed outside its form via form="id", or one
+     * whose form is across a shadow root, still works — closest('form') can never resolve either.
+     */
     const form = this._internals.form;
     if (!form) return;
 
@@ -278,9 +292,11 @@ export class Button extends FormControlElement {
     const isDisabled = this.disabled || this.loading || this._fieldsetDisabled.fieldsetDisabled;
     const ariaLabel =
       this.loading && this.loadingLabel ? this.loadingLabel : this.getAttribute('aria-label') || nothing;
-    // The label stays in the DOM (and in the accessibility tree) while loading, just visually hidden with
-    // opacity — not removed — so the button keeps its accessible name instead of reading as an unnamed busy
-    // control, and keeps its width instead of shrinking to fit only the spinner.
+    /*
+     * The label stays in the DOM (and in the accessibility tree) while loading, just visually hidden with
+     * opacity — not removed — so the button keeps its accessible name instead of reading as an unnamed busy
+     * control, and keeps its width instead of shrinking to fit only the spinner.
+     */
     const inner = html`
       <span class=${classMap({ label: true, 'is-loading': this.loading })} part="label">
         ${this.iconStart ? html`<lt-icon class="icon-start" name=${this.iconStart}></lt-icon>` : ''}

@@ -75,9 +75,11 @@ const radioGroupFor = (radio: Radio): Set<Radio> | null => {
 @customElement('lt-radio')
 export class Radio extends FormControlElement {
   static styles = radioStyles;
-  // Makes host.focus() move focus into the shadow root (the inner <input>) — lt-radio-group needs this to move
-  // focus programmatically for arrow-key navigation, the same way lt-button's delegatesFocus
-  // lets lt-dropdown do the same for its trigger.
+  /*
+   * Makes host.focus() move focus into the shadow root (the inner <input>) — lt-radio-group needs this to move
+   * focus programmatically for arrow-key navigation, the same way lt-button's delegatesFocus
+   * lets lt-dropdown do the same for its trigger.
+   */
   static override shadowRootOptions = { ...LitElement.shadowRootOptions, delegatesFocus: true };
 
   private _group: Set<Radio> | null = null;
@@ -100,8 +102,10 @@ export class Radio extends FormControlElement {
 
   override willUpdate(changed: PropertyValues<this>) {
     super.willUpdate(changed);
-    // A renamed radio (e.g. lt-radio-group re-assigning `name`) needs to leave its old group and join the new
-    // one — otherwise it would keep excluding radios it no longer shares a name with.
+    /*
+     * A renamed radio (e.g. lt-radio-group re-assigning `name`) needs to leave its old group and join the new
+     * one — otherwise it would keep excluding radios it no longer shares a name with.
+     */
     if (changed.has('name')) this._joinGroup();
   }
 
@@ -228,15 +232,19 @@ export class Radio extends FormControlElement {
    * @private
    */
   private handleChange(e: Event) {
-    // Stop the native (composed) change event from also bubbling past the
-    // shadow boundary — otherwise it double-fires 'change' on the host after
-    // our own CustomEvent, with the wrong (non-{value, checked}) detail shape.
+    /*
+     * Stop the native (composed) change event from also bubbling past the
+     * shadow boundary — otherwise it double-fires 'change' on the host after
+     * our own CustomEvent, with the wrong (non-{value, checked}) detail shape.
+     */
     e.stopPropagation();
     const target = e.target as HTMLInputElement;
     this.checked = target.checked;
 
-    // Exclude the rest of the group directly — native <input> grouping can't do this itself, since each
-    // instance's input lives in its own separate shadow root (see radioGroupFor's doc comment).
+    /*
+     * Exclude the rest of the group directly — native <input> grouping can't do this itself, since each
+     * instance's input lives in its own separate shadow root (see radioGroupFor's doc comment).
+     */
     if (this.checked) {
       this._group?.forEach((other) => {
         if (other !== this) other.checked = false;

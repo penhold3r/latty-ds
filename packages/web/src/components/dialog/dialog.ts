@@ -152,9 +152,11 @@ export class Dialog extends ThemeableElement {
   });
   private previouslyFocusedElement?: HTMLElement;
   private _scrollLocked = false;
-  // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
-  // was ever shown — `open` starts false, so the else branch ran, firing a spurious `close` and clobbering
-  // `document.body.style.overflow` on page load. Same fix as lt-dropdown and lt-snackbar.
+  /*
+   * `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
+   * was ever shown — `open` starts false, so the else branch ran, firing a spurious `close` and clobbering
+   * `document.body.style.overflow` on page load. Same fix as lt-dropdown and lt-snackbar.
+   */
   private _skipNextOpenChange = true;
 
   /**
@@ -186,8 +188,10 @@ export class Dialog extends ThemeableElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // Markup never goes through the `title` accessor above — the attribute is just present on the node from
-    // HTML parsing. `heading` wins if both are somehow given.
+    /*
+     * Markup never goes through the `title` accessor above — the attribute is just present on the node from
+     * HTML parsing. `heading` wins if both are somehow given.
+     */
     if (this.hasAttribute('title')) {
       if (!this.heading) this.heading = this.getAttribute('title')!;
       this.removeAttribute('title');
@@ -196,8 +200,10 @@ export class Dialog extends ThemeableElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    // A dialog removed from the DOM while still open (rather than closed first) must still release its lock —
-    // otherwise the page is left permanently unscrollable.
+    /*
+     * A dialog removed from the DOM while still open (rather than closed first) must still release its lock —
+     * otherwise the page is left permanently unscrollable.
+     */
     if (this._scrollLocked) {
       unlockBodyScroll();
       this._scrollLocked = false;
@@ -218,9 +224,11 @@ export class Dialog extends ThemeableElement {
   }
 
   private handleOpen() {
-    // Store currently focused element to restore later. This is the shadow-rooted host itself when the opener
-    // delegates focus (e.g. lt-button) — its own .focus() now correctly moves focus back into its shadow
-    // root on restore.
+    /*
+     * Store currently focused element to restore later. This is the shadow-rooted host itself when the opener
+     * delegates focus (e.g. lt-button) — its own .focus() now correctly moves focus back into its shadow
+     * root on restore.
+     */
     this.previouslyFocusedElement = document.activeElement as HTMLElement;
 
     if (!this._scrollLocked) {
@@ -228,9 +236,11 @@ export class Dialog extends ThemeableElement {
       this._scrollLocked = true;
     }
 
-    // Guard against calling showModal() on an already-open dialog — throws InvalidStateError (confirmed in
-    // Chromium/Firefox/WebKit, _agent-plans/component-audit-probes/native-dialog-spike.mjs). Shouldn't happen in
-    // practice, since this only runs on a genuine false->true transition of `open`, but costs nothing to guard.
+    /*
+     * Guard against calling showModal() on an already-open dialog — throws InvalidStateError (confirmed in
+     * Chromium/Firefox/WebKit, _agent-plans/component-audit-probes/native-dialog-spike.mjs). Shouldn't happen in
+     * practice, since this only runs on a genuine false->true transition of `open`, but costs nothing to guard.
+     */
     if (this.dialogElement && !this.dialogElement.open) {
       this.dialogElement.showModal();
     }
@@ -244,8 +254,10 @@ export class Dialog extends ThemeableElement {
       this._scrollLocked = false;
     }
 
-    // The native element may already be closed here (this runs for both "we closed it" and "it closed itself,
-    // e.g. via Escape" — see _handleNativeClose below), so guard against calling close() twice.
+    /*
+     * The native element may already be closed here (this runs for both "we closed it" and "it closed itself,
+     * e.g. via Escape" — see _handleNativeClose below), so guard against calling close() twice.
+     */
     if (this.dialogElement?.open) {
       this.dialogElement.close();
     }
@@ -262,26 +274,32 @@ export class Dialog extends ThemeableElement {
     }
   }
 
-  // Native <dialog> fires 'cancel' (cancelable) on Escape before it closes itself — preventDefault() here is
-  // how close-on-escape="false" is implemented now, instead of an old keydown listener racing the platform's
-  // own handling (confirmed working in the spike across all three engines).
+  /*
+   * Native <dialog> fires 'cancel' (cancelable) on Escape before it closes itself — preventDefault() here is
+   * how close-on-escape="false" is implemented now, instead of an old keydown listener racing the platform's
+   * own handling (confirmed working in the spike across all three engines).
+   */
   private _handleCancel = (e: Event) => {
     if (!this.closeOnEscape) {
       e.preventDefault();
     }
   };
 
-  // The native element's own 'close' event fires whenever IT closes, for any reason — our own close() call
-  // above, but also Escape (which closes it directly; nothing else tells us). Sync `open` back so the two never
-  // drift apart. If we're the ones who just called close() (inside handleClose(), above), `open` is already
-  // false and this is a no-op — Lit ignores a property set to its current value.
+  /*
+   * The native element's own 'close' event fires whenever IT closes, for any reason — our own close() call
+   * above, but also Escape (which closes it directly; nothing else tells us). Sync `open` back so the two never
+   * drift apart. If we're the ones who just called close() (inside handleClose(), above), `open` is already
+   * false and this is a no-op — Lit ignores a property set to its current value.
+   */
   private _handleNativeClose = () => {
     this.open = false;
   };
 
-  // The clicked-outside-the-content area of a shown <dialog> resolves e.target to the <dialog> element itself
-  // (::backdrop isn't a real node and can't be an event target) — clicking any actual descendant instead
-  // targets that descendant, so this only ever fires for a genuine backdrop click (confirmed in the spike).
+  /*
+   * The clicked-outside-the-content area of a shown <dialog> resolves e.target to the <dialog> element itself
+   * (::backdrop isn't a real node and can't be an event target) — clicking any actual descendant instead
+   * targets that descendant, so this only ever fires for a genuine backdrop click (confirmed in the spike).
+   */
   private _handleDialogClick = (e: MouseEvent) => {
     if (this.closeOnBackdropClick && e.target === this.dialogElement) {
       this.hide();

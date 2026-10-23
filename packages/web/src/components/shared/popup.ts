@@ -104,9 +104,11 @@ export class PopupController {
     this.#panel = panel;
 
     const cleanup = await openFloating(reference, panel, this.#options.floating?.());
-    // A close that happened while openFloating was resolving must not leave the autoUpdate cleanup
-    // orphaned — it would keep a scroll/resize listener pair alive on a panel that is no longer on
-    // screen.
+    /*
+     * A close that happened while openFloating was resolving must not leave the autoUpdate cleanup
+     * orphaned — it would keep a scroll/resize listener pair alive on a panel that is no longer on
+     * screen.
+     */
     if (this.#token !== token) cleanup();
     else this.#floatingCleanup = cleanup;
   }

@@ -160,9 +160,11 @@ describe('<lt-textfield>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('disables the inner input without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
-      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
-      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
-      // updateComplete reflects it.
+      /*
+       * FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+       * update already in flight — see the controller's own doc comment), so this needs an extra tick before
+       * updateComplete reflects it.
+       */
       await Promise.resolve();
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('input')!.hasAttribute('disabled')).toBe(true);
@@ -191,9 +193,11 @@ describe('<lt-textfield>', () => {
       el.type = 'password';
       await el.updateComplete;
       el.formDisabledCallback(true);
-      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
-      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
-      // updateComplete reflects it.
+      /*
+       * FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+       * update already in flight — see the controller's own doc comment), so this needs an extra tick before
+       * updateComplete reflects it.
+       */
       await Promise.resolve();
       await el.updateComplete;
       expect(el.shadowRoot!.querySelector('.password-toggle')!.hasAttribute('disabled')).toBe(true);
@@ -249,10 +253,12 @@ describe('<lt-textfield>', () => {
   });
 
   it('does not double-fire input for consumers listening on the host', async () => {
-    // Real browser input/change events on the native <input> are composed
-    // (cross the shadow boundary), so without stopPropagation() a consumer
-    // listening on the host would see both our CustomEvent and the original
-    // native event re-arriving — this reproduces that with composed: true.
+    /*
+     * Real browser input/change events on the native <input> are composed
+     * (cross the shadow boundary), so without stopPropagation() a consumer
+     * listening on the host would see both our CustomEvent and the original
+     * native event re-arriving — this reproduces that with composed: true.
+     */
     const inputHandler = vi.fn();
     el.addEventListener('input', inputHandler);
 
@@ -417,10 +423,12 @@ describe('<lt-textfield>', () => {
     });
   });
 
-  // jsdom doesn't implement the form-associated custom element reset lifecycle (verified: form.reset() never
-  // calls formResetCallback at all), so these call it directly — the same thing a real form reset does, per the
-  // HTML spec's "reset the form owner" algorithm. The wiring from a real <form>'s reset button to this callback
-  // is native browser behavior for any formAssociated element, not something this component implements itself.
+  /*
+   * jsdom doesn't implement the form-associated custom element reset lifecycle (verified: form.reset() never
+   * calls formResetCallback at all), so these call it directly — the same thing a real form reset does, per the
+   * HTML spec's "reset the form owner" algorithm. The wiring from a real <form>'s reset button to this callback
+   * is native browser behavior for any formAssociated element, not something this component implements itself.
+   */
   describe('formResetCallback restores the markup default (TFD-1, TFD-7)', () => {
     beforeEach(async () => {
       el.remove();
@@ -613,9 +621,11 @@ describe('<lt-textfield>', () => {
       expect(toggle().classList.contains('icon-end')).toBe(true);
     });
 
-    // jsdom doesn't implement the browser default action this guards against (a real .click() there never
-    // moves focus to begin with, unlike real browsers), so this only confirms the guard is wired up; the actual
-    // behavior — the input keeps focus through a real mouse click on the toggle — is verified in Chromium.
+    /*
+     * jsdom doesn't implement the browser default action this guards against (a real .click() there never
+     * moves focus to begin with, unlike real browsers), so this only confirms the guard is wired up; the actual
+     * behavior — the input keeps focus through a real mouse click on the toggle — is verified in Chromium.
+     */
     it('suppresses the mousedown default action that would otherwise steal focus', async () => {
       el.type = 'password';
       await el.updateComplete;
@@ -869,10 +879,12 @@ describe('<lt-textfield>', () => {
       });
     });
 
-    // jsdom's ElementInternals is a partial stub (see vitest.setup.ts): setValidity is a no-op and
-    // checkValidity()/reportValidity() are hard-coded to always return true, so el.checkValidity() can't actually
-    // observe anything here. These spy on the calls our component makes to setValidity instead — verified
-    // end-to-end (real checkValidity()/form.checkValidity()) in Chromium.
+    /*
+     * jsdom's ElementInternals is a partial stub (see vitest.setup.ts): setValidity is a no-op and
+     * checkValidity()/reportValidity() are hard-coded to always return true, so el.checkValidity() can't actually
+     * observe anything here. These spy on the calls our component makes to setValidity instead — verified
+     * end-to-end (real checkValidity()/form.checkValidity()) in Chromium.
+     */
     describe('setValidity is called with the native validity + message (TFD-3)', () => {
       it('required + empty: valueMissing', async () => {
         const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
@@ -1071,9 +1083,11 @@ describe('<lt-textfield>', () => {
   });
 
   describe('end icon', () => {
-    // has-start-icon/has-end-icon live on .input-container for the single-line case (the box the icon is
-    // absolutely positioned within, and — since prefix/suffix — the element with the field's own border/
-    // background/focus ring), not on the <input> itself; still on <textarea> directly for the multiline case.
+    /*
+     * has-start-icon/has-end-icon live on .input-container for the single-line case (the box the icon is
+     * absolutely positioned within, and — since prefix/suffix — the element with the field's own border/
+     * background/focus ring), not on the <input> itself; still on <textarea> directly for the multiline case.
+     */
     const container = () => el.shadowRoot!.querySelector('.input-container')!;
 
     it('gets room for the password toggle so typed text cannot run under it', async () => {
@@ -1378,10 +1392,12 @@ describe('prefix / suffix', () => {
     expect(el.shadowRoot!.querySelector('.suffix')).toBeNull();
   });
 
-  // Lit's child-position template bindings accept a real DOM Node and insert it live, not just a string — so a
-  // consumer bypassing the type system (plain JS, an `as any` cast) and assigning an actual element could get it
-  // rendered for real if the template interpolated `this.prefix` directly. Explicitly coerced via `String()` to
-  // close that off; confirmed here by actually assigning a Node, not just asserting the TS type disallows it.
+  /*
+   * Lit's child-position template bindings accept a real DOM Node and insert it live, not just a string — so a
+   * consumer bypassing the type system (plain JS, an `as any` cast) and assigning an actual element could get it
+   * rendered for real if the template interpolated `this.prefix` directly. Explicitly coerced via `String()` to
+   * close that off; confirmed here by actually assigning a Node, not just asserting the TS type disallows it.
+   */
   it('cannot have a real DOM node rendered via the property, even bypassing the type system', async () => {
     const node = document.createElement('span');
     node.textContent = 'malicious';
@@ -1426,14 +1442,18 @@ describe('autosize', () => {
     expect(textarea.classList.contains('autosize')).toBe(false);
   });
 
-  // jsdom has no real layout engine — scrollHeight always reads 0 (no actual grown pixel height to assert,
-  // that needs live-browser verification, same class of gap as every other CSS-driven feature in this
-  // codebase). What's verifiable here is that the resize code path actually runs — reads scrollHeight, writes
-  // it back as an inline height — at the right times, not just that the CSS class is present.
+  /*
+   * jsdom has no real layout engine — scrollHeight always reads 0 (no actual grown pixel height to assert,
+   * that needs live-browser verification, same class of gap as every other CSS-driven feature in this
+   * codebase). What's verifiable here is that the resize code path actually runs — reads scrollHeight, writes
+   * it back as an inline height — at the right times, not just that the CSS class is present.
+   */
   it('re-measures height on input when autosize is set', async () => {
-    // updated() already resizes once as soon as autosize turns on (see its own test below) — reset the inline
-    // height to prove handleInput() independently re-triggers the same resize, not just that it happens to
-    // already be set from that earlier call.
+    /*
+     * updated() already resizes once as soon as autosize turns on (see its own test below) — reset the inline
+     * height to prove handleInput() independently re-triggers the same resize, not just that it happens to
+     * already be set from that earlier call.
+     */
     el.autosize = true;
     await el.updateComplete;
     const textarea = el.shadowRoot!.querySelector('textarea')!;
@@ -1486,9 +1506,11 @@ describe('the value published to the surrounding form (TFD-8)', () => {
   });
 
   it('publishes an empty string rather than null, so the field still submits its name', async () => {
-    // A native input always submits its name, even with an empty value (`name=`). Publishing `null`
-    // instead means "this control has no value", and the browser then drops the entry from the form
-    // data entirely — so an empty field silently disappeared from the submission.
+    /*
+     * A native input always submits its name, even with an empty value (`name=`). Publishing `null`
+     * instead means "this control has no value", and the browser then drops the entry from the form
+     * data entirely — so an empty field silently disappeared from the submission.
+     */
     const spy = vi.spyOn(ElementInternals.prototype, 'setFormValue');
 
     const el = document.createElement('lt-textfield') as Textfield;

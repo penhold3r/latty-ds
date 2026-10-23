@@ -84,10 +84,12 @@ describe.each(CASES)('the shared field presentation — $tag', ({ tag, described
     await el.updateComplete;
 
     const marker = el.shadowRoot!.querySelector('.required-indicator')!;
-    // Deliberately not `aria-hidden`. Most controls also expose the required state programmatically —
-    // `required` on a native input, `aria-required` on a select or combobox — but `lt-date-input`'s
-    // trigger is a plain `<button>`, and `aria-required` is not a property `role="button"` allows. For
-    // that control the marker is the only required cue there is, so hiding it would take information away.
+    /*
+     * Deliberately not `aria-hidden`. Most controls also expose the required state programmatically —
+     * `required` on a native input, `aria-required` on a select or combobox — but `lt-date-input`'s
+     * trigger is a plain `<button>`, and `aria-required` is not a property `role="button"` allows. For
+     * that control the marker is the only required cue there is, so hiding it would take information away.
+     */
     expect(marker.hasAttribute('aria-hidden')).toBe(false);
   });
 

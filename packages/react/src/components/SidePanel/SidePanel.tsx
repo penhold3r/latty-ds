@@ -37,8 +37,10 @@ export const SidePanel = forwardRef<SidePanelEl, SidePanelProps>(function SidePa
     if (noCloseButton) el.setAttribute('no-close-button', '');
     else el.removeAttribute('no-close-button');
   }, [noCloseButton]);
-  // React 18 stringifies non-primitive JSX props into a DOM attribute instead of setting the property (see
-  // scripts/codegen-wrappers.mjs) — assign labels imperatively via the ref instead of spreading it as a JSX prop.
+  /*
+   * React 18 stringifies non-primitive JSX props into a DOM attribute instead of setting the property (see
+   * scripts/codegen-wrappers.mjs) — assign labels imperatively via the ref instead of spreading it as a JSX prop.
+   */
   useLayoutEffect(() => {
     const el = innerRef.current;
     if (!el) return;

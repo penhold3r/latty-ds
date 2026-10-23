@@ -266,8 +266,10 @@ describe('<lt-snackbar>', () => {
       await el.updateComplete;
 
       const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
-      // The close transition can leave the pointer appearing to "leave" an already-closed snackbar — this must
-      // not schedule a hide() timer that nothing will ever clear (open won't change again to trigger cleanup).
+      /*
+       * The close transition can leave the pointer appearing to "leave" an already-closed snackbar — this must
+       * not schedule a hide() timer that nothing will ever clear (open won't change again to trigger cleanup).
+       */
       el.dispatchEvent(new Event('pointerleave'));
       expect(setTimeoutSpy).not.toHaveBeenCalled();
     });
@@ -296,9 +298,11 @@ describe('<lt-snackbar>', () => {
       el.dispatchEvent(new Event('pointerenter'));
       const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
 
-      // Real time passes before the redundant pointerenter — if it re-ran the pause logic (clearTimeout on
-      // nothing + decrementing _remainingMs a second time using a stale _timerStartedAt), the eventual resume
-      // below would fire too early.
+      /*
+       * Real time passes before the redundant pointerenter — if it re-ran the pause logic (clearTimeout on
+       * nothing + decrementing _remainingMs a second time using a stale _timerStartedAt), the eventual resume
+       * below would fire too early.
+       */
       vi.advanceTimersByTime(300);
       el.dispatchEvent(new Event('pointerenter'));
       expect(setTimeoutSpy).not.toHaveBeenCalled(); // no new timer scheduled — nothing restarted
@@ -322,9 +326,11 @@ describe('<lt-snackbar>', () => {
       el.dispatchEvent(new Event('pointerleave')); // resumes with 700ms remaining
       const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
 
-      // A second, redundant pointerleave (e.g. a stray duplicate) must not reschedule the already-running
-      // timer — doing so would leak the original one (never cleared) and could fire the second with slightly
-      // skewed timing.
+      /*
+       * A second, redundant pointerleave (e.g. a stray duplicate) must not reschedule the already-running
+       * timer — doing so would leak the original one (never cleared) and could fire the second with slightly
+       * skewed timing.
+       */
       el.dispatchEvent(new Event('pointerleave'));
       expect(setTimeoutSpy).not.toHaveBeenCalled();
 
@@ -344,9 +350,11 @@ describe('<lt-snackbar>', () => {
       el.dispatchEvent(new Event('pointerenter'));
       el.remove();
 
-      // If hover state leaked across a disconnect, a later show() on a fresh connection would start paused
-      // (per the "starts already paused if shown while hovering" behavior above) even though the pointer was
-      // never actually over the reconnected element.
+      /*
+       * If hover state leaked across a disconnect, a later show() on a fresh connection would start paused
+       * (per the "starts already paused if shown while hovering" behavior above) even though the pointer was
+       * never actually over the reconnected element.
+       */
       document.body.appendChild(el);
       el.hide();
       await el.updateComplete;
@@ -358,10 +366,12 @@ describe('<lt-snackbar>', () => {
     });
   });
 
-  // §6.1's companion migration: lt-snackbar renders as a "manual" popover on its own host so it stays above an
-  // open lt-dialog/lt-sidepanel regardless of z-index (top-layer content always wins). jsdom has no real Popover
-  // API (vitest.setup.ts stubs it), so these verify the component calls the right methods at the right times,
-  // not the actual top-layer rendering itself (that's a live-Chromium concern).
+  /*
+   * §6.1's companion migration: lt-snackbar renders as a "manual" popover on its own host so it stays above an
+   * open lt-dialog/lt-sidepanel regardless of z-index (top-layer content always wins). jsdom has no real Popover
+   * API (vitest.setup.ts stubs it), so these verify the component calls the right methods at the right times,
+   * not the actual top-layer rendering itself (that's a live-Chromium concern).
+   */
   describe('popover (SNK-companion to §6.1)', () => {
     it('is a manual popover', () => {
       expect(el.getAttribute('popover')).toBe('manual');

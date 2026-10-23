@@ -45,19 +45,23 @@ export class AccordionGroup extends ThemeableElement {
   @queryAssignedElements({ selector: 'lt-accordion' })
   private _accordions!: Accordion[];
 
-  // Re-wires on every slotchange (accordions added/removed/reordered) and on reconnect (moving the group in the
-  // DOM disconnects and reconnects it without re-running firstUpdated). Re-adding the same bound function
-  // reference is a no-op per addEventListener's own de-duplication, so calling this repeatedly never stacks up
-  // duplicate listeners — same pattern as lt-tab-group's updateTabs/updatePanels.
+  /*
+   * Re-wires on every slotchange (accordions added/removed/reordered) and on reconnect (moving the group in the
+   * DOM disconnects and reconnects it without re-running firstUpdated). Re-adding the same bound function
+   * reference is a no-op per addEventListener's own de-duplication, so calling this repeatedly never stacks up
+   * duplicate listeners — same pattern as lt-tab-group's updateTabs/updatePanels.
+   */
   private _wireAccordions = () => {
     this._accordions?.forEach((a) => a.addEventListener('toggle', this._handleToggle));
   };
 
-  // Closes every other accordion when one opens, unless `multiple` lets them coexist. Reacts to the child's own
-  // `toggle` event rather than tracking a single `value` (lt-accordion has no identifying value of its own, and
-  // more than one can legitimately be open when `multiple` is set). Dispatches a matching `toggle` on each
-  // sibling it closes — lt-accordion only fires that event from its own click handling, so a consumer listening
-  // on an individual accordion would otherwise never learn the group just closed it for them.
+  /*
+   * Closes every other accordion when one opens, unless `multiple` lets them coexist. Reacts to the child's own
+   * `toggle` event rather than tracking a single `value` (lt-accordion has no identifying value of its own, and
+   * more than one can legitimately be open when `multiple` is set). Dispatches a matching `toggle` on each
+   * sibling it closes — lt-accordion only fires that event from its own click handling, so a consumer listening
+   * on an individual accordion would otherwise never learn the group just closed it for them.
+   */
   private _handleToggle = (e: Event) => {
     if (this.multiple) return;
     if (!(e as CustomEvent<{ open: boolean }>).detail.open) return;

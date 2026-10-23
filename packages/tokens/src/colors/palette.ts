@@ -59,8 +59,10 @@ const rampFromBase = (
   for (const step of STEPS) {
     const canonical = L_BY_STEP[step];
 
-    // Proportionally stretch each half so the full range [l50, l900] is
-    // preserved while the pivot step maps to lPivot.
+    /*
+     * Proportionally stretch each half so the full range [l50, l900] is
+     * preserved while the pivot step maps to lPivot.
+     */
     let lTarget: number;
     if (canonical >= l500) {
       // Light side: map [l500, l50] → [lPivot, l50]

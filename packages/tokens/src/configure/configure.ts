@@ -38,10 +38,12 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
     const typographyOverrides: Record<string, string> = {};
     resolvedFonts.forEach((font, i) => {
       if (font.importUrl) importUrls.push(font.importUrl);
-      // Only override the slot when a family name could actually be derived —
-      // a CDN URL we can't parse (non-Google-Fonts host) still gets @import'd
-      // below, but the token itself falls back to the default rather than
-      // being set to an unusable empty string.
+      /*
+       * Only override the slot when a family name could actually be derived —
+       * a CDN URL we can't parse (non-Google-Fonts host) still gets @import'd
+       * below, but the token itself falls back to the default rather than
+       * being set to an unusable empty string.
+       */
       if (font.family) typographyOverrides[fontFamilySlot(i)] = font.family;
     });
     if (Object.keys(typographyOverrides).length > 0) {
@@ -94,13 +96,17 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
       semanticTokensToCss(buildSemanticTokens('light', semanticOpts), '[data-theme="light"]');
   }
 
-  // Every lt-* component sets its own font-family on :host, but plain HTML
-  // outside any component's shadow DOM never gets one otherwise — this is
-  // theme-independent, so it's appended once regardless of which branch ran.
+  /**
+   * Every lt-* component sets its own font-family on :host, but plain HTML
+   * outside any component's shadow DOM never gets one otherwise — this is
+   * theme-independent, so it's appended once regardless of which branch ran.
+   */
   body += '\nbody { font-family: var(--lt-typography-fontFamilyPrimary); }\n';
 
-  // @import must be the first rule(s) of a stylesheet — safe here since
-  // they're the first thing written into the returned string.
+  /**
+   * @import must be the first rule(s) of a stylesheet — safe here since
+   * they're the first thing written into the returned string.
+   */
   const importLines = importUrls.map((url) => `@import url("${url}");`).join('\n');
   return importLines ? `${importLines}\n${body}` : body;
 };

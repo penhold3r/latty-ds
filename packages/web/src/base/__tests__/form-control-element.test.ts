@@ -2,8 +2,10 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { customElement, property } from 'lit/decorators.js';
 import { FormControlElement } from '../form-control-element';
 
-// A minimal concrete control, standing in for the eleven real ones — the base class is abstract, and this
-// is the smallest thing that can exercise it.
+/*
+ * A minimal concrete control, standing in for the eleven real ones — the base class is abstract, and this
+ * is the smallest thing that can exercise it.
+ */
 @customElement('lt-test-form-control')
 class TestFormControl extends FormControlElement {
   @property() value = '';
@@ -33,8 +35,10 @@ describe('<FormControlElement>', () => {
 
     el = document.createElement('lt-test-form-control') as TestFormControl;
     el.setAttribute('name', 'q');
-    // The default is captured the first time the control connects, so the markup's value has to be in
-    // place before it joins the DOM — exactly like a native input's `defaultValue`.
+    /*
+     * The default is captured the first time the control connects, so the markup's value has to be in
+     * place before it joins the DOM — exactly like a native input's `defaultValue`.
+     */
     el.setAttribute('value', 'initial');
     form.append(el);
     await el.updateComplete;
@@ -46,8 +50,10 @@ describe('<FormControlElement>', () => {
   });
 
   it('is form-associated through the inherited static', () => {
-    // The static lives on the base class; a subclass inherits it through the prototype chain, which is
-    // what lets `attachInternals()` succeed in the constructor.
+    /*
+     * The static lives on the base class; a subclass inherits it through the prototype chain, which is
+     * what lets `attachInternals()` succeed in the constructor.
+     */
     expect(TestFormControl.formAssociated).toBe(true);
     expect(el.form).toBe(form);
   });

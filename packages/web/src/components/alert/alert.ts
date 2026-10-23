@@ -93,8 +93,10 @@ export class Alert extends ThemeableElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // Markup never goes through the `title` accessor above — the attribute is just present on the node from
-    // HTML parsing. `heading` wins if both are somehow given.
+    /*
+     * Markup never goes through the `title` accessor above — the attribute is just present on the node from
+     * HTML parsing. `heading` wins if both are somehow given.
+     */
     if (this.hasAttribute('title')) {
       if (!this.heading) this.heading = this.getAttribute('title')!;
       this.removeAttribute('title');
@@ -112,9 +114,11 @@ export class Alert extends ThemeableElement {
   private _handleClose() {
     const cancelled = !dispatch(this, 'close', undefined, { cancelable: true });
     if (cancelled) return;
-    // The close button is about to disappear from under the user's focus. Move focus to the host (still
-    // visible for the fade below) now, rather than leaving it on the button and letting the browser drop
-    // focus to <body> with no warning once the alert is actually hidden.
+    /*
+     * The close button is about to disappear from under the user's focus. Move focus to the host (still
+     * visible for the fade below) now, rather than leaving it on the button and letting the browser drop
+     * focus to <body> with no warning once the alert is actually hidden.
+     */
     this.tabIndex = -1;
     this.focus();
     this.setAttribute('dismissed', '');
@@ -129,8 +133,10 @@ export class Alert extends ThemeableElement {
     if (changed.has('open') && this.open) this.removeAttribute('dismissed');
   }
 
-  // Error/warning alerts are urgent enough to interrupt the screen reader (`alert`, assertive); the rest are
-  // informational and should announce without cutting off whatever the user was already hearing (`status`, polite).
+  /*
+   * Error/warning alerts are urgent enough to interrupt the screen reader (`alert`, assertive); the rest are
+   * informational and should announce without cutting off whatever the user was already hearing (`status`, polite).
+   */
   private get _role(): 'alert' | 'status' {
     return this.variant === 'error' || this.variant === 'warning' ? 'alert' : 'status';
   }

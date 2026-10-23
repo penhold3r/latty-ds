@@ -95,9 +95,11 @@ describe('<lt-datepicker>', () => {
   });
 
   describe('the native input/change event does not also reach the host (DTP-1)', () => {
-    // A real native <input> event is composed (crosses the shadow boundary) — the earlier tests above dispatch
-    // plain, non-composed events, which never exercise that path. Only exactly one event, our own re-dispatched
-    // CustomEvent with a `detail`, should ever reach a host listener.
+    /*
+     * A real native <input> event is composed (crosses the shadow boundary) — the earlier tests above dispatch
+     * plain, non-composed events, which never exercise that path. Only exactly one event, our own re-dispatched
+     * CustomEvent with a `detail`, should ever reach a host listener.
+     */
     it('fires input exactly once, with detail, for a composed/bubbling native input event', async () => {
       const handler = vi.fn();
       el.addEventListener('input', handler);
@@ -126,8 +128,10 @@ describe('<lt-datepicker>', () => {
       expect(el.hasAttribute('value')).toBe(false);
     });
 
-    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
-    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+    /*
+     * jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+     * formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+     */
     it('restores the value set in markup, not empty', async () => {
       const fresh = document.createElement('lt-datepicker') as Datepicker;
       fresh.setAttribute('value', '2026-05-19');
@@ -145,9 +149,11 @@ describe('<lt-datepicker>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('disables the inner input without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
-      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
-      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
-      // updateComplete reflects it.
+      /*
+       * FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+       * update already in flight — see the controller's own doc comment), so this needs an extra tick before
+       * updateComplete reflects it.
+       */
       await Promise.resolve();
       await el.updateComplete;
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
@@ -176,10 +182,12 @@ describe('<lt-datepicker>', () => {
     });
   });
 
-  // jsdom's ElementInternals is a partial stub (see vitest.setup.ts): setValidity is a no-op and
-  // checkValidity()/reportValidity() are hard-coded to always return true, so el.checkValidity() can't actually
-  // observe anything here. These spy on the calls our component makes to setValidity instead — verified
-  // end-to-end (real checkValidity()/form.checkValidity()) in Chromium.
+  /*
+   * jsdom's ElementInternals is a partial stub (see vitest.setup.ts): setValidity is a no-op and
+   * checkValidity()/reportValidity() are hard-coded to always return true, so el.checkValidity() can't actually
+   * observe anything here. These spy on the calls our component makes to setValidity instead — verified
+   * end-to-end (real checkValidity()/form.checkValidity()) in Chromium.
+   */
   describe('setValidity is called with the native validity + message (DTP-2)', () => {
     it('required + empty: valueMissing', async () => {
       el.required = true;

@@ -88,9 +88,11 @@ export class NativeAttrsController implements ReactiveController {
     this._options = options;
     this._exclude = new Set(Array.from(options.exclude ?? [], (a) => a.toLowerCase()));
     this._observer = new MutationObserver((records) => {
-      // Request a Lit update so any host getter reading `getAttribute(...)` / `hasAttribute(...)`
-      // (such as `placeholder`, `readonly`, `maxlength`, `target`, `rel`) re-renders, and sync
-      // the inner target immediately if it already exists.
+      /*
+       * Request a Lit update so any host getter reading `getAttribute(...)` / `hasAttribute(...)`
+       * (such as `placeholder`, `readonly`, `maxlength`, `target`, `rel`) re-renders, and sync
+       * the inner target immediately if it already exists.
+       */
       const relevant = records.some((r) => r.attributeName && !this._isIgnoredHostAttr(r.attributeName.toLowerCase()));
       if (relevant) {
         this._sync();

@@ -99,24 +99,28 @@ export class TabGroup extends ThemeableElement {
 
   @query('.tabs-container') private _tabsContainerEl!: HTMLElement;
 
-  // Whether the tab list actually overflows its own container in the scrolling axis — controls whether the
-  // scroll buttons render at all. Kept separate from _atStart/_atEnd below so toggling an edge while already
-  // overflowing (the common case, every scroll tick) never adds/removes the buttons themselves and reflows the
-  // available width for the tabs-container — only a genuine start/end of overflow does that, which is far rarer.
+  /*
+   * Whether the tab list actually overflows its own container in the scrolling axis — controls whether the
+   * scroll buttons render at all. Kept separate from _atStart/_atEnd below so toggling an edge while already
+   * overflowing (the common case, every scroll tick) never adds/removes the buttons themselves and reflows the
+   * available width for the tabs-container — only a genuine start/end of overflow does that, which is far rarer.
+   */
   @state() private _overflowing = false;
   @state() private _atStart = false;
   @state() private _atEnd = false;
 
-  // Measuring real DOM (scrollWidth/clientWidth) can only happen after a render has actually painted, so
-  // _updateScrollButtons() sometimes sets the three @state fields above from inside firstUpdated()/updated() —
-  // by that point Lit's own isUpdatePending has already gone false for the render in progress, so assigning them
-  // synchronously schedules a genuinely separate follow-up update that the update() call already in flight's own
-  // updateComplete promise does NOT chain to (confirmed empirically: awaiting it once still left a pending
-  // update behind — and overriding getUpdateComplete() to simply `await this.updateComplete` again deadlocks,
-  // since that read re-enters this same override while the outer call is still resolving). Polling
-  // isUpdatePending via microtasks instead sidesteps that re-entrancy: it reads the flag rather than awaiting
-  // the promise machinery that produces it, so a single `await el.updateComplete` reliably sees the final
-  // settled state instead of a stale pre-measurement default.
+  /*
+   * Measuring real DOM (scrollWidth/clientWidth) can only happen after a render has actually painted, so
+   * _updateScrollButtons() sometimes sets the three @state fields above from inside firstUpdated()/updated() —
+   * by that point Lit's own isUpdatePending has already gone false for the render in progress, so assigning them
+   * synchronously schedules a genuinely separate follow-up update that the update() call already in flight's own
+   * updateComplete promise does NOT chain to (confirmed empirically: awaiting it once still left a pending
+   * update behind — and overriding getUpdateComplete() to simply `await this.updateComplete` again deadlocks,
+   * since that read re-enters this same override while the outer call is still resolving). Polling
+   * isUpdatePending via microtasks instead sidesteps that re-entrancy: it reads the flag rather than awaiting
+   * the promise machinery that produces it, so a single `await el.updateComplete` reliably sees the final
+   * settled state instead of a stale pre-measurement default.
+   */
   private _scrollButtonsSettled: Promise<void> = Promise.resolve();
 
   private _awaitScrollButtonsSettled(): Promise<void> {
@@ -135,21 +139,27 @@ export class TabGroup extends ThemeableElement {
 
   private _scrollResizeObserver?: ResizeObserver;
 
-  // Scopes generated tab/panel ids to this instance, so two groups on the same page whose tabs happen to share a
-  // `value` (e.g. two groups each with a "settings" tab) don't collide.
+  /*
+   * Scopes generated tab/panel ids to this instance, so two groups on the same page whose tabs happen to share a
+   * `value` (e.g. two groups each with a "settings" tab) don't collide.
+   */
   private readonly _uid = `lt-tab-group-${groupCount++}`;
 
-  // Reacts to a slotted tab's `disabled` attribute changing after the fact (e.g. a consumer disabling a tab
-  // dynamically, with no accompanying change to this group's own value/size/appearance), so the roving tabindex
-  // and keyboard navigation immediately stop landing on it.
+  /*
+   * Reacts to a slotted tab's `disabled` attribute changing after the fact (e.g. a consumer disabling a tab
+   * dynamically, with no accompanying change to this group's own value/size/appearance), so the roving tabindex
+   * and keyboard navigation immediately stop landing on it.
+   */
   private readonly _tabObserver = new MutationObserver(() => this.updateTabs());
 
   connectedCallback() {
     super.connectedCallback();
     this._tabObserver.observe(this, { attributes: true, attributeFilter: ['disabled'], subtree: true });
-    // Re-attaches listeners after a reconnect (moving the group in the DOM disconnects and reconnects it
-    // without re-running firstUpdated, which only ever fires once). Harmless before the first render too —
-    // updateTabs/updatePanels no-op when `this.tabs`/`this.panels` aren't populated yet.
+    /*
+     * Re-attaches listeners after a reconnect (moving the group in the DOM disconnects and reconnects it
+     * without re-running firstUpdated, which only ever fires once). Harmless before the first render too —
+     * updateTabs/updatePanels no-op when `this.tabs`/`this.panels` aren't populated yet.
+     */
     this.updateTabs();
     this.updatePanels();
   }
@@ -160,10 +170,12 @@ export class TabGroup extends ThemeableElement {
   firstUpdated() {
     this.updateTabs();
     this.updatePanels();
-    // The container itself resizing (e.g. the window, or a sibling panel growing/shrinking) is the one
-    // overflow-affecting trigger none of updateTabs/handleSlotChange's call sites cover — ResizeObserver's
-    // own first callback (fired as soon as observation starts) also gives the initial measurement, so no
-    // separate up-front _updateScrollButtons() call is needed here.
+    /*
+     * The container itself resizing (e.g. the window, or a sibling panel growing/shrinking) is the one
+     * overflow-affecting trigger none of updateTabs/handleSlotChange's call sites cover — ResizeObserver's
+     * own first callback (fired as soon as observation starts) also gives the initial measurement, so no
+     * separate up-front _updateScrollButtons() call is needed here.
+     */
     this._scrollResizeObserver = new ResizeObserver(this._updateScrollButtons);
     this._scrollResizeObserver.observe(this._tabsContainerEl);
   }
@@ -175,9 +187,11 @@ export class TabGroup extends ThemeableElement {
   private updateTabs() {
     if (!this.tabs) return;
 
-    // Roving tabindex (WAI-ARIA Tabs pattern): only one tab is ever a Tab stop. It's the active tab, or — if
-    // none is active, or the active one is disabled — the first enabled tab, so the tablist is still reachable
-    // in one Tab press.
+    /*
+     * Roving tabindex (WAI-ARIA Tabs pattern): only one tab is ever a Tab stop. It's the active tab, or — if
+     * none is active, or the active one is disabled — the first enabled tab, so the tablist is still reachable
+     * in one Tab press.
+     */
     const enabled = enabledItems(this.tabs);
     const rovingTarget = rovingTargetOf(enabled, this.value);
 
@@ -199,9 +213,11 @@ export class TabGroup extends ThemeableElement {
         tab.removeAttribute('data-variant');
       }
 
-      // Listen for tab clicks and arrow/Home/End key navigation. Re-adding the same bound function reference is
-      // a no-op per addEventListener's own de-duplication, so calling this repeatedly (slotchange, value/size/
-      // appearance changes) never stacks up duplicate listeners.
+      /*
+       * Listen for tab clicks and arrow/Home/End key navigation. Re-adding the same bound function reference is
+       * a no-op per addEventListener's own de-duplication, so calling this repeatedly (slotchange, value/size/
+       * appearance changes) never stacks up duplicate listeners.
+       */
       tab.addEventListener('click', this.handleTabClick);
       tab.addEventListener('keydown', this.handleTabKeydown);
     });
@@ -218,8 +234,10 @@ export class TabGroup extends ThemeableElement {
   private _updateScrollButtons = () => {
     const el = this._tabsContainerEl;
     if (!el) return;
-    // A 1px tolerance absorbs sub-pixel scroll-position rounding, which would otherwise flicker the buttons'
-    // disabled state right at either edge.
+    /*
+     * A 1px tolerance absorbs sub-pixel scroll-position rounding, which would otherwise flicker the buttons'
+     * disabled state right at either edge.
+     */
     if (this.orientation === 'vertical') {
       this._overflowing = el.scrollHeight > el.clientHeight + 1;
       this._atStart = el.scrollTop <= 1;
@@ -229,8 +247,10 @@ export class TabGroup extends ThemeableElement {
       this._atStart = el.scrollLeft <= 1;
       this._atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 1;
     }
-    // Captures a promise that resolves once any update the three assignments above just (re-)triggered has
-    // actually settled — see the field's own comment for why this can't just be `this.updateComplete` directly.
+    /*
+     * Captures a promise that resolves once any update the three assignments above just (re-)triggered has
+     * actually settled — see the field's own comment for why this can't just be `this.updateComplete` directly.
+     */
     this._scrollButtonsSettled = this._awaitScrollButtonsSettled();
   };
 
@@ -273,8 +293,10 @@ export class TabGroup extends ThemeableElement {
       if (!panel.hasAttribute('tabindex')) panel.setAttribute('tabindex', '0');
     });
 
-    // A tab only points at a panel that actually exists, and only once that panel has its id — otherwise
-    // aria-controls dangles (a tab with no panel, or a tab whose panel hasn't been wired up yet).
+    /*
+     * A tab only points at a panel that actually exists, and only once that panel has its id — otherwise
+     * aria-controls dangles (a tab with no panel, or a tab whose panel hasn't been wired up yet).
+     */
     this.tabs?.forEach((tab) => {
       const panel = this.panels.find((p) => (p.getAttribute('value') ?? p.getAttribute('data-value')) === tab.value);
       if (panel) tab.setAttribute('aria-controls', panel.id);
@@ -380,9 +402,11 @@ export class TabGroup extends ThemeableElement {
     if (changedProperties.has('value')) {
       this.updateTabs();
       this.updatePanels();
-      // Keeps the active tab visible in a scrollable tablist even when `value` is set directly (not via click
-      // or arrow-key navigation, where focus()'s own default scroll-into-view already covers it). `nearest`
-      // on both axes scrolls the minimum necessary — never the whole page — and is a no-op when already in view.
+      /*
+       * Keeps the active tab visible in a scrollable tablist even when `value` is set directly (not via click
+       * or arrow-key navigation, where focus()'s own default scroll-into-view already covers it). `nearest`
+       * on both axes scrolls the minimum necessary — never the whole page — and is a no-op when already in view.
+       */
       this.tabs?.find((tab) => tab.value === this.value)?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     }
 

@@ -132,9 +132,11 @@ describe('<lt-tab-group>', () => {
         updateComplete: Promise<boolean>;
       })[];
       tab1.disabled = true;
-      // Tab1's own reflection of `disabled` to an attribute, and the group's MutationObserver reacting to it,
-      // both happen outside the group's own update cycle — wait for the tab's update, then flush the observer's
-      // queued microtask, rather than just the group's updateComplete.
+      /*
+       * Tab1's own reflection of `disabled` to an attribute, and the group's MutationObserver reacting to it,
+       * both happen outside the group's own update cycle — wait for the tab's update, then flush the observer's
+       * queued microtask, rather than just the group's updateComplete.
+       */
       await tab1.updateComplete;
       await Promise.resolve();
       expect(tab1.tabIndex).toBe(-1);
@@ -391,9 +393,11 @@ describe('scroll buttons', () => {
   const prevButton = () => el.shadowRoot!.querySelector<HTMLElement & { label: string; icon: string }>('.scroll-prev');
   const nextButton = () => el.shadowRoot!.querySelector<HTMLElement & { label: string; icon: string }>('.scroll-next');
 
-  // jsdom reports 0 for every layout dimension, so "overflow" has to be simulated by overriding the relevant
-  // getters directly on the real container element, then forcing a recompute the same way a real resize/scroll
-  // would — dispatching the container's own `scroll` event, which the component already listens for.
+  /*
+   * jsdom reports 0 for every layout dimension, so "overflow" has to be simulated by overriding the relevant
+   * getters directly on the real container element, then forcing a recompute the same way a real resize/scroll
+   * would — dispatching the container's own `scroll` event, which the component already listens for.
+   */
   const mockLayout = (dims: {
     scrollWidth?: number;
     clientWidth?: number;
@@ -427,9 +431,11 @@ describe('scroll buttons', () => {
   });
 
   it('settles after a single updateComplete, with no lingering pending update left behind', async () => {
-    // Regression guard: _updateScrollButtons sets @state from inside firstUpdated()/updated(), which schedules
-    // a genuinely separate follow-up update a naive `await el.updateComplete` would NOT wait for — confirmed
-    // empirically while building this feature. getUpdateComplete() is overridden specifically to fix this.
+    /*
+     * Regression guard: _updateScrollButtons sets @state from inside firstUpdated()/updated(), which schedules
+     * a genuinely separate follow-up update a naive `await el.updateComplete` would NOT wait for — confirmed
+     * empirically while building this feature. getUpdateComplete() is overridden specifically to fix this.
+     */
     const fresh = document.createElement('lt-tab-group') as TabGroup;
     fresh.value = 'tab1';
     fresh.innerHTML = '<lt-tab value="tab1" label="Tab 1"></lt-tab>';

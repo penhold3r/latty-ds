@@ -80,11 +80,13 @@ export class SnackbarGroup extends ThemeableElement {
   private async _present(sb: Snackbar) {
     this._visible.push(sb);
     this.appendChild(sb);
-    // Lit's very first update on a freshly-connected element always treats `open` as "changed" — calling
-    // show() before that first (still-closed) render settles would make lt-snackbar's own mount-already-open
-    // guard (SNK-1) swallow this as if it had been declared open from the start: no `show` event, no
-    // auto-dismiss timer ever starting. Awaiting updateComplete first lets that initial cycle pass harmlessly,
-    // so the real open transition below is a genuinely new, correctly-handled update.
+    /*
+     * Lit's very first update on a freshly-connected element always treats `open` as "changed" — calling
+     * show() before that first (still-closed) render settles would make lt-snackbar's own mount-already-open
+     * guard (SNK-1) swallow this as if it had been declared open from the start: no `show` event, no
+     * auto-dismiss timer ever starting. Awaiting updateComplete first lets that initial cycle pass harmlessly,
+     * so the real open transition below is a genuinely new, correctly-handled update.
+     */
     await sb.updateComplete;
     sb.show();
     this._syncPopoverState();
@@ -97,25 +99,31 @@ export class SnackbarGroup extends ThemeableElement {
     this._removeAfterExit(sb);
   }
 
-  // Removing the node immediately would cut its own fade/slide-out transition short (the same display-cuts-the-
-  // transition-off-partway-through class of bug `allow-discrete` exists to prevent in the first place) — wait
-  // for the host's own opacity transition to actually finish first. prefers-reduced-motion disables transitions
-  // entirely (no transitionend would ever fire), so that case removes immediately instead of waiting forever.
+  /*
+   * Removing the node immediately would cut its own fade/slide-out transition short (the same display-cuts-the-
+   * transition-off-partway-through class of bug `allow-discrete` exists to prevent in the first place) — wait
+   * for the host's own opacity transition to actually finish first. prefers-reduced-motion disables transitions
+   * entirely (no transitionend would ever fire), so that case removes immediately instead of waiting forever.
+   */
   private _removeAfterExit(sb: Snackbar) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       sb.remove();
       return;
     }
-    // Not { once: true }: the same CSS also transitions display/overlay (for allow-discrete) alongside
-    // opacity/transform, each potentially firing its own transitionend — `once` would consume the listener on
-    // whichever of those fires first, regardless of whether it was the one this code actually cares about,
-    // silently breaking removal if opacity's doesn't happen to be first. Removed manually instead, only once
-    // the real match is found.
+    /*
+     * Not { once: true }: the same CSS also transitions display/overlay (for allow-discrete) alongside
+     * opacity/transform, each potentially firing its own transitionend — `once` would consume the listener on
+     * whichever of those fires first, regardless of whether it was the one this code actually cares about,
+     * silently breaking removal if opacity's doesn't happen to be first. Removed manually instead, only once
+     * the real match is found.
+     */
     const onTransitionEnd = (e: Event) => {
       const te = e as TransitionEvent;
-      // A composed transitionend from inside sb's own shadow tree (e.g. lt-surface) gets retargeted to report
-      // `e.target` as sb itself once it bubbles past the shadow boundary — composedPath()[0] is the only
-      // reliable way to tell "this host's own transition" apart from a descendant's.
+      /*
+       * A composed transitionend from inside sb's own shadow tree (e.g. lt-surface) gets retargeted to report
+       * `e.target` as sb itself once it bubbles past the shadow boundary — composedPath()[0] is the only
+       * reliable way to tell "this host's own transition" apart from a descendant's.
+       */
       if (te.propertyName !== 'opacity' || te.composedPath()[0] !== sb) return;
       sb.removeEventListener('transitionend', onTransitionEnd);
       sb.remove();

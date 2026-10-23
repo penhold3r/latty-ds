@@ -153,12 +153,15 @@ export abstract class FormControlElement extends ThemeableElement {
    * `state` is the value the control published through `setFormValue()` (a string for a single-value
    * control, a `FormData` for a multi-value one), or `null` when the control had no value to save.
    */
-  // The browser always calls this with two arguments — the state and the mode it is restoring in
-  // (`'restore'` for a session restore, `'autocomplete'` for autofill). The mode is part of the DOM
-  // contract, so the signature keeps it, even though no control needs it yet: it stays available to a
-  // subclass that does (a combobox restoring a suggestion list, say) without the base having to change.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  formStateRestoreCallback(state: File | string | FormData | null, _mode: 'restore' | 'autocomplete'): void {
+  /*
+   * The browser always calls this with two arguments — the state and the mode it is restoring in
+   * (`'restore'` for a session restore, `'autocomplete'` for autofill). The mode is part of the DOM
+   * contract, so the signature keeps it, even though no control needs it yet: it stays available to a
+   * subclass that does (a combobox restoring a suggestion list, say) without the base having to change.
+   * eslint-disable-next-line @typescript-eslint/no-unused-vars
+   */
+  formStateRestoreCallback(state: File | string | FormData | null, mode: 'restore' | 'autocomplete'): void {
+    void mode;
     this._restoreFormState(state);
   }
 

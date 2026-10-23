@@ -88,8 +88,10 @@ export class Tab extends ThemeableElement {
     }
   }
 
-  // Enter/Space activate the tab exactly like a mouse click: a native `click` on the host, which
-  // `lt-tab-group` (or any consumer) listens for. There is no separate tab event.
+  /*
+   * Enter/Space activate the tab exactly like a mouse click: a native `click` on the host, which
+   * `lt-tab-group` (or any consumer) listens for. There is no separate tab event.
+   */
   private _handleHostKeydown = (e: KeyboardEvent) => {
     if (this.disabled) return;
     if (e.key === 'Enter' || e.key === ' ') {

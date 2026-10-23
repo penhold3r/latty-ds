@@ -67,8 +67,10 @@ export class Datepicker extends FormControlElement {
 
   private _syncValidity() {
     if (!this.input) return;
-    // `type`/`min`/`max`/`step`/`required` are forwarded onto the inner input, so its own `validity` already
-    // covers valueMissing, rangeUnderflow, rangeOverflow, and stepMismatch (DTP-2) for free — mirror that directly.
+    /*
+     * `type`/`min`/`max`/`step`/`required` are forwarded onto the inner input, so its own `validity` already
+     * covers valueMissing, rangeUnderflow, rangeOverflow, and stepMismatch (DTP-2) for free — mirror that directly.
+     */
     if (!this.input.validity.valid) {
       this._internals.setValidity(toValidityFlags(this.input.validity), this.input.validationMessage, this.input);
     } else {
@@ -96,9 +98,11 @@ export class Datepicker extends FormControlElement {
   }
 
   private handleChange(e: Event) {
-    // The native input/change event is composed, so it would otherwise keep bubbling past the shadow boundary
-    // after we re-dispatch our own — double-firing the same event name on the host, the first one with no
-    // `detail` at all (DTP-1: `e.detail.value` throws on it).
+    /*
+     * The native input/change event is composed, so it would otherwise keep bubbling past the shadow boundary
+     * after we re-dispatch our own — double-firing the same event name on the host, the first one with no
+     * `detail` at all (DTP-1: `e.detail.value` throws on it).
+     */
     e.stopPropagation();
     this.value = this.input.value;
     dispatch(this, 'change', { value: this.value });

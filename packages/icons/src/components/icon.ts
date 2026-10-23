@@ -177,8 +177,10 @@ export class Icon extends LitElement {
    * @private
    */
   private cleanSVG(svg: string): string {
-    // Strip width, height, and stroke-width only from the root <svg> tag so
-    // child elements can carry their own stroke-width without being affected.
+    /*
+     * Strip width, height, and stroke-width only from the root <svg> tag so
+     * child elements can carry their own stroke-width without being affected.
+     */
     return svg.replace(/<svg([^>]*)>/, (_, attrs: string) => {
       const cleaned = attrs
         .replace(/\s*width="[^"]*"/g, '')

@@ -127,18 +127,20 @@ describe('<lt-list>', () => {
     expect(parentList.shadowRoot!.querySelector('[part="list"]')).toBeTruthy();
     expect(nestedList.shadowRoot!.querySelector('[part="list"]')).toBeTruthy();
 
-    // ISSUE: The HTML parser moves <li> elements out of <lt-list>
-    // because it doesn't recognize custom elements as valid list containers.
-    // When an <li> is encountered while already inside another <li>, the parser
-    // auto-closes the parent <li> and makes the nested <li> a sibling instead.
-    // This is independent of what lt-list renders internally (a real <ul>/<ol>
-    // or the current div+role="list") — the light DOM is already malformed by
-    // the time either would matter.
-    //
-    // SOLUTION: Use <lt-list-item> instead of <li> for nested lists.
-    // A <lt-list-item> tag isn't <li> at the raw-HTML-token level, so it never
-    // triggers the parser's li-auto-close behavior in the first place.
-    // This demonstrates the bug - nested list has 0 li items
+    /*
+     * ISSUE: The HTML parser moves <li> elements out of <lt-list>
+     * because it doesn't recognize custom elements as valid list containers.
+     * When an <li> is encountered while already inside another <li>, the parser
+     * auto-closes the parent <li> and makes the nested <li> a sibling instead.
+     * This is independent of what lt-list renders internally (a real <ul>/<ol>
+     * or the current div+role="list") — the light DOM is already malformed by
+     * the time either would matter.
+     *
+     * SOLUTION: Use <lt-list-item> instead of <li> for nested lists.
+     * A <lt-list-item> tag isn't <li> at the raw-HTML-token level, so it never
+     * triggers the parser's li-auto-close behavior in the first place.
+     * This demonstrates the bug - nested list has 0 li items
+     */
     const nestedItems = nestedList.querySelectorAll('li');
     expect(nestedItems.length).toBe(0); // This is why we created lt-list-item!
 

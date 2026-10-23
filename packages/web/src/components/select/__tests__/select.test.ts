@@ -77,9 +77,11 @@ describe('<lt-select>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('marks the trigger disabled without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
-      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
-      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
-      // updateComplete reflects it.
+      /*
+       * FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+       * update already in flight — see the controller's own doc comment), so this needs an extra tick before
+       * updateComplete reflects it.
+       */
       await Promise.resolve();
       await el.updateComplete;
       const trigger = el.shadowRoot!.querySelector('.select-trigger')!;
@@ -138,8 +140,10 @@ describe('<lt-select>', () => {
   });
 
   it('keeps an opaque background on the outlined listbox surface', () => {
-    // outlined appearance resets Surface's background to transparent unless a
-    // background prop is set explicitly — without this the popover would be see-through.
+    /*
+     * outlined appearance resets Surface's background to transparent unless a
+     * background prop is set explicitly — without this the popover would be see-through.
+     */
     const listbox = el.shadowRoot!.querySelector('lt-surface.dropdown');
     expect(listbox?.getAttribute('background')).toBe('--lt-bg-default');
   });
@@ -433,8 +437,10 @@ describe('<lt-select>', () => {
       expect(el.hasAttribute('value')).toBe(false);
     });
 
-    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
-    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+    /*
+     * jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+     * formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+     */
     it('restores the value set in markup, not empty', async () => {
       const fresh = document.createElement('lt-select') as Select;
       fresh.options = mockOptions;
@@ -450,8 +456,10 @@ describe('<lt-select>', () => {
     });
   });
 
-  // jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
-  // component makes rather than reading back a real validationMessage.
+  /*
+   * jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
+   * component makes rather than reading back a real validationMessage.
+   */
   describe('labels (i18n, X5)', () => {
     it('defaults the required-field validation message to English', async () => {
       const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');

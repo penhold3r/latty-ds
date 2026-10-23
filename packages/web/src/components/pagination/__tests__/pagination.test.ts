@@ -139,9 +139,11 @@ describe('<lt-pagination>', () => {
     );
 
     it('collapses a single hidden page into its own number instead of a pointless ellipsis', async () => {
-      // total=8: page 2's sibling window is [2,3] by the raw algorithm, leaving boundary page 1 and page 2
-      // one apart — no page is actually hidden between them, so there should be no leading ellipsis, just
-      // page 2 shown plainly.
+      /*
+       * total=8: page 2's sibling window is [2,3] by the raw algorithm, leaving boundary page 1 and page 2
+       * one apart — no page is actually hidden between them, so there should be no leading ellipsis, just
+       * page 2 shown plainly.
+       */
       el.totalPages = 8;
       el.page = 2;
       await el.updateComplete;

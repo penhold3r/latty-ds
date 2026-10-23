@@ -79,9 +79,11 @@ describe('<lt-button>', () => {
     expect(handler).not.toHaveBeenCalled();
   });
 
-  // jsdom doesn't implement delegatesFocus (shadowRoot.delegatesFocus itself is undefined, not just false), so
-  // this only confirms the option was requested; the actual focus-moves-in behavior is verified in a real
-  // browser (Chromium), where host.focus() correctly moves document.activeElement onto the inner <button>.
+  /*
+   * jsdom doesn't implement delegatesFocus (shadowRoot.delegatesFocus itself is undefined, not just false), so
+   * this only confirms the option was requested; the actual focus-moves-in behavior is verified in a real
+   * browser (Chromium), where host.focus() correctly moves document.activeElement onto the inner <button>.
+   */
   it('requests a focus-delegating shadow root', () => {
     expect(el.shadowRoot!.mode).toBe('open');
     expect(Button.shadowRootOptions.delegatesFocus).toBe(true);
@@ -367,9 +369,11 @@ describe('<lt-button>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('disables the inner button without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
-      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
-      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
-      // updateComplete reflects it.
+      /*
+       * FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+       * update already in flight — see the controller's own doc comment), so this needs an extra tick before
+       * updateComplete reflects it.
+       */
       await Promise.resolve();
       await el.updateComplete;
       const button = el.shadowRoot!.querySelector('button') as HTMLButtonElement;

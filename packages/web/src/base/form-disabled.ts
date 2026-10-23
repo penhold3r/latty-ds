@@ -51,9 +51,11 @@ export class FormDisabledController implements ReactiveController {
     host.addController(this);
   }
 
-  // No-op — this controller has no connect-time work of its own (formDisabledCallback drives it instead), but
-  // ReactiveController's members are all optional, and a class satisfying an all-optional interface with no
-  // members in common is a TS error (TS2559); this gives it one.
+  /*
+   * No-op — this controller has no connect-time work of its own (formDisabledCallback drives it instead), but
+   * ReactiveController's members are all optional, and a class satisfying an all-optional interface with no
+   * members in common is a TS error (TS2559); this gives it one.
+   */
   hostConnected() {}
 
   /** Whether an ancestor `<fieldset>` is currently disabled. */
@@ -64,8 +66,10 @@ export class FormDisabledController implements ReactiveController {
   setFieldsetDisabled(disabled: boolean) {
     if (this._fieldsetDisabled === disabled) return;
     this._fieldsetDisabled = disabled;
-    // Deferred — see the class doc comment. Must never be called synchronously here: `formDisabledCallback` can
-    // (and, for the component's own `disabled`, reliably does) fire from inside the host's own in-progress update.
+    /*
+     * Deferred — see the class doc comment. Must never be called synchronously here: `formDisabledCallback` can
+     * (and, for the component's own `disabled`, reliably does) fire from inside the host's own in-progress update.
+     */
     queueMicrotask(() => this._host.requestUpdate());
   }
 }

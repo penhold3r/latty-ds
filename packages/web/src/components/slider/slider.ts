@@ -37,8 +37,10 @@ export class Slider extends FormControlElement {
   /** Label displayed above the track. */
   @property({ reflect: true }) label = '';
 
-  // A unitless 0–1 ratio, not a percentage — CSS derives both the track's fill percentage and the tooltip's
-  // thumb-following offset from it via calc(), so there's only one number to keep in sync.
+  /*
+   * A unitless 0–1 ratio, not a percentage — CSS derives both the track's fill percentage and the tooltip's
+   * thumb-following offset from it via calc(), so there's only one number to keep in sync.
+   */
   private get _fillRatio(): number {
     if (this.max === this.min) return 0; // avoid dividing by zero
     return (this.value - this.min) / (this.max - this.min);

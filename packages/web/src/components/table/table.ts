@@ -423,9 +423,11 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
 
   override firstUpdated(changedProperties: PropertyValues<this>) {
     super.firstUpdated(changedProperties);
-    // Measures .table-container whenever its rendered size changes (a height change, a window resize, a
-    // sidebar collapsing elsewhere on the page — anything), not just once on mount, so a virtualized table
-    // keeps computing its visible window correctly if its viewport is ever resized after the fact.
+    /*
+     * Measures .table-container whenever its rendered size changes (a height change, a window resize, a
+     * sidebar collapsing elsewhere on the page — anything), not just once on mount, so a virtualized table
+     * keeps computing its visible window correctly if its viewport is ever resized after the fact.
+     */
     this._containerResizeObserver = new ResizeObserver((entries) => {
       this._viewportHeight = entries[0]?.contentRect.height ?? 0;
     });
@@ -716,8 +718,10 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
     const renderRow = (row: T, index: number) => {
       const key = getRowKey(row, index, this.rowKey);
       const selected = this.currentSelected.includes(key);
-      // +2, not +1: row-index 1 is the header, matching the ARIA Grid pattern's row numbering, so a row's own
-      // position within the page (0-based) needs to shift by one more than usual to land after it.
+      /*
+       * +2, not +1: row-index 1 is the header, matching the ARIA Grid pattern's row numbering, so a row's own
+       * position within the page (0-based) needs to shift by one more than usual to land after it.
+       */
       const ariaRowIndex = isVirtualized ? index - pageStart + 2 : nothing;
 
       return html`
@@ -765,11 +769,13 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
       `;
     };
 
-    // Keyed rendering only makes sense with a real key. Without `row-key` the old fallback (JSON.stringify(row)) was
-    // O(n) per render, threw on circular data and BigInt, and gave identical rows identical keys; index-based
-    // rendering has none of those problems. Iterates `visibleEntries` (not `sortedData` directly) so each entry's
-    // preserved global index — not its position within this page, let alone this scroll window — is what
-    // `renderRow` ultimately uses.
+    /*
+     * Keyed rendering only makes sense with a real key. Without `row-key` the old fallback (JSON.stringify(row)) was
+     * O(n) per render, threw on circular data and BigInt, and gave identical rows identical keys; index-based
+     * rendering has none of those problems. Iterates `visibleEntries` (not `sortedData` directly) so each entry's
+     * preserved global index — not its position within this page, let alone this scroll window — is what
+     * `renderRow` ultimately uses.
+     */
     const entries = this.visibleEntries;
     const rows = this.rowKey
       ? repeat(
@@ -787,10 +793,12 @@ export class Table<T = Record<string, unknown>> extends ThemeableElement {
       `;
     }
 
-    // Rows scrolled out of view above/below still need to occupy their own vertical space, or the scrollbar's
-    // range (and the position everything else lands at while scrolling) would be wrong — two plain spacer rows,
-    // sized to stand in for however many rows aren't currently rendered on each side, do that without needing
-    // any non-table layout. aria-hidden since they carry no real content, just filler height.
+    /*
+     * Rows scrolled out of view above/below still need to occupy their own vertical space, or the scrollbar's
+     * range (and the position everything else lands at while scrolling) would be wrong — two plain spacer rows,
+     * sized to stand in for however many rows aren't currently rendered on each side, do that without needing
+     * any non-table layout. aria-hidden since they carry no real content, just filler height.
+     */
     const rowHeightPx = this.rowHeight > 0 ? this.rowHeight : DEFAULT_ROW_HEIGHT;
     const { topSpacerRows, bottomSpacerRows } = getVirtualSpacers(entries, this.pageRange);
     const colCount = Math.max(columns.length + selectionColumnCount, 1);

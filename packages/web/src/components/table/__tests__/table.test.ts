@@ -50,12 +50,14 @@ describe('<lt-table>', () => {
     expect(table).toBeTruthy();
   });
 
-  // WCAG 2.1.1 — .table-container is horizontally scrollable (overflow-x: auto) whenever the table is wider
-  // than its available space, which can happen even with no other focusable element inside the table at all
-  // (e.g. no sortable columns, no row-selection controls) — without this, a keyboard user would have no way to
-  // reach the overflowed content at all. Found live via axe's scrollable-region-focusable rule failing on a
-  // docs page whose API table happened to be wide enough to overflow, not from reasoning about the component
-  // in isolation.
+  /*
+   * WCAG 2.1.1 — .table-container is horizontally scrollable (overflow-x: auto) whenever the table is wider
+   * than its available space, which can happen even with no other focusable element inside the table at all
+   * (e.g. no sortable columns, no row-selection controls) — without this, a keyboard user would have no way to
+   * reach the overflowed content at all. Found live via axe's scrollable-region-focusable rule failing on a
+   * docs page whose API table happened to be wide enough to overflow, not from reasoning about the component
+   * in isolation.
+   */
   it('makes .table-container keyboard-focusable, so a horizontally overflowing table stays reachable', () => {
     const container = el.shadowRoot!.querySelector('.table-container');
     expect(container?.getAttribute('tabindex')).toBe('0');
@@ -406,8 +408,10 @@ describe('<lt-table>', () => {
       await el.updateComplete;
 
       expect(handler).toHaveBeenCalledOnce();
-      // A controlled component doesn't write back on its own — `selected` only changes when the consumer updates
-      // it in response to the event, same as a controlled checkbox in any other framework.
+      /*
+       * A controlled component doesn't write back on its own — `selected` only changes when the consumer updates
+       * it in response to the event, same as a controlled checkbox in any other framework.
+       */
       expect(el.selected).toEqual([1]);
     });
 
@@ -725,9 +729,11 @@ describe('<lt-table>', () => {
   });
 
   describe('explicit ARIA table roles (TBL-4)', () => {
-    // Safari computes a cell's accessibility role from its rendered display value, not its tag name — stack
-    // mode's display:block (table.styles.ts) silently drops the whole table's native semantics there, unlike
-    // Chrome/Firefox. An explicit role isn't display-dependent, so this must hold in BOTH responsive modes.
+    /*
+     * Safari computes a cell's accessibility role from its rendered display value, not its tag name — stack
+     * mode's display:block (table.styles.ts) silently drops the whole table's native semantics there, unlike
+     * Chrome/Firefox. An explicit role isn't display-dependent, so this must hold in BOTH responsive modes.
+     */
     it.each(['scroll', 'stack'] as const)(
       'carries explicit table/rowgroup/row/columnheader/cell roles in %s mode',
       async (mode) => {
@@ -1001,8 +1007,10 @@ describe('<lt-table>', () => {
   });
 
   describe('column resize', () => {
-    // Reflects whatever width was last applied inline (matching a real browser's live geometry) so repeated
-    // keyboard steps compound correctly, falling back to `initialWidth` before any resize has happened yet.
+    /*
+     * Reflects whatever width was last applied inline (matching a real browser's live geometry) so repeated
+     * keyboard steps compound correctly, falling back to `initialWidth` before any resize has happened yet.
+     */
     const mockThWidth = (initialWidth: number) => {
       vi.spyOn(HTMLTableCellElement.prototype, 'getBoundingClientRect').mockImplementation(function (
         this: HTMLElement
@@ -1016,12 +1024,14 @@ describe('<lt-table>', () => {
     const pointerEvent = (type: string, clientX: number) =>
       new PointerEvent(type, { clientX, pointerId: 1, bubbles: true });
 
-    // th/td must render as border-box, not the CSS content-box default: getBoundingClientRect() reports
-    // width + padding under content-box, so reading the rendered width back and writing it as the new width —
-    // which every keyboard resize step and the start of every drag does — grows the column by its own padding
-    // each time. jsdom has no real CSS cascade or layout (confirmed: getComputedStyle(th).boxSizing reads '' in
-    // jsdom regardless of the actual stylesheet), so this can only be verified live — confirmed in real Chromium:
-    // before the fix, 3 ArrowRight presses (10px step) grew a column by 126px instead of 30px; after, exactly 30.
+    /*
+     * th/td must render as border-box, not the CSS content-box default: getBoundingClientRect() reports
+     * width + padding under content-box, so reading the rendered width back and writing it as the new width —
+     * which every keyboard resize step and the start of every drag does — grows the column by its own padding
+     * each time. jsdom has no real CSS cascade or layout (confirmed: getComputedStyle(th).boxSizing reads '' in
+     * jsdom regardless of the actual stylesheet), so this can only be verified live — confirmed in real Chromium:
+     * before the fix, 3 ArrowRight presses (10px step) grew a column by 126px instead of 30px; after, exactly 30.
+     */
 
     it('renders no resize handle for a column that does not opt in', () => {
       expect(el.shadowRoot!.querySelector('.resize-handle')).toBeNull();
@@ -1349,8 +1359,10 @@ describe('<lt-table>', () => {
     });
 
     it('windows correctly within a page, not from the start of the full dataset', async () => {
-      // Page 2 of 20-per-page covers sortedData rows 20..39. Scrolled 300px into THAT page (not the dataset as a
-      // whole) at 50px rows should land on page-relative row 6 (floor(300/50)) — sortedData index 26.
+      /*
+       * Page 2 of 20-per-page covers sortedData rows 20..39. Scrolled 300px into THAT page (not the dataset as a
+       * whole) at 50px rows should land on page-relative row 6 (floor(300/50)) — sortedData index 26.
+       */
       bigTable.pageSize = 20;
       bigTable.page = 2;
       bigTable.virtualized = true;

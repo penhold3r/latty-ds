@@ -10,9 +10,11 @@ import { Slider } from './components/Slider/Slider';
 const fire = (container: HTMLElement, tag: string, name: string, detail?: unknown) =>
   container.querySelector(tag)!.dispatchEvent(new CustomEvent(name, { detail, bubbles: true, composed: true }));
 
-// Every wrapper handler receives the event itself, typed with its payload. This file is also a type-level check:
-// `pnpm typecheck` fails if a handler's event type doesn't allow the `e.detail.*` reads below (or if a native React
-// handler type such as onSelect/onLoad/onError leaks into the intersection).
+/*
+ * Every wrapper handler receives the event itself, typed with its payload. This file is also a type-level check:
+ * `pnpm typecheck` fails if a handler's event type doesn't allow the `e.detail.*` reads below (or if a native React
+ * handler type such as onSelect/onLoad/onError leaks into the intersection).
+ */
 describe('event-first handlers', () => {
   it('pass the event, with the typed payload on e.detail', () => {
     const seen: unknown[] = [];

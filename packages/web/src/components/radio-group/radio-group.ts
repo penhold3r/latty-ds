@@ -92,9 +92,11 @@ export class RadioGroup extends ThemeableElement {
   @queryAssignedElements({ selector: 'lt-radio' })
   private radios!: Radio[];
 
-  // Reacts to a slotted radio's `disabled` attribute changing after the fact (e.g. a consumer disabling one
-  // dynamically, with no accompanying change to this group's own value/name), so the roving tabindex and
-  // keyboard navigation immediately stop landing on it.
+  /*
+   * Reacts to a slotted radio's `disabled` attribute changing after the fact (e.g. a consumer disabling one
+   * dynamically, with no accompanying change to this group's own value/name), so the roving tabindex and
+   * keyboard navigation immediately stop landing on it.
+   */
   private readonly _radioObserver = new MutationObserver(() => this._syncRadios());
 
   // The form the group's radios belong to — the owner form whose `reset` event the group listens for.
@@ -103,15 +105,19 @@ export class RadioGroup extends ThemeableElement {
   connectedCallback() {
     super.connectedCallback();
     this._radioObserver.observe(this, { attributes: true, attributeFilter: ['disabled'], subtree: true });
-    // Re-attaches listeners after a reconnect (moving the group in the DOM disconnects and reconnects it
-    // without re-running firstUpdated, which only ever fires once). Harmless to call before the first render
-    // too — _syncRadios no-ops when `this.radios` isn't populated yet.
+    /*
+     * Re-attaches listeners after a reconnect (moving the group in the DOM disconnects and reconnects it
+     * without re-running firstUpdated, which only ever fires once). Harmless to call before the first render
+     * too — _syncRadios no-ops when `this.radios` isn't populated yet.
+     */
     this._syncRadios();
   }
 
   firstUpdated() {
-    // Seed `value` from markup (a radio with `checked` and no explicit group `value`) before the first sync,
-    // so that sync doesn't see an empty `value`, match it against no radio, and uncheck the one that should stay.
+    /*
+     * Seed `value` from markup (a radio with `checked` and no explicit group `value`) before the first sync,
+     * so that sync doesn't see an empty `value`, match it against no radio, and uncheck the one that should stay.
+     */
     if (!this.value) {
       const checkedRadio = this.radios?.find((r) => r.checked);
       if (checkedRadio) this.value = checkedRadio.value;
@@ -128,9 +134,11 @@ export class RadioGroup extends ThemeableElement {
   private _syncRadios() {
     if (!this.radios) return;
 
-    // Roving tabindex (native radiogroup behavior): only one radio is ever a Tab stop. It's the checked one,
-    // or — if none is checked, or the checked one is disabled — the first enabled radio, so the group is still
-    // reachable in one Tab press.
+    /*
+     * Roving tabindex (native radiogroup behavior): only one radio is ever a Tab stop. It's the checked one,
+     * or — if none is checked, or the checked one is disabled — the first enabled radio, so the group is still
+     * reachable in one Tab press.
+     */
     const enabled = enabledItems(this.radios);
     const rovingTarget = rovingTargetOf(enabled, this.value);
 
@@ -138,9 +146,11 @@ export class RadioGroup extends ThemeableElement {
       if (this.name) radio.name = this.name;
       radio.checked = radio.value === this.value;
       radio.tabbable = radio === rovingTarget;
-      // Re-adding the same bound function reference is a no-op per addEventListener's own de-duplication, so
-      // calling this on every sync (slotchange, value/name changes, a reconnect) never stacks up listeners —
-      // and, unlike a "have I seen this one before" set, it also re-attaches one a disconnect actually removed.
+      /*
+       * Re-adding the same bound function reference is a no-op per addEventListener's own de-duplication, so
+       * calling this on every sync (slotchange, value/name changes, a reconnect) never stacks up listeners —
+       * and, unlike a "have I seen this one before" set, it also re-attaches one a disconnect actually removed.
+       */
       radio.addEventListener('change', this.handleRadioChange as EventListener);
       radio.addEventListener('keydown', this.handleRadioKeydown as EventListener);
     });
@@ -188,8 +198,10 @@ export class RadioGroup extends ThemeableElement {
     if (form === this._ownerForm) return;
     this._ownerForm?.removeEventListener('reset', this._handleFormReset, true);
     this._ownerForm = form;
-    // The `reset` event doesn't bubble, but it does propagate down the capture phase, and a listener on the
-    // form itself fires at the target — so this catches the reset however the group is nested in it.
+    /*
+     * The `reset` event doesn't bubble, but it does propagate down the capture phase, and a listener on the
+     * form itself fires at the target — so this catches the reset however the group is nested in it.
+     */
     form?.addEventListener('reset', this._handleFormReset, true);
   }
 
@@ -220,9 +232,11 @@ export class RadioGroup extends ThemeableElement {
     const radio = e.target as Radio;
     if (!radio.checked) return;
 
-    // The radio already excluded the rest of the group itself (see lt-radio's own registry-based mutual
-    // exclusion) — stop its event here rather than let it also reach whatever's outside this group, which
-    // would otherwise double-fire 'change' with two different detail shapes for one selection.
+    /*
+     * The radio already excluded the rest of the group itself (see lt-radio's own registry-based mutual
+     * exclusion) — stop its event here rather than let it also reach whatever's outside this group, which
+     * would otherwise double-fire 'change' with two different detail shapes for one selection.
+     */
     e.stopPropagation();
     this._select(radio);
   };

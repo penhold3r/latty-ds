@@ -203,8 +203,10 @@ describe('<lt-dialog>', () => {
     el.closeOnBackdropClick = true;
     await el.updateComplete;
 
-    // Clicking the native <dialog> element itself (not a descendant) is exactly what a real backdrop click
-    // resolves to (::backdrop isn't a real node and can't be an event target — confirmed in the spike).
+    /*
+     * Clicking the native <dialog> element itself (not a descendant) is exactly what a real backdrop click
+     * resolves to (::backdrop isn't a real node and can't be an event target — confirmed in the spike).
+     */
     const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
     dialog.click();
     await el.updateComplete;
@@ -235,11 +237,13 @@ describe('<lt-dialog>', () => {
     expect(el.open).toBe(true);
   });
 
-  // A real Escape press is handled entirely by the platform now (the native <dialog>'s own CloseWatcher-driven
-  // cancel->close sequence), not by a keydown listener this component owns — jsdom doesn't implement that
-  // sequence at all, so these dispatch the 'cancel' event directly (what the browser fires first) to exercise
-  // _handleCancel's actual logic, and simulate the browser's own follow-up close() for the "stays open" case
-  // would be wrong to call, matching what really happens when cancel isn't prevented.
+  /*
+   * A real Escape press is handled entirely by the platform now (the native <dialog>'s own CloseWatcher-driven
+   * cancel->close sequence), not by a keydown listener this component owns — jsdom doesn't implement that
+   * sequence at all, so these dispatch the 'cancel' event directly (what the browser fires first) to exercise
+   * _handleCancel's actual logic, and simulate the browser's own follow-up close() for the "stays open" case
+   * would be wrong to call, matching what really happens when cancel isn't prevented.
+   */
   it('does not prevent the native cancel event if closeOnEscape is true, so a real dialog closes itself', async () => {
     el.open = true;
     el.closeOnEscape = true;
@@ -251,8 +255,10 @@ describe('<lt-dialog>', () => {
 
     expect(cancelEvent.defaultPrevented).toBe(false);
 
-    // A real dialog closes itself right after an unprevented cancel and fires 'close' — simulate that step,
-    // which jsdom's stub only does when explicitly told to (see vitest.setup.ts).
+    /*
+     * A real dialog closes itself right after an unprevented cancel and fires 'close' — simulate that step,
+     * which jsdom's stub only does when explicitly told to (see vitest.setup.ts).
+     */
     dialog.close();
     await el.updateComplete;
 
@@ -443,12 +449,14 @@ describe('<lt-dialog>', () => {
   });
 
   describe('focus restoration to a shadow-rooted opener (DLG-4)', () => {
-    // jsdom doesn't implement delegatesFocus at all (confirmed empirically elsewhere this session), so
-    // document.activeElement never actually moves into a shadow-rooted custom element's shadow root here —
-    // that part of DLG-4 (lt-button's own delegatesFocus, BTN-4) is verified in Chromium, not jsdom. What this
-    // checks is dialog.ts's own half: that it captures document.activeElement at open time (whatever it is —
-    // BTN-4 already made that the shadow-rooted host itself, not BODY) and calls .focus() on that exact
-    // reference to restore it, once, on close.
+    /*
+     * jsdom doesn't implement delegatesFocus at all (confirmed empirically elsewhere this session), so
+     * document.activeElement never actually moves into a shadow-rooted custom element's shadow root here —
+     * that part of DLG-4 (lt-button's own delegatesFocus, BTN-4) is verified in Chromium, not jsdom. What this
+     * checks is dialog.ts's own half: that it captures document.activeElement at open time (whatever it is —
+     * BTN-4 already made that the shadow-rooted host itself, not BODY) and calls .focus() on that exact
+     * reference to restore it, once, on close.
+     */
     it('calls .focus() on whatever was document.activeElement when opened, exactly once, on close', async () => {
       const opener = document.createElement('button');
       document.body.appendChild(opener);

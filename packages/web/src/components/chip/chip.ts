@@ -80,8 +80,10 @@ export class Chip extends ThemeableElement {
   }
 
   private _handleDelete(e: Event) {
-    // Stops the click from also bubbling to the chip's own click handler below — the delete button and
-    // selectable-chip toggling are two independent actions sharing the same element.
+    /*
+     * Stops the click from also bubbling to the chip's own click handler below — the delete button and
+     * selectable-chip toggling are two independent actions sharing the same element.
+     */
     e.stopPropagation();
     dispatch(this, 'delete');
   }
@@ -103,8 +105,10 @@ export class Chip extends ThemeableElement {
       this._handleDelete(e);
       return;
     }
-    // e.target === e.currentTarget scopes this to the chip itself — the delete button is a real native <button>
-    // and already handles its own Enter/Space activation; re-triggering selection here too would double-fire.
+    /*
+     * e.target === e.currentTarget scopes this to the chip itself — the delete button is a real native <button>
+     * and already handles its own Enter/Space activation; re-triggering selection here too would double-fire.
+     */
     if (this.selectable && e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
       this._toggleSelected();

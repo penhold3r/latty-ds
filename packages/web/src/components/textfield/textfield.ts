@@ -222,9 +222,11 @@ export class Textfield extends FormControlElement {
   }
 
   private handleInput(e: Event) {
-    // The native input/change event is composed, so it would otherwise keep
-    // bubbling past the shadow boundary after we re-dispatch our own —
-    // double-firing the same event name on the host with the wrong detail shape.
+    /*
+     * The native input/change event is composed, so it would otherwise keep
+     * bubbling past the shadow boundary after we re-dispatch our own —
+     * double-firing the same event name on the host with the wrong detail shape.
+     */
     e.stopPropagation();
     const input = e.target as HTMLInputElement | HTMLTextAreaElement;
     this.value = input.value;
@@ -374,9 +376,11 @@ export class Textfield extends FormControlElement {
     const resolvedHelperText = typeof this.helperText === 'function' ? this.helperText(isInvalid) : this.helperText;
     const placeholder = this.getAttribute('placeholder') ?? '';
     const maxLengthAttr = this.getAttribute('maxlength');
-    // A real `<label for>` already gives the input its accessible name — an `aria-label` alongside it would
-    // override that (aria-label always wins accessible-name computation) and hide the visible label text from
-    // screen readers instead. Only fall back to `aria-label` when there's no visible label to associate.
+    /*
+     * A real `<label for>` already gives the input its accessible name — an `aria-label` alongside it would
+     * override that (aria-label always wins accessible-name computation) and hide the visible label text from
+     * screen readers instead. Only fall back to `aria-label` when there's no visible label to associate.
+     */
     const ariaLabel = this.label ? undefined : this.getAttribute('aria-label') || placeholder || undefined;
 
     return html`

@@ -110,8 +110,10 @@ export class Accordion extends ThemeableElement {
         this._content.style.height = '0px';
       });
     } else {
-      // Opening — read offsetHeight synchronously after setting details.open so the
-      // browser has committed the open state and the layout reflects the full content height.
+      /*
+       * Opening — read offsetHeight synchronously after setting details.open so the
+       * browser has committed the open state and the layout reflects the full content height.
+       */
       this._details.open = true;
       this.open = true;
       const endHeight = this._contentInner.offsetHeight;
@@ -136,8 +138,10 @@ export class Accordion extends ThemeableElement {
    * @private
    */
   private handleTransitionEnd(e: TransitionEvent) {
-    // `transitionend` bubbles, so a transition inside the slotted content (a button hover, say) would otherwise end
-    // this animation early and snap the height to `auto`.
+    /*
+     * `transitionend` bubbles, so a transition inside the slotted content (a button hover, say) would otherwise end
+     * this animation early and snap the height to `auto`.
+     */
     if (e.target !== this._content || e.propertyName !== 'height') return;
     this._animating = false;
 

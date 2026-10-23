@@ -18,8 +18,10 @@ const addNeutralInteractive = (map: SemanticTokenMap): void => {
 };
 
 export interface SemanticTokenOptions {
-  // The generated colour ramps (`tokens.color`). The interactive fills and the text on them are picked from these by
-  // contrast (see contrast.ts), so they adapt to whatever base colours the consumer configured.
+  /*
+   * The generated colour ramps (`tokens.color`). The interactive fills and the text on them are picked from these by
+   * contrast (see contrast.ts), so they adapt to whatever base colours the consumer configured.
+   */
   palettes: ColorPalettes;
   // Shifts which neutral palette step border-default/-strong/-subtle resolve to. Default: 'default'.
   borderContrast?: 'default' | 'high';
@@ -42,9 +44,11 @@ const BORDER_STEPS = {
   }
 } as const;
 
-// Interactive fills and the text on them, for every variant. Picked from the real generated ramps rather than
-// hard-coded (white on the 500 step failed AA for success/error/info in light and for most variants in dark, and
-// primary's pressed state too), so text reaches WCAG AA on the resting, hover and pressed fills in both themes.
+/*
+ * Interactive fills and the text on them, for every variant. Picked from the real generated ramps rather than
+ * hard-coded (white on the 500 step failed AA for success/error/info in light and for most variants in dark, and
+ * primary's pressed state too), so text reaches WCAG AA on the resting, hover and pressed fills in both themes.
+ */
 const addInteractive = (map: SemanticTokenMap, mode: ThemeMode, palettes: ColorPalettes): void => {
   for (const v of VARIANTS) {
     const colors = resolveVariantColors(v, palettes, mode);
@@ -62,12 +66,14 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap 
   // Text
   map['text-default'] = 'color-neutral-900';
   map['text-subtle'] = 'color-neutral-600';
-  // neutral-400 (the previous value) is only 2.2:1 against --lt-bg-subtle —
-  // fails WCAG AA (4.5:1) for normal text. neutral-600 is the next step that
-  // clears it (5.26:1); at this palette's granularity that puts text-muted
-  // at the same step as text-subtle in light mode (dark mode keeps them
-  // distinct — see below). Found via the Docusaurus migration's a11y suite
-  // (documentation/a11y/a11y.spec.ts) flagging lt-select's placeholder text.
+  /*
+   * neutral-400 (the previous value) is only 2.2:1 against --lt-bg-subtle —
+   * fails WCAG AA (4.5:1) for normal text. neutral-600 is the next step that
+   * clears it (5.26:1); at this palette's granularity that puts text-muted
+   * at the same step as text-subtle in light mode (dark mode keeps them
+   * distinct — see below). Found via the Docusaurus migration's a11y suite
+   * (documentation/a11y/a11y.spec.ts) flagging lt-select's placeholder text.
+   */
   map['text-muted'] = 'color-neutral-600';
   map['text-disabled'] = 'color-neutral-400';
   map['text-inverse'] = 'color-white';
@@ -94,10 +100,12 @@ const buildLightSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap 
   map['border-strong'] = `color-neutral-${lightBorderSteps.strong}`;
   map['border-subtle'] = `color-neutral-${lightBorderSteps.subtle}`;
   map['border-focus'] = 'color-primary-200';
-  // Its own step, not an alias of border-default (X4(d)): input chrome needs to read as an input, not blend
-  // into every other hairline border in the UI — neutral-300 is a first bump toward WCAG 1.4.11's 3:1 non-text
-  // minimum (still short of it, ~1.6:1 against a white/neutral-50 field background; neutral-500 is roughly where
-  // it would actually clear 3:1), kept as a deliberate incremental step rather than jumping straight there.
+  /*
+   * Its own step, not an alias of border-default (X4(d)): input chrome needs to read as an input, not blend
+   * into every other hairline border in the UI — neutral-300 is a first bump toward WCAG 1.4.11's 3:1 non-text
+   * minimum (still short of it, ~1.6:1 against a white/neutral-50 field background; neutral-500 is roughly where
+   * it would actually clear 3:1), kept as a deliberate incremental step rather than jumping straight there.
+   */
   map['border-input'] = `color-neutral-${lightBorderSteps.input}`;
   map['focus-ring-color'] = 'border-focus';
   map['focus-halo-color'] = 'bg-primary-subtle';
@@ -119,10 +127,12 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap =
   // Text
   map['text-default'] = 'color-neutral-100';
   map['text-subtle'] = 'color-neutral-300';
-  // neutral-500 (the previous value) is only 3.47:1 against --lt-bg-subtle —
-  // fails WCAG AA (4.5:1). neutral-400 clears it (5.5:1) and stays distinct
-  // from text-subtle above. Found via the Docusaurus migration's a11y suite
-  // flagging lt-select's placeholder text in dark theme.
+  /*
+   * neutral-500 (the previous value) is only 3.47:1 against --lt-bg-subtle —
+   * fails WCAG AA (4.5:1). neutral-400 clears it (5.5:1) and stays distinct
+   * from text-subtle above. Found via the Docusaurus migration's a11y suite
+   * flagging lt-select's placeholder text in dark theme.
+   */
   map['text-muted'] = 'color-neutral-400';
   map['text-disabled'] = 'color-neutral-600';
   map['text-inverse'] = 'color-neutral-900';
@@ -149,9 +159,11 @@ const buildDarkSemanticTokens = (opts: SemanticTokenOptions): SemanticTokenMap =
   map['border-strong'] = `color-neutral-${darkBorderSteps.strong}`;
   map['border-subtle'] = `color-neutral-${darkBorderSteps.subtle}`;
   map['border-focus'] = 'color-primary-400';
-  // Own step, mirroring the light-mode bump above (X4(d)): neutral-600 clears WCAG 1.4.11's 3:1 against the
-  // page background (neutral-900, ~3.14:1) but is still short against a field's own bg-subtle fill
-  // (neutral-800, ~2.30:1, up from neutral-700's ~1.49:1) — same "incremental step, not a full fix" caveat.
+  /*
+   * Own step, mirroring the light-mode bump above (X4(d)): neutral-600 clears WCAG 1.4.11's 3:1 against the
+   * page background (neutral-900, ~3.14:1) but is still short against a field's own bg-subtle fill
+   * (neutral-800, ~2.30:1, up from neutral-700's ~1.49:1) — same "incremental step, not a full fix" caveat.
+   */
   map['border-input'] = `color-neutral-${darkBorderSteps.input}`;
   map['focus-ring-color'] = 'border-focus';
   map['focus-halo-color'] = 'bg-primary-subtle';

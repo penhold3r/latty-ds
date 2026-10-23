@@ -209,10 +209,12 @@ export class Select extends FormControlElement {
     dispatch(this, 'change', { value: this.value });
   }
 
-  // SEL-4: the trigger is a <div role="combobox">, not a real labelable element (<input>/<button>/<select>/
-  // <textarea>) — a native <label for="..."> only auto-forwards a click to one of those, so pointing `for` at
-  // this div would silently do nothing. Forwarding the click by hand is the standard workaround for a custom
-  // ARIA widget's own label.
+  /*
+   * SEL-4: the trigger is a <div role="combobox">, not a real labelable element (<input>/<button>/<select>/
+   * <textarea>) — a native <label for="..."> only auto-forwards a click to one of those, so pointing `for` at
+   * this div would silently do nothing. Forwarding the click by hand is the standard workaround for a custom
+   * ARIA widget's own label.
+   */
   private _focusTrigger() {
     this.shadowRoot?.querySelector<HTMLElement>('.select-trigger')?.focus();
   }

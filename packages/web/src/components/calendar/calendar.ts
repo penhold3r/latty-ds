@@ -206,8 +206,10 @@ export class Calendar extends ThemeableElement {
       return;
     }
 
-    // Guarded here too, not just on the rendered buttons' `disabled` attribute, since PageUp/PageDown calls this
-    // directly from the keyboard.
+    /*
+     * Guarded here too, not just on the rendered buttons' `disabled` attribute, since PageUp/PageDown calls this
+     * directly from the keyboard.
+     */
     if (!canNavigateMonth(this._viewYear, this._viewMonth, this.months, delta, this._minDate, this._maxDate)) return;
 
     const next = addMonths(this._viewYear, this._viewMonth, delta);
@@ -322,9 +324,11 @@ export class Calendar extends ThemeableElement {
   };
 
   private _handleKeyDown = (e: KeyboardEvent) => {
-    // The event's own target — the cell that's actually focused — not re-derived state, which can point
-    // somewhere else entirely (e.g. today's date, while the cell that's really focused, and rendered as the
-    // roving tab stop, is the 1st of whatever month is in view).
+    /*
+     * The event's own target — the cell that's actually focused — not re-derived state, which can point
+     * somewhere else entirely (e.g. today's date, while the cell that's really focused, and rendered as the
+     * roving tab stop, is the 1st of whatever month is in view).
+     */
     const currentIso = (e.currentTarget as HTMLElement).dataset.date ?? '';
     const focusedDate = parseIsoDate(currentIso) ?? new Date(this._viewYear, this._viewMonth, 1);
 
@@ -421,12 +425,14 @@ export class Calendar extends ThemeableElement {
           @mouseleave=${this._handleGridMouseLeave}
         >
           ${weeks.map((week) => {
-            // week[3] — the row's middle day — not week[0], its first: ISO weeks run Monday-Sunday, so for any
-            // week-start other than Monday, a row's first day can belong to a different ISO week than most of
-            // its other six days (e.g. a Sunday-start row spanning Sun Oct 11 - Sat Oct 17 2026 is 6/7 ISO week
-            // 42, with only that leading Sunday itself still counted in week 41 — using day 0 would mislabel the
-            // whole row "41"). The middle day of any 7 consecutive days is mathematically guaranteed to fall in
-            // whichever ISO week has the most days in that row, matching what a reader scanning the row expects.
+            /*
+             * week[3] — the row's middle day — not week[0], its first: ISO weeks run Monday-Sunday, so for any
+             * week-start other than Monday, a row's first day can belong to a different ISO week than most of
+             * its other six days (e.g. a Sunday-start row spanning Sun Oct 11 - Sat Oct 17 2026 is 6/7 ISO week
+             * 42, with only that leading Sunday itself still counted in week 41 — using day 0 would mislabel the
+             * whole row "41"). The middle day of any 7 consecutive days is mathematically guaranteed to fall in
+             * whichever ISO week has the most days in that row, matching what a reader scanning the row expects.
+             */
             const weekNumber = getIsoWeekNumber(week[3].date);
             return html`
               <div role="row">
@@ -448,9 +454,11 @@ export class Calendar extends ThemeableElement {
     const today = new Date();
     const isMulti = this.months > 1;
 
-    // A candidate for the roving tab stop only counts if it actually falls in one of the visible months —
-    // otherwise no rendered cell matches it and nothing ends up as a Tab stop at all (e.g. the selected date's
-    // month has been paged away from).
+    /*
+     * A candidate for the roving tab stop only counts if it actually falls in one of the visible months —
+     * otherwise no rendered cell matches it and nothing ends up as a Tab stop at all (e.g. the selected date's
+     * month has been paged away from).
+     */
     const isInView = (date: Date): boolean => isDateInView(date, this._viewYear, this._viewMonth, this.months);
 
     // Roving tabindex anchor — shared across all panels
@@ -568,8 +576,10 @@ export class Calendar extends ThemeableElement {
     const canNavigateNext = this._pickingMonthYear
       ? canNavigateYear(this._pickerYear, 1, this._minDate, this._maxDate)
       : canNavigateMonth(this._viewYear, this._viewMonth, this.months, 1, this._minDate, this._maxDate);
-    // WCAG 2.5.3 Label in Name: the visible text (a live-updating month/year) has to be part of the accessible
-    // name, not replaced by it — otherwise a speech-input user saying what they see on the button can't match it.
+    /*
+     * WCAG 2.5.3 Label in Name: the visible text (a live-updating month/year) has to be part of the accessible
+     * name, not replaced by it — otherwise a speech-input user saying what they see on the button can't match it.
+     */
     const monthYearVisibleText = this._pickingMonthYear ? String(this._pickerYear) : monthLabel;
 
     const header = html`

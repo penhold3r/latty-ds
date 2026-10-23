@@ -99,22 +99,26 @@ export class Snackbar extends ThemeableElement {
   }
 
   private _timer?: ReturnType<typeof setTimeout>;
-  // Remaining time left on the auto-dismiss countdown, in ms — tracked separately from `duration` so a
-  // hover/focus pause-and-resume doesn't restart the full countdown from scratch (WCAG 2.2.1 Timing Adjustable:
-  // the point is to stop it disappearing *while the user is engaging with it*, not to give it a fresh full
-  // `duration` every time the pointer happens to pass over it). Also what makes an actionable (`actionLabel`)
-  // snackbar actually usable as an "Undo" pattern — without this, reading the message and reaching for the
-  // action button could lose the race against its own timer.
+  /*
+   * Remaining time left on the auto-dismiss countdown, in ms — tracked separately from `duration` so a
+   * hover/focus pause-and-resume doesn't restart the full countdown from scratch (WCAG 2.2.1 Timing Adjustable:
+   * the point is to stop it disappearing *while the user is engaging with it*, not to give it a fresh full
+   * `duration` every time the pointer happens to pass over it). Also what makes an actionable (`actionLabel`)
+   * snackbar actually usable as an "Undo" pattern — without this, reading the message and reaching for the
+   * action button could lose the race against its own timer.
+   */
   private _remainingMs = 0;
   private _timerStartedAt = 0;
   private _hovered = false;
   private _focused = false;
-  // `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
-  // was ever shown — `open` starts false, so the else branch ran, dispatching a `hide` for a snackbar that was
-  // never visible. Same fix as lt-dropdown. This guards
-  // only the timer/event side effects, not the popover sync below — a snackbar mounted already open (markup
-  // `open=""`) still needs `showPopover()` called once, or it stays in the native `display: none` state despite
-  // `open` being true.
+  /*
+   * `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
+   * was ever shown — `open` starts false, so the else branch ran, dispatching a `hide` for a snackbar that was
+   * never visible. Same fix as lt-dropdown. This guards
+   * only the timer/event side effects, not the popover sync below — a snackbar mounted already open (markup
+   * `open=""`) still needs `showPopover()` called once, or it stays in the native `display: none` state despite
+   * `open` being true.
+   */
   private _skipNextOpenChange = true;
 
   /** Shows the snackbar and starts the auto-dismiss timer. */
@@ -129,13 +133,15 @@ export class Snackbar extends ThemeableElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // `lt-snackbar` is a "manual" popover on its own host (not a wrapped child, unlike lt-dialog/lt-sidepanel's
-    // inner <dialog>) so it renders in the top layer, above an open modal dialog regardless of z-index — the
-    // whole reason for this migration (§6.1: a snackbar shown while a dialog is open would otherwise be hidden
-    // behind it, since top-layer content always wins). "manual" means nothing native can show or dismiss it —
-    // no light-dismiss on outside click, no Escape — only our own show()/hide() can, matching the existing
-    // behavior (duration timer + explicit close button) exactly. Skipped entirely when `managed` — the group
-    // that created this instance owns top-layer rendering for the whole stack with its own single popover.
+    /*
+     * `lt-snackbar` is a "manual" popover on its own host (not a wrapped child, unlike lt-dialog/lt-sidepanel's
+     * inner <dialog>) so it renders in the top layer, above an open modal dialog regardless of z-index — the
+     * whole reason for this migration (§6.1: a snackbar shown while a dialog is open would otherwise be hidden
+     * behind it, since top-layer content always wins). "manual" means nothing native can show or dismiss it —
+     * no light-dismiss on outside click, no Escape — only our own show()/hide() can, matching the existing
+     * behavior (duration timer + explicit close button) exactly. Skipped entirely when `managed` — the group
+     * that created this instance owns top-layer rendering for the whole stack with its own single popover.
+     */
     if (!this.managed) this.setAttribute('popover', 'manual');
     this.addEventListener('pointerenter', this._onPointerEnter);
     this.addEventListener('pointerleave', this._onPointerLeave);
@@ -180,8 +186,10 @@ export class Snackbar extends ThemeableElement {
   }
 
   private _syncPopoverState() {
-    // Not a popover at all when managed (see `managed`'s own doc comment) — this instance's visibility is
-    // driven purely by the `:host([managed][open])` CSS rule, same as any other reactive attribute toggle.
+    /*
+     * Not a popover at all when managed (see `managed`'s own doc comment) — this instance's visibility is
+     * driven purely by the `:host([managed][open])` CSS rule, same as any other reactive attribute toggle.
+     */
     if (this.managed) return;
     if (this.open) {
       if (!this.matches(':popover-open')) this.showPopover();
@@ -205,9 +213,11 @@ export class Snackbar extends ThemeableElement {
     this._clearTimer();
     if (this.duration > 0) {
       this._remainingMs = this.duration;
-      // A snackbar can be shown while already hovered/focused (e.g. shown in direct response to clicking
-      // something the pointer is still sitting on) — start paused in that case rather than racing a timer the
-      // user is already engaging with from the very first frame.
+      /*
+       * A snackbar can be shown while already hovered/focused (e.g. shown in direct response to clicking
+       * something the pointer is still sitting on) — start paused in that case rather than racing a timer the
+       * user is already engaging with from the very first frame.
+       */
       if (this._hovered || this._focused) return;
       this._scheduleTimer();
     }
@@ -226,9 +236,11 @@ export class Snackbar extends ThemeableElement {
   }
 
   private _resumeTimer() {
-    // Still engaged via the other channel (e.g. focus left but the pointer is still hovering), already running,
-    // or nothing to resume (not open, or auto-dismiss disabled entirely) — any of these means there's nothing to
-    // actually resume right now.
+    /*
+     * Still engaged via the other channel (e.g. focus left but the pointer is still hovering), already running,
+     * or nothing to resume (not open, or auto-dismiss disabled entirely) — any of these means there's nothing to
+     * actually resume right now.
+     */
     if (this._hovered || this._focused || this._timer !== undefined || !this.open || this.duration <= 0) return;
     this._scheduleTimer();
   }

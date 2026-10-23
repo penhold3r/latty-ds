@@ -72,8 +72,10 @@ describe('<lt-tooltip>', () => {
     });
 
     it('sets aria-description on the trigger with the tooltip text', () => {
-      // Not aria-describedby: its id lookup can't cross from the trigger (light DOM) into the tooltip bubble
-      // (this element's own shadow root), so no AT ever actually resolves it — verified: it announces nothing.
+      /*
+       * Not aria-describedby: its id lookup can't cross from the trigger (light DOM) into the tooltip bubble
+       * (this element's own shadow root), so no AT ever actually resolves it — verified: it announces nothing.
+       */
       expect(btn.getAttribute('aria-description')).toBe('Tip');
       expect(btn.hasAttribute('aria-describedby')).toBe(false);
     });
@@ -238,8 +240,10 @@ describe('<lt-tooltip>', () => {
       expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
 
       vi.advanceTimersByTime(300);
-      // A second pointerenter-driven sync while already waiting (e.g. a stray duplicate event) must not
-      // schedule a second timer — only one wait should ever be running at a time.
+      /*
+       * A second pointerenter-driven sync while already waiting (e.g. a stray duplicate event) must not
+       * schedule a second timer — only one wait should ever be running at a time.
+       */
       wrap.dispatchEvent(new Event('pointerenter'));
       await wrap.updateComplete;
       expect(setTimeoutSpy).toHaveBeenCalledTimes(1);
@@ -526,9 +530,11 @@ describe('<lt-tooltip>', () => {
       await wrap.updateComplete;
       tap();
       await wrap.updateComplete;
-      // Falls through to the ordinary hover model instead: pointerenter opened it immediately (delay=0), then
-      // pointerleave (also part of `tap()`) closed it again — so by the end of the sequence it's closed either
-      // way, but via the hover path, not a stuck-open touch toggle.
+      /*
+       * Falls through to the ordinary hover model instead: pointerenter opened it immediately (delay=0), then
+       * pointerleave (also part of `tap()`) closed it again — so by the end of the sequence it's closed either
+       * way, but via the hover path, not a stuck-open touch toggle.
+       */
       expect(bubble().matches(':popover-open')).toBe(false);
     });
 
@@ -547,8 +553,10 @@ describe('<lt-tooltip>', () => {
       await wrap.updateComplete;
       wrap.remove();
 
-      // If the document-level listeners weren't cleaned up on disconnect, these would still find something to
-      // act on (or throw reaching into a disconnected element's internals).
+      /*
+       * If the document-level listeners weren't cleaned up on disconnect, these would still find something to
+       * act on (or throw reaching into a disconnected element's internals).
+       */
       expect(() => {
         document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
         document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, composed: true }));

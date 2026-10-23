@@ -45,9 +45,11 @@ describe('Select', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  // React 18 (the version actually installed here, the repo's declared peer floor) stringifies non-primitive
-  // JSX props into DOM attributes for unknown elements instead of setting the property — `options={[...]}`
-  // became `attribute options="[object Object]"`, the real `options` property left undefined (X7).
+  /*
+   * React 18 (the version actually installed here, the repo's declared peer floor) stringifies non-primitive
+   * JSX props into DOM attributes for unknown elements instead of setting the property — `options={[...]}`
+   * became `attribute options="[object Object]"`, the real `options` property left undefined (X7).
+   */
   it('sets options as a real property, not a stringified attribute (X7)', () => {
     const options = [
       { value: 'us', label: 'United States' },

@@ -76,11 +76,13 @@ describe('<lt-sidepanel>', () => {
     expect(fired).toBe(true);
   });
 
-  // A real Escape press closes only the panel that's actually focused now (the platform's own per-<dialog>
-  // handling), not every open panel on the page via a window-level listener (SPL-3) — jsdom doesn't implement
-  // that native mechanism at all, so this dispatches the native element's own 'close' event directly, the way a
-  // real Escape press would eventually produce, to verify it's synced back onto `open` (and dispatches our own
-  // `close`) correctly.
+  /*
+   * A real Escape press closes only the panel that's actually focused now (the platform's own per-<dialog>
+   * handling), not every open panel on the page via a window-level listener (SPL-3) — jsdom doesn't implement
+   * that native mechanism at all, so this dispatches the native element's own 'close' event directly, the way a
+   * real Escape press would eventually produce, to verify it's synced back onto `open` (and dispatches our own
+   * `close`) correctly.
+   */
   it('a native close (e.g. from Escape) is synced back onto open and dispatches close', async () => {
     el.open = true;
     await el.updateComplete;

@@ -32,13 +32,17 @@ const palettesWith = (variant: Record<string, string>): ColorPalettes => ({
 const DEEP = palettesWith(
   ramp(['#eff4ff', '#dbe6fe', '#a9c2fb', '#3d6ce0', '#2a55c9', '#1e3f9e', '#173080', '#102463', '#0b1a48', '#071030'])
 );
-// A bright yellow: white fails everywhere near the resting step, so a dark text is needed, and the darker steps
-// (from 700) are too dark for that text to hold.
+/*
+ * A bright yellow: white fails everywhere near the resting step, so a dark text is needed, and the darker steps
+ * (from 700) are too dark for that text to hold.
+ */
 const YELLOW = palettesWith(
   ramp(['#fffbe0', '#fff4b8', '#ffec85', '#ffe24d', '#ffdc2e', '#ffd60a', '#d4b100', '#8f7700', '#5c4c00', '#3d3200'])
 );
-// Every step the same mid grey at the luminance crossover, where white (4.2) and near-black neutral (4.0) both fall
-// short and only pure black (4.9) holds.
+/*
+ * Every step the same mid grey at the luminance crossover, where white (4.2) and near-black neutral (4.0) both fall
+ * short and only pure black (4.9) holds.
+ */
 const CROSSOVER_GREY = palettesWith(ramp(Array(10).fill('#7a7a7a')));
 // Room for the resting step only: its neighbours are too dark for black text.
 const NO_ROOM = palettesWith(

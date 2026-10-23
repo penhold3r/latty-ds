@@ -224,9 +224,11 @@ describe('<lt-combobox>', () => {
   });
 
   describe('keyboard navigation and ARIA (CMB-1, CMB-2)', () => {
-    // A disabled option in the middle is what actually exposes CMB-2: activeIndex counted positions in the
-    // enabled-only list, but the render compared it against the unfiltered one, so the two only ever agreed
-    // when nothing disabled came before the active option.
+    /*
+     * A disabled option in the middle is what actually exposes CMB-2: activeIndex counted positions in the
+     * enabled-only list, but the render compared it against the unfiltered one, so the two only ever agreed
+     * when nothing disabled came before the active option.
+     */
     const withMiddleDisabled = [
       { value: 'a', label: 'Alpha' },
       { value: 'b', label: 'Beta', disabled: true },
@@ -328,8 +330,10 @@ describe('<lt-combobox>', () => {
       expect(el.hasAttribute('value')).toBe(false);
     });
 
-    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
-    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+    /*
+     * jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+     * formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+     */
     it('restores the value set in markup, not empty', async () => {
       const fresh = document.createElement('lt-combobox') as Combobox;
       fresh.options = OPTIONS;
@@ -348,9 +352,11 @@ describe('<lt-combobox>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('disables the inner input without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
-      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
-      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
-      // updateComplete reflects it.
+      /*
+       * FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+       * update already in flight — see the controller's own doc comment), so this needs an extra tick before
+       * updateComplete reflects it.
+       */
       await Promise.resolve();
       await el.updateComplete;
       const input = el.shadowRoot!.querySelector('input') as HTMLInputElement;
@@ -410,8 +416,10 @@ describe('<lt-combobox>', () => {
       expect(el.shadowRoot!.querySelector('.no-results')?.textContent).toBe('Aucun résultat');
     });
 
-    // jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
-    // component makes rather than reading back a real validationMessage.
+    /*
+     * jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
+     * component makes rather than reading back a real validationMessage.
+     */
     it('defaults the required-field validation message to English', async () => {
       const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
       el.required = true;
@@ -933,10 +941,12 @@ describe('multiple (tags)', () => {
     (el as any).open = true;
     await el.updateComplete;
 
-    // The delete button lives inside lt-chip's own (nested) shadow root, so this exercises the shadow-walking
-    // containment check, not plain Node.contains() (which does not cross shadow boundaries). Invoked directly
-    // (matching chip.test.ts's precedent for `_handleDelete`) since jsdom's focus/event-composition emulation
-    // for nested custom-element shadow roots is unreliable to drive through a real dispatch.
+    /*
+     * The delete button lives inside lt-chip's own (nested) shadow root, so this exercises the shadow-walking
+     * containment check, not plain Node.contains() (which does not cross shadow boundaries). Invoked directly
+     * (matching chip.test.ts's precedent for `_handleDelete`) since jsdom's focus/event-composition emulation
+     * for nested custom-element shadow roots is unreliable to drive through a real dispatch.
+     */
     const deleteBtn = tags()[0].shadowRoot!.querySelector<HTMLButtonElement>('.delete')!;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (el as any)._onFocusOut({ relatedTarget: deleteBtn } as unknown as FocusEvent);

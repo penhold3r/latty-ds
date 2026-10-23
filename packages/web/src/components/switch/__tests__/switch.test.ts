@@ -37,10 +37,12 @@ describe('<lt-switch>', () => {
   });
 
   it('does not double-fire change for consumers listening on the host', async () => {
-    // Real browser change events on the native checkbox are composed (cross
-    // the shadow boundary), so without stopPropagation() a consumer listening
-    // on the host would see both our CustomEvent and the original native
-    // event re-arriving — this reproduces that with an explicit composed dispatch.
+    /*
+     * Real browser change events on the native checkbox are composed (cross
+     * the shadow boundary), so without stopPropagation() a consumer listening
+     * on the host would see both our CustomEvent and the original native
+     * event re-arriving — this reproduces that with an explicit composed dispatch.
+     */
     const handler = vi.fn();
     el.addEventListener('change', handler);
 
@@ -181,8 +183,10 @@ describe('<lt-switch>', () => {
       expect(el.hasAttribute('checked')).toBe(false);
     });
 
-    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
-    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+    /*
+     * jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+     * formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+     */
     it('restores the checked state set in markup, not false', async () => {
       const fresh = document.createElement('lt-switch') as Switch;
       fresh.setAttribute('checked', '');
@@ -200,9 +204,11 @@ describe('<lt-switch>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('disables the inner input without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
-      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
-      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
-      // updateComplete reflects it.
+      /*
+       * FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+       * update already in flight — see the controller's own doc comment), so this needs an extra tick before
+       * updateComplete reflects it.
+       */
       await Promise.resolve();
       await el.updateComplete;
       const input = el.shadowRoot!.querySelector('input[type="checkbox"]') as HTMLInputElement;
@@ -231,8 +237,10 @@ describe('<lt-switch>', () => {
     });
   });
 
-  // jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
-  // component makes rather than reading back a real validationMessage.
+  /*
+   * jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
+   * component makes rather than reading back a real validationMessage.
+   */
   describe('labels (i18n, X5)', () => {
     it('defaults the required-field validation message to English', async () => {
       const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');

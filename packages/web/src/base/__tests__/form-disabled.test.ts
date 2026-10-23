@@ -29,8 +29,10 @@ describe('FormDisabledController', () => {
     const spy = vi.spyOn(el, 'requestUpdate');
 
     el.fieldset.setFieldsetDisabled(true);
-    // Deferred to a microtask (not called synchronously) — see the class doc comment: formDisabledCallback can
-    // fire from inside the host's own in-progress update, so requestUpdate() must never be reentrant with it.
+    /*
+     * Deferred to a microtask (not called synchronously) — see the class doc comment: formDisabledCallback can
+     * fire from inside the host's own in-progress update, so requestUpdate() must never be reentrant with it.
+     */
     expect(spy).not.toHaveBeenCalled();
     await Promise.resolve();
     expect(spy).toHaveBeenCalledOnce();

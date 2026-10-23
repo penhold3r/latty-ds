@@ -159,9 +159,11 @@ describe('<lt-radio-group>', () => {
   });
 
   describe('following a form reset (RDG-2)', () => {
-    // The radios are the form-associated elements — each one restores its own default when the form
-    // resets — but the group is not form-associated, so nothing used to tell it that had happened and
-    // its `value` kept pointing at a radio that was no longer checked.
+    /*
+     * The radios are the form-associated elements — each one restores its own default when the form
+     * resets — but the group is not form-associated, so nothing used to tell it that had happened and
+     * its `value` kept pointing at a radio that was no longer checked.
+     */
     it('re-derives its value from the radios once the browser has reset them', async () => {
       const form = document.createElement('form');
       document.body.append(form);
@@ -178,8 +180,10 @@ describe('<lt-radio-group>', () => {
       await el.updateComplete;
       expect(el.value).toBe('option1');
 
-      // …and the browser resets the form. jsdom never runs the form-associated reset lifecycle, so the
-      // radios' own `formResetCallback` is called by hand, in the order the browser would.
+      /*
+       * …and the browser resets the form. jsdom never runs the form-associated reset lifecycle, so the
+       * radios' own `formResetCallback` is called by hand, in the order the browser would.
+       */
       form.reset();
       radio1.formResetCallback();
       radio2.formResetCallback();

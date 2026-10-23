@@ -77,8 +77,10 @@ export class SidePanel extends ThemeableElement {
     exclude: ['aria-labelledby']
   });
   private _scrollLocked = false;
-  // Same first-update guard as lt-dialog, lt-dropdown, and lt-snackbar: `updated()` runs after the very first
-  // render where `changed.has('open')` is true even though nothing was ever shown.
+  /*
+   * Same first-update guard as lt-dialog, lt-dropdown, and lt-snackbar: `updated()` runs after the very first
+   * render where `changed.has('open')` is true even though nothing was ever shown.
+   */
   private _skipNextOpenChange = true;
 
   /** Open the panel. */
@@ -120,8 +122,10 @@ export class SidePanel extends ThemeableElement {
     const panel = this.dialogElement;
     if (!panel) return;
 
-    // Disable transition and snap to the new anchor's off-screen start position.
-    // Handles both anchor-only changes and anchor + open changing simultaneously.
+    /*
+     * Disable transition and snap to the new anchor's off-screen start position.
+     * Handles both anchor-only changes and anchor + open changing simultaneously.
+     */
     panel.style.transition = 'none';
     if (this.open) {
       panel.style.transform = this._offScreenTransform;
@@ -139,9 +143,11 @@ export class SidePanel extends ThemeableElement {
       lockBodyScroll();
       this._scrollLocked = true;
     }
-    // Guard against calling showModal() on an already-open dialog — throws InvalidStateError. Initial focus placement and, on close, focus restoration to whatever had focus beforehand are both
-    // native showModal()/close() behavior — nothing to implement here for either (confirmed in the investigation's
-    // spike: "Focus returns to a shadow-rooted opener on close" works with no manual tracking at all).
+    /*
+     * Guard against calling showModal() on an already-open dialog — throws InvalidStateError. Initial focus placement and, on close, focus restoration to whatever had focus beforehand are both
+     * native showModal()/close() behavior — nothing to implement here for either (confirmed in the investigation's
+     * spike: "Focus returns to a shadow-rooted opener on close" works with no manual tracking at all).
+     */
     if (this.dialogElement && !this.dialogElement.open) {
       this.dialogElement.showModal();
     }
@@ -153,38 +159,48 @@ export class SidePanel extends ThemeableElement {
       unlockBodyScroll();
       this._scrollLocked = false;
     }
-    // The native element may already be closed here (this runs for both "we closed it" and "it closed itself,
-    // e.g. via Escape" — see _handleNativeClose below), so guard against calling close() twice.
+    /*
+     * The native element may already be closed here (this runs for both "we closed it" and "it closed itself,
+     * e.g. via Escape" — see _handleNativeClose below), so guard against calling close() twice.
+     */
     if (this.dialogElement?.open) {
       this.dialogElement.close();
     }
     dispatch(this, 'close');
   }
 
-  // Unlike lt-dialog, this has no close-on-escape toggle, so there's nothing to preventDefault() on 'cancel' —
-  // Escape is left entirely to the native element, now scoped to whichever panel actually has focus, not a
-  // window-level listener that closed every open panel on one keypress regardless of which was focused.
+  /*
+   * Unlike lt-dialog, this has no close-on-escape toggle, so there's nothing to preventDefault() on 'cancel' —
+   * Escape is left entirely to the native element, now scoped to whichever panel actually has focus, not a
+   * window-level listener that closed every open panel on one keypress regardless of which was focused.
+   */
 
-  // The native element's own 'close' event fires whenever IT closes, for any reason — sync `open` back so the
-  // two never drift apart. If we're the ones who just called close() (inside _handleClose(), above), `open` is
-  // already false and this is a no-op.
+  /*
+   * The native element's own 'close' event fires whenever IT closes, for any reason — sync `open` back so the
+   * two never drift apart. If we're the ones who just called close() (inside _handleClose(), above), `open` is
+   * already false and this is a no-op.
+   */
   private _handleNativeClose = () => {
     this.open = false;
   };
 
-  // The clicked-outside-the-content area of a shown <dialog> resolves e.target to the <dialog> element itself
-  // (::backdrop isn't a real node and can't be an event target) — clicking any actual descendant instead
-  // targets that descendant (same mechanism as lt-dialog's backdrop-click detection, confirmed in the spike).
+  /*
+   * The clicked-outside-the-content area of a shown <dialog> resolves e.target to the <dialog> element itself
+   * (::backdrop isn't a real node and can't be an event target) — clicking any actual descendant instead
+   * targets that descendant (same mechanism as lt-dialog's backdrop-click detection, confirmed in the spike).
+   */
   private _handleDialogClick = (e: MouseEvent) => {
     if (e.target === this.dialogElement) {
       this.hide();
     }
   };
 
-  // translateX has no logical/direction-aware equivalent in CSS, unlike the positioning below (inset-inline-*
-  // resolves automatically) — var(--_start-x)/var(--_end-x) carry the direction-dependent sign instead (defined
-  // in the stylesheet, flipped under :host(:dir(rtl))), so this stays correct under RTL without reading
-  // getComputedStyle(this).direction here at all.
+  /*
+   * translateX has no logical/direction-aware equivalent in CSS, unlike the positioning below (inset-inline-*
+   * resolves automatically) — var(--_start-x)/var(--_end-x) carry the direction-dependent sign instead (defined
+   * in the stylesheet, flipped under :host(:dir(rtl))), so this stays correct under RTL without reading
+   * getComputedStyle(this).direction here at all.
+   */
   private get _offScreenTransform(): string {
     switch (this.anchor) {
       case 'end':

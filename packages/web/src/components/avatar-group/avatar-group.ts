@@ -49,32 +49,40 @@ export class AvatarGroup extends ThemeableElement {
   @queryAssignedElements({ selector: 'lt-avatar' })
   private _avatars!: Avatar[];
 
-  // Purely derived from `max` and the current slotted children — computed fresh in render() rather than cached
-  // into a separate reactive property, so a `max`/`size` change settles in the one update cycle Lit already
-  // gives it, instead of a second one chained from inside updated() (which a single `await updateComplete`
-  // doesn't wait for).
+  /*
+   * Purely derived from `max` and the current slotted children — computed fresh in render() rather than cached
+   * into a separate reactive property, so a `max`/`size` change settles in the one update cycle Lit already
+   * gives it, instead of a second one chained from inside updated() (which a single `await updateComplete`
+   * doesn't wait for).
+   */
   private get _overflowCount(): number {
     if (this.max === undefined) return 0;
     return Math.max(0, (this._avatars?.length ?? 0) - this.max);
   }
 
-  // Forwards `size` and hides avatars past `max` — side effects on the slotted (light DOM) children, which
-  // live outside this component's own render output.
+  /*
+   * Forwards `size` and hides avatars past `max` — side effects on the slotted (light DOM) children, which
+   * live outside this component's own render output.
+   */
   private _applyToAvatars = () => {
     (this._avatars ?? []).forEach((avatar, i) => {
       if (this.size !== undefined) avatar.size = this.size;
       const isHidden = this.max !== undefined && i >= this.max;
       avatar.hidden = isHidden;
-      // lt-avatar's own `:host { display: inline-flex }` is author CSS, which always outranks the UA
-      // stylesheet's `[hidden] { display: none }` regardless of specificity — CSS origin beats specificity in
-      // the cascade, so the `hidden` property/attribute alone silently does nothing here (confirmed live: all
-      // avatars stayed visible). An inline style beats any selector-based rule, :host's included.
+      /*
+       * lt-avatar's own `:host { display: inline-flex }` is author CSS, which always outranks the UA
+       * stylesheet's `[hidden] { display: none }` regardless of specificity — CSS origin beats specificity in
+       * the cascade, so the `hidden` property/attribute alone silently does nothing here (confirmed live: all
+       * avatars stayed visible). An inline style beats any selector-based rule, :host's included.
+       */
       avatar.style.display = isHidden ? 'none' : '';
     });
   };
 
-  // Slotted children changing (add/remove/reorder) doesn't touch any `@property` of this component, so Lit has
-  // no reason to re-render on its own — request one explicitly so the overflow count picks up the new count.
+  /*
+   * Slotted children changing (add/remove/reorder) doesn't touch any `@property` of this component, so Lit has
+   * no reason to re-render on its own — request one explicitly so the overflow count picks up the new count.
+   */
   private _handleSlotChange = () => {
     this._applyToAvatars();
     this.requestUpdate();

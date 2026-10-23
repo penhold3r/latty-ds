@@ -69,11 +69,13 @@ describe('<lt-avatar-group>', () => {
       expect(a5.hasAttribute('hidden')).toBe(true);
     });
 
-    // lt-avatar's own `:host { display: inline-flex }` is author CSS, which outranks the UA stylesheet's
-    // `[hidden] { display: none }` regardless of specificity — confirmed live in Chromium that the `hidden`
-    // attribute/property alone silently does nothing, every avatar stayed visible. This asserts the actual fix
-    // (an inline style, which beats any selector-based rule including :host's), not just the semantic attribute
-    // jsdom's lack of a real cascade can't tell apart from a genuinely-hidden element.
+    /*
+     * lt-avatar's own `:host { display: inline-flex }` is author CSS, which outranks the UA stylesheet's
+     * `[hidden] { display: none }` regardless of specificity — confirmed live in Chromium that the `hidden`
+     * attribute/property alone silently does nothing, every avatar stayed visible. This asserts the actual fix
+     * (an inline style, which beats any selector-based rule including :host's), not just the semantic attribute
+     * jsdom's lack of a real cascade can't tell apart from a genuinely-hidden element.
+     */
     it('forces display:none via inline style past max, not just the hidden attribute', () => {
       const [a1, a2, a3, a4, a5] = avatars();
       expect(a1.style.display).toBe('');

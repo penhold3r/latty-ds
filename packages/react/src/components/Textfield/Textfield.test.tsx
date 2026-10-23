@@ -1,8 +1,10 @@
 import { render } from '@testing-library/react';
 import { createRef } from 'react';
 import { Textfield } from './Textfield';
-// Registers the real <lt-textfield> class, needed for the helperText test below to exercise its actual
-// `helperText` accessor rather than a plain, un-upgraded HTMLUnknownElement.
+/*
+ * Registers the real <lt-textfield> class, needed for the helperText test below to exercise its actual
+ * `helperText` accessor rather than a plain, un-upgraded HTMLUnknownElement.
+ */
 import '@latty-ds/web';
 
 describe('Textfield', () => {
@@ -32,12 +34,14 @@ describe('Textfield', () => {
     expect(ref.current?.tagName.toLowerCase()).toBe('lt-textfield');
   });
 
-  // Regression guard for a bug found 2026-10-19: helperText's type (`string | ((error: boolean) => string)`)
-  // means a consumer can pass a function, and a function value can't safely go through a JSX attribute under any
-  // React version (React 18 always stringifies it via setAttribute for a custom element; React 19 only property-
-  // assigns when the *exact* JSX key already exists on the DOM node, which a kebab-cased key like `helper-text`
-  // never does). scripts/codegen-wrappers.mjs lists `helperText` in FUNCTION_CAPABLE_FIELDS so it's always
-  // assigned as a real property through the ref-based effect instead, bypassing JSX attributes entirely.
+  /*
+   * Regression guard for a bug found 2026-10-19: helperText's type (`string | ((error: boolean) => string)`)
+   * means a consumer can pass a function, and a function value can't safely go through a JSX attribute under any
+   * React version (React 18 always stringifies it via setAttribute for a custom element; React 19 only property-
+   * assigns when the *exact* JSX key already exists on the DOM node, which a kebab-cased key like `helper-text`
+   * never does). scripts/codegen-wrappers.mjs lists `helperText` in FUNCTION_CAPABLE_FIELDS so it's always
+   * assigned as a real property through the ref-based effect instead, bypassing JSX attributes entirely.
+   */
   it('assigns a function helperText as a real property, not a stringified attribute', () => {
     const fn = (error: boolean) => (error ? 'Invalid' : 'Looks good');
     const { container } = render(<Textfield helperText={fn} />);

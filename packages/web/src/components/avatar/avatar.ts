@@ -58,8 +58,10 @@ export class Avatar extends ThemeableElement {
     return this.statusLabel || this.status[0].toUpperCase() + this.status.slice(1);
   }
 
-  // Array.from walks code points, so an emoji or other astral character isn't cut in half; empty words are dropped,
-  // so a whitespace-only name yields no initials instead of throwing.
+  /*
+   * Array.from walks code points, so an emoji or other astral character isn't cut in half; empty words are dropped,
+   * so a whitespace-only name yields no initials instead of throwing.
+   */
   private get _initials(): string {
     return this.name
       .split(/\s+/)
@@ -84,11 +86,13 @@ export class Avatar extends ThemeableElement {
     const label = this.alt || this.name.trim();
     const fullLabel = [label, this._statusLabel].filter(Boolean).join(', ');
 
-    // With neither alt/name nor a status there is nothing meaningful to announce, so it is decorative rather
-    // than "avatar".
-    // The status dot is a sibling of the base span, not a child of it — the base span has overflow:hidden to
-    // crop the image/initials to the circle/square shape, which would also clip a dot sitting right at its
-    // corner. Positioned relative to the host instead, it sits outside that clip.
+    /*
+     * With neither alt/name nor a status there is nothing meaningful to announce, so it is decorative rather
+     * than "avatar".
+     * The status dot is a sibling of the base span, not a child of it — the base span has overflow:hidden to
+     * crop the image/initials to the circle/square shape, which would also clip a dot sitting right at its
+     * corner. Positioned relative to the host instead, it sits outside that clip.
+     */
     return html`
       <span part="base" role=${fullLabel ? 'img' : 'presentation'} aria-label=${ifDefined(fullLabel || undefined)}>
         ${showImage

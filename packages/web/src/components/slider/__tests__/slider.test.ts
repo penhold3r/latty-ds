@@ -121,9 +121,11 @@ describe('<lt-slider>', () => {
       expect(el.hasAttribute('value')).toBe(false);
     });
 
-    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
-    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
-    // Previously this reset to `min`, not the markup default (verified: value="40" min="0" reset to 0).
+    /*
+     * jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+     * formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+     * Previously this reset to `min`, not the markup default (verified: value="40" min="0" reset to 0).
+     */
     it('restores the value set in markup, not min', async () => {
       const fresh = document.createElement('lt-slider') as Slider;
       fresh.setAttribute('value', '40');
@@ -141,9 +143,11 @@ describe('<lt-slider>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('disables the inner input without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
-      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
-      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
-      // updateComplete reflects it.
+      /*
+       * FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+       * update already in flight — see the controller's own doc comment), so this needs an extra tick before
+       * updateComplete reflects it.
+       */
       await Promise.resolve();
       await el.updateComplete;
       const input = el.shadowRoot!.querySelector('input[type="range"]') as HTMLInputElement;

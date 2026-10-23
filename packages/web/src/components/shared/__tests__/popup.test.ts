@@ -43,8 +43,10 @@ describe('PopupController', () => {
   });
 
   afterEach(() => {
-    // Every controller installs a document-level listener, so they have to be torn down here —
-    // otherwise one test's handler is still listening during the next one.
+    /*
+     * Every controller installs a document-level listener, so they have to be torn down here —
+     * otherwise one test's handler is still listening during the next one.
+     */
     controllers.forEach((c) => c.destroy());
     host.remove();
     reference.remove();
@@ -125,8 +127,10 @@ describe('PopupController', () => {
     const controller = makeController({ outsideCapture: true });
     await controller.open();
 
-    // The target stops the event from bubbling, so only a capture-phase listener on the document
-    // ever sees it.
+    /*
+     * The target stops the event from bubbling, so only a capture-phase listener on the document
+     * ever sees it.
+     */
     const inner = document.createElement('button');
     document.body.appendChild(inner);
     inner.addEventListener('click', (e) => e.stopPropagation());

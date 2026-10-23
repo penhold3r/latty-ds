@@ -87,10 +87,12 @@ export class Image extends ThemeableElement {
     if (changed.has('src')) this._errored = false;
   }
 
-  // Literal event names (not a shared helper taking `name`): the manifest analyzer reads names from
-  // `new CustomEvent('…')` call sites, and a variable there produced a bogus event called "name".
-  // Non-bubbling and non-composed, exactly like the native <img> events they mirror — a bubbling
-  // `error` would also reach window-level error handlers (Sentry and friends) as a spurious error.
+  /*
+   * Literal event names (not a shared helper taking `name`): the manifest analyzer reads names from
+   * `new CustomEvent('…')` call sites, and a variable there produced a bogus event called "name".
+   * Non-bubbling and non-composed, exactly like the native <img> events they mirror — a bubbling
+   * `error` would also reach window-level error handlers (Sentry and friends) as a spurious error.
+   */
   private _handleLoad() {
     this.dispatchEvent(new CustomEvent('load', { detail: { src: this.src } }));
   }

@@ -175,9 +175,11 @@ export class ColorInput extends FormControlElement {
   }
 
   private _handleChange(e: Event) {
-    // Stop the native (composed) change event from also bubbling past the
-    // shadow boundary — otherwise it double-fires 'change' on the host after
-    // our own CustomEvent, with the wrong (non-{value}) detail shape.
+    /*
+     * Stop the native (composed) change event from also bubbling past the
+     * shadow boundary — otherwise it double-fires 'change' on the host after
+     * our own CustomEvent, with the wrong (non-{value}) detail shape.
+     */
     e.stopPropagation();
     const pickerHex = (e.target as HTMLInputElement).value; // always #rrggbb from native picker
     this.value = formatColor(pickerHex, this.format);

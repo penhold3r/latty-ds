@@ -99,8 +99,10 @@ export class NavItem extends ThemeableElement {
     });
 
     this.requestUpdate();
-    // A group that starts `open` renders its children container only now (after this first slotchange), so
-    // `updated()` never got to size it for the `open` it was created with, and it stayed collapsed at height 0.
+    /*
+     * A group that starts `open` renders its children container only now (after this first slotchange), so
+     * `updated()` never got to size it for the `open` it was created with, and it stayed collapsed at height 0.
+     */
     void this.updateComplete.then(() => this._syncInitialHeight());
   }
 

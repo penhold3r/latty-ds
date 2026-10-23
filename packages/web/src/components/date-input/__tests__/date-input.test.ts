@@ -355,8 +355,10 @@ describe('<lt-date-input>', () => {
       expect(el.hasAttribute('value')).toBe(false);
     });
 
-    // jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
-    // formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+    /*
+     * jsdom doesn't implement the form-associated custom element reset lifecycle (form.reset() never calls
+     * formResetCallback), so this calls it directly — the same thing a real form reset does per the HTML spec.
+     */
     it('restores the value set in markup, not empty', async () => {
       const fresh = document.createElement('lt-date-input') as DateInput;
       fresh.setAttribute('value', '2026-05-19');
@@ -374,9 +376,11 @@ describe('<lt-date-input>', () => {
   describe('formDisabledCallback (a disabled ancestor <fieldset>, X1)', () => {
     it('disables the trigger button without touching the disabled property/attribute', async () => {
       el.formDisabledCallback(true);
-      // FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
-      // update already in flight — see the controller's own doc comment), so this needs an extra tick before
-      // updateComplete reflects it.
+      /*
+       * FormDisabledController defers its requestUpdate() to a microtask (so it's never reentrant with an
+       * update already in flight — see the controller's own doc comment), so this needs an extra tick before
+       * updateComplete reflects it.
+       */
       await Promise.resolve();
       await el.updateComplete;
       const btn = el.shadowRoot!.querySelector('#field-btn') as HTMLButtonElement;
@@ -424,8 +428,10 @@ describe('<lt-date-input>', () => {
       expect(el.shadowRoot!.querySelector('.dropdown')?.getAttribute('aria-label')).toBe('Sélecteur de date');
     });
 
-    // jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
-    // component makes rather than reading back a real validationMessage.
+    /*
+     * jsdom's ElementInternals.setValidity is a stubbed no-op (see vitest.setup.ts), so these spy on the call our
+     * component makes rather than reading back a real validationMessage.
+     */
     it('defaults the required-field validation message to English', async () => {
       const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
       el.required = true;
