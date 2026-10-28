@@ -5,7 +5,14 @@
 import { createStyleSheet } from '@latty-ds/tokens/configure';
 import type { BorderWidth, LattyConfig } from '@latty-ds/tokens/configure';
 import { highlight } from '../ComponentPlayground/ComponentPlayground.prism';
-import { contrastRatio, luminance, parseComputedColor, parseHex, rateContrast } from './ThemePlayground.contrast';
+import {
+  contrastRatio,
+  luminance,
+  parseComputedColor,
+  parseHex,
+  rateContrast,
+  rateInteractiveContrast
+} from './ThemePlayground.contrast';
 import { DEFAULTS, PRESETS, fontEntries } from './ThemePlayground.state';
 import type { PlaygroundState, ThemeValue } from './ThemePlayground.state';
 import { readStateFromUrl, stateToUrl, writeStateToUrl } from './ThemePlayground.url';
@@ -233,7 +240,8 @@ const updateContrast = (stage: HTMLElement): void => {
       return;
     }
     const ratio = contrastRatio(fg.rgb, bg.rgb);
-    const rating = rateContrast(ratio);
+    const isFilled = chip.textContent?.trim().startsWith('Filled');
+    const rating = isFilled ? rateInteractiveContrast(ratio) : rateContrast(ratio);
     badge.setAttribute('variant', rating.variant);
     badge.setAttribute('content', `${rating.label} ${ratio.toFixed(1)}:1`);
   });

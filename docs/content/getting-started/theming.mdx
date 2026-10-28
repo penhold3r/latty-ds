@@ -30,9 +30,9 @@ values. All options are optional — omit any key to keep the default.
 
 ### Readable text on your colors
 
-You never have to pick label colors. Buttons, badges, alerts, snackbars, and every other filled surface take their text (and their hover and pressed shades) from your palette by contrast: the theme engine tries white, then the color's own lightest tint, then its own deepest shade, then near-black, then pure black, and uses the first that reaches WCAG AA (4.5:1) on the fill, in both the light and dark themes. Pure black or white always reaches 4.5:1 on any fill, so this holds for whatever base color you configure.
+You never have to pick label colors. Buttons, badges, alerts, snackbars, and every other filled surface take their text (and their hover and pressed shades) from your palette by contrast: the theme engine tries white, then the color's own lightest tint, then its own deepest shade, then near-black, then pure black, and uses the first that clears 3.5:1 on the fill — a threshold between WCAG AA for normal text (4.5:1) and AA for large text (3:1), tuned for the bold/large text that interactive fills always carry.
 
-In practice a saturated brand color gets white text, while a bright one (yellow, green, orange) gets a dark shade of itself, and its hover and pressed fills move the other way (lighter) so the text keeps its contrast. The result is available as <code>--lt-text-on-&lt;variant&gt;</code> and <code>--lt-interactive-&lt;variant&gt;-bg</code> (with <code>-hover</code> and <code>-active</code>) if you build your own filled surface.
+In practice most brand colors (blues, greens, teals, purples) get clean white text, while very bright ones (yellow, orange) get a dark shade of themselves, and their hover and pressed fills move the other way so the text keeps its contrast. The result is available as <code>--lt-text-on-&lt;variant&gt;</code> and <code>--lt-interactive-&lt;variant&gt;-bg</code> (with <code>-hover</code> and <code>-active</code>) if you build your own filled surface.
 
 <CodeBlock language="css">{`.promo-banner {
   background: var(--lt-interactive-primary-bg);
@@ -131,6 +131,27 @@ For server-side rendering use <code>createStyleSheet()</code>, which returns the
 
 const css = createStyleSheet({ colors: { primary: '#6366f1' } });
 // inject \`css\` into a <style> tag in your server-rendered HTML`}</CodeBlock>
+
+### Token overrides
+
+Pass <code>overrides</code> to force any token to a specific value. Overrides are appended after all generated tokens, so they always win by source order. This is useful when the auto-generated contrast or palette doesn't match your intent:
+
+<CodeBlock language="ts">{`configure({
+  colors: { primary: '#4F46E5', secondary: '#607D8B' },
+  overrides: {
+    'text-on-secondary': '#FFFFFF',
+    'color-primary-500': '#5046E5',
+  },
+});`}</CodeBlock>
+
+Keys are token names without the <code>--lt-</code> prefix. Values are raw CSS values — they are emitted as-is, not wrapped in <code>var()</code>. Works identically with <code>createStyleSheet()</code> for SSR:
+
+<CodeBlock language="ts">{`const css = createStyleSheet({
+  colors: { primary: '#4F46E5' },
+  overrides: { 'text-on-primary': '#000000' },
+});`}</CodeBlock>
+
+If an override breaks accessibility, that's on you — Latty won't validate override values.
 
 ## CSS overrides
 

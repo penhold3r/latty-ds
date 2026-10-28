@@ -40,3 +40,12 @@ export const rateContrast = (ratio: number): ContrastRating => {
   if (ratio >= 3) return { label: 'Low', variant: 'warning' };
   return { label: 'Fail', variant: 'error' };
 };
+
+/** Ratings for interactive fills (buttons, badges, chips) — bold/large text where 3.5:1 is the system threshold. */
+export const rateInteractiveContrast = (ratio: number): ContrastRating => {
+  if (ratio >= 7) return { label: 'AAA', variant: 'success' };
+  if (ratio >= 4.5) return { label: 'AA', variant: 'success' };
+  if (ratio >= 3.5) return { label: 'AA Large', variant: 'success' };
+  if (ratio >= 3) return { label: 'Low', variant: 'warning' };
+  return { label: 'Fail', variant: 'error' };
+};
