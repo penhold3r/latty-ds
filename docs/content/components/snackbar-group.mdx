@@ -1,6 +1,6 @@
 ---
 title: Snackbar Group
-description: Manages stacked snackbar notifications with visibility control
+description: Queues and stacks snackbar notifications so they never overlap
 slug: /components/snackbar-group
 ---
 
@@ -9,18 +9,28 @@ import FrameworkTabs from '@site/src/components/FrameworkTabs';
 
 # Snackbar Group
 
-<code>lt-snackbar-group</code> manages the display of <code>lt-snackbar</code> notifications. It renders
-in the top layer as a manual popover and controls how many snackbars are visible at once via
-<code>maxVisible</code> (defaults to 1). Show snackbars imperatively by calling the <code>show()</code>
-method with a config object.
+<code>lt-snackbar-group</code> is the recommended way to show snackbars from anywhere in an app. Place
+one instance at the end of your page and call its <code>show()</code> method whenever you need a
+notification. It handles queuing, stacking, and top-layer positioning automatically.
 
-See the <a href="/components/snackbar">Snackbar</a> page for the individual snackbar API.
+See the <a href="/components/snackbar">Snackbar</a> page for the individual snackbar API and a
+comparison with <code>lt-alert</code>.
+
+## How it works
+
+- Calls to <code>show()</code> create managed <code>lt-snackbar</code> instances inside the group.
+- Up to <code>maxVisible</code> snackbars display simultaneously, stacked vertically.
+- Extra calls queue automatically and are presented as earlier ones dismiss.
+- The group renders as a native manual popover in the top layer, so notifications appear above
+  dialogs and side panels regardless of z-index.
+- The auto-dismiss countdown pauses while a snackbar is hovered or focused, then resumes with
+  whatever time was left.
 
 ## Usage
 
 <FrameworkTabs
   html={`
-<lt-snackbar-group id="notifications" max-visible="1"></lt-snackbar-group>
+<lt-snackbar-group id="notifications"></lt-snackbar-group>
 
 <lt-button onclick="showSnackbar()">Show notification</lt-button>
 
@@ -44,7 +54,7 @@ export function Notifications() {
 
   return (
     <>
-      <SnackbarGroup ref={ref} maxVisible={1} />
+      <SnackbarGroup ref={ref} />
       <Button onClick={() => ref.current?.show({
         message: 'Changes saved',
         variant: 'success',
@@ -57,7 +67,7 @@ export function Notifications() {
   `}
   vue={`
 <template>
-  <lt-snackbar-group ref="notifications" max-visible="1"></lt-snackbar-group>
+  <lt-snackbar-group ref="notifications"></lt-snackbar-group>
   <lt-button @click="showSnackbar">Show notification</lt-button>
 </template>
 
@@ -70,6 +80,51 @@ function showSnackbar() {
 <\/script>
   `}
 />
+
+## Action button and undo pattern
+
+Pass <code>actionLabel</code> and <code>onAction</code> to add an action button. The callback fires once
+when clicked, then the snackbar dismisses itself.
+
+```html
+<script type="module">
+  document.getElementById('notifications').show({
+    message: 'File deleted',
+    variant: 'error',
+    actionLabel: 'Undo',
+    duration: 6000,
+    onAction: () => restoreFile(),
+  });
+</script>
+```
+
+## Stacking multiple snackbars
+
+Set <code>max-visible</code> to show more than one at a time. Calls past the limit queue until a
+slot opens.
+
+```html
+<lt-snackbar-group id="toasts" max-visible="3"></lt-snackbar-group>
+```
+
+## Internationalization
+
+Pass <code>labels</code> to override the dismiss button's accessible name for non-English UIs.
+
+```js
+group.show({
+  message: 'Cambios guardados',
+  variant: 'success',
+  labels: { dismiss: 'Cerrar' },
+});
+```
+
+## When to use a standalone snackbar instead
+
+If your app only ever shows one snackbar at a time from a single place (for example a form
+submission handler), a standalone <code>lt-snackbar</code> with a direct <code>show()</code> call
+works fine. Reach for <code>lt-snackbar-group</code> when notifications can come from multiple
+parts of the app or might overlap.
 
 ## API
 
