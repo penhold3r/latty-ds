@@ -22,10 +22,14 @@ export const dropdownItemStyles = css`
     width: 100%;
   }
 
-  .item:hover,
+  .item:hover {
+    background: var(--lt-bg-neutral-subtle);
+  }
+
   .item:focus-visible {
     background: var(--lt-bg-neutral-subtle);
-    outline: none;
+    outline: var(--lt-border-focusRingWidth) solid var(--lt-focus-ring-color);
+    outline-offset: calc(-1 * var(--lt-border-focusRingWidth));
   }
 
   .item:active {

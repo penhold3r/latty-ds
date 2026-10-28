@@ -11,8 +11,7 @@ export interface TextfieldValidationInput {
 }
 
 /**
- * The textfield's own format and constraint rules — the ones the native control either can't express at all
- * (`tel`'s pattern) or that the component wants to report before the browser does.
+ * The textfield's own format and constraint rules beyond what the native control checks.
  *
  * An empty value is always valid: `required` is left to the native control's own `valueMissing` validity, so
  * treating "empty" as invalid here would double-report the same failure.
@@ -24,16 +23,6 @@ export function isValidTextfieldValue(input: TextfieldValidationInput): boolean 
   if (!value) return true;
 
   if (type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return false;
-
-  if (type === 'url') {
-    try {
-      new URL(value);
-    } catch {
-      return false;
-    }
-  }
-
-  if (type === 'tel' && !/^[+\d][\d\s()\-.]{2,}$/.test(value)) return false;
 
   if (type === 'number') {
     const number = Number(value);

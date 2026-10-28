@@ -80,21 +80,21 @@ describe('<lt-list>', () => {
     el.markerColor = 'red';
     await el.updateComplete;
     const list = el.shadowRoot!.querySelector('[part="list"]') as HTMLElement;
-    expect(list.style.getPropertyValue('--list-marker-color')).toBe('red');
+    expect(list.style.getPropertyValue('--lt-list-marker-color')).toBe('red');
   });
 
   it('applies custom marker color with CSS variable', async () => {
     el.markerColor = 'var(--lt-color-primary-500)';
     await el.updateComplete;
     const list = el.shadowRoot!.querySelector('[part="list"]') as HTMLElement;
-    expect(list.style.getPropertyValue('--list-marker-color')).toBe('var(--lt-color-primary-500)');
+    expect(list.style.getPropertyValue('--lt-list-marker-color')).toBe('var(--lt-color-primary-500)');
   });
 
   it('does not apply style when marker color is empty', async () => {
     el.markerColor = '';
     await el.updateComplete;
     const list = el.shadowRoot!.querySelector('[part="list"]') as HTMLElement;
-    expect(list.style.getPropertyValue('--list-marker-color')).toBe('');
+    expect(list.style.getPropertyValue('--lt-list-marker-color')).toBe('');
   });
 
   it('exposes list part for styling', () => {

@@ -206,8 +206,11 @@ describe('<lt-dialog>', () => {
     /*
      * Clicking the native <dialog> element itself (not a descendant) is exactly what a real backdrop click
      * resolves to (::backdrop isn't a real node and can't be an event target — confirmed in the spike).
+     * Both pointerdown and click must target the dialog for the close to fire (DLG-9: prevents accidental
+     * close from a text-selection drag that ends on the backdrop).
      */
     const dialog = el.shadowRoot!.querySelector('dialog') as HTMLDialogElement;
+    dialog.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
     dialog.click();
     await el.updateComplete;
 

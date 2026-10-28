@@ -4,7 +4,7 @@ export const listStyles = css`
   :host {
     display: block;
     font-family: var(--lt-typography-fontFamilyPrimary, 'Hanken Grotesk', sans-serif);
-    --list-marker-color: var(--lt-text-subtle);
+    --lt-list-marker-color: var(--lt-text-subtle);
   }
 
   [part='list'] {
@@ -64,7 +64,7 @@ export const listStyles = css`
   }
 
   [part='list'] ::slotted(li)::marker {
-    color: var(--list-marker-color);
+    color: var(--lt-list-marker-color);
   }
 
   /* Size variants */

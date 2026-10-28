@@ -16,7 +16,7 @@ export const chipStyles = css`
        compressed/squished, so cap what the chip actually renders at "medium"
        (2px) regardless of the theme's configured border width. */
     border: min(var(--lt-border-width, 1px), 2px) solid var(--lt-chip-border-color, transparent);
-    color: var(--lt-chip-color);
+    color: var(--_chip-on-bg, var(--lt-chip-color));
     box-sizing: border-box;
     display: inline-flex;
     font-weight: 400;

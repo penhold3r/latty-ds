@@ -346,9 +346,9 @@ export class Tooltip extends ThemeableElement {
     this._hide();
   }
 
-  protected firstUpdated() {
+  private _onSlotChange = () => {
     this._describeTrigger();
-  }
+  };
 
   protected updated(changed: PropertyValues<this>) {
     super.updated(changed);
@@ -364,7 +364,7 @@ export class Tooltip extends ThemeableElement {
     });
 
     return html`
-      <slot></slot>
+      <slot @slotchange=${this._onSlotChange}></slot>
       <div
         class="tooltip"
         id=${this._tooltipId}

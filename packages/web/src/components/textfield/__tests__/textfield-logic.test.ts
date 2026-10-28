@@ -22,7 +22,7 @@ describe('isValidTextfieldValue', () => {
     ).toBe(false);
   });
 
-  it('validates url', () => {
+  it('defers url validation to the native input', () => {
     expect(
       isValidTextfieldValue({
         value: 'https://example.com',
@@ -35,10 +35,10 @@ describe('isValidTextfieldValue', () => {
     ).toBe(true);
     expect(
       isValidTextfieldValue({ value: 'not-a-url', type: 'url', min: null, max: null, minlength: null, maxlength: null })
-    ).toBe(false);
+    ).toBe(true);
   });
 
-  it('validates tel with spaces, parentheses, and dashes', () => {
+  it('defers tel validation to the native input', () => {
     expect(
       isValidTextfieldValue({
         value: '+1 (555) 123-4567',
@@ -51,7 +51,7 @@ describe('isValidTextfieldValue', () => {
     ).toBe(true);
     expect(
       isValidTextfieldValue({ value: '12', type: 'tel', min: null, max: null, minlength: null, maxlength: null })
-    ).toBe(false);
+    ).toBe(true);
   });
 
   it('validates number with min and max', () => {

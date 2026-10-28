@@ -154,8 +154,10 @@ export const buttonStyles = css`
     --_active-bg: var(--lt-interactive-info-bg-active);
   }
 
-  [part='base']:hover:not([disabled]):not([aria-disabled='true']) {
-    background: var(--lt-button-bg, var(--_hover-bg));
+  @media (hover: hover) {
+    [part='base']:hover:not([disabled]):not([aria-disabled='true']) {
+      background: var(--lt-button-bg, var(--_hover-bg));
+    }
   }
 
   [part='base']:active:not([disabled]):not([aria-disabled='true']) {
@@ -286,29 +288,6 @@ export const buttonStyles = css`
     --_border-color: var(--lt-border-info-strong);
   }
 
-  /* loading */
-  .spinner {
-    animation: spin 700ms linear infinite;
-    border-radius: 999px;
-    border-right-color: transparent;
-    border: 2px solid currentColor;
-    height: 1em;
-    width: 1em;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  .icon,
-  .end {
-    align-items: center;
-    display: inline-flex;
-    justify-content: center;
-  }
-
   :host([uppercase]) [part='base'] {
     font-variant-caps: small-caps;
     letter-spacing: 0.05rem;
@@ -320,9 +299,6 @@ export const buttonStyles = css`
   @media (prefers-reduced-motion: reduce) {
     [part='base'] {
       transition: none;
-    }
-    .spinner {
-      animation: none;
     }
   }
 `;

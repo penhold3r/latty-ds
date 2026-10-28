@@ -154,6 +154,7 @@ export class TabGroup extends ThemeableElement {
 
   connectedCallback() {
     super.connectedCallback();
+    this.addEventListener('change', this._stopNestedChange);
     this._tabObserver.observe(this, { attributes: true, attributeFilter: ['disabled'], subtree: true });
     /*
      * Re-attaches listeners after a reconnect (moving the group in the DOM disconnects and reconnects it
@@ -168,6 +169,10 @@ export class TabGroup extends ThemeableElement {
    * Lifecycle: Called after the element's DOM has been updated.
    */
   firstUpdated() {
+    if (!this.value && this.tabs?.length) {
+      const firstEnabled = enabledItems(this.tabs)[0];
+      if (firstEnabled) this.value = firstEnabled.value;
+    }
     this.updateTabs();
     this.updatePanels();
     /*
@@ -387,10 +392,16 @@ export class TabGroup extends ThemeableElement {
   }
 
   /**
-   * Cleanup event listeners when component is removed.
+   * Stops nested tab group change events from bubbling into this group's consumers.
+   * @param {Event} e - The change event.
    */
+  private _stopNestedChange = (e: Event) => {
+    if (e.target !== this) e.stopPropagation();
+  };
+
   disconnectedCallback() {
     super.disconnectedCallback();
+    this.removeEventListener('change', this._stopNestedChange);
     this._tabObserver.disconnect();
     this._scrollResizeObserver?.disconnect();
     if (this.tabs) {

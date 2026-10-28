@@ -132,7 +132,7 @@ export class Pagination extends ThemeableElement {
 
         ${pages.map((p) =>
           p === '…'
-            ? html`<button class="ellipsis" aria-hidden="true" tabindex="-1">…</button>`
+            ? html`<span class="ellipsis" aria-hidden="true">…</span>`
             : html`<button
                 aria-label=${this._labels.page(p as number)}
                 aria-current=${p === this._current ? 'page' : nothing}

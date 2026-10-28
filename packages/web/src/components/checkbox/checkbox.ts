@@ -56,7 +56,7 @@ export class Checkbox extends FormControlElement {
   private _slotted = new SlottedContentController(this);
   private readonly _fieldIds = createFieldIds();
   private _nativeAttrs = new NativeAttrsController(this, () => this.input, {
-    exclude: ['aria-label', 'aria-checked', 'aria-describedby']
+    exclude: ['aria-label', 'aria-describedby']
   });
 
   /**
@@ -234,7 +234,6 @@ export class Checkbox extends FormControlElement {
             value=${this.value}
             @change=${this.handleChange}
             aria-label=${hasLabel ? nothing : this.getAttribute('aria-label') || 'checkbox'}
-            aria-checked=${this.indeterminate ? 'mixed' : this.checked ? 'true' : 'false'}
             aria-describedby=${this.helperText ? this._fieldIds.helper : nothing}
           />
           ${this.renderCheckmark()}

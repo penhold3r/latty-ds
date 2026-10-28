@@ -6,14 +6,10 @@ export const linkStyles = css`
   }
 
   a[part='base'] {
-    align-items: center;
     color: var(--lt-text-primary);
     cursor: pointer;
-    display: inline-flex;
     font: inherit;
-    gap: 0.25em;
     text-decoration: none;
-    vertical-align: baseline;
   }
 
   a[part='base']:hover {
@@ -28,7 +24,9 @@ export const linkStyles = css`
   }
 
   lt-icon[part='icon'] {
-    flex-shrink: 0;
+    display: inline;
+    margin-inline-start: 0.15em;
+    vertical-align: baseline;
   }
 
   /* ── Underline ──────────────────────────────────────────────────────── 'hover' (the default) is already the
@@ -41,5 +39,17 @@ export const linkStyles = css`
   :host([underline='none']) a[part='base'],
   :host([underline='none']) a[part='base']:hover {
     text-decoration: none;
+  }
+
+  .sr-only {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 `;

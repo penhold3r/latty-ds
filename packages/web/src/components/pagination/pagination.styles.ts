@@ -69,7 +69,7 @@ export const paginationStyles = css`
     font-weight: 600;
   }
 
-  button.ellipsis {
+  .ellipsis {
     cursor: default;
     pointer-events: none;
   }

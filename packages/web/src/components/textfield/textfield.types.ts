@@ -47,7 +47,7 @@ export type TextfieldInputMode = 'none' | 'text' | 'decimal' | 'numeric' | 'tel'
 
 /** Overridable UI text for `lt-textfield`, for i18n. */
 export interface TextfieldLabels {
-  /** Validation message shown when the value fails a format rule HTML has no native constraint for (e.g. `tel`). */
+  /** Validation message shown when the value fails a custom format rule. */
   validationMessage: string;
   /** Accessible label for the password-visibility toggle when the password is hidden. */
   showPassword: string;

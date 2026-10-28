@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 
@@ -159,7 +159,7 @@ export class Accordion extends ThemeableElement {
   render() {
     return html`
       <details>
-        <summary @click=${this.handleSummaryClick}>
+        <summary @click=${this.handleSummaryClick} aria-disabled=${this.disabled ? 'true' : nothing}>
           <div class="summary-content">
             ${this.iconStart ? html`<lt-icon class="start-icon" name="${this.iconStart}"></lt-icon>` : ''}
             <lt-text variant="h6" as="span" class="summary-text">

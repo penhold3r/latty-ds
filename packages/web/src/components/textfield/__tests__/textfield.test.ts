@@ -774,9 +774,9 @@ describe('<lt-textfield>', () => {
     it.each([
       ['https://example.com', false],
       ['http://foo.bar/path?q=1', false],
-      ['example.com', true],
-      ['not a url', true]
-    ] as const)('url "%s" → auto-error=%s', async (value, expectError) => {
+      ['example.com', false],
+      ['not a url', false]
+    ] as const)('url "%s" → auto-error=%s (deferred to native)', async (value, expectError) => {
       el.type = 'url';
       await el.updateComplete;
       await typeAndLeave(value);
@@ -786,9 +786,9 @@ describe('<lt-textfield>', () => {
     it.each([
       ['+1 (555) 000-1234', false],
       ['555-0100', false],
-      ['abc', true],
-      ['12', true]
-    ] as const)('tel "%s" → auto-error=%s', async (value, expectError) => {
+      ['abc', false],
+      ['12', false]
+    ] as const)('tel "%s" → auto-error=%s (deferred to native)', async (value, expectError) => {
       el.type = 'tel';
       await el.updateComplete;
       await typeAndLeave(value);
@@ -928,12 +928,12 @@ describe('<lt-textfield>', () => {
         expect(spy.mock.lastCall?.[0]).toMatchObject({ rangeOverflow: true });
       });
 
-      it('tel with no native constraint: customError (the tel format has no native HTML equivalent)', async () => {
+      it('tel defers to native (no custom validation)', async () => {
         el.type = 'tel';
         await el.updateComplete;
         const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
         await typeOnly('ab');
-        expect(spy.mock.lastCall?.[0]).toMatchObject({ customError: true });
+        expect(spy.mock.lastCall?.[0]).toEqual({});
       });
 
       it('passes the inner control as the validation anchor', async () => {
@@ -946,21 +946,13 @@ describe('<lt-textfield>', () => {
     });
 
     describe('labels (i18n, X5)', () => {
-      it('defaults the tel format validation message to English', async () => {
+      it('tel has no custom validation message (deferred to native)', async () => {
         el.type = 'tel';
         await el.updateComplete;
         const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
         await typeOnly('ab');
-        expect(spy.mock.lastCall?.[1]).toBe('Please match the requested format');
-      });
-
-      it('overrides the tel format validation message via labels', async () => {
-        el.type = 'tel';
-        el.labels = { validationMessage: 'Veuillez respecter le format demandé' };
-        await el.updateComplete;
-        const spy = vi.spyOn(ElementInternals.prototype, 'setValidity');
-        await typeOnly('ab');
-        expect(spy.mock.lastCall?.[1]).toBe('Veuillez respecter le format demandé');
+        expect(spy.mock.lastCall?.[0]).toEqual({});
+        expect(spy.mock.lastCall?.[1]).toBeUndefined();
       });
     });
   });

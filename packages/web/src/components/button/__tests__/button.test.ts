@@ -100,11 +100,12 @@ describe('<lt-button>', () => {
     expect(spinner).toBeTruthy();
   });
 
-  it('disables button when loading', async () => {
+  it('uses aria-disabled (not native disabled) when loading, so focus is preserved', async () => {
     el.loading = true;
     await el.updateComplete;
     const btn = el.shadowRoot!.querySelector('button')!;
-    expect(btn.hasAttribute('disabled')).toBe(true);
+    expect(btn.hasAttribute('disabled')).toBe(false);
+    expect(btn.getAttribute('aria-disabled')).toBe('true');
     expect(btn.getAttribute('aria-busy')).toBe('true');
   });
 

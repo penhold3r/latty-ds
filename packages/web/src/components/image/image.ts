@@ -71,7 +71,7 @@ export class Image extends ThemeableElement {
   @state() private _errored = false;
 
   private get _borderRadius(): string | undefined {
-    if (this.rounded === null) return undefined;
+    if (this.rounded === null || this.rounded === 'false') return undefined;
     return this.rounded || 'var(--lt-border-radius)';
   }
 

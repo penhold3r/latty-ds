@@ -1,4 +1,4 @@
-import { html } from 'lit';
+import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 
@@ -41,7 +41,7 @@ export class Divider extends ThemeableElement {
 
   render() {
     return html`
-      <div part="base" role="separator" aria-orientation=${this.orientation}>
+      <div part="base" role="separator" aria-orientation=${this.orientation === 'vertical' ? 'vertical' : nothing}>
         ${this.label ? html`<span part="label">${this.label}</span>` : ''}
       </div>
     `;

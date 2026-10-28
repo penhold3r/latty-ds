@@ -1,6 +1,6 @@
 import { html, nothing } from 'lit';
 import { ThemeableElement } from '../../base';
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 
 import { navItemStyles } from './nav.styles';
 import { NavOrientation } from './nav.types';
@@ -84,7 +84,34 @@ export class NavItem extends ThemeableElement {
   @query('.children') private _childrenEl?: HTMLElement;
   @query('.children-inner') private _childrenInnerEl?: HTMLElement;
 
-  private _hasChildren = false;
+  @state() private _hasChildren = false;
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener('keydown', this._onDocKeydown);
+    document.addEventListener('click', this._onDocClick);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('keydown', this._onDocKeydown);
+    document.removeEventListener('click', this._onDocClick);
+  }
+
+  private _onDocKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && this.open && this.orientation === 'horizontal') {
+      this.open = false;
+      this.dispatchEvent(new CustomEvent('toggle', { detail: { open: false }, bubbles: true, composed: true }));
+      (this.shadowRoot?.querySelector('.item-trigger') as HTMLElement)?.focus();
+    }
+  };
+
+  private _onDocClick = (e: MouseEvent) => {
+    if (this.open && this.orientation === 'horizontal' && !this.contains(e.target as Node)) {
+      this.open = false;
+      this.dispatchEvent(new CustomEvent('toggle', { detail: { open: false }, bubbles: true, composed: true }));
+    }
+  };
 
   private _onSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;

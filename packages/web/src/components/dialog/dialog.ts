@@ -1,7 +1,7 @@
 import { html, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { devWarn } from '../../utils';
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 
 import { dialogStyles } from './dialog.styles';
 import { backdropFeatureStyles } from '../shared/backdrop.styles';
@@ -152,6 +152,7 @@ export class Dialog extends ThemeableElement {
   });
   private previouslyFocusedElement?: HTMLElement;
   private _scrollLocked = false;
+  @state() private _hasFooter = false;
   /*
    * `updated()` also runs after the very first render, where `changed.has('open')` is true even though nothing
    * was ever shown — `open` starts false, so the else branch ran, firing a spurious `close` and clobbering
@@ -199,6 +200,7 @@ export class Dialog extends ThemeableElement {
       if (!this.heading) this.heading = this.getAttribute('title')!;
       this.removeAttribute('title');
     }
+    this._hasFooter = !!this.querySelector('[slot="footer"]');
   }
 
   disconnectedCallback() {
@@ -298,15 +300,21 @@ export class Dialog extends ThemeableElement {
     this.open = false;
   };
 
-  /*
-   * The clicked-outside-the-content area of a shown <dialog> resolves e.target to the <dialog> element itself
-   * (::backdrop isn't a real node and can't be an event target) — clicking any actual descendant instead
-   * targets that descendant, so this only ever fires for a genuine backdrop click (confirmed in the spike).
-   */
+  private _pointerDownTarget: EventTarget | null = null;
+
+  private _handlePointerDown = (e: PointerEvent) => {
+    this._pointerDownTarget = e.target;
+  };
+
   private _handleDialogClick = (e: MouseEvent) => {
-    if (this.closeOnBackdropClick && e.target === this.dialogElement) {
+    if (
+      this.closeOnBackdropClick &&
+      e.target === this.dialogElement &&
+      this._pointerDownTarget === this.dialogElement
+    ) {
       this.hide();
     }
+    this._pointerDownTarget = null;
   };
 
   private handleCloseClick() {
@@ -320,6 +328,7 @@ export class Dialog extends ThemeableElement {
         aria-labelledby=${this.heading ? 'dialog-title' : this.getAttribute('aria-labelledby') || 'dialog-title'}
         @cancel=${this._handleCancel}
         @close=${this._handleNativeClose}
+        @pointerdown=${this._handlePointerDown}
         @click=${this._handleDialogClick}
       >
         <lt-surface elevation=${this.elevation} appearance=${this.appearance} part="surface">
@@ -349,19 +358,20 @@ export class Dialog extends ThemeableElement {
             <slot></slot>
           </div>
 
-          ${this.hasSlot('footer')
+          ${this._hasFooter
             ? html`
                 <div class="footer" part="footer">
-                  <slot name="footer"></slot>
+                  <slot name="footer" @slotchange=${this._onFooterSlotChange}></slot>
                 </div>
               `
-            : ''}
+            : html`<slot name="footer" @slotchange=${this._onFooterSlotChange}></slot>`}
         </lt-surface>
       </dialog>
     `;
   }
 
-  private hasSlot(name: string): boolean {
-    return !!this.querySelector(`[slot="${name}"]`);
-  }
+  private _onFooterSlotChange = (e: Event) => {
+    const slot = e.target as HTMLSlotElement;
+    this._hasFooter = slot.assignedNodes({ flatten: true }).length > 0;
+  };
 }

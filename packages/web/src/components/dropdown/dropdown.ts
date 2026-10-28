@@ -47,14 +47,14 @@ export class Dropdown extends ThemeableElement {
   connectedCallback() {
     super.connectedCallback();
     this.addEventListener('keydown', this._onKeydown);
-    this.addEventListener('select', this.hide);
+    this.addEventListener('select', this._onSelect);
     this.addEventListener('focusout', this._onFocusOut);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('keydown', this._onKeydown);
-    this.removeEventListener('select', this.hide);
+    this.removeEventListener('select', this._onSelect);
     this.removeEventListener('focusout', this._onFocusOut);
     this._popup.destroy();
   }
@@ -73,6 +73,8 @@ export class Dropdown extends ThemeableElement {
    * if that's still somewhere inside this dropdown (the trigger, or an item — both light DOM children of this
    * element), there's nothing to do.
    */
+  private _onSelect = () => this.hide();
+
   private _onFocusOut = (e: FocusEvent) => {
     if (!this.open) return;
     const next = e.relatedTarget as Node | null;

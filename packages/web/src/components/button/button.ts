@@ -329,7 +329,8 @@ export class Button extends FormControlElement {
         part="base"
         type="button"
         @click=${this._handleClick}
-        ?disabled=${isDisabled}
+        ?disabled=${isDisabled && !this.loading}
+        aria-disabled=${isDisabled && this.loading ? 'true' : nothing}
         aria-busy=${this.loading ? 'true' : 'false'}
         aria-label=${ariaLabel}
       >

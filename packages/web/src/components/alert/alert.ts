@@ -5,7 +5,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 
 import { alertStyles } from './alert.styles';
 import type { AlertVariant, AlertAppearance, AlertLabels } from './alert.types';
-import { resolveColorValue, dispatch } from '../../utils';
+import { resolveColorValue, pickTextColor, dispatch } from '../../utils';
 
 import '../icon-button/icon-button';
 import '../text/text';
@@ -129,8 +129,15 @@ export class Alert extends ThemeableElement {
 
   override updated(changed: PropertyValues<this>) {
     super.updated(changed);
-    // Reopening a previously dismissed alert should replay the entrance, not stay mid-exit-animation.
     if (changed.has('open') && this.open) this.removeAttribute('dismissed');
+    if (changed.has('background')) {
+      if (this.background) {
+        const color = pickTextColor(this, 'base');
+        this.style.setProperty('--_alert-on-bg', color);
+      } else {
+        this.style.removeProperty('--_alert-on-bg');
+      }
+    }
   }
 
   /*

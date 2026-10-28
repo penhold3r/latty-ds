@@ -1,4 +1,4 @@
-import { html, nothing } from 'lit';
+import { html, nothing, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -6,7 +6,7 @@ import { styleMap } from 'lit/directives/style-map.js';
 import { chipStyles } from './chip.styles';
 import '@latty-ds/icons';
 import type { ChipVariant, ChipSize, ChipAppearance, ChipLabels } from './chip.types';
-import { resolveColorValue, dispatch } from '../../utils';
+import { resolveColorValue, pickTextColor, dispatch } from '../../utils';
 
 const DEFAULT_LABELS: ChipLabels = {
   remove: 'Remove'
@@ -112,6 +112,18 @@ export class Chip extends ThemeableElement {
     if (this.selectable && e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
       this._toggleSelected();
+    }
+  }
+
+  protected override updated(changed: PropertyValues<this>) {
+    super.updated(changed);
+    if (changed.has('background')) {
+      if (this.background) {
+        const color = pickTextColor(this, 'base');
+        this.style.setProperty('--_chip-on-bg', color);
+      } else {
+        this.style.removeProperty('--_chip-on-bg');
+      }
     }
   }
 

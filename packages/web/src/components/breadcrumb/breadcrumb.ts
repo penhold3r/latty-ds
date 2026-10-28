@@ -44,9 +44,9 @@ export class Breadcrumb extends ThemeableElement {
   override updated(changed: PropertyValues<this>) {
     super.updated(changed);
     if (changed.has('separator')) {
-      // Guard against null/undefined being coerced to strings
       if (this.separator !== null && this.separator !== undefined) {
-        this.style.setProperty('--lt-breadcrumb-separator', `"${this.separator}"`);
+        const safe = this.separator.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        this.style.setProperty('--lt-breadcrumb-separator', `"${safe}"`);
       } else {
         this.style.removeProperty('--lt-breadcrumb-separator');
       }
@@ -101,21 +101,19 @@ export class BreadcrumbItem extends ThemeableElement {
   }
 
   render() {
-    // Only apply local override if separator is explicitly provided and not nullish/empty
     const hasSeparatorOverride = this.separator !== null && this.separator !== undefined && this.separator !== '';
     const target = this.getAttribute('target') || '';
     const rel = this.getAttribute('rel') || (target === '_blank' ? 'noopener noreferrer' : '');
+    const sepStyle = hasSeparatorOverride
+      ? `--lt-breadcrumb-separator: "${this.separator.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
+      : '';
 
     return html`
       <div part="item">
         ${this.current || !this.href
           ? html`<span part="text" aria-current=${this.current ? 'page' : 'false'}><slot></slot></span>`
           : html`<a part="link" href=${this.href} target=${target || nothing} rel=${rel || nothing}><slot></slot></a>`}
-        <span
-          part="separator"
-          aria-hidden="true"
-          style=${hasSeparatorOverride ? `--lt-breadcrumb-separator: "${this.separator}"` : ''}
-        ></span>
+        <span part="separator" aria-hidden="true" style=${sepStyle}></span>
       </div>
     `;
   }

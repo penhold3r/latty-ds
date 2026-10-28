@@ -47,10 +47,22 @@ function hslToHex(h: number, s: number, l: number): string {
   return `#${toHexByte(f(0))}${toHexByte(f(8))}${toHexByte(f(4))}`;
 }
 
+/**
+ * Clamps a number between min and max inclusive.
+ * @param {number} n - The value to clamp.
+ * @param {number} min - Lower bound.
+ * @param {number} max - Upper bound.
+ * @returns {number} The clamped value.
+ */
+function clamp(n: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, n));
+}
+
 /** Normalise any supported color string to `#rrggbb`. Returns `''` if unrecognised.
  * @param {string} value - The color value.
  * @returns {string} The normalized hex string.
  */
+
 function toHex(value: string): string {
   value = value.trim();
   if (!value) return '';
@@ -59,13 +71,23 @@ function toHex(value: string): string {
     const [, r, g, b] = /^#([0-9a-f])([0-9a-f])([0-9a-f])$/i.exec(value)!;
     return `#${r}${r}${g}${g}${b}${b}`;
   }
-  const rgb = value.match(/^rgb\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)\s*\)$/i);
-  if (rgb) {
-    const toB = (n: string) => Number(n).toString(16).padStart(2, '0');
-    return `#${toB(rgb[1])}${toB(rgb[2])}${toB(rgb[3])}`;
+  if (/^#[0-9a-f]{8}$/i.test(value)) return value.slice(0, 7).toLowerCase();
+  if (/^#[0-9a-f]{4}$/i.test(value)) {
+    const [, r, g, b] = /^#([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])$/i.exec(value)!;
+    return `#${r}${r}${g}${g}${b}${b}`;
   }
-  const hsl = value.match(/^hsl\(\s*(\d+)[,\s]+(\d+)%[,\s]+(\d+)%\s*\)$/i);
-  if (hsl) return hslToHex(Number(hsl[1]), Number(hsl[2]), Number(hsl[3]));
+  const rgba = value.match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+[\d.]+%?)?\s*\)$/i);
+  if (rgba) {
+    const toB = (n: string) =>
+      clamp(Math.round(Number(n)), 0, 255)
+        .toString(16)
+        .padStart(2, '0');
+    return `#${toB(rgba[1])}${toB(rgba[2])}${toB(rgba[3])}`;
+  }
+  const hsla = value.match(/^hsla?\(\s*([\d.]+)[,\s]+([\d.]+)%[,\s]+([\d.]+)%(?:[,\s/]+[\d.]+%?)?\s*\)$/i);
+  if (hsla) {
+    return hslToHex(clamp(Number(hsla[1]), 0, 360), clamp(Number(hsla[2]), 0, 100), clamp(Number(hsla[3]), 0, 100));
+  }
   return '';
 }
 

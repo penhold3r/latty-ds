@@ -5,8 +5,12 @@ import { customElement, property } from 'lit/decorators.js';
 import '@latty-ds/icons';
 
 import { linkStyles } from './link.styles';
-import type { LinkUnderline } from './link.types';
+import type { LinkUnderline, LinkLabels } from './link.types';
 import { NativeAttrsController } from '../shared/native-attrs';
+
+const DEFAULT_LABELS: LinkLabels = {
+  external: 'opens in a new tab'
+};
 
 /**
  * A styled anchor element. Uses the primary color by default with an underline on hover.
@@ -41,6 +45,13 @@ export class Link extends ThemeableElement {
   /** Controls when the underline shows. @default 'hover'. */
   @property({ reflect: true }) underline: LinkUnderline = 'hover';
 
+  /** Overridable UI text, for i18n. English defaults — override only the keys you need. */
+  @property({ type: Object }) labels: Partial<LinkLabels> = {};
+
+  private get _labels(): LinkLabels {
+    return { ...DEFAULT_LABELS, ...this.labels };
+  }
+
   private get _target(): string {
     return this.getAttribute('target') || (this.external ? '_blank' : '');
   }
@@ -55,7 +66,10 @@ export class Link extends ThemeableElement {
     return html`
       <a part="base" href=${this.href || nothing} target=${this._target || nothing} rel=${this._rel || nothing}>
         <slot></slot>
-        ${this.external ? html`<lt-icon name="external" size="xs" part="icon"></lt-icon>` : nothing}
+        ${this.external
+          ? html`<lt-icon name="external" size="xs" part="icon" aria-hidden="true"></lt-icon
+              ><span class="sr-only">(${this._labels.external})</span>`
+          : nothing}
       </a>
     `;
   }

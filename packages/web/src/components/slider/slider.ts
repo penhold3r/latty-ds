@@ -19,7 +19,7 @@ export class Slider extends FormControlElement {
   static styles = sliderStyles;
 
   private _nativeAttrs = new NativeAttrsController(this, () => this.shadowRoot?.querySelector('input'), {
-    exclude: ['aria-label', 'aria-valuemin', 'aria-valuemax', 'aria-valuenow']
+    exclude: ['aria-label']
   });
 
   @property({ reflect: true }) size: SliderSize = 'md';
@@ -125,9 +125,6 @@ export class Slider extends FormControlElement {
         .value=${String(this.value)}
         ?disabled=${this._isDisabled}
         aria-label=${this.label || this.getAttribute('aria-label') || 'slider'}
-        aria-valuemin=${this.min}
-        aria-valuemax=${this.max}
-        aria-valuenow=${this.value}
         @input=${this._onInput}
         @change=${this._onChange}
       />

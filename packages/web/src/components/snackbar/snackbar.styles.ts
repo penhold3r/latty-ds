@@ -13,7 +13,7 @@ export const snackbarStyles = css`
   :host {
     background: transparent;
     border: none;
-    bottom: 24px;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
     left: 50%;
     margin: 0;
     max-width: calc(100vw - 48px);

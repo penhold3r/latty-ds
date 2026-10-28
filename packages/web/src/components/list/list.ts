@@ -20,7 +20,7 @@ import './list-item';
  *   is still set here and inherited down, so real `<li>` children (and
  *   `<lt-list-item>`, which sets `display: list-item` on itself) render
  *   their native marker/counter exactly as they would inside a real list.
- * @cssprop --list-marker-color - Color of the bullet points or numbers (default: neutral-500)
+ * @cssprop --lt-list-marker-color - Color of the bullet points or numbers (default: neutral-500)
  * @example
  * ```html
  * <lt-list>
@@ -95,7 +95,7 @@ export class List extends ThemeableElement {
   @property({ type: Boolean, attribute: 'no-marker', reflect: true }) noMarker = false;
 
   render() {
-    const styles = this.markerColor ? { '--list-marker-color': this.markerColor } : {};
+    const styles = this.markerColor ? { '--lt-list-marker-color': this.markerColor } : {};
 
     return html`
       <div part="list" role="list" style=${styleMap(styles)}>
