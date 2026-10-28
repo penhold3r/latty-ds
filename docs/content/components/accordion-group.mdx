@@ -22,9 +22,9 @@ accordion API.
 
 <ComponentPlayground
   tag="lt-accordion-group"
-  content={`<lt-accordion heading="Section 1">Content for section one.</lt-accordion>
-<lt-accordion heading="Section 2">Content for section two.</lt-accordion>
-<lt-accordion heading="Section 3">Content for section three.</lt-accordion>`}
+  content={`<lt-accordion label="Section 1">Content for section one.</lt-accordion>
+<lt-accordion label="Section 2">Content for section two.</lt-accordion>
+<lt-accordion label="Section 3">Content for section three.</lt-accordion>`}
   subTags={['lt-accordion']}
 />
 
@@ -33,32 +33,32 @@ accordion API.
 <FrameworkTabs
   html={`
 <lt-accordion-group>
-  <lt-accordion heading="Shipping">Standard and express options.</lt-accordion>
-  <lt-accordion heading="Returns">30-day return policy.</lt-accordion>
-  <lt-accordion heading="Warranty">1-year limited warranty.</lt-accordion>
+  <lt-accordion label="Shipping">Standard and express options.</lt-accordion>
+  <lt-accordion label="Returns">30-day return policy.</lt-accordion>
+  <lt-accordion label="Warranty">1-year limited warranty.</lt-accordion>
 </lt-accordion-group>
 
 <!-- Allow multiple panels open at once -->
 <lt-accordion-group multiple>
-  <lt-accordion heading="Step 1">First step details.</lt-accordion>
-  <lt-accordion heading="Step 2">Second step details.</lt-accordion>
+  <lt-accordion label="Step 1">First step details.</lt-accordion>
+  <lt-accordion label="Step 2">Second step details.</lt-accordion>
 </lt-accordion-group>
   `}
   react={`
 import { AccordionGroup, Accordion } from '@latty-ds/react';
 
 <AccordionGroup>
-  <Accordion heading="Shipping">Standard and express options.</Accordion>
-  <Accordion heading="Returns">30-day return policy.</Accordion>
-  <Accordion heading="Warranty">1-year limited warranty.</Accordion>
+  <Accordion label="Shipping">Standard and express options.</Accordion>
+  <Accordion label="Returns">30-day return policy.</Accordion>
+  <Accordion label="Warranty">1-year limited warranty.</Accordion>
 </AccordionGroup>
   `}
   vue={`
 <template>
   <lt-accordion-group>
-    <lt-accordion heading="Shipping">Standard and express options.</lt-accordion>
-    <lt-accordion heading="Returns">30-day return policy.</lt-accordion>
-    <lt-accordion heading="Warranty">1-year limited warranty.</lt-accordion>
+    <lt-accordion label="Shipping">Standard and express options.</lt-accordion>
+    <lt-accordion label="Returns">30-day return policy.</lt-accordion>
+    <lt-accordion label="Warranty">1-year limited warranty.</lt-accordion>
   </lt-accordion-group>
 </template>
   `}
