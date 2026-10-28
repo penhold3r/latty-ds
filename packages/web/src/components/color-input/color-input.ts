@@ -58,11 +58,43 @@ function clamp(n: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, n));
 }
 
+function rgbStringToHex(rgb: string): string {
+  const m = rgb.match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+[\d.]+%?)?\s*\)$/i);
+  if (!m) return '';
+  const toB = (n: string) =>
+    clamp(Math.round(Number(n)), 0, 255)
+      .toString(16)
+      .padStart(2, '0');
+  return `#${toB(m[1])}${toB(m[2])}${toB(m[3])}`;
+}
+
+function getCanvasCtx(): CanvasRenderingContext2D | null {
+  try {
+    return document.createElement('canvas').getContext('2d');
+  } catch {
+    return null;
+  }
+}
+
+function resolveViaCanvas(value: string): string {
+  const ctx = getCanvasCtx();
+  if (!ctx) return '';
+  ctx.fillStyle = '#000';
+  ctx.fillStyle = value;
+  const resolved = ctx.fillStyle;
+  if (resolved === '#000000') {
+    ctx.fillStyle = '#fff';
+    ctx.fillStyle = value;
+    if (ctx.fillStyle === '#ffffff') return '';
+  }
+  if (resolved.startsWith('#')) return resolved;
+  return rgbStringToHex(resolved);
+}
+
 /** Normalise any supported color string to `#rrggbb`. Returns `''` if unrecognised.
  * @param {string} value - The color value.
  * @returns {string} The normalized hex string.
  */
-
 function toHex(value: string): string {
   value = value.trim();
   if (!value) return '';
@@ -76,19 +108,13 @@ function toHex(value: string): string {
     const [, r, g, b] = /^#([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])$/i.exec(value)!;
     return `#${r}${r}${g}${g}${b}${b}`;
   }
-  const rgba = value.match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+[\d.]+%?)?\s*\)$/i);
-  if (rgba) {
-    const toB = (n: string) =>
-      clamp(Math.round(Number(n)), 0, 255)
-        .toString(16)
-        .padStart(2, '0');
-    return `#${toB(rgba[1])}${toB(rgba[2])}${toB(rgba[3])}`;
-  }
+  const rgba = rgbStringToHex(value);
+  if (rgba) return rgba;
   const hsla = value.match(/^hsla?\(\s*([\d.]+)[,\s]+([\d.]+)%[,\s]+([\d.]+)%(?:[,\s/]+[\d.]+%?)?\s*\)$/i);
   if (hsla) {
     return hslToHex(clamp(Number(hsla[1]), 0, 360), clamp(Number(hsla[2]), 0, 100), clamp(Number(hsla[3]), 0, 100));
   }
-  return '';
+  return resolveViaCanvas(value);
 }
 
 /** Format a `#rrggbb` hex string into the requested display format.

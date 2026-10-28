@@ -109,6 +109,68 @@ describe('<lt-color-input>', () => {
     expect(picker.value).toBe('#ff0000');
   });
 
+  describe('named colors and modern color spaces (canvas fallback)', () => {
+    function mockCanvasContext(colorMap: Record<string, string>) {
+      return vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(() => {
+        let current = '#000000';
+        return {
+          get fillStyle() {
+            return current;
+          },
+          set fillStyle(v: string) {
+            const resolved = colorMap[v];
+            if (resolved !== undefined) current = resolved;
+          }
+        } as unknown as CanvasRenderingContext2D;
+      });
+    }
+
+    it('resolves CSS named colors to hex', async () => {
+      const spy = mockCanvasContext({ '#000': '#000000', '#fff': '#ffffff', red: '#ff0000' });
+      el.value = 'red';
+      await el.updateComplete;
+      const picker = el.shadowRoot!.querySelector('.native-picker') as HTMLInputElement;
+      expect(picker.value).toBe('#ff0000');
+      spy.mockRestore();
+    });
+
+    it('resolves rebeccapurple', async () => {
+      const spy = mockCanvasContext({ '#000': '#000000', '#fff': '#ffffff', rebeccapurple: '#663399' });
+      el.value = 'rebeccapurple';
+      await el.updateComplete;
+      const picker = el.shadowRoot!.querySelector('.native-picker') as HTMLInputElement;
+      expect(picker.value).toBe('#663399');
+      spy.mockRestore();
+    });
+
+    it('resolves oklch() via canvas', async () => {
+      const spy = mockCanvasContext({ '#000': '#000000', '#fff': '#ffffff', 'oklch(0.7 0.15 30)': 'rgb(198, 93, 7)' });
+      el.value = 'oklch(0.7 0.15 30)';
+      await el.updateComplete;
+      const picker = el.shadowRoot!.querySelector('.native-picker') as HTMLInputElement;
+      expect(picker.value).toBe('#c65d07');
+      spy.mockRestore();
+    });
+
+    it('resolves black named color (edge case: matches reset sentinel)', async () => {
+      const spy = mockCanvasContext({ '#000': '#000000', '#fff': '#ffffff', black: '#000000' });
+      el.value = 'black';
+      await el.updateComplete;
+      const picker = el.shadowRoot!.querySelector('.native-picker') as HTMLInputElement;
+      expect(picker.value).toBe('#000000');
+      spy.mockRestore();
+    });
+
+    it('returns empty for invalid values even with canvas', async () => {
+      const spy = mockCanvasContext({ '#000': '#000000', '#fff': '#ffffff' });
+      el.value = 'notacolor';
+      await el.updateComplete;
+      const picker = el.shadowRoot!.querySelector('.native-picker') as HTMLInputElement;
+      expect(picker.value).toBe('#000000');
+      spy.mockRestore();
+    });
+  });
+
   it('shows placeholder when no value is set', () => {
     el.placeholder = 'Pick a color';
     const display = el.shadowRoot!.querySelector('.display-value');
