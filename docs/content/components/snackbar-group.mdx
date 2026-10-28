@@ -4,7 +4,6 @@ description: Manages stacked snackbar notifications with visibility control
 slug: /components/snackbar-group
 ---
 
-import ComponentPlayground from '@site/src/components/ComponentPlayground';
 import ApiTable from '@site/src/components/ApiTable';
 import FrameworkTabs from '@site/src/components/FrameworkTabs';
 
@@ -13,18 +12,9 @@ import FrameworkTabs from '@site/src/components/FrameworkTabs';
 <code>lt-snackbar-group</code> manages the display of <code>lt-snackbar</code> notifications. It renders
 in the top layer as a manual popover and controls how many snackbars are visible at once via
 <code>maxVisible</code> (defaults to 1). Show snackbars imperatively by calling the <code>show()</code>
-method.
+method with a config object.
 
 See the <a href="/components/snackbar">Snackbar</a> page for the individual snackbar API.
-
-## Playground
-
-<ComponentPlayground
-  tag="lt-snackbar-group"
-  defaults={{ maxVisible: 1 }}
-  content={`<lt-snackbar variant="info" message="File uploaded successfully"></lt-snackbar>`}
-  subTags={['lt-snackbar']}
-/>
 
 ## Usage
 
