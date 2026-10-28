@@ -1,0 +1,82 @@
+---
+title: Radio Group
+description: Groups radio buttons with a shared name and value
+slug: /components/radio-group
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Radio Group
+
+<code>lt-radio-group</code> coordinates a set of <code>lt-radio</code> children into a single-select
+control. It manages the shared <code>name</code>, tracks the selected <code>value</code>, and fires a
+<code>change</code> event when the selection changes. Set <code>orientation</code> to <code>horizontal</code>
+for an inline layout.
+
+See the <a href="/components/radio">Radio</a> page for the individual radio button API.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-radio-group"
+  defaults={{ label: 'Preferred contact', value: 'email' }}
+  content={`<lt-radio value="email" label="Email"></lt-radio>
+<lt-radio value="phone" label="Phone"></lt-radio>
+<lt-radio value="mail" label="Mail"></lt-radio>`}
+  subTags={['lt-radio']}
+/>
+
+## Usage
+
+<FrameworkTabs
+  html={`
+<lt-radio-group label="Payment method" name="payment" value="card">
+  <lt-radio value="card" label="Credit card"></lt-radio>
+  <lt-radio value="paypal" label="PayPal"></lt-radio>
+  <lt-radio value="bank" label="Bank transfer"></lt-radio>
+</lt-radio-group>
+
+<script type="module">
+  document.querySelector('lt-radio-group').addEventListener('change', (e) => {
+    console.log('selected:', e.detail.value);
+  });
+<\/script>
+  `}
+  react={`
+import { RadioGroup, Radio } from '@latty-ds/react';
+
+<RadioGroup label="Payment method" name="payment" value="card"
+  onChange={(e) => console.log(e.detail.value)}>
+  <Radio value="card" label="Credit card" />
+  <Radio value="paypal" label="PayPal" />
+  <Radio value="bank" label="Bank transfer" />
+</RadioGroup>
+  `}
+  vue={`
+<template>
+  <lt-radio-group label="Payment method" name="payment" value="card" @change="onSelect">
+    <lt-radio value="card" label="Credit card"></lt-radio>
+    <lt-radio value="paypal" label="PayPal"></lt-radio>
+    <lt-radio value="bank" label="Bank transfer"></lt-radio>
+  </lt-radio-group>
+</template>
+  `}
+/>
+
+## Horizontal layout
+
+Set <code>orientation="horizontal"</code> to arrange the radios in a row.
+
+```html
+<lt-radio-group label="Size" orientation="horizontal" value="md">
+  <lt-radio value="sm" label="Small"></lt-radio>
+  <lt-radio value="md" label="Medium"></lt-radio>
+  <lt-radio value="lg" label="Large"></lt-radio>
+</lt-radio-group>
+```
+
+## API
+
+<ApiTable tag="lt-radio-group" />

@@ -75,6 +75,20 @@ import { TabGroup, Tab, TabPanel } from '@latty-ds/react';
   `}
 />
 
+## Manual activation
+
+By default, arrow keys select a tab immediately (`activation="automatic"`). Set `activation="manual"` when
+selection has side effects (e.g. loading data) and the user should confirm with Enter or Space before committing.
+
+```html
+<lt-tab-group activation="manual" value="overview">
+  <lt-tab label="Overview" value="overview"></lt-tab>
+  <lt-tab label="Analytics" value="analytics"></lt-tab>
+  <lt-tab-panel value="overview">Overview content</lt-tab-panel>
+  <lt-tab-panel value="analytics">Analytics content (loaded on confirm)</lt-tab-panel>
+</lt-tab-group>
+```
+
 ## Nested tab groups
 
 Nested <code>lt-tab-group</code> elements are safe — inner groups' <code>change</code> events do

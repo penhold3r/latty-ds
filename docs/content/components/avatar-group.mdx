@@ -1,0 +1,71 @@
+---
+title: Avatar Group
+description: Overlapping stack of avatars with an overflow indicator
+slug: /components/avatar-group
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Avatar Group
+
+<code>lt-avatar-group</code> renders an overlapping stack of <code>lt-avatar</code> elements — a
+collaborator list, for example. Set <code>max</code> to cap how many are shown; a "+N" indicator stands
+in for the rest. Set <code>size</code> to force every avatar to the same diameter (overlap only reads
+correctly when all circles match).
+
+See the <a href="/components/avatar">Avatar</a> page for the full avatar API.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-avatar-group"
+  defaults={{ size: 'md', max: 3 }}
+  content={`<lt-avatar name="Alice"></lt-avatar>
+<lt-avatar name="Bob"></lt-avatar>
+<lt-avatar name="Carol"></lt-avatar>
+<lt-avatar name="Dave"></lt-avatar>
+<lt-avatar name="Eve"></lt-avatar>`}
+  subTags={['lt-avatar']}
+/>
+
+## Usage
+
+<FrameworkTabs
+  html={`
+<lt-avatar-group size="md" max="4">
+  <lt-avatar name="Alice" src="/img/alice.jpg"></lt-avatar>
+  <lt-avatar name="Bob" src="/img/bob.jpg"></lt-avatar>
+  <lt-avatar name="Carol"></lt-avatar>
+  <lt-avatar name="Dave"></lt-avatar>
+  <lt-avatar name="Eve"></lt-avatar>
+</lt-avatar-group>
+  `}
+  react={`
+import { AvatarGroup, Avatar } from '@latty-ds/react';
+
+<AvatarGroup size="md" max={4}>
+  <Avatar name="Alice" src="/img/alice.jpg" />
+  <Avatar name="Bob" src="/img/bob.jpg" />
+  <Avatar name="Carol" />
+  <Avatar name="Dave" />
+  <Avatar name="Eve" />
+</AvatarGroup>
+  `}
+  vue={`
+<template>
+  <lt-avatar-group size="md" max="4">
+    <lt-avatar name="Alice" src="/img/alice.jpg"></lt-avatar>
+    <lt-avatar name="Bob" src="/img/bob.jpg"></lt-avatar>
+    <lt-avatar name="Carol"></lt-avatar>
+    <lt-avatar name="Dave"></lt-avatar>
+    <lt-avatar name="Eve"></lt-avatar>
+  </lt-avatar-group>
+</template>
+  `}
+/>
+
+## API
+
+<ApiTable tag="lt-avatar-group" />

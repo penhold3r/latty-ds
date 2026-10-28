@@ -1,0 +1,86 @@
+---
+title: Snackbar Group
+description: Manages stacked snackbar notifications with visibility control
+slug: /components/snackbar-group
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Snackbar Group
+
+<code>lt-snackbar-group</code> manages the display of <code>lt-snackbar</code> notifications. It renders
+in the top layer as a manual popover and controls how many snackbars are visible at once via
+<code>maxVisible</code> (defaults to 1). Show snackbars imperatively by calling the <code>show()</code>
+method.
+
+See the <a href="/components/snackbar">Snackbar</a> page for the individual snackbar API.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-snackbar-group"
+  defaults={{ maxVisible: 1 }}
+  content={`<lt-snackbar variant="info" message="File uploaded successfully"></lt-snackbar>`}
+  subTags={['lt-snackbar']}
+/>
+
+## Usage
+
+<FrameworkTabs
+  html={`
+<lt-snackbar-group id="notifications" max-visible="1"></lt-snackbar-group>
+
+<lt-button onclick="showSnackbar()">Show notification</lt-button>
+
+<script type="module">
+  function showSnackbar() {
+    const group = document.querySelector('#notifications');
+    group.show({
+      message: 'Changes saved',
+      variant: 'success',
+    });
+  }
+  window.showSnackbar = showSnackbar;
+<\/script>
+  `}
+  react={`
+import { useRef } from 'react';
+import { SnackbarGroup, Button } from '@latty-ds/react';
+
+export function Notifications() {
+  const ref = useRef(null);
+
+  return (
+    <>
+      <SnackbarGroup ref={ref} maxVisible={1} />
+      <Button onClick={() => ref.current?.show({
+        message: 'Changes saved',
+        variant: 'success',
+      })}>
+        Show notification
+      </Button>
+    </>
+  );
+}
+  `}
+  vue={`
+<template>
+  <lt-snackbar-group ref="notifications" max-visible="1"></lt-snackbar-group>
+  <lt-button @click="showSnackbar">Show notification</lt-button>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+const notifications = ref(null);
+function showSnackbar() {
+  notifications.value?.show({ message: 'Changes saved', variant: 'success' });
+}
+<\/script>
+  `}
+/>
+
+## API
+
+<ApiTable tag="lt-snackbar-group" />
