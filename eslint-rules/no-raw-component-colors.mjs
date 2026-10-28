@@ -4,16 +4,7 @@
 // Each file may keep the number it already has (BASELINE below), but no more. Fixing one should lower its count
 // here, so the baseline only ever shrinks.
 
-const BASELINE = {
-  'button/button.styles.ts': {
-    steps: 1,
-    rgb: 0
-  },
-  'icon-button/icon-button.styles.ts': {
-    steps: 2,
-    rgb: 0
-  }
-};
+const BASELINE = {};
 
 const RAW_STEP = /var\(--lt-color-[a-z]+-\d+/g;
 // A negative lookahead excludes `rgb(var(--lt-shadow-rgb) / <alpha>)` — the token-driven idiom (see

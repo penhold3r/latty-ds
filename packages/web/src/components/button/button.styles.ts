@@ -120,12 +120,7 @@ export const buttonStyles = css`
   }
   :host([variant='neutral']) {
     --_bg: var(--lt-interactive-neutral-bg);
-    /* --lt-text-inverse flips with theme (pairs with --lt-bg-inverse, which also flips) to dark text in dark
-       mode — but --lt-interactive-neutral-bg itself stays the same mid-gray in both themes, so inverse text
-       would read dark-on-dark here and fail AA (confirmed: 3.13:1 in dark, caught by the contrast a11y suite).
-       No semantic --lt-text-on-neutral token exists yet (every other filled variant has one); this raw step
-       stays grandfathered in no-raw-component-colors.mjs until one is added. */
-    --_color: var(--lt-color-neutral-50);
+    --_color: var(--lt-text-on-neutral);
     --_hover-bg: var(--lt-interactive-neutral-bg-hover);
     --_active-bg: var(--lt-interactive-neutral-bg-active);
   }

@@ -1,0 +1,93 @@
+---
+title: Tab Group
+description: Container for tabbed navigation with panels
+slug: /components/tab-group
+---
+
+import ComponentPlayground from '@site/src/components/ComponentPlayground';
+import ApiTable from '@site/src/components/ApiTable';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Tab Group
+
+<code>lt-tab-group</code> is the container for tabbed navigation. It coordinates <code>lt-tab</code> headers
+with <code>lt-tab-panel</code> content areas. The active tab is controlled by the <code>value</code> prop on
+the group. Keyboard navigation follows the ARIA tabs pattern: Arrow keys move between tabs, Home/End jump to
+first/last, and only the active tab is in the tab order.
+
+When no <code>value</code> is set, the first enabled tab is selected by default. If the tab list overflows,
+scroll buttons appear automatically at either end.
+
+## Playground
+
+<ComponentPlayground
+  tag="lt-tab-group"
+  defaults={{ value: 'overview' }}
+  content={`<lt-tab label="Overview" value="overview" icon-start="home"></lt-tab>
+<lt-tab label="Components" value="components" icon-start="package"></lt-tab>
+<lt-tab label="Tokens" value="tokens" icon-start="color-palette"></lt-tab>
+<lt-tab label="Disabled" value="disabled" disabled></lt-tab>
+<lt-tab-panel value="overview">Overview panel content goes here.</lt-tab-panel>
+<lt-tab-panel value="components">Components panel content goes here.</lt-tab-panel>
+<lt-tab-panel value="tokens">Tokens panel content goes here.</lt-tab-panel>`}
+  subTags={['lt-tab', 'lt-tab-panel']}
+/>
+
+## Usage
+
+<FrameworkTabs
+  html={`
+<lt-tab-group value="tab1">
+  <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
+  <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
+  <lt-tab label="Disabled" value="tab3" disabled></lt-tab>
+  <lt-tab-panel value="tab1">Overview content</lt-tab-panel>
+  <lt-tab-panel value="tab2">Settings content</lt-tab-panel>
+</lt-tab-group>
+
+<script type="module">
+  document.querySelector('lt-tab-group').addEventListener('change', (e) => {
+    console.log('active tab:', e.detail.value);
+  });
+<\/script>
+  `}
+  react={`
+import { TabGroup, Tab, TabPanel } from '@latty-ds/react';
+
+<TabGroup value="tab1" onChange={(e) => console.log(e.detail.value)}>
+  <Tab label="Overview" value="tab1" iconStart="home" />
+  <Tab label="Settings" value="tab2" iconStart="settings" />
+  <Tab label="Disabled" value="tab3" disabled />
+  <TabPanel value="tab1">Overview content</TabPanel>
+  <TabPanel value="tab2">Settings content</TabPanel>
+</TabGroup>
+  `}
+  vue={`
+<template>
+  <lt-tab-group value="tab1" @change="onTab">
+    <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
+    <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
+    <lt-tab label="Disabled" value="tab3" disabled></lt-tab>
+    <lt-tab-panel value="tab1">Overview content</lt-tab-panel>
+    <lt-tab-panel value="tab2">Settings content</lt-tab-panel>
+  </lt-tab-group>
+</template>
+  `}
+/>
+
+## Nested tab groups
+
+Nested <code>lt-tab-group</code> elements are safe — inner groups' <code>change</code> events do
+not bubble into the outer group's listeners.
+
+## API — lt-tab-group
+
+<ApiTable tag="lt-tab-group" />
+
+## API — lt-tab
+
+<ApiTable tag="lt-tab" />
+
+## API — lt-tab-panel
+
+<ApiTable tag="lt-tab-panel" />

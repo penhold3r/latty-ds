@@ -14,6 +14,7 @@ const VARIANTS = ['primary', 'secondary', 'success', 'warning', 'error', 'info']
  * @returns {void}
  */
 const addNeutralInteractive = (map: SemanticTokenMap): void => {
+  map['text-on-neutral'] = 'color-neutral-50';
   map['interactive-neutral-bg'] = 'color-neutral-600';
   map['interactive-neutral-bg-hover'] = 'color-neutral-700';
   map['interactive-neutral-bg-active'] = 'color-neutral-800';
