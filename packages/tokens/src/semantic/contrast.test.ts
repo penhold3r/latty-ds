@@ -1,6 +1,13 @@
 import { describe, it, expect } from 'vitest';
 
-import { contrastRatio, relativeLuminance, resolveVariantColors, WCAG_AA, type ColorPalettes } from './contrast';
+import {
+  contrastRatio,
+  INTERACTIVE_MIN,
+  relativeLuminance,
+  resolveVariantColors,
+  WCAG_AA,
+  type ColorPalettes
+} from './contrast';
 
 const STEPS = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'] as const;
 
@@ -40,11 +47,12 @@ const YELLOW = palettesWith(
   ramp(['#fffbe0', '#fff4b8', '#ffec85', '#ffe24d', '#ffdc2e', '#ffd60a', '#d4b100', '#8f7700', '#5c4c00', '#3d3200'])
 );
 /*
- * Every step the same mid grey at the luminance crossover, where white (4.2) and near-black neutral (4.0) both fall
- * short and only pure black (4.9) holds.
+ * Every step the same mid grey at the luminance crossover. White (4.29) clears the interactive threshold (3.5) but
+ * not WCAG AA normal (4.5); only pure black (4.89) reaches AA normal.
  */
 const CROSSOVER_GREY = palettesWith(ramp(Array(10).fill('#7a7a7a')));
-// Room for the resting step only: its neighbours are too dark for black text.
+// Room for the resting step only at WCAG AA: its neighbours are too dark for black text.
+// At the interactive threshold white passes on both the resting step and its neighbours.
 const NO_ROOM = palettesWith(
   ramp(['#5a5a5a', '#5a5a5a', '#5a5a5a', '#5a5a5a', '#5a5a5a', '#7a7a7a', ...Array(4).fill('#5a5a5a')])
 );
@@ -79,8 +87,12 @@ describe('resolveVariantColors', () => {
     expect(resolveVariantColors('brand', YELLOW, 'light', 10).onText).toBe('color-neutral-900');
   });
 
-  it('reaches for pure black only when nothing more on-brand holds', () => {
-    expect(resolveVariantColors('brand', CROSSOVER_GREY, 'light').onText).toBe('color-black');
+  it('prefers white on the crossover grey at the default interactive threshold', () => {
+    expect(resolveVariantColors('brand', CROSSOVER_GREY, 'light').onText).toBe('color-white');
+  });
+
+  it('reaches for pure black when the stricter WCAG AA threshold is requested', () => {
+    expect(resolveVariantColors('brand', CROSSOVER_GREY, 'light', WCAG_AA).onText).toBe('color-black');
   });
 
   it('takes the highest-contrast candidate when nothing reaches the target', () => {
@@ -101,8 +113,15 @@ describe('resolveVariantColors', () => {
     expect([bg, hover, active]).toEqual(['color-brand-500', 'color-brand-600', 'color-brand-300']);
   });
 
-  it('keeps hover and pressed on the resting fill when neither direction has room', () => {
+  it('walks hover and pressed at the default interactive threshold even on the NO_ROOM ramp', () => {
     const colors = resolveVariantColors('brand', NO_ROOM, 'light');
+    expect(colors.onText).toBe('color-white');
+    expect(colors.hover).toBe('color-brand-600');
+    expect(colors.active).toBe('color-brand-700');
+  });
+
+  it('keeps hover and pressed on the resting fill when neither direction has room at WCAG AA', () => {
+    const colors = resolveVariantColors('brand', NO_ROOM, 'light', WCAG_AA);
     expect(colors.hover).toBe(colors.bg);
     expect(colors.active).toBe(colors.bg);
   });
@@ -123,7 +142,7 @@ describe('resolveVariantColors', () => {
       })
     );
 
-    expect(Math.min(...results)).toBeGreaterThanOrEqual(WCAG_AA);
+    expect(Math.min(...results)).toBeGreaterThanOrEqual(INTERACTIVE_MIN);
   });
 
   it('throws a clear error for a variant with no ramp', () => {

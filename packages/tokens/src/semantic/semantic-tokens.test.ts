@@ -1,13 +1,12 @@
 import { describe, it, expect } from 'vitest';
 
 import { buildSemanticTokens } from './semantic-tokens';
-import { contrastRatio } from './contrast';
+import { contrastRatio, INTERACTIVE_MIN } from './contrast';
 import { buildTokens } from '../core/';
 import tokensConfig from '../../tokens.config.json';
 
 const VARIANTS = ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const;
 const MODES = ['light', 'dark'] as const;
-const AA = 4.5;
 
 const everyVariant = (hex: string): Record<string, string> => Object.fromEntries(VARIANTS.map((v) => [v, hex]));
 
@@ -72,15 +71,18 @@ const ROWS = Object.keys(CONFIGS).flatMap((config) =>
 );
 
 describe('semantic tokens — text on interactive fills', () => {
-  it.each(ROWS)('%s / %s / %s: text meets AA on the resting, hover and pressed fills', (config, mode, variant) => {
-    const map = built[config][mode];
-    const text = resolveHex(config, map[`text-on-${variant}`]);
-    const ratios = ['', '-hover', '-active'].map((state) =>
-      contrastRatio(text, resolveHex(config, map[`interactive-${variant}-bg${state}`]))
-    );
+  it.each(ROWS)(
+    '%s / %s / %s: text meets interactive minimum on the resting, hover and pressed fills',
+    (config, mode, variant) => {
+      const map = built[config][mode];
+      const text = resolveHex(config, map[`text-on-${variant}`]);
+      const ratios = ['', '-hover', '-active'].map((state) =>
+        contrastRatio(text, resolveHex(config, map[`interactive-${variant}-bg${state}`]))
+      );
 
-    expect(Math.min(...ratios)).toBeGreaterThanOrEqual(AA);
-  });
+      expect(Math.min(...ratios)).toBeGreaterThanOrEqual(INTERACTIVE_MIN);
+    }
+  );
 
   it.each(VARIANTS)('defines the full token set for %s', (variant) => {
     const map = built.default.light;
@@ -115,8 +117,8 @@ describe('semantic tokens — neutral interactive contrast', () => {
   ] as const)('near-white text meets AA on %s %s', (mode, token) => {
     const map = built.default[mode];
     const bg = resolveHex('default', map[token]);
-    expect(contrastRatio(resolveHex('default', 'color-neutral-50'), bg)).toBeGreaterThanOrEqual(AA);
-    expect(contrastRatio(resolveHex('default', 'color-white'), bg)).toBeGreaterThanOrEqual(AA);
+    expect(contrastRatio(resolveHex('default', 'color-neutral-50'), bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(resolveHex('default', 'color-white'), bg)).toBeGreaterThanOrEqual(4.5);
   });
 });
 

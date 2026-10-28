@@ -13,6 +13,9 @@ import { STEPS } from '../constants/';
 /** WCAG AA for normal text. */
 export const WCAG_AA = 4.5;
 
+/** Minimum contrast for text on interactive fills (buttons, badges, chips) — between AA normal (4.5) and AA large (3.0). */
+export const INTERACTIVE_MIN = 3.5;
+
 export type ThemeMode = 'light' | 'dark';
 
 /** A generated ramp: step → hex (`{ '50': '#…', …, '900': '#…' }`). */
@@ -106,7 +109,7 @@ export const resolveVariantColors = (
   variant: string,
   palettes: ColorPalettes,
   mode: ThemeMode,
-  minContrast: number = WCAG_AA
+  minContrast: number = INTERACTIVE_MIN
 ): VariantColors => {
   const palette = asPalette(palettes[variant], variant);
   const neutral = asPalette(palettes.neutral, 'neutral');
