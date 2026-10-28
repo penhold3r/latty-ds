@@ -1,0 +1,142 @@
+---
+title: Migration Guide
+description: Adopting Latty when coming from another component library
+slug: /getting-started/migration
+sidebar_position: 5
+---
+
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+
+# Migration Guide
+
+Moving to Latty from another component library? This page maps common patterns from popular
+libraries to their Latty equivalents. Latty is framework-agnostic — it ships Web Components that
+work in any framework — so most patterns translate directly with only naming differences.
+
+## Concept mapping
+
+| Concept | MUI / Radix / Chakra | Latty |
+|---------|---------------------|-------|
+| Import style | Framework-specific React components | Web Components (`lt-*`) or React wrappers (`@latty-ds/react`) |
+| Theming | Theme provider / CSS-in-JS | CSS custom properties (`--lt-*`) via `configure()` or `tokens.css` |
+| Variants | `color="primary"` or `variant="solid"` | `variant="primary"` (consistent across all components) |
+| Destructive actions | `color="error"` or `colorScheme="red"` | `variant="error"` (never `danger` — it does not exist) |
+| Sizes | `size="sm"` / `size="small"` | `size="sm"` (sm, md, lg — consistent across all components) |
+| Icons | Separate icon package with React components | `<lt-icon name="...">` or `icon` prop on components |
+| Dark mode | Theme provider toggle | `configure({ theme: 'dark' })` or `data-theme="dark"` on root |
+| Form integration | Controlled components with `onChange` | Native form association — reads `.value` in submit handler |
+
+## Component equivalents
+
+| Pattern | MUI | Radix | Shoelace | Latty |
+|---------|-----|-------|----------|-------|
+| Button | `<Button>` | `<Button>` | `<sl-button>` | `<lt-button>` |
+| Text field | `<TextField>` | — | `<sl-input>` | `<lt-textfield>` |
+| Select | `<Select>` | `<Select.Root>` | `<sl-select>` | `<lt-select>` |
+| Dialog | `<Dialog>` | `<Dialog.Root>` | `<sl-dialog>` | `<lt-dialog>` |
+| Tabs | `<Tabs>` / `<Tab>` / `<TabPanel>` | `<Tabs.Root>` | `<sl-tab-group>` | `<lt-tab-group>` + `<lt-tab>` + `<lt-tab-panel>` |
+| Card | `<Card>` | `<Card>` | `<sl-card>` | `<lt-surface>` |
+| Snackbar / Toast | `<Snackbar>` | `<Toast>` | `<sl-alert>` | `<lt-snackbar-group>` + `show()` |
+| Checkbox | `<Checkbox>` | `<Checkbox>` | `<sl-checkbox>` | `<lt-checkbox>` |
+| Switch | `<Switch>` | `<Switch>` | `<sl-switch>` | `<lt-switch>` |
+| Accordion | `<Accordion>` | `<Accordion.Root>` | `<sl-details>` | `<lt-accordion-group>` + `<lt-accordion>` |
+| Dropdown menu | `<Menu>` | `<DropdownMenu.Root>` | `<sl-dropdown>` | `<lt-dropdown>` + `<lt-dropdown-item>` |
+| Alert / Banner | `<Alert>` | `<Callout>` | `<sl-alert>` | `<lt-alert>` |
+| Badge | `<Badge>` / `<Chip>` | `<Badge>` | `<sl-badge>` | `<lt-badge>` / `<lt-chip>` |
+| Spinner | `<CircularProgress>` | — | `<sl-spinner>` | `<lt-spinner>` |
+| Avatar | `<Avatar>` | `<Avatar>` | `<sl-avatar>` | `<lt-avatar>` |
+| Tooltip | `<Tooltip>` | `<Tooltip>` | `<sl-tooltip>` | `<lt-tooltip>` |
+| Navigation | `<Drawer>` / `<List>` | — | — | `<lt-nav>` + `<lt-nav-item>` |
+
+## Key differences to watch for
+
+### No `danger` variant
+
+Latty uses <code>variant="error"</code> for destructive actions. There is no <code>danger</code>
+variant — setting it will silently fall back to the default style.
+
+```html
+<!-- ✗ Does not exist -->
+<lt-button variant="danger">Delete</lt-button>
+
+<!-- ✓ Correct -->
+<lt-button variant="error">Delete</lt-button>
+```
+
+### Cards are surfaces
+
+Latty does not have a dedicated card component. Use <code>lt-surface</code> with an
+<code>appearance</code> and <code>elevation</code> instead.
+
+```html
+<lt-surface appearance="outlined" elevation="1">
+  <lt-text variant="heading-sm">Card title</lt-text>
+  <lt-text>Card content goes here.</lt-text>
+</lt-surface>
+```
+
+### Tokens, not utility classes
+
+Latty does not use utility classes (like Tailwind) or CSS-in-JS. Custom styling uses CSS custom
+properties.
+
+```css
+.my-layout {
+  padding: var(--lt-spacing-4);
+  gap: var(--lt-spacing-3);
+  border-radius: var(--lt-border-radius);
+  color: var(--lt-text-primary);
+}
+```
+
+### Boolean attributes follow HTML semantics
+
+Presence means true, absence means false. Never set a boolean attribute to the string
+<code>"false"</code>.
+
+```js
+// ✗ This DISABLES the element (attribute is present)
+el.setAttribute('disabled', 'false');
+
+// ✓ Correct way to enable
+el.removeAttribute('disabled');
+// or
+el.disabled = false;
+```
+
+### React wrappers are optional
+
+The <code>@latty-ds/react</code> package provides typed React wrappers, but you can also use the
+Web Components directly with standard JSX. The wrappers handle event binding and prop casing
+automatically.
+
+<FrameworkTabs
+  html={`
+<!-- Web Component (any framework) -->
+<lt-button variant="primary" full-width>Save</lt-button>
+  `}
+  react={`
+// React wrapper (typed props, event handlers)
+import { Button } from '@latty-ds/react';
+
+<Button variant="primary" fullWidth onClick={handleSave}>
+  Save
+</Button>
+  `}
+  vue={`
+<!-- Vue (Web Components work directly) -->
+<lt-button variant="primary" full-width @click="handleSave">
+  Save
+</lt-button>
+  `}
+/>
+
+## Incremental adoption
+
+You don't need to migrate everything at once. Latty Web Components coexist with any framework's
+component library — they're just custom HTML elements. A practical approach:
+
+1. Install <code>@latty-ds/tokens</code> and <code>@latty-ds/web</code>
+2. Start using Latty for new features or pages
+3. Replace existing components one at a time, starting with simple ones (buttons, badges, alerts)
+4. Migrate layout components (surfaces, navs) last since they tend to have the most custom styling
