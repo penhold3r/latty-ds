@@ -9,7 +9,7 @@ import tokensConfig from '../../tokens.config.json';
 
 export type { BorderWidth, LattyConfig };
 
-const DEFAULTS: Required<Omit<LattyConfig, 'theme' | 'elevation'>> = {
+const DEFAULTS: Required<Omit<LattyConfig, 'theme' | 'elevation' | 'overrides'>> = {
   colors: tokensConfig.color,
   font: { family: DEFAULT_FONT_FAMILY },
   border: { radius: DEFAULT_BORDER_RADIUS, width: DEFAULT_BORDER_WIDTH }
