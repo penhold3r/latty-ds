@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/penhold3r/latty-ds/compare/v1.4.0...v1.5.0) (2026-10-28)
+
+### Bug Fixes
+
+- **tokens:** exclude overrides from DEFAULTS Required type ([5f6db9d](https://github.com/penhold3r/latty-ds/commit/5f6db9dff7fabb3888cc9138f4cfa0f22c103ea8))
+- **tokens:** lower interactive fill contrast threshold to 3.5:1 ([00de1cb](https://github.com/penhold3r/latty-ds/commit/00de1cb77f53ebe023e7938d22d53631b278fb2f))
+
+### Features
+
+- **tokens:** add overrides option to configure() and createStyleSheet() ([b5e7df3](https://github.com/penhold3r/latty-ds/commit/b5e7df3cb4b7142795b38662d0b31b308437f7f9))
+
 # [1.4.0](https://github.com/penhold3r/latty-ds/compare/v1.3.0...v1.4.0) (2026-10-28)
 
 ### Bug Fixes

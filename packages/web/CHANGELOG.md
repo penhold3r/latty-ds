@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/penhold3r/latty-ds/compare/v1.4.0...v1.5.0) (2026-10-28)
+
+**Note:** Version bump only for package @latty-ds/web
+
 # [1.4.0](https://github.com/penhold3r/latty-ds/compare/v1.3.0...v1.4.0) (2026-10-28)
 
 ### Bug Fixes
