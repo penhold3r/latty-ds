@@ -132,6 +132,24 @@ const css = createStyleSheet({ colors: { primary: '#6366f1' } });
 // inject `css` into a <style> tag in the server-rendered HTML
 ```
 
+## Token overrides via `configure()`
+
+Pass `overrides` to force any token to a specific value. Overrides are appended after all generated tokens, so they always win. Useful when the auto-generated contrast or palette doesn't match your intent:
+
+```ts
+configure({
+  colors: { primary: '#4F46E5', secondary: '#607D8B' },
+  overrides: {
+    'text-on-secondary': '#FFFFFF',
+    'color-primary-500': '#5046E5'
+  }
+});
+```
+
+Keys are token names without the `--lt-` prefix. Values are raw CSS values (not wrapped in `var()`). Works identically with `createStyleSheet()` for SSR.
+
+If an override breaks accessibility, that's on the consumer side — Latty won't validate overrides.
+
 ## CSS overrides
 
 Override individual tokens directly in a stylesheet for one-off adjustments or scoped changes:

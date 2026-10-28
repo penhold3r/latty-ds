@@ -108,6 +108,11 @@ export const createStyleSheet = (userConfig: LattyConfig = {}): string => {
    */
   body += '\nbody { font-family: var(--lt-typography-fontFamilyPrimary); }\n';
 
+  if (userConfig.overrides && Object.keys(userConfig.overrides).length > 0) {
+    const lines = Object.entries(userConfig.overrides).map(([key, value]) => `  --lt-${key}: ${value};`);
+    body += `:root {\n${lines.join('\n')}\n}\n`;
+  }
+
   /**
    * @import must be the first rule(s) of a stylesheet — safe here since
    * they're the first thing written into the returned string.

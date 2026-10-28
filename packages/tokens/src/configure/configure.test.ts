@@ -152,6 +152,28 @@ describe('createStyleSheet', () => {
     expect(css).toContain('--lt-color-tertiary-500');
   });
 
+  it('appends overrides as raw --lt-* declarations after all generated tokens', () => {
+    const css = createStyleSheet({ overrides: { 'text-on-secondary': '#FFFFFF' } });
+    expect(css).toContain('--lt-text-on-secondary: #FFFFFF;');
+    const generatedIndex = css.indexOf('--lt-text-on-secondary: var(');
+    const overrideIndex = css.indexOf('--lt-text-on-secondary: #FFFFFF;');
+    expect(overrideIndex).toBeGreaterThan(generatedIndex);
+  });
+
+  it('supports multiple overrides', () => {
+    const css = createStyleSheet({
+      overrides: { 'text-on-primary': '#000000', 'bg-default': '#FAFAFA' }
+    });
+    expect(css).toContain('--lt-text-on-primary: #000000;');
+    expect(css).toContain('--lt-bg-default: #FAFAFA;');
+  });
+
+  it('does not emit an override block when overrides is empty', () => {
+    const withOverrides = createStyleSheet({ overrides: {} });
+    const without = createStyleSheet();
+    expect(withOverrides).toEqual(without);
+  });
+
   it('semantic tokens use var() references, not raw hex', () => {
     const css = createStyleSheet();
     const semanticSection = css.split('/* Semantic tokens */')[1];

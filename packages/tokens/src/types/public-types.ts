@@ -147,4 +147,22 @@ export interface LattyConfig {
    * - `'auto'`   — alias for `'system'`, deprecated.
    */
   theme?: 'light' | 'dark' | 'system' | 'auto';
+  /**
+   * Raw token overrides appended after all generated tokens. Keys are token
+   * names without the `--lt-` prefix (e.g. `'text-on-secondary'`,
+   * `'color-primary-500'`). Values are any valid CSS value — they are emitted
+   * as-is, not wrapped in `var()`.
+   *
+   * Use this to force a specific token value when the generated result doesn't
+   * match your intent. If the override breaks accessibility, that's on the
+   * consumer side — Latty won't validate overrides.
+   * @example
+   * ```ts
+   * configure({
+   *   colors: { primary: '#4F46E5', secondary: '#607D8B' },
+   *   overrides: { 'text-on-secondary': '#FFFFFF' },
+   * });
+   * ```
+   */
+  overrides?: Record<string, string>;
 }
