@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/penhold3r/latty-ds/compare/v1.3.0...v1.4.0) (2026-10-28)
+
+### Bug Fixes
+
+- **config:** add skipLibCheck to base tsconfig ([542a64a](https://github.com/penhold3r/latty-ds/commit/542a64a198c41bd6fe45ab9155242317056081a4))
+
 # [1.3.0](https://github.com/penhold3r/latty-ds/compare/v1.2.0...v1.3.0) (2026-10-23)
 
 ### Features

@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/penhold3r/latty-ds/compare/v1.3.0...v1.4.0) (2026-10-28)
+
+### Bug Fixes
+
+- **config:** add skipLibCheck to base tsconfig ([542a64a](https://github.com/penhold3r/latty-ds/commit/542a64a198c41bd6fe45ab9155242317056081a4))
+- **docs:** drop broken playground from snackbar-group page ([083835a](https://github.com/penhold3r/latty-ds/commit/083835a2a85cf4b42c9b8e604e6c08c69d9d700e))
+- **docs:** use correct label attribute for accordion children ([5b4cec8](https://github.com/penhold3r/latty-ds/commit/5b4cec8876c9e92e11b3876d85d10169ed4ba352))
+- **tokens,web:** add --lt-text-on-neutral token and tab-group docs page ([98b0d20](https://github.com/penhold3r/latty-ds/commit/98b0d200118da45c2ed04e87c47542b5c62aa1f8))
+- **web:** address all low-severity audit findings (Sections A, B, C) ([1dda323](https://github.com/penhold3r/latty-ds/commit/1dda323ddf2178a74ea4f2e271ac62c5449c38ea))
+
+### Features
+
+- **web:** add tab-group manual activation, migrate tooltip to floating-ui, clean up codegen ([9d93f59](https://github.com/penhold3r/latty-ds/commit/9d93f59bee74c02cdec47223321b4357ee32dd6d))
+- **web:** support named colors and oklch in color-input toHex ([ebd4186](https://github.com/penhold3r/latty-ds/commit/ebd4186ad55f097af866fb366271d63fad7fd760))
+
 # [1.3.0](https://github.com/penhold3r/latty-ds/compare/v1.2.0...v1.3.0) (2026-10-23)
 
 ### Bug Fixes
