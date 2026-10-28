@@ -4,7 +4,13 @@ import { ThemeableElement } from '../../base';
 import { customElement, property, query, queryAssignedElements, state } from 'lit/decorators.js';
 
 import { tabGroupStyles } from './tab-group.styles';
-import { TabGroupSize, TabGroupAppearance, TabGroupOrientation, TabGroupLabels } from './tab-group.types';
+import {
+  TabGroupSize,
+  TabGroupAppearance,
+  TabGroupOrientation,
+  TabGroupActivation,
+  TabGroupLabels
+} from './tab-group.types';
 import type { Tab } from '../tab/tab';
 
 import '../tab/tab';
@@ -75,6 +81,13 @@ export class TabGroup extends ThemeableElement {
    * @default 'horizontal'
    */
   @property({ reflect: true }) orientation: TabGroupOrientation = 'horizontal';
+
+  /**
+   * Tab activation mode. `automatic` (default) selects a tab as soon as it receives focus via arrow keys.
+   * `manual` moves focus without selecting — the user confirms with Enter or Space.
+   * @default 'automatic'
+   */
+  @property({ reflect: true }) activation: TabGroupActivation = 'automatic';
 
   /** Overridable UI text (scroll button labels), for i18n. English defaults — override only the keys you need. */
   @property({ type: Object }) labels: Partial<TabGroupLabels> = {};
@@ -356,6 +369,12 @@ export class TabGroup extends ThemeableElement {
     const enabled = enabledItems(this.tabs ?? []);
     if (enabled.length === 0) return;
 
+    if (this.activation === 'manual' && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      this._select(e.currentTarget as Tab);
+      return;
+    }
+
     const forwardKey = this.orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
     const backwardKey = this.orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
 
@@ -378,8 +397,14 @@ export class TabGroup extends ThemeableElement {
     if (!next) return;
 
     e.preventDefault();
-    this._select(next);
-    next.focus();
+    if (this.activation === 'manual') {
+      next.tabIndex = 0;
+      (e.currentTarget as Tab).tabIndex = -1;
+      next.focus();
+    } else {
+      this._select(next);
+      next.focus();
+    }
   };
 
   /**

@@ -2,6 +2,7 @@ import { html, type PropertyValues } from 'lit';
 import { ThemeableElement } from '../../base';
 import { customElement, property, query } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
+import { computePosition, autoUpdate, offset, flip, shift, type Placement } from '@floating-ui/dom';
 
 import { tooltipStyles } from './tooltip.styles';
 import type { TooltipPlacement } from './tooltip.types';
@@ -200,56 +201,60 @@ export class Tooltip extends ThemeableElement {
     this._hide();
   }
 
+  private _floatingCleanup: (() => void) | null = null;
+
+  private _resolvedPlacement(): Placement {
+    const rtl = getComputedStyle(this).direction === 'rtl';
+    switch (this.placement) {
+      case 'start':
+        return rtl ? 'right' : 'left';
+      case 'end':
+        return rtl ? 'left' : 'right';
+      default:
+        return this.placement;
+    }
+  }
+
   private _show() {
     if (!this._isShown()) {
       this._tooltipEl.showPopover();
-      window.addEventListener('scroll', this._reposition, true);
-      window.addEventListener('resize', this._reposition);
     }
-    this._reposition();
+    this._startPositioning();
   }
 
   private _hide() {
     if (!this._isShown()) return;
+    this._stopPositioning();
     this._tooltipEl.hidePopover();
-    window.removeEventListener('scroll', this._reposition, true);
-    window.removeEventListener('resize', this._reposition);
   }
 
-  /*
-   * A top-layer popover is positioned against the viewport, not the host, so the bubble's fixed coordinates are
-   * computed here from the host's rect. Fixed coordinates need a physical side, so the logical start/end placements
-   * are resolved against the host's computed direction (start is the left side in LTR, the right side in RTL).
-   */
-  private _reposition = () => {
-    if (!this._isShown()) return;
-    const host = this.getBoundingClientRect();
-    const { width, height } = this._tooltipEl.getBoundingClientRect();
-    const style = getComputedStyle(this);
-    const offset = parseFloat(style.getPropertyValue('--lt-tooltip-offset')) || 8;
-    const rtl = style.direction === 'rtl';
+  private _startPositioning() {
+    this._stopPositioning();
 
-    let left: number;
-    let top: number;
-    switch (this.placement) {
-      case 'bottom':
-        left = host.left + host.width / 2 - width / 2;
-        top = host.bottom + offset;
-        break;
-      case 'start':
-      case 'end': {
-        const onLeft = (this.placement === 'start') !== rtl;
-        left = onLeft ? host.left - offset - width : host.right + offset;
-        top = host.top + host.height / 2 - height / 2;
-        break;
-      }
-      default:
-        left = host.left + host.width / 2 - width / 2;
-        top = host.top - offset - height;
-    }
-    this._tooltipEl.style.left = `${left}px`;
-    this._tooltipEl.style.top = `${top}px`;
-  };
+    const reposition = async () => {
+      if (!this._isShown()) return;
+      const offsetPx = parseFloat(getComputedStyle(this).getPropertyValue('--lt-tooltip-offset')) || 8;
+      const {
+        x,
+        y,
+        placement: resolved
+      } = await computePosition(this, this._tooltipEl, {
+        strategy: 'fixed',
+        placement: this._resolvedPlacement(),
+        middleware: [offset(offsetPx), flip(), shift({ padding: 8 })]
+      });
+      this._tooltipEl.style.left = `${x}px`;
+      this._tooltipEl.style.top = `${y}px`;
+      this._tooltipEl.dataset.side = resolved.split('-')[0];
+    };
+
+    this._floatingCleanup = autoUpdate(this, this._tooltipEl, reposition);
+  }
+
+  private _stopPositioning() {
+    this._floatingCleanup?.();
+    this._floatingCleanup = null;
+  }
 
   private _onPointerEnter = (e: PointerEvent) => {
     /*
@@ -343,6 +348,7 @@ export class Tooltip extends ThemeableElement {
     this._clearShowTimer();
     this._clearHideTimer();
     this._stopTouchOpenWatchers();
+    this._stopPositioning();
     this._hide();
   }
 
@@ -354,7 +360,7 @@ export class Tooltip extends ThemeableElement {
     super.updated(changed);
     if (changed.has('content')) this._describeTrigger();
     if (changed.has('content') || changed.has('disabled')) this._sync();
-    else if (changed.has('placement')) this._reposition();
+    else if (changed.has('placement') && this._isShown()) this._startPositioning();
   }
 
   render() {

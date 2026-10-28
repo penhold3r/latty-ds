@@ -1,4 +1,16 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+
+vi.mock('@floating-ui/dom', () => ({
+  computePosition: () => Promise.resolve({ x: 100, y: 50, placement: 'top', middlewareData: {} }),
+  autoUpdate: (_ref: Element, _float: HTMLElement, cb: () => void) => {
+    cb();
+    return () => {};
+  },
+  offset: () => ({}),
+  flip: () => ({}),
+  shift: () => ({})
+}));
+
 import type { Tooltip } from '../tooltip';
 import '../tooltip';
 
@@ -569,74 +581,54 @@ describe('<lt-tooltip>', () => {
 
     const bubble = () => wrap.shadowRoot!.querySelector<HTMLElement>('.tooltip')!;
 
-    const rect = (left: number, top: number, width: number, height: number): DOMRect =>
-      ({
-        left,
-        top,
-        width,
-        height,
-        right: left + width,
-        bottom: top + height,
-        x: left,
-        y: top,
-        toJSON: () => ({})
-      }) as DOMRect;
-
     beforeEach(async () => {
       wrap = document.createElement('lt-tooltip') as Tooltip;
       wrap.content = 'Tip';
       wrap.appendChild(document.createElement('button'));
       document.body.appendChild(wrap);
       await wrap.updateComplete;
-      // Host at (200, 100) 100x40; bubble 60x20; offset defaults to 8px.
-      vi.spyOn(wrap, 'getBoundingClientRect').mockReturnValue(rect(200, 100, 100, 40));
-      vi.spyOn(bubble(), 'getBoundingClientRect').mockReturnValue(rect(0, 0, 60, 20));
     });
 
     afterEach(() => {
       wrap.remove();
-      vi.restoreAllMocks();
     });
 
-    const openAndPosition = async (placement: Tooltip['placement']) => {
-      wrap.placement = placement;
-      await wrap.updateComplete;
+    it('positions the bubble and sets data-side when opened', async () => {
       wrap.dispatchEvent(new Event('pointerenter'));
       await wrap.updateComplete;
-    };
-
-    it('places top: centered horizontally, above the host with the offset', async () => {
-      await openAndPosition('top');
-      expect(bubble().style.left).toBe('220px'); // 200 + 50 - 30
-      expect(bubble().style.top).toBe('72px'); // 100 - 8 - 20
+      await new Promise((r) => setTimeout(r, 0));
+      expect(bubble().style.left).toBeTruthy();
+      expect(bubble().style.top).toBeTruthy();
+      expect(bubble().dataset.side).toBe('top');
     });
 
-    it('places bottom: centered horizontally, below the host with the offset', async () => {
-      await openAndPosition('bottom');
-      expect(bubble().style.left).toBe('220px');
-      expect(bubble().style.top).toBe('148px'); // 140 + 8
+    it('resolves start to left in LTR', () => {
+      wrap.placement = 'start';
+      expect((wrap as unknown as { _resolvedPlacement(): string })._resolvedPlacement()).toBe('left');
     });
 
-    it('places start on the left side in LTR, vertically centered', async () => {
-      await openAndPosition('start');
-      expect(bubble().style.left).toBe('132px'); // 200 - 8 - 60
-      expect(bubble().style.top).toBe('110px'); // 100 + 20 - 10
-    });
-
-    it('places end on the right side in LTR', async () => {
-      await openAndPosition('end');
-      expect(bubble().style.left).toBe('308px'); // 300 + 8
-    });
-
-    it('flips start and end in RTL', async () => {
-      wrap.style.direction = 'rtl';
-      await openAndPosition('start');
-      expect(bubble().style.left).toBe('308px');
-
-      await wrap.updateComplete;
+    it('resolves end to right in LTR', () => {
       wrap.placement = 'end';
-      await wrap.updateComplete;
-      expect(bubble().style.left).toBe('132px');
+      expect((wrap as unknown as { _resolvedPlacement(): string })._resolvedPlacement()).toBe('right');
+    });
+
+    it('resolves start to right in RTL', () => {
+      wrap.style.direction = 'rtl';
+      wrap.placement = 'start';
+      expect((wrap as unknown as { _resolvedPlacement(): string })._resolvedPlacement()).toBe('right');
+    });
+
+    it('resolves end to left in RTL', () => {
+      wrap.style.direction = 'rtl';
+      wrap.placement = 'end';
+      expect((wrap as unknown as { _resolvedPlacement(): string })._resolvedPlacement()).toBe('left');
+    });
+
+    it('passes top and bottom through unchanged', () => {
+      wrap.placement = 'top';
+      expect((wrap as unknown as { _resolvedPlacement(): string })._resolvedPlacement()).toBe('top');
+      wrap.placement = 'bottom';
+      expect((wrap as unknown as { _resolvedPlacement(): string })._resolvedPlacement()).toBe('bottom');
     });
   });
 });

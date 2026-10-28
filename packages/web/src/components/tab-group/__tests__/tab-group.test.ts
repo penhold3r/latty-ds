@@ -344,6 +344,90 @@ describe('orientation', () => {
   });
 });
 
+describe('manual activation', () => {
+  let el: TabGroup;
+
+  const arrow = (target: Element, key: string) =>
+    target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }));
+
+  beforeEach(async () => {
+    el = document.createElement('lt-tab-group') as TabGroup;
+    el.value = 'tab1';
+    el.activation = 'manual';
+    el.innerHTML = `
+      <lt-tab value="tab1" label="Tab 1"></lt-tab>
+      <lt-tab value="tab2" label="Tab 2"></lt-tab>
+      <lt-tab value="tab3" label="Tab 3"></lt-tab>
+      <div slot="panel" data-value="tab1">Panel 1</div>
+      <div slot="panel" data-value="tab2">Panel 2</div>
+      <div slot="panel" data-value="tab3">Panel 3</div>
+    `;
+    document.body.appendChild(el);
+    await el.updateComplete;
+  });
+
+  afterEach(() => {
+    el.remove();
+  });
+
+  it('arrow keys move focus without changing the selected value', () => {
+    const [tab1, tab2] = el.querySelectorAll('lt-tab');
+    arrow(tab1, 'ArrowRight');
+    expect(el.value).toBe('tab1');
+    expect(document.activeElement).toBe(tab2);
+  });
+
+  it('Enter confirms the focused tab as the new selection', () => {
+    const [tab1, tab2] = el.querySelectorAll('lt-tab');
+    arrow(tab1, 'ArrowRight');
+    expect(el.value).toBe('tab1');
+    arrow(tab2, 'Enter');
+    expect(el.value).toBe('tab2');
+  });
+
+  it('Space confirms the focused tab as the new selection', () => {
+    const [tab1, tab2] = el.querySelectorAll('lt-tab');
+    arrow(tab1, 'ArrowRight');
+    arrow(tab2, ' ');
+    expect(el.value).toBe('tab2');
+  });
+
+  it('moves roving tabindex to the focused tab so Tab lands back on it', () => {
+    const [tab1, tab2] = el.querySelectorAll('lt-tab') as unknown as HTMLElement[];
+    arrow(tab1, 'ArrowRight');
+    expect(tab1.tabIndex).toBe(-1);
+    expect(tab2.tabIndex).toBe(0);
+  });
+
+  it('Home/End move focus without selecting', () => {
+    const [tab1, , tab3] = el.querySelectorAll('lt-tab');
+    arrow(tab1, 'End');
+    expect(el.value).toBe('tab1');
+    expect(document.activeElement).toBe(tab3);
+  });
+
+  it('works with vertical orientation', async () => {
+    el.orientation = 'vertical';
+    await el.updateComplete;
+    const [tab1, tab2] = el.querySelectorAll('lt-tab');
+    arrow(tab1, 'ArrowDown');
+    expect(el.value).toBe('tab1');
+    expect(document.activeElement).toBe(tab2);
+    arrow(tab2, 'Enter');
+    expect(el.value).toBe('tab2');
+  });
+
+  it('dispatches change only on Enter/Space, not on arrow', () => {
+    const handler = vi.fn();
+    el.addEventListener('change', handler);
+    const [tab1, tab2] = el.querySelectorAll('lt-tab');
+    arrow(tab1, 'ArrowRight');
+    expect(handler).not.toHaveBeenCalled();
+    arrow(tab2, 'Enter');
+    expect(handler).toHaveBeenCalledOnce();
+  });
+});
+
 describe('aria-controls only points at a real panel', () => {
   it('links each tab to its own panel and leaves a tab with no panel unlinked', async () => {
     const group = document.createElement('lt-tab-group') as TabGroup;

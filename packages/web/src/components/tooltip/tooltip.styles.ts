@@ -65,44 +65,35 @@ export const tooltipStyles = css`
     pointer-events: auto;
   }
 
-  /* ── Arrows ─────────────────────────────────────────────────────────────── The bubble's own position is set
-     from JS; each arrow sits on the bubble edge facing the host. Centering is direction-symmetric, so
-     inset-inline-start:50% + translateX(-50%) is correct in both LTR and RTL. Start/end use logical properties, so
-     they flip with the page direction without a custom-property trick. ─────────────────────────── */
+  /* ── Arrows ─────────────────────────────────────────────────────────────── The bubble's position is set by
+     floating-ui in JS; each arrow sits on the bubble edge facing the trigger. The data-side attribute is the
+     resolved physical side (top/bottom/left/right) after any flip, so the arrow always points the right way
+     even when the tooltip had to move to avoid the viewport edge. ─────────────────────────── */
 
-  /* ── Top (default) ──────────────────────────── */
-
-  :host(:not([placement])) .arrow,
-  :host([placement='top']) .arrow {
+  .tooltip[data-side='top'] .arrow {
     border-top-color: var(--lt-tooltip-bg, var(--lt-bg-inverse));
-    inset-inline-start: 50%;
+    left: 50%;
     top: 100%;
     transform: translateX(-50%);
   }
 
-  /* ── Bottom ─────────────────────────────────── */
-
-  :host([placement='bottom']) .arrow {
+  .tooltip[data-side='bottom'] .arrow {
     border-bottom-color: var(--lt-tooltip-bg, var(--lt-bg-inverse));
     bottom: 100%;
-    inset-inline-start: 50%;
+    left: 50%;
     transform: translateX(-50%);
   }
 
-  /* ── Start ──────────────────────────────────── */
-
-  :host([placement='start']) .arrow {
-    border-inline-start-color: var(--lt-tooltip-bg, var(--lt-bg-inverse));
-    inset-inline-start: 100%;
+  .tooltip[data-side='left'] .arrow {
+    border-left-color: var(--lt-tooltip-bg, var(--lt-bg-inverse));
+    left: 100%;
     top: 50%;
     transform: translateY(-50%);
   }
 
-  /* ── End ────────────────────────────────────── */
-
-  :host([placement='end']) .arrow {
-    border-inline-end-color: var(--lt-tooltip-bg, var(--lt-bg-inverse));
-    inset-inline-end: 100%;
+  .tooltip[data-side='right'] .arrow {
+    border-right-color: var(--lt-tooltip-bg, var(--lt-bg-inverse));
+    right: 100%;
     top: 50%;
     transform: translateY(-50%);
   }

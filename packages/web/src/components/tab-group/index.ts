@@ -5,4 +5,4 @@
  */
 
 export { TabGroup } from './tab-group';
-export type { TabGroupAppearance, TabGroupSize } from './tab-group.types';
+export type { TabGroupAppearance, TabGroupSize, TabGroupActivation } from './tab-group.types';
