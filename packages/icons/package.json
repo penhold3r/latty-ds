@@ -1,7 +1,7 @@
 {
   "name": "@latty-ds/icons",
   "version": "1.5.0",
-  "description": "Icon components for the Latty design system — pluggable icon registry with Iconoir as the default provider",
+  "description": "Icon components for the Latty design system — 200 curated icons with a pluggable provider registry",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -12,9 +12,9 @@
   "keywords": [
     "design-system",
     "icons",
-    "iconoir",
     "web-components",
     "icon-registry",
+    "icon-provider",
     "latty"
   ],
   "publishConfig": {
@@ -33,6 +33,9 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./element": {
+      "default": "./dist/components/icon.js"
     },
     "./activity": {
       "default": "./dist/entries/activity.js"

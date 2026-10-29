@@ -60,6 +60,7 @@ const perIconExports = Object.fromEntries(
 
 pkg.exports = {
   '.': { types: './dist/index.d.ts', default: './dist/index.js' },
+  './element': { default: './dist/components/icon.js' },
   ...perIconExports
 };
 
