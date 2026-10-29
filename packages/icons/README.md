@@ -1,8 +1,8 @@
 # @latty-ds/icons
 
-Icon system for the Latty Design System. Ships a curated set of pre-registered icons from [Iconoir](https://iconoir.com) and a pluggable provider registry for adding your own.
+Icon system for the Latty Design System. Ships 200 curated icons across 16 categories and a pluggable registry for adding your own.
 
-See the [icon gallery](https://latty-ds.com) in the docs for the full list of available icons.
+See the [icon gallery](https://latty-ds.com/icons/introduction) in the docs for the full list of available icons.
 
 ## Installation
 
@@ -26,7 +26,19 @@ Icons inherit `currentColor`, so color them with CSS:
 
 ### Sizes
 
-`xs` (12px) · `sm` (16px) · `md` (20px, default) · `lg` (24px) · `xl` (32px)
+`xs` (12px) · `sm` (16px) · `md` (20px, default) · `lg` (24px) · `xl` (32px) · `inherit` (1em, scales with surrounding text)
+
+### Accessibility
+
+Icons are **decorative by default** (`aria-hidden="true"`). When an icon conveys meaning on its own (not inside a labelled button or link), set `label`:
+
+```html
+<!-- Decorative (default) — hidden from screen readers -->
+<lt-icon name="search"></lt-icon>
+
+<!-- Informative — announced as "Warning" -->
+<lt-icon name="warning-triangle" label="Warning"></lt-icon>
+```
 
 ## Registering custom icons
 
@@ -43,33 +55,24 @@ iconRegistry.registerIcons({
 });
 ```
 
-Custom icons take priority over provider icons, so you can override any default:
+Custom icons override any built-in with the same name:
 
 ```typescript
 iconRegistry.registerIcon('check', '<svg><!-- your custom check --></svg>');
 ```
 
-## Custom providers
+> **Security note:** SVG strings are rendered as-is via Lit's `unsafeSVG`. Never pass untrusted or user-provided SVG to `registerIcon`.
+
+## Tree-shaking
+
+Importing the main entry (`@latty-ds/icons`) registers all 200 icons. For smaller bundles, import only what you need:
 
 ```typescript
-import { iconRegistry } from '@latty-ds/icons';
-import type { IconProvider } from '@latty-ds/icons';
-
-class MyProvider implements IconProvider {
-  name = 'my-provider';
-  private icons = new Map([['icon-1', '<svg>...</svg>']]);
-
-  getIcon(name: string) {
-    return this.icons.get(name);
-  }
-
-  getAllIcons() {
-    return new Map(this.icons);
-  }
-}
-
-iconRegistry.registerProvider(new MyProvider());
+import '@latty-ds/icons/search';
+import '@latty-ds/icons/check';
 ```
+
+Each per-icon entry registers that icon and defines the `lt-icon` custom element — no other import needed.
 
 ## Using icons inside components
 
@@ -83,29 +86,27 @@ Components that accept icons use `icon` / `icon-end` / `icon-start` props:
 
 ## API reference
 
+### `lt-icon` element
+
+| Property | Attribute | Type            | Default | Description                                                    |
+| -------- | --------- | --------------- | ------- | -------------------------------------------------------------- |
+| `name`   | `name`    | `LattyIconName` | `''`    | Icon name from the registry                                    |
+| `size`   | `size`    | `IconSize`      | `'md'`  | Icon size                                                      |
+| `label`  | `label`   | `string`        | `''`    | Accessible label; when set, icon is informative (`role="img"`) |
+
+CSS custom property: `--lt-icon-size` overrides the `size` attribute.
+
 ### `iconRegistry`
 
-| Method                                   | Description                             |
-| ---------------------------------------- | --------------------------------------- |
-| `registerProvider(provider, isDefault?)` | Register an icon provider               |
-| `registerIcon(name, svg)`                | Register a single icon                  |
-| `registerIcons(icons)`                   | Register multiple icons                 |
-| `getIcon(name)`                          | Get an icon SVG string by name          |
-| `hasIcon(name)`                          | Check if an icon is registered          |
-| `getAvailableIcons()`                    | Get all registered icon names           |
-| `setDefaultProvider(name)`               | Change the active default provider      |
-| `clearCustomIcons()`                     | Remove all manually registered icons    |
-| `reset()`                                | Reset the registry to its initial state |
-
-### `IconProvider` interface
-
-```typescript
-interface IconProvider {
-  name: string;
-  getIcon(name: string): string | undefined;
-  getAllIcons(): Map<string, string>;
-}
-```
+| Method                    | Description                                               |
+| ------------------------- | --------------------------------------------------------- |
+| `registerIcon(name, svg)` | Register a single icon                                    |
+| `registerIcons(icons)`    | Register multiple icons at once                           |
+| `getIcon(name)`           | Get an icon's SVG string                                  |
+| `hasIcon(name)`           | Check if an icon is registered                            |
+| `getAvailableIcons()`     | Get all registered icon names (sorted)                    |
+| `subscribe(listener)`     | Listen for registry changes; returns unsubscribe function |
+| `reset()`                 | Clear all icons from the registry                         |
 
 ## License
 

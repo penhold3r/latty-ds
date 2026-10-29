@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { Icon } from '../icon';
+import type { IconProvider } from '../../types/provider.types';
 import { iconRegistry } from '../../registry/icon-registry';
 import '../../index'; // Import to trigger auto-registration
 import '../icon';
@@ -117,6 +118,52 @@ describe('<lt-icon>', () => {
     expect(warn).toHaveBeenCalledTimes(1);
     missing.remove();
     warn.mockRestore();
+  });
+
+  describe('accessibility', () => {
+    it('is decorative by default (aria-hidden="true")', async () => {
+      expect(el.getAttribute('aria-hidden')).toBe('true');
+      expect(el.hasAttribute('role')).toBe(false);
+      expect(el.hasAttribute('aria-label')).toBe(false);
+    });
+
+    it('becomes informative when label is set', async () => {
+      el.label = 'Close';
+      await el.updateComplete;
+      expect(el.getAttribute('role')).toBe('img');
+      expect(el.getAttribute('aria-label')).toBe('Close');
+      expect(el.hasAttribute('aria-hidden')).toBe(false);
+    });
+
+    it('reverts to decorative when label is cleared', async () => {
+      el.label = 'Close';
+      await el.updateComplete;
+      el.label = '';
+      await el.updateComplete;
+      expect(el.getAttribute('aria-hidden')).toBe('true');
+      expect(el.hasAttribute('role')).toBe(false);
+      expect(el.hasAttribute('aria-label')).toBe(false);
+    });
+
+    it('reflects label property to attribute', async () => {
+      el.label = 'Search';
+      await el.updateComplete;
+      expect(el.getAttribute('label')).toBe('Search');
+    });
+  });
+
+  it('renders icon from a registered provider', async () => {
+    const provider: IconProvider = {
+      name: 'test-provider',
+      getIcon: (name) => (name === 'provider-icon' ? '<svg><rect /></svg>' : undefined)
+    };
+    iconRegistry.registerProvider(provider);
+    el.name = 'provider-icon';
+    await el.updateComplete;
+
+    const svg = el.shadowRoot!.querySelector('svg');
+    expect(svg).toBeTruthy();
+    iconRegistry.removeProvider('test-provider');
   });
 
   /*

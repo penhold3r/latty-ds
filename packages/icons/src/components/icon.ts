@@ -2,22 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 import { iconRegistry } from '../registry/icon-registry.js';
-import { lattyIcons } from '../icons/index.js';
 import type { IconSize } from '../types/icons.types.js';
-
-/*
- * Registering here before the class declaration matters: this is a genuine top-level statement (not an
- * import), so it runs strictly in source order relative to `@customElement('lt-icon')` — unlike moving
- * this call around in index.ts, which has no effect since ES modules fully evaluate every
- * `import`/`export ... from` declaration before that file's own top-level statements run.
- * `customElements.define()` synchronously upgrades any `<lt-icon>` already in the DOM (e.g. from
- * prerendered/SSR'd HTML) the instant it's called, which calls `connectedCallback` → `loadIcon()`
- * immediately — if that runs before the registry has data, every such icon logs a spurious "not found
- * in registry" warning on first paint, even though it self-heals a moment later via the registry's own
- * `subscribe` mechanism. Registering the data first, in the same module that defines the element,
- * closes that race.
- */
-iconRegistry.registerIcons(lattyIcons);
 
 /**
  * Icon component for displaying SVG icons from the icon registry.
@@ -29,6 +14,7 @@ iconRegistry.registerIcons(lattyIcons);
  * - Inherits color from parent via currentColor
  * - Loads icons from the global icon registry
  * - Automatically cleans SVG attributes for consistent sizing
+ * - Decorative by default (`aria-hidden="true"`); set `label` for informative icons
  *
  * Note: setting `font-size` on the icon has no effect on its own — use `size="inherit"`
  * (then `font-size` drives the 1em box) or `--lt-icon-size` for fluid sizing.
@@ -38,6 +24,7 @@ iconRegistry.registerIcons(lattyIcons);
  * <lt-icon name="search" size="md"></lt-icon>
  * <lt-icon name="user" size="lg" style="color: blue;"></lt-icon>
  * <lt-icon name="star" size="inherit"></lt-icon> <!-- scales with surrounding text -->
+ * <lt-icon name="warning-triangle" label="Warning"></lt-icon> <!-- informative -->
  * ```
  */
 @customElement('lt-icon')
@@ -121,6 +108,13 @@ export class Icon extends LitElement {
   @property({ reflect: true }) size: IconSize = 'md';
 
   /**
+   * Accessible label for informative icons. When set, the icon gets `role="img"`
+   * and `aria-label`. When absent, the icon is decorative (`aria-hidden="true"`).
+   * @default ''
+   */
+  @property({ reflect: true }) label = '';
+
+  /**
    * Internal SVG content loaded from registry.
    * @private
    */
@@ -143,6 +137,17 @@ export class Icon extends LitElement {
   willUpdate(changedProperties: Map<string, unknown>) {
     if (changedProperties.has('name')) {
       this.loadIcon();
+    }
+    if (changedProperties.has('label')) {
+      if (this.label) {
+        this.setAttribute('role', 'img');
+        this.setAttribute('aria-label', this.label);
+        this.removeAttribute('aria-hidden');
+      } else {
+        this.removeAttribute('role');
+        this.removeAttribute('aria-label');
+        this.setAttribute('aria-hidden', 'true');
+      }
     }
   }
 

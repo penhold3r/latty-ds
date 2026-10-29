@@ -7,6 +7,8 @@ import { normalizeNativeProps } from '../../normalize-props';
 export type IconProps = HTMLAttributes<IconEl> & {
   name: LattyIconName;
   size?: IconSize;
+  /** Accessible label. When set, the icon is informative (`role="img"` + `aria-label`). When absent, decorative (`aria-hidden="true"`). */
+  label?: string;
 };
 
 export const Icon = forwardRef<IconEl, IconProps>(function Icon(props, forwardedRef) {
