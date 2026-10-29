@@ -18,7 +18,7 @@ export type TableProps = Omit<TableHTMLAttributes<TableEl>, 'loading' | 'label' 
   stickyHeader?: boolean;
   height?: string;
   virtualized?: boolean;
-  rowHeight?: number;
+  rowHeight?: string;
   rowKey?: string;
   selectionMode?: TableEl['selectionMode'];
   pageSize?: number;

@@ -110,6 +110,23 @@ import '@latty-ds/icons/arrow-right';`}</CodeBlock>
 
 Setting <code>font-size</code> on an icon has no effect on its own — the icon box is fixed by <code>size</code>. Use <code>size="inherit"</code> to get a 1em box that follows the text, or set <code>--lt-icon-size</code> to any length.
 
+### Accessibility
+
+Icons are **decorative by default** — they render with <code>aria-hidden="true"</code> and are invisible to screen readers. When an icon conveys meaning on its own (not inside a labelled button or link), set the <code>label</code> property:
+
+<FrameworkTabs
+  html={`<!-- Decorative (default) — hidden from screen readers -->
+<lt-icon name="search" />
+
+<!-- Informative — announced as "Warning" -->
+<lt-icon name="warning-triangle" label="Warning" />`}
+  react={`{/* Decorative (default) */}
+<Icon name="search" />
+
+{/* Informative — announced as "Warning" */}
+<Icon name="warning-triangle" label="Warning" />`}
+/>
+
 ### Custom icons
 
 <CodeBlock language="js">{`import { iconRegistry } from '@latty-ds/icons';
@@ -122,6 +139,23 @@ iconRegistry.registerIcons({
 'brand-x': '<svg>...</svg>',
 'brand-y': '<svg>...</svg>',
 });`}</CodeBlock>
+
+### Icon providers
+
+Use <code>registerProvider</code> to plug in an external icon library (Lucide, Material Symbols, Phosphor, etc.) as a fallback source. Icons not found in the built-in or custom set are resolved through providers in registration order:
+
+<CodeBlock language="ts">{`import { iconRegistry } from '@latty-ds/icons';
+import type { IconProvider } from '@latty-ds/icons';
+
+const myProvider: IconProvider = {
+  name: 'my-lib',
+  getIcon: (name) => myIconMap[name], // return SVG string or undefined
+};
+
+iconRegistry.registerProvider(myProvider);
+// <lt-icon name="rocket"> now resolves from myProvider if Latty doesn't have it`}</CodeBlock>
+
+Resolution order: custom icons (<code>registerIcon</code>) → built-in Latty icons → providers (in registration order). Custom always wins. Remove a provider with <code>iconRegistry.removeProvider('my-lib')</code>.
 
 ## API
 
@@ -144,6 +178,12 @@ iconRegistry.registerIcons({
       type: "'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'inherit'",
       default: "'md'",
       description: "Rendered size — 12 / 16 / 20 / 24 / 32 px, or 'inherit' for a 1em box that scales with font-size."
+    },
+    {
+      name: 'label',
+      type: 'string',
+      default: "''",
+      description: "Accessible label. When set, icon is informative (role=\"img\" + aria-label). When absent, decorative (aria-hidden=\"true\")."
     },
     {
       name: '--lt-icon-size',

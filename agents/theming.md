@@ -279,6 +279,27 @@ export default function RootLayout({ children }) {
 
 Tokens are inlined server-side so there is no flash. Theme toggling with `data-theme` still works client-side as described above.
 
+## Icon providers
+
+The icon registry supports external icon libraries as fallback providers. When `lt-icon` can't find a name in the built-in or custom icons, it checks registered providers in order:
+
+```ts
+import { iconRegistry } from '@latty-ds/icons';
+import type { IconProvider } from '@latty-ds/icons';
+
+const myProvider: IconProvider = {
+  name: 'my-lib',
+  getIcon: (name) => myIconMap[name] // return SVG string or undefined
+};
+
+iconRegistry.registerProvider(myProvider);
+// <lt-icon name="rocket"> now resolves from myProvider if Latty doesn't have it
+```
+
+Resolution order: custom icons (`registerIcon`) → built-in Latty icons → providers (in registration order). Custom always wins.
+
+Remove a provider with `iconRegistry.removeProvider('my-lib')`.
+
 ## Next
 
 - [`components.md`](./components.md) — explore the full component catalog
