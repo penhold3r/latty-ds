@@ -3,7 +3,7 @@ import { html, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement, property, state } from 'lit/decorators.js';
 import { FormControlElement } from '../../base';
-import '@latty-ds/icons';
+import '@latty-ds/icons/calendar';
 import '../calendar/calendar';
 import '../text/text';
 

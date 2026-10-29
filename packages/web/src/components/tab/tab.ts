@@ -5,7 +5,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { tabStyles } from './tab.styles';
 import { TabSize, TabOrientation } from './tab.types';
 
-import '@latty-ds/icons';
+import '@latty-ds/icons/element';
 
 /**
  * A tab component that represents a single tab within a tab group.

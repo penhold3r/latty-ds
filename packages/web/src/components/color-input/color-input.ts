@@ -4,7 +4,7 @@ import { FormControlElement } from '../../base';
 import { colorInputStyles } from './color-input.styles';
 import { ColorInputFormat, ColorInputSize, type ColorInputLabels } from './color-input.types';
 import { NativeAttrsController } from '../shared/native-attrs';
-import '@latty-ds/icons';
+import '@latty-ds/icons/color-palette';
 import '../text/text';
 
 /**

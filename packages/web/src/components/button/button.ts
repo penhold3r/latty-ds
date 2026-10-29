@@ -10,7 +10,7 @@ import { ButtonAppearance, ButtonSize, ButtonType, ButtonVariant } from './butto
 import { NativeAttrsController } from '../shared/native-attrs';
 
 import '../spinner/';
-import '@latty-ds/icons';
+import '@latty-ds/icons/element';
 
 const SUBMITTER_ATTRS = [
   'name',

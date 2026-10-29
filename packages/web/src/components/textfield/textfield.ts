@@ -16,7 +16,7 @@ import {
   resolveTextfieldInputType,
   shouldShowTextfieldClear
 } from './textfield-logic';
-import '@latty-ds/icons';
+import '@latty-ds/icons/xmark';
 import '../text/text';
 
 let textfieldCount = 0;

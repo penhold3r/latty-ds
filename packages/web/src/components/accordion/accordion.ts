@@ -6,7 +6,7 @@ import { accordionStyles } from './accordion.styles';
 import { AccordionAppearance } from './accordion.types';
 import { NativeAttrsController } from '../shared/native-attrs';
 
-import '@latty-ds/icons';
+import '@latty-ds/icons/caret-down';
 import '../text/text';
 
 /**

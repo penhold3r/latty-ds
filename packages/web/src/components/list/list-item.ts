@@ -6,7 +6,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { listItemStyles } from './list-item.styles';
 import { NativeAttrsController } from '../shared/native-attrs';
 
-import '@latty-ds/icons';
+import '@latty-ds/icons/element';
 
 /**
  * A list item that behaves like a native `<li>` without literally being one.

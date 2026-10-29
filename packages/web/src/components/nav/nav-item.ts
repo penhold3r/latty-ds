@@ -6,7 +6,7 @@ import { navItemStyles } from './nav.styles';
 import { NavOrientation } from './nav.types';
 import { NativeAttrsController } from '../shared/native-attrs';
 
-import '@latty-ds/icons';
+import '@latty-ds/icons/caret-down';
 
 /**
  * A single navigation item. Can render as an anchor link or a collapsible group header

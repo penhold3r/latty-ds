@@ -6,6 +6,7 @@ class IconRegistry {
   private icons = new Map<string, string>();
   private providers: IconProvider[] = [];
   private listeners = new Set<RegistryListener>();
+  private pendingNotify = false;
 
   subscribe(listener: RegistryListener): () => void {
     this.listeners.add(listener);
@@ -16,16 +17,42 @@ class IconRegistry {
     this.listeners.forEach((fn) => fn());
   }
 
-  registerIcon(name: string, svg: string): void {
-    this.icons.set(name, svg);
-    this.notify();
+  private scheduleNotify(): void {
+    if (!this.pendingNotify) {
+      this.pendingNotify = true;
+      queueMicrotask(() => {
+        this.pendingNotify = false;
+        this.notify();
+      });
+    }
   }
 
+  /**
+   * Register a single icon. SVG is rendered as-is — never pass untrusted input.
+   * @param {string} name - The icon name.
+   * @param {string} svg - Raw SVG markup (rendered via unsafeSVG).
+   */
+  registerIcon(name: string, svg: string): void {
+    if (import.meta.env?.DEV !== false) {
+      const existing = this.icons.get(name);
+      if (existing !== undefined && existing !== svg) {
+        // eslint-disable-next-line no-console
+        console.warn(`[IconRegistry] overwriting "${name}" with different SVG`);
+      }
+    }
+    this.icons.set(name, svg);
+    this.scheduleNotify();
+  }
+
+  /**
+   * Register multiple icons at once. SVG values are rendered as-is — never pass untrusted input.
+   * @param {Record<string, string>} icons - Map of icon names to raw SVG markup.
+   */
   registerIcons(icons: Record<string, string>): void {
     Object.entries(icons).forEach(([name, svg]) => {
       this.icons.set(name, svg);
     });
-    this.notify();
+    this.scheduleNotify();
   }
 
   /**
@@ -38,7 +65,7 @@ class IconRegistry {
       this.removeProvider(provider.name);
     }
     this.providers.push(provider);
-    this.notify();
+    this.scheduleNotify();
   }
 
   /**
@@ -49,7 +76,7 @@ class IconRegistry {
     const idx = this.providers.findIndex((p) => p.name === name);
     if (idx !== -1) {
       this.providers.splice(idx, 1);
-      this.notify();
+      this.scheduleNotify();
     }
   }
 

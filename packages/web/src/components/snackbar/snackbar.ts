@@ -7,7 +7,7 @@ import type { SnackbarVariant, SnackbarLabels } from './snackbar.types';
 import type { SurfaceElevation, SurfaceAppearance } from '../surface/surface.types';
 import { dispatch } from '../../utils';
 
-import '@latty-ds/icons';
+import '@latty-ds/icons/xmark';
 import '../surface/surface';
 
 const DEFAULT_LABELS: SnackbarLabels = {

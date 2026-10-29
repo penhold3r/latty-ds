@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
 import { chipStyles } from './chip.styles';
-import '@latty-ds/icons';
+import '@latty-ds/icons/xmark';
 import type { ChipVariant, ChipSize, ChipAppearance, ChipLabels } from './chip.types';
 import { resolveColorValue, pickTextColor, dispatch } from '../../utils';
 

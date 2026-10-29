@@ -7,7 +7,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { avatarStyles } from './avatar.styles';
 import type { AvatarSize, AvatarShape, AvatarColor, AvatarStatus } from './avatar.types';
 import { NativeAttrsController } from '../shared/native-attrs';
-import '@latty-ds/icons';
+import '@latty-ds/icons/user';
 
 /**
  * Displays a user avatar — image, initials fallback, or icon fallback.

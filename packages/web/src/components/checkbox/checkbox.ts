@@ -9,7 +9,8 @@ import { SlottedContentController } from '../shared/slotted-content';
 import { NativeAttrsController } from '../shared/native-attrs';
 import { createFieldIds } from '../shared/form-field';
 
-import '@latty-ds/icons';
+import '@latty-ds/icons/check';
+import '@latty-ds/icons/minus';
 import '../text/text';
 
 const DEFAULT_LABELS: CheckboxLabels = {

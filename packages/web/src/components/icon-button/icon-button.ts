@@ -8,7 +8,7 @@ import { iconButtonStyles } from './icon-button.styles';
 import type { IconButtonVariant, IconButtonAppearance, IconButtonSize } from './icon-button.types';
 import { NativeAttrsController } from '../shared/native-attrs';
 
-import '@latty-ds/icons';
+import '@latty-ds/icons/element';
 
 /**
  * Icon-only button. Requires `label` for screen readers since there is no visible text.

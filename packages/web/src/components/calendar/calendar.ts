@@ -1,7 +1,9 @@
 import { html, nothing, type PropertyValues } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ThemeableElement } from '../../base';
-import '@latty-ds/icons';
+import '@latty-ds/icons/arrow-down';
+import '@latty-ds/icons/arrow-left';
+import '@latty-ds/icons/arrow-right';
 import '../icon-button/icon-button';
 import '../button/button';
 

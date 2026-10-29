@@ -121,6 +121,7 @@ export class Icon extends LitElement {
   @state() private svgContent = '';
 
   private _unsubscribeRegistry?: () => void;
+  private _lastWarnedName = '';
 
   connectedCallback() {
     super.connectedCallback();
@@ -166,9 +167,13 @@ export class Icon extends LitElement {
 
     if (svg) {
       this.svgContent = this.cleanSVG(svg);
+      this._lastWarnedName = '';
     } else {
-      // eslint-disable-next-line no-console
-      console.warn(`Icon "${this.name}" not found in registry`);
+      if (this._lastWarnedName !== this.name && import.meta.env?.DEV !== false) {
+        // eslint-disable-next-line no-console
+        console.warn(`[lt-icon] "${this.name}" not found in registry`);
+        this._lastWarnedName = this.name;
+      }
       this.svgContent = '';
     }
   }
@@ -182,15 +187,8 @@ export class Icon extends LitElement {
    * @private
    */
   private cleanSVG(svg: string): string {
-    /*
-     * Strip width, height, and stroke-width only from the root <svg> tag so
-     * child elements can carry their own stroke-width without being affected.
-     */
     return svg.replace(/<svg([^>]*)>/, (_, attrs: string) => {
-      const cleaned = attrs
-        .replace(/\s*width="[^"]*"/g, '')
-        .replace(/\s*height="[^"]*"/g, '')
-        .replace(/\s*stroke-width="[^"]*"/g, '');
+      const cleaned = attrs.replace(/\s*width="[^"]*"/g, '').replace(/\s*height="[^"]*"/g, '');
       return `<svg${cleaned}>`;
     });
   }

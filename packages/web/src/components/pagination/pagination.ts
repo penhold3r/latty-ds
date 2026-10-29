@@ -5,7 +5,10 @@ import { customElement, property } from 'lit/decorators.js';
 import { paginationStyles } from './pagination.styles';
 import type { PaginationSize, PaginationLabels } from './pagination.types';
 import { dispatch } from '../../utils';
-import '@latty-ds/icons';
+import '@latty-ds/icons/caret-left';
+import '@latty-ds/icons/caret-right';
+import '@latty-ds/icons/double-caret-left';
+import '@latty-ds/icons/double-caret-right';
 
 const DEFAULT_LABELS: PaginationLabels = {
   navigation: 'Pagination',

@@ -21,7 +21,8 @@ import {
   ColumnResizeDetail
 } from './table.types';
 
-import '@latty-ds/icons';
+import '@latty-ds/icons/arrow-up';
+import '@latty-ds/icons/arrow-down';
 import { NativeAttrsController } from '../shared/native-attrs';
 import {
   getPageRange,

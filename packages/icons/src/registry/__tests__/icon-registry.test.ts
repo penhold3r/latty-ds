@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { iconRegistry } from '../icon-registry';
 import type { IconProvider } from '../../types/provider.types';
 
+const flush = () => new Promise<void>((resolve) => queueMicrotask(resolve));
+
 describe('IconRegistry', () => {
   beforeEach(() => {
     iconRegistry.reset();
@@ -71,26 +73,51 @@ describe('IconRegistry', () => {
   });
 
   describe('subscribe / notify', () => {
-    it('fires listener on registerIcon', () => {
+    it('fires listener on registerIcon (async)', async () => {
       const listener = vi.fn();
       iconRegistry.subscribe(listener);
       iconRegistry.registerIcon('a', '<svg/>');
+      expect(listener).not.toHaveBeenCalled();
+      await flush();
       expect(listener).toHaveBeenCalledTimes(1);
     });
 
-    it('fires listener once on registerIcons', () => {
+    it('fires listener once on registerIcons (async)', async () => {
       const listener = vi.fn();
       iconRegistry.subscribe(listener);
       iconRegistry.registerIcons({ a: '<svg/>', b: '<svg/>', c: '<svg/>' });
+      await flush();
       expect(listener).toHaveBeenCalledTimes(1);
     });
 
-    it('stops notifying after unsubscribe', () => {
+    it('stops notifying after unsubscribe', async () => {
       const listener = vi.fn();
       const unsub = iconRegistry.subscribe(listener);
       iconRegistry.registerIcon('a', '<svg/>');
+      await flush();
       unsub();
       iconRegistry.registerIcon('b', '<svg/>');
+      await flush();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('coalesces multiple rapid registerIcon calls into one notification', async () => {
+      const listener = vi.fn();
+      iconRegistry.subscribe(listener);
+      iconRegistry.registerIcon('a', '<svg/>');
+      iconRegistry.registerIcon('b', '<svg/>');
+      iconRegistry.registerIcon('c', '<svg/>');
+      await flush();
+      expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('coalesces registerIcon + registerIcons + registerProvider into one notification', async () => {
+      const listener = vi.fn();
+      iconRegistry.subscribe(listener);
+      iconRegistry.registerIcon('a', '<svg/>');
+      iconRegistry.registerIcons({ b: '<svg/>', c: '<svg/>' });
+      iconRegistry.registerProvider({ name: 'p', getIcon: () => undefined });
+      await flush();
       expect(listener).toHaveBeenCalledTimes(1);
     });
   });
@@ -151,25 +178,29 @@ describe('IconRegistry', () => {
       expect(iconRegistry.getProviders()).toEqual([]);
     });
 
-    it('removeProvider is a no-op for unknown name', () => {
+    it('removeProvider is a no-op for unknown name', async () => {
       const listener = vi.fn();
       iconRegistry.subscribe(listener);
       iconRegistry.removeProvider('nonexistent');
+      await flush();
       expect(listener).not.toHaveBeenCalled();
     });
 
-    it('notifies subscribers when provider is added', () => {
+    it('notifies subscribers when provider is added', async () => {
       const listener = vi.fn();
       iconRegistry.subscribe(listener);
       iconRegistry.registerProvider(lucide);
+      await flush();
       expect(listener).toHaveBeenCalledTimes(1);
     });
 
-    it('notifies subscribers when provider is removed', () => {
+    it('notifies subscribers when provider is removed', async () => {
       iconRegistry.registerProvider(lucide);
+      await flush();
       const listener = vi.fn();
       iconRegistry.subscribe(listener);
       iconRegistry.removeProvider('lucide');
+      await flush();
       expect(listener).toHaveBeenCalledTimes(1);
     });
   });
