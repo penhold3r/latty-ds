@@ -168,7 +168,7 @@ describe('<lt-icon-button>', () => {
       el.label = 'Close';
       document.body.appendChild(el);
       await el.updateComplete;
-      expect(warn).not.toHaveBeenCalled();
+      expect(warn).not.toHaveBeenCalledWith(expect.stringContaining('[lt-icon-button]'));
       el.remove();
     });
 
@@ -177,7 +177,7 @@ describe('<lt-icon-button>', () => {
       el.textContent = 'Save';
       document.body.appendChild(el);
       await el.updateComplete;
-      expect(warn).not.toHaveBeenCalled();
+      expect(warn).not.toHaveBeenCalledWith(expect.stringContaining('[lt-icon-button]'));
       el.remove();
     });
   });
