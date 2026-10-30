@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/penhold3r/latty-ds/compare/v1.5.0...v1.6.0) (2026-10-30)
+
+### Bug Fixes
+
+- **icons:** normalize social viewBoxes, preserve stroke-width, gate dev warnings ([bd78076](https://github.com/penhold3r/latty-ds/commit/bd7807614625922e73da90c466716e715e441e46))
+- **web:** narrow icon-button warning assertions to ignore lt-icon dev warnings ([700d31d](https://github.com/penhold3r/latty-ds/commit/700d31d8e0ad1d66facf1764db6e4142bcbdcab7))
+- **web:** round the lt-avatar-group separator ring ([b512c95](https://github.com/penhold3r/latty-ds/commit/b512c95eb40fa6c127dcd23d730b5e7ccca89801))
+- **web:** stop lt-dialog collapsing to 0px high in WebKit ([f56d1c2](https://github.com/penhold3r/latty-ds/commit/f56d1c2a64c9e2ad1ae57ad4ffe6ec9d275fca9b))
+
+### Features
+
+- **web:** add shape prop to lt-avatar-group ([a047093](https://github.com/penhold3r/latty-ds/commit/a047093a3c043fe9448ad000e4de7137448cabd3))
+
 # [1.5.0](https://github.com/penhold3r/latty-ds/compare/v1.4.0...v1.5.0) (2026-10-28)
 
 **Note:** Version bump only for package @latty-ds/web

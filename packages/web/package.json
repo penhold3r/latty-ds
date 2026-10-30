@@ -1,6 +1,6 @@
 {
   "name": "@latty-ds/web",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Web Components for the Latty design system — framework-agnostic UI components built with Lit",
   "license": "MIT",
   "repository": {

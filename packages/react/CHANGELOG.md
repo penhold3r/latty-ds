@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/penhold3r/latty-ds/compare/v1.5.0...v1.6.0) (2026-10-30)
+
+### Features
+
+- **icons:** add label prop for a11y and registerProvider for external icon libraries ([90c0baf](https://github.com/penhold3r/latty-ds/commit/90c0baff0807018989ab0d0034cdd03d23725107))
+- **web:** add shape prop to lt-avatar-group ([a047093](https://github.com/penhold3r/latty-ds/commit/a047093a3c043fe9448ad000e4de7137448cabd3))
+
 # [1.5.0](https://github.com/penhold3r/latty-ds/compare/v1.4.0...v1.5.0) (2026-10-28)
 
 **Note:** Version bump only for package @latty-ds/react

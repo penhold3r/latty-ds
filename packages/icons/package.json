@@ -1,6 +1,6 @@
 {
   "name": "@latty-ds/icons",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Icon components for the Latty design system — 200 curated icons with a pluggable provider registry",
   "license": "MIT",
   "repository": {

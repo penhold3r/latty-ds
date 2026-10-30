@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/penhold3r/latty-ds/compare/v1.5.0...v1.6.0) (2026-10-30)
+
+### Bug Fixes
+
+- **icons:** normalize social viewBoxes, preserve stroke-width, gate dev warnings ([bd78076](https://github.com/penhold3r/latty-ds/commit/bd7807614625922e73da90c466716e715e441e46))
+- **icons:** remove Iconoir attribution from package.json, add element export ([c9f2cb6](https://github.com/penhold3r/latty-ds/commit/c9f2cb6f52602ea483c816b0a2389186d217931a))
+- **web:** narrow icon-button warning assertions to ignore lt-icon dev warnings ([700d31d](https://github.com/penhold3r/latty-ds/commit/700d31d8e0ad1d66facf1764db6e4142bcbdcab7))
+- **web:** round the lt-avatar-group separator ring ([b512c95](https://github.com/penhold3r/latty-ds/commit/b512c95eb40fa6c127dcd23d730b5e7ccca89801))
+- **web:** stop lt-dialog collapsing to 0px high in WebKit ([f56d1c2](https://github.com/penhold3r/latty-ds/commit/f56d1c2a64c9e2ad1ae57ad4ffe6ec9d275fca9b))
+
+### Features
+
+- **icons:** add label prop for a11y and registerProvider for external icon libraries ([90c0baf](https://github.com/penhold3r/latty-ds/commit/90c0baff0807018989ab0d0034cdd03d23725107))
+- **icons:** support provider priority with override and fallback tiers ([7f38b96](https://github.com/penhold3r/latty-ds/commit/7f38b96685d60da7599f59a7036d326dd4802939))
+- **web:** add shape prop to lt-avatar-group ([a047093](https://github.com/penhold3r/latty-ds/commit/a047093a3c043fe9448ad000e4de7137448cabd3))
+
 # [1.5.0](https://github.com/penhold3r/latty-ds/compare/v1.4.0...v1.5.0) (2026-10-28)
 
 ### Bug Fixes

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/penhold3r/latty-ds/compare/v1.5.0...v1.6.0) (2026-10-30)
+
+### Bug Fixes
+
+- **icons:** normalize social viewBoxes, preserve stroke-width, gate dev warnings ([bd78076](https://github.com/penhold3r/latty-ds/commit/bd7807614625922e73da90c466716e715e441e46))
+- **icons:** remove Iconoir attribution from package.json, add element export ([c9f2cb6](https://github.com/penhold3r/latty-ds/commit/c9f2cb6f52602ea483c816b0a2389186d217931a))
+
+### Features
+
+- **icons:** add label prop for a11y and registerProvider for external icon libraries ([90c0baf](https://github.com/penhold3r/latty-ds/commit/90c0baff0807018989ab0d0034cdd03d23725107))
+- **icons:** support provider priority with override and fallback tiers ([7f38b96](https://github.com/penhold3r/latty-ds/commit/7f38b96685d60da7599f59a7036d326dd4802939))
+
 # [1.5.0](https://github.com/penhold3r/latty-ds/compare/v1.4.0...v1.5.0) (2026-10-28)
 
 **Note:** Version bump only for package @latty-ds/icons
