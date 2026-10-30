@@ -70,6 +70,14 @@ describe('IconRegistry', () => {
       iconRegistry.registerProvider(provider);
       expect(iconRegistry.getAvailableIcons().filter((n) => n === 'shared')).toHaveLength(1);
     });
+
+    it('includes icons from both override and fallback providers', () => {
+      const override: IconProvider = { name: 'o', getIcon: () => '<svg/>', listIcons: () => ['from-override'] };
+      const fallback: IconProvider = { name: 'f', getIcon: () => '<svg/>', listIcons: () => ['from-fallback'] };
+      iconRegistry.registerProvider(override);
+      iconRegistry.registerProvider(fallback, { priority: 'fallback' });
+      expect(iconRegistry.getAvailableIcons()).toEqual(['from-fallback', 'from-override']);
+    });
   });
 
   describe('subscribe / notify', () => {
@@ -125,8 +133,8 @@ describe('IconRegistry', () => {
   describe('reset', () => {
     it('clears all icons and providers', () => {
       iconRegistry.registerIcon('a', '<svg/>');
-      const provider: IconProvider = { name: 'p', getIcon: () => '<svg/>' };
-      iconRegistry.registerProvider(provider);
+      iconRegistry.registerProvider({ name: 'o', getIcon: () => '<svg/>' });
+      iconRegistry.registerProvider({ name: 'f', getIcon: () => '<svg/>' }, { priority: 'fallback' });
       iconRegistry.reset();
       expect(iconRegistry.getIcon('a')).toBeUndefined();
       expect(iconRegistry.getProviders()).toEqual([]);
@@ -150,17 +158,34 @@ describe('IconRegistry', () => {
       expect(iconRegistry.getIcon('rocket')).toBe('<svg>rocket</svg>');
     });
 
-    it('registry icons take priority over providers', () => {
-      iconRegistry.registerIcon('rocket', '<svg>custom</svg>');
+    it('override provider (default) wins over built-in icons', () => {
+      iconRegistry.registerIcon('rocket', '<svg>built-in</svg>');
       iconRegistry.registerProvider(lucide);
-      expect(iconRegistry.getIcon('rocket')).toBe('<svg>custom</svg>');
+      expect(iconRegistry.getIcon('rocket')).toBe('<svg>rocket</svg>');
     });
 
-    it('checks providers in registration order', () => {
+    it('fallback provider loses to built-in icons', () => {
+      iconRegistry.registerIcon('rocket', '<svg>built-in</svg>');
+      iconRegistry.registerProvider(lucide, { priority: 'fallback' });
+      expect(iconRegistry.getIcon('rocket')).toBe('<svg>built-in</svg>');
+    });
+
+    it('fallback provider resolves when no built-in icon exists', () => {
+      iconRegistry.registerProvider(lucide, { priority: 'fallback' });
+      expect(iconRegistry.getIcon('rocket')).toBe('<svg>rocket</svg>');
+    });
+
+    it('checks override providers in registration order', () => {
       iconRegistry.registerProvider(lucide);
       iconRegistry.registerProvider(phosphor);
       expect(iconRegistry.getIcon('rocket')).toBe('<svg>rocket</svg>');
       expect(iconRegistry.getIcon('atom')).toBe('<svg>atom</svg>');
+    });
+
+    it('override providers are checked before fallback providers', () => {
+      iconRegistry.registerProvider(phosphor, { priority: 'fallback' });
+      iconRegistry.registerProvider(lucide);
+      expect(iconRegistry.getIcon('rocket')).toBe('<svg>rocket</svg>');
     });
 
     it('replaces provider with same name on re-register', () => {
@@ -171,8 +196,24 @@ describe('IconRegistry', () => {
       expect(iconRegistry.getIcon('rocket')).toBe('<svg>v2</svg>');
     });
 
-    it('removeProvider removes by name', () => {
+    it('re-register can change priority tier', () => {
       iconRegistry.registerProvider(lucide);
+      iconRegistry.registerIcon('rocket', '<svg>built-in</svg>');
+      expect(iconRegistry.getIcon('rocket')).toBe('<svg>rocket</svg>');
+
+      iconRegistry.registerProvider(lucide, { priority: 'fallback' });
+      expect(iconRegistry.getIcon('rocket')).toBe('<svg>built-in</svg>');
+    });
+
+    it('removeProvider removes from override tier', () => {
+      iconRegistry.registerProvider(lucide);
+      iconRegistry.removeProvider('lucide');
+      expect(iconRegistry.getIcon('rocket')).toBeUndefined();
+      expect(iconRegistry.getProviders()).toEqual([]);
+    });
+
+    it('removeProvider removes from fallback tier', () => {
+      iconRegistry.registerProvider(lucide, { priority: 'fallback' });
       iconRegistry.removeProvider('lucide');
       expect(iconRegistry.getIcon('rocket')).toBeUndefined();
       expect(iconRegistry.getProviders()).toEqual([]);
@@ -202,6 +243,12 @@ describe('IconRegistry', () => {
       iconRegistry.removeProvider('lucide');
       await flush();
       expect(listener).toHaveBeenCalledTimes(1);
+    });
+
+    it('getProviders returns override providers before fallback', () => {
+      iconRegistry.registerProvider({ name: 'fallback-lib', getIcon: () => undefined }, { priority: 'fallback' });
+      iconRegistry.registerProvider({ name: 'override-lib', getIcon: () => undefined });
+      expect(iconRegistry.getProviders()).toEqual(['override-lib', 'fallback-lib']);
     });
   });
 });

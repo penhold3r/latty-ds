@@ -281,7 +281,7 @@ Tokens are inlined server-side so there is no flash. Theme toggling with `data-t
 
 ## Icon providers
 
-The icon registry supports external icon libraries as fallback providers. When `lt-icon` can't find a name in the built-in or custom icons, it checks registered providers in order:
+The icon registry supports external icon libraries via providers. By default, a provider's icons **replace** Latty's everywhere — including inside components like checkbox and select:
 
 ```ts
 import { iconRegistry } from '@latty-ds/icons';
@@ -292,11 +292,14 @@ const myProvider: IconProvider = {
   getIcon: (name) => myIconMap[name] // return SVG string or undefined
 };
 
+// Provider icons replace Latty's built-in icons everywhere
 iconRegistry.registerProvider(myProvider);
-// <lt-icon name="rocket"> now resolves from myProvider if Latty doesn't have it
+
+// Or use as a fallback — only fills gaps where Latty has no icon
+iconRegistry.registerProvider(myProvider, { priority: 'fallback' });
 ```
 
-Resolution order: custom icons (`registerIcon`) → built-in Latty icons → providers (in registration order). Custom always wins.
+Resolution order: override providers (default) → built-in/custom icons → fallback providers.
 
 Remove a provider with `iconRegistry.removeProvider('my-lib')`.
 

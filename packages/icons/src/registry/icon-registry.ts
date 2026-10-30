@@ -1,10 +1,11 @@
-import type { IconProvider } from '../types/provider.types.js';
+import type { IconProvider, ProviderOptions } from '../types/provider.types.js';
 
 type RegistryListener = () => void;
 
 class IconRegistry {
   private icons = new Map<string, string>();
-  private providers: IconProvider[] = [];
+  private overrideProviders: IconProvider[] = [];
+  private fallbackProviders: IconProvider[] = [];
   private listeners = new Set<RegistryListener>();
   private pendingNotify = false;
 
@@ -56,49 +57,68 @@ class IconRegistry {
   }
 
   /**
-   * Register an external icon provider as a fallback source.
-   * Providers are checked in registration order after built-in and custom icons.
+   * Register an external icon provider.
+   *
+   * By default (`priority: 'override'`), the provider is checked **before**
+   * built-in icons — its icons replace Latty's everywhere, including inside
+   * components like checkbox and select.
+   *
+   * Pass `{ priority: 'fallback' }` to check the provider only when no
+   * built-in or custom icon matches.
    * @param {IconProvider} provider - The provider to register.
+   * @param {ProviderOptions} [options] - Registration options.
    */
-  registerProvider(provider: IconProvider): void {
-    if (this.providers.some((p) => p.name === provider.name)) {
-      this.removeProvider(provider.name);
-    }
-    this.providers.push(provider);
+  registerProvider(provider: IconProvider, options?: ProviderOptions): void {
+    this.removeProvider(provider.name);
+    const list = options?.priority === 'fallback' ? this.fallbackProviders : this.overrideProviders;
+    list.push(provider);
     this.scheduleNotify();
   }
 
   /**
-   * Remove a provider by name.
+   * Remove a provider by name (from either tier).
    * @param {string} name - The provider name to remove.
    */
   removeProvider(name: string): void {
-    const idx = this.providers.findIndex((p) => p.name === name);
+    const removed =
+      this.removeFromList(this.overrideProviders, name) || this.removeFromList(this.fallbackProviders, name);
+    if (removed) this.scheduleNotify();
+  }
+
+  private removeFromList(list: IconProvider[], name: string): boolean {
+    const idx = list.findIndex((p) => p.name === name);
     if (idx !== -1) {
-      this.providers.splice(idx, 1);
-      this.scheduleNotify();
+      list.splice(idx, 1);
+      return true;
     }
+    return false;
   }
 
   /**
-   * Returns registered provider names in resolution order.
+   * Returns registered provider names in resolution order
+   * (override providers first, then fallback).
    * @returns {string[]} Provider names.
    */
   getProviders(): string[] {
-    return this.providers.map((p) => p.name);
+    return [...this.overrideProviders, ...this.fallbackProviders].map((p) => p.name);
   }
 
   /**
    * Resolve an icon by name.
-   * Order: custom/built-in icons → providers (in registration order).
+   * Order: override providers → built-in/custom icons → fallback providers.
    * @param {string} name - The icon name to look up.
    * @returns {string | undefined} The SVG markup, or undefined if not found.
    */
   getIcon(name: string): string | undefined {
+    for (const provider of this.overrideProviders) {
+      const svg = provider.getIcon(name);
+      if (svg !== undefined) return svg;
+    }
+
     const direct = this.icons.get(name);
     if (direct !== undefined) return direct;
 
-    for (const provider of this.providers) {
+    for (const provider of this.fallbackProviders) {
       const svg = provider.getIcon(name);
       if (svg !== undefined) return svg;
     }
@@ -112,7 +132,7 @@ class IconRegistry {
 
   getAvailableIcons(): string[] {
     const names = new Set(this.icons.keys());
-    for (const provider of this.providers) {
+    for (const provider of [...this.overrideProviders, ...this.fallbackProviders]) {
       if (provider.listIcons) {
         for (const name of provider.listIcons()) {
           names.add(name);
@@ -124,7 +144,8 @@ class IconRegistry {
 
   reset(): void {
     this.icons.clear();
-    this.providers = [];
+    this.overrideProviders = [];
+    this.fallbackProviders = [];
   }
 }
 

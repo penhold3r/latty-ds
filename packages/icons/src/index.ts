@@ -15,7 +15,7 @@ export { iconRegistry } from './registry/icon-registry.js';
 
 /* Types */
 export type { IconSize, IconDefinition } from './types/icons.types.js';
-export type { IconProvider } from './types/provider.types.js';
+export type { IconProvider, ProviderOptions } from './types/provider.types.js';
 export type { LattyIconName } from './icons/index.js';
 
 /*

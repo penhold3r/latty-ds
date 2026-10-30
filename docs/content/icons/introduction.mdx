@@ -142,7 +142,7 @@ iconRegistry.registerIcons({
 
 ### Icon providers
 
-Use <code>registerProvider</code> to plug in an external icon library (Lucide, Material Symbols, Phosphor, etc.) as a fallback source. Icons not found in the built-in or custom set are resolved through providers in registration order:
+Use <code>registerProvider</code> to plug in an external icon library (Lucide, Material Symbols, Phosphor, etc.). By default, a provider's icons **replace** Latty's everywhere — including inside components like checkbox and select:
 
 <CodeBlock language="ts">{`import { iconRegistry } from '@latty-ds/icons';
 import type { IconProvider } from '@latty-ds/icons';
@@ -152,10 +152,13 @@ const myProvider: IconProvider = {
   getIcon: (name) => myIconMap[name], // return SVG string or undefined
 };
 
+// Provider icons replace Latty's built-in icons everywhere
 iconRegistry.registerProvider(myProvider);
-// <lt-icon name="rocket"> now resolves from myProvider if Latty doesn't have it`}</CodeBlock>
 
-Resolution order: custom icons (<code>registerIcon</code>) → built-in Latty icons → providers (in registration order). Custom always wins. Remove a provider with <code>iconRegistry.removeProvider('my-lib')</code>.
+// Or use as a fallback — only fills gaps where Latty has no icon
+iconRegistry.registerProvider(myProvider, { priority: 'fallback' });`}</CodeBlock>
+
+Resolution order: override providers (default) → built-in/custom icons → fallback providers. Remove a provider with <code>iconRegistry.removeProvider('my-lib')</code>.
 
 ## API
 

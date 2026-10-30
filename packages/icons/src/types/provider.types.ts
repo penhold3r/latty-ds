@@ -1,6 +1,5 @@
 /**
- * An external icon source that the registry can fall back to
- * when an icon isn't found in the built-in or custom set.
+ * An external icon source that the registry resolves icons from.
  */
 export interface IconProvider {
   /** Unique name identifying this provider. */
@@ -15,4 +14,14 @@ export interface IconProvider {
    * Omit for large libraries where enumeration is expensive.
    */
   listIcons?(): string[];
+}
+
+export interface ProviderOptions {
+  /**
+   * Where this provider sits in the resolution chain.
+   * - `'override'` (default) — checked before built-in icons, so the provider's
+   *   icons replace Latty's even inside components like checkbox or select.
+   * - `'fallback'` — checked after built-in and custom icons, only fills gaps.
+   */
+  priority?: 'override' | 'fallback';
 }
