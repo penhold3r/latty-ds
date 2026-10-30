@@ -96,7 +96,17 @@ export const avatarStyles = css`
     color: var(--lt-text-info);
   }
 
-  /* ── Shape ───────────────────────────────────────────────────────────── */
+  /* ── Shape ───────────────────────────────────────────────────────────── The host carries the same radius as
+     the base so a box-shadow/outline put on lt-avatar from outside (e.g. lt-avatar-group's separator ring)
+     follows its shape. No overflow on the host, so the status dot is not clipped. */
+  :host([shape='circle']) {
+    border-radius: 999px;
+  }
+
+  :host([shape='square']) {
+    border-radius: var(--lt-border-radius);
+  }
+
   :host([shape='circle']) span[part='base'] {
     border-radius: 999px;
   }
