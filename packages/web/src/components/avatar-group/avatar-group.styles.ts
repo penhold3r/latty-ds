@@ -45,6 +45,10 @@ export const avatarGroupStyles = css`
     width: 40px;
   }
 
+  :host([shape='square']) .overflow {
+    border-radius: var(--lt-border-radius);
+  }
+
   :host([size='xs']) .overflow {
     font-size: 0.625rem;
     height: 24px;
