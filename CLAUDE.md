@@ -148,7 +148,9 @@ This runs `lerna version --conventional-commits`, which:
 
 CI then picks up the tag (`.github/workflows/publish.yml`, triggered on `v*` tags or manual dispatch): it builds all packages, restores the committed `custom-elements.json` (the build regenerates it), runs tests, and publishes via `lerna publish from-package --yes`. The only required repo secret is `NPM_TOKEN` (npm publish token) — version bumps are pushed from the local machine by `lerna version`, not from CI.
 
-To do a dry run without pushing: `pnpm exec lerna version --conventional-commits --no-push`.
+A `release` job then runs once publishing succeeds and creates the GitHub release for the tag, using notes built from `CHANGELOG.md` by `scripts/release-notes.mjs` (it also marks which packages shipped at that version). The job is idempotent — it edits the release if one already exists — so re-running the workflow is safe, and a backfilled release is simply overwritten with generated notes. Preview the notes for any version locally with `pnpm release:notes --version 1.6.0`.
+
+`lerna version --no-push` still writes the version bump commit and the tag locally; it only skips the push. Amend or re-tag before pushing if you need to change anything.
 
 ## Architecture
 

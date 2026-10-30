@@ -40,3 +40,42 @@ jobs:
       - run: pnpm exec lerna publish from-package --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  # Runs only once the packages are actually on npm, so the releases page never announces a publish that
+  # failed. Kept out of the publish job so `contents: write` is scoped to the job that needs it, and so a
+  # notes problem shows up as its own red X rather than as a failed publish.
+  release:
+    needs: publish
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build release notes from the CHANGELOG
+        run: node scripts/release-notes.mjs --out "$RUNNER_TEMP/release-notes.md"
+
+      - name: Create or update the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --title "$TAG" --notes-file "$RUNNER_TEMP/release-notes.md"
+          else
+            gh release create "$TAG" --title "$TAG" --notes-file "$RUNNER_TEMP/release-notes.md" --verify-tag
+          fi

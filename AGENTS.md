@@ -21,6 +21,7 @@ pnpm check:esm-smoke
 pnpm format:check         # or pnpm format
 pnpm a11y                 # builds + serves docs, then Playwright/axe
 pnpm bundle-size          # add :update to rewrite the committed baseline
+pnpm release:notes        # print the GitHub release notes for a version (default: current tag)
 ```
 
 `pnpm build` also builds the docs; CI uses `pnpm --filter './packages/**' -r build` when only packages are needed.

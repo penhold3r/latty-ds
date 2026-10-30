@@ -28,6 +28,7 @@
     "a11y": "pnpm --filter @latty-ds/docs exec playwright test --config=playwright.a11y.config.ts",
     "a11y:report": "pnpm --filter @latty-ds/docs exec playwright show-report playwright-a11y-report",
     "release": "lerna version --conventional-commits",
+    "release:notes": "node scripts/release-notes.mjs",
     "prepare": "husky"
   },
   "engines": {
