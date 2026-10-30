@@ -66,6 +66,10 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # The notes script imports the shared logger, which is only importable once the private
+      # `@latty-ds/utils` package is built — `pnpm install` links it but does not compile it.
+      - run: pnpm --filter @latty-ds/utils build
+
       - name: Build release notes from the CHANGELOG
         run: node scripts/release-notes.mjs --out "$RUNNER_TEMP/release-notes.md"
 
