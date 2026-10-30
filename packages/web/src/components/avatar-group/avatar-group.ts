@@ -4,14 +4,15 @@ import { customElement, property, queryAssignedElements } from 'lit/decorators.j
 
 import { avatarGroupStyles } from './avatar-group.styles';
 import type { Avatar } from '../avatar/avatar';
-import type { AvatarSize } from '../avatar/avatar.types';
+import type { AvatarShape, AvatarSize } from '../avatar/avatar.types';
 
 import '../avatar/avatar';
 
 /**
  * An overlapping stack of `lt-avatar` elements — e.g. A list of collaborators. Set `max` to cap how many are
  * shown, with a "+N" indicator standing in for the rest. Set `size` to force every avatar (and the indicator) to
- * the same size — overlap only reads correctly when every circle is the same diameter..
+ * the same size — overlap only reads correctly when every circle is the same diameter.. Set `shape` to do the
+ * same for the shape, so the indicator matches square avatars.
  * @element lt-avatar-group
  * @part overflow - The "+N" indicator shown when `max` hides some avatars
  * @slot - `lt-avatar` elements
@@ -37,6 +38,12 @@ export class AvatarGroup extends ThemeableElement {
    */
   @property({ reflect: true }) size?: AvatarSize;
 
+  /**
+   * Uniform shape forwarded to every slotted avatar and the overflow indicator. Leave unset to let each avatar
+   * keep its own `shape`; the overflow indicator then falls back to `circle`.
+   */
+  @property({ reflect: true }) shape?: AvatarShape;
+
   /** Caps the number of visible avatars; the rest collapse into a "+N" indicator. Unset shows all. */
   @property({ type: Number }) max?: number;
 
@@ -61,12 +68,13 @@ export class AvatarGroup extends ThemeableElement {
   }
 
   /*
-   * Forwards `size` and hides avatars past `max` — side effects on the slotted (light DOM) children, which
+   * Forwards `size`/`shape` and hides avatars past `max` — side effects on the slotted (light DOM) children, which
    * live outside this component's own render output.
    */
   private _applyToAvatars = () => {
     (this._avatars ?? []).forEach((avatar, i) => {
       if (this.size !== undefined) avatar.size = this.size;
+      if (this.shape !== undefined) avatar.shape = this.shape;
       const isHidden = this.max !== undefined && i >= this.max;
       avatar.hidden = isHidden;
       /*
@@ -95,7 +103,7 @@ export class AvatarGroup extends ThemeableElement {
 
   protected updated(changed: Map<string, unknown>) {
     super.updated(changed);
-    if (changed.has('size') || changed.has('max')) this._applyToAvatars();
+    if (changed.has('size') || changed.has('shape') || changed.has('max')) this._applyToAvatars();
   }
 
   render() {

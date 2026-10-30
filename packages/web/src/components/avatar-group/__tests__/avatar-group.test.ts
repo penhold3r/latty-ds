@@ -115,6 +115,42 @@ describe('<lt-avatar-group>', () => {
     });
   });
 
+  describe('shape', () => {
+    it('does not force a shape on avatars by default', () => {
+      avatars().forEach((a) => expect(a.shape).toBe('circle')); // lt-avatar's own default, untouched
+    });
+
+    it('leaves a non-default shape alone when the group shape is unset', async () => {
+      const [a1] = avatars();
+      a1.shape = 'square';
+      el.max = 2;
+      await el.updateComplete;
+      expect(a1.shape).toBe('square');
+    });
+
+    it('forwards shape to every avatar when set', async () => {
+      el.shape = 'square';
+      await el.updateComplete;
+      avatars().forEach((a) => expect(a.shape).toBe('square'));
+    });
+
+    it('reflects shape to the host attribute', async () => {
+      el.shape = 'square';
+      await el.updateComplete;
+      expect(el.getAttribute('shape')).toBe('square');
+    });
+
+    it('applies shape to a newly-slotted avatar via slotchange', async () => {
+      el.shape = 'square';
+      await el.updateComplete;
+      const f = document.createElement('lt-avatar') as Avatar;
+      el.appendChild(f);
+      await new Promise((resolve) => setTimeout(resolve));
+      await el.updateComplete;
+      expect(f.shape).toBe('square');
+    });
+  });
+
   describe('size', () => {
     it('forwards size to every avatar when set', async () => {
       el.size = 'sm';
