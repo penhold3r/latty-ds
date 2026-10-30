@@ -9,11 +9,14 @@ export const dialogStyles = css`
      focus trap and inert background for free (DLG-1). Reset its UA-default border/padding/background (a native
      <dialog> renders with a visible border and white background by default) so lt-surface, not the browser's
      own chrome, controls how it looks. Width/height are viewport-relative with a spacing-4 inset on each side
-     (matching the old .backdrop's padding), capped per size variant below. */
+     (matching the old .backdrop's padding), capped per size variant below. The max-height uses dvh (with a vh
+     fallback first): on mobile, vh ignores the browser toolbars, so a vh-capped dialog overflows the visible
+     viewport — e.g. an iPhone in landscape. */
   dialog {
     background: transparent;
     border: none;
     max-height: calc(100vh - var(--lt-spacing-8));
+    max-height: calc(100dvh - var(--lt-spacing-8));
     overflow: visible;
     padding: 0;
     width: calc(100vw - var(--lt-spacing-8));
@@ -40,7 +43,9 @@ export const dialogStyles = css`
   }
   :host([size='fullscreen']) dialog {
     height: 100vh;
+    height: 100dvh;
     max-height: 100vh;
+    max-height: 100dvh;
     max-width: 100vw;
     width: 100vw;
   }
@@ -59,17 +64,28 @@ export const dialogStyles = css`
     background: rgb(var(--lt-shadow-rgb) / var(--lt-dialog-overlay-opacity, 0.5));
   }
 
-  /* lt-surface — fills the <dialog>, sized by it (max-width/height above); the entrance/exit animation */
+  /* lt-surface — sized by its content, capped like the <dialog> so a long .body scrolls (flex: 1; overflow-y:
+     auto) with the footer still visible; also the entrance/exit animation. Not height: 100% — the <dialog> is
+     height: fit-content, and while Chromium resolves that percentage as auto, WebKit resolves it against the
+     <dialog>'s own height and collapses the whole surface to 0px. */
   lt-surface {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
+    max-height: calc(100vh - var(--lt-spacing-8));
+    max-height: calc(100dvh - var(--lt-spacing-8));
     opacity: 0;
     transform: translateY(16px);
     transition:
       opacity var(--lt-duration-moderate) var(--lt-ease-standard),
       transform var(--lt-duration-moderate) var(--lt-ease-emphasized);
     width: 100%;
+  }
+
+  /* fullscreen: the <dialog> has a definite height there, so the surface fills it. */
+  :host([size='fullscreen']) lt-surface {
+    height: 100%;
+    max-height: none;
   }
 
   dialog[open] lt-surface {
