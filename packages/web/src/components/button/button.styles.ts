@@ -57,11 +57,15 @@ export const buttonStyles = css`
     opacity: 0;
   }
 
-  /* Centered over the (invisible but still laid-out) label, not laid out alongside it. */
+  /* Centered over the (invisible but still laid-out) label, not laid out alongside it. The explicit fit-content
+     size is what makes inset + auto margins center it: with auto width/height, inset: 0 stretches the host over
+     the whole button and draws the circle at its top-left corner. */
   .spinner {
+    height: fit-content;
     inset: 0;
     margin: auto;
     position: absolute;
+    width: fit-content;
   }
 
   [part='base']:active {
