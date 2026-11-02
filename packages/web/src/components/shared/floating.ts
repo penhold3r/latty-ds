@@ -48,6 +48,8 @@ export const floatingPanelReset: CSSResult = css`
   [popover] {
     background: transparent;
     border: 0;
+    /* The UA's height: fit-content on [popover] makes WebKit resolve lt-surface's height: 100% to 0. */
+    height: auto;
     inset: unset;
     margin: 0;
     overflow: visible;
