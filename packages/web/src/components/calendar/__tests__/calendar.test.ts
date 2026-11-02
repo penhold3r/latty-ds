@@ -69,9 +69,11 @@ describe('<lt-calendar>', () => {
   });
 
   it('does not dispatch lt-change when a disabled day is clicked', async () => {
-    const today = new Date();
-    const iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-01`;
-    el.min = iso;
+    /* A fixed month, not the current one: January 2026 starts mid-week, so the grid always opens with leading
+       days from December, which are before `min`. A month starting on the first day of the week has none: the
+       first `.day--outside` is then a selectable day from the next month, or there isn't one at all. */
+    el.value = '2026-01-15';
+    el.min = '2026-01-01';
     await el.updateComplete;
 
     let fired = false;
@@ -79,8 +81,9 @@ describe('<lt-calendar>', () => {
       fired = true;
     });
 
-    const outsideDay = el.shadowRoot!.querySelector<HTMLButtonElement>('.day--outside');
-    outsideDay?.click();
+    const outsideDay = el.shadowRoot!.querySelector<HTMLButtonElement>('.day--outside')!;
+    expect(outsideDay.getAttribute('aria-disabled')).toBe('true');
+    outsideDay.click();
 
     expect(fired).toBe(false);
   });
