@@ -170,6 +170,9 @@ importers:
       lunr:
         specifier: ^2.3.9
         version: 2.3.9
+      mark.js:
+        specifier: ^8.11.1
+        version: 8.11.1
       prism-react-renderer:
         specifier: ^2.3.0
         version: 2.4.1(react@19.2.8)
@@ -11574,7 +11577,7 @@ snapshots:
       '@swc/html': 1.16.1
       browserslist: 4.28.8
       lightningcss: 1.33.0
-      semver: 7.7.4
+      semver: 7.8.5
       swc-loader: 0.2.7(@swc/core@1.16.1)(webpack@5.110.2(@swc/core@1.16.1)(@swc/html@1.16.1)(esbuild@0.28.0)(lightningcss@1.33.0)(postcss@8.5.6))
       tslib: 2.8.1
       webpack: 5.110.2(@swc/core@1.16.1)(@swc/html@1.16.1)(esbuild@0.28.0)(lightningcss@1.33.0)(postcss@8.5.6)
