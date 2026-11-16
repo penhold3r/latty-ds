@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.1](https://github.com/penhold3r/latty-ds/compare/v1.6.0...v1.6.1) (2026-11-16)
+
+### Bug Fixes
+
+- **web:** center the lt-button loading spinner ([79630e0](https://github.com/penhold3r/latty-ds/commit/79630e02e7a3a6f48ea786d03c6c3b4d6d87acf4))
+- **web:** stop lt-select and lt-dropdown panels collapsing in WebKit ([a2ac0b4](https://github.com/penhold3r/latty-ds/commit/a2ac0b41daba66918d2f5990884fe57c60dc199e))
+
 # [1.6.0](https://github.com/penhold3r/latty-ds/compare/v1.5.0...v1.6.0) (2026-10-30)
 
 ### Bug Fixes
