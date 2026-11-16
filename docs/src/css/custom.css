@@ -66,18 +66,13 @@
    variable here keeps those companion overrides while matching the actual
    header token.
 
-   Text/icon color uses `--lt-text-on-primary` — computed against the actual
-   configured primary color (`accessibleTextOn()` in
-   packages/tokens/src/semantic/semantic-tokens.ts), not flipped by page
-   theme like `--lt-text-inverse` is. `--lt-bg-primary` doesn't change
-   between light/dark, but it's still a consumer-configurable brand color
-   (could be a light yellow, not just this repo's orange) — pinning to a
-   hardcoded white would silently break contrast for a lighter primary.
-   This is deliberately scoped to this doc's own navbar chrome, not a change
-   to any `@latty-ds/web` component. */
+   `--lt-text-on-primary` resolves to dark brown (#3c1d05) which technically
+   passes WCAG but looks wrong on a vivid orange bar — white icons read
+   much better. Hardcoded #fff here; if the primary ever becomes light
+   enough for white to fail contrast, revisit. */
 .navbar--primary {
   --ifm-navbar-background-color: var(--lt-bg-primary);
-  color: var(--lt-text-on-primary);
+  color: #fff;
 }
 
 /* lt-icon-button's anchor-mode color bug (`a[part='base'] { color: inherit }`
@@ -89,9 +84,14 @@
    `--lt-text-on-primary` for the same reason as `.navbar--primary` above —
    computed against the actual primary color, not hardcoded. */
 .navbar__header-btn {
-  --lt-icon-button-color: var(--lt-text-on-primary);
-  --lt-icon-button-hover-bg: color-mix(in srgb, var(--lt-text-on-primary) 15%, transparent);
-  --lt-icon-button-hover-color: var(--lt-text-on-primary);
+  --lt-icon-button-color: #fff;
+  --lt-icon-button-hover-bg: rgba(255, 255, 255, 0.15);
+  --lt-icon-button-hover-color: #fff;
+}
+
+.navbar__version-badge {
+  --lt-badge-bg: rgba(255, 255, 255, 0.2);
+  --lt-badge-color: #fff;
 }
 
 /* Headings no longer need a hand-duplicated typography shadow here — every
@@ -308,6 +308,81 @@ lt-snackbar > p {
 .navbar__search-input:disabled {
   opacity: 0.6;
   cursor: wait;
+}
+
+/* ── Mobile search toggle ──────────────────────────────────────────────── */
+
+.navbar__search-toggle,
+.navbar__search-close {
+  display: none;
+}
+
+@media (max-width: 576px) {
+  .navbar__items--right {
+    gap: var(--lt-spacing-1, 0.25rem);
+  }
+
+  .navbar__search-toggle {
+    display: inline-flex;
+  }
+
+  /* Hide the pill input by default on mobile */
+  .navbar__search {
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  .navbar__search .navbar__search-input,
+  .navbar__search .search-icon {
+    display: none;
+  }
+
+  /* Expanded overlay state */
+  .navbar__search--mobile-open {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 400;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    background: var(--lt-bg-primary);
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    gap: 8px;
+  }
+
+  .navbar__search--mobile-open:hover,
+  .navbar__search--mobile-open:focus-within {
+    border: none;
+    border-color: transparent;
+    outline: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .navbar__search--mobile-open .navbar__search-toggle {
+    display: none;
+  }
+
+  .navbar__search--mobile-open .navbar__search-input {
+    display: block;
+    flex: 1;
+    width: auto;
+    height: 36px;
+    font-size: 0.875rem;
+    background-color: var(--lt-bg-surface);
+    border: 1px solid var(--lt-border-default);
+    border-radius: var(--lt-border-radius-full, 9999px);
+  }
+
+  .navbar__search--mobile-open .navbar__search-close {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
 }
 
 /* Autocomplete suggestions dropdown styling matching Latty tokens */

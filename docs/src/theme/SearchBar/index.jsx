@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import clsx from "clsx";
-import { useHistory } from "@docusaurus/router";
+import { useHistory, useLocation } from "@docusaurus/router";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { usePluginData } from '@docusaurus/useGlobalData';
 import useIsBrowser from "@docusaurus/useIsBrowser";
@@ -9,7 +9,9 @@ const Search = props => {
   const initialized = useRef(false);
   const searchBarRef = useRef(null);
   const [indexReady, setIndexReady] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const history = useHistory();
+  const location = useLocation();
   const { siteConfig = {} } = useDocusaurusContext();
   const pluginConfig = (siteConfig.plugins || []).find(plugin => Array.isArray(plugin) && typeof plugin[0] === "string" && plugin[0].includes("docusaurus-lunr-search"))
   const isBrowser = useIsBrowser();
@@ -111,8 +113,35 @@ const Search = props => {
     }
   }, [indexReady]);
 
+  // Close mobile search on navigation
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  const openMobileSearch = useCallback(() => {
+    setMobileOpen(true);
+    loadAlgolia();
+    setTimeout(() => searchBarRef.current?.focus(), 50);
+  }, []);
+
+  const closeMobileSearch = useCallback(() => {
+    setMobileOpen(false);
+    if (searchBarRef.current) {
+      searchBarRef.current.value = '';
+      searchBarRef.current.blur();
+    }
+  }, []);
+
   return (
-    <div className="navbar__search" key="search-box">
+    <div className={clsx("navbar__search", { "navbar__search--mobile-open": mobileOpen })} key="search-box">
+      <lt-icon-button
+        class="navbar__search-toggle navbar__header-btn"
+        label="Open search"
+        icon="search"
+        size="sm"
+        round
+        onClick={openMobileSearch}
+      />
       <span
         aria-label="expand searchbar"
         role="button"
@@ -137,9 +166,20 @@ const Search = props => {
         onMouseOver={loadAlgolia}
         onFocus={toggleSearchIconClick}
         onBlur={toggleSearchIconClick}
+        onKeyDown={(e) => { if (e.key === 'Escape') closeMobileSearch(); }}
         ref={searchBarRef}
         disabled={!indexReady}
       />
+      {mobileOpen && (
+        <lt-icon-button
+          class="navbar__search-close navbar__header-btn"
+          label="Close search"
+          icon="xmark"
+          size="sm"
+          round
+          onClick={closeMobileSearch}
+        />
+      )}
       <HighlightSearchResults />
     </div>
   );

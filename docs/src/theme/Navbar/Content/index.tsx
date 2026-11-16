@@ -31,10 +31,10 @@ export default function NavbarContent(): JSX.Element {
       <div className={clsx(ThemeClassNames.layout.navbar.containerLeft, 'navbar__items')}>
         {!mobileSidebar.disabled && <NavbarMobileSidebarToggle />}
         <NavbarLogo />
+        <lt-badge class="navbar__version-badge" content={version} variant="neutral" appearance="filled" size="sm" />
       </div>
       <div className={clsx(ThemeClassNames.layout.navbar.containerRight, 'navbar__items navbar__items--right')}>
         <SearchBar />
-        <lt-badge class="navbar__version-badge" content={version} variant="neutral" appearance="filled" size="sm" />
         <lt-icon-button
           class="navbar__header-btn"
           label="Toggle theme"
