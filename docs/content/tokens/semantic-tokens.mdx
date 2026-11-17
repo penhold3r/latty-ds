@@ -11,10 +11,23 @@ import SemanticTokenTable from '@site/src/components/SemanticTokenTable';
 import tokens from '@latty-ds/tokens/tokens.json';
 
 export const semantic = tokens.semantic;
+export const semanticDark = tokens.semanticDark;
 
 export const groups = (() => {
   const g = { text: [], bg: [], border: [], interactive: [] };
   for (const entry of Object.entries(semantic).sort(([a], [b]) => a.localeCompare(b))) {
+    const [key] = entry;
+    if (key.startsWith('text-')) g.text.push(entry);
+    else if (key.startsWith('bg-')) g.bg.push(entry);
+    else if (key.startsWith('border-')) g.border.push(entry);
+    else g.interactive.push(entry);
+  }
+  return g;
+})();
+
+export const darkGroups = (() => {
+  const g = { text: [], bg: [], border: [], interactive: [] };
+  for (const entry of Object.entries(semanticDark).sort(([a], [b]) => a.localeCompare(b))) {
     const [key] = entry;
     if (key.startsWith('text-')) g.text.push(entry);
     else if (key.startsWith('bg-')) g.bg.push(entry);
@@ -51,6 +64,26 @@ Or generate them at runtime with your own color palette:
 
 configure({ colors: { primary: '#6366f1' } });`}</CodeBlock>
 
+## Naming convention
+
+Semantic tokens follow the pattern <code>{`{role}-{variant}[-{state}]`}</code>:
+
+- **Role**: `text`, `bg`, `border`, or `interactive`
+- **Variant**: `default`, `primary`, `success`, etc.
+- **State** (optional): `subtle`, `strong`, `muted`, `hover`, `active`
+
+## Contrast resolution
+
+Tokens like `bg-primary` and `text-on-primary` are paired to meet **WCAG AA contrast** (4.5:1 for text). The token pipeline uses `resolveVariantColors` to pick fill and foreground steps that pass programmatically — you don't need to verify contrast yourself when using semantic token pairs.
+
+For higher-contrast borders, configure `border.contrast`:
+
+<CodeBlock language="js">{`configure({
+  border: { contrast: 'high' }  // shifts border tokens to higher-contrast steps
+});`}</CodeBlock>
+
+## Light mode
+
 {Object.entries(groups).map(([groupKey, entries]) => {
 const meta = groupMeta[groupKey];
 const rows = entries.map(([tok, ref]) => ({tok, ref}));
@@ -59,6 +92,22 @@ return (
 <section key={groupKey} className="token-section">
 <lt-text variant="h2">{meta.label}</lt-text>
 <lt-text variant="body">{meta.description}</lt-text>
+<SemanticTokenTable rows={rows} />
+</section>
+);
+})}
+
+## Dark mode
+
+In dark mode, semantic tokens remap to different primitive steps — lighter foregrounds on darker backgrounds. The same token names apply; only the references change.
+
+{Object.entries(darkGroups).map(([groupKey, entries]) => {
+const meta = groupMeta[groupKey];
+const rows = entries.map(([tok, ref]) => ({tok, ref}));
+return (
+
+<section key={groupKey} className="token-section">
+<lt-text variant="h2">{meta.label} (dark)</lt-text>
 <SemanticTokenTable rows={rows} />
 </section>
 );

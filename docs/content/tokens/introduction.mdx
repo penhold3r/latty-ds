@@ -43,8 +43,12 @@ Design tokens are the single source of truth for every visual decision in Latty.
     { cat: 'Spacing', prefix: '--lt-spacing-*', ex: '--lt-spacing-4' },
     { cat: 'Border radius', prefix: '--lt-border-radius', ex: '0.5rem' },
     { cat: 'Border width', prefix: '--lt-border-width', ex: '1px' },
+    { cat: 'Duration', prefix: '--lt-duration-*', ex: '--lt-duration-fast (150ms)' },
+    { cat: 'Easing', prefix: '--lt-ease-*', ex: '--lt-ease-standard' },
     { cat: 'Elevation', prefix: '--lt-elevation-*', ex: '--lt-elevation-2' },
     { cat: 'Shadow color', prefix: '--lt-shadow-rgb', ex: 'rgb(var(--lt-shadow-rgb) / 0.25)' },
+    { cat: 'Z-index', prefix: '--lt-z-*', ex: '--lt-z-overlay (1000)' },
+    { cat: 'Focus ring', prefix: '--lt-border-focusRing*', ex: '--lt-border-focusRingWidth' },
     { cat: 'Typography', prefix: '--lt-typography-fontFamilyPrimary', ex: '"Hanken Grotesk", sans-serif' }
   ]}
 />
@@ -84,4 +88,5 @@ For runtime theming use the `configure()` API — see the [Theming](/getting-sta
 
 - [Colors](/tokens/colors) — full palette browser for all semantic colors
 - [Spacing](/tokens/spacing) — visual spacing scale
+- [Motion & Layout](/tokens/motion-layout) — duration, easing, z-index, elevation, and shadow tokens
 - [Semantic tokens](/tokens/semantic-tokens) — role-based token reference

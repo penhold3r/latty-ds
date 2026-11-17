@@ -1,0 +1,133 @@
+---
+title: Motion & Layout
+description: Duration, easing, z-index, elevation, and shadow tokens
+sidebar_label: Motion & Layout
+sidebar_position: 3.5
+slug: /tokens/motion-layout
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import StaticTable from '@site/src/components/StaticTable';
+
+# Motion & Layout
+
+Tokens for transitions, stacking layers, and depth.
+
+## Duration
+
+Transition duration scale — four steps from micro-feedback to large panel animations.
+
+<StaticTable
+  columns={[
+    { key: 'token', label: 'Token', code: true },
+    { key: 'value', label: 'Value' },
+    { key: 'use', label: 'Use case' }
+  ]}
+  rows={[
+    { token: '--lt-duration-instant', value: '100ms', use: 'Micro feedback — press/active transforms' },
+    { token: '--lt-duration-fast', value: '150ms', use: 'Default interactive transitions — hover, focus, border' },
+    { token: '--lt-duration-moderate', value: '200ms', use: 'Structural movement — expand/collapse, enter/exit fades' },
+    { token: '--lt-duration-slow', value: '300ms', use: 'Large/attention movement — panel slides, progress fill' }
+  ]}
+/>
+
+<CodeBlock language="css">{`/* Fade-in on hover */
+.card {
+  opacity: 0.8;
+  transition: opacity var(--lt-duration-fast) var(--lt-ease-standard);
+}
+.card:hover {
+  opacity: 1;
+}
+
+/* Smooth collapse */
+.panel {
+  transition: height var(--lt-duration-moderate) var(--lt-ease-standard);
+}`}</CodeBlock>
+
+## Easing
+
+Two easing curves that cover all interactive motion.
+
+<StaticTable
+  columns={[
+    { key: 'token', label: 'Token', code: true },
+    { key: 'value', label: 'Value', code: true },
+    { key: 'use', label: 'Use case' }
+  ]}
+  rows={[
+    { token: '--lt-ease-standard', value: 'cubic-bezier(0.4, 0, 0.2, 1)', use: 'Deceleration curve — elements entering or settling on screen' },
+    { token: '--lt-ease-emphasized', value: 'cubic-bezier(0.34, 1.2, 0.64, 1)', use: 'Overshoot curve — entrances that should draw attention' }
+  ]}
+/>
+
+The **standard** curve is the safe default for any transition. Use **emphasized** sparingly — it overshoots slightly past the target before settling, which makes an entrance feel snappy but can look odd on simple color transitions.
+
+## Z-index
+
+Two stacking layers. Components that use the native top layer (`<dialog>`, Popover API) don't need a z-index token.
+
+<StaticTable
+  columns={[
+    { key: 'token', label: 'Token', code: true },
+    { key: 'value', label: 'Value' },
+    { key: 'use', label: 'Use case' }
+  ]}
+  rows={[
+    { token: '--lt-z-sticky', value: '100', use: 'In-flow elements above normal content — header, nav' },
+    { token: '--lt-z-overlay', value: '1000', use: 'Floating overlays not on the native top layer — select, combobox, dropdown, tooltip, date-input calendar' }
+  ]}
+/>
+
+:::note
+`lt-dialog`, `lt-sidepanel`, and `lt-snackbar` use the native `<dialog>` element or the Popover API, which renders on the browser's **top layer** — above everything regardless of stacking context. They don't need z-index tokens at all.
+:::
+
+## Elevation
+
+Six levels of `box-shadow` depth, from flat to maximum lift. Shadows are derived from the neutral-900 palette step, so they adapt when you override the neutral color.
+
+<StaticTable
+  columns={[
+    { key: 'token', label: 'Token', code: true },
+    { key: 'desc', label: 'Description' }
+  ]}
+  rows={[
+    { token: '--lt-elevation-0', desc: 'No shadow (flat)' },
+    { token: '--lt-elevation-1', desc: 'Subtle lift — cards, list items on hover' },
+    { token: '--lt-elevation-2', desc: 'Moderate — raised cards, dropdowns' },
+    { token: '--lt-elevation-3', desc: 'Pronounced — floating toolbars, sticky headers' },
+    { token: '--lt-elevation-4', desc: 'High — dialogs, side panels' },
+    { token: '--lt-elevation-5', desc: 'Maximum — full-screen overlays, drawers' }
+  ]}
+/>
+
+<CodeBlock language="css">{`/* Card with hover lift */
+.card {
+  box-shadow: var(--lt-elevation-1);
+  transition: box-shadow var(--lt-duration-fast) var(--lt-ease-standard);
+}
+.card:hover {
+  box-shadow: var(--lt-elevation-3);
+}`}</CodeBlock>
+
+## Shadow RGB
+
+A raw RGB-channel token for building custom shadows, scrims, or translucent borders that the canned elevation levels don't cover.
+
+<CodeBlock language="css">{`/* Custom directional shadow */
+.sidebar {
+  box-shadow: 4px 0 12px rgb(var(--lt-shadow-rgb) / 0.15);
+}
+
+/* Modal backdrop scrim */
+.backdrop {
+  background: rgb(var(--lt-shadow-rgb) / 0.4);
+}
+
+/* Tinted hairline border */
+.divider {
+  border-bottom: 1px solid rgb(var(--lt-shadow-rgb) / 0.08);
+}`}</CodeBlock>
+
+The value is derived from the same neutral-900 step as the elevation tokens (`"23 23 23"` with the default palette). Always consume it as `rgb(var(--lt-shadow-rgb) / <alpha>)` — never hardcode `rgb(0 0 0 / ...)`.

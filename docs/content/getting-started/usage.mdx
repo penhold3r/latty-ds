@@ -91,7 +91,7 @@ import { Button, Dialog } from '@latty-ds/react';
 export function ConfirmDialog({ onConfirm }: { onConfirm: () => void }) {
   return (
     <Dialog heading="Are you sure?">
-      <Button slot="footer" variant="danger" onClick={onConfirm}>Delete</Button>
+      <Button slot="footer" variant="error" onClick={onConfirm}>Delete</Button>
     </Dialog>
   );
 }`}</CodeBlock>
@@ -150,7 +150,7 @@ Components use standard HTML slots to accept content. Content placed directly in
 The most common named slot is <code>trigger</code> on <code>lt-dropdown</code> — any element placed there becomes the anchor that opens the menu:
 
 <CodeBlock language="html">{`<lt-dropdown>
-  <lt-icon-button slot="trigger" name="more-horiz" label="Options"></lt-icon-button>
+  <lt-icon-button slot="trigger" name="more-horizontal" label="Options"></lt-icon-button>
   <lt-dropdown-item>Edit</lt-dropdown-item>
   <lt-dropdown-item>Delete</lt-dropdown-item>
 </lt-dropdown>`}</CodeBlock>
@@ -161,7 +161,7 @@ The most common named slot is <code>trigger</code> on <code>lt-dropdown</code> �
   Are you sure you want to permanently delete this item?
   <div slot="footer">
     <lt-button appearance="outlined" id="cancel-btn">Cancel</lt-button>
-    <lt-button variant="danger" id="confirm-btn">Delete</lt-button>
+    <lt-button variant="error" id="confirm-btn">Delete</lt-button>
   </div>
 </lt-dialog>`}</CodeBlock>
 
@@ -174,16 +174,16 @@ Some components are designed as parent/child pairs. The parent manages shared st
 ### Tabs
 
 <code>lt-tab-group</code> owns the active tab state via its <code>value</code> prop. Each <code>lt-tab</code> declares
-its own value, and panel content is slotted with a matching <code>data-value</code>:
+its own value, and <code>lt-tab-panel</code> elements hold the corresponding content:
 
 <CodeBlock language="html">{`<lt-tab-group value="profile">
   <lt-tab label="Profile" value="profile" icon-start="user"></lt-tab>
   <lt-tab label="Settings" value="settings" icon-start="settings"></lt-tab>
   <lt-tab label="Billing" value="billing" icon-start="credit-card"></lt-tab>
 
-  <div slot="panel" data-value="profile">Profile content here</div>
-  <div slot="panel" data-value="settings">Settings content here</div>
-  <div slot="panel" data-value="billing">Billing content here</div>
+  <lt-tab-panel value="profile">Profile content here</lt-tab-panel>
+  <lt-tab-panel value="settings">Settings content here</lt-tab-panel>
+  <lt-tab-panel value="billing">Billing content here</lt-tab-panel>
 </lt-tab-group>
 
 <script type="module">
@@ -289,14 +289,12 @@ A common gotcha: setting <code>element.setAttribute('disabled', false)</code> do
 
 ## Forms
 
-<code>lt-button</code> participates in native HTML form submission — a button with <code>type="submit"</code> inside a
-<code>&lt;form&gt;</code> triggers the form's submit event as expected. Input components (<code>lt-textfield</code>,
-<code>lt-select</code>, <code>lt-checkbox</code>, etc.) do not submit their values natively. Read them via events or the
-element's <code>value</code> property on submit:
+Latty form components participate in native HTML form submission via the browser's <code>ElementInternals</code> API. A <code>lt-button</code> with <code>type="submit"</code> triggers the form's submit event, and input components report their values through <code>FormData</code> automatically — just give them a <code>name</code> attribute:
 
 <CodeBlock language="html">{`<form id="signup-form">
   <lt-textfield name="email" label="Email" type="email" required></lt-textfield>
-  <lt-select id="role-select" label="Role"></lt-select>
+  <lt-select id="role-select" name="role" label="Role"></lt-select>
+  <lt-checkbox name="terms" label="I agree to the terms" required></lt-checkbox>
   <lt-button type="submit" variant="primary">Sign up</lt-button>
 </form>
 
@@ -311,11 +309,13 @@ element's <code>value</code> property on submit:
 
   document.getElementById('signup-form').addEventListener('submit', (e) => {
     e.preventDefault();
-    const email = document.querySelector('lt-textfield[name="email"]').value;
-    const role = roleSelect.value;
-    console.log({ email, role });
+    const data = new FormData(e.target);
+    console.log(Object.fromEntries(data));
+    // { email: "user@example.com", role: "admin", terms: "on" }
   });
 </script>`}</CodeBlock>
+
+See <a href="/components/common-props#native-form-association">Common Props — Form association</a> for the full list of form-capable components and details on validation, reset, and state restoration.
 
 ## Next steps
 

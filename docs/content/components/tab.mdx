@@ -35,6 +35,8 @@ themselves once scrolled all the way to that side.
   <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
   <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
   <lt-tab label="Disabled" value="tab3" disabled></lt-tab>
+  <lt-tab-panel value="tab1">Overview content</lt-tab-panel>
+  <lt-tab-panel value="tab2">Settings content</lt-tab-panel>
 </lt-tab-group>
 
 <script type="module">
@@ -48,23 +50,27 @@ themselves once scrolled all the way to that side.
 <lt-tab-group value="tab1" orientation="vertical">
   <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
   <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
-  <div slot="panel" data-value="tab1">Overview content</div>
-  <div slot="panel" data-value="tab2">Settings content</div>
+  <lt-tab-panel value="tab1">Overview content</lt-tab-panel>
+  <lt-tab-panel value="tab2">Settings content</lt-tab-panel>
 </lt-tab-group>
     `}
     react={`
-import { TabGroup, Tab } from '@latty-ds/react';
+import { TabGroup, Tab, TabPanel } from '@latty-ds/react';
 
 <TabGroup value="tab1" onChange={(e) => console.log('active tab:', e.detail.value)}>
   <Tab label="Overview" value="tab1" iconStart="home" />
   <Tab label="Settings" value="tab2" iconStart="settings" />
   <Tab label="Disabled" value="tab3" disabled />
+  <TabPanel value="tab1">Overview content</TabPanel>
+  <TabPanel value="tab2">Settings content</TabPanel>
 </TabGroup>
 
 // Vertical orientation: tabs stack beside the panels; arrow keys become Up/Down
 <TabGroup value="tab1" orientation="vertical">
   <Tab label="Overview" value="tab1" iconStart="home" />
   <Tab label="Settings" value="tab2" iconStart="settings" />
+  <TabPanel value="tab1">Overview content</TabPanel>
+  <TabPanel value="tab2">Settings content</TabPanel>
 </TabGroup>
     `}
     vue={`
@@ -74,12 +80,16 @@ import { TabGroup, Tab } from '@latty-ds/react';
     <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
     <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
     <lt-tab label="Disabled" value="tab3" disabled></lt-tab>
+    <lt-tab-panel value="tab1">Overview content</lt-tab-panel>
+    <lt-tab-panel value="tab2">Settings content</lt-tab-panel>
   </lt-tab-group>
 
   <!-- Vertical orientation: tabs stack beside the panels; arrow keys become Up/Down -->
   <lt-tab-group value="tab1" orientation="vertical">
     <lt-tab label="Overview" value="tab1" icon-start="home"></lt-tab>
     <lt-tab label="Settings" value="tab2" icon-start="settings"></lt-tab>
+    <lt-tab-panel value="tab1">Overview content</lt-tab-panel>
+    <lt-tab-panel value="tab2">Settings content</lt-tab-panel>
   </lt-tab-group>
 </template>
     `}
@@ -90,3 +100,8 @@ import { TabGroup, Tab } from '@latty-ds/react';
 
   ## API — lt-tab
   <ApiTable tag="lt-tab" />
+
+  ## API — lt-tab-panel
+  <ApiTable tag="lt-tab-panel" />
+
+See also <a href="/components/tab-group">Tab Group</a> for manual activation, nested groups, and more panel examples.

@@ -6,6 +6,10 @@ sidebar_position: 1
 slug: /
 ---
 
+import { iconGroups } from '@site/src/data/icons';
+
+export const totalIcons = iconGroups.reduce((sum, g) => sum + g.icons.length, 0);
+
 Latty is a design system with a full component library, a token-based theme engine, and first-class framework support. Components work natively in HTML, Vue, and Svelte, and ship with typed React wrappers. One install, every framework.
 
 ## What's included
@@ -30,7 +34,7 @@ Latty is a design system with a full component library, a token-based theme engi
     <strong>
       <code>@latty-ds/icons</code>
     </strong>{' '}
-    — 800+ icons from the Iconoir library, already bundled inside
+    — {totalIcons} custom-drawn icons bundled inside
     <code>@latty-ds/web</code>. Install separately only if you need direct access to the icon registry API.
   </lt-list-item>
   <lt-list-item>

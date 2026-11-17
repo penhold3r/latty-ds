@@ -1,0 +1,313 @@
+---
+title: Common Props
+description: Shared patterns across all Latty components — size, variant, appearance, i18n labels, form association, CSS parts and custom properties
+sidebar_label: Common Props
+sidebar_position: 1
+slug: /components/common-props
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import FrameworkTabs from '@site/src/components/FrameworkTabs';
+import StaticTable from '@site/src/components/StaticTable';
+
+# Common Props
+
+Most Latty components share a set of conventions. This page documents them once — individual component pages cover what's unique.
+
+## Size
+
+Many components accept a `size` attribute with consistent values: `sm`, `md` (default), and `lg`.
+
+<FrameworkTabs
+  html={`<lt-button size="sm">Small</lt-button>
+<lt-button size="md">Medium</lt-button>
+<lt-button size="lg">Large</lt-button>`}
+  react={`import { Button } from '@latty-ds/react';
+
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>`}
+  vue={`<lt-button size="sm">Small</lt-button>
+<lt-button size="md">Medium</lt-button>
+<lt-button size="lg">Large</lt-button>`}
+/>
+
+**Components with `size`:** `lt-avatar`, `lt-badge`, `lt-button`, `lt-checkbox`, `lt-chip`, `lt-color-input`, `lt-combobox`, `lt-date-input`, `lt-datepicker`, `lt-dialog`, `lt-icon-button`, `lt-list`, `lt-pagination`, `lt-progress`, `lt-radio`, `lt-select`, `lt-slider`, `lt-spinner`, `lt-switch`, `lt-tab`, `lt-tab-group`, `lt-textfield`.
+
+:::note
+Most components use `sm | md | lg`. Exceptions: `lt-dialog` adds `xl` and `fullscreen`; `lt-avatar` adds `xs` and `xl`.
+:::
+
+## Variant
+
+Semantic color variants convey meaning — primary for emphasis, error for destructive actions, success for confirmation. The available set depends on the component's role.
+
+**Form inputs** use validation-focused variants:
+
+`default` · `success` · `warning` · `error`
+
+**Action and display components** use the full semantic palette:
+
+`primary` · `secondary` · `neutral` · `success` · `warning` · `error` · `info`
+
+:::caution
+There is no `danger` variant. Use `variant="error"` for destructive actions.
+:::
+
+## Appearance
+
+Controls the visual weight of a component independently of its color variant.
+
+| Appearance | Description | Used by |
+|------------|-------------|---------|
+| `filled` | Solid background (default for most) | button, alert, chip, snackbar, surface |
+| `outlined` | Bordered, transparent background | button, alert, accordion, chip, surface |
+| `ghost` | No border or background, just text/icon | button |
+| `solid` | High-contrast filled background | alert |
+| `clean` | Minimal, no visual container | accordion |
+
+<FrameworkTabs
+  html={`<lt-button appearance="filled">Filled</lt-button>
+<lt-button appearance="outlined">Outlined</lt-button>
+<lt-button appearance="ghost">Ghost</lt-button>`}
+  react={`import { Button } from '@latty-ds/react';
+
+<Button appearance="filled">Filled</Button>
+<Button appearance="outlined">Outlined</Button>
+<Button appearance="ghost">Ghost</Button>`}
+  vue={`<lt-button appearance="filled">Filled</lt-button>
+<lt-button appearance="outlined">Outlined</lt-button>
+<lt-button appearance="ghost">Ghost</lt-button>`}
+/>
+
+## Labels (i18n)
+
+Components with built-in UI text (close buttons, validation messages, navigation labels) accept a `labels` property for internationalization. It's a JS-only property — set it via JavaScript or a framework binding, not as an HTML attribute.
+
+Each component defines its own `Labels` interface with English defaults. Override only the keys you need:
+
+<FrameworkTabs
+  html={`<lt-calendar id="cal"></lt-calendar>
+
+<script>
+  document.getElementById('cal').labels = {
+    today: 'Hoy',
+    previousMonth: 'Mes anterior',
+    nextMonth: 'Mes siguiente'
+  };
+</script>`}
+  react={`import { Calendar } from '@latty-ds/react';
+
+<Calendar
+  labels={{
+    today: 'Hoy',
+    previousMonth: 'Mes anterior',
+    nextMonth: 'Mes siguiente',
+  }}
+/>`}
+  vue={`<lt-calendar
+  :labels="{
+    today: 'Hoy',
+    previousMonth: 'Mes anterior',
+    nextMonth: 'Mes siguiente'
+  }"
+></lt-calendar>`}
+/>
+
+**Components with `labels`:** `lt-alert`, `lt-breadcrumb`, `lt-calendar`, `lt-checkbox`, `lt-chip`, `lt-color-input`, `lt-combobox`, `lt-date-input`, `lt-dialog`, `lt-link`, `lt-pagination`, `lt-radio`, `lt-select`, `lt-sidepanel`, `lt-snackbar`, `lt-snackbar-group`, `lt-switch`, `lt-tab-group`, `lt-table`, `lt-textfield`.
+
+Each component's API table lists its full `Labels` interface with defaults.
+
+## Native form association
+
+Form-capable components use the browser's `ElementInternals` API to participate in native `<form>` submission. This means they:
+
+- Report their value via `FormData` when the form is submitted
+- Support native constraint validation (`required`, `pattern`, `min`, `max`)
+- Respond to `form.reset()` and browser-initiated state restoration
+- Work with `<form>` without any JavaScript glue
+
+<FrameworkTabs
+  html={`<form id="signup">
+  <lt-textfield name="email" label="Email" required type="email"></lt-textfield>
+  <lt-select name="role" label="Role" required></lt-select>
+  <lt-checkbox name="terms" label="I agree to the terms" required></lt-checkbox>
+  <lt-button type="submit">Submit</lt-button>
+</form>
+
+<script>
+  document.getElementById('signup').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    console.log(Object.fromEntries(data));
+    // { email: "user@example.com", role: "admin", terms: "on" }
+  });
+</script>`}
+  react={`import { Textfield, Select, Checkbox, Button } from '@latty-ds/react';
+
+function SignupForm() {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    console.log(Object.fromEntries(data));
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Textfield name="email" label="Email" required type="email" />
+      <Select name="role" label="Role" required />
+      <Checkbox name="terms" label="I agree to the terms" required />
+      <Button type="submit">Submit</Button>
+    </form>
+  );
+}`}
+  vue={`<template>
+  <form @submit.prevent="handleSubmit">
+    <lt-textfield name="email" label="Email" required type="email"></lt-textfield>
+    <lt-select name="role" label="Role" required></lt-select>
+    <lt-checkbox name="terms" label="I agree to the terms" required></lt-checkbox>
+    <lt-button type="submit">Submit</lt-button>
+  </form>
+</template>
+
+<script setup>
+function handleSubmit(e) {
+  const data = new FormData(e.target);
+  console.log(Object.fromEntries(data));
+}
+</script>`}
+/>
+
+**Form-associated components:** `lt-textfield`, `lt-select`, `lt-checkbox`, `lt-radio`, `lt-switch`, `lt-slider`, `lt-color-input`, `lt-combobox`, `lt-date-input`, `lt-datepicker`.
+
+All extend `FormControlElement` which calls `attachInternals()` and manages `setFormValue()`, `formResetCallback()`, and `formStateRestoreCallback()` automatically.
+
+## Imperative methods
+
+Overlay components expose `show()`, `hide()`, and `toggle()` methods as an alternative to setting the `open` attribute:
+
+<CodeBlock language="js">{`const dialog = document.querySelector('lt-dialog');
+
+// These are equivalent:
+dialog.open = true;
+dialog.show();
+
+// And these:
+dialog.open = false;
+dialog.hide();
+
+// Toggle between open and closed:
+dialog.toggle();`}</CodeBlock>
+
+**Components with `show()` / `hide()` / `toggle()`:** `lt-dialog`, `lt-sidepanel`.
+
+`lt-dropdown` manages its own open state through the trigger element, but the same methods are available for programmatic control.
+
+## CSS custom properties
+
+Every component exposes `--lt-[component]-[property]` CSS custom properties for contextual overrides. Set them on the element or any ancestor — they inherit through the shadow DOM.
+
+<CodeBlock language="css">{`/* Override button styles in a specific context */
+.site-header {
+  --lt-button-bg: transparent;
+  --lt-button-color: white;
+  --lt-button-min-width: 0;
+}
+
+/* Custom progress bar color */
+.upload-progress {
+  --lt-progress-color: #8b5cf6;
+  --lt-progress-height: 8px;
+}`}</CodeBlock>
+
+<details>
+<summary><strong>Full list of component CSS custom properties</strong></summary>
+
+| Component | Properties |
+|-----------|-----------|
+| Accordion | `--lt-accordion-content-padding`, `--lt-accordion-header-color`, `--lt-accordion-header-font-size`, `--lt-accordion-header-font-weight`, `--lt-accordion-summary-padding` |
+| Alert | `--lt-alert-bg`, `--lt-alert-border-color`, `--lt-alert-color` |
+| Avatar | `--lt-avatar-bg`, `--lt-avatar-color`, `--lt-avatar-status-ring` |
+| Avatar Group | `--lt-avatar-group-overlap` |
+| Badge | `--lt-badge-bg`, `--lt-badge-border-color`, `--lt-badge-color` |
+| Breadcrumb | `--lt-breadcrumb-separator` |
+| Button | `--lt-button-bg`, `--lt-button-border-color`, `--lt-button-color`, `--lt-button-min-width` |
+| Chip | `--lt-chip-bg`, `--lt-chip-border-color`, `--lt-chip-color` |
+| Dialog | `--lt-dialog-overlay-opacity` |
+| Dropdown | `--lt-dropdown-max-height`, `--lt-dropdown-menu-padding` |
+| List | `--lt-list-marker-color`, `--lt-list-item-active-bg`, `--lt-list-item-hover-bg` |
+| Nav | `--lt-nav-gap`, `--lt-nav-item-active-bg`, `--lt-nav-item-active-color`, `--lt-nav-item-font-size`, `--lt-nav-item-padding` |
+| Progress | `--lt-progress-color`, `--lt-progress-height`, `--lt-progress-track-color` |
+| SidePanel | `--lt-sidepanel-overlay-opacity`, `--lt-sidepanel-shadow` |
+| Slider | `--lt-slider-thumb-size`, `--lt-slider-track-height` |
+| Spinner | `--lt-spinner-color`, `--lt-spinner-size` |
+| Surface | `--lt-surface-bg` |
+| Tooltip | `--lt-tooltip-bg`, `--lt-tooltip-color`, `--lt-tooltip-offset` |
+
+</details>
+
+## CSS shadow parts
+
+Components expose named `::part()` targets so you can style specific internal elements from outside the shadow DOM.
+
+<CodeBlock language="css">{`/* Style the inner button element */
+lt-button::part(base) {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Style the tooltip bubble */
+lt-tooltip::part(tooltip) {
+  max-width: 320px;
+}
+
+/* Style the dialog overlay surface */
+lt-dialog::part(surface) {
+  border-radius: 16px;
+}`}</CodeBlock>
+
+<details>
+<summary><strong>Full list of component parts</strong></summary>
+
+| Component | Parts |
+|-----------|-------|
+| Alert | `base`, `close`, `content`, `icon`, `title` |
+| Avatar | `base`, `icon`, `image`, `initials`, `status` |
+| Avatar Group | `overflow` |
+| Badge | `base`, `dot` |
+| Breadcrumb | `item`, `link`, `list`, `separator`, `text` |
+| Button | `base`, `label`, `spinner` |
+| Calendar | `base` |
+| Chip | `base`, `delete-button` |
+| Dialog | `body`, `close-button`, `dialog`, `footer`, `header`, `surface` |
+| Divider | `base`, `label` |
+| Header | `inner` |
+| Icon Button | `base` |
+| Image | `image` |
+| Link | `base`, `icon` |
+| List | `base` (on `lt-list`) |
+| Progress | `fill`, `track` |
+| Select | `listbox` |
+| SidePanel | `body`, `close-button`, `header`, `panel` |
+| Skeleton | `base` |
+| Snackbar | `action`, `base`, `close`, `icon`, `message` |
+| Surface | `surface` |
+| Tab Group | `panels-container` |
+| Text | `base` |
+| Tooltip | `arrow`, `tooltip` |
+
+</details>
+
+## Boolean HTML attributes
+
+Boolean attributes in HTML follow the standard: **presence means true, absence means false**. Never set a boolean attribute to the string `"false"` — it's still truthy.
+
+<CodeBlock language="js">{`// ✗ This keeps the element disabled (attribute is present, value ignored)
+el.setAttribute('disabled', 'false');
+
+// ✓ Remove the attribute to disable it
+el.removeAttribute('disabled');
+// or set the JS property
+el.disabled = false;`}</CodeBlock>
+
+This applies to `disabled`, `required`, `checked`, `open`, `animated`, `dismissible`, `loading`, and all other boolean props.

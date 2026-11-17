@@ -163,15 +163,15 @@ Override individual tokens directly in your stylesheet for one-off adjustments o
   --lt-typography-fontFamilyPrimary: 'Inter', sans-serif; /* swap font */
 }
 
-/_ Scoped to a section of the page _/
+/* Scoped to a section of the page */
 .sidebar {
 --lt-color-neutral-50: #f8f8ff;
 --lt-color-neutral-100: #f0f0f8;
 }
 
-/_ Spacing tokens — only overridable this way, not via configure() _/
+/* Spacing tokens — only overridable this way, not via configure() */
 :root {
---lt-spacing-4: 1.25rem; /_ default: 1rem _/
+--lt-spacing-4: 1.25rem; /* default: 1rem */
 }`}</CodeBlock>
 
 ## Component-level overrides
@@ -184,7 +184,7 @@ Every component exposes CSS custom properties — named <code>--lt-[component]-[
   --lt-icon-button-hover-bg: rgba(255, 255, 255, 0.15);
 }
 
-/_ A single progress bar with a custom fill colour _/
+/* A single progress bar with a custom fill colour */
 .upload-progress {
 --lt-progress-color: #8b5cf6;
 --lt-progress-track-color: #ede9fe;

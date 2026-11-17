@@ -6,10 +6,63 @@ sidebar_position: 2
 slug: /tokens/colors
 ---
 
+import CodeBlock from '@theme/CodeBlock';
 import ColorPalette from '@site/src/components/ColorPalette';
 
 # Colors
 
-Each semantic color is auto-generated from a single base hex value using the OKLCH color space, producing 10 perceptually uniform shades (50–900) plus a muted variant.
+Each semantic color is auto-generated from a single base hex value using the OKLCH color space, producing 10 perceptually uniform shades (50–900) plus a muted variant for each.
+
+## The palette
+
+Latty ships with six semantic colors plus a neutral scale:
+
+| Color | Base hex | Role |
+|-------|----------|------|
+| **Primary** | `#FF8200` | Brand, main actions, active states |
+| **Secondary** | `#5252c5` | Supporting actions, secondary emphasis |
+| **Success** | `#22c55e` | Positive outcomes, completion |
+| **Warning** | `#eeb308` | Caution, non-blocking issues |
+| **Error** | `#ef4444` | Destructive actions, validation errors |
+| **Info** | `#0ea5e9` | Informational, neutral callouts |
+| **Neutral** | Generated | Text, borders, backgrounds — a chroma-free scale |
+
+Each base hex is defined in `tokens.config.json` and customizable via `configure()`.
+
+## How the palette is generated
+
+The base hex value is pinned to the `500` step. Latty then generates lighter (50–400) and darker (600–900) shades in the OKLCH color space, which produces perceptually uniform steps — unlike HSL, the perceived brightness difference between each step is consistent.
+
+The neutral scale uses a separate lightness curve with zero chroma, so it stays perfectly grey regardless of the primary color.
+
+## Muted variants
+
+Every color also generates a muted variant (`*-muted-50` through `*-muted-900`) with reduced chroma. These are useful for subtle backgrounds, disabled states, and low-emphasis UI.
+
+<CodeBlock language="css">{`/* Muted variant tokens */
+background: var(--lt-color-primary-muted-100);
+border-color: var(--lt-color-error-muted-200);`}</CodeBlock>
+
+## System colors
+
+Two fixed tokens are always available:
+
+- `--lt-color-black`: `#000000`
+- `--lt-color-white`: `#ffffff`
+
+## Customizing colors
+
+Override any color via `configure()` — Latty regenerates the full 10-step palette from your base hex:
+
+<CodeBlock language="js">{`import { configure } from '@latty-ds/tokens/configure';
+
+configure({
+  colors: {
+    primary: '#6366f1',   // Indigo primary
+    secondary: '#8b5cf6'  // Purple secondary
+  }
+});`}</CodeBlock>
+
+## Palette preview
 
 <ColorPalette />

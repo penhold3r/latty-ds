@@ -32,9 +32,10 @@ and signal progress to the user.
 
 <lt-skeleton shape="circle" width="48px" height="48px"></lt-skeleton>
 
-<!-- Disable shimmer -->
+<!-- Disable shimmer (set via JS — boolean HTML attributes are truthy when present) -->
 
-<lt-skeleton animated="false"></lt-skeleton>`}
+<lt-skeleton id="no-shimmer"></lt-skeleton>
+<script>document.getElementById('no-shimmer').animated = false;</script>`}
     react={`import { Skeleton } from '@latty-ds/react';
 
 <Skeleton />
